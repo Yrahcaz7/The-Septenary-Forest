@@ -2923,7 +2923,7 @@ addLayer('ds', {
                 return false;
             },
             onEnter() {
-                doReset('ds');
+                doReset('ds', true);
             },
             rewardDescription: "multiplies hex and demon soul gain based on your demon souls",
             rewardDisplay() {
@@ -2947,7 +2947,7 @@ addLayer('ds', {
                 return false;
             },
             onEnter() {
-                doReset('ds');
+                doReset('ds', true);
             },
             unlocked() {
                 if (hasChallenge('ds', 11)) return true;
@@ -2975,7 +2975,7 @@ addLayer('ds', {
                 return false;
             },
             onEnter() {
-                doReset('ds');
+                doReset('ds', true);
             },
             unlocked() {
                 if (hasChallenge('ds', 12)) return true;
@@ -3003,7 +3003,7 @@ addLayer('ds', {
                 return false;
             },
             onEnter() {
-                doReset('ds');
+                doReset('ds', true);
             },
             unlocked() {
                 if (hasMilestone('a', 7)) return true;
