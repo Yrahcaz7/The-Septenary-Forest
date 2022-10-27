@@ -4769,6 +4769,7 @@ addLayer('d', {
 			if (hasMilestone('s', 51)) work *= 3;
 			if (challengeCompletions('r', 11) >= 17) work *= 2;
 			if (challengeCompletions('r', 11) >= 38) work *= 2;
+			if (challengeCompletions('r', 11) >= 41) work *= 2;
 			if (hasMilestone('gi', 10)) work *= 2;
 			for (let index = 0; index < work; index++) {
 				if (!layers.d.buyables[11].canAfford()) break;
@@ -4782,6 +4783,7 @@ addLayer('d', {
 			if (challengeCompletions('r', 11) >= 23) work *= 1.5;
 			if (challengeCompletions('r', 11) >= 32) work *= 2;
 			if (challengeCompletions('r', 11) >= 38) work *= 2;
+			if (challengeCompletions('r', 11) >= 41) work *= 2;
 			if (hasMilestone('gi', 10)) work *= 2;
 			for (let index = 0; index < work; index++) {
 				if (!layers.d.buyables[12].canAfford()) break;
@@ -4792,6 +4794,7 @@ addLayer('d', {
 			let work = 1;
 			if (challengeCompletions('r', 11) >= 17) work *= 2;
 			if (challengeCompletions('r', 11) >= 38) work *= 2;
+			if (challengeCompletions('r', 11) >= 41) work *= 2;
 			if (hasMilestone('gi', 10)) work *= 2;
 			for (let index = 0; index < work; index++) {
 				if (!layers.d.buyables[21].canAfford()) break;
@@ -5097,6 +5100,7 @@ addLayer('r', {
 				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-r">Activate Relics';
 				return '<h3>Activate Relics';
 			},
+			buttonText: ["Activate", "Cannot activate", "Enter activation", "Enter activation"],
 			challengeDescription() {
 				return 'Temporarily converts all your point production into light production. Get enough light, and you can activate your relics for rewards.<br>';
 			},
@@ -5151,6 +5155,9 @@ addLayer('r', {
 				else if (challengeCompletions('r', 11) == 35) text += '<br>Next reward: nothing';
 				else if (challengeCompletions('r', 11) == 36) text += '<br>Next reward: still nothing';
 				else if (challengeCompletions('r', 11) == 37) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work<br>twice as fast';
+				else if (challengeCompletions('r', 11) == 38) text += '<br>Next reward: nothing';
+				else if (challengeCompletions('r', 11) == 39) text += '<br>Next reward: still nothing';
+				else if (challengeCompletions('r', 11) == 40) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work<br>twice as fast';
 				else text += '<br>Next reward: you have gotten all the rewards!';
 				return text;
 			},

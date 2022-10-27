@@ -7,7 +7,7 @@ function prestigeButtonText(layer) {
 		return `${tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "Reset for "}+<b>${formatWhole(tmp[layer].resetGain)}</b> ${tmp[layer].resource}<br><br>${player[layer].points.lt(30) ? (tmp[layer].baseAmount.gte(tmp[layer].nextAt) && (tmp[layer].canBuyMax !== undefined) && tmp[layer].canBuyMax ? "Next:" : "Req:") : ""} ${formatWhole(tmp[layer].baseAmount)} / ${(tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAtDisp) : format(tmp[layer].nextAtDisp))} ${tmp[layer].baseResource}`
 	if (tmp[layer].type == "none")
 		return "";
-    return "You need prestige button text";
+	return "You need prestige button text";
 };
 
 function constructNodeStyle(layer) {
@@ -19,28 +19,42 @@ function constructNodeStyle(layer) {
 	if(tmp[layer].notify && player[layer].unlocked)
 		style.push({'box-shadow': 'var(--hqProperty2a), 0 0 20px ' + tmp[layer].trueGlowColor});
 	style.push(tmp[layer].nodeStyle);
-    return style;
+	return style;
 };
 
 function challengeStyle(layer, id) {
 	if (player[layer].activeChallenge == id && canCompleteChallenge(layer, id)) return "canComplete";
 	else if (hasChallenge(layer, id)) return "done";
-    return "locked";
+	return "locked";
 };
 
 function challengeButtonText(layer, id) {
-    return (player[layer].activeChallenge==(id)?(canCompleteChallenge(layer, id)?"Finish":"Exit Early"):(hasChallenge(layer, id)?"Completed":"Start"));
+	let text = ["Finish", "Exit Early", "Completed", "Start"]
+	if (tmp[layer].challenges[id].buttonText) {
+		if (typeof tmp[layer].challenges[id].buttonText == "function" && typeof tmp[layer].challenges[id].buttonText() == "object") {
+			if (tmp[layer].challenges[id].buttonText()[0]) text[0] = tmp[layer].challenges[id].buttonText()[0];
+			if (tmp[layer].challenges[id].buttonText()[1]) text[1] = tmp[layer].challenges[id].buttonText()[1];
+			if (tmp[layer].challenges[id].buttonText()[1]) text[2] = tmp[layer].challenges[id].buttonText()[2];
+			if (tmp[layer].challenges[id].buttonText()[3]) text[1] = tmp[layer].challenges[id].buttonText()[3];
+		} else if (typeof tmp[layer].challenges[id].buttonText == "object") {
+			if (tmp[layer].challenges[id].buttonText[0]) text[0] = tmp[layer].challenges[id].buttonText[0];
+			if (tmp[layer].challenges[id].buttonText[1]) text[1] = tmp[layer].challenges[id].buttonText[1];
+			if (tmp[layer].challenges[id].buttonText[2]) text[2] = tmp[layer].challenges[id].buttonText[2];
+			if (tmp[layer].challenges[id].buttonText[3]) text[3] = tmp[layer].challenges[id].buttonText[3];
+		};
+	};
+	return (player[layer].activeChallenge==(id)?(canCompleteChallenge(layer, id)?text[0]:text[1]):(hasChallenge(layer, id)?text[2]:text[3]));
 };
 
 function achievementStyle(layer, id) {
-    ach = tmp[layer].achievements[id];
-    let style = [];
-    if (ach.image){ 
-        style.push({'background-image': 'url("' + ach.image + '")'})
-    };
-    if (!ach.unlocked) style.push({'visibility': 'hidden'});
-    style.push(ach.style);
-    return style;
+	let ach = tmp[layer].achievements[id];
+	let style = [];
+	if (ach.image){ 
+		style.push({'background-image': 'url("' + ach.image + '")'})
+	};
+	if (!ach.unlocked) style.push({'visibility': 'hidden'});
+	style.push(ach.style);
+	return style;
 };
 
 function updateWidth() {
