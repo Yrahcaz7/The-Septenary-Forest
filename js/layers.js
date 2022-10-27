@@ -829,11 +829,11 @@ addLayer('e', {
 		};
 	},
 	doReset(resettingLayer) {
+		if (challengeCompletions('r', 11) >= 21) return;
+		if (hasMilestone('s', 20) && resettingLayer == 's') return;
+		if (hasMilestone('m', 2) && resettingLayer == 'm') return;
+		if (hasMilestone('gi', 1) && resettingLayer == 'gi') return;
 		let keep = ["auto_upgrades", "auto_buyables"];
-			if (challengeCompletions('r', 11) >= 21) return;
-			if (hasMilestone('s', 20) && resettingLayer == 's') return;
-			if (hasMilestone('m', 2) && resettingLayer == 'm') return;
-			if (hasMilestone('gi', 1) && resettingLayer == 'gi') return;
 			if (hasMilestone('c', 0) && resettingLayer == 'c') keep.push("upgrades");
 			if (hasMilestone('c', 2) && resettingLayer == 'c') keep.push("buyables");
 			if (hasMilestone('q', 1) && resettingLayer == 'q') keep.push("upgrades");
@@ -1186,10 +1186,10 @@ addLayer('c', {
 		};
 	},
 	doReset(resettingLayer) {
+		if (challengeCompletions('r', 11) >= 25 && resettingLayer == 'r') return;
+		if (hasMilestone('m', 4) && resettingLayer == 'm') return;
+		if (hasMilestone('gi', 2) && resettingLayer == 'gi') return;
 		let keep = ["auto_upgrades", "auto_buyables"];
-			if (challengeCompletions('r', 11) >= 25 && resettingLayer == 'r') return;
-			if (hasMilestone('m', 4) && resettingLayer == 'm') return;
-			if (hasMilestone('gi', 2) && resettingLayer == 'gi') return;
 			if (hasMilestone('h', 2) && resettingLayer == 'h') keep.push("upgrades");
 			if (hasMilestone('h', 3) && resettingLayer == 'h') keep.push("buyables");
 			if (hasMilestone('h', 4) && resettingLayer == 'sp') keep.push("upgrades");
@@ -1538,10 +1538,10 @@ addLayer('q', {
 		};
 	},
 	doReset(resettingLayer) {
+		if (challengeCompletions('r', 11) >= 30 && resettingLayer == 'r') return;
+		if (hasMilestone('m', 5) && resettingLayer == 'm') return;
+		if (hasMilestone('gi', 3) && resettingLayer == 'gi') return;
 		let keep = ["auto_upgrades"];
-			if (challengeCompletions('r', 11) >= 30 && resettingLayer == 'r') return;
-			if (hasMilestone('m', 5) && resettingLayer == 'm') return;
-			if (hasMilestone('gi', 3) && resettingLayer == 'gi') return;
 			if (hasMilestone('sp', 3) && resettingLayer == 'sp') keep.push("milestones");
 			if (hasMilestone('sp', 5) && resettingLayer == 'sp') keep.push("upgrades");
 			if (hasMilestone('h', 5) && resettingLayer == 'h') keep.push("milestones");
@@ -2017,6 +2017,7 @@ addLayer('sp', {
 		};
 	},
 	doReset(resettingLayer) {
+		if (challengeCompletions('r', 11) >= 35 && resettingLayer == 'r') return;
 		let keep = ["auto_upgrades", "auto_buyables"];
 			if (hasMilestone('ds', 0) && resettingLayer == 'ds') keep.push("buyables");
 			if (hasMilestone('ds', 1) && resettingLayer == 'ds') keep.push("upgrades");
@@ -2239,10 +2240,10 @@ addLayer('h', {
 		};
 	},
 	doReset(resettingLayer) {
+		if (challengeCompletions('r', 11) >= 27 && resettingLayer == 'r') return;
+		if (hasMilestone('m', 13) && resettingLayer == 'm') return;
+		if (hasMilestone('gi', 4) && resettingLayer == 'gi') return;
 		let keep = ["auto_upgrades"];
-			if (challengeCompletions('r', 11) >= 27 && resettingLayer == 'r') return;
-			if (hasMilestone('m', 13) && resettingLayer == 'm') return;
-			if (hasMilestone('gi', 4) && resettingLayer == 'gi') return;
 			if (hasMilestone('ds', 8) && resettingLayer == 'ds') keep.push("milestones");
 			if (hasMilestone('a', 6) && resettingLayer == 'a') keep.push("milestones");
 			if (hasMilestone('a', 11) && (resettingLayer == 'a' || resettingLayer == 'ds')) keep.push("upgrades");
@@ -2723,10 +2724,10 @@ addLayer('ds', {
 		};
 	},
 	doReset(resettingLayer) {
+		if (hasMilestone('m', 14) && resettingLayer == 'm') return;
+		if (hasMilestone('gi', 5) && resettingLayer == 'gi') return;
 		let keep = ["auto_upgrades", "auto_buyables"];
 		let saveupg = [];
-			if (hasMilestone('m', 14) && resettingLayer == 'm') return;
-			if (hasMilestone('gi', 5) && resettingLayer == 'gi') return;
 			if (hasMilestone('m', 1)) {
 				keep.push("challenges");
 				saveupg.push(22);
@@ -4273,8 +4274,8 @@ addLayer('s', {
 		return 'which multiplies essence gain by <h2 class="layer-s">' + format(tmp.s.effect) + '</h2>x';
 	},
 	doReset(resettingLayer) {
+		if (hasMilestone('s', 12) && resettingLayer == 'a') return;
 		let keep = ["auto_worship", "auto_sacrifice", "auto_sacrificial_ceremony"];
-			if (hasMilestone('s', 12) && resettingLayer == 'a') return;
 			if (challengeCompletions('r', 11) >= 9 && resettingLayer == 'r') keep.push("milestones");
 			if (layers[resettingLayer].row > this.row) {
 				layerDataReset('s', keep);
@@ -4765,7 +4766,8 @@ addLayer('d', {
 			if (hasMilestone('s', 46)) work *= 2;
 			if (hasMilestone('s', 51)) work *= 3;
 			if (challengeCompletions('r', 11) >= 17) work *= 2;
-			if (hasMilestone('gi', 10)) work *= 3;
+			if (challengeCompletions('r', 11) >= 38) work *= 2;
+			if (hasMilestone('gi', 10)) work *= 2;
 			for (let index = 0; index < work; index++) {
 				if (!layers.d.buyables[11].canAfford()) break;
 				layers.d.buyables[11].buy();
@@ -4777,7 +4779,8 @@ addLayer('d', {
 			if (challengeCompletions('r', 11) >= 22) work *= 2;
 			if (challengeCompletions('r', 11) >= 23) work *= 1.5;
 			if (challengeCompletions('r', 11) >= 32) work *= 2;
-			if (hasMilestone('gi', 10)) work *= 3;
+			if (challengeCompletions('r', 11) >= 38) work *= 2;
+			if (hasMilestone('gi', 10)) work *= 2;
 			for (let index = 0; index < work; index++) {
 				if (!layers.d.buyables[12].canAfford()) break;
 				layers.d.buyables[12].buy();
@@ -4786,7 +4789,8 @@ addLayer('d', {
 		if (hasMilestone('s', 28) && player.s.auto_sacrificial_ceremony) {
 			let work = 1;
 			if (challengeCompletions('r', 11) >= 17) work *= 2;
-			if (hasMilestone('gi', 10)) work *= 3;
+			if (challengeCompletions('r', 11) >= 38) work *= 2;
+			if (hasMilestone('gi', 10)) work *= 2;
 			for (let index = 0; index < work; index++) {
 				if (!layers.d.buyables[21].canAfford()) break;
 				layers.d.buyables[21].buy();
@@ -5103,44 +5107,49 @@ addLayer('r', {
 			rewardDescription() {
 				text = '';
 				if (challengeCompletions('r', 11) >= 1 && challengeCompletions('r', 11) < 4) text += 'multiply relic\'s second and third effects based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x<br>';
-				if (challengeCompletions('r', 11) >= 5 && challengeCompletions('r', 11) < 12) text += 'multiply relic\'s second and third effects, exponentially increase relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + ',<br>and ' + format(player.r.relic_effects[2]) + 'x<br>';
-				if (challengeCompletions('r', 11) >= 13) text += 'multiply relic\'s second and third effects and molecule gain, exponentially increase relic\'s first effect, multiply Sacrificial Ceremony\'s last effect, and also multiply relic gain (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + ',<br>' + format(player.r.relic_effects[2]) + 'x,<br>and ' + format(player.r.relic_effects[3]) + 'x<br>';
+				else if (challengeCompletions('r', 11) >= 5 && challengeCompletions('r', 11) < 12) text += 'multiply relic\'s second and third effects, exponentially increase relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + ',<br>and ' + format(player.r.relic_effects[2]) + 'x<br>';
+				else if (challengeCompletions('r', 11) >= 13) text += 'multiply relic\'s second and third effects and molecule gain, exponentially increase relic\'s first effect, multiply Sacrificial Ceremony\'s last effect, and also multiply relic gain (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + ',<br>' + format(player.r.relic_effects[2]) + 'x,<br>and ' + format(player.r.relic_effects[3]) + 'x<br>';
 				if (challengeCompletions('r', 11) == 0) text += 'nothing currently<br><br>Next reward: multiply relic\'s second and third effects based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x';
-				if (challengeCompletions('r', 11) == 1) text += '<br>Next reward: relic\'s third effect also effects point gain';
-				if (challengeCompletions('r', 11) == 2) text += '<br>Next reward: multiply relic\'s first effect by 10,000 and raise it to ^3.5';
-				if (challengeCompletions('r', 11) == 3) text += '<br>Next reward: exponentially increase relic\'s first effect based on your light<br>Currently: ^' + format(player.r.relic_effects[1]);
-				if (challengeCompletions('r', 11) == 4) text += 'multiply relic\'s second and third effects based on your light, and also exponentially increase relic\'s first effect based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x<br>and ^' + format(player.r.relic_effects[1]) + '<br><br>Next reward: multiply Sacrificial Ceremony\'s last effect based on your light<br>Currently: ' + format(player.r.relic_effects[2]) + 'x';
-				if (challengeCompletions('r', 11) == 5) text += '<br>Next reward: raise relic\'s first effect to ^5';
-				if (challengeCompletions('r', 11) == 6) text += '<br>Next reward: quadruple the third activated relic effect';
-				if (challengeCompletions('r', 11) == 7) text += '<br>Next reward: double the third activated relic effect';
-				if (challengeCompletions('r', 11) == 8) text += '<br>Next reward: keep sanctum milestones on relic resets';
-				if (challengeCompletions('r', 11) == 9 && !player.m.unlocked) {
+				else if (challengeCompletions('r', 11) == 1) text += '<br>Next reward: relic\'s third effect also effects point gain';
+				else if (challengeCompletions('r', 11) == 2) text += '<br>Next reward: multiply relic\'s first effect by 10,000 and raise it to ^3.5';
+				else if (challengeCompletions('r', 11) == 3) text += '<br>Next reward: exponentially increase relic\'s first effect based on your light<br>Currently: ^' + format(player.r.relic_effects[1]);
+				else if (challengeCompletions('r', 11) == 4) text += 'multiply relic\'s second and third effects based on your light, and also exponentially increase relic\'s first effect based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x<br>and ^' + format(player.r.relic_effects[1]) + '<br><br>Next reward: multiply Sacrificial Ceremony\'s last effect based on your light<br>Currently: ' + format(player.r.relic_effects[2]) + 'x';
+				else if (challengeCompletions('r', 11) == 5) text += '<br>Next reward: raise relic\'s first effect to ^5';
+				else if (challengeCompletions('r', 11) == 6) text += '<br>Next reward: quadruple the third activated relic effect';
+				else if (challengeCompletions('r', 11) == 7) text += '<br>Next reward: double the third activated relic effect';
+				else if (challengeCompletions('r', 11) == 8) text += '<br>Next reward: keep sanctum milestones on relic resets';
+				else if (challengeCompletions('r', 11) == 9) {
 					text += '<br>Next reward: unlock Molecules';
 					if (player.m.unlocked) text += ' (already unlocked)';
-				};
-				if (challengeCompletions('r', 11) == 10) text += '<br>Next reward: double the first activated relic effect';
-				if (challengeCompletions('r', 11) == 11) text += '<br>Next reward: the first activated relic effect also applies to molecule gain';
-				if (challengeCompletions('r', 11) == 12) text += 'multiply relic\'s second and third effects and molecule gain, exponentially increase relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + ',<br>and ' + format(player.r.relic_effects[2]) + 'x<br><br>Next reward: multiply relic gain based on your light<br>Currently: ' + format(player.r.relic_effects[3]) + 'x';
-				if (challengeCompletions('r', 11) == 13) text += '<br>Next reward: double the first activated relic effect';
-				if (challengeCompletions('r', 11) == 14) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.2';
-				if (challengeCompletions('r', 11) == 15) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.1';
-				if (challengeCompletions('r', 11) == 16) text += '<br>Next reward: sanctum layer autobuyers buy 2x faster';
-				if (challengeCompletions('r', 11) == 17) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.05';
-				if (challengeCompletions('r', 11) == 18) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.02';
-				if (challengeCompletions('r', 11) == 19) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.01';
-				if (challengeCompletions('r', 11) == 20) text += '<br>Next reward: essence is never reset';
-				if (challengeCompletions('r', 11) == 21) text += '<br>Next reward: auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> works thrice as fast';
-				if (challengeCompletions('r', 11) == 22) text += '<br>Next reward: auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> works twice as fast';
-				if (challengeCompletions('r', 11) == 23) text += '<br>Next reward: nothing';
-				if (challengeCompletions('r', 11) == 24) text += '<br>Next reward: relic resets don\'t reset cores';
-				if (challengeCompletions('r', 11) == 25) text += '<br>Next reward: nothing';
-				if (challengeCompletions('r', 11) == 26) text += '<br>Next reward: relic resets don\'t reset hexes';
-				if (challengeCompletions('r', 11) == 27) text += '<br>Next reward: nothing';
-				if (challengeCompletions('r', 11) == 28) text += '<br>Next reward: still nothing';
-				if (challengeCompletions('r', 11) == 29) text += '<br>Next reward: relic resets don\'t reset quarks';
-				if (challengeCompletions('r', 11) == 30) text += '<br>Next reward: nothing';
-				if (challengeCompletions('r', 11) == 31) text += '<br>Next reward: auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> works twice as fast';
-				if (challengeCompletions('r', 11) >= 32) text += '<br>Next reward: you have gotten all the rewards!';
+				} else if (challengeCompletions('r', 11) == 10) text += '<br>Next reward: double the first activated relic effect';
+				else if (challengeCompletions('r', 11) == 11) text += '<br>Next reward: the first activated relic effect also applies to molecule gain';
+				else if (challengeCompletions('r', 11) == 12) text += 'multiply relic\'s second and third effects and molecule gain, exponentially increase relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + ',<br>and ' + format(player.r.relic_effects[2]) + 'x<br><br>Next reward: multiply relic gain based on your light<br>Currently: ' + format(player.r.relic_effects[3]) + 'x';
+				else if (challengeCompletions('r', 11) == 13) text += '<br>Next reward: double the first activated relic effect';
+				else if (challengeCompletions('r', 11) == 14) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.2';
+				else if (challengeCompletions('r', 11) == 15) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.1';
+				else if (challengeCompletions('r', 11) == 16) text += '<br>Next reward: sanctum layer autobuyers buy 2x faster';
+				else if (challengeCompletions('r', 11) == 17) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.05';
+				else if (challengeCompletions('r', 11) == 18) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.02';
+				else if (challengeCompletions('r', 11) == 19) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.01';
+				else if (challengeCompletions('r', 11) == 20) text += '<br>Next reward: essence is never reset';
+				else if (challengeCompletions('r', 11) == 21) text += '<br>Next reward: auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> works thrice as fast';
+				else if (challengeCompletions('r', 11) == 22) text += '<br>Next reward: auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> works twice as fast';
+				else if (challengeCompletions('r', 11) == 23) text += '<br>Next reward: nothing';
+				else if (challengeCompletions('r', 11) == 24) text += '<br>Next reward: relic resets don\'t reset cores';
+				else if (challengeCompletions('r', 11) == 25) text += '<br>Next reward: nothing';
+				else if (challengeCompletions('r', 11) == 26) text += '<br>Next reward: relic resets don\'t reset hexes';
+				else if (challengeCompletions('r', 11) == 27) text += '<br>Next reward: nothing';
+				else if (challengeCompletions('r', 11) == 28) text += '<br>Next reward: still nothing';
+				else if (challengeCompletions('r', 11) == 29) text += '<br>Next reward: relic resets don\'t reset quarks';
+				else if (challengeCompletions('r', 11) == 30) text += '<br>Next reward: nothing';
+				else if (challengeCompletions('r', 11) == 31) text += '<br>Next reward: auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> works twice as fast';
+				else if (challengeCompletions('r', 11) == 32) text += '<br>Next reward: nothing';
+				else if (challengeCompletions('r', 11) == 33) text += '<br>Next reward: still nothing';
+				else if (challengeCompletions('r', 11) == 34) text += '<br>Next reward: relic resets don\'t reset subatomic particles';
+				else if (challengeCompletions('r', 11) == 35) text += '<br>Next reward: nothing';
+				else if (challengeCompletions('r', 11) == 36) text += '<br>Next reward: still nothing';
+				else if (challengeCompletions('r', 11) == 37) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work<br>twice as fast';
+				else text += '<br>Next reward: you have gotten all the rewards!';
 				return text;
 			},
 			canComplete() {
@@ -5795,8 +5804,8 @@ addLayer('gi', {
 		10: {
 			requirementDescription: '18 good influence',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'all Devotion autobuyers work thrice as fast';
-				return 'all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work thrice as fast';
+				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'all Devotion autobuyers work twice as fast';
+				return 'all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work twice as fast';
 			},
 			done() { return player.gi.points.gte(18) },
 			unlocked() { return hasMilestone('gi', 8) },
@@ -5805,7 +5814,7 @@ addLayer('gi', {
 			requirementDescription: '21 good influence',
 			effectDescription: 'you can explore 3 further molecule upgrades',
 			done() { return player.gi.points.gte(21) },
-			unlocked() { return hasMilestone('gi', 8) },
+			unlocked() { return hasMilestone('gi', 9) },
 		},
 	},
 	buyables: {
