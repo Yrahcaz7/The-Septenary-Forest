@@ -5083,17 +5083,6 @@ addLayer('r', {
 		"blank",
 		"upgrades",
 	],
-	clickables: {
-		11: {
-			display() {return "Reset your light to the start of the light softcap"},
-			canClick() {return player.r.light.gt(0) && !inChallenge('r', 11)},
-			onClick() {
-				if (confirm('are you sure you want to reset your light to the start of the light softcap?')) player.r.light = new Decimal(player.r.lightsoftcap_start[0]).add(player.r.lightgain.mul(0.1));
-			},
-			style: {'min-height':'30px','width':'fit-content','border-radius':'15px'},
-			unlocked() {return player.r.light.gte(player.r.lightsoftcap_start[0])},
-		},
-	},
 	challenges: {
 		11: {
 			name() {
@@ -5101,9 +5090,7 @@ addLayer('r', {
 				return '<h3>Activate Relics';
 			},
 			buttonText: ["Activate", "Cannot activate", "Enter activation", "Enter activation"],
-			challengeDescription() {
-				return 'Temporarily converts all your point production into light production. Get enough light, and you can activate your relics for rewards.<br>';
-			},
+			challengeDescription: 'Temporarily converts all your point production into light production. Get enough light, and you can activate your relics for rewards.<br>',
 			goalDescription() {
 				if (maxedChallenge('r', 11)) text = 'You have ' + format(player.r.light) + ' light.<br>(' + format(player.r.lightgain) + '/sec)<br>';
 				else text = 'You have ' + format(player.r.light) + '/' + format(player.r.lightreq) + ' light.<br>(' + format(player.r.lightgain) + '/sec)<br>';
@@ -5176,6 +5163,17 @@ addLayer('r', {
 				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-color':color,'color':textcolor,'border-radius':'16%','height':'425px','width':'425px'};
 			},
+		},
+	},
+	clickables: {
+		11: {
+			display: 'Reset your light to the start of the light softcap',
+			canClick() {return player.r.light.gt(0) && !inChallenge('r', 11)},
+			onClick() {
+				if (confirm('are you sure you want to reset your light to the start of the light softcap?')) player.r.light = new Decimal(player.r.lightsoftcap_start[0]).add(player.r.lightgain.mul(0.1));
+			},
+			style: {'min-height':'30px','width':'fit-content','border-radius':'15px'},
+			unlocked() {return player.r.light.gte(player.r.lightsoftcap_start[0])},
 		},
 	},
 	upgrades: {
