@@ -5070,9 +5070,21 @@ addLayer('r', {
 			}],
 		"blank",
 		"challenges",
+		"clickables",
 		"blank",
 		"upgrades",
 	],
+	clickables: {
+		11: {
+			display() {return "Reset your light to the start of the light softcap"},
+			canClick() {return player.r.light.gt(0) && !inChallenge('r', 11)},
+			onClick() {
+				if (confirm('are you sure you want to reset your light to the start of the light softcap?')) player.r.light = new Decimal(player.r.lightsoftcap_start[0]).add(player.r.lightgain.mul(0.1));
+			},
+			style: {'min-height':'30px','width':'fit-content','border-radius':'15px'},
+			unlocked() {return player.r.light.gte(player.r.lightsoftcap_start[0])},
+		},
+	},
 	challenges: {
 		11: {
 			name() {
@@ -5837,7 +5849,7 @@ addLayer('gi', {
 				if (player.nerdMode) return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(new Decimal(10).pow(getBuyableAmount('gi', 12).pow(1.5))) + 'x<br>formula: 10^(x^1.5)<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', 12)) + '/' + formatWhole(this.purchaseLimit()) + '<br>limit formula: log10(x)/10 (floored)<br>where x is demon souls';
 				return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(new Decimal(10).pow(getBuyableAmount('gi', 12).pow(1.5))) + 'x<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', 12)) + '/' + formatWhole(this.purchaseLimit());
 			},
-			unlocked() {return getBuyableAmount('gi', 11).gte(8)}
+			unlocked() {return getBuyableAmount('gi', 11).gte(8)},
 		},
 	},
 });
