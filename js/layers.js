@@ -767,7 +767,7 @@ addLayer('e', {
             if (hasUpgrade('sp', 12)) mult = mult.mul(new Decimal(5).pow(getBuyableAmount('sp', 12)));
         };
         if (getBuyableAmount('sp', 11).gt(0)) mult = mult.mul(getBuyableAmount('sp', 11).add(1).pow(-1));
-        if (getBuyableAmount('gi', 12).gt(0)) mult = mult.mul(getBuyableAmount('gi', 12).add(1).pow(3));
+        if (getBuyableAmount('gi', 12).gt(0)) mult = mult.mul(new Decimal(10).pow(getBuyableAmount('gi', 12).pow(1.5)));
         if (hasUpgrade('p', 22)) mult = mult.mul(player.p.holiness.add(1).pow(0.055));
         if (player.s.points.gt(0)) mult = mult.mul(tmp.s.effect);
         if (player.r.points.gt(0)) mult = mult.mul(player.r.essencemult);
@@ -4279,7 +4279,9 @@ addLayer('s', {
                     player.s.total = new Decimal(2);
                 };
                 if (hasMilestone('gi', 6) && resettingLayer == 'gi') {
-                    if (hasMilestone('gi', 7)) set = 7;
+                    if (hasMilestone('gi', 9)) set = 16;
+                    else if (hasMilestone('gi', 8)) set = 9;
+                    else if (hasMilestone('gi', 7)) set = 7;
                     else set = 4;
                     player.s.points = new Decimal(set);
                     player.s.best = new Decimal(set);
@@ -4751,76 +4753,37 @@ addLayer('d', {
     layerShown() {return false},
     automate() {
         if (hasMilestone('s', 19) && player.s.auto_worship) {
-            if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-            if (challengeCompletions('r', 11) >= 17 && layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-            if (hasMilestone('s', 44) && layers.d.buyables[11].canAfford()) {
+            let work = 1;
+            if (hasMilestone('s', 44)) work *= 2;
+            if (hasMilestone('s', 46)) work *= 2;
+            if (hasMilestone('s', 51)) work *= 3;
+            if (challengeCompletions('r', 11) >= 17) work *= 2;
+            if (hasMilestone('gi', 10)) work *= 2;
+            for (let index = 0; index < work; index++) {
+                if (!layers.d.buyables[11].canAfford()) break;
                 layers.d.buyables[11].buy();
-                if (challengeCompletions('r', 11) >= 17 && layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-            };
-            if (hasMilestone('s', 46)) {
-                if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                if (challengeCompletions('r', 11) >= 17) {
-                    if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                    if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                };
-            };
-            if (hasMilestone('s', 51)) {
-                if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                if (challengeCompletions('r', 11) >= 17) {
-                    if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                    if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                    if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                    if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                    if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                    if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                    if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                    if (layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-                };
             };
         };
-        if (hasMilestone('s', 38) && player.s.auto_sacrifice && layers.d.buyables[12].canAfford()) {
-            layers.d.buyables[12].buy();
-            if (challengeCompletions('r', 11) >= 17 && layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-            if (challengeCompletions('r', 11) >= 22) {
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-            };
-            if (challengeCompletions('r', 11) >= 23) {
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-            };
-            if (challengeCompletions('r', 11) >= 32) {
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-                if (layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
+        if (hasMilestone('s', 38) && player.s.auto_sacrifice) {
+            let work = 1;
+            if (challengeCompletions('r', 11) >= 17) work *= 2;
+            if (challengeCompletions('r', 11) >= 22) work *= 2;
+            if (challengeCompletions('r', 11) >= 23) work *= 1.5;
+            if (challengeCompletions('r', 11) >= 32) work *= 2;
+            if (hasMilestone('gi', 10)) work *= 2;
+            for (let index = 0; index < work; index++) {
+                if (!layers.d.buyables[12].canAfford()) break;
+                layers.d.buyables[12].buy();
             };
         };
-        if (hasMilestone('s', 28) && player.s.auto_sacrificial_ceremony && layers.d.buyables[21].canAfford()) {
-            layers.d.buyables[21].buy();
-            if (challengeCompletions('r', 11) >= 17 && layers.d.buyables[21].canAfford()) layers.d.buyables[21].buy();
+        if (hasMilestone('s', 28) && player.s.auto_sacrificial_ceremony) {
+            let work = 1;
+            if (challengeCompletions('r', 11) >= 17) work *= 2;
+            if (hasMilestone('gi', 10)) work *= 2;
+            for (let index = 0; index < work; index++) {
+                if (!layers.d.buyables[21].canAfford()) break;
+                layers.d.buyables[21].buy();
+            };
         };
     },
     update(diff) {
@@ -5709,31 +5672,58 @@ addLayer('gi', {
             requirementDescription: '3 good influence',
             effectDescription: 'good influence resets don\'t reset cores',
             done() { return player.gi.points.gte(3) },
+            unlocked() { return hasMilestone('gi', 0) },
         },
         3: {
             requirementDescription: '4 good influence',
             effectDescription: 'good influence resets don\'t reset quarks',
             done() { return player.gi.points.gte(4) },
+            unlocked() { return hasMilestone('gi', 1) },
         },
         4: {
             requirementDescription: '5 good influence',
             effectDescription: 'good influence resets don\'t reset hexes',
             done() { return player.gi.points.gte(5) },
+            unlocked() { return hasMilestone('gi', 2) },
         },
         5: {
             requirementDescription: '6 good influence',
             effectDescription: 'good influence resets don\'t reset demon souls',
             done() { return player.gi.points.gte(6) },
+            unlocked() { return hasMilestone('gi', 3) },
         },
         6: {
             requirementDescription: '8 good influence',
             effectDescription: 'keep 4 sanctums on good influence resets',
             done() { return player.gi.points.gte(8) },
+            unlocked() { return hasMilestone('gi', 4) },
         },
         7: {
             requirementDescription: '10 good influence',
-            effectDescription: 'keep 3 sanctums (7 total) on good influence resets',
+            effectDescription: 'keep 3 more sanctums (7 total) on good influence resets',
             done() { return player.gi.points.gte(10) },
+            unlocked() { return hasMilestone('gi', 5) },
+        },
+        8: {
+            requirementDescription: '13 good influence',
+            effectDescription: 'keep 2 more sanctums (9 total) on good influence resets',
+            done() { return player.gi.points.gte(13) },
+            unlocked() { return hasMilestone('gi', 6) },
+        },
+        9: {
+            requirementDescription: '16 good influence',
+            effectDescription: 'keep 7 more sanctums (16 total) on good influence resets',
+            done() { return player.gi.points.gte(16) },
+            unlocked() { return hasMilestone('gi', 7) },
+        },
+        10: {
+            requirementDescription: '19 good influence',
+            effectDescription() {
+                if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'all Devotion autobuyers work twice as fast';
+                return 'all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work twice as fast';
+            },
+            done() { return player.gi.points.gte(19) },
+            unlocked() { return hasMilestone('gi', 8) },
         },
     },
     buyables: {
@@ -5774,8 +5764,8 @@ addLayer('gi', {
                 setBuyableAmount('gi', 12, getBuyableAmount('gi', 12).add(1));
             },
             display() {
-                if (player.nerdMode) return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(getBuyableAmount('gi', 12).add(1).pow(3)) + 'x<br>formula: (x+1)^3<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', 12)) + '/' + formatWhole(this.purchaseLimit()) + '<br>limit formula: log10(x)/10 (floored)<br>where x is demon souls';
-                return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(getBuyableAmount('gi', 12).add(1).pow(3)) + 'x<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', 12)) + '/' + formatWhole(this.purchaseLimit());
+                if (player.nerdMode) return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(new Decimal(10).pow(getBuyableAmount('gi', 12).pow(1.5))) + 'x<br>formula: 10^(x^1.5)<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', 12)) + '/' + formatWhole(this.purchaseLimit()) + '<br>limit formula: log10(x)/10 (floored)<br>where x is demon souls';
+                return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(new Decimal(10).pow(getBuyableAmount('gi', 12).pow(1.5))) + 'x<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', 12)) + '/' + formatWhole(this.purchaseLimit());
             },
             unlocked() {return getBuyableAmount('gi', 11).gte(8)}
         },
