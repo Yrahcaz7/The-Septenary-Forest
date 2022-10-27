@@ -180,10 +180,11 @@ addLayer('A', {
 			color: '#D2D237',
 		},
 		35: {
-			name: 'Core of Truth',
+			name: 'Core of the Universe',
 			done() {return player.c.points.gte('1e10000')},
 			tooltip: 'obtain 1e10,000 cores.',
 			unlocked() { if (hasAchievement('A', 34)) return true },
+			image() { if (hasAchievement('A', 34)) return "images/achievements/35.png" },
 			color: '#D2D237',
 		},
 		36: {
@@ -353,7 +354,7 @@ addLayer('A', {
 			color: '#BA0035',
 		},
 		73: {
-			name: 'Demonic Origin',
+			name: 'Demon Summoning',
 			done() {return player.ds.points.gte(1e60)},
 			tooltip: 'obtain 1e60 demon souls.',
 			unlocked() { if (hasAchievement('A', 72)) return true },
@@ -361,14 +362,15 @@ addLayer('A', {
 			color: '#BA0035',
 		},
 		74: {
-			name: 'Demon Dimension',
+			name: 'Demonic Origin',
 			done() {return player.ds.points.gte('1e400')},
 			tooltip: 'obtain 1e400 demon souls.',
 			unlocked() { if (hasAchievement('A', 73)) return true },
+			image() { if (hasAchievement('A', 73)) return "images/achievements/74.png" },
 			color: '#BA0035',
 		},
 		75: {
-			name: 'Demonic Everything',
+			name: 'Demonic Dimension',
 			done() {return player.ds.points.gte('1e2000')},
 			tooltip: 'obtain 1e2000 demon souls.',
 			unlocked() { if (hasAchievement('A', 74)) return true },
