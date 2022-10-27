@@ -89,6 +89,7 @@ function getPointGen(forced = false) {
 				if (hasUpgrade('h', 41)) gain = gain.mul(upgradeEffect('h', 41));
 	}}};
 	if (hasUpgrade('p', 72)) gain = gain.mul(upgradeEffect('p', 72));
+	if (hasUpgrade('m', 52)) gain = gain.mul(upgradeEffect('m', 52));
 	if (getBuyableAmount('c', 11).gt(0)) gain = gain.mul(getBuyableAmount('c', 11).mul(5).add(1));
 	if (getBuyableAmount('sp', 21).gt(0)) {
 		gain = gain.mul(new Decimal(5).pow(getBuyableAmount('sp', 21)));

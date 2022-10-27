@@ -78,7 +78,7 @@ addLayer('A', {
 		14: {
 			name: 'Cosmic Point',
 			done() {return player.points.gte('1e1000')},
-			tooltip: 'obtain 1e1,000 points.',
+			tooltip: 'obtain 1e1000 points.',
 			unlocked() { if (hasAchievement('A', 13)) return true },
 			image() { if (hasAchievement('A', 14)) return "images/achievements/14.png" },
 			color: '#DFDFDF',
@@ -126,7 +126,7 @@ addLayer('A', {
 		24: {
 			name: 'Essence of the Universe',
 			done() {return player.e.points.gte('1e1000')},
-			tooltip: 'obtain 1e1,000 essence.',
+			tooltip: 'obtain 1e1000 essence.',
 			unlocked() { if (hasAchievement('A', 23)) return true },
 			image() { if (hasAchievement('A', 24)) return "images/achievements/24.png" },
 			color: '#4CED13',
@@ -174,7 +174,7 @@ addLayer('A', {
 		34: {
 			name: 'Core of the Sun',
 			done() {return player.c.points.gte('1e1000')},
-			tooltip: 'obtain 1e1,000 cores.',
+			tooltip: 'obtain 1e1000 cores.',
 			unlocked() { if (hasAchievement('A', 33)) return true },
 			image() { if (hasAchievement('A', 34)) return "images/achievements/34.png" },
 			color: '#D2D237',
@@ -221,7 +221,7 @@ addLayer('A', {
 		44: {
 			name: 'Quirky Quarks',
 			done() {return player.q.points.gte('1e1000')},
-			tooltip: 'obtain 1e1,000 quarks.',
+			tooltip: 'obtain 1e1000 quarks.',
 			unlocked() { if (hasAchievement('A', 43)) return true },
 			image() { if (hasAchievement('A', 44)) return "images/achievements/44.png" },
 			color: '#DB5196',
@@ -316,7 +316,7 @@ addLayer('A', {
 		64: {
 			name: 'The Advent of the End',
 			done() {return player.h.points.gte('1e1000')},
-			tooltip: 'obtain 1e1,000 hexes.',
+			tooltip: 'obtain 1e1000 hexes.',
 			unlocked() { if (hasAchievement('A', 63)) return true },
 			image() { if (hasAchievement('A', 64)) return "images/achievements/64.png" },
 			color: '#E36409',
@@ -365,6 +365,13 @@ addLayer('A', {
 			done() {return player.ds.points.gte('1e400')},
 			tooltip: 'obtain 1e400 demon souls.',
 			unlocked() { if (hasAchievement('A', 73)) return true },
+			color: '#BA0035',
+		},
+		75: {
+			name: 'Demonic Everything',
+			done() {return player.ds.points.gte('1e2000')},
+			tooltip: 'obtain 1e2000 demon souls.',
+			unlocked() { if (hasAchievement('A', 74)) return true },
 			color: '#BA0035',
 		},
 		76: {
@@ -447,7 +454,7 @@ addLayer('A', {
 		94: {
 			name: 'Global Prayers',
 			done() {return player.p.points.gte('1e1000')},
-			tooltip: 'obtain 1e1,000 prayers.',
+			tooltip: 'obtain 1e1000 prayers.',
 			unlocked() { if (hasAchievement('A', 93)) return true },
 			color: '#FDBBFF',
 		},
@@ -4758,7 +4765,7 @@ addLayer('d', {
 			if (hasMilestone('s', 46)) work *= 2;
 			if (hasMilestone('s', 51)) work *= 3;
 			if (challengeCompletions('r', 11) >= 17) work *= 2;
-			if (hasMilestone('gi', 10)) work *= 2;
+			if (hasMilestone('gi', 10)) work *= 3;
 			for (let index = 0; index < work; index++) {
 				if (!layers.d.buyables[11].canAfford()) break;
 				layers.d.buyables[11].buy();
@@ -4770,7 +4777,7 @@ addLayer('d', {
 			if (challengeCompletions('r', 11) >= 22) work *= 2;
 			if (challengeCompletions('r', 11) >= 23) work *= 1.5;
 			if (challengeCompletions('r', 11) >= 32) work *= 2;
-			if (hasMilestone('gi', 10)) work *= 2;
+			if (hasMilestone('gi', 10)) work *= 3;
 			for (let index = 0; index < work; index++) {
 				if (!layers.d.buyables[12].canAfford()) break;
 				layers.d.buyables[12].buy();
@@ -4779,7 +4786,7 @@ addLayer('d', {
 		if (hasMilestone('s', 28) && player.s.auto_sacrificial_ceremony) {
 			let work = 1;
 			if (challengeCompletions('r', 11) >= 17) work *= 2;
-			if (hasMilestone('gi', 10)) work *= 2;
+			if (hasMilestone('gi', 10)) work *= 3;
 			for (let index = 0; index < work; index++) {
 				if (!layers.d.buyables[21].canAfford()) break;
 				layers.d.buyables[21].buy();
@@ -5236,13 +5243,15 @@ addLayer('m', {
 			if (layers[resettingLayer].row > this.row) layerDataReset('m', keep);
 		},
 	update(diff) {
-		effnon = new Decimal(player.m.upgrades.length);
+		let effnon = new Decimal(player.m.upgrades.length);
 		if (hasUpgrade('m', 42)) effnon = effnon.mul(upgradeEffect('m', 42));
 		player.m.unique_nonextra = effnon;
-		effex = new Decimal(0);
+		let effex = new Decimal(0);
 		if (hasUpgrade('m', 31) && upgradeEffect('m', 31).gt(0)) effex = effex.add(upgradeEffect('m', 31));
 		if (hasUpgrade('m', 32) && upgradeEffect('m', 32).gt(0)) effex = effex.add(upgradeEffect('m', 32));
 		if (hasUpgrade('m', 41) && upgradeEffect('m', 41).gt(0)) effex = effex.add(upgradeEffect('m', 41));
+		if (hasUpgrade('m', 51) && upgradeEffect('m', 51).gt(0)) effex = effex.add(upgradeEffect('m', 51));
+		if (hasUpgrade('m', 53) && upgradeEffect('m', 53).gt(0)) effex = effex.add(upgradeEffect('m', 53));
 		player.m.unique_extra = effex;
 		player.m.unique_total = player.m.unique_nonextra.add(player.m.unique_extra);
 	},
@@ -5444,7 +5453,7 @@ addLayer('m', {
 		},
 		22: {
 			title() {
-				return '<b class="layer-m' + getdark(this, "title-light") + 'H<tag style="font-size:10px;">2</tag>O, aka Water';
+				return '<b class="layer-m' + getdark(this, "title-light") + 'H<tag style="font-size:10px">2</tag>O, aka Water';
 			},
 			description() {
 				return 'multiplies essence gain based on your total unique molecules';
@@ -5516,7 +5525,7 @@ addLayer('m', {
 			fullDisplay() {
 				text = '';
 				if (player.nerdMode) text += ' <br>formula: x*1000';
-				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'O<tag style="font-size:10px;">3</tag>, aka Ozone</h3><br>multiplies demon soul based on your total unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e10) + ' atoms';
+				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'O<tag style="font-size:10px">3</tag>, aka Ozone</h3><br>multiplies demon soul based on your total unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e10) + ' atoms';
 			},
 			canAfford() {
 				if (player.a.points.gte(1e10)) return true;
@@ -5584,6 +5593,60 @@ addLayer('m', {
 			},
 			unlocked() { return hasUpgrade('m', 31) && hasUpgrade('m', 32) && hasUpgrade('m', 33) },
 		},
+		51: {
+			title() {
+				return '<b class="layer-m' + getdark(this, "title-light") + 'Neon Gas';
+			},
+			description() {
+				return 'gives extra unique molecules based on your total good influence';
+			},
+			cost: 1e12,
+			effect() {
+				return player.gi.total.add(1).pow(2.5).floor();
+			},
+			effectDisplay() {
+				text = '+' + formatWhole(this.effect());
+				if (player.nerdMode) text += ' <br>formula: (x+1)^2.5';
+				return text;
+			},
+			unlocked() { return hasMilestone('gi', 11) },
+		},
+		52: {
+			title() {
+				return '<b class="layer-m' + getdark(this, "title-light") + 'Sodium Oxide';
+			},
+			description() {
+				return 'multiplies point gain based on your total unique molecules';
+			},
+			cost: 1e13,
+			effect() {
+				return player.m.unique_total.add(1).pow(10);
+			},
+			effectDisplay() {
+				text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: (x+1)^10';
+				return text;
+			},
+			unlocked() { return hasMilestone('gi', 11) },
+		},
+		53: {
+			title() {
+				return '<b class="layer-m' + getdark(this, "title-light") + 'F<tag style="font-size:10px">2</tag>, Fluorine';
+			},
+			description() {
+				return 'gives extra unique molecules based on your atoms';
+			},
+			cost: 1e14,
+			effect() {
+				return player.a.points.add(1).pow(0.45).floor();
+			},
+			effectDisplay() {
+				text = '+' + formatWhole(this.effect());
+				if (player.nerdMode) text += ' <br>formula: (x+1)^0.45';
+				return text;
+			},
+			unlocked() { return hasMilestone('gi', 11) },
+		},
 	},
 });
 
@@ -5596,6 +5659,7 @@ addLayer('gi', {
 		points: new Decimal(0),
 		best: new Decimal(0),
 		total: new Decimal(0),
+		best_devotion: new Decimal(0),
 		req_devotion: new Decimal(1),
 	}},
 	color() {
@@ -5705,24 +5769,30 @@ addLayer('gi', {
 			unlocked() { return hasMilestone('gi', 5) },
 		},
 		8: {
-			requirementDescription: '13 good influence',
+			requirementDescription: '12 good influence',
 			effectDescription: 'keep 2 more sanctums (9 total) on good influence resets',
-			done() { return player.gi.points.gte(13) },
+			done() { return player.gi.points.gte(12) },
 			unlocked() { return hasMilestone('gi', 6) },
 		},
 		9: {
-			requirementDescription: '16 good influence',
+			requirementDescription: '15 good influence',
 			effectDescription: 'keep 7 more sanctums (16 total) on good influence resets',
-			done() { return player.gi.points.gte(16) },
+			done() { return player.gi.points.gte(15) },
 			unlocked() { return hasMilestone('gi', 7) },
 		},
 		10: {
-			requirementDescription: '19 good influence',
+			requirementDescription: '18 good influence',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'all Devotion autobuyers work twice as fast';
-				return 'all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work twice as fast';
+				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'all Devotion autobuyers work thrice as fast';
+				return 'all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work thrice as fast';
 			},
-			done() { return player.gi.points.gte(19) },
+			done() { return player.gi.points.gte(18) },
+			unlocked() { return hasMilestone('gi', 8) },
+		},
+		11: {
+			requirementDescription: '21 good influence',
+			effectDescription: 'you can explore 3 further molecule upgrades',
+			done() { return player.gi.points.gte(21) },
 			unlocked() { return hasMilestone('gi', 8) },
 		},
 	},
