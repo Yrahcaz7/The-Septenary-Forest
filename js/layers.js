@@ -4772,7 +4772,7 @@ addLayer('d', {
 			if (hasMilestone('s', 51)) work *= 3;
 			if (challengeCompletions('r', 11) >= 17) work *= 2;
 			if (challengeCompletions('r', 11) >= 38) work *= 2;
-			if (challengeCompletions('r', 11) >= 41) work *= 2;
+			if (challengeCompletions('r', 11) >= 40) work *= 2;
 			if (hasMilestone('gi', 10)) work *= 2;
 			for (let index = 0; index < work; index++) {
 				if (!layers.d.buyables[11].canAfford()) break;
@@ -4786,7 +4786,7 @@ addLayer('d', {
 			if (challengeCompletions('r', 11) >= 23) work *= 1.5;
 			if (challengeCompletions('r', 11) >= 32) work *= 2;
 			if (challengeCompletions('r', 11) >= 38) work *= 2;
-			if (challengeCompletions('r', 11) >= 41) work *= 2;
+			if (challengeCompletions('r', 11) >= 40) work *= 2;
 			if (hasMilestone('gi', 10)) work *= 2;
 			for (let index = 0; index < work; index++) {
 				if (!layers.d.buyables[12].canAfford()) break;
@@ -4797,7 +4797,7 @@ addLayer('d', {
 			let work = 1;
 			if (challengeCompletions('r', 11) >= 17) work *= 2;
 			if (challengeCompletions('r', 11) >= 38) work *= 2;
-			if (challengeCompletions('r', 11) >= 41) work *= 2;
+			if (challengeCompletions('r', 11) >= 40) work *= 2;
 			if (hasMilestone('gi', 10)) work *= 2;
 			for (let index = 0; index < work; index++) {
 				if (!layers.d.buyables[21].canAfford()) break;
@@ -5148,8 +5148,7 @@ addLayer('r', {
 				else if (challengeCompletions('r', 11) == 36) text += '<br>Next reward: still nothing';
 				else if (challengeCompletions('r', 11) == 37) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work<br>twice as fast';
 				else if (challengeCompletions('r', 11) == 38) text += '<br>Next reward: nothing';
-				else if (challengeCompletions('r', 11) == 39) text += '<br>Next reward: still nothing';
-				else if (challengeCompletions('r', 11) == 40) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work<br>twice as fast';
+				else if (challengeCompletions('r', 11) == 39) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work<br>twice as fast';
 				else text += '<br>Next reward: you have gotten all the rewards!';
 				return text;
 			},
@@ -5666,11 +5665,11 @@ addLayer('m', {
 			},
 			cost: 1e14,
 			effect() {
-				return player.m.unique_total.add(1).pow(10);
+				return player.m.unique_total.add(1).pow(25);
 			},
 			effectDisplay() {
 				text = format(this.effect()) + 'x';
-				if (player.nerdMode) text += ' <br>formula: (x+1)^10';
+				if (player.nerdMode) text += ' <br>formula: (x+1)^25';
 				return text;
 			},
 			unlocked() { return hasMilestone('gi', 11) },
@@ -5749,7 +5748,9 @@ addLayer('gi', {
 			if (layers[resettingLayer].row > this.row) layerDataReset('gi', keep);
 		},
 	update(diff) {
-		eff = player.s.devotion.mul(1.05).add(1).pow(0.2);
+		let ex = 0.2;
+		if (hasMilestone('gi', 12)) ex = 0.22;
+		let eff = player.s.devotion.mul(1.05).add(1).pow(ex);
 		player.gi.req_devotion = eff;
 	},
 	tabFormat: [
@@ -5842,6 +5843,15 @@ addLayer('gi', {
 			toggles: [['a', 'auto_upgrades']],
 			unlocked() { return hasMilestone('gi', 9) },
 		},
+		12: {
+			requirementDescription: '22 good influence and<br>555 total good influence',
+			effectDescription() {
+				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'increase Devotion\'s effect exponent<br>on good influence gain<br>0.2 --> 0.22';
+				return 'increase <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b>\'s effect exponent<br>on good influence gain<br>0.2 --> 0.22';
+			},
+			done() { return player.gi.points.gte(22) && player.gi.total.gte(555) },
+			unlocked() { return hasMilestone('gi', 10) },
+		},
 	},
 	buyables: {
 		11: {
@@ -5874,17 +5884,17 @@ addLayer('gi', {
 				return player.gi.points.gte(this.cost()) && getBuyableAmount('gi', 12).lt(this.purchaseLimit());
 			},
 			purchaseLimit() {
-				return player.ds.points.log(10).div(10).floor();
+				return player.ds.points.add(1).log(10).div(12).floor();
 			},
 			buy() {
 				player.gi.points = player.gi.points.sub(this.cost());
 				setBuyableAmount('gi', 12, getBuyableAmount('gi', 12).add(1));
 			},
 			display() {
-				if (player.nerdMode) return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(new Decimal(10).pow(getBuyableAmount('gi', 12).pow(1.5))) + 'x<br>formula: 10^(x^1.5)<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', 12)) + '/' + formatWhole(this.purchaseLimit()) + '<br>limit formula: log10(x)/10 (floored)<br>where x is demon souls';
+				if (player.nerdMode) return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(new Decimal(10).pow(getBuyableAmount('gi', 12).pow(1.5))) + 'x<br>formula: 10^(x^1.5)<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', 12)) + '/' + formatWhole(this.purchaseLimit()) + '<br>limit formula: log10(x+1)/12 (floored) where x is demon souls';
 				return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(new Decimal(10).pow(getBuyableAmount('gi', 12).pow(1.5))) + 'x<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', 12)) + '/' + formatWhole(this.purchaseLimit());
 			},
-			unlocked() {return getBuyableAmount('gi', 11).gte(8)},
+			unlocked() { return getBuyableAmount('gi', 11).gte(8) },
 		},
 	},
 });
