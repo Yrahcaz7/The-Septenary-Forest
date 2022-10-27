@@ -4948,6 +4948,7 @@ addLayer('r', {
 		total: new Decimal(0),
 		lightreq: new Decimal(20000),
 		light: new Decimal(0),
+		lightbest: new Decimal(0),
 		lightgain: new Decimal(0),
 		lightgainbest: new Decimal(0),
 		lightsoftcap_start: [1e20],
@@ -5064,6 +5065,7 @@ addLayer('r', {
 			player.r.lightgain = gain;
 		} else player.r.lightgain = lightboost;
 		player.r.light = player.r.light.add(player.r.lightgain.mul(diff));
+		if (player.r.light.gt(player.r.lightbest)) player.r.lightbest = player.r.light;
 		if (player.r.lightgain.gt(player.r.lightgainbest)) player.r.lightgainbest = player.r.lightgain;
 	},
 	tabFormat: [
@@ -5167,10 +5169,23 @@ addLayer('r', {
 	},
 	clickables: {
 		11: {
-			display: 'Reset your light to the start of the light softcap',
+			display: 'Reset your light to the start of the<br>light softcap and enter activation',
 			canClick() {return player.r.light.gt(0) && !inChallenge('r', 11)},
 			onClick() {
-				if (confirm('are you sure you want to reset your light to the start of the light softcap?')) player.r.light = new Decimal(player.r.lightsoftcap_start[0]).add(player.r.lightgain.mul(0.1));
+				if (confirm('are you sure you want to reset your light to the start of the light softcap?')) {
+					player.r.light = new Decimal(player.r.lightsoftcap_start[0]).add(player.r.lightgain.mul(0.1));
+					startChallenge('r', 11);
+				};
+			},
+			style: {'min-height':'30px','width':'fit-content','border-radius':'15px'},
+			unlocked() {return player.r.light.gte(player.r.lightsoftcap_start[0])},
+		},
+		12: {
+			display: 'Restore your light to your best<br>light and exit activation',
+			canClick() {return player.r.lightbest.gt(0) && player.r.light.lt(player.r.lightbest)},
+			onClick() {
+				player.r.light = player.r.lightbest;
+				if (inChallenge('r', 11)) completeChallenge('r', 11);
 			},
 			style: {'min-height':'30px','width':'fit-content','border-radius':'15px'},
 			unlocked() {return player.r.light.gte(player.r.lightsoftcap_start[0])},
