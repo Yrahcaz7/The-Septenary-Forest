@@ -789,7 +789,7 @@ addLayer('e', {
 	},
 	row: 0,
 	hotkeys: [
-		{key: 'e', description: "E: Reset for essence", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+		{key: 'e', description: 'E: Reset for essence', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown(){return true},
 	passiveGeneration() {
@@ -835,7 +835,7 @@ addLayer('e', {
 		if (hasMilestone('s', 20) && resettingLayer == 's') return;
 		if (hasMilestone('m', 2) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 1) && resettingLayer == 'gi') return;
-		let keep = ["auto_upgrades", "auto_buyables"];
+		let keep = ['auto_upgrades', 'auto_buyables'];
 			if (hasMilestone('c', 0) && resettingLayer == 'c') keep.push("upgrades");
 			if (hasMilestone('c', 2) && resettingLayer == 'c') keep.push("buyables");
 			if (hasMilestone('q', 1) && resettingLayer == 'q') keep.push("upgrades");
@@ -1150,7 +1150,7 @@ addLayer('c', {
 	softcapPower: 0.7,
 	row: 1,
 	hotkeys: [
-		{key: 'c', description: "C: Reset for cores", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+		{key: 'c', description: 'C: Reset for cores', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown(){return true},
 	passiveGeneration() {
@@ -1191,7 +1191,7 @@ addLayer('c', {
 		if (challengeCompletions('r', 11) >= 25 && resettingLayer == 'r') return;
 		if (hasMilestone('m', 4) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 2) && resettingLayer == 'gi') return;
-		let keep = ["auto_upgrades", "auto_buyables"];
+		let keep = ['auto_upgrades', 'auto_buyables'];
 			if (hasMilestone('h', 2) && resettingLayer == 'h') keep.push("upgrades");
 			if (hasMilestone('h', 3) && resettingLayer == 'h') keep.push("buyables");
 			if (hasMilestone('h', 4) && resettingLayer == 'sp') keep.push("upgrades");
@@ -1503,7 +1503,7 @@ addLayer('q', {
 	softcapPower: 0.6,
 	row: 1,
 	hotkeys: [
-		{key: 'q', description: "Q: Reset for quarks", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+		{key: 'q', description: 'Q: Reset for quarks', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown(){return player.c.unlocked},
 	passiveGeneration() {
@@ -1543,7 +1543,7 @@ addLayer('q', {
 		if (challengeCompletions('r', 11) >= 30 && resettingLayer == 'r') return;
 		if (hasMilestone('m', 5) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 3) && resettingLayer == 'gi') return;
-		let keep = ["auto_upgrades"];
+		let keep = ['auto_upgrades'];
 			if (hasMilestone('sp', 3) && resettingLayer == 'sp') keep.push("milestones");
 			if (hasMilestone('sp', 5) && resettingLayer == 'sp') keep.push("upgrades");
 			if (hasMilestone('h', 5) && resettingLayer == 'h') keep.push("milestones");
@@ -1997,7 +1997,7 @@ addLayer('sp', {
 	},
 	row: 2,
 	hotkeys: [
-		{key: 'S', description: "Shift-S: Reset for subatomic particles", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+		{key: 'S', description: 'Shift-S: Reset for subatomic particles', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown(){return player.q.unlocked},
 	automate() {
@@ -2020,7 +2020,7 @@ addLayer('sp', {
 	},
 	doReset(resettingLayer) {
 		if (challengeCompletions('r', 11) >= 35 && resettingLayer == 'r') return;
-		let keep = ["auto_upgrades", "auto_buyables"];
+		let keep = ['auto_upgrades', 'auto_buyables'];
 			if (hasMilestone('ds', 0) && resettingLayer == 'ds') keep.push("buyables");
 			if (hasMilestone('ds', 1) && resettingLayer == 'ds') keep.push("upgrades");
 			if (hasMilestone('a', 0) && resettingLayer == 'a') keep.push("buyables");
@@ -2224,7 +2224,7 @@ addLayer('h', {
 	softcapPower: 0.5,
 	row: 2,
 	hotkeys: [
-		{key: 'h', description: "H: Reset for hexes", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+		{key: 'h', description: 'H: Reset for hexes', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown(){return player.sp.unlocked},
 	passiveGeneration() {
@@ -2245,7 +2245,7 @@ addLayer('h', {
 		if (challengeCompletions('r', 11) >= 27 && resettingLayer == 'r') return;
 		if (hasMilestone('m', 13) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 4) && resettingLayer == 'gi') return;
-		let keep = ["auto_upgrades"];
+		let keep = ['auto_upgrades'];
 			if (hasMilestone('ds', 8) && resettingLayer == 'ds') keep.push("milestones");
 			if (hasMilestone('a', 6) && resettingLayer == 'a') keep.push("milestones");
 			if (hasMilestone('a', 11) && (resettingLayer == 'a' || resettingLayer == 'ds')) keep.push("upgrades");
@@ -2698,7 +2698,7 @@ addLayer('ds', {
 	},
 	row: 3,
 	hotkeys: [
-		{key: 'd', description: "D: Reset for demon souls", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+		{key: 'd', description: 'D: Reset for demon souls', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown(){return player.h.unlocked},
 	passiveGeneration() {
@@ -2728,7 +2728,7 @@ addLayer('ds', {
 	doReset(resettingLayer) {
 		if (hasMilestone('m', 14) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 5) && resettingLayer == 'gi') return;
-		let keep = ["auto_upgrades", "auto_buyables"];
+		let keep = ['auto_upgrades', 'auto_buyables'];
 		let saveupg = [];
 			if (hasMilestone('m', 1)) {
 				keep.push("challenges");
@@ -2775,8 +2775,7 @@ addLayer('ds', {
 				];
 			},
 			unlocked() {
-				if (hasUpgrade('ds', 22)) return true;
-				return false;
+				return hasUpgrade('ds', 22);
 			},
 		},
 	},
@@ -2960,8 +2959,7 @@ addLayer('ds', {
 				doReset('ds', true);
 			},
 			unlocked() {
-				if (hasChallenge('ds', 11)) return true;
-				return false;
+				return hasChallenge('ds', 11);
 			},
 			rewardDescription: "multiply demon soul gain based on your hexes",
 			rewardDisplay() {
@@ -2988,8 +2986,7 @@ addLayer('ds', {
 				doReset('ds', true);
 			},
 			unlocked() {
-				if (hasChallenge('ds', 12)) return true;
-				return false;
+				return hasChallenge('ds', 12);
 			},
 			rewardDescription: "multiply subatomic particle<br>gain based on your demon souls",
 			rewardDisplay() {
@@ -3016,8 +3013,7 @@ addLayer('ds', {
 				doReset('ds', true);
 			},
 			unlocked() {
-				if (hasMilestone('a', 7)) return true;
-				return false;
+				return hasMilestone('a', 7);
 			},
 			rewardDescription: "multiply atom gain by 1.5",
 		},
@@ -3033,6 +3029,7 @@ addLayer('a', {
 		points: new Decimal(0),
 		best: new Decimal(0),
 		total: new Decimal(0),
+		auto_upgrades: false,
 	}},
 	color() {
 		if (player.sp.points.gte(10000) || player.a.unlocked) return "#4D2FE0";
@@ -3068,11 +3065,18 @@ addLayer('a', {
 	},
 	row: 3,
 	hotkeys: [
-		{key: 'a', description: "A: Reset for atoms", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+		{key: 'a', description: 'A: Reset for atoms', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown(){return player.ds.unlocked},
+	automate() {
+		if (hasMilestone('gi', 11) && player.a.auto_upgrades) {
+			for (id in layers.a.upgrades) {
+				if (layers.a.upgrades[id].unlocked) buyUpgrade('a', id);
+			};
+		};
+	},
 	doReset(resettingLayer) {
-		let keep = [];
+		let keep = ['auto_upgrades'];
 			if (layers[resettingLayer].row == this.row) {
 				keep.push("milestones", "points", "best", "total");
 				if (hasMilestone('a', 12)) keep.push("upgrades");
@@ -3257,7 +3261,7 @@ addLayer('a', {
 			},
 			branches: [31, 32],
 			unlocked() {
-				if (!hasUpgrade('a', 22) && !hasUpgrade('a', 33) || hasMilestone('a', 10)) return true;
+				return !hasUpgrade('a', 22) && !hasUpgrade('a', 33) || hasMilestone('a', 10);
 			},
 		},
 		22: {
@@ -3284,7 +3288,7 @@ addLayer('a', {
 			},
 			branches: [32, 33],
 			unlocked() {
-				if (!hasUpgrade('a', 21) && !hasUpgrade('a', 31) || hasMilestone('a', 10)) return true;
+				return !hasUpgrade('a', 21) && !hasUpgrade('a', 31) || hasMilestone('a', 10);
 			},
 		},
 		31: {
@@ -3305,7 +3309,7 @@ addLayer('a', {
 			},
 			branches: [41],
 			unlocked() {
-				if (!hasUpgrade('a', 22) && !hasUpgrade('a', 32) && !hasUpgrade('a', 33) && !hasUpgrade('a', 42) || hasMilestone('a', 10)) return true;
+				return !hasUpgrade('a', 22) && !hasUpgrade('a', 32) && !hasUpgrade('a', 33) && !hasUpgrade('a', 42) || hasMilestone('a', 10);
 			},
 		},
 		32: {
@@ -3332,7 +3336,7 @@ addLayer('a', {
 			},
 			branches: [41, 42],
 			unlocked() {
-				if (!hasUpgrade('a', 31) && !hasUpgrade('a', 33) || hasMilestone('a', 10)) return true;
+				return !hasUpgrade('a', 31) && !hasUpgrade('a', 33) || hasMilestone('a', 10);
 			},
 		},
 		33: {
@@ -3359,7 +3363,7 @@ addLayer('a', {
 			},
 			branches: [42],
 			unlocked() {
-				if (!hasUpgrade('a', 21) && !hasUpgrade('a', 31) && !hasUpgrade('a', 32) && !hasUpgrade('a', 41) || hasMilestone('a', 10)) return true;
+				return !hasUpgrade('a', 21) && !hasUpgrade('a', 31) && !hasUpgrade('a', 32) && !hasUpgrade('a', 41) || hasMilestone('a', 10);
 			},
 		},
 		41: {
@@ -3380,7 +3384,7 @@ addLayer('a', {
 			},
 			branches: [51],
 			unlocked() {
-				if (!hasUpgrade('a', 33) && !hasUpgrade('a', 42) || hasMilestone('a', 10)) return true;
+				return !hasUpgrade('a', 33) && !hasUpgrade('a', 42) || hasMilestone('a', 10);
 			},
 		},
 		42: {
@@ -3401,7 +3405,7 @@ addLayer('a', {
 			},
 			branches: [51],
 			unlocked() {
-				if (!hasUpgrade('a', 31) && !hasUpgrade('a', 41) || hasMilestone('a', 10)) return true;
+				return !hasUpgrade('a', 31) && !hasUpgrade('a', 41) || hasMilestone('a', 10);
 			},
 		},
 		51: {
@@ -3441,7 +3445,7 @@ addLayer('a', {
 			},
 			branches: [71, 72],
 			unlocked() {
-				if (!hasUpgrade('a', 62) && !hasUpgrade('a', 73) || hasMilestone('a', 10)) return true;
+				return !hasUpgrade('a', 62) && !hasUpgrade('a', 73) || hasMilestone('a', 10);
 			},
 		},
 		62: {
@@ -3468,7 +3472,7 @@ addLayer('a', {
 			},
 			branches: [72, 73],
 			unlocked() {
-				if (!hasUpgrade('a', 61) && !hasUpgrade('a', 71) || hasMilestone('a', 10)) return true;
+				return !hasUpgrade('a', 61) && !hasUpgrade('a', 71) || hasMilestone('a', 10);
 			},
 		},
 		71: {
@@ -3488,7 +3492,7 @@ addLayer('a', {
 				return text;
 			},
 			unlocked() {
-				if (!hasUpgrade('a', 62) && !hasUpgrade('a', 72) && !hasUpgrade('a', 73) || hasMilestone('a', 10)) return true;
+				return !hasUpgrade('a', 62) && !hasUpgrade('a', 72) && !hasUpgrade('a', 73) || hasMilestone('a', 10);
 			},
 		},
 		72: {
@@ -3514,7 +3518,7 @@ addLayer('a', {
 				return text;
 			},
 			unlocked() {
-				if (!hasUpgrade('a', 71) && !hasUpgrade('a', 73) || hasMilestone('a', 10)) return true;
+				return !hasUpgrade('a', 71) && !hasUpgrade('a', 73) || hasMilestone('a', 10);
 			},
 		},
 		73: {
@@ -3534,7 +3538,7 @@ addLayer('a', {
 				return text;
 			},
 			unlocked() {
-				if (!hasUpgrade('a', 61) && !hasUpgrade('a', 71) && !hasUpgrade('a', 72) || hasMilestone('a', 10)) return true;
+				return !hasUpgrade('a', 61) && !hasUpgrade('a', 71) && !hasUpgrade('a', 72) || hasMilestone('a', 10);
 			},
 		},
 	},
@@ -3588,7 +3592,7 @@ addLayer('p', {
 	},
 	row: 1,
 	hotkeys: [
-		{key: 'p', description: "P: Reset for prayers", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+		{key: 'p', description: 'P: Reset for prayers', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown(){return player.a.unlocked},
 	passiveGeneration() {
@@ -3665,7 +3669,7 @@ addLayer('p', {
 		return 'which are generating <h2 class="layer-p">' + format(tmp.p.effect) + '</h2> divinity/sec';
 	},
 	doReset(resettingLayer) {
-		let keep = ["auto_upgrades", "smart_auto_upgrades"];
+		let keep = ['auto_upgrades', "smart_auto_upgrades"];
 			if (resettingLayer == 'h') keep.push("points", "best", "total", "milestones");
 			if (resettingLayer == 'sp') keep.push("points", "best", "total", "milestones");
 			if (resettingLayer == 'r') keep.push("milestones");
@@ -4264,7 +4268,7 @@ addLayer('s', {
 	},
 	row: 2,
 	hotkeys: [
-		{key: 's', description: "S: Reset for sanctums", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+		{key: 's', description: 'S: Reset for sanctums', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown(){return player.p.unlocked},
 	effect() {
@@ -4335,8 +4339,7 @@ addLayer('s', {
 				];
 			},
 			unlocked() {
-				if (hasMilestone('s', 13)) return true;
-				return false;
+				return hasMilestone('s', 13);
 			},
 		},
 	},
@@ -4350,13 +4353,13 @@ addLayer('s', {
 			requirementDescription: '2 sanctums',
 			effectDescription: 'you can autobuy core upgrades',
 			done() { return player.s.points.gte(2) },
-			toggles: [['c', "auto_upgrades"]],
+			toggles: [['c', 'auto_upgrades']],
 		},
 		2: {
 			requirementDescription: '3 sanctums',
 			effectDescription: 'you can autobuy core buyables',
 			done() { return player.s.points.gte(3) },
-			toggles: [['c', "auto_buyables"]],
+			toggles: [['c', 'auto_buyables']],
 		},
 		3: {
 			requirementDescription: '4 sanctums',
@@ -4367,13 +4370,13 @@ addLayer('s', {
 			requirementDescription: '5 sanctums',
 			effectDescription: 'you can autobuy quark upgrades',
 			done() { return player.s.points.gte(5) },
-			toggles: [['q', "auto_upgrades"]],
+			toggles: [['q', 'auto_upgrades']],
 		},
 		5: {
 			requirementDescription: '6 sanctums',
 			effectDescription: 'you can autobuy prayer upgrades',
 			done() { return player.s.points.gte(6) },
-			toggles: [['p', "auto_upgrades"]],
+			toggles: [['p', 'auto_upgrades']],
 		},
 		6: {
 			requirementDescription: '7 sanctums',
@@ -4987,7 +4990,7 @@ addLayer('r', {
 	},
 	row: 3,
 	hotkeys: [
-		{key: 'r', description: "R: Reset for relics", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+		{key: 'r', description: 'R: Reset for relics', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown(){return player.p.unlocked},
 	effect() {
@@ -5266,7 +5269,7 @@ addLayer('m', {
 	},
 	row: 4,
 	hotkeys: [
-		{key: 'm', description: "M: Reset for molecules", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+		{key: 'm', description: 'M: Reset for molecules', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown(){return challengeCompletions('r', 11) >= 10 || player.m.unlocked},
 	effect() {
@@ -5329,19 +5332,19 @@ addLayer('m', {
 			requirementDescription: '1 molecule',
 			effectDescription: 'molecules don\'t reset relics, and<br>you can autobuy essence buyables',
 			done() { return player.m.points.gte(1) },
-			toggles: [['e', "auto_buyables"]],
+			toggles: [['e', 'auto_buyables']],
 		},
 		1: {
 			requirementDescription: '2 total molecules',
 			effectDescription: 'keep demon soul challenges and<br><b class="layer-ds' + getdark(this, "ref", true, true) + 'Demonic Key</b> on row 5 resets,<br>and you can autobuy hex upgrades',
 			done() { return player.m.total.gte(2) },
-			toggles: [['h', "auto_upgrades"]],
+			toggles: [['h', 'auto_upgrades']],
 		},
 		2: {
 			requirementDescription: '3 total molecules',
 			effectDescription: 'molecules don\'t reset essence, and<br>you can autobuy essence upgrades',
 			done() { return player.m.total.gte(3) },
-			toggles: [['e', "auto_upgrades"]],
+			toggles: [['e', 'auto_upgrades']],
 		},
 		3: {
 			requirementDescription: '4 total molecules',
@@ -5352,19 +5355,19 @@ addLayer('m', {
 			requirementDescription: '5 total molecules',
 			effectDescription: 'molecules don\'t reset cores, and<br>you can autobuy subatomic<br>particle upgrades and buyables',
 			done() { return player.m.total.gte(5) },
-			toggles: [['sp', "auto_upgrades"], ['sp', "auto_buyables"]],
+			toggles: [['sp', 'auto_upgrades'], ['sp', 'auto_buyables']],
 		},
 		5: {
 			requirementDescription: '7 total molecules',
 			effectDescription: 'molecules don\'t reset quarks, and<br>you can autobuy demon soul upgrades',
 			done() { return player.m.total.gte(7) },
-			toggles: [['ds', "auto_upgrades"]],
+			toggles: [['ds', 'auto_upgrades']],
 		},
 		6: {
 			requirementDescription: '10 total molecules',
 			effectDescription: 'you can autobuy demon soul buyables',
 			done() { return player.m.total.gte(10) },
-			toggles: [['ds', "auto_buyables"]],
+			toggles: [['ds', 'auto_buyables']],
 		},
 		7: {
 			requirementDescription: '15 total molecules',
@@ -5643,7 +5646,7 @@ addLayer('m', {
 			description() {
 				return 'gives extra unique molecules based on your total good influence';
 			},
-			cost: 1e12,
+			cost: 1e13,
 			effect() {
 				return player.gi.total.add(1).pow(2.5).floor();
 			},
@@ -5661,7 +5664,7 @@ addLayer('m', {
 			description() {
 				return 'multiplies point gain based on your total unique molecules';
 			},
-			cost: 1e13,
+			cost: 1e14,
 			effect() {
 				return player.m.unique_total.add(1).pow(10);
 			},
@@ -5679,7 +5682,7 @@ addLayer('m', {
 			description() {
 				return 'gives extra unique molecules based on your atoms';
 			},
-			cost: 1e14,
+			cost: 1e13,
 			effect() {
 				return player.a.points.add(1).pow(0.45).floor();
 			},
@@ -5729,7 +5732,7 @@ addLayer('gi', {
 	},
 	row: 4,
 	hotkeys: [
-		{key: 'G', description: "Shift-G: Reset for good influence", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+		{key: 'G', description: 'Shift-G: Reset for good influence', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown(){return player.m.unlocked},
 	effect() {
@@ -5834,8 +5837,9 @@ addLayer('gi', {
 		},
 		11: {
 			requirementDescription: '21 good influence',
-			effectDescription: 'you can explore 3 further molecule upgrades',
+			effectDescription: 'you can explore 3 further molecule upgrades,<br>and you can autobuy atom upgrades',
 			done() { return player.gi.points.gte(21) },
+			toggles: [['a', 'auto_upgrades']],
 			unlocked() { return hasMilestone('gi', 9) },
 		},
 	},
