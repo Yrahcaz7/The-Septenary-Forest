@@ -744,14 +744,14 @@ addLayer('e', {
 		let mult = new Decimal(1);
 		if (hasUpgrade('e', 13)) mult = mult.mul(upgradeEffect('e', 13));
 		if (hasUpgrade('e', 22)) {
-			let mult = mult.mul(upgradeEffect('e', 22));
+			mult = mult.mul(upgradeEffect('e', 22));
 			if (hasUpgrade('e', 41)) {
-				let mult = mult.mul(upgradeEffect('e', 41));
+				mult = mult.mul(upgradeEffect('e', 41));
 				if (hasUpgrade('e', 42)) mult = mult.mul(upgradeEffect('e', 42));
 		}};
 		if (hasUpgrade('c', 11)) mult = mult.mul(upgradeEffect('c', 11));
 		if (hasUpgrade('q', 12) && hasUpgrade('q', 14)) {
-			let mult = mult.mul(upgradeEffect('q', 14));
+			mult = mult.mul(upgradeEffect('q', 14));
 			if (hasUpgrade('q', 15)) mult = mult.mul(upgradeEffect('q', 15));
 		};
 		if (hasUpgrade('q', 32)) mult = mult.mul(upgradeEffect('q', 32));
@@ -763,7 +763,7 @@ addLayer('e', {
 		if (getBuyableAmount('e', 12).gt(0)) mult = mult.mul(getBuyableAmount('e', 12).mul(0.25).add(1));
 		if (getBuyableAmount('c', 12).gt(0)) mult = mult.mul(new Decimal(2).pow(getBuyableAmount('c', 12)));
 		if (getBuyableAmount('sp', 12).gt(0)) {
-			let mult = mult.mul(new Decimal(5).pow(getBuyableAmount('sp', 12)));
+			mult = mult.mul(new Decimal(5).pow(getBuyableAmount('sp', 12)));
 			if (hasUpgrade('sp', 12)) mult = mult.mul(new Decimal(5).pow(getBuyableAmount('sp', 12)));
 		};
 		if (getBuyableAmount('sp', 11).gt(0)) mult = mult.mul(getBuyableAmount('sp', 11).add(1).pow(-1));
@@ -1116,14 +1116,14 @@ addLayer('c', {
 		if (hasUpgrade('e', 32)) mult = mult.mul(upgradeEffect('e', 32));
 		if (hasUpgrade('c', 12)) mult = mult.mul(upgradeEffect('c', 12));
 		if (hasUpgrade('q', 21)) {
-			let mult = mult.mul(upgradeEffect('q', 21));
+			mult = mult.mul(upgradeEffect('q', 21));
 			if (hasUpgrade('q', 22)) mult = mult.mul(upgradeEffect('q', 22));
 		};
 		if (hasUpgrade('q', 33)) mult = mult.mul(upgradeEffect('q', 33));
 		if (hasUpgrade('h', 13)) {
-			let mult = mult.mul(upgradeEffect('h', 13));
+			mult = mult.mul(upgradeEffect('h', 13));
 			if (hasUpgrade('h', 23)) {
-				let mult = mult.mul(upgradeEffect('h', 23));
+				mult = mult.mul(upgradeEffect('h', 23));
 				if (hasUpgrade('h', 33)) mult = mult.mul(upgradeEffect('h', 33));
 		}};
 		if (hasUpgrade('h', 24)) mult = mult.mul(3);
@@ -1462,15 +1462,15 @@ addLayer('q', {
 		if (hasUpgrade('q', 21)) mult = mult.mul(upgradeEffect('q', 21));
 			if (hasUpgrade('q', 22)) mult = mult.mul(upgradeEffect('q', 22));
 		if (hasUpgrade('q', 12) && hasUpgrade('q', 23)) {
-			let mult = mult.mul(upgradeEffect('q', 23));
+			mult = mult.mul(upgradeEffect('q', 23));
 			if (hasUpgrade('q', 24)) {
-				let mult = mult.mul(upgradeEffect('q', 24));
+				mult = mult.mul(upgradeEffect('q', 24));
 				if (hasUpgrade('q', 25)) {
-					let mult = mult.mul(upgradeEffect('q', 25));
+					mult = mult.mul(upgradeEffect('q', 25));
 					if (hasUpgrade('q', 31)) mult = mult.mul(upgradeEffect('q', 31));
 		}}};
 		if (hasUpgrade('q', 42)) {
-			let mult = mult.mul(upgradeEffect('q', 42));
+			mult = mult.mul(upgradeEffect('q', 42));
 			if (hasUpgrade('q', 44)) mult = mult.mul(upgradeEffect('q', 44));
 		};
 		if (hasUpgrade('q', 45)) mult = mult.mul(upgradeEffect('q', 45));
@@ -1478,7 +1478,7 @@ addLayer('q', {
 		if (hasUpgrade('a', 41)) mult = mult.mul(upgradeEffect('a', 41));
 		if (hasUpgrade('m', 13)) mult = mult.mul(upgradeEffect('m', 13));
 		if (getBuyableAmount('sp', 11).gt(0)) {
-			let mult = mult.mul(new Decimal(5).pow(getBuyableAmount('sp', 11)));
+			mult = mult.mul(new Decimal(5).pow(getBuyableAmount('sp', 11)));
 			if (hasUpgrade('sp', 11)) mult = mult.mul(new Decimal(5).pow(getBuyableAmount('sp', 11)));
 		};
 		if (getBuyableAmount('sp', 21).gt(0)) mult = mult.mul(getBuyableAmount('sp', 21).add(1).pow(-1));
@@ -2188,11 +2188,11 @@ addLayer('h', {
 	gainMult() {
 		let mult = new Decimal(1);
 		if (hasUpgrade('h', 12)) {
-			let mult = mult.mul(upgradeEffect('h', 12));
+			mult = mult.mul(upgradeEffect('h', 12));
 			if (hasUpgrade('h', 22)) {
-				let mult = mult.mul(upgradeEffect('h', 22));
+				mult = mult.mul(upgradeEffect('h', 22));
 				if (hasUpgrade('h', 32)) {
-					let mult = mult.mul(upgradeEffect('h', 32));
+					mult = mult.mul(upgradeEffect('h', 32));
 					if (hasUpgrade('h', 42)) mult = mult.mul(upgradeEffect('h', 42));
 		}}};
 		if (hasUpgrade('h', 14)) mult = mult.mul(4);
@@ -3566,7 +3566,7 @@ addLayer('p', {
 		if (hasUpgrade('ds', 21) && hasUpgrade('ds', 23) && hasUpgrade('ds', 24) && hasUpgrade('p', 31)) mult = mult.mul(player.A.points.pow(2).div(100));
 		if (hasUpgrade('p', 41)) mult = mult.mul(player.p.hymnEff);
 		if (hasUpgrade('p', 62)) {
-			let mult = mult.mul(upgradeEffect('p', 62));
+			mult = mult.mul(upgradeEffect('p', 62));
 			if (hasUpgrade('p', 63)) mult = mult.mul(upgradeEffect('p', 63));
 		};
 		if (hasUpgrade('p', 73)) mult = mult.mul(upgradeEffect('p', 73));
