@@ -708,20 +708,19 @@ addLayer('SC', {
 		if (player.h.points.gte(layers.h.softcap) && !player.SC.softcaps.includes("h1")) {
 			player.SC.softcaps.push("h1");
 		};
-		if (player.p.divinity.gte(player.p.divinitysoftcap_start[0]) && !player.SC.softcaps.includes("p-d1")) {
+		if (player.p.divinity.gte(softcaps.p_d[0][0]) && !player.SC.softcaps.includes("p-d1")) {
 			player.SC.softcaps.push("p-d1");
 		};
-		if (tmp.m.effect.gte(player.m.effectsoftcap_start[0]) && !player.SC.softcaps.includes("m-eff1")) {
+		if (tmp.m.effect.gte(softcaps.m_eff[0][0]) && !player.SC.softcaps.includes("m-eff1")) {
 			player.SC.softcaps.push("m-eff1");
 		};
-		if (player.r.lightgain.gte(player.r.lightsoftcap_start[0]) && !player.SC.softcaps.includes("r-l1")) {
+		if (player.r.lightgain.gte(softcaps.r_l[0][0]) && !player.SC.softcaps.includes("r-l1")) {
 			player.SC.softcaps.push("r-l1");
 		};
-		if (tmp.gi.effect.gte(player.gi.softcap_start[0]) && !player.SC.softcaps.includes("gi-eff1")) {
+		if (tmp.gi.effect.gte(softcaps.gi_eff[0][0]) && !player.SC.softcaps.includes("gi-eff1")) {
 			player.SC.softcaps.push("gi-eff1");
 		};
 		player.SC.points = new Decimal(player.SC.softcaps.length);
-		player.r.lightsoftcap_power[0] = new Decimal(0.9).div(player.r.light.sub(player.r.lightsoftcap_start).pow(1.025).div(4e25).add(1));
 	},
 	tabFormat: [
 		"main-display",
@@ -731,13 +730,13 @@ addLayer('SC', {
 				if (player.SC.softcaps.includes("c1")) text += '<br><h2 class="layer-c">Core Gain Softcap</h2><br>starts at ' + format(layers.c.softcap) + ', gain to ^' + format(layers.c.softcapPower) + '<br>';
 				if (player.SC.softcaps.includes("q1")) text += '<br><h2 class="layer-q">Quark Gain Softcap</h2><br>starts at ' + format(layers.q.softcap) + ', gain to ^' + format(layers.q.softcapPower) + '<br>';
 				if (player.SC.softcaps.includes("h1")) text += '<br><h2 class="layer-h">Hex Gain Softcap</h2><br>starts at ' + format(layers.h.softcap) + ', gain to ^' + format(layers.h.softcapPower) + '<br>';
-				if (player.SC.softcaps.includes("p-d1")) text += '<br><h2 class="layer-p">Divinity Gain Softcap</h2><br>starts at ' + format(player.p.divinitysoftcap_start[0]) + ', gain to ^' + format(player.p.divinitysoftcap_power[0]) + '<br>';
-				if (player.SC.softcaps.includes("m-eff1")) text += '<br><h2 class="layer-m">Molecule Effect Softcap</h2><br>starts at ' + format(player.m.effectsoftcap_start[0]) + ', effect to ^' + format(player.m.effectsoftcap_power[0]) + '<br>';
+				if (player.SC.softcaps.includes("p-d1")) text += '<br><h2 class="layer-p">Divinity Gain Softcap</h2><br>starts at ' + format(softcaps.p_d[0][0]) + ', gain to ^' + format(softcaps.p_d[0][1]) + '<br>';
+				if (player.SC.softcaps.includes("m-eff1")) text += '<br><h2 class="layer-m">Molecule Effect Softcap</h2><br>starts at ' + format(softcaps.m_eff[0][0]) + ', effect to ^' + format(softcaps.m_eff[0][1]) + '<br>';
 				if (player.SC.softcaps.includes("r-l1")) {
-					text += '<br><h2 class="layer-r">Light Gain Softcap</h2><br>starts at ' + format(player.r.lightsoftcap_start[0]) + ', gain to ^' + formatSmall(player.r.lightsoftcap_power[0]) + '<br>';
+					text += '<br><h2 class="layer-r">Light Gain Softcap</h2><br>starts at ' + format(softcaps.r_l[0][0]) + ', gain to ^' + formatSmall(softcaps.r_l[0][1]) + '<br>';
 					if (player.nerdMode) text += 'formula: 0.9/(x^1.025/4e25+1) where x is light after softcap<br>';
 				};
-				if (player.SC.softcaps.includes("gi-eff1")) text += '<br><h2 class="layer-gi">Good Influence Effect Softcap</h2><br>starts at ' + format(player.gi.softcap_start[0]) + ', effect to ^' + format(player.gi.softcap_power[0]) + '<br>';
+				if (player.SC.softcaps.includes("gi-eff1")) text += '<br><h2 class="layer-gi">Good Influence Effect Softcap</h2><br>starts at ' + format(softcaps.gi_eff[0][0]) + ', effect to ^' + format(softcaps.gi_eff[0][1]) + '<br>';
 				return text;
 			}],
 	],
@@ -3566,8 +3565,6 @@ addLayer('p', {
 		best: new Decimal(0),
 		total: new Decimal(0),
 		divinity: new Decimal(0),
-		divinitysoftcap_start: [1e150],
-		divinitysoftcap_power: [0.95],
 		holiness: new Decimal(0),
 		hymn: new Decimal(0),
 		hymnEff: new Decimal(0),
@@ -3670,14 +3667,14 @@ addLayer('p', {
 		if (hasMilestone('p', 2)) effEx = new Decimal(1.5);
 		if (hasMilestone('p', 3)) effEx = new Decimal(1.6);
 		eff = effBoost.mul(player.p.points).pow(effEx);
-		sc_start0 = player.p.divinitysoftcap_start[0];
-		if (eff.gt(sc_start0)) eff = eff.sub(sc_start0).pow(player.p.divinitysoftcap_power[0]).add(sc_start0);
+		sc_start0 = softcaps.p_d[0][0];
+		if (eff.gt(sc_start0)) eff = eff.sub(sc_start0).pow(softcaps.p_d[0][1]).add(sc_start0);
 		if (hasUpgrade('p', 71)) eff = eff.mul(upgradeEffect('p', 71));
 		return eff;
 	},
 	effectDescription() {
 		if (tmp.p.effect.lt(0.1)) return 'which are generating <h2 class="layer-p">' + tmp.p.effect.mul(100).round().div(100) + '</h2> divinity/sec';
-		if (tmp.p.effect.gt(player.p.divinitysoftcap_start[0])) return 'which are generating <h2 class="layer-p">' + format(tmp.p.effect) + '</h2> divinity/sec (softcapped)';
+		if (tmp.p.effect.gt(softcaps.p_d[0][0])) return 'which are generating <h2 class="layer-p">' + format(tmp.p.effect) + '</h2> divinity/sec (softcapped)';
 		return 'which are generating <h2 class="layer-p">' + format(tmp.p.effect) + '</h2> divinity/sec';
 	},
 	doReset(resettingLayer) {
@@ -4993,8 +4990,6 @@ addLayer('r', {
 		lightbest: new Decimal(0),
 		lightgain: new Decimal(0),
 		lightgainbest: new Decimal(0),
-		lightsoftcap_start: [1e20],
-		lightsoftcap_power: [0.9],
 		relic_effects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
 		sanctummult: new Decimal(1),
 		essencemult: new Decimal(1),
@@ -5069,6 +5064,7 @@ addLayer('r', {
 			if (layers[resettingLayer].row > this.row) layerDataReset('r', keep);
 		},
 	update(diff) {
+		softcaps.r_l[0][1] = new Decimal(0.9).div(player.r.light.sub(softcaps.r_l[0][0]).pow(1.025).div(4e25).add(1));
 		player.r.lightreq = new Decimal(20000).mul(new Decimal(5).pow(challengeCompletions('r', 11)));
 		let mult0 = new Decimal(1);
 		if (challengeCompletions('r', 11) >= 11) mult0 = mult0.mul(2);
@@ -5101,8 +5097,8 @@ addLayer('r', {
 			if (hasMilestone('s', 41)) gain = gain.mul(3);
 			if (hasMilestone('s', 50)) gain = gain.mul(3);
 			if (hasMilestone('s', 52)) gain = gain.mul(3);
-			let sc_start0 = player.r.lightsoftcap_start[0];
-			if (gain.gt(sc_start0)) gain = gain.sub(sc_start0).pow(player.r.lightsoftcap_power[0]).add(sc_start0);
+			let sc_start0 = softcaps.r_l[0][0];
+			if (gain.gt(sc_start0)) gain = gain.sub(sc_start0).pow(softcaps.r_l[0][1]).add(sc_start0);
 			if (gain.lt(lightboost)) gain = lightboost;
 			player.r.lightgain = gain;
 		} else player.r.lightgain = lightboost;
@@ -5214,12 +5210,12 @@ addLayer('r', {
 			canClick() {return player.r.light.gt(0) && !inChallenge('r', 11)},
 			onClick() {
 				if (confirm('are you sure you want to reset your light to the start of the light softcap?')) {
-					player.r.light = new Decimal(player.r.lightsoftcap_start[0]).add(player.r.lightgain.mul(0.1));
+					player.r.light = new Decimal(softcaps.r_l[0][0]).add(player.r.lightgain.mul(0.1));
 					startChallenge('r', 11);
 				};
 			},
 			style: {'min-height':'30px','width':'fit-content','border-radius':'15px'},
-			unlocked() {return player.r.light.gte(player.r.lightsoftcap_start[0])},
+			unlocked() {return player.r.light.gte(softcaps.r_l[0][0])},
 		},
 		12: {
 			display: 'Restore your light to your best<br>light and exit activation',
@@ -5229,7 +5225,7 @@ addLayer('r', {
 				if (inChallenge('r', 11)) completeChallenge('r', 11);
 			},
 			style: {'min-height':'30px','width':'fit-content','border-radius':'15px'},
-			unlocked() {return player.r.light.gte(player.r.lightsoftcap_start[0])},
+			unlocked() {return player.r.light.gte(softcaps.r_l[0][0])},
 		},
 	},
 	upgrades: {
@@ -5281,8 +5277,6 @@ addLayer('m', {
 		points: new Decimal(0),
 		best: new Decimal(0),
 		total: new Decimal(0),
-		effectsoftcap_start: [15000],
-		effectsoftcap_power: [0.5],
 		unique_nonextra: new Decimal(0),
 		unique_extra: new Decimal(0),
 		unique_total: new Decimal(0),
@@ -5323,13 +5317,13 @@ addLayer('m', {
 	effect() {
 		effBoost = new Decimal(0.5);
 		eff = player.m.best.mul(effBoost).add(1).pow(0.99);
-		sc_start0 = player.m.effectsoftcap_start[0];
-		if (eff.gt(sc_start0)) eff = eff.sub(sc_start0).pow(player.m.effectsoftcap_power[0]).add(sc_start0);
+		sc_start0 = softcaps.m_eff[0][0];
+		if (eff.gt(sc_start0)) eff = eff.sub(sc_start0).pow(softcaps.m_eff[0][1]).add(sc_start0);
 		return eff;
 	},
 	effectDescription() {
 		softcap = '';
-		if (tmp.m.effect.gt(player.m.effectsoftcap_start[0])) softcap = ' (softcapped)';
+		if (tmp.m.effect.gt(softcaps.m_eff[0][0])) softcap = ' (softcapped)';
 		return 'which multiplies atom gain by <h2 class="layer-m">' + format(tmp.m.effect) + '</h2>x (based on best)' + softcap;
 	},
 	doReset(resettingLayer) {
@@ -5774,8 +5768,6 @@ addLayer('gi', {
 		best: new Decimal(0),
 		total: new Decimal(0),
 		req_devotion: new Decimal(1),
-		softcap_start: ['1e2500'],
-		softcap_power: [0.6666666666666666],
 	}},
 	color() {
 		if (player.r.points.gte(15) || player.gi.unlocked) return "#08FF87";
@@ -5808,15 +5800,14 @@ addLayer('gi', {
 		let effBase = new Decimal(2);
 		if (getBuyableAmount('gi', 11).gt(0)) effBase = effBase.add(getBuyableAmount('gi', 11));
 		let eff = effBase.pow(player.gi.total);
-		if (eff.gt(player.gi.softcap_start[0])) {
-			console.log(eff.sub(player.gi.softcap_start[0]).pow(player.gi.softcap_power[0]));
-			eff = eff.sub(player.gi.softcap_start[0]).pow(player.gi.softcap_power[0]).add(player.gi.softcap_start[0]);
+		if (eff.gt(softcaps.gi_eff[0][0])) {
+			eff = eff.sub(softcaps.gi_eff[0][0]).pow(softcaps.gi_eff[0][1]).add(softcaps.gi_eff[0][0]);
 		};
 		return eff;
 	},
 	effectDescription() {
 		let text = 'which multiplies prayer gain by <h2 class="layer-gi">' + format(tmp.gi.effect) + '</h2>x (based on total)';
-		if (this.effect().gte(player.gi.softcap_start[0])) text += ' (softcapped)';
+		if (this.effect().gte(softcaps.gi_eff[0][0])) text += ' (softcapped)';
 		return text;
 	},
 	doReset(resettingLayer) {
