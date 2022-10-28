@@ -366,7 +366,7 @@ addLayer('A', {
 			done() {return player.ds.points.gte('1e400')},
 			tooltip: 'obtain 1e400 demon souls.',
 			unlocked() { return hasAchievement('A', 73) },
-			image() { if (hasAchievement('A', 73)) return "images/achievements/74.png" },
+			image() { if (hasAchievement('A', 74)) return "images/achievements/74.png" },
 			color: '#BA0035',
 		},
 		75: {
@@ -624,35 +624,38 @@ addLayer('SC', {
 	layerShown() {return player.SC.points > 0},
 	tooltip() {return player.SC.points + ' softcaps'},
 	effectDescription() {
-		core = 0;
-		quark = 0;
-		hex = 0;
-		divine = 0;
-		molecule = 0;
-		light = 0;
-		good = 0;
-		text = ['of which '];
-		textfin = '';
-		textvalue = 0;
-		if (player.SC.softcaps.includes("c1")) {
+		let core = 0;
+		let quark = 0;
+		let hex = 0;
+		let divine = 0;
+		let molecule = 0;
+		let light = 0;
+		let relic = 0;
+		let good = 0;
+		let text = ['of which '];
+		let textfin = '';
+		if (player.SC.softcaps.includes("c")) {
 			core += 1;
 		};
-		if (player.SC.softcaps.includes("q1")) {
+		if (player.SC.softcaps.includes("q")) {
 			quark += 1;
 		};
-		if (player.SC.softcaps.includes("h1")) {
+		if (player.SC.softcaps.includes("h")) {
 			hex += 1;
 		};
-		if (player.SC.softcaps.includes("p-d1")) {
+		if (player.SC.softcaps.includes("p-d")) {
 			divine += 1;
 		};
-		if (player.SC.softcaps.includes("m-eff1")) {
+		if (player.SC.softcaps.includes("m-eff")) {
 			molecule += 1;
 		};
-		if (player.SC.softcaps.includes("r-l1")) {
+		if (player.SC.softcaps.includes("r-l")) {
 			light += 1;
 		};
-		if (player.SC.softcaps.includes("gi-eff1")) {
+		if (player.SC.softcaps.includes("r-l")) {
+			relic += 1;
+		};
+		if (player.SC.softcaps.includes("gi-eff")) {
 			good += 1;
 		};
 		if (core > 0) text.push('<h2 class="layer-c">' + core + '</h2> is <h2 class="layer-c">core</h2>');
@@ -661,6 +664,8 @@ addLayer('SC', {
 		if (divine > 0) text.push('<h2 class="layer-p">' + divine + '</h2> is <h2 class="layer-p">divine</h2>');
 		if (molecule > 0) text.push('<h2 class="layer-m">' + molecule + '</h2> is <h2 class="layer-m">molecular</h2>');
 		if (light > 0) text.push('<h2 class="layer-r">' + light + '</h2> is <h2 class="layer-r">light</h2>');
+		if (relic == 1) text.push('<h2 class="layer-r">1</h2> is a <h2 class="layer-r">relic</h2>');
+		else if (relic > 1) text.push('<h2 class="layer-r">' + relic + '</h2> are <h2 class="layer-r">relics</h2>');
 		if (good > 0) text.push('<h2 class="layer-gi">' + good + '</h2> is <h2 class="layer-gi">good</h2>');
 		textfin = text[0];
 		if (text.length > 1) {
@@ -696,29 +701,38 @@ addLayer('SC', {
 			else textfin += ", ";
 			textfin += text[7];
 		};
+		if (text.length > 8) {
+			if (text.length == 9) textfin += ', and ';
+			else textfin += ", ";
+			textfin += text[8];
+		};
 		return textfin;
 	},
 	update(diff) {
-		if (player.c.points.gte(layers.c.softcap) && !player.SC.softcaps.includes("c1")) {
-			player.SC.softcaps.push("c1");
+		player.SC.softcaps = [];
+		if (player.c.points.gte(layers.c.softcap) && !player.SC.softcaps.includes("c")) {
+			player.SC.softcaps.push("c");
 		};
-		if (player.q.points.gte(layers.q.softcap) && !player.SC.softcaps.includes("q1")) {
-			player.SC.softcaps.push("q1");
+		if (player.q.points.gte(layers.q.softcap) && !player.SC.softcaps.includes("q")) {
+			player.SC.softcaps.push("q");
 		};
-		if (player.h.points.gte(layers.h.softcap) && !player.SC.softcaps.includes("h1")) {
-			player.SC.softcaps.push("h1");
+		if (player.h.points.gte(layers.h.softcap) && !player.SC.softcaps.includes("h")) {
+			player.SC.softcaps.push("h");
 		};
-		if (player.p.divinity.gte(softcaps.p_d[0][0]) && !player.SC.softcaps.includes("p-d1")) {
-			player.SC.softcaps.push("p-d1");
+		if (player.p.divinity.gte(softcaps.p_d[0][0]) && !player.SC.softcaps.includes("p-d")) {
+			player.SC.softcaps.push("p-d");
 		};
-		if (tmp.m.effect.gte(softcaps.m_eff[0][0]) && !player.SC.softcaps.includes("m-eff1")) {
-			player.SC.softcaps.push("m-eff1");
+		if (tmp.m.effect.gte(softcaps.m_eff[0][0]) && !player.SC.softcaps.includes("m-eff")) {
+			player.SC.softcaps.push("m-eff");
 		};
-		if (player.r.lightgain.gte(softcaps.r_l[0][0]) && !player.SC.softcaps.includes("r-l1")) {
-			player.SC.softcaps.push("r-l1");
+		if (player.r.lightgain.gte(softcaps.r_l[0][0]) && !player.SC.softcaps.includes("r-l")) {
+			player.SC.softcaps.push("r-l");
 		};
-		if (tmp.gi.effect.gte(softcaps.gi_eff[0][0]) && !player.SC.softcaps.includes("gi-eff1")) {
-			player.SC.softcaps.push("gi-eff1");
+		if (tmp.r.effect.gte(softcaps.r_eff1[0][0]) && !player.SC.softcaps.includes("r-eff1")) {
+			player.SC.softcaps.push("r-eff1");
+		};
+		if (tmp.gi.effect.gte(softcaps.gi_eff[0][0]) && !player.SC.softcaps.includes("gi-eff")) {
+			player.SC.softcaps.push("gi-eff");
 		};
 		player.SC.points = new Decimal(player.SC.softcaps.length);
 	},
@@ -727,16 +741,17 @@ addLayer('SC', {
 		["display-text",
 			function() {
 				text = '';
-				if (player.SC.softcaps.includes("c1")) text += '<br><h2 class="layer-c">Core Gain Softcap</h2><br>starts at ' + format(layers.c.softcap) + ', gain to ^' + format(layers.c.softcapPower) + '<br>';
-				if (player.SC.softcaps.includes("q1")) text += '<br><h2 class="layer-q">Quark Gain Softcap</h2><br>starts at ' + format(layers.q.softcap) + ', gain to ^' + format(layers.q.softcapPower) + '<br>';
-				if (player.SC.softcaps.includes("h1")) text += '<br><h2 class="layer-h">Hex Gain Softcap</h2><br>starts at ' + format(layers.h.softcap) + ', gain to ^' + format(layers.h.softcapPower) + '<br>';
-				if (player.SC.softcaps.includes("p-d1")) text += '<br><h2 class="layer-p">Divinity Gain Softcap</h2><br>starts at ' + format(softcaps.p_d[0][0]) + ', gain to ^' + format(softcaps.p_d[0][1]) + '<br>';
-				if (player.SC.softcaps.includes("m-eff1")) text += '<br><h2 class="layer-m">Molecule Effect Softcap</h2><br>starts at ' + format(softcaps.m_eff[0][0]) + ', effect to ^' + format(softcaps.m_eff[0][1]) + '<br>';
-				if (player.SC.softcaps.includes("r-l1")) {
+				if (player.SC.softcaps.includes("c")) text += '<br><h2 class="layer-c">Core Gain Softcap</h2><br>starts at ' + format(layers.c.softcap) + ', gain to ^' + format(layers.c.softcapPower) + '<br>';
+				if (player.SC.softcaps.includes("q")) text += '<br><h2 class="layer-q">Quark Gain Softcap</h2><br>starts at ' + format(layers.q.softcap) + ', gain to ^' + format(layers.q.softcapPower) + '<br>';
+				if (player.SC.softcaps.includes("h")) text += '<br><h2 class="layer-h">Hex Gain Softcap</h2><br>starts at ' + format(layers.h.softcap) + ', gain to ^' + format(layers.h.softcapPower) + '<br>';
+				if (player.SC.softcaps.includes("p-d")) text += '<br><h2 class="layer-p">Divinity Gain Softcap</h2><br>starts at ' + format(softcaps.p_d[0][0]) + ', gain to ^' + format(softcaps.p_d[0][1]) + '<br>';
+				if (player.SC.softcaps.includes("m-eff")) text += '<br><h2 class="layer-m">Molecule Effect Softcap</h2><br>starts at ' + format(softcaps.m_eff[0][0]) + ', effect to ^' + format(softcaps.m_eff[0][1]) + '<br>';
+				if (player.SC.softcaps.includes("r-l")) {
 					text += '<br><h2 class="layer-r">Light Gain Softcap</h2><br>starts at ' + format(softcaps.r_l[0][0]) + ', gain to ^' + formatSmall(softcaps.r_l[0][1]) + '<br>';
 					if (player.nerdMode) text += 'formula: (x/1,000,000)^(-0.005) where x is light after softcap<br>';
 				};
-				if (player.SC.softcaps.includes("gi-eff1")) text += '<br><h2 class="layer-gi">Good Influence Effect Softcap</h2><br>starts at ' + format(softcaps.gi_eff[0][0]) + ', effect to ^' + format(softcaps.gi_eff[0][1]) + '<br>';
+				if (player.SC.softcaps.includes("r-eff1")) text += '<br><h2 class="layer-r">Relic\'s First Effect Softcap</h2><br>starts at ' + format(softcaps.r_eff1[0][0]) + ', effect to ^' + format(softcaps.r_eff1[0][1]) + '<br>';
+				if (player.SC.softcaps.includes("gi-eff")) text += '<br><h2 class="layer-gi">Good Influence Effect Softcap</h2><br>starts at ' + format(softcaps.gi_eff[0][0]) + ', effect to ^' + format(softcaps.gi_eff[0][1]) + '<br>';
 				return text;
 			}],
 	],
@@ -4808,7 +4823,7 @@ addLayer('d', {
 			if (hasMilestone('s', 51)) work *= 3;
 			if (challengeCompletions('r', 11) >= 17) work *= 2;
 			if (challengeCompletions('r', 11) >= 38) work *= 2;
-			if (challengeCompletions('r', 11) >= 40) work *= 2;
+			if (challengeCompletions('r', 11) >= 41) work *= 2;
 			if (hasMilestone('gi', 10)) work *= 2;
 			for (let index = 0; index < work; index++) {
 				if (!layers.d.buyables[11].canAfford()) break;
@@ -4822,7 +4837,7 @@ addLayer('d', {
 			if (challengeCompletions('r', 11) >= 23) work *= 1.5;
 			if (challengeCompletions('r', 11) >= 32) work *= 2;
 			if (challengeCompletions('r', 11) >= 38) work *= 2;
-			if (challengeCompletions('r', 11) >= 40) work *= 2;
+			if (challengeCompletions('r', 11) >= 41) work *= 2;
 			if (hasMilestone('gi', 10)) work *= 2;
 			for (let index = 0; index < work; index++) {
 				if (!layers.d.buyables[12].canAfford()) break;
@@ -4833,7 +4848,7 @@ addLayer('d', {
 			let work = 1;
 			if (challengeCompletions('r', 11) >= 17) work *= 2;
 			if (challengeCompletions('r', 11) >= 38) work *= 2;
-			if (challengeCompletions('r', 11) >= 40) work *= 2;
+			if (challengeCompletions('r', 11) >= 41) work *= 2;
 			if (hasMilestone('gi', 10)) work *= 2;
 			for (let index = 0; index < work; index++) {
 				if (!layers.d.buyables[21].canAfford()) break;
@@ -5029,10 +5044,10 @@ addLayer('r', {
 	],
 	layerShown(){return player.p.unlocked},
 	effect() {
-		effBoost1 = new Decimal(1);
-		effex1 = new Decimal(1);
-		effBoost2 = new Decimal(1);
-		effBoost3 = new Decimal(1);
+		let effBoost1 = new Decimal(1);
+		let effex1 = new Decimal(1);
+		let effBoost2 = new Decimal(1);
+		let effBoost3 = new Decimal(1);
 		if (getBuyableAmount('d', 12).gt(0)) {
 			if (hasMilestone('s', 24)) effBoost1 = effBoost1.mul(new Decimal(2).pow(getBuyableAmount('d', 12)));
 			else effBoost1 = effBoost1.mul(new Decimal(1.5).pow(getBuyableAmount('d', 12)));
@@ -5049,14 +5064,17 @@ addLayer('r', {
 		};
 		player.r.sanctummult = player.r.points.add(1).pow(0.5).mul(effBoost2);
 		player.r.essencemult = player.r.points.mul(100).add(1).pow(0.25).mul(effBoost3);
-		return player.r.points.mul(effBoost1).add(1).pow(1.1).pow(effex1);
+		let eff1 = player.r.points.mul(effBoost1).add(1).pow(1.1).pow(effex1);
+		if (eff1.gt(softcaps.r_eff1[0][0])) eff1 = eff1.sub(softcaps.r_eff1[0][0]).pow(softcaps.r_eff1[0][1]).add(softcaps.r_eff1[0][0]);
+		return eff1;
 	},
 	effectDescription() {
-		text = '';
-		if (challengeCompletions('r', 11) >= 2) text = 'point and ';
-		if (colorvalue[1] == 'none') return 'which makes Essence Influence\'s hardcap start ' + format(tmp.r.effect) + 'x later, multiplies sanctum gain by ' + format(player.r.sanctummult) + 'x, and also multiplies ' + text + 'essence gain by ' + format(player.r.essencemult) + 'x';
-		if (!colorvalue[0][2]) return 'which makes <h3>Essence Influence\'s</h3> hardcap start <h2 class="layer-r">' + format(tmp.r.effect) + '</h2>x later, multiplies sanctum gain by <h2 class="layer-r">' + format(player.r.sanctummult) + '</h2>x, and also multiplies ' + text + 'essence gain by <h2 class="layer-r">' + format(player.r.essencemult) + '</h2>x';
-		return 'which makes <h3 class="layer-e">Essence Influence\'s</h3> hardcap start <h2 class="layer-r">' + format(tmp.r.effect) + '</h2>x later, multiplies sanctum gain by <h2 class="layer-r">' + format(player.r.sanctummult) + '</h2>x, and also multiplies ' + text + 'essence gain by <h2 class="layer-r">' + format(player.r.essencemult) + '</h2>x';
+		text = ['', ''];
+		if (tmp.r.effect.gte(softcaps.r_eff1[0][0])) text[0] = ' (softcapped)';
+		if (challengeCompletions('r', 11) >= 2) text[1] = 'point and ';
+		if (colorvalue[1] == 'none') return 'which makes Essence Influence\'s hardcap start ' + format(tmp.r.effect) + 'x later' + text[0] + ', multiplies sanctum gain by ' + format(player.r.sanctummult) + 'x, and also multiplies ' + text[1] + 'essence gain by ' + format(player.r.essencemult) + 'x';
+		if (!colorvalue[0][2]) return 'which makes <h3>Essence Influence\'s</h3> hardcap start <h2 class="layer-r">' + format(tmp.r.effect) + '</h2>x later' + text[0] + ', multiplies sanctum gain by <h2 class="layer-r">' + format(player.r.sanctummult) + '</h2>x, and also multiplies ' + text[1] + 'essence gain by <h2 class="layer-r">' + format(player.r.essencemult) + '</h2>x';
+		return 'which makes <h3 class="layer-e">Essence Influence\'s</h3> hardcap start <h2 class="layer-r">' + format(tmp.r.effect) + '</h2>x later' + text[0] + ', multiplies sanctum gain by <h2 class="layer-r">' + format(player.r.sanctummult) + '</h2>x, and also multiplies ' + text[1] + 'essence gain by <h2 class="layer-r">' + format(player.r.essencemult) + '</h2>x';
 	},
 	doReset(resettingLayer) {
 		let keep = [];
@@ -5187,7 +5205,8 @@ addLayer('r', {
 				else if (challengeCompletions('r', 11) == 36) text += '<br>Next reward: still nothing';
 				else if (challengeCompletions('r', 11) == 37) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work<br>twice as fast';
 				else if (challengeCompletions('r', 11) == 38) text += '<br>Next reward: nothing';
-				else if (challengeCompletions('r', 11) == 39) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work<br>twice as fast';
+				else if (challengeCompletions('r', 11) == 39) text += '<br>Next reward: still nothing';
+				else if (challengeCompletions('r', 11) == 40) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work<br>twice as fast';
 				else text += '<br>Next reward: you have gotten all the rewards!';
 				return text;
 			},
