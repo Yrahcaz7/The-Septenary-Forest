@@ -630,6 +630,7 @@ addLayer('SC', {
 		divine = 0;
 		molecule = 0;
 		light = 0;
+		good = 0;
 		text = ['of which '];
 		textfin = '';
 		textvalue = 0;
@@ -651,12 +652,16 @@ addLayer('SC', {
 		if (player.SC.softcaps.includes("r-l1")) {
 			light += 1;
 		};
+		if (player.SC.softcaps.includes("gi-eff1")) {
+			good += 1;
+		};
 		if (core > 0) text.push('<h2 class="layer-c">' + core + '</h2> is <h2 class="layer-c">core</h2>');
 		if (quark > 0) text.push('<h2 class="layer-q">' + quark + '</h2> is <h2 class="layer-q">quirky</h2>');
 		if (hex > 0) text.push('<h2 class="layer-h">' + hex + '</h2> is <h2 class="layer-h">hexed</h2>');
 		if (divine > 0) text.push('<h2 class="layer-p">' + divine + '</h2> is <h2 class="layer-p">divine</h2>');
 		if (molecule > 0) text.push('<h2 class="layer-m">' + molecule + '</h2> is <h2 class="layer-m">molecular</h2>');
 		if (light > 0) text.push('<h2 class="layer-r">' + light + '</h2> is <h2 class="layer-r">light</h2>');
+		if (good > 0) text.push('<h2 class="layer-gi">' + good + '</h2> is <h2 class="layer-gi">good</h2>');
 		textfin = text[0];
 		if (text.length > 1) {
 			textfin += text[1];
@@ -686,6 +691,11 @@ addLayer('SC', {
 			else textfin += ", ";
 			textfin += text[6];
 		};
+		if (text.length > 7) {
+			if (text.length == 8) textfin += ', and ';
+			else textfin += ", ";
+			textfin += text[7];
+		};
 		return textfin;
 	},
 	update(diff) {
@@ -707,6 +717,9 @@ addLayer('SC', {
 		if (player.r.lightgain.gte(player.r.lightsoftcap_start[0]) && !player.SC.softcaps.includes("r-l1")) {
 			player.SC.softcaps.push("r-l1");
 		};
+		if (tmp.gi.effect.gte(player.gi.softcap_start[0]) && !player.SC.softcaps.includes("gi-eff1")) {
+			player.SC.softcaps.push("gi-eff1");
+		};
 		player.SC.points = new Decimal(player.SC.softcaps.length);
 		player.r.lightsoftcap_power[0] = new Decimal(0.9).div(player.r.light.sub(player.r.lightsoftcap_start).pow(1.025).div(4e25).add(1));
 	},
@@ -724,6 +737,7 @@ addLayer('SC', {
 					text += '<br><h2 class="layer-r">Light Gain Softcap</h2><br>starts at ' + format(player.r.lightsoftcap_start[0]) + ', gain to ^' + formatSmall(player.r.lightsoftcap_power[0]) + '<br>';
 					if (player.nerdMode) text += 'formula: 0.9/(x^1.025/4e25+1) where x is light after softcap<br>';
 				};
+				if (player.SC.softcaps.includes("gi-eff1")) text += '<br><h2 class="layer-gi">Good Influence Effect Softcap</h2><br>starts at ' + format(player.gi.softcap_start[0]) + ', effect to ^' + format(player.gi.softcap_power[0]) + '<br>';
 				return text;
 			}],
 	],
@@ -2029,8 +2043,7 @@ addLayer('sp', {
 			if (layers[resettingLayer].row > this.row) layerDataReset('sp', keep);
 		},
 	resetsNothing() {
-		if (hasMilestone('s', 11)) return true;
-		return false;
+		return !!hasMilestone('s', 11);
 	},
 	tabFormat: [
 		"main-display",
@@ -3085,8 +3098,7 @@ addLayer('a', {
 			if (layers[resettingLayer].row >= this.row) layerDataReset('a', keep);
 		},
 	resetsNothing() {
-		if (hasMilestone('a', 14)) return true;
-		return false;
+		return !!hasMilestone('a', 14);
 	},
 	tabFormat: {
 		"Atomic Progress": {
@@ -4293,7 +4305,10 @@ addLayer('s', {
 					player.s.total = new Decimal(2);
 				};
 				if (hasMilestone('gi', 6) && resettingLayer == 'gi') {
-					if (hasMilestone('gi', 9)) set = 16;
+					if (hasMilestone('gi', 15)) set = 215;
+					else if (hasMilestone('gi', 14)) set = 85;
+					else if (hasMilestone('gi', 13)) set = 30;
+					else if (hasMilestone('gi', 9)) set = 16;
 					else if (hasMilestone('gi', 8)) set = 9;
 					else if (hasMilestone('gi', 7)) set = 7;
 					else set = 4;
@@ -4304,8 +4319,7 @@ addLayer('s', {
 			};
 		},
 	resetsNothing() {
-		if (hasMilestone('s', 47)) return true;
-		return false;
+		return !!hasMilestone('s', 47);
 	},
 	tabFormat: {
 		"Landmarks": {
@@ -5704,8 +5718,9 @@ addLayer('gi', {
 		points: new Decimal(0),
 		best: new Decimal(0),
 		total: new Decimal(0),
-		best_devotion: new Decimal(0),
 		req_devotion: new Decimal(1),
+		softcap_start: ['1e2500'],
+		softcap_power: [0.6666666666666666],
 	}},
 	color() {
 		if (player.r.points.gte(15) || player.gi.unlocked) return "#08FF87";
@@ -5735,18 +5750,27 @@ addLayer('gi', {
 	],
 	layerShown(){return player.m.unlocked},
 	effect() {
-		effBase = new Decimal(2);
+		let effBase = new Decimal(2);
 		if (getBuyableAmount('gi', 11).gt(0)) effBase = effBase.add(getBuyableAmount('gi', 11));
-		effBoost = new Decimal(1);
-		return effBase.pow(player.gi.total).mul(effBoost);
+		let eff = effBase.pow(player.gi.total);
+		if (eff.gt(player.gi.softcap_start[0])) {
+			console.log(eff.sub(player.gi.softcap_start[0]).pow(player.gi.softcap_power[0]));
+			eff = eff.sub(player.gi.softcap_start[0]).pow(player.gi.softcap_power[0]).add(player.gi.softcap_start[0]);
+		};
+		return eff;
 	},
 	effectDescription() {
-		return 'which multiplies prayer gain by <h2 class="layer-gi">' + format(tmp.gi.effect) + '</h2>x (based on total)';
+		let text = 'which multiplies prayer gain by <h2 class="layer-gi">' + format(tmp.gi.effect) + '</h2>x (based on total)';
+		if (this.effect().gte(player.gi.softcap_start[0])) text += ' (softcapped)';
+		return text;
 	},
 	doReset(resettingLayer) {
 		let keep = [];
 			if (layers[resettingLayer].row > this.row) layerDataReset('gi', keep);
 		},
+	resetsNothing() {
+		return !!hasMilestone('gi', 16);
+	},
 	update(diff) {
 		let ex = 0.2;
 		if (hasMilestone('gi', 12)) ex = 0.22;
@@ -5852,6 +5876,30 @@ addLayer('gi', {
 			done() { return player.gi.points.gte(22) && player.gi.total.gte(555) },
 			unlocked() { return hasMilestone('gi', 10) },
 		},
+		13: {
+			requirementDescription: '28 good influence and<br>1,000 total good influence',
+			effectDescription: 'keep 14 more sanctums (30 total)<br>on good influence resets',
+			done() { return player.gi.points.gte(28) && player.gi.total.gte(1000) },
+			unlocked() { return hasMilestone('gi', 12) },
+		},
+		14: {
+			requirementDescription: '32 good influence and<br>1,500 total good influence',
+			effectDescription: 'keep 55 more sanctums (85 total)<br>on good influence resets',
+			done() { return player.gi.points.gte(32) && player.gi.total.gte(1500) },
+			unlocked() { return hasMilestone('gi', 13) },
+		},
+		15: {
+			requirementDescription: '33 good influence and<br>1,750 total good influence',
+			effectDescription: 'keep 130 more sanctums (215 total)<br>on good influence resets',
+			done() { return player.gi.points.gte(33) && player.gi.total.gte(1750) },
+			unlocked() { return hasMilestone('gi', 14) },
+		},
+		16: {
+			requirementDescription: '36 good influence and<br>2,000 total good influence',
+			effectDescription: 'good influence resets nothing',
+			done() { return player.gi.points.gte(36) && player.gi.total.gte(2000) },
+			unlocked() { return hasMilestone('gi', 15) },
+		},
 	},
 	buyables: {
 		11: {
@@ -5884,14 +5932,14 @@ addLayer('gi', {
 				return player.gi.points.gte(this.cost()) && getBuyableAmount('gi', 12).lt(this.purchaseLimit());
 			},
 			purchaseLimit() {
-				return player.ds.points.add(1).log(10).div(12).floor();
+				return player.ds.points.add(1).log(10).div(12.5).floor();
 			},
 			buy() {
 				player.gi.points = player.gi.points.sub(this.cost());
 				setBuyableAmount('gi', 12, getBuyableAmount('gi', 12).add(1));
 			},
 			display() {
-				if (player.nerdMode) return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(new Decimal(10).pow(getBuyableAmount('gi', 12).pow(1.5))) + 'x<br>formula: 10^(x^1.5)<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', 12)) + '/' + formatWhole(this.purchaseLimit()) + '<br>limit formula: log10(x+1)/12 (floored) where x is demon souls';
+				if (player.nerdMode) return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(new Decimal(10).pow(getBuyableAmount('gi', 12).pow(1.5))) + 'x<br>formula: 10^(x^1.5)<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', 12)) + '/' + formatWhole(this.purchaseLimit()) + '<br>limit formula: log10(x+1)/12.5 (floored) where x is demon souls';
 				return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(new Decimal(10).pow(getBuyableAmount('gi', 12).pow(1.5))) + 'x<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', 12)) + '/' + formatWhole(this.purchaseLimit());
 			},
 			unlocked() { return getBuyableAmount('gi', 11).gte(8) },
