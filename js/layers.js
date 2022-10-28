@@ -63,7 +63,7 @@ addLayer('A', {
 			name: 'Very Pointy',
 			done() {return player.points.gte(1e10)},
 			tooltip: 'obtain 1e10 points.',
-			unlocked() { if (hasAchievement('A', 11)) return true },
+			unlocked() { return hasAchievement('A', 11) },
 			image() { if (hasAchievement('A', 12)) return "images/achievements/12.png" },
 			color: '#DFDFDF',
 		},
@@ -71,7 +71,7 @@ addLayer('A', {
 			name: 'Now That\'s Really Pointy',
 			done() {return player.points.gte(1e100)},
 			tooltip: 'obtain 1e100 points.',
-			unlocked() { if (hasAchievement('A', 12)) return true },
+			unlocked() { return hasAchievement('A', 12) },
 			image() { if (hasAchievement('A', 13)) return "images/achievements/13.png" },
 			color: '#DFDFDF',
 		},
@@ -79,7 +79,7 @@ addLayer('A', {
 			name: 'Cosmic Point',
 			done() {return player.points.gte('1e1000')},
 			tooltip: 'obtain 1e1000 points.',
-			unlocked() { if (hasAchievement('A', 13)) return true },
+			unlocked() { return hasAchievement('A', 13) },
 			image() { if (hasAchievement('A', 14)) return "images/achievements/14.png" },
 			color: '#DFDFDF',
 		},
@@ -87,7 +87,7 @@ addLayer('A', {
 			name: 'Everything is Points',
 			done() {return player.points.gte('1e10000')},
 			tooltip: 'obtain 1e10,000 points.',
-			unlocked() { if (hasAchievement('A', 14)) return true },
+			unlocked() { return hasAchievement('A', 14) },
 			image() { if (hasAchievement('A', 15)) return "images/achievements/15.png" },
 			color: '#DFDFDF',
 		},
@@ -95,7 +95,7 @@ addLayer('A', {
 			name: 'Dull Points',
 			done() {return player.points.gte(1e10) && player.e.total.eq(0)},
 			tooltip: 'obtain 1e10 points with no essence.',
-			unlocked() { if (hasAchievement('A', 12) && hasAchievement('A', 21)) return true },
+			unlocked() { return hasAchievement('A', 12) && hasAchievement('A', 21) },
 			image() { if (hasAchievement('A', 16)) return "images/achievements/16.png" },
 			color: '#DFDFDF',
 		},
@@ -103,7 +103,7 @@ addLayer('A', {
 			name: 'Essence of Rat',
 			done() {return player.e.points.gte(1)},
 			tooltip: 'obtain 1 essence.',
-			unlocked() { if (hasAchievement('A', 21)) return true },
+			unlocked() { return hasAchievement('A', 21) },
 			image() { if (hasAchievement('A', 21)) return "images/achievements/21.png" },
 			color: '#4CED13',
 		},
@@ -111,7 +111,7 @@ addLayer('A', {
 			name: 'Essence Cluster',
 			done() {return player.e.points.gte(1e10)},
 			tooltip: 'obtain 1e10 essence.',
-			unlocked() { if (hasAchievement('A', 21)) return true },
+			unlocked() { return hasAchievement('A', 21) },
 			image() { if (hasAchievement('A', 22)) return "images/achievements/22.png" },
 			color: '#4CED13',
 		},
@@ -119,7 +119,7 @@ addLayer('A', {
 			name: 'Gleaming, Golden Essence',
 			done() {return player.e.points.gte(1e100)},
 			tooltip: 'obtain 1e100 essence.',
-			unlocked() { if (hasAchievement('A', 22)) return true },
+			unlocked() { return hasAchievement('A', 22) },
 			image() { if (hasAchievement('A', 23)) return "images/achievements/23.png" },
 			color: '#4CED13',
 		},
@@ -127,7 +127,7 @@ addLayer('A', {
 			name: 'Essence of the Universe',
 			done() {return player.e.points.gte('1e1000')},
 			tooltip: 'obtain 1e1000 essence.',
-			unlocked() { if (hasAchievement('A', 23)) return true },
+			unlocked() { return hasAchievement('A', 23) },
 			image() { if (hasAchievement('A', 24)) return "images/achievements/24.png" },
 			color: '#4CED13',
 		},
@@ -135,7 +135,7 @@ addLayer('A', {
 			name: 'Essence of all Essence',
 			done() {return player.e.points.gte('1e10000')},
 			tooltip: 'obtain 1e10,000 essence.',
-			unlocked() { if (hasAchievement('A', 24)) return true },
+			unlocked() { return hasAchievement('A', 24) },
 			image() { if (hasAchievement('A', 25)) return "images/achievements/25.png" },
 			color: '#4CED13',
 		},
@@ -143,7 +143,7 @@ addLayer('A', {
 			name: 'Empty Soul',
 			done() {return player.e.points .gte(1e10) && getBuyableAmount('e', 11).eq(0) && getBuyableAmount('e', 12).eq(0)},
 			tooltip: 'obtain 1e10 essence with no essence buyables.',
-			unlocked() {if (hasAchievement('A', 22) && hasAchievement('A', 31)) return true },
+			unlocked() { return hasAchievement('A', 22) && hasAchievement('A', 31) },
 			image() { if (hasAchievement('A', 26)) return "images/achievements/26.png" },
 			color: '#4CED13',
 		},
@@ -151,7 +151,7 @@ addLayer('A', {
 			name: 'Cracked Core',
 			done() {return player.c.points.gte(1)},
 			tooltip: 'obtain 1 core.',
-			unlocked() { if (hasAchievement('A', 31)) return true },
+			unlocked() { return hasAchievement('A', 31) },
 			image() { if (hasAchievement('A', 31)) return "images/achievements/31.png" },
 			color: '#D2D237',
 		},
@@ -159,7 +159,7 @@ addLayer('A', {
 			name: 'Mountainous Core',
 			done() {return player.c.points.gte(1e10)},
 			tooltip: 'obtain 1e10 cores.',
-			unlocked() { if (hasAchievement('A', 31)) return true },
+			unlocked() { return hasAchievement('A', 31) },
 			image() { if (hasAchievement('A', 32)) return "images/achievements/32.png" },
 			color: '#D2D237',
 		},
@@ -167,7 +167,7 @@ addLayer('A', {
 			name: 'Core of the Earth',
 			done() {return player.c.points.gte(1e100)},
 			tooltip: 'obtain 1e100 cores.',
-			unlocked() { if (hasAchievement('A', 32)) return true },
+			unlocked() { return hasAchievement('A', 32) },
 			image() { if (hasAchievement('A', 33)) return "images/achievements/33.png" },
 			color: '#D2D237',
 		},
@@ -175,7 +175,7 @@ addLayer('A', {
 			name: 'Core of the Sun',
 			done() {return player.c.points.gte('1e1000')},
 			tooltip: 'obtain 1e1000 cores.',
-			unlocked() { if (hasAchievement('A', 33)) return true },
+			unlocked() { return hasAchievement('A', 33) },
 			image() { if (hasAchievement('A', 34)) return "images/achievements/34.png" },
 			color: '#D2D237',
 		},
@@ -183,7 +183,7 @@ addLayer('A', {
 			name: 'Core of the Universe',
 			done() {return player.c.points.gte('1e10000')},
 			tooltip: 'obtain 1e10,000 cores.',
-			unlocked() { if (hasAchievement('A', 34)) return true },
+			unlocked() { return hasAchievement('A', 34) },
 			image() { if (hasAchievement('A', 34)) return "images/achievements/35.png" },
 			color: '#D2D237',
 		},
@@ -191,7 +191,7 @@ addLayer('A', {
 			name: 'Pointless Core',
 			done() {return player.c.points.gte(1e10) && getBuyableAmount('c', 11).eq(0) && getBuyableAmount('c', 12).eq(0) && player.q.total.eq(0)},
 			tooltip: 'obtain 1e10 cores with no core buyables and quarks.',
-			unlocked() { if (hasAchievement('A', 32) && hasAchievement('A', 41)) return true },
+			unlocked() { return hasAchievement('A', 32) && hasAchievement('A', 41) },
 			image() { if (hasAchievement('A', 36)) return "images/achievements/36.png" },
 			color: '#D2D237',
 		},
@@ -199,7 +199,7 @@ addLayer('A', {
 			name: 'The Smallest Quark',
 			done() {return player.q.points.gte(1)},
 			tooltip: 'obtain 1 quark.',
-			unlocked() { if (hasAchievement('A', 41)) return true },
+			unlocked() { return hasAchievement('A', 41) },
 			image() { if (hasAchievement('A', 41)) return "images/achievements/41.png" },
 			color: '#DB5196',
 		},
@@ -207,7 +207,7 @@ addLayer('A', {
 			name: 'Quark Field',
 			done() {return player.q.points .gte(1e10)},
 			tooltip: 'obtain 1e10 quarks.',
-			unlocked() { if (hasAchievement('A', 41)) return true },
+			unlocked() { return hasAchievement('A', 41) },
 			image() { if (hasAchievement('A', 42)) return "images/achievements/42.png" },
 			color: '#DB5196',
 		},
@@ -215,7 +215,7 @@ addLayer('A', {
 			name: 'Oh, the Quark of it all',
 			done() {return player.q.points.gte(1e100)},
 			tooltip: 'obtain 1e100 quarks.',
-			unlocked() { if (hasAchievement('A', 42)) return true },
+			unlocked() { return hasAchievement('A', 42) },
 			image() { if (hasAchievement('A', 43)) return "images/achievements/43.png" },
 			color: '#DB5196',
 		},
@@ -223,7 +223,7 @@ addLayer('A', {
 			name: 'Quirky Quarks',
 			done() {return player.q.points.gte('1e1000')},
 			tooltip: 'obtain 1e1000 quarks.',
-			unlocked() { if (hasAchievement('A', 43)) return true },
+			unlocked() { return hasAchievement('A', 43) },
 			image() { if (hasAchievement('A', 44)) return "images/achievements/44.png" },
 			color: '#DB5196',
 		},
@@ -231,14 +231,14 @@ addLayer('A', {
 			name: 'Impossible Quarks',
 			done() {return player.q.points.gte('1e10000')},
 			tooltip: 'obtain 1e10,000 quarks.',
-			unlocked() { if (hasAchievement('A', 44)) return true },
+			unlocked() { return hasAchievement('A', 44) },
 			color: '#DB5196',
 		},
 		46: {
 			name: 'The Outside',
 			done() {return player.q.points.gte(1e10) && player.c.total.eq(0)},
 			tooltip: 'obtain 1e10 quarks with no cores.',
-			unlocked() { if (hasAchievement('A', 42) && hasAchievement('A', 51)) return true },
+			unlocked() { return hasAchievement('A', 42) && hasAchievement('A', 51) },
 			image() { if (hasAchievement('A', 46)) return "images/achievements/46.png" },
 			color: '#DB5196',
 		},
@@ -246,7 +246,7 @@ addLayer('A', {
 			name: 'Submarine, Subatomic',
 			done() {return player.sp.points.gte(1)},
 			tooltip: 'obtain 1 subatomic particle.',
-			unlocked() { if (hasAchievement('A', 51)) return true },
+			unlocked() { return hasAchievement('A', 51) },
 			image() { if (hasAchievement('A', 51)) return "images/achievements/51.png" },
 			color: '#710CC4',
 		},
@@ -254,7 +254,7 @@ addLayer('A', {
 			name: 'Variant Particles',
 			done() {return player.sp.points.gte(100)},
 			tooltip: 'obtain 100 subatomic particles.',
-			unlocked() { if (hasAchievement('A', 51)) return true },
+			unlocked() { return hasAchievement('A', 51) },
 			image() { if (hasAchievement('A', 52)) return "images/achievements/52.png" },
 			color: '#710CC4',
 		},
@@ -262,7 +262,7 @@ addLayer('A', {
 			name: 'Periodic Particles',
 			done() {return player.sp.points.gte(10000)},
 			tooltip: 'obtain 10,000 subatomic particles.',
-			unlocked() { if (hasAchievement('A', 52)) return true },
+			unlocked() { return hasAchievement('A', 52) },
 			image() { if (hasAchievement('A', 53)) return "images/achievements/53.png" },
 			color: '#710CC4',
 		},
@@ -270,7 +270,7 @@ addLayer('A', {
 			name: 'That\'s no Particle no More',
 			done() {return player.sp.points.gte(1000000)},
 			tooltip: 'obtain 1,000,000 subatomic particles.',
-			unlocked() { if (hasAchievement('A', 53)) return true },
+			unlocked() { return hasAchievement('A', 53) },
 			image() { if (hasAchievement('A', 54)) return "images/achievements/54.png" },
 			color: '#710CC4',
 		},
@@ -278,7 +278,7 @@ addLayer('A', {
 			name: 'Anti Dark Matter',
 			done() {return player.sp.points.gte(1e11)},
 			tooltip: 'obtain 1e11 subatomic particles.',
-			unlocked() { if (hasAchievement('A', 54)) return true },
+			unlocked() { return hasAchievement('A', 54) },
 			image() { if (hasAchievement('A', 55)) return "images/achievements/55.png" },
 			color: '#710CC4',
 		},
@@ -286,7 +286,7 @@ addLayer('A', {
 			name: 'Hollow Particles',
 			done() {return player.sp.points.gte(10) && getBuyableAmount('sp', 11).eq(0) && getBuyableAmount('sp', 12).eq(0) && getBuyableAmount('sp', 21).eq(0) && player.h.total.eq(0)},
 			tooltip: 'obtain 10 subatomic particles with no subatomic particle buyables and hexes.',
-			unlocked() { if (hasAchievement('A', 52) && hasAchievement('A', 61)) return true },
+			unlocked() { return hasAchievement('A', 52) && hasAchievement('A', 61) },
 			image() { if (hasAchievement('A', 56)) return "images/achievements/56.png" },
 			color: '#710CC4',
 		},
@@ -294,7 +294,7 @@ addLayer('A', {
 			name: 'The Hex Game',
 			done() {return player.h.points.gte(1)},
 			tooltip: 'obtain 1 hex.',
-			unlocked() { if (hasAchievement('A', 61)) return true },
+			unlocked() { return hasAchievement('A', 61) },
 			image() { if (hasAchievement('A', 61)) return "images/achievements/61.png" },
 			color: '#E36409',
 		},
@@ -302,7 +302,7 @@ addLayer('A', {
 			name: 'Cursed into Oblivion',
 			done() {return player.h.points.gte(1e10)},
 			tooltip: 'obtain 1e10 hexes.',
-			unlocked() { if (hasAchievement('A', 61)) return true },
+			unlocked() { return hasAchievement('A', 61) },
 			image() { if (hasAchievement('A', 62)) return "images/achievements/62.png" },
 			color: '#E36409',
 		},
@@ -310,7 +310,7 @@ addLayer('A', {
 			name: 'The Prophecy of Doom',
 			done() {return player.h.points.gte(1e100)},
 			tooltip: 'obtain 1e100 hexes.',
-			unlocked() { if (hasAchievement('A', 62)) return true },
+			unlocked() { return hasAchievement('A', 62) },
 			image() { if (hasAchievement('A', 63)) return "images/achievements/63.png" },
 			color: '#E36409',
 		},
@@ -318,7 +318,7 @@ addLayer('A', {
 			name: 'The Advent of the End',
 			done() {return player.h.points.gte('1e1000')},
 			tooltip: 'obtain 1e1000 hexes.',
-			unlocked() { if (hasAchievement('A', 63)) return true },
+			unlocked() { return hasAchievement('A', 63) },
 			image() { if (hasAchievement('A', 64)) return "images/achievements/64.png" },
 			color: '#E36409',
 		},
@@ -326,14 +326,14 @@ addLayer('A', {
 			name: 'Nihilism: Nothing is There',
 			done() {return player.h.points.gte('1e10000')},
 			tooltip: 'obtain 1e10,000 hexes.',
-			unlocked() { if (hasAchievement('A', 64)) return true },
+			unlocked() { return hasAchievement('A', 64) },
 			color: '#E36409',
 		},
 		66: {
 			name: 'Same Old Tricks',
 			done() {return player.h.points.gte(1e10) && getBuyableAmount('c', 11).eq(0) && getBuyableAmount('c', 12).eq(0) && player.sp.total.eq(0)},
 			tooltip: 'obtain 1e10 hexes with no subatomic particles and core buyables.',
-			unlocked() { if (hasAchievement('A', 62) && hasAchievement('A', 71)) return true },
+			unlocked() { return hasAchievement('A', 62) && hasAchievement('A', 71) },
 			image() { if (hasAchievement('A', 66)) return "images/achievements/66.png" },
 			color: '#E36409',
 		},
@@ -341,7 +341,7 @@ addLayer('A', {
 			name: 'Demon Spirits',
 			done() {return player.ds.points.gte(1)},
 			tooltip: 'obtain 1 demon soul.',
-			unlocked() { if (hasAchievement('A', 71)) return true },
+			unlocked() { return hasAchievement('A', 71) },
 			image() { if (hasAchievement('A', 71)) return "images/achievements/71.png" },
 			color: '#BA0035',
 		},
@@ -349,7 +349,7 @@ addLayer('A', {
 			name: 'Demonic Ruin',
 			done() {return player.ds.points.gte(1e8)},
 			tooltip: 'obtain 1e8 demon souls.',
-			unlocked() { if (hasAchievement('A', 71)) return true },
+			unlocked() { return hasAchievement('A', 71) },
 			image() { if (hasAchievement('A', 72)) return "images/achievements/72.png" },
 			color: '#BA0035',
 		},
@@ -357,7 +357,7 @@ addLayer('A', {
 			name: 'Demon Summoning',
 			done() {return player.ds.points.gte(1e60)},
 			tooltip: 'obtain 1e60 demon souls.',
-			unlocked() { if (hasAchievement('A', 72)) return true },
+			unlocked() { return hasAchievement('A', 72) },
 			image() { if (hasAchievement('A', 73)) return "images/achievements/73.png" },
 			color: '#BA0035',
 		},
@@ -365,7 +365,7 @@ addLayer('A', {
 			name: 'Demonic Origin',
 			done() {return player.ds.points.gte('1e400')},
 			tooltip: 'obtain 1e400 demon souls.',
-			unlocked() { if (hasAchievement('A', 73)) return true },
+			unlocked() { return hasAchievement('A', 73) },
 			image() { if (hasAchievement('A', 73)) return "images/achievements/74.png" },
 			color: '#BA0035',
 		},
@@ -373,14 +373,14 @@ addLayer('A', {
 			name: 'Demonic Dimension',
 			done() {return player.ds.points.gte('1e2000')},
 			tooltip: 'obtain 1e2000 demon souls.',
-			unlocked() { if (hasAchievement('A', 74)) return true },
+			unlocked() { return hasAchievement('A', 74) },
 			color: '#BA0035',
 		},
 		76: {
 			name: 'Occult Uprising',
 			done() {return player.ds.points.gte(1e10) && getBuyableAmount('ds', 11).eq(0) && player.a.total.eq(0)},
 			tooltip: 'obtain 1e10 demon souls with no demon soul buyables and atoms.',
-			unlocked() { if (hasAchievement('A', 72) && hasAchievement('A', 81)) return true },
+			unlocked() { return hasAchievement('A', 72) && hasAchievement('A', 81) },
 			image() { if (hasAchievement('A', 76)) return "images/achievements/76.png" },
 			color: '#BA0035',
 		},
@@ -388,7 +388,7 @@ addLayer('A', {
 			name: 'Atomic Mass',
 			done() {return player.a.points.gte(1)},
 			tooltip: 'obtain 1 atom.',
-			unlocked() { if (hasAchievement('A', 81)) return true },
+			unlocked() { return hasAchievement('A', 81) },
 			image() { if (hasAchievement('A', 81)) return "images/achievements/81.png" },
 			color: '#4D2FE0',
 		},
@@ -396,7 +396,7 @@ addLayer('A', {
 			name: 'Atomic Movement',
 			done() {return player.a.points.gte(10)},
 			tooltip: 'obtain 10 atoms.',
-			unlocked() { if (hasAchievement('A', 81)) return true },
+			unlocked() { return hasAchievement('A', 81) },
 			image() { if (hasAchievement('A', 82)) return "images/achievements/82.png" },
 			color: '#4D2FE0',
 		},
@@ -404,7 +404,7 @@ addLayer('A', {
 			name: 'Masses of Atoms',
 			done() {return player.a.points.gte(1000)},
 			tooltip: 'obtain 1,000 atoms.',
-			unlocked() { if (hasAchievement('A', 82)) return true },
+			unlocked() { return hasAchievement('A', 82) },
 			image() { if (hasAchievement('A', 83)) return "images/achievements/83.png" },
 			color: '#4D2FE0',
 		},
@@ -412,7 +412,7 @@ addLayer('A', {
 			name: 'Atom Dance',
 			done() {return player.a.points.gte(10000)},
 			tooltip: 'obtain 10,000 atoms.',
-			unlocked() { if (hasAchievement('A', 83)) return true },
+			unlocked() { return hasAchievement('A', 83) },
 			image() { if (hasAchievement('A', 84)) return "images/achievements/84.png" },
 			color: '#4D2FE0',
 		},
@@ -420,7 +420,7 @@ addLayer('A', {
 			name: 'Atomic Hole',
 			done() {return player.a.points.gte(1e9)},
 			tooltip: 'obtain 1e9 atoms.',
-			unlocked() { if (hasAchievement('A', 84)) return true },
+			unlocked() { return hasAchievement('A', 84) },
 			image() { if (hasAchievement('A', 85)) return "images/achievements/85.png" },
 			color: '#4D2FE0',
 		},
@@ -428,7 +428,7 @@ addLayer('A', {
 			name: 'For Science!',
 			done() {return player.a.points.gte(10) && player.ds.total.eq(0)},
 			tooltip: 'obtain 10 atoms with no demon souls.',
-			unlocked() { if (hasAchievement('A', 82) && hasAchievement('A', 91)) return true },
+			unlocked() { return hasAchievement('A', 82) && hasAchievement('A', 91) },
 			image() { if (hasAchievement('A', 86)) return "images/achievements/86.png" },
 			color: '#4D2FE0',
 		},
@@ -436,168 +436,168 @@ addLayer('A', {
 			name: 'Praise the Lord',
 			done() {return player.p.points.gte(1)},
 			tooltip: 'obtain 1 prayer.',
-			unlocked() { if (hasAchievement('A', 91)) return true },
+			unlocked() { return hasAchievement('A', 91) },
 			color: '#FDBBFF',
 		},
 		92: {
 			name: 'Church Prayer Circle',
 			done() {return player.p.points.gte(1e10)},
 			tooltip: 'obtain 1e10 prayers.',
-			unlocked() { if (hasAchievement('A', 91)) return true },
+			unlocked() { return hasAchievement('A', 91) },
 			color: '#FDBBFF',
 		},
 		93: {
 			name: 'Prayers all around',
 			done() {return player.p.points.gte(1e100)},
 			tooltip: 'obtain 1e100 prayers.',
-			unlocked() { if (hasAchievement('A', 92)) return true },
+			unlocked() { return hasAchievement('A', 92) },
 			color: '#FDBBFF',
 		},
 		94: {
 			name: 'Global Prayers',
 			done() {return player.p.points.gte('1e1000')},
 			tooltip: 'obtain 1e1000 prayers.',
-			unlocked() { if (hasAchievement('A', 93)) return true },
+			unlocked() { return hasAchievement('A', 93) },
 			color: '#FDBBFF',
 		},
 		95: {
 			name: 'Everything is Prayers',
 			done() {return player.p.points.gte('1e10000')},
 			tooltip: 'obtain 1e10,000 prayers.',
-			unlocked() { if (hasAchievement('A', 94)) return true },
+			unlocked() { return hasAchievement('A', 94) },
 			color: '#FDBBFF',
 		},
 		96: {
 			name: 'Persistence',
 			done() {return player.p.points.gte(1e10) && player.h.total.eq(0) && player.sp.total.eq(0) && player.s.total.eq(0)},
 			tooltip: 'obtain 1e10 prayers with no hexes, subatomic particles, and sanctums.',
-			unlocked() { if (hasAchievement('A', 92) && hasAchievement('A', 101)) return true },
+			unlocked() { return hasAchievement('A', 92) && hasAchievement('A', 101) },
 			color: '#FDBBFF',
 		},
 		101: {
 			name: 'Church Sanctum',
 			done() {return player.s.points.gte(1)},
 			tooltip: 'obtain 1 sanctum.',
-			unlocked() { if (hasAchievement('A', 101)) return true },
+			unlocked() { return hasAchievement('A', 101) },
 			color: '#AAFF00',
 		},
 		102: {
 			name: 'Shrine Blessings',
 			done() {return player.s.points.gte(10)},
 			tooltip: 'obtain 10 sanctums.',
-			unlocked() { if (hasAchievement('A', 101)) return true },
+			unlocked() { return hasAchievement('A', 101) },
 			color: '#AAFF00',
 		},
 		103: {
 			name: 'Greatest Sanctum',
 			done() {return player.s.points.gte(100)},
 			tooltip: 'obtain 100 sanctums.',
-			unlocked() { if (hasAchievement('A', 102)) return true },
+			unlocked() { return hasAchievement('A', 102) },
 			color: '#AAFF00',
 		},
 		104: {
 			name: 'The World is Sanctum',
 			done() {return player.s.points.gte(1000)},
 			tooltip: 'obtain 1,000 sanctums.',
-			unlocked() { if (hasAchievement('A', 103)) return true },
+			unlocked() { return hasAchievement('A', 103) },
 			color: '#AAFF00',
 		},
 		105: {
 			name: 'Sanctum, Absolute',
 			done() {return player.s.points.gte(10000)},
 			tooltip: 'obtain 10,000 sanctums.',
-			unlocked() { if (hasAchievement('A', 104)) return true },
+			unlocked() { return hasAchievement('A', 104) },
 			color: '#AAFF00',
 		},
 		106: {
 			name: 'Still Sanctum',
 			done() {return player.s.points.gte(10) && player.ds.total.eq(0) && player.a.total.eq(0)},
 			tooltip: 'obtain 10 sanctums with no demon souls and atoms.',
-			unlocked() { if (hasAchievement('A', 102) && hasAchievement('A', 111)) return true },
+			unlocked() { return hasAchievement('A', 102) && hasAchievement('A', 111) },
 			color: '#AAFF00',
 		},
 		111: {
 			name: 'Ancient Relic',
 			done() {return player.r.points.gte(1)},
 			tooltip: 'obtain 1 relic.',
-			unlocked() { if (hasAchievement('A', 111)) return true },
+			unlocked() { return hasAchievement('A', 111) },
 			color: '#B9A975',
 		},
 		112: {
 			name: 'Relic Stash',
 			done() {return player.r.points.gte(10)},
 			tooltip: 'obtain 10 relics.',
-			unlocked() { if (hasAchievement('A', 111)) return true },
+			unlocked() { return hasAchievement('A', 111) },
 			color: '#B9A975',
 		},
 		113: {
 			name: 'Treasure Hoard',
 			done() {return player.r.points.gte(100)},
 			tooltip: 'obtain 100 relics.',
-			unlocked() { if (hasAchievement('A', 112)) return true },
+			unlocked() { return hasAchievement('A', 112) },
 			color: '#B9A975',
 		},
 		116: {
 			name: 'Broken Relics',
 			done() {return player.r.points.gte(10) && player.m.total.eq(0)},
 			tooltip: 'obtain 10 relics with no molecules.',
-			unlocked() { if (hasAchievement('A', 112) && hasAchievement('A', 121)) return true },
+			unlocked() { return hasAchievement('A', 112) && hasAchievement('A', 121) },
 			color: '#B9A975',
 		},
 		121: {
 			name: 'Atom Combination',
 			done() {return player.m.points.gte(1)},
 			tooltip: 'obtain 1 molecule.',
-			unlocked() { if (hasAchievement('A', 121)) return true },
+			unlocked() { return hasAchievement('A', 121) },
 			color: '#00CCCC',
 		},
 		122: {
 			name: 'Varied Molecules',
 			done() {return player.m.points.gte(1000000)},
 			tooltip: 'obtain 1,000,000 molecules.',
-			unlocked() { if (hasAchievement('A', 121)) return true },
+			unlocked() { return hasAchievement('A', 121) },
 			color: '#00CCCC',
 		},
 		123: {
 			name: 'Molecule Dictionary',
 			done() {return player.m.points.gte(1e12)},
 			tooltip: 'obtain 1e12 molecules.',
-			unlocked() { if (hasAchievement('A', 122)) return true },
+			unlocked() { return hasAchievement('A', 122) },
 			color: '#00CCCC',
 		},
 		124: {
 			name: 'Plethora of Molecules',
 			done() {return player.m.points.gte(1e24)},
 			tooltip: 'obtain 1e24 molecules.',
-			unlocked() { if (hasAchievement('A', 123)) return true },
+			unlocked() { return hasAchievement('A', 123) },
 			color: '#00CCCC',
 		},
 		126: {
 			name: 'Shiny New Molecules',
 			done() {return player.m.points.gte(1000000) && player.r.total.eq(0)},
 			tooltip: 'obtain 1,000,000 molecules with no relics.',
-			unlocked() { if (hasAchievement('A', 122) && hasAchievement('A', 131)) return true },
+			unlocked() { return hasAchievement('A', 122) && hasAchievement('A', 131) },
 			color: '#00CCCC',
 		},
 		131: {
 			name: 'Spread the Word',
 			done() {return player.gi.points.gte(1)},
 			tooltip: 'obtain 1 good influence.',
-			unlocked() { if (hasAchievement('A', 131)) return true },
+			unlocked() { return hasAchievement('A', 131) },
 			color: '#08FF87',
 		},
 		132: {
 			name: 'Good Deeds All Around',
 			done() {return player.gi.points.gte(10)},
 			tooltip: 'obtain 10 good influence.',
-			unlocked() { if (hasAchievement('A', 131)) return true },
+			unlocked() { return hasAchievement('A', 131) },
 			color: '#08FF87',
 		},
 		133: {
 			name: 'World of Good',
 			done() {return player.gi.points.gte(100)},
 			tooltip: 'obtain 100 good influence.',
-			unlocked() { if (hasAchievement('A', 132)) return true },
+			unlocked() { return hasAchievement('A', 132) },
 			color: '#08FF87',
 		},
 	},
@@ -1106,7 +1106,7 @@ addLayer('e', {
 				if (player.nerdMode) return 'multiplies core gain (and essence gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(getBuyableAmount('e', 12).add(1)) + 'x<br>and ' + format(getBuyableAmount('e', 12).pow(0.25).add(1)) + 'x<br>formulas: x+1 and x^0.25+1<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount('e', 12));
 				return 'multiplies core gain (and essence gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(getBuyableAmount('e', 12).add(1)) + 'x<br>and ' + format(getBuyableAmount('e', 12).pow(0.25).add(1)) + 'x<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount('e', 12));
 			},
-			unlocked() { if (player.e.total.gte(85194) || getBuyableAmount('e', 12).gt(0)) return true },
+			unlocked() { return player.e.total.gte(85194) || getBuyableAmount('e', 12).gt(0) },
 		},
 	},
 });
@@ -1251,7 +1251,7 @@ addLayer('c', {
 			requirementDescription: '1e64 cores',
 			effectDescription: 'gain 50% of essence gain per second',
 			done() { return player.c.points.gte(1e64) },
-			unlocked() { if (player.c.points.gte(1e60)) return true },
+			unlocked() { return player.c.points.gte(1e60) },
 		},
 	},
 	upgrades: {
@@ -2221,7 +2221,7 @@ addLayer('h', {
 		if (hasUpgrade('h', 14)) mult = mult.mul(4);
 		if (hasUpgrade('h', 62)) mult = mult.mul(upgradeEffect('h', 62));
 		if (hasUpgrade('h', 11) && hasUpgrade('ds', 11)) mult = mult.mul(upgradeEffect('h', 11));
-		if (hasUpgrade('p', 12)) mult = mult.mul(1.02);
+		if (hasUpgrade('p', 12)) mult = mult.mul(1.05);
 		if (hasUpgrade('m', 23)) mult = mult.mul(upgradeEffect('m', 23));
 		if (getBuyableAmount('ds', 11).gt(0)) mult = mult.mul(new Decimal(2).pow(getBuyableAmount('ds', 11)));
 		if (hasChallenge('ds', 11)) mult = mult.mul(player.ds.points.add(1).pow(0.25));
@@ -3720,7 +3720,6 @@ addLayer('p', {
 				else player.p.holiness = player.p.holiness.add(player.p.divinity.mul(0.04).mul(mult).mul(diff).mul(0.002));
 			};
 			if (hasUpgrade('p', 41)) {
-				let mult = new Decimal(1);
 				if (hasUpgrade('p', 51) && hasUpgrade('p', 55)) player.p.hymn = player.p.hymn.add(player.p.holiness.div(175).mul(diff).mul(0.002).floor());
 				else if (hasUpgrade('p', 51)) player.p.hymn = player.p.hymn.add(player.p.holiness.div(200).mul(diff).mul(0.002).floor());
 				else player.p.hymn = player.p.hymn.add(player.p.holiness.div(250).mul(diff).mul(0.002).floor());
@@ -3764,13 +3763,13 @@ addLayer('p', {
 			requirementDescription: '2,500 prayers & 250 hymns',
 			effectDescription: 'divinity gain is raised to the power of 1.5',
 			done() { return player.p.points.gte(2500) && player.p.hymn.gte(250)},
-			unlocked() { if (hasUpgrade('p', 41)) return true },
+			unlocked() { return hasUpgrade('p', 41) },
 		},
 		3: {
 			requirementDescription: '1.00e55 prayers',
 			effectDescription: 'divinity gain is raised to the power<br>of 1.6 instead of 1.5',
 			done() { return player.p.points.gte(1e55)},
-			unlocked() { if (player.p.points.gte(1e50) || (hasMilestone('p', 2) && player.s.points.gt(3))) return true },
+			unlocked() { return player.p.points.gte(1e50) || (hasMilestone('p', 2) && player.s.points.gt(3)) },
 		},
 	},
 	upgrades: {
@@ -3796,7 +3795,7 @@ addLayer('p', {
 				return '<b class="layer-p' + getdark(this, "title") + 'Heretic Leniency';
 			},
 			description() {
-				return 'multiplies hex gain by 1.02';
+				return 'multiplies hex gain by 1.05';
 			},
 			cost: 10,
 		},
@@ -3831,7 +3830,10 @@ addLayer('p', {
 			unlocked() { return hasMilestone('s', 0) && !hasUpgrade('p', 14) },
 		},
 		15: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Prayer Divination</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 75 divinity'},
+			fullDisplay() {
+				if (player.nerdMode) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Prayer Divination</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x <br>formula: (x+1)^0.02<br><br>Cost: 75 divinity';
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Prayer Divination</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 75 divinity';
+			},
 			canAfford() {
 				if (player.p.divinity.gte(75)) return true;
 				return false;
@@ -3845,7 +3847,10 @@ addLayer('p', {
 			unlocked() { return hasUpgrade('p', 14) },
 		},
 		21: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine Prayers</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 20 divinity' },
+			fullDisplay() {
+				if (player.nerdMode) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine Prayers</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x <br>formula: (x+1)^0.01<br><br>Cost: 20 divinity';
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine Prayers</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 20 divinity';
+			},
 			canAfford() {
 				if (player.p.divinity.gte(20)) return true;
 				return false;
@@ -3877,7 +3882,7 @@ addLayer('p', {
 			pay() {
 				player.p.holiness = player.p.holiness.sub(10);
 			},
-			unlocked() { if (hasUpgrade('p', 22)) return true },
+			unlocked() { return hasUpgrade('p', 22) },
 		},
 		24: {
 			fullDisplay() {
@@ -3914,11 +3919,14 @@ addLayer('p', {
 				player.p.divinity = player.p.divinity.sub(175);
 				player.p.holiness = player.p.holiness.sub(40);
 			},
-			unlocked() { if (hasUpgrade('p', 22)) return true },
+			unlocked() { return hasUpgrade('p', 22) },
 
 		},
 		32: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine Synergy</h3><br>multiplies divinity gain based on your holiness<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 750 divinity,<br>50 holiness' },
+			fullDisplay() {
+				if (player.nerdMode) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine Synergy</h3><br>multiplies divinity gain based on your holiness<br>Currently: ' + format(this.effect()) + 'x <br>formula: (x+1)^0.025<br><br>Cost: 750 divinity,<br>50 holiness';
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine Synergy</h3><br>multiplies divinity gain based on your holiness<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 750 divinity,<br>50 holiness';
+			},
 			canAfford() {
 				if (player.p.divinity.gte(750) && player.p.holiness.gte(50)) return true;
 				return false;
@@ -3930,7 +3938,7 @@ addLayer('p', {
 			effect() {
 				return player.p.holiness.add(1).pow(0.025);
 			},
-			unlocked() { if (hasUpgrade('p', 22)) return true },
+			unlocked() { return hasUpgrade('p', 22) },
 		},
 		33: {
 			title() {
@@ -3983,10 +3991,16 @@ addLayer('p', {
 				player.p.divinity = player.p.divinity.sub(2000);
 				player.p.holiness = player.p.holiness.sub(450);
 			},
-			unlocked() { if (hasUpgrade('p', 22)) return true },
+			unlocked() { return hasUpgrade('p', 22) },
 		},
 		42: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine hymns</h3><br>multiplies divinity gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 1,000 holiness,<br>75 hymns' },
+			fullDisplay() {
+				if (player.nerdMode) {
+					if (hasUpgrade('p', 45)) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine hymns</h3><br>multiplies divinity gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x <br>formula: (x+1)^0.125<br><br>Cost: 1,000 holiness,<br>75 hymns';
+					else return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine hymns</h3><br>multiplies divinity gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x <br>formula: (x+1)^0.1<br><br>Cost: 1,000 holiness,<br>75 hymns';
+				};
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine hymns</h3><br>multiplies divinity gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 1,000 holiness,<br>75 hymns';
+			},
 			canAfford() {
 				if (player.p.holiness.gte(1000) && player.p.hymn.gte(75)) return true;
 				return false;
@@ -3999,7 +4013,7 @@ addLayer('p', {
 				if (hasUpgrade('p', 45)) return player.p.hymn.add(1).pow(0.125);
 				else return player.p.hymn.add(1).pow(0.1);
 			},
-			unlocked() { if (hasUpgrade('p', 41)) return true },
+			unlocked() { return hasUpgrade('p', 41) },
 		},
 		43: {
 			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Singing</h3><br>increases hymn effect exponent<br>0.15 --> 0.2<br><br>Cost: 1,000,000 holiness,<br>50,000 hymns' },
@@ -4011,7 +4025,7 @@ addLayer('p', {
 				player.p.holiness = player.p.holiness.sub(1000000);
 				player.p.hymn = player.p.hymn.sub(50000);
 			},
-			unlocked() { if (hasUpgrade('p', 41)) return true },
+			unlocked() { return hasUpgrade('p', 41) },
 		},
 		44: {
 			fullDisplay() {
@@ -4047,7 +4061,7 @@ addLayer('p', {
 			pay() {
 				player.p.hymn = player.p.hymn.sub(1000000);
 			},
-			unlocked() { if (hasUpgrade('p', 41)) return true },
+			unlocked() { return hasUpgrade('p', 41) },
 		},
 		52: {
 			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Stronger Hymns</h3><br>increases hymn effect exponent if you have <b class="layer-p' + getdark(this, "ref", true) + 'Hymn Singing</b><br>0.2 --> 0.225<br><br>Cost: 10,000,000 hymns';
@@ -4059,7 +4073,7 @@ addLayer('p', {
 			pay() {
 				player.p.hymn = player.p.hymn.sub(10000000);
 			},
-			unlocked() { if (hasUpgrade('p', 41)) return true },
+			unlocked() { return hasUpgrade('p', 41) },
 		},
 		53: {
 			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Strongest Hymns</h3><br>increases hymn effect exponent if you have all subsequent upgrades<br>0.225 --> 0.25<br><br>Cost: 100,000,000 hymns' },
@@ -4070,7 +4084,7 @@ addLayer('p', {
 			pay() {
 				player.p.hymn = player.p.hymn.sub(100000000);
 			},
-			unlocked() { if (hasUpgrade('p', 41)) return true },
+			unlocked() { return hasUpgrade('p', 41) },
 		},
 		54: {
 			fullDisplay() {
@@ -4098,7 +4112,10 @@ addLayer('p', {
 			unlocked() { return hasUpgrade('p', 54) },
 		},
 		61: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Hymns</h3><br>multiplies holiness gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: ' + format(1e9) + ' hymns' },
+			fullDisplay() {
+				if (player.nerdMode) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Hymns</h3><br>multiplies holiness gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x <br>formula: (x+1)^0.02<br><br>Cost: ' + format(1e9) + ' hymns';
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Hymns</h3><br>multiplies holiness gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: ' + format(1e9) + ' hymns';
+			},
 			canAfford() {
 				if (player.p.hymn.gte(1e9)) return true;
 				return false;
@@ -4109,10 +4126,13 @@ addLayer('p', {
 			effect() {
 				return player.p.hymn.add(1).pow(0.02);
 			},
-			unlocked() { if (hasUpgrade('p', 41)) return true },
+			unlocked() { return hasUpgrade('p', 41) },
 		},
 		62: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Deconstruction</h3><br>multiplies prayer gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: ' + format(1e11) + ' hymns' },
+			fullDisplay() {
+				if (player.nerdMode) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Deconstruction</h3><br>multiplies prayer gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x <br>formula: log5(x+10)<br><br>Cost: ' + format(1e11) + ' hymns';
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Deconstruction</h3><br>multiplies prayer gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: ' + format(1e11) + ' hymns';
+			},
 			canAfford() {
 				if (player.p.hymn.gte(1e11)) return true;
 				return false;
@@ -4121,12 +4141,14 @@ addLayer('p', {
 				player.p.hymn = player.p.hymn.sub(1e11);
 			},
 			effect() {
-				return player.p.hymn.add(1).log(5);
+				return player.p.hymn.add(10).log(5);
 			},
-			unlocked() { if (hasUpgrade('p', 41)) return true },
+			unlocked() { return hasUpgrade('p', 41) },
 		},
 		63: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Resolve</h3><br>multiplies the effect of <b class="layer-p' + getdark(this, "ref", true) + 'Hymn Deconstruction</b> based on your essence<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: ' + format(1e15) + ' hymns';
+			fullDisplay() {
+				if (player.nerdMode) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Resolve</h3><br>multiplies the effect of <b class="layer-p' + getdark(this, "ref", true) + 'Hymn Deconstruction</b> based on your essence<br>Currently: ' + format(this.effect()) + 'x <br>formula: (x+1)^0.0015<br><br>Cost: ' + format(1e15) + ' hymns';
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Resolve</h3><br>multiplies the effect of <b class="layer-p' + getdark(this, "ref", true) + 'Hymn Deconstruction</b> based on your essence<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: ' + format(1e15) + ' hymns';
 			},
 			canAfford() {
 				if (player.p.hymn.gte(1e15)) return true;
@@ -4138,7 +4160,7 @@ addLayer('p', {
 			effect() {
 				return player.e.points.add(1).pow(0.0015);
 			},
-			unlocked() { if (hasUpgrade('p', 41)) return true },
+			unlocked() { return hasUpgrade('p', 41) },
 		},
 		64: {
 			fullDisplay() {
