@@ -748,7 +748,7 @@ addLayer('SC', {
 				if (player.SC.softcaps.includes("m-eff")) text += '<br><h2 class="layer-m">Molecule Effect Softcap</h2><br>starts at ' + format(softcaps.m_eff[0][0]) + ', effect to ^' + format(softcaps.m_eff[0][1]) + '<br>';
 				if (player.SC.softcaps.includes("r-l")) {
 					text += '<br><h2 class="layer-r">Light Gain Softcap</h2><br>starts at ' + format(softcaps.r_l[0][0]) + ', gain to ^' + formatSmall(softcaps.r_l[0][1]) + '<br>';
-					if (player.nerdMode) text += 'formula: (x/1,000,000)^(-0.005) where x is light after softcap<br>';
+					if (player.nerdMode) text += 'formula: (x/1e20+1)^(-0.01) where x is light after softcap<br>';
 				};
 				if (player.SC.softcaps.includes("r-eff1")) text += '<br><h2 class="layer-r">Relic\'s First Effect Softcap</h2><br>starts at ' + format(softcaps.r_eff1[0][0]) + ', effect to ^' + format(softcaps.r_eff1[0][1]) + '<br>';
 				if (player.SC.softcaps.includes("gi-eff")) text += '<br><h2 class="layer-gi">Good Influence Effect Softcap</h2><br>starts at ' + format(softcaps.gi_eff[0][0]) + ', effect to ^' + format(softcaps.gi_eff[0][1]) + '<br>';
@@ -5069,7 +5069,7 @@ addLayer('r', {
 		return eff1;
 	},
 	effectDescription() {
-		text = ['', ''];
+		let text = ['', ''];
 		if (tmp.r.effect.gte(softcaps.r_eff1[0][0])) text[0] = ' (softcapped)';
 		if (challengeCompletions('r', 11) >= 2) text[1] = 'point and ';
 		if (colorvalue[1] == 'none') return 'which makes Essence Influence\'s hardcap start ' + format(tmp.r.effect) + 'x later' + text[0] + ', multiplies sanctum gain by ' + format(player.r.sanctummult) + 'x, and also multiplies ' + text[1] + 'essence gain by ' + format(player.r.essencemult) + 'x';
@@ -5117,7 +5117,7 @@ addLayer('r', {
 			if (hasMilestone('s', 52)) gain = gain.mul(3);
 			let sc_start0 = softcaps.r_l[0][0];
 			if (gain.gt(sc_start0)) {
-				softcaps.r_l[0][1] = gain.sub(softcaps.r_l[0][0]).div(1e6).pow(-0.005);
+				softcaps.r_l[0][1] = gain.div(sc_start0).add(1).pow(-0.01);
 				player.r.lightlastcap = softcaps.r_l[0][1];
 				gain = gain.sub(sc_start0).pow(softcaps.r_l[0][1]).add(sc_start0);
 			};
