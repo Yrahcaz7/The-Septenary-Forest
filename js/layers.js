@@ -4300,16 +4300,19 @@ addLayer('s', {
 				layerDataReset('d', keep);
 				if (hasMilestone('m', 9) && resettingLayer == 'm') player.s.milestones = ['0'];
 				if (hasMilestone('m', 10) && resettingLayer == 'm') {
-					player.s.points = new Decimal(2);
-					player.s.best = new Decimal(2);
-					player.s.total = new Decimal(2);
+					if (hasMilestone('m', 19)) set = 215;
+					else if (hasMilestone('m', 18)) set = 20;
+					else set = 5;
+					player.s.points = new Decimal(set);
+					player.s.best = new Decimal(set);
+					player.s.total = new Decimal(set);
 				};
 				if (hasMilestone('gi', 6) && resettingLayer == 'gi') {
 					if (hasMilestone('gi', 15)) set = 215;
 					else if (hasMilestone('gi', 14)) set = 85;
 					else if (hasMilestone('gi', 13)) set = 30;
 					else if (hasMilestone('gi', 9)) set = 16;
-					else if (hasMilestone('gi', 8)) set = 9;
+					else if (hasMilestone('gi', 8)) set = 10;
 					else if (hasMilestone('gi', 7)) set = 7;
 					else set = 4;
 					player.s.points = new Decimal(set);
@@ -5285,6 +5288,16 @@ addLayer('m', {
 		{key: 'm', description: 'M: Reset for molecules', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown(){return challengeCompletions('r', 11) >= 10 || player.m.unlocked},
+	passiveGeneration() {
+		let gen = 0;
+		if (hasMilestone('m', 20)) {
+			gen += 0.1;
+			if (hasMilestone('m', 21)) {
+				gen += 0.4;
+			};
+		};
+		return gen;
+	},
 	effect() {
 		effBoost = new Decimal(0.5);
 		eff = player.m.best.mul(effBoost).add(1).pow(0.99);
@@ -5402,7 +5415,7 @@ addLayer('m', {
 		},
 		10: {
 			requirementDescription: '125 total molecules',
-			effectDescription: 'keep 2 sanctums on molecule resets',
+			effectDescription: 'keep 5 sanctums on molecule resets',
 			done() { return player.m.total.gte(125) },
 		},
 		11: {
@@ -5439,6 +5452,26 @@ addLayer('m', {
 			requirementDescription: '2.5e10 total molecules',
 			effectDescription: 'gain +5% of best light gain per second',
 			done() { return player.m.total.gte(2.5e10) },
+		},
+		18: {
+			requirementDescription: '2.5e12 total molecules',
+			effectDescription: 'keep 25 more sanctums (30 total) on molecule resets',
+			done() { return player.m.total.gte(2.5e12) },
+		},
+		19: {
+			requirementDescription: '4e14 total molecules',
+			effectDescription: 'keep 185 more sanctums (215 total) on molecule resets',
+			done() { return player.m.total.gte(4e14) },
+		},
+		20: {
+			requirementDescription: '7.5e16 total molecules',
+			effectDescription: 'gain +10% of your molecule gain per second',
+			done() { return player.m.total.gte(7.5e16) },
+		},
+		21: {
+			requirementDescription: '1.5e19 total molecules',
+			effectDescription: 'gain +40% of your molecule gain per second',
+			done() { return player.m.total.gte(1.5e19) },
 		},
 	},
 	upgrades: {
@@ -5841,13 +5874,13 @@ addLayer('gi', {
 		},
 		8: {
 			requirementDescription: '12 good influence',
-			effectDescription: 'keep 2 more sanctums (9 total) on good influence resets',
+			effectDescription: 'keep 3 more sanctums (10 total) on good influence resets',
 			done() { return player.gi.points.gte(12) },
 			unlocked() { return hasMilestone('gi', 6) },
 		},
 		9: {
 			requirementDescription: '15 good influence',
-			effectDescription: 'keep 7 more sanctums (16 total) on good influence resets',
+			effectDescription: 'keep 6 more sanctums (16 total) on good influence resets',
 			done() { return player.gi.points.gte(15) },
 			unlocked() { return hasMilestone('gi', 7) },
 		},
