@@ -734,7 +734,7 @@ addLayer('SC', {
 				if (player.SC.softcaps.includes("m-eff1")) text += '<br><h2 class="layer-m">Molecule Effect Softcap</h2><br>starts at ' + format(softcaps.m_eff[0][0]) + ', effect to ^' + format(softcaps.m_eff[0][1]) + '<br>';
 				if (player.SC.softcaps.includes("r-l1")) {
 					text += '<br><h2 class="layer-r">Light Gain Softcap</h2><br>starts at ' + format(softcaps.r_l[0][0]) + ', gain to ^' + formatSmall(softcaps.r_l[0][1]) + '<br>';
-					if (player.nerdMode) text += 'formula: 0.9/(x^1.025/4e25+1) where x is light after softcap<br>';
+					if (player.nerdMode) text += 'formula: (x/1,000,000)^(-0.005) where x is light after softcap<br>';
 				};
 				if (player.SC.softcaps.includes("gi-eff1")) text += '<br><h2 class="layer-gi">Good Influence Effect Softcap</h2><br>starts at ' + format(softcaps.gi_eff[0][0]) + ', effect to ^' + format(softcaps.gi_eff[0][1]) + '<br>';
 				return text;
@@ -4990,6 +4990,7 @@ addLayer('r', {
 		lightbest: new Decimal(0),
 		lightgain: new Decimal(0),
 		lightgainbest: new Decimal(0),
+		lightlastcap: new Decimal(0),
 		relic_effects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
 		sanctummult: new Decimal(1),
 		essencemult: new Decimal(1),
@@ -5064,7 +5065,6 @@ addLayer('r', {
 			if (layers[resettingLayer].row > this.row) layerDataReset('r', keep);
 		},
 	update(diff) {
-		softcaps.r_l[0][1] = new Decimal(0.9).div(player.r.light.sub(softcaps.r_l[0][0]).pow(1.025).div(4e25).add(1));
 		player.r.lightreq = new Decimal(20000).mul(new Decimal(5).pow(challengeCompletions('r', 11)));
 		let mult0 = new Decimal(1);
 		if (challengeCompletions('r', 11) >= 11) mult0 = mult0.mul(2);
@@ -5098,13 +5098,18 @@ addLayer('r', {
 			if (hasMilestone('s', 50)) gain = gain.mul(3);
 			if (hasMilestone('s', 52)) gain = gain.mul(3);
 			let sc_start0 = softcaps.r_l[0][0];
-			if (gain.gt(sc_start0)) gain = gain.sub(sc_start0).pow(softcaps.r_l[0][1]).add(sc_start0);
-			if (gain.lt(lightboost)) gain = lightboost;
+			if (gain.gt(sc_start0)) {
+				softcaps.r_l[0][1] = gain.sub(softcaps.r_l[0][0]).div(1e6).pow(-0.005);
+				player.r.lightlastcap = softcaps.r_l[0][1];
+				gain = gain.sub(sc_start0).pow(softcaps.r_l[0][1]).add(sc_start0);
+			};
+			gain = gain.add(lightboost);
 			player.r.lightgain = gain;
 		} else player.r.lightgain = lightboost;
 		player.r.light = player.r.light.add(player.r.lightgain.mul(diff));
 		if (player.r.light.gt(player.r.lightbest)) player.r.lightbest = player.r.light;
 		if (player.r.lightgain.gt(player.r.lightgainbest)) player.r.lightgainbest = player.r.lightgain;
+		if (!softcaps.r_l[0][1]) softcaps.r_l[0][1] = player.r.lightlastcap;
 	},
 	tabFormat: [
 		"main-display",
@@ -5119,7 +5124,6 @@ addLayer('r', {
 			}],
 		"blank",
 		"challenges",
-		"clickables",
 		"blank",
 		"upgrades",
 	],
@@ -5202,30 +5206,6 @@ addLayer('r', {
 				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-color':color,'color':textcolor,'border-radius':'16%','height':'425px','width':'425px'};
 			},
-		},
-	},
-	clickables: {
-		11: {
-			display: 'Reset your light to the start of the<br>light softcap and enter activation',
-			canClick() {return player.r.light.gt(0) && !inChallenge('r', 11)},
-			onClick() {
-				if (confirm('are you sure you want to reset your light to the start of the light softcap?')) {
-					player.r.light = new Decimal(softcaps.r_l[0][0]).add(player.r.lightgain.mul(0.1));
-					startChallenge('r', 11);
-				};
-			},
-			style: {'min-height':'30px','width':'fit-content','border-radius':'15px'},
-			unlocked() {return player.r.light.gte(softcaps.r_l[0][0])},
-		},
-		12: {
-			display: 'Restore your light to your best<br>light and exit activation',
-			canClick() {return player.r.lightbest.gt(0) && player.r.light.lt(player.r.lightbest)},
-			onClick() {
-				player.r.light = player.r.lightbest;
-				if (inChallenge('r', 11)) completeChallenge('r', 11);
-			},
-			style: {'min-height':'30px','width':'fit-content','border-radius':'15px'},
-			unlocked() {return player.r.light.gte(softcaps.r_l[0][0])},
 		},
 	},
 	upgrades: {
