@@ -652,7 +652,7 @@ addLayer('SC', {
 		if (player.SC.softcaps.includes("r-l")) {
 			light += 1;
 		};
-		if (player.SC.softcaps.includes("r-l")) {
+		if (player.SC.softcaps.includes("r-eff1")) {
 			relic += 1;
 		};
 		if (player.SC.softcaps.includes("gi-eff")) {
@@ -748,7 +748,7 @@ addLayer('SC', {
 				if (player.SC.softcaps.includes("m-eff")) text += '<br><h2 class="layer-m">Molecule Effect Softcap</h2><br>starts at ' + format(softcaps.m_eff[0][0]) + ', effect to ^' + format(softcaps.m_eff[0][1]) + '<br>';
 				if (player.SC.softcaps.includes("r-l")) {
 					text += '<br><h2 class="layer-r">Light Gain Softcap</h2><br>starts at ' + format(softcaps.r_l[0][0]) + ', gain to ^' + formatSmall(softcaps.r_l[0][1]) + '<br>';
-					if (player.nerdMode) text += 'formula: (x/1e20+1)^(-0.01) where x is light after softcap<br>';
+					if (player.nerdMode) text += 'formula: (x/1e24+1)^(-0.01) where x is light gain after softcap<br>';
 				};
 				if (player.SC.softcaps.includes("r-eff1")) text += '<br><h2 class="layer-r">Relic\'s First Effect Softcap</h2><br>starts at ' + format(softcaps.r_eff1[0][0]) + ', effect to ^' + format(softcaps.r_eff1[0][1]) + '<br>';
 				if (player.SC.softcaps.includes("gi-eff")) text += '<br><h2 class="layer-gi">Good Influence Effect Softcap</h2><br>starts at ' + format(softcaps.gi_eff[0][0]) + ', effect to ^' + format(softcaps.gi_eff[0][1]) + '<br>';
@@ -5117,7 +5117,7 @@ addLayer('r', {
 			if (hasMilestone('s', 52)) gain = gain.mul(3);
 			let sc_start0 = softcaps.r_l[0][0];
 			if (gain.gt(sc_start0)) {
-				softcaps.r_l[0][1] = gain.div(sc_start0).add(1).pow(-0.01);
+				softcaps.r_l[0][1] = gain.div(1e24).add(1).pow(-0.01);
 				player.r.lightlastcap = softcaps.r_l[0][1];
 				gain = gain.sub(sc_start0).pow(softcaps.r_l[0][1]).add(sc_start0);
 			};
@@ -5470,12 +5470,12 @@ addLayer('m', {
 		},
 		18: {
 			requirementDescription: '2.5e12 total molecules',
-			effectDescription: 'keep 25 more sanctums (30 total) on molecule resets',
+			effectDescription: 'keep 25 more sanctums (30 total)<br>on molecule resets',
 			done() { return player.m.total.gte(2.5e12) },
 		},
 		19: {
 			requirementDescription: '4e14 total molecules',
-			effectDescription: 'keep 185 more sanctums (215 total) on molecule resets',
+			effectDescription: 'keep 185 more sanctums (215 total)<br>on molecule resets',
 			done() { return player.m.total.gte(4e14) },
 		},
 		20: {
