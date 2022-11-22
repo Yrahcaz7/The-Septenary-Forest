@@ -1586,6 +1586,7 @@ addLayer('q', {
 		if (challengeCompletions('r', 11) >= 30 && resettingLayer == 'r') return;
 		if (hasMilestone('m', 5) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 3) && resettingLayer == 'gi') return;
+		if (hasMilestone('ei', 2) && resettingLayer == 'ei') return;
 		let keep = ['auto_upgrades'];
 			if (hasMilestone('sp', 3) && resettingLayer == 'sp') keep.push("milestones");
 			if (hasMilestone('sp', 5) && resettingLayer == 'sp') keep.push("upgrades");
@@ -2424,7 +2425,7 @@ addLayer('h', {
 			},
 			description() {
 				if (hasUpgrade('ds', 11)) return 'multiplies the first effect of <b class="layer-h' + getdark(this, "ref") + 'Hex Leak</b> based on your hexes';
-				return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Hex Leak</b> based on your hexes';            
+				return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Hex Leak</b> based on your hexes';
 			},
 			cost: 1000,
 			effect() {
@@ -2460,7 +2461,7 @@ addLayer('h', {
 				return '<b class="layer-h' + getdark(this, "title") + 'Hex Fission';
 			},
 			description() {
-				return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Hex Fusion</b> based on your hexes'            
+				return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Hex Fusion</b> based on your hexes'
 			},
 			cost: 10000,
 			effect() {
@@ -2488,7 +2489,7 @@ addLayer('h', {
 				return '<b class="layer-h' + getdark(this, "title") + 'Hex Numerals';
 			},
 			description() {
-				return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Numerical Hexes</b> based on your points'            
+				return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Numerical Hexes</b> based on your points'
 			},
 			cost: 100000,
 			effect() {
@@ -2506,7 +2507,7 @@ addLayer('h', {
 				return '<b class="layer-h' + getdark(this, "title") + 'Extreme Hexes';
 			},
 			description() {
-				return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Super Strong Hexes</b> based on your hexes'            
+				return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Super Strong Hexes</b> based on your hexes'
 			},
 			cost: 500000,
 			effect() {
@@ -5848,6 +5849,7 @@ addLayer('gi', {
 	gainExp() {
 		let gain = new Decimal(1);
 		gain = gain.mul(player.gi.req_devotion);
+		if (hasUpgrade('ei', 24)) gain = gain.mul(upgradeEffect('ei', 24));
 		return gain;
 	},
 	row: 4,
@@ -6073,6 +6075,7 @@ addLayer('ei', {
 	baseAmount() {return player.ds.points},
 	type: 'static',
 	exponent() {
+		if (hasUpgrade('ei', 23)) return 7.25;
 		if (hasUpgrade('ei', 13)) return 7.75;
 		return 12;
 	},
@@ -6086,6 +6089,7 @@ addLayer('ei', {
 	gainExp() {
 		let gain = new Decimal(1);
 		if (hasUpgrade('ei', 11)) gain = gain.mul(upgradeEffect('ei', 11));
+		if (hasUpgrade('ei', 21)) gain = gain.mul(upgradeEffect('ei', 21));
 		return gain;
 	},
 	row: 4,
@@ -6096,9 +6100,11 @@ addLayer('ei', {
 	effect() {
 		let effBase = new Decimal(2);
 		if (hasUpgrade('ei', 15)) effBase = new Decimal(4);
+		if (hasUpgrade('ei', 25)) effBase = new Decimal(6);
 		let eff = effBase.pow(player.ei.points).sub(1);
 		if (hasUpgrade('ei', 12)) eff = eff.mul(upgradeEffect('ei', 12));
 		if (hasUpgrade('ei', 14)) eff = eff.mul(upgradeEffect('ei', 14));
+		if (hasUpgrade('ei', 22)) eff = eff.mul(upgradeEffect('ei', 22));
 		return eff;
 	},
 	effectDescription() {
@@ -6137,6 +6143,12 @@ addLayer('ei', {
 			effectDescription: 'evil influence resets don\'t reset cores',
 			done() { return player.ei.total.gte(8) && player.ei.power.gte(5000) },
 			unlocked() { return hasMilestone('ei', 0) },
+		},
+		2: {
+			requirementDescription: '48 total evil influence and 1e12 evil power',
+			effectDescription: 'evil influence resets don\'t reset quarks',
+			done() { return player.ei.total.gte(48) && player.ei.power.gte(1e12) },
+			unlocked() { return hasMilestone('ei', 1) },
 		},
 	},
 	upgrades: {
@@ -6212,6 +6224,80 @@ addLayer('ei', {
 			},
 			cost: 4,
 			unlocked() { return hasUpgrade('ei', 14) },
+		},
+		21: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'The Cycle Continues';
+			},
+			description() {
+				return 'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Cycle of Evil</b> based on your evil power';
+			},
+			cost: 4,
+			effect() {
+				return player.ei.power.add(1).log10().add(1);
+			},
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: log10(x+1)+1';
+				return text;
+			},
+			unlocked() { return hasUpgrade('ei', 15) },
+		},
+		22: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Stronger Evil';
+			},
+			description() {
+				return 'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Evil Power Up</b> based on your evil power';
+			},
+			cost: 5,
+			effect() {
+				return player.ei.power.add(1).pow(0.2);
+			},
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: (x+1)^0.2';
+				return text;
+			},
+			unlocked() { return hasUpgrade('ei', 15) },
+		},
+		23: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Even More Evil';
+			},
+			description() {
+				return 'reduces evil influence gain exponent<br>7.75 --> 7.25';
+			},
+			cost: 5,
+			unlocked() { return hasUpgrade('ei', 15) },
+		},
+		24: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Daredevil';
+			},
+			description() {
+				return 'multiplies good influence gain based on your evil power';
+			},
+			cost: 6,
+			effect() {
+				return player.ei.power.add(1).log10().add(1).pow(0.0175);
+			},
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^0.0175';
+				return text;
+			},
+			unlocked() { return hasUpgrade('ei', 15) },
+		},
+		25: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'The Evil Eye';
+			},
+			description() {
+				return 'increases evil power\'s base gain<br>4 --> 6';
+			},
+			cost: 6,
+			unlocked() { return hasUpgrade('ei', 15) },
 		},
 	},
 });
