@@ -2703,6 +2703,7 @@ addLayer('ds', {
 		if (player.h.points.gte(1e60) || player.ds.unlocked) return "#BA0035";
 		return '#A0A0A0';
 	},
+	branches: ['ei'],
 	requires: 1e60,
 	resource: 'demon souls',
 	baseResource: 'hexes',
@@ -2757,10 +2758,12 @@ addLayer('ds', {
 		if (hasMilestone('gi', 5) && resettingLayer == 'gi') return;
 		let keep = ['auto_upgrades', 'auto_buyables'];
 		let saveupg = [];
-			if (hasMilestone('m', 1)) {
+			if (hasMilestone('m', 1) && (resettingLayer == 'm' || resettingLayer == 'gi' || resettingLayer == 'ei')) {
 				keep.push("challenges");
 				saveupg.push(22);
 			};
+			if (hasMilestone('ei', 1) && resettingLayer == 'ei') keep.push("upgrades");
+			if (hasMilestone('ei', 2) && resettingLayer == 'ei') keep.push("buyables");
 			if (layers[resettingLayer].row > this.row) {
 				layerDataReset('ds', keep);
 				player[this.layer].upgrades = saveupg;
@@ -3759,6 +3762,7 @@ addLayer('p', {
 		"blank",
 		"milestones",
 		"upgrades",
+		"clickables",
 	],
 	milestones: {
 		0: {
@@ -4260,6 +4264,24 @@ addLayer('p', {
 			},
 			cost: 1.00e175,
 			unlocked() { return hasMilestone('s', 3) && hasUpgrade('p', 41) },
+		},
+	},
+	clickables: {
+		11: {
+			title: 'RESET',
+			display: 'resets your prayer upgrades, holiness, divinity, and hymns (used for if you can\'t get some researches anymore)',
+			canClick() {
+				return true;
+			},
+			onClick() {
+				if (confirm('Are you really sure you want to reset your prayer upgrades, holiness, divinity, and hymns?')) {
+					player.p.upgrades = [];
+					player.p.holiness = new Decimal(0);
+					player.p.divinity = new Decimal(0);
+					player.p.hymn = new Decimal(0);
+				};
+			},
+			unlocked() {return hasMilestone('s', 0)},
 		},
 	},
 });
@@ -5080,6 +5102,7 @@ addLayer('r', {
 		let keep = [];
 			if (hasMilestone('m', 0) && resettingLayer == 'm') return;
 			if (hasMilestone('gi', 0) && resettingLayer == 'gi') return;
+			if (hasMilestone('ei', 0) && resettingLayer == 'ei') return;
 			if (layers[resettingLayer].row > this.row) layerDataReset('r', keep);
 		},
 	update(diff) {
@@ -6015,3 +6038,79 @@ addLayer('gi', {
 		},
 	},
 });
+
+/*addLayer('ei', {
+	name: 'Evil Influence',
+	symbol: 'EI',
+	position: 0,
+	startData() { return {
+		unlocked: false,
+		points: new Decimal(0),
+		best: new Decimal(0),
+		total: new Decimal(0),
+	}},
+	color() {
+		if (player.ds.points.gte('e3000') || player.ei.unlocked) return "#FF3300";
+		return '#A0A0A0';
+	},
+	requires: 'e3000',
+	resource: 'evil influence',
+	baseResource: 'demon souls',
+	baseAmount() {return player.ds.points},
+	type: 'static',
+	exponent: 12,
+	canBuyMax() {
+		return true;
+	},
+	gainMult() {
+		let mult = new Decimal(1);
+		return mult;
+	},
+	gainExp() {
+		let gain = new Decimal(1);
+		return gain;
+	},
+	row: 4,
+	hotkeys: [
+		{key: 'E', description: 'Shift-E: Reset for evil influence', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+	],
+	layerShown(){return player.gi.unlocked},
+	effect() {
+		let effBase = new Decimal(10);
+		let eff = effBase.pow(player.ei.total);
+		return eff;
+	},
+	effectDescription() {
+		return 'which multiplies demon soul gain by <h2 class="layer-ei">' + format(tmp.ei.effect) + '</h2>x (based on total)';
+	},
+	doReset(resettingLayer) {
+		let keep = [];
+			if (layers[resettingLayer].row > this.row) layerDataReset('ei', keep);
+		},
+	tabFormat: [
+		"main-display",
+		"prestige-button",
+		"resource-display",
+		"blank",
+		"milestones",
+		"buyables",
+		"blank",
+	],
+	milestones: {
+		0: {
+			requirementDescription: '1 evil influence',
+			effectDescription: 'evil influence resets don\'t reset relics',
+			done() { return player.ei.points.gte(1) },
+		},
+		1: {
+			requirementDescription: '2 evil influence',
+			effectDescription: 'keep demon soul upgrades on evil influence resets',
+			done() { return player.ei.points.gte(2) },
+		},
+		2: {
+			requirementDescription: '3 evil influence',
+			effectDescription: 'keep demon soul buyables on evil influence resets',
+			done() { return player.ei.points.gte(3) },
+		},
+	},
+});*/
