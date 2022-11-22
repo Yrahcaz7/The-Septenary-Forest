@@ -4823,7 +4823,6 @@ addLayer('d', {
 			if (hasMilestone('s', 51)) work *= 3;
 			if (challengeCompletions('r', 11) >= 17) work *= 2;
 			if (challengeCompletions('r', 11) >= 38) work *= 2;
-			if (challengeCompletions('r', 11) >= 41) work *= 2;
 			if (hasMilestone('gi', 10)) work *= 2;
 			for (let index = 0; index < work; index++) {
 				if (!layers.d.buyables[11].canAfford()) break;
@@ -4837,7 +4836,6 @@ addLayer('d', {
 			if (challengeCompletions('r', 11) >= 23) work *= 1.5;
 			if (challengeCompletions('r', 11) >= 32) work *= 2;
 			if (challengeCompletions('r', 11) >= 38) work *= 2;
-			if (challengeCompletions('r', 11) >= 41) work *= 2;
 			if (hasMilestone('gi', 10)) work *= 2;
 			for (let index = 0; index < work; index++) {
 				if (!layers.d.buyables[12].canAfford()) break;
@@ -4848,7 +4846,6 @@ addLayer('d', {
 			let work = 1;
 			if (challengeCompletions('r', 11) >= 17) work *= 2;
 			if (challengeCompletions('r', 11) >= 38) work *= 2;
-			if (challengeCompletions('r', 11) >= 41) work *= 2;
 			if (hasMilestone('gi', 10)) work *= 2;
 			for (let index = 0; index < work; index++) {
 				if (!layers.d.buyables[21].canAfford()) break;
@@ -4893,7 +4890,8 @@ addLayer('d', {
 			},
 			buy() {
 				player.p.points = player.p.points.sub(this.cost());
-				setBuyableAmount('d', 11, getBuyableAmount('d', 11).add(1));
+				if (challengeCompletions('r', 11) >= 41) setBuyableAmount('d', 11, getBuyableAmount('d', 11).add(5));
+				else setBuyableAmount('d', 11, getBuyableAmount('d', 11).add(1));
 			},
 			display() {
 				return 'use prayers to worship the gods. you will gain 0.1 devotion per worship.<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 11).mul(0.1)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' prayers<br><br>Times Worshipped: ' + formatWhole(getBuyableAmount('d', 11));
@@ -4925,7 +4923,8 @@ addLayer('d', {
 			},
 			buy() {
 				if (!hasMilestone('s', 34)) player.s.points = player.s.points.sub(this.cost());
-				setBuyableAmount('d', 12, getBuyableAmount('d', 12).add(1));
+				if (challengeCompletions('r', 11) >= 41) setBuyableAmount('d', 12, getBuyableAmount('d', 12).add(5));
+				else setBuyableAmount('d', 12, getBuyableAmount('d', 12).add(1));
 			},
 			display() {
 				if (hasMilestone('s', 34)) return 'use sanctums as a sacrifice to worship the gods. you will gain<br>1 devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by 2<br>Currently: ' + format(new Decimal(2).pow(getBuyableAmount('d', 12))) + 'x<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 12)) + '<br><br>Req: ' + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed: ' + formatWhole(getBuyableAmount('d', 12));
@@ -4971,7 +4970,8 @@ addLayer('d', {
 			buy() {
 				player.h.points = player.h.points.sub(this.cost_h());
 				player.sp.points = player.sp.points.sub(this.cost_sp());
-				setBuyableAmount('d', 21, getBuyableAmount('d', 21).add(1));
+				if (challengeCompletions('r', 11) >= 41) setBuyableAmount('d', 21, getBuyableAmount('d', 21).add(5));
+				else setBuyableAmount('d', 21, getBuyableAmount('d', 21).add(1));
 			},
 			display() {
 				lasteff = new Decimal(1e25);
@@ -5108,18 +5108,24 @@ addLayer('r', {
 		else if (hasMilestone('m', 3)) lightboost = player.r.lightgainbest.mul(0.001);
 		if (inChallenge('r', 11)) {
 			let gain = getPointGen(true).pow(0.001).div(10);
-			if (hasUpgrade('r', 11)) gain = gain.mul(upgradeEffect('r', 11));
-			if (hasUpgrade('r', 12)) gain = gain.mul(upgradeEffect('r', 12));
-			if (getBuyableAmount('d', 21).gt(0)) gain = gain.mul(getBuyableAmount('d', 21));
-			if (hasMilestone('s', 30)) gain = gain.mul(2);
-			if (hasMilestone('s', 41)) gain = gain.mul(3);
-			if (hasMilestone('s', 50)) gain = gain.mul(3);
-			if (hasMilestone('s', 52)) gain = gain.mul(3);
-			let sc_start0 = softcaps.r_l[0][0];
-			if (gain.gt(sc_start0)) {
-				softcaps.r_l[0][1] = gain.div(1e24).add(1).pow(-0.01);
-				player.r.lightlastcap = softcaps.r_l[0][1];
-				gain = gain.sub(sc_start0).pow(softcaps.r_l[0][1]).add(sc_start0);
+			if (hasUpgrade('r', 13)) {
+				gain = upgradeEffect('r', 13);
+				softcaps.r_l[0][1] = new Decimal(0);
+				player.r.lightlastcap = new Decimal(0);
+			} else {
+				if (hasUpgrade('r', 11)) gain = gain.mul(upgradeEffect('r', 11));
+				if (hasUpgrade('r', 12)) gain = gain.mul(upgradeEffect('r', 12));
+				if (getBuyableAmount('d', 21).gt(0)) gain = gain.mul(getBuyableAmount('d', 21));
+				if (hasMilestone('s', 30)) gain = gain.mul(2);
+				if (hasMilestone('s', 41)) gain = gain.mul(3);
+				if (hasMilestone('s', 50)) gain = gain.mul(3);
+				if (hasMilestone('s', 52)) gain = gain.mul(3);
+				let sc_start0 = softcaps.r_l[0][0];
+				if (gain.gt(sc_start0)) {
+					softcaps.r_l[0][1] = gain.div(1e24).add(1).pow(-0.01);
+					player.r.lightlastcap = softcaps.r_l[0][1];
+					gain = gain.sub(sc_start0).pow(softcaps.r_l[0][1]).add(sc_start0);
+				};
 			};
 			gain = gain.add(lightboost);
 			player.r.lightgain = gain;
@@ -5160,7 +5166,7 @@ addLayer('r', {
 				return text;
 			},
 			rewardDescription() {
-				text = '';
+				let text = '';
 				if (challengeCompletions('r', 11) >= 1 && challengeCompletions('r', 11) < 4) text += 'multiply relic\'s second and third effects based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x<br>';
 				else if (challengeCompletions('r', 11) >= 5 && challengeCompletions('r', 11) < 12) text += 'multiply relic\'s second and third effects, exponentially increase relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + ',<br>and ' + format(player.r.relic_effects[2]) + 'x<br>';
 				else if (challengeCompletions('r', 11) >= 13) text += 'multiply relic\'s second and third effects and molecule gain, exponentially increase relic\'s first effect, multiply Sacrificial Ceremony\'s last effect, and also multiply relic gain (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + ',<br>' + format(player.r.relic_effects[2]) + 'x,<br>and ' + format(player.r.relic_effects[3]) + 'x<br>';
@@ -5206,7 +5212,7 @@ addLayer('r', {
 				else if (challengeCompletions('r', 11) == 37) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work<br>twice as fast';
 				else if (challengeCompletions('r', 11) == 38) text += '<br>Next reward: nothing';
 				else if (challengeCompletions('r', 11) == 39) text += '<br>Next reward: still nothing';
-				else if (challengeCompletions('r', 11) == 40) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work<br>twice as fast';
+				else if (challengeCompletions('r', 11) == 40) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers<br>can bulk buy 5x';
 				else text += '<br>Next reward: you have gotten all the rewards!';
 				return text;
 			},
@@ -5230,7 +5236,7 @@ addLayer('r', {
 	upgrades: {
 		11: {
 			fullDisplay() {
-				text = '';
+				let text = '';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.3';
 				return '<h3 class="layer-r' + getdark(this, "title-hasend") + 'Brighter Light</h3><br>multiplies light gain based on your sanctums<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e12) + ' light';
 			},
@@ -5248,7 +5254,7 @@ addLayer('r', {
 		},
 		12: {
 			fullDisplay() {
-				text = '';
+				let text = '';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.1';
 				return '<h3 class="layer-r' + getdark(this, "title-hasend") + 'Light of Light</h3><br>multiplies light gain based on your light<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e13) + ' light';
 			},
@@ -5263,6 +5269,24 @@ addLayer('r', {
 				return player.r.light.add(1).pow(0.1);
 			},
 			unlocked() { return hasMilestone('gi', 0) },
+		},
+		13: {
+			fullDisplay() {
+				let text = '';
+				if (player.nerdMode) text += ' <br>formula: (x*36+1)^10';
+				return '<h3 class="layer-r' + getdark(this, "title-hasend") + 'Good Light</h3><br>(based on your good influence) sets light gain after softcap to:<br>' + format(this.effect()) + '/sec' + text + '<br><br>Cost: ' + format(1e30) + ' light';
+			},
+			canAfford() {
+				if (player.r.light.gte(1e30)) return true;
+				return false;
+			},
+			pay() {
+				player.r.light = player.r.light.sub(1e30);
+			},
+			effect() {
+				return player.gi.points.mul(36).add(1).pow(10);
+			},
+			unlocked() { return hasMilestone('gi', 0) && player.r.lightbest.gte(1e20) },
 		},
 	},
 });
@@ -5543,7 +5567,7 @@ addLayer('m', {
 		},
 		21: {
 			fullDisplay() {
-				text = '';
+				let text = '';
 				if (player.nerdMode) text += ' <br>formula: (x*25+1)^0.3';
 				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'Hydrogen Gas</h3><br>multiplies core gain based on your best molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: 360,000 atoms';
 			},
@@ -5577,7 +5601,7 @@ addLayer('m', {
 		},
 		23: {
 			fullDisplay() {
-				text = '';
+				let text = '';
 				if (player.nerdMode) text += ' <br>formula: (x*250+1)^0.1';
 				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'Ammonia</h3><br>multiplies hex gain based on your best molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: 4,600,000 atoms';
 			},
@@ -5612,7 +5636,7 @@ addLayer('m', {
 		},
 		32: {
 			fullDisplay() {
-				text = '';
+				let text = '';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.2';
 				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'NaCl, aka Salt</h3><br>gives extra unique molecules based on your atoms<br>Currently: +' + formatWhole(this.effect()) + text + '<br><br>Cost: 7,777,777 atoms';
 			},
@@ -5630,7 +5654,7 @@ addLayer('m', {
 		},
 		33: {
 			fullDisplay() {
-				text = '';
+				let text = '';
 				if (player.nerdMode) text += ' <br>formula: x*1000';
 				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'O<tag style="font-size:10px">3</tag>, aka Ozone</h3><br>multiplies demon soul based on your total unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e10) + ' atoms';
 			},
@@ -5684,7 +5708,7 @@ addLayer('m', {
 		},
 		43: {
 			fullDisplay() {
-				text = '';
+				let text = '';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
 				return'<h3 class="layer-m' + getdark(this, "title-light", true) + 'Calcium Hydroxide</h3><br>multiplies relic gain based on your extra unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1.61e10) + ' atoms';
 			},
