@@ -9,8 +9,8 @@ let modInfo = {
 };
 
 let VERSION = {
-	num: '2.3',
-	name: 'Influence of Good',
+	num: '2.4',
+	name: 'Power of Evil',
 };
 
 let winText = '<h3>You won the game!</h3><br>However, it isn\'t the end yet...<br>Wait for more updates for further content.';
@@ -58,7 +58,7 @@ function removeachievement(value) {
 };
 
 // Determines if it should show points/sec
-function canGenPoints(){
+function canGenPoints() {
 	return true;
 };
 

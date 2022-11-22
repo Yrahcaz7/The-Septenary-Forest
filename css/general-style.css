@@ -146,13 +146,13 @@ h1, h2, h3, b, input {
 }
 
 .layer-ei {
-	color: #FF3300;
-	text-shadow: 0 0 10px #FF3300;
+	color: #FF4400;
+	text-shadow: 0 0 10px #FF4400;
 }
 
 .layer-ei-dark {
-	color: #AA1100;
-	text-shadow: 0 0 10px #AA1100;
+	color: #661100;
+	text-shadow: 0 0 10px #661100;
 }
 
 /* These are styles for different states of components. You can make layer-specific versions with .c.locked, for example */

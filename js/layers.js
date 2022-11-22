@@ -600,6 +600,20 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 132) },
 			color: '#08FF87',
 		},
+		141: {
+			name: 'Malevolent Evil',
+			done() {return player.ei.points.gte(1)},
+			tooltip: 'obtain 1 evil influence.',
+			unlocked() { return hasAchievement('A', 141) },
+			color: '#FF4400',
+		},
+		142: {
+			name: 'Evil Encroaches',
+			done() {return player.ei.points.gte(10)},
+			tooltip: 'obtain 10 evil influence.',
+			unlocked() { return hasAchievement('A', 141) },
+			color: '#FF4400',
+		},
 	},
 });
 
@@ -1219,6 +1233,7 @@ addLayer('c', {
 		if (challengeCompletions('r', 11) >= 25 && resettingLayer == 'r') return;
 		if (hasMilestone('m', 4) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 2) && resettingLayer == 'gi') return;
+		if (hasMilestone('ei', 1) && resettingLayer == 'ei') return;
 		let keep = ['auto_upgrades', 'auto_buyables'];
 			if (hasMilestone('h', 2) && resettingLayer == 'h') keep.push("upgrades");
 			if (hasMilestone('h', 3) && resettingLayer == 'h') keep.push("buyables");
@@ -2762,8 +2777,6 @@ addLayer('ds', {
 				keep.push("challenges");
 				saveupg.push(22);
 			};
-			if (hasMilestone('ei', 1) && resettingLayer == 'ei') keep.push("upgrades");
-			if (hasMilestone('ei', 2) && resettingLayer == 'ei') keep.push("buyables");
 			if (layers[resettingLayer].row > this.row) {
 				layerDataReset('ds', keep);
 				player[this.layer].upgrades = saveupg;
@@ -3611,7 +3624,7 @@ addLayer('p', {
 			if (hasUpgrade('p', 63)) mult = mult.mul(upgradeEffect('p', 63));
 		};
 		if (hasUpgrade('p', 73)) mult = mult.mul(upgradeEffect('p', 73));
-		if (player.gi.points.gt(0)) mult = mult.mul(tmp.gi.effect);
+		if (player.gi.total.gt(0)) mult = mult.mul(tmp.gi.effect);
 		return mult;
 	},
 	gainExp() {
@@ -6039,7 +6052,7 @@ addLayer('gi', {
 	},
 });
 
-/*addLayer('ei', {
+addLayer('ei', {
 	name: 'Evil Influence',
 	symbol: 'EI',
 	position: 0,
@@ -6048,9 +6061,10 @@ addLayer('gi', {
 		points: new Decimal(0),
 		best: new Decimal(0),
 		total: new Decimal(0),
+		power: new Decimal(0),
 	}},
 	color() {
-		if (player.ds.points.gte('e3000') || player.ei.unlocked) return "#FF3300";
+		if (player.ds.points.gte('e3000') || player.ei.unlocked) return "#FF4400";
 		return '#A0A0A0';
 	},
 	requires: 'e3000',
@@ -6058,7 +6072,10 @@ addLayer('gi', {
 	baseResource: 'demon souls',
 	baseAmount() {return player.ds.points},
 	type: 'static',
-	exponent: 12,
+	exponent() {
+		if (hasUpgrade('ei', 13)) return 7.75;
+		return 12;
+	},
 	canBuyMax() {
 		return true;
 	},
@@ -6068,6 +6085,7 @@ addLayer('gi', {
 	},
 	gainExp() {
 		let gain = new Decimal(1);
+		if (hasUpgrade('ei', 11)) gain = gain.mul(upgradeEffect('ei', 11));
 		return gain;
 	},
 	row: 4,
@@ -6076,41 +6094,124 @@ addLayer('gi', {
 	],
 	layerShown(){return player.gi.unlocked},
 	effect() {
-		let effBase = new Decimal(10);
-		let eff = effBase.pow(player.ei.total);
+		let effBase = new Decimal(2);
+		if (hasUpgrade('ei', 15)) effBase = new Decimal(4);
+		let eff = effBase.pow(player.ei.points).sub(1);
+		if (hasUpgrade('ei', 12)) eff = eff.mul(upgradeEffect('ei', 12));
+		if (hasUpgrade('ei', 14)) eff = eff.mul(upgradeEffect('ei', 14));
 		return eff;
 	},
 	effectDescription() {
-		return 'which multiplies demon soul gain by <h2 class="layer-ei">' + format(tmp.ei.effect) + '</h2>x (based on total)';
+		return 'which generates <h2 class="layer-ei">' + format(tmp.ei.effect) + '</h2> evil power per second';
 	},
 	doReset(resettingLayer) {
 		let keep = [];
 			if (layers[resettingLayer].row > this.row) layerDataReset('ei', keep);
 		},
+	update(diff) {
+		if (tmp.ei.effect.gt(0)) {
+			player.ei.power = player.ei.power.add(tmp.ei.effect.mul(diff));
+		};
+	},
 	tabFormat: [
 		"main-display",
 		"prestige-button",
 		"resource-display",
 		"blank",
-		"milestones",
-		"buyables",
+		["display-text",
+			function() {
+				return 'You have <h2 class="layer-ei">' + format(player.ei.power) + '</h2> evil power';
+			}],
 		"blank",
+		"milestones",
+		"upgrades",
 	],
 	milestones: {
 		0: {
-			requirementDescription: '1 evil influence',
+			requirementDescription: '2 total evil influence',
 			effectDescription: 'evil influence resets don\'t reset relics',
-			done() { return player.ei.points.gte(1) },
+			done() { return player.ei.total.gte(2) },
 		},
 		1: {
-			requirementDescription: '2 evil influence',
-			effectDescription: 'keep demon soul upgrades on evil influence resets',
-			done() { return player.ei.points.gte(2) },
-		},
-		2: {
-			requirementDescription: '3 evil influence',
-			effectDescription: 'keep demon soul buyables on evil influence resets',
-			done() { return player.ei.points.gte(3) },
+			requirementDescription: '8 total evil influence and 5,000 evil power',
+			effectDescription: 'evil influence resets don\'t reset cores',
+			done() { return player.ei.total.gte(8) && player.ei.power.gte(5000) },
+			unlocked() { return hasMilestone('ei', 0) },
 		},
 	},
-});*/
+	upgrades: {
+		11: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Cycle of Evil';
+			},
+			description() {
+				return 'multiplies evil influence gain based on your evil power';
+			},
+			cost: 2,
+			effect() {
+				return player.ei.power.add(1).log10().add(1);
+			},
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: log10(x+1)+1';
+				return text;
+			},
+		},
+		12: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Power Up';
+			},
+			description() {
+				return 'multiplies evil power gain based on your evil power';
+			},
+			cost: 3,
+			effect() {
+				return player.ei.power.add(1).pow(0.1);
+			},
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: (x+1)^0.1';
+				return text;
+			},
+			unlocked() { return hasUpgrade('ei', 11) },
+		},
+		13: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'More Evil';
+			},
+			description() {
+				return 'reduces evil influence gain exponent<br>12 --> 7.75';
+			},
+			cost: 3,
+			unlocked() { return hasUpgrade('ei', 12) },
+		},
+		14: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Rising Conflict';
+			},
+			description() {
+				return 'multiplies evil power gain based on your good influence';
+			},
+			cost: 4,
+			effect() {
+				return player.gi.points.add(1).pow(0.75);
+			},
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: (x+1)^0.75';
+				return text;
+			},
+			unlocked() { return hasUpgrade('ei', 13) },
+		},
+		15: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Laughter';
+			},
+			description() {
+				return 'increases evil power\'s base gain<br>2 --> 4';
+			},
+			cost: 4,
+			unlocked() { return hasUpgrade('ei', 14) },
+		},
+	},
+});
