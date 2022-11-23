@@ -4926,8 +4926,10 @@ addLayer('d', {
 			},
 			buy() {
 				player.p.points = player.p.points.sub(this.cost());
-				if (challengeCompletions('r', 11) >= 41) setBuyableAmount('d', 11, getBuyableAmount('d', 11).add(5));
-				else setBuyableAmount('d', 11, getBuyableAmount('d', 11).add(1));
+				let bulk = 1;
+				if (challengeCompletions('r', 11) >= 41) bulk *= 5;
+				if (hasMilestone('gi', 17)) bulk *= 2;
+				setBuyableAmount('d', 11, getBuyableAmount('d', 11).add(bulk));
 			},
 			display() {
 				return 'use prayers to worship the gods. you will gain 0.1 devotion per worship.<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 11).mul(0.1)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' prayers<br><br>Times Worshipped: ' + formatWhole(getBuyableAmount('d', 11));
@@ -4959,8 +4961,10 @@ addLayer('d', {
 			},
 			buy() {
 				if (!hasMilestone('s', 34)) player.s.points = player.s.points.sub(this.cost());
-				if (challengeCompletions('r', 11) >= 41) setBuyableAmount('d', 12, getBuyableAmount('d', 12).add(5));
-				else setBuyableAmount('d', 12, getBuyableAmount('d', 12).add(1));
+				let bulk = 1;
+				if (challengeCompletions('r', 11) >= 41) bulk *= 5;
+				if (hasMilestone('gi', 17)) bulk *= 2;
+				setBuyableAmount('d', 12, getBuyableAmount('d', 12).add(bulk));
 			},
 			display() {
 				if (hasMilestone('s', 34)) return 'use sanctums as a sacrifice to worship the gods. you will gain<br>1 devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by 2<br>Currently: ' + format(new Decimal(2).pow(getBuyableAmount('d', 12))) + 'x<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 12)) + '<br><br>Req: ' + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed: ' + formatWhole(getBuyableAmount('d', 12));
@@ -5006,8 +5010,10 @@ addLayer('d', {
 			buy() {
 				player.h.points = player.h.points.sub(this.cost_h());
 				player.sp.points = player.sp.points.sub(this.cost_sp());
-				if (challengeCompletions('r', 11) >= 41) setBuyableAmount('d', 21, getBuyableAmount('d', 21).add(5));
-				else setBuyableAmount('d', 21, getBuyableAmount('d', 21).add(1));
+				let bulk = 1;
+				if (challengeCompletions('r', 11) >= 41) bulk *= 5;
+				if (hasMilestone('gi', 17)) bulk *= 2;
+				setBuyableAmount('d', 21, getBuyableAmount('d', 21).add(bulk));
 			},
 			display() {
 				lasteff = new Decimal(1e25);
@@ -5072,6 +5078,7 @@ addLayer('r', {
 		let gain = new Decimal(1);
 		if (hasUpgrade('m', 43)) gain = gain.mul(upgradeEffect('m', 43));
 		if (challengeCompletions('r', 11) >= 13) gain = gain.mul(player.r.relic_effects[3]);
+		if (hasUpgrade('ei', 34)) gain = gain.mul(upgradeEffect('ei', 34));
 		return gain;
 	},
 	row: 3,
@@ -6007,6 +6014,14 @@ addLayer('gi', {
 			done() { return player.gi.points.gte(36) && player.gi.total.gte(2000) },
 			unlocked() { return hasMilestone('gi', 15) },
 		},
+		17: {
+			requirementDescription: '50 good influence and<br>6,400 total good influence',
+			effectDescription() {
+				return 'all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk buy 2x';
+			},
+			done() { return player.gi.points.gte(50) && player.gi.total.gte(6400) },
+			unlocked() { return hasMilestone('gi', 16) },
+		},
 	},
 	buyables: {
 		11: {
@@ -6075,6 +6090,7 @@ addLayer('ei', {
 	baseAmount() {return player.ds.points},
 	type: 'static',
 	exponent() {
+		if (hasUpgrade('ei', 33)) return 7;
 		if (hasUpgrade('ei', 23)) return 7.25;
 		if (hasUpgrade('ei', 13)) return 7.75;
 		return 12;
@@ -6090,6 +6106,7 @@ addLayer('ei', {
 		let gain = new Decimal(1);
 		if (hasUpgrade('ei', 11)) gain = gain.mul(upgradeEffect('ei', 11));
 		if (hasUpgrade('ei', 21)) gain = gain.mul(upgradeEffect('ei', 21));
+		if (hasUpgrade('ei', 31)) gain = gain.mul(upgradeEffect('ei', 31));
 		return gain;
 	},
 	row: 4,
@@ -6101,10 +6118,12 @@ addLayer('ei', {
 		let effBase = new Decimal(2);
 		if (hasUpgrade('ei', 15)) effBase = new Decimal(4);
 		if (hasUpgrade('ei', 25)) effBase = new Decimal(6);
+		if (hasUpgrade('ei', 35)) effBase = new Decimal(8);
 		let eff = effBase.pow(player.ei.points).sub(1);
 		if (hasUpgrade('ei', 12)) eff = eff.mul(upgradeEffect('ei', 12));
 		if (hasUpgrade('ei', 14)) eff = eff.mul(upgradeEffect('ei', 14));
 		if (hasUpgrade('ei', 22)) eff = eff.mul(upgradeEffect('ei', 22));
+		if (hasUpgrade('ei', 32)) eff = eff.mul(upgradeEffect('ei', 32));
 		return eff;
 	},
 	effectDescription() {
@@ -6145,9 +6164,9 @@ addLayer('ei', {
 			unlocked() { return hasMilestone('ei', 0) },
 		},
 		2: {
-			requirementDescription: '48 total evil influence and 1e12 evil power',
+			requirementDescription: '55 total evil influence and 1e12 evil power',
 			effectDescription: 'evil influence resets don\'t reset quarks',
-			done() { return player.ei.total.gte(48) && player.ei.power.gte(1e12) },
+			done() { return player.ei.total.gte(55) && player.ei.power.gte(1e12) },
 			unlocked() { return hasMilestone('ei', 1) },
 		},
 	},
@@ -6241,7 +6260,7 @@ addLayer('ei', {
 				if (player.nerdMode) text += ' <br>formula: log10(x+1)+1';
 				return text;
 			},
-			unlocked() { return hasUpgrade('ei', 15) },
+			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		22: {
 			title() {
@@ -6259,7 +6278,7 @@ addLayer('ei', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.2';
 				return text;
 			},
-			unlocked() { return hasUpgrade('ei', 15) },
+			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		23: {
 			title() {
@@ -6269,7 +6288,7 @@ addLayer('ei', {
 				return 'reduces evil influence gain exponent<br>7.75 --> 7.25';
 			},
 			cost: 5,
-			unlocked() { return hasUpgrade('ei', 15) },
+			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		24: {
 			title() {
@@ -6287,7 +6306,7 @@ addLayer('ei', {
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^0.0175';
 				return text;
 			},
-			unlocked() { return hasUpgrade('ei', 15) },
+			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		25: {
 			title() {
@@ -6297,7 +6316,81 @@ addLayer('ei', {
 				return 'increases evil power\'s base gain<br>4 --> 6';
 			},
 			cost: 6,
-			unlocked() { return hasUpgrade('ei', 15) },
+			unlocked() { return player.ei.upgrades.length >= 5 },
+		},
+		31: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Demonic Cycle';
+			},
+			description() {
+				return 'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'The Cycle Continues</b> based on your demon souls';
+			},
+			cost: 6,
+			effect() {
+				return player.ds.points.add(1).log10().add(1).pow(0.02);
+			},
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^0.02';
+				return text;
+			},
+			unlocked() { return player.ei.upgrades.length >= 10 },
+		},
+		32: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Demonic Evil';
+			},
+			description() {
+				return 'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Stronger Evil</b> based on your demon souls';
+			},
+			cost: 7,
+			effect() {
+				return player.ds.points.add(1).log10().add(1).pow(0.9);
+			},
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^0.9';
+				return text;
+			},
+			unlocked() { return player.ei.upgrades.length >= 10 },
+		},
+		33: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Gathering';
+			},
+			description() {
+				return 'reduces evil influence gain exponent<br>7.25 --> 7';
+			},
+			cost: 7,
+			unlocked() { return player.ei.upgrades.length >= 10 },
+		},
+		34: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Greedy Evil';
+			},
+			description() {
+				return 'multiplies relic gain based on your evil power';
+			},
+			cost: 8,
+			effect() {
+				return player.ei.power.add(1).log10().add(1).pow(0.01);
+			},
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^0.01';
+				return text;
+			},
+			unlocked() { return player.ei.upgrades.length >= 10 },
+		},
+		35: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Innate Evil';
+			},
+			description() {
+				return 'increases evil power\'s base gain<br>6 --> 8';
+			},
+			cost: 8,
+			unlocked() { return player.ei.upgrades.length >= 10 },
 		},
 	},
 });
