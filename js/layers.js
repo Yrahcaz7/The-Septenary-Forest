@@ -3130,6 +3130,7 @@ addLayer('a', {
 		};
 	},
 	doReset(resettingLayer) {
+		if (hasMilestone('ei', 4) && resettingLayer == 'ei') return;
 		let keep = ['auto_upgrades'];
 			if (layers[resettingLayer].row == this.row) {
 				keep.push("milestones", "points", "best", "total");
@@ -6092,6 +6093,9 @@ addLayer('ei', {
 	baseAmount() {return player.ds.points},
 	type: 'static',
 	exponent() {
+		if (hasUpgrade('ei', 83)) return 5.75;
+		if (hasUpgrade('ei', 73)) return 6.25;
+		if (hasUpgrade('ei', 63)) return 6.45;
 		if (hasUpgrade('ei', 53)) return 6.55;
 		if (hasUpgrade('ei', 43)) return 6.75;
 		if (hasUpgrade('ei', 33)) return 7;
@@ -6113,6 +6117,7 @@ addLayer('ei', {
 		if (hasUpgrade('ei', 31)) gain = gain.mul(upgradeEffect('ei', 31));
 		if (hasUpgrade('ei', 41)) gain = gain.mul(upgradeEffect('ei', 41));
 		if (hasUpgrade('ei', 54)) gain = gain.mul(upgradeEffect('ei', 54));
+		if (hasUpgrade('ei', 64)) gain = gain.mul(upgradeEffect('ei', 64));
 		return gain;
 	},
 	row: 4,
@@ -6134,6 +6139,9 @@ addLayer('ei', {
 		if (hasUpgrade('ei', 42)) eff = eff.mul(upgradeEffect('ei', 42));
 		if (hasUpgrade('ei', 44)) eff = eff.mul(upgradeEffect('ei', 44));
 		if (hasUpgrade('ei', 52)) eff = eff.mul(upgradeEffect('ei', 52));
+		if (hasUpgrade('ei', 62)) eff = eff.mul(upgradeEffect('ei', 62));
+		if (hasUpgrade('ei', 72)) eff = eff.mul(upgradeEffect('ei', 72));
+		if (hasUpgrade('ei', 74)) eff = eff.mul(upgradeEffect('ei', 74));
 		return eff;
 	},
 	effectDescription() {
@@ -6184,6 +6192,12 @@ addLayer('ei', {
 			effectDescription: 'evil influence resets don\'t reset prayers',
 			done() { return player.ei.total.gte(146) && player.ei.power.gte(1e39) },
 			unlocked() { return hasMilestone('ei', 2) },
+		},
+		4: {
+			requirementDescription: '303 total evil influence and 1e193 evil power',
+			effectDescription: 'evil influence resets don\'t reset atoms',
+			done() { return player.ei.total.gte(303) && player.ei.power.gte(1e193) },
+			unlocked() { return hasMilestone('ei', 3) },
 		},
 	},
 	upgrades: {
@@ -6527,6 +6541,108 @@ addLayer('ei', {
 				return text;
 			},
 			unlocked() { return player.ei.upgrades.length >= 20 },
+		},
+		62: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Empower Evil';
+			},
+			description() {
+				return 'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Bloody Evil</b> based on your evil power';
+			},
+			cost: 15,
+			effect() {
+				return player.ei.power.add(1).pow(0.1);
+			},
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: (x+1)^0.1';
+				return text;
+			},
+			unlocked() { return player.ei.upgrades.length >= 23 },
+		},
+		63: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Army of Evil';
+			},
+			description() {
+				return 'reduces evil influence gain exponent<br>6.55 --> 6.45';
+			},
+			cost: 16,
+			unlocked() { return player.ei.upgrades.length >= 23 },
+		},
+		64: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Rituals';
+			},
+			description() {
+				return 'multiplies evil influence gain based on your sanctums';
+			},
+			cost: 17,
+			effect() {
+				return player.gi.points.add(1).log10().add(1).pow(0.55);
+			},
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^0.55';
+				return text;
+			},
+			unlocked() { return player.ei.upgrades.length >= 23 },
+		},
+		72: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Powerful Evil';
+			},
+			description() {
+				return 'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Empower Evil</b> based on your evil power';
+			},
+			cost: 19,
+			effect() {
+				return player.ei.power.add(1).pow(0.145);
+			},
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: (x+1)^0.145';
+				return text;
+			},
+			unlocked() { return player.ei.upgrades.length >= 26 },
+		},
+		73: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Kingdom';
+			},
+			description() {
+				return 'reduces evil influence gain exponent<br>6.45 --> 6.25';
+			},
+			cost: 22,
+			unlocked() { return player.ei.upgrades.length >= 26 },
+		},
+		74: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Prayers';
+			},
+			description() {
+				return 'multiplies evil power gain based on your prayers';
+			},
+			cost: 25,
+			effect() {
+				return player.p.points.add(1).log10().add(1).pow(3.6);
+			},
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^3.6';
+				return text;
+			},
+			unlocked() { return player.ei.upgrades.length >= 26 },
+		},
+		83: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Infinite Evil';
+			},
+			description() {
+				return 'reduces evil influence gain exponent<br>6.25 --> 5.75';
+			},
+			cost: 30,
+			unlocked() { return player.ei.upgrades.length >= 29 },
 		},
 	},
 });
