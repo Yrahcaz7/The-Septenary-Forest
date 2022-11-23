@@ -47,6 +47,13 @@ function getdark(darkthis, type, special = false, research = false) {
 	return '">';
 };
 
+function getDevotionBulk() {
+	let bulk = 1;
+	if (challengeCompletions('r', 11) >= 41) bulk *= 10;
+	if (hasMilestone('gi', 17)) bulk *= 2;
+	return bulk;
+};
+
 function removeachievement(value) {
 	for (var i = 0; i < player.A.achievements.length; i++) {
 		if (player.A.achievements[i] == value) {

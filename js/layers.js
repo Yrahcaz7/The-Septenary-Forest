@@ -3717,6 +3717,7 @@ addLayer('p', {
 		return 'which are generating <h2 class="layer-p">' + format(tmp.p.effect) + '</h2> divinity/sec';
 	},
 	doReset(resettingLayer) {
+		if (hasMilestone('ei', 3) && resettingLayer == 'ei') return;
 		let keep = ['auto_upgrades', "smart_auto_upgrades"];
 			if (resettingLayer == 'h') keep.push("points", "best", "total", "milestones");
 			if (resettingLayer == 'sp') keep.push("points", "best", "total", "milestones");
@@ -4933,10 +4934,7 @@ addLayer('d', {
 			},
 			buy() {
 				player.p.points = player.p.points.sub(this.cost());
-				let bulk = 1;
-				if (challengeCompletions('r', 11) >= 41) bulk *= 5;
-				if (hasMilestone('gi', 17)) bulk *= 2;
-				setBuyableAmount('d', 11, getBuyableAmount('d', 11).add(bulk));
+				setBuyableAmount('d', 11, getBuyableAmount('d', 11).add(getDevotionBulk()));
 			},
 			display() {
 				return 'use prayers to worship the gods. you will gain 0.1 devotion per worship.<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 11).mul(0.1)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' prayers<br><br>Times Worshipped: ' + formatWhole(getBuyableAmount('d', 11));
@@ -4968,10 +4966,7 @@ addLayer('d', {
 			},
 			buy() {
 				if (!hasMilestone('s', 34)) player.s.points = player.s.points.sub(this.cost());
-				let bulk = 1;
-				if (challengeCompletions('r', 11) >= 41) bulk *= 5;
-				if (hasMilestone('gi', 17)) bulk *= 2;
-				setBuyableAmount('d', 12, getBuyableAmount('d', 12).add(bulk));
+				setBuyableAmount('d', 12, getBuyableAmount('d', 12).add(getDevotionBulk()));
 			},
 			display() {
 				if (hasMilestone('s', 34)) return 'use sanctums as a sacrifice to worship the gods. you will gain<br>1 devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by 2<br>Currently: ' + format(new Decimal(2).pow(getBuyableAmount('d', 12))) + 'x<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 12)) + '<br><br>Req: ' + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed: ' + formatWhole(getBuyableAmount('d', 12));
@@ -5017,10 +5012,7 @@ addLayer('d', {
 			buy() {
 				player.h.points = player.h.points.sub(this.cost_h());
 				player.sp.points = player.sp.points.sub(this.cost_sp());
-				let bulk = 1;
-				if (challengeCompletions('r', 11) >= 41) bulk *= 5;
-				if (hasMilestone('gi', 17)) bulk *= 2;
-				setBuyableAmount('d', 21, getBuyableAmount('d', 21).add(bulk));
+				setBuyableAmount('d', 21, getBuyableAmount('d', 21).add(getDevotionBulk()));
 			},
 			display() {
 				lasteff = new Decimal(1e25);
@@ -5263,7 +5255,7 @@ addLayer('r', {
 				else if (challengeCompletions('r', 11) == 37) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work<br>twice as fast';
 				else if (challengeCompletions('r', 11) == 38) text += '<br>Next reward: nothing';
 				else if (challengeCompletions('r', 11) == 39) text += '<br>Next reward: still nothing';
-				else if (challengeCompletions('r', 11) == 40) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers<br>can bulk buy 5x';
+				else if (challengeCompletions('r', 11) == 40) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers<br>can bulk buy 10x';
 				else text += '<br>Next reward: you have gotten all the rewards!';
 				return text;
 			},
@@ -6097,6 +6089,7 @@ addLayer('ei', {
 	baseAmount() {return player.ds.points},
 	type: 'static',
 	exponent() {
+		if (hasUpgrade('ei', 53)) return 6.55;
 		if (hasUpgrade('ei', 43)) return 6.75;
 		if (hasUpgrade('ei', 33)) return 7;
 		if (hasUpgrade('ei', 23)) return 7.25;
@@ -6116,6 +6109,7 @@ addLayer('ei', {
 		if (hasUpgrade('ei', 21)) gain = gain.mul(upgradeEffect('ei', 21));
 		if (hasUpgrade('ei', 31)) gain = gain.mul(upgradeEffect('ei', 31));
 		if (hasUpgrade('ei', 41)) gain = gain.mul(upgradeEffect('ei', 41));
+		if (hasUpgrade('ei', 54)) gain = gain.mul(upgradeEffect('ei', 54));
 		return gain;
 	},
 	row: 4,
@@ -6136,6 +6130,7 @@ addLayer('ei', {
 		if (hasUpgrade('ei', 32)) eff = eff.mul(upgradeEffect('ei', 32));
 		if (hasUpgrade('ei', 42)) eff = eff.mul(upgradeEffect('ei', 42));
 		if (hasUpgrade('ei', 44)) eff = eff.mul(upgradeEffect('ei', 44));
+		if (hasUpgrade('ei', 52)) eff = eff.mul(upgradeEffect('ei', 52));
 		return eff;
 	},
 	effectDescription() {
@@ -6180,6 +6175,12 @@ addLayer('ei', {
 			effectDescription: 'evil influence resets don\'t reset quarks',
 			done() { return player.ei.total.gte(55) && player.ei.power.gte(1e12) },
 			unlocked() { return hasMilestone('ei', 1) },
+		},
+		3: {
+			requirementDescription: '146 total evil influence and 1e39 evil power',
+			effectDescription: 'evil influence resets don\'t reset prayers',
+			done() { return player.ei.total.gte(146) && player.ei.power.gte(1e39) },
+			unlocked() { return hasMilestone('ei', 2) },
 		},
 	},
 	upgrades: {
@@ -6477,6 +6478,52 @@ addLayer('ei', {
 			},
 			cost: 10,
 			unlocked() { return player.ei.upgrades.length >= 15 },
+		},
+		52: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Bloody Evil';
+			},
+			description() {
+				return 'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Crimson Evil</b> based on your evil power';
+			},
+			cost: 11,
+			effect() {
+				return player.ei.power.add(1).pow(0.15);
+			},
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: (x+1)^0.15';
+				return text;
+			},
+			unlocked() { return player.ei.upgrades.length >= 20 },
+		},
+		53: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Amassing Evil';
+			},
+			description() {
+				return 'reduces evil influence gain exponent<br>6.75 --> 6.55';
+			},
+			cost: 12,
+			unlocked() { return player.ei.upgrades.length >= 20 },
+		},
+		54: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Determination';
+			},
+			description() {
+				return 'multiplies evil influence gain based on your good influence';
+			},
+			cost: 13,
+			effect() {
+				return player.gi.points.add(1).log10().add(1).pow(0.8);
+			},
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^0.8';
+				return text;
+			},
+			unlocked() { return player.ei.upgrades.length >= 20 },
 		},
 	},
 });
