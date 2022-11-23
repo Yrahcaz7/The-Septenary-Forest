@@ -232,6 +232,7 @@ addLayer('A', {
 			done() {return player.q.points.gte('1e10000')},
 			tooltip: 'obtain 1e10,000 quarks.',
 			unlocked() { return hasAchievement('A', 44) },
+			image() { if (hasAchievement('A', 45)) return "images/achievements/45.png" },
 			color: '#DB5196',
 		},
 		46: {
@@ -327,6 +328,7 @@ addLayer('A', {
 			done() {return player.h.points.gte('1e10000')},
 			tooltip: 'obtain 1e10,000 hexes.',
 			unlocked() { return hasAchievement('A', 64) },
+			image() { if (hasAchievement('A', 65)) return "images/achievements/65.png" },
 			color: '#E36409',
 		},
 		66: {
@@ -374,6 +376,7 @@ addLayer('A', {
 			done() {return player.ds.points.gte('1e2000')},
 			tooltip: 'obtain 1e2000 demon souls.',
 			unlocked() { return hasAchievement('A', 74) },
+			image() { if (hasAchievement('A', 75)) return "images/achievements/75.png" },
 			color: '#BA0035',
 		},
 		76: {
@@ -4291,12 +4294,12 @@ addLayer('p', {
 	clickables: {
 		11: {
 			title: 'RESET',
-			display: 'resets your prayer upgrades, holiness, divinity, and hymns (used for if you can\'t get some researches anymore)',
+			display: 'resets your prayer upgrades, divinity, holiness, and hymns (used for if you can\'t get some researches anymore)',
 			canClick() {
 				return true;
 			},
 			onClick() {
-				if (confirm('Are you really sure you want to reset your prayer upgrades, holiness, divinity, and hymns?')) {
+				if (confirm('Are you really sure you want to reset your prayer upgrades, divinity, holiness, and hymns?')) {
 					player.p.upgrades = [];
 					player.p.holiness = new Decimal(0);
 					player.p.divinity = new Decimal(0);
