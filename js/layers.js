@@ -614,6 +614,13 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 141) },
 			color: '#FF4400',
 		},
+		143: {
+			name: 'Evil Encompasses',
+			done() {return player.ei.points.gte(100)},
+			tooltip: 'obtain 100 evil influence.',
+			unlocked() { return hasAchievement('A', 142) },
+			color: '#FF4400',
+		},
 	},
 });
 
@@ -6090,6 +6097,7 @@ addLayer('ei', {
 	baseAmount() {return player.ds.points},
 	type: 'static',
 	exponent() {
+		if (hasUpgrade('ei', 43)) return 6.75;
 		if (hasUpgrade('ei', 33)) return 7;
 		if (hasUpgrade('ei', 23)) return 7.25;
 		if (hasUpgrade('ei', 13)) return 7.75;
@@ -6107,6 +6115,7 @@ addLayer('ei', {
 		if (hasUpgrade('ei', 11)) gain = gain.mul(upgradeEffect('ei', 11));
 		if (hasUpgrade('ei', 21)) gain = gain.mul(upgradeEffect('ei', 21));
 		if (hasUpgrade('ei', 31)) gain = gain.mul(upgradeEffect('ei', 31));
+		if (hasUpgrade('ei', 41)) gain = gain.mul(upgradeEffect('ei', 41));
 		return gain;
 	},
 	row: 4,
@@ -6119,11 +6128,14 @@ addLayer('ei', {
 		if (hasUpgrade('ei', 15)) effBase = new Decimal(4);
 		if (hasUpgrade('ei', 25)) effBase = new Decimal(6);
 		if (hasUpgrade('ei', 35)) effBase = new Decimal(8);
+		if (hasUpgrade('ei', 45)) effBase = new Decimal(10);
 		let eff = effBase.pow(player.ei.points).sub(1);
 		if (hasUpgrade('ei', 12)) eff = eff.mul(upgradeEffect('ei', 12));
 		if (hasUpgrade('ei', 14)) eff = eff.mul(upgradeEffect('ei', 14));
 		if (hasUpgrade('ei', 22)) eff = eff.mul(upgradeEffect('ei', 22));
 		if (hasUpgrade('ei', 32)) eff = eff.mul(upgradeEffect('ei', 32));
+		if (hasUpgrade('ei', 42)) eff = eff.mul(upgradeEffect('ei', 42));
+		if (hasUpgrade('ei', 44)) eff = eff.mul(upgradeEffect('ei', 44));
 		return eff;
 	},
 	effectDescription() {
@@ -6391,6 +6403,80 @@ addLayer('ei', {
 			},
 			cost: 8,
 			unlocked() { return player.ei.upgrades.length >= 10 },
+		},
+		41: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Longer Cycle';
+			},
+			description() {
+				return 'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Demonic Cycle</b> based on your evil power';
+			},
+			cost: 8,
+			effect() {
+				return player.ei.power.add(1).log10().add(1).pow(0.06);
+			},
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^0.06';
+				return text;
+			},
+			unlocked() { return player.ei.upgrades.length >= 15 },
+		},
+		42: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Crimson Evil';
+			},
+			description() {
+				return 'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Demonic Evil</b> based on your demon souls';
+			},
+			cost: 9,
+			effect() {
+				return player.ds.points.add(1).log10().add(1).pow(0.5);
+			},
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^0.5';
+				return text;
+			},
+			unlocked() { return player.ei.upgrades.length >= 15 },
+		},
+		43: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Condensing';
+			},
+			description() {
+				return 'reduces evil influence gain exponent<br>7 --> 6.75';
+			},
+			cost: 9,
+			unlocked() { return player.ei.upgrades.length >= 15 },
+		},
+		44: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Infiltration';
+			},
+			description() {
+				return 'multiplies evil power gain based on your sanctums';
+			},
+			cost: 10,
+			effect() {
+				return player.s.points.add(1).log10().add(1).pow(4);
+			},
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^4';
+				return text;
+			},
+			unlocked() { return player.ei.upgrades.length >= 15 },
+		},
+		45: {
+			title() {
+				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Schemes';
+			},
+			description() {
+				return 'increases evil power\'s base gain<br>8 --> 10';
+			},
+			cost: 10,
+			unlocked() { return player.ei.upgrades.length >= 15 },
 		},
 	},
 });
