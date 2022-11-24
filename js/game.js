@@ -155,7 +155,7 @@ function generatePoints(layer, diff) {
 
 function doReset(layer, force=false) {
 	if (tmp[layer].type == "none") return;
-	let row = tmp[layer].row;
+	let row = tmp[layer].row, challenge = player[layer].activeChallenge;
 	if (!force) {
 		if (tmp[layer].canReset === false) return;
 		if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return;
@@ -190,6 +190,7 @@ function doReset(layer, force=false) {
 		rowReset(r, layer);
 	};
 	player[layer].resetTime = 0;
+	if (challenge && tmp[layer].challenges[challenge].noAutoExit) Vue.set(player[layer], "activeChallenge", challenge);
 	updateTemp();
 	updateTemp();
 };

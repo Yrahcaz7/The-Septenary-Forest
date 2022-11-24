@@ -5313,14 +5313,14 @@ addLayer('r', {
 			fullDisplay() {
 				let text = '';
 				if (player.nerdMode) text += ' <br>formula: (x*36+1)^10';
-				return '<h3 class="layer-r' + getdark(this, "title-hasend") + 'Good Light</h3><br>(based on your good influence) sets light gain after softcap to:<br>' + format(this.effect()) + '/sec' + text + '<br><br>Cost: ' + format(1e30) + ' light';
+				return '<h3 class="layer-r' + getdark(this, "title-hasend") + 'Good Light</h3><br>(based on your good influence) sets light gain after softcap to:<br>' + format(this.effect()) + '/sec' + text + '<br><br>Cost: ' + format(1e26) + ' light';
 			},
 			canAfford() {
-				if (player.r.light.gte(1e30)) return true;
+				if (player.r.light.gte(1e26)) return true;
 				return false;
 			},
 			pay() {
-				player.r.light = player.r.light.sub(1e30);
+				player.r.light = player.r.light.sub(1e26);
 			},
 			effect() {
 				return player.gi.points.mul(36).add(1).pow(10);
@@ -6134,7 +6134,10 @@ addLayer('ei', {
 		if (hasUpgrade('ei', 62)) eff = eff.mul(upgradeEffect('ei', 62));
 		if (hasUpgrade('ei', 72)) eff = eff.mul(upgradeEffect('ei', 72));
 		if (hasUpgrade('ei', 74)) eff = eff.mul(upgradeEffect('ei', 74));
-		if (inChallenge('ei', 11)) eff = eff.div(1e20);
+		if (inChallenge('ei', 11)) eff = eff.div(1000);
+		if (inChallenge('ei', 12)) eff = eff.div(100000000);
+		if (hasChallenge('ei', 11)) eff = eff.pow(1.075);
+		if (hasChallenge('ei', 12)) eff = eff.pow(1.05);
 		return eff;
 	},
 	effectDescription() {
@@ -6144,6 +6147,9 @@ addLayer('ei', {
 		let keep = [];
 			if (layers[resettingLayer].row > this.row) layerDataReset('ei', keep);
 		},
+	resetsNothing() {
+		return !!hasChallenge('ei', 12);
+	},
 	update(diff) {
 		if (tmp.ei.effect.gt(0)) {
 			player.ei.power = player.ei.power.add(tmp.ei.effect.mul(diff));
@@ -6225,12 +6231,15 @@ addLayer('ei', {
 			unlocked() { return hasMilestone('ei', 3) },
 		},
 		5: {
-			requirementDescription: '348 total evil influence and 1e245 evil power',
+			requirementDescription() {
+				if (inChallenge('ei', 11)) return '348 total evil influence and 1e230 evil power';
+				return '348 total evil influence and 1e245 evil power';
+			},
 			effectDescription() {
 				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'unlock the Gate of Evil';
 				return 'unlock the <b class="layer-ei' + getdark(this, "ref", true, true) + 'Gate of Evil';
 			},
-			done() { return player.ei.total.gte(348) && player.ei.power.gte(1e245) },
+			done() { return inChallenge('ei', 11) ? player.ei.total.gte(348) && player.ei.power.gte(1e230) : player.ei.total.gte(348) && player.ei.power.gte(1e245) },
 			unlocked() { return hasMilestone('ei', 4) },
 		},
 	},
@@ -6679,24 +6688,43 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 29 },
 		},
 	},
-	/*challenges: {
+	challenges: {
 		11: {
 			name() {
-				if (colorvalue[0][1]) return '<h3 class="layer-ei">Open the Gate';
-				return '<h3>Open the Gate';
+				if (colorvalue[0][1]) return '<h3 class="layer-ei">Build the Gate';
+				return '<h3>Build the Gate';
 			},
-			challengeDescription: " - Resets evil influence milestones<br> - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Forces an evil influence reset<br> - Divides evil power gain by 1e20<br>",
-			goalDescription: '1e245 evil power<br>',
+			challengeDescription: ' - Resets evil influence milestones<br> - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Forces an evil influence reset<br> - Divides evil power gain by 1,000<br>',
+			goalDescription: '1e230 evil power<br>',
 			canComplete() {
-				return player.ei.power.gte(1e225);
+				return player.ei.power.gte(1e230);
 			},
 			onEnter() {
 				player.ei.milestones = [];
 				player.ei.upgrades = [];
 				player.ei.power = new Decimal(0);
 			},
-			rewardDescription: "unlocks something new...",
+			rewardDescription: 'exponentiate evil influence<br>gain by ^1.075',
 			doReset: true,
+			noAutoExit: true,
 		},
-	},*/
+		12: {
+			name() {
+				if (colorvalue[0][1]) return '<h3 class="layer-ei">Power the Gate';
+				return '<h3>Power the Gate';
+			},
+			challengeDescription: " - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Forces an evil influence reset<br> - Divides evil power gain by 100,000,000<br>",
+			goalDescription: '1e21 evil power<br>',
+			canComplete() {
+				return player.ei.power.gte(1e21);
+			},
+			onEnter() {
+				player.ei.upgrades = [];
+				player.ei.power = new Decimal(0);
+			},
+			rewardDescription: 'evil influence resets nothing, all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>influence gain by ^1.05',
+			doReset: true,
+			noAutoExit: true,
+		},
+	},
 });
