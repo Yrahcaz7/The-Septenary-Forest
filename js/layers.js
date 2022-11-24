@@ -540,6 +540,13 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 112) },
 			color: '#B9A975',
 		},
+		114: {
+			name: 'Mountain of Relics',
+			done() {return player.r.points.gte(1000)},
+			tooltip: 'obtain 1,000 relics.',
+			unlocked() { return hasAchievement('A', 113) },
+			color: '#B9A975',
+		},
 		116: {
 			name: 'Broken Relics',
 			done() {return player.r.points.gte(10) && player.m.total.eq(0)},
@@ -623,6 +630,20 @@ addLayer('A', {
 			tooltip: 'obtain 100 evil influence.',
 			unlocked() { return hasAchievement('A', 142) },
 			color: '#FF4400',
+		},
+		151: {
+			name: 'Big Fight',
+			done() {return player.w.points.gte(1)},
+			tooltip: 'obtain 1 war.',
+			unlocked() { return hasAchievement('A', 151) },
+			color: '#A0A0A0',
+		},
+		152: {
+			name: '"Resolving Differences"',
+			done() {return player.w.points.gte(10)},
+			tooltip: 'obtain 10 wars.',
+			unlocked() { return hasAchievement('A', 151) },
+			color: '#A0A0A0',
 		},
 	},
 });
@@ -834,6 +855,7 @@ addLayer('e', {
 		if (player.r.points.gt(0)) mult = mult.mul(player.r.essencemult);
 		if (hasUpgrade('ds', 21)) mult = mult.mul(player.A.points.mul(0.2));
 		if (inChallenge('ds', 21)) mult = mult.mul(0.00000000000000000001);
+		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
 		return mult;
 	},
 	gainExp() {
@@ -1193,6 +1215,7 @@ addLayer('c', {
 		if (hasUpgrade('ds', 21) && hasUpgrade('ds', 23)) mult = mult.mul(player.A.points.pow(2).div(100));
 		if (inChallenge('ds', 11)) mult = mult.mul(0.01);
 		if (inChallenge('ds', 21)) mult = mult.mul(0.000000000000001);
+		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
 		return mult;
 	},
 	gainExp() {
@@ -1290,7 +1313,7 @@ addLayer('c', {
 			requirementDescription: '1e64 cores',
 			effectDescription: 'gain 50% of essence gain per second',
 			done() { return player.c.points.gte(1e64) },
-			unlocked() { return player.c.points.gte(1e60) },
+			unlocked() { return player.c.best.gte(1e60) },
 		},
 	},
 	upgrades: {
@@ -1547,6 +1570,7 @@ addLayer('q', {
 		if (hasUpgrade('ds', 21) && hasUpgrade('ds', 23)) mult = mult.mul(player.A.points.pow(2).div(100));
 		if (inChallenge('ds', 11)) mult = mult.mul(0.1);
 		if (inChallenge('ds', 22)) mult = mult.mul(0.0000000000000000000000000000000000000001);
+		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
 		return mult;
 	},
 	gainExp() {
@@ -2023,14 +2047,7 @@ addLayer('sp', {
 	baseAmount() {return player.q.points},
 	type: 'static',
 	exponent: 4.25,
-	canBuyMax() {
-		if (hasMilestone('sp', 0)) return true;
-		return false;
-	},
-	gainMult() {
-		let mult = new Decimal(1);
-		return mult;
-	},
+	canBuyMax() { return hasMilestone('sp', 0) || player.w.unlocked },
 	gainExp() {
 		let gain = new Decimal(1);
 		if (hasUpgrade('q', 43)) gain = gain.mul(upgradeEffect('q', 43));
@@ -2043,6 +2060,7 @@ addLayer('sp', {
 		if (hasChallenge('ds', 21)) gain = gain.mul(player.ds.points.add(1).pow(0.2));
 		if (inChallenge('ds', 12)) gain = gain.mul(player.q.points.pow(-0.05));
 		if (inChallenge('ds', 22)) gain = gain.mul(0.0000000000000000000000000000000000000001);
+		if (new Decimal(tmp.w.effect[0]).gt(1)) gain = gain.mul(tmp.w.effect[0]);
 		return gain;
 	},
 	autoPrestige() {
@@ -2268,6 +2286,7 @@ addLayer('h', {
 		if (inChallenge('ds', 11)) mult = mult.mul(0.001);
 		if (inChallenge('ds', 12)) mult = mult.mul(0.0000000001);
 		if (inChallenge('ds', 21)) mult = mult.mul(0.00001);
+		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
 		return mult;
 	},
 	gainExp() {
@@ -2745,6 +2764,7 @@ addLayer('ds', {
 		if (hasUpgrade('m', 33)) mult = mult.mul(upgradeEffect('m', 33));
 		if (hasChallenge('ds', 11)) mult = mult.mul(player.ds.points.add(1).pow(0.25));
 		if (hasChallenge('ds', 12)) mult = mult.mul(player.h.points.add(1).pow(0.02));
+		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
 		return mult;
 	},
 	gainExp() {
@@ -2978,7 +2998,10 @@ addLayer('ds', {
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Quark gain is divided by 100,000<br> - Point gain is divided by 10,000<br> - Hex gain is divided by 1,000<br> - Core gain is divided by 100<br> - Quark gain is divided by 10",
 			goalDescription() {
-				if (colorvalue[0][2]) return '<b class="layer-h">Potential Essence Potential';
+				if (colorvalue[0][2]) {
+					if (hasChallenge('ds', this.id)) return '<b class="layer-h">Potential Essence Potential';
+					return '<b class="layer-h-dark">Potential Essence Potential';
+				};
 				return '<b>Potential Essence Potential';
 			},
 			canComplete() {
@@ -3000,7 +3023,10 @@ addLayer('ds', {
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1,000,000<br> - Hex gain is divided by 1e10<br> - Subatomic Particle gain is divided by the number of Quarks",
 			goalDescription() {
-				if (colorvalue[0][2]) return '<b class="layer-h">Sub Core Particle Fusion';
+				if (colorvalue[0][2]) {
+					if (hasChallenge('ds', this.id)) return '<b class="layer-h">Sub Core Particle Fusion';
+					return '<b class="layer-h-dark">Sub Core Particle Fusion';
+				};
 				return '<b>Sub Core Particle Fusion';
 			},
 			canComplete() {
@@ -3025,7 +3051,10 @@ addLayer('ds', {
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Hex gain is divided by 100,000<br> - Point gain is divided by 1e10<br> - Core gain is divided by 1e15<br> - Essence gain is divided by 1e20",
 			goalDescription() {
-				if (colorvalue[0][2]) return '<b class="layer-h">Sub Core Particle Fusion';
+				if (colorvalue[0][2]) {
+					if (hasChallenge('ds', this.id)) return '<b class="layer-h">Sub Core Particle Fusion';
+					return '<b class="layer-h-dark">Sub Core Particle Fusion';
+				};
 				return '<b>Sub Core Particle Fusion';
 			},
 			canComplete() {
@@ -3089,10 +3118,6 @@ addLayer('a', {
 	type: 'static',
 	exponent: 1,
 	canBuyMax() { return true },
-	gainMult() {
-		let mult = new Decimal(1);
-		return mult;
-	},
 	gainExp() {
 		let gain = new Decimal(1);
 		if (hasUpgrade('a', 22)) gain = gain.mul(upgradeEffect('a', 22));
@@ -3102,7 +3127,8 @@ addLayer('a', {
 		if (hasUpgrade('a', 62)) gain = gain.mul(upgradeEffect('a', 62));
 		if (hasUpgrade('a', 72)) gain = gain.mul(upgradeEffect('a', 72));
 		if (hasChallenge('ds', 22)) gain = gain.mul(1.5);
-		if (tmp.m.effect.gt(1)) gain = gain.mul(tmp.m.effect)
+		if (tmp.m.effect.gt(1)) gain = gain.mul(tmp.m.effect);
+		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
 		return gain;
 	},
 	autoPrestige() {
@@ -3628,7 +3654,8 @@ addLayer('p', {
 			if (hasUpgrade('p', 63)) mult = mult.mul(upgradeEffect('p', 63));
 		};
 		if (hasUpgrade('p', 73)) mult = mult.mul(upgradeEffect('p', 73));
-		if (player.gi.total.gt(0)) mult = mult.mul(tmp.gi.effect);
+		if (tmp.gi.effect.gt(1)) mult = mult.mul(tmp.gi.effect);
+		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
 		return mult;
 	},
 	gainExp() {
@@ -3742,7 +3769,7 @@ addLayer('p', {
 		if (tmp.p.effect.gt(0)) {
 			player.p.divinity = player.p.divinity.add(tmp.p.effect.mul(diff));
 		};
-		if (hasMilestone('s', 9)) {
+		if (hasMilestone('s', 8)) {
 			gen = 0.002;
 			if (hasMilestone('s', 16)) gen = gen + 0.023;
 			if (hasUpgrade('p', 22)) {
@@ -4334,18 +4361,12 @@ addLayer('s', {
 		if (hasUpgrade('p', 65)) return 4;
 		return 5;
 	},
-	canBuyMax() {
-		if (hasMilestone('s', 0) || player.r.points.gt(0)) return true;
-		return false;
-	},
-	gainMult() {
-		let mult = new Decimal(1);
-		return mult;
-	},
+	canBuyMax() { return hasMilestone('s', 0) || player.r.total.gt(0) || player.w.unlocked },
 	gainExp() {
 		let gain = new Decimal(1);
-		if (player.r.points.gt(0)) gain = gain.mul(player.r.sanctummult);
+		if (player.r.sanctummult.gt(1)) gain = gain.mul(player.r.sanctummult);
 		if (player.s.devotion_effect.gt(1)) gain = gain.mul(player.s.devotion_effect);
+		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
 		return gain;
 	},
 	autoPrestige() {
@@ -5062,25 +5083,20 @@ addLayer('r', {
 	baseAmount() {return player.s.points},
 	type: 'static',
 	exponent: 0.66,
-	canBuyMax() {
-		return true;
-	},
-	gainMult() {
-		let mult = new Decimal(1);
-		return mult;
-	},
+	canBuyMax() { return true },
 	gainExp() {
 		let gain = new Decimal(1);
 		if (hasUpgrade('m', 43)) gain = gain.mul(upgradeEffect('m', 43));
 		if (challengeCompletions('r', 11) >= 13) gain = gain.mul(player.r.relic_effects[3]);
 		if (hasUpgrade('ei', 34)) gain = gain.mul(upgradeEffect('ei', 34));
+		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
 		return gain;
 	},
 	row: 3,
 	hotkeys: [
 		{key: 'r', description: 'R: Reset for relics', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
-	layerShown(){return player.p.unlocked},
+	layerShown(){return player.s.unlocked},
 	effect() {
 		let effBoost1 = new Decimal(1);
 		let effex1 = new Decimal(1);
@@ -5262,7 +5278,7 @@ addLayer('r', {
 				return player.r.points;
 			},
 			style() {
-				num = player.r.light.log(2).div(player.r.lightreq.log(2)).mul(100).floor();
+				num = player.r.light.add(1).log(2).div(player.r.lightreq.add(1).log(2)).mul(100).floor();
 				color = 'rgb(' + num + ',' + num + ',' + (num + 50) + ')';
 				if (maxedChallenge('r', 11)) color = 'rgb(0,0,50)';
 				if (num > 205) color = 'rgb(205,205,255)';
@@ -5356,6 +5372,7 @@ addLayer('m', {
 	gainMult() {
 		let mult = new Decimal(1);
 		if (challengeCompletions('r', 11) >= 12) mult = mult.mul(player.r.relic_effects[0]);
+		if (new Decimal(tmp.w.effect[1]).gt(1)) mult = mult.mul(tmp.w.effect[1]);
 		return mult;
 	},
 	gainExp() {
@@ -5835,23 +5852,19 @@ addLayer('gi', {
 		if (player.r.points.gte(15) || player.gi.unlocked) return "#08FF87";
 		return '#A0A0A0';
 	},
+	branches: ['w'],
 	requires: 15,
 	resource: 'good influence',
 	baseResource: 'relics',
 	baseAmount() {return player.r.points},
 	type: 'static',
 	exponent: 1,
-	canBuyMax() {
-		return true;
-	},
-	gainMult() {
-		let mult = new Decimal(1);
-		return mult;
-	},
+	canBuyMax() { return true },
 	gainExp() {
 		let gain = new Decimal(1);
-		gain = gain.mul(player.gi.req_devotion);
+		if (player.gi.req_devotion.gt(1)) gain = gain.mul(player.gi.req_devotion);
 		if (hasUpgrade('ei', 24)) gain = gain.mul(upgradeEffect('ei', 24));
+		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
 		return gain;
 	},
 	row: 4,
@@ -6079,6 +6092,7 @@ addLayer('ei', {
 		if (player.ds.points.gte('e3000') || player.ei.unlocked) return "#FF4400";
 		return '#A0A0A0';
 	},
+	branches: ['w'],
 	requires: 'e3000',
 	resource: 'evil influence',
 	baseResource: 'demon souls',
@@ -6095,13 +6109,7 @@ addLayer('ei', {
 		if (hasUpgrade('ei', 13)) return 7.75;
 		return 12;
 	},
-	canBuyMax() {
-		return true;
-	},
-	gainMult() {
-		let mult = new Decimal(1);
-		return mult;
-	},
+	canBuyMax() { return true },
 	gainExp() {
 		let gain = new Decimal(1);
 		if (hasUpgrade('ei', 11)) gain = gain.mul(upgradeEffect('ei', 11));
@@ -6110,6 +6118,7 @@ addLayer('ei', {
 		if (hasUpgrade('ei', 41)) gain = gain.mul(upgradeEffect('ei', 41));
 		if (hasUpgrade('ei', 54)) gain = gain.mul(upgradeEffect('ei', 54));
 		if (hasUpgrade('ei', 64)) gain = gain.mul(upgradeEffect('ei', 64));
+		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
 		return gain;
 	},
 	row: 4,
@@ -6748,8 +6757,83 @@ addLayer('ei', {
 				player.r.total = new Decimal(0);
 				player.r.challenges[11] = 0;
 			},
-			rewardDescription: 'coming soon!',
+			rewardDescription: 'unlock Wars',
 			noAutoExit: true,
 		},
 	},
+});
+
+addLayer('w', {
+	name: 'Wars',
+	symbol: 'W',
+	position: 0,
+	startData() { return {
+		unlocked: false,
+		points: new Decimal(0),
+		best: new Decimal(0),
+		total: new Decimal(0),
+	}},
+	color: '#A0A0A0',
+	requires: 60,
+	resource: 'wars',
+	baseAmount() {return player.gi.points.min(player.ei.points)},
+	type: 'custom',
+	getResetGain() {
+		let gain = [player.gi.points.sub(60).div(10).mul(this.gainExp()).floor().sub(player.w.points).add(1), player.ei.points.sub(60).div(10).mul(this.gainExp()).floor().sub(player.w.points).add(1)];
+		return gain[0].min(gain[1]).max(0);
+	},
+	getNextAt() {
+		if (this.canBuyMax()) return this.getResetGain().div(this.gainExp()).mul(10).add(60);
+		return player.w.points.div(this.gainExp()).mul(10).add(60);
+	},
+	canReset() { return this.getResetGain().gt(0) },
+	prestigeNotify() { return this.getResetGain().gt(0) },
+	prestigeButtonText() {
+		return 'Reset for +<b>' + formatWhole(this.getResetGain()) + '</b> wars<br><br>' + (player.w.points.lt(30) ? (this.canBuyMax() ? 'Next:' : 'Req:') : '') + ' ' + formatWhole(player.gi.points) + ' / ' + formatWhole(this.getNextAt()) + ' GI<br>and ' + formatWhole(player.ei.points) + ' / ' + formatWhole(this.getNextAt()) + ' EI';
+	},
+	canBuyMax() {
+		return false;
+	},
+	onPrestige(gain) {
+		player.c.unlocked = false;
+		player.q.unlocked = false;
+		player.sp.unlocked = false;
+		player.h.unlocked = false;
+		player.ds.unlocked = false;
+		player.a.unlocked = false;
+		player.p.unlocked = false;
+		player.s.unlocked = false;
+		player.r.unlocked = false;
+		player.m.unlocked = false;
+		player.gi.unlocked = false;
+		player.ei.unlocked = false;
+	},
+	gainExp() {
+		let gain = new Decimal(1);
+		return gain;
+	},
+	row: 5,
+	tooltipLocked() {
+		return 'Reach 60 GI and 60 EI to unlock (You have ' + formatWhole(player.gi.points) + ' GI and ' + formatWhole(player.ei.points) + ' EI)';
+	},
+	hotkeys: [
+		{key: 'w', description: 'W: Reset for wars', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+	],
+	layerShown(){return hasChallenge('ei', 21) || player.w.unlocked},
+	effect() {
+		return [new Decimal(1e10).pow(player.w.points), player.w.points.add(1).log10().add(1).pow(0.25)];
+	},
+	effectDescription() {
+		return 'which multiplies essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x and atom, sanctum, relic, molecule, good influence, and evil influence by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x';
+	},
+	doReset(resettingLayer) {
+		let keep = [];
+			if (layers[resettingLayer].row > this.row) layerDataReset('w', keep);
+		},
+	tabFormat: [
+		"main-display",
+		"prestige-button",
+		["display-text", () => { return 'You have ' + formatWhole(player.gi.points) + ' good influence<br>You have ' + formatWhole(player.ei.points) + ' evil influence<br><br>Your best wars is ' + formatWhole(player.w.best) + '<br>You have made a total of ' + formatWhole(player.w.total) + ' wars<br><br>After unlocking War, you can always buy max on all resources below this row.' }],
+		"blank",
+	],
 });
