@@ -6124,6 +6124,7 @@ addLayer('ei', {
 		if (hasUpgrade('ei', 35)) effBase = new Decimal(8);
 		if (hasUpgrade('ei', 45)) effBase = new Decimal(10);
 		let eff = effBase.pow(player.ei.points).sub(1);
+		// mul
 		if (hasUpgrade('ei', 12)) eff = eff.mul(upgradeEffect('ei', 12));
 		if (hasUpgrade('ei', 14)) eff = eff.mul(upgradeEffect('ei', 14));
 		if (hasUpgrade('ei', 22)) eff = eff.mul(upgradeEffect('ei', 22));
@@ -6134,14 +6135,17 @@ addLayer('ei', {
 		if (hasUpgrade('ei', 62)) eff = eff.mul(upgradeEffect('ei', 62));
 		if (hasUpgrade('ei', 72)) eff = eff.mul(upgradeEffect('ei', 72));
 		if (hasUpgrade('ei', 74)) eff = eff.mul(upgradeEffect('ei', 74));
+		// div
 		if (inChallenge('ei', 11)) eff = eff.div(1000);
 		if (inChallenge('ei', 12)) eff = eff.div(100000000);
+		if (inChallenge('ei', 21)) eff = eff.div(1e15);
+		// exp
 		if (hasChallenge('ei', 11)) eff = eff.pow(1.075);
-		if (hasChallenge('ei', 12)) eff = eff.pow(1.05);
+		if (hasChallenge('ei', 12)) eff = eff.pow(1.075);
 		return eff;
 	},
 	effectDescription() {
-		return 'which generates <h2 class="layer-ei">' + format(tmp.ei.effect) + '</h2> evil power per second';
+		return 'which generates <h2 class="layer-ei">' + formatSmall(tmp.ei.effect) + '</h2> evil power per second';
 	},
 	doReset(resettingLayer) {
 		let keep = [];
@@ -6164,7 +6168,7 @@ addLayer('ei', {
 				"blank",
 				["display-text",
 					function() {
-						return 'You have <h2 class="layer-ei">' + format(player.ei.power) + '</h2> evil power';
+						return 'You have <h2 class="layer-ei">' + formatSmall(player.ei.power) + '</h2> evil power';
 					}],
 				"blank",
 				"milestones",
@@ -6178,7 +6182,7 @@ addLayer('ei', {
 					"prestige-button",
 					"resource-display",
 					"blank",
-					["display-text", 'You have <h2 class="layer-ei">' + format(player.ei.power) + '</h2> evil power'],
+					["display-text", 'You have <h2 class="layer-ei">' + formatSmall(player.ei.power) + '</h2> evil power'],
 					"blank",
 					"blank",
 					"challenges",
@@ -6189,7 +6193,7 @@ addLayer('ei', {
 					"prestige-button",
 					"resource-display",
 					"blank",
-					["display-text", 'You have <h2 class="layer-ei">' + format(player.ei.power) + '</h2> evil power'],
+					["display-text", 'You have <h2 class="layer-ei">' + formatSmall(player.ei.power) + '</h2> evil power'],
 					"blank",
 					"milestones",
 					"upgrades",
@@ -6722,8 +6726,29 @@ addLayer('ei', {
 				player.ei.upgrades = [];
 				player.ei.power = new Decimal(0);
 			},
-			rewardDescription: 'evil influence resets nothing, all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>influence gain by ^1.05',
+			rewardDescription: 'evil influence resets nothing, all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>influence gain by ^1.075',
 			doReset: true,
+			noAutoExit: true,
+		},
+		21: {
+			name() {
+				if (colorvalue[0][1]) return '<h3 class="layer-ei">Enter the Gate';
+				return '<h3>Enter the Gate';
+			},
+			challengeDescription: " - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Resets your relics to 0<br> - Divides evil power gain by 1e15<br>",
+			goalDescription: '1e18 evil power and 93 relics<br>',
+			canComplete() {
+				return player.ei.power.gte(1e18) && player.r.points.gte(93);
+			},
+			onEnter() {
+				player.ei.upgrades = [];
+				player.ei.power = new Decimal(0);
+				player.r.points = new Decimal(0);
+				player.r.best = new Decimal(0);
+				player.r.total = new Decimal(0);
+				player.r.challenges[11] = 0;
+			},
+			rewardDescription: 'coming soon!',
 			noAutoExit: true,
 		},
 	},
