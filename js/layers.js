@@ -2973,20 +2973,17 @@ addLayer('ds', {
 	challenges: {
 		11: {
 			name() {
-				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ds">Blazing Curse';
+				if (colorvalue[0][1]) return '<h3 class="layer-ds">Blazing Curse';
 				return '<h3>Blazing Curse';
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Quark gain is divided by 100,000<br> - Point gain is divided by 10,000<br> - Hex gain is divided by 1,000<br> - Core gain is divided by 100<br> - Quark gain is divided by 10",
 			goalDescription() {
-				if (colorvalue[0][2] && colorvalue[1] != 'none') return '<b class="layer-h">Potential Essence Potential';
+				if (colorvalue[0][2]) return '<b class="layer-h">Potential Essence Potential';
 				return '<b>Potential Essence Potential';
 			},
 			canComplete() {
 				if (hasUpgrade('h', 64)) return true;
 				return false;
-			},
-			onEnter() {
-				doReset('ds', true);
 			},
 			rewardDescription: "multiplies hex and demon soul gain based on your demon souls",
 			rewardDisplay() {
@@ -2994,23 +2991,21 @@ addLayer('ds', {
 				if (player.nerdMode) text += '<br>formula: (x+1)^0.25';
 				return text;
 			},
+			doReset: true,
 		},
 		12: {
 			name() {
-				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ds">Hellfire';
+				if (colorvalue[0][1]) return '<h3 class="layer-ds">Hellfire';
 				return '<h3>Hellfire';
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1,000,000<br> - Hex gain is divided by 1e10<br> - Subatomic Particle gain is divided by the number of Quarks",
 			goalDescription() {
-				if (colorvalue[0][2] && colorvalue[1] != 'none') return '<b class="layer-h">Sub Core Particle Fusion';
+				if (colorvalue[0][2]) return '<b class="layer-h">Sub Core Particle Fusion';
 				return '<b>Sub Core Particle Fusion';
 			},
 			canComplete() {
 				if (hasUpgrade('h', 63)) return true;
 				return false;
-			},
-			onEnter() {
-				doReset('ds', true);
 			},
 			unlocked() {
 				return hasChallenge('ds', 11);
@@ -3021,23 +3016,21 @@ addLayer('ds', {
 				if (player.nerdMode) text += '<br>formula: (x+1)^0.02';
 				return text;
 			},
+			doReset: true,
 		},
 		21: {
 			name() {
-				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ds">Opposite Polarity';
+				if (colorvalue[0][1]) return '<h3 class="layer-ds">Opposite Polarity';
 				return '<h3>Opposite Polarity';
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Hex gain is divided by 100,000<br> - Point gain is divided by 1e10<br> - Core gain is divided by 1e15<br> - Essence gain is divided by 1e20",
 			goalDescription() {
-				if (colorvalue[0][2] && colorvalue[1] != 'none') return '<b class="layer-h">Sub Core Particle Fusion';
+				if (colorvalue[0][2]) return '<b class="layer-h">Sub Core Particle Fusion';
 				return '<b>Sub Core Particle Fusion';
 			},
 			canComplete() {
 				if (hasUpgrade('h', 53)) return true;
 				return false;
-			},
-			onEnter() {
-				doReset('ds', true);
 			},
 			unlocked() {
 				return hasChallenge('ds', 12);
@@ -3048,28 +3041,27 @@ addLayer('ds', {
 				if (player.nerdMode) text += '<br>formula: (x+1)^0.2';
 				return text;
 			},
+			doReset: true,
 		},
 		22: {
 			name() {
-				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ds">Dreaded Science';
+				if (colorvalue[0][1]) return '<h3 class="layer-ds">Dreaded Science';
 				return '<h3>Dreaded Science';
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1e10<br> - Quark and Subatomic Particle gain is divided by 1e40",
 			goalDescription() {
-				if (colorvalue[0][2] && colorvalue[1] != 'none') return '<b class="layer-a">Famed Atom\'s Donations';
+				if (colorvalue[0][2]) return '<b class="layer-a">Famed Atom\'s Donations';
 				return '<b>Famed Atom\'s Donations';
 			},
 			canComplete() {
 				if (hasUpgrade('a', 51)) return true;
 				return false;
 			},
-			onEnter() {
-				doReset('ds', true);
-			},
 			unlocked() {
 				return hasMilestone('a', 7);
 			},
 			rewardDescription: "multiply atom gain by 1.5",
+			doReset: true,
 		},
 	},
 });
@@ -5201,7 +5193,7 @@ addLayer('r', {
 	challenges: {
 		11: {
 			name() {
-				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-r">Activate Relics';
+				if (colorvalue[0][1]) return '<h3 class="layer-r">Activate Relics';
 				return '<h3>Activate Relics';
 			},
 			buttonText: ["Activate", "Cannot activate", "Enter activation", "Enter activation"],
@@ -6142,6 +6134,7 @@ addLayer('ei', {
 		if (hasUpgrade('ei', 62)) eff = eff.mul(upgradeEffect('ei', 62));
 		if (hasUpgrade('ei', 72)) eff = eff.mul(upgradeEffect('ei', 72));
 		if (hasUpgrade('ei', 74)) eff = eff.mul(upgradeEffect('ei', 74));
+		if (inChallenge('ei', 11)) eff = eff.div(1e20);
 		return eff;
 	},
 	effectDescription() {
@@ -6156,19 +6149,51 @@ addLayer('ei', {
 			player.ei.power = player.ei.power.add(tmp.ei.effect.mul(diff));
 		};
 	},
-	tabFormat: [
-		"main-display",
-		"prestige-button",
-		"resource-display",
-		"blank",
-		["display-text",
-			function() {
-				return 'You have <h2 class="layer-ei">' + format(player.ei.power) + '</h2> evil power';
-			}],
-		"blank",
-		"milestones",
-		"upgrades",
-	],
+	tabFormat: {
+		"Cycle of Evil": {
+			content: [
+				"main-display",
+				"prestige-button",
+				"resource-display",
+				"blank",
+				["display-text",
+					function() {
+						return 'You have <h2 class="layer-ei">' + format(player.ei.power) + '</h2> evil power';
+					}],
+				"blank",
+				"milestones",
+				"upgrades",
+			],
+		},
+		"Gate of Evil": {
+			content: function() {
+				if (this.unlocked) return [
+					"main-display",
+					"prestige-button",
+					"resource-display",
+					"blank",
+					["display-text", 'You have <h2 class="layer-ei">' + format(player.ei.power) + '</h2> evil power'],
+					"blank",
+					"blank",
+					"challenges",
+					"blank",
+				];
+				return [
+					"main-display",
+					"prestige-button",
+					"resource-display",
+					"blank",
+					["display-text", 'You have <h2 class="layer-ei">' + format(player.ei.power) + '</h2> evil power'],
+					"blank",
+					"milestones",
+					"upgrades",
+				];
+			},
+			unlocked() {
+				return hasMilestone('ei', 5);
+			},
+		},
+	},
 	milestones: {
 		0: {
 			requirementDescription: '2 total evil influence',
@@ -6198,6 +6223,15 @@ addLayer('ei', {
 			effectDescription: 'evil influence resets don\'t reset atoms',
 			done() { return player.ei.total.gte(303) && player.ei.power.gte(1e193) },
 			unlocked() { return hasMilestone('ei', 3) },
+		},
+		5: {
+			requirementDescription: '348 total evil influence and 1e245 evil power',
+			effectDescription() {
+				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'unlock the Gate of Evil';
+				return 'unlock the <b class="layer-ei' + getdark(this, "ref", true, true) + 'Gate of Evil';
+			},
+			done() { return player.ei.total.gte(348) && player.ei.power.gte(1e245) },
+			unlocked() { return hasMilestone('ei', 4) },
 		},
 	},
 	upgrades: {
@@ -6645,4 +6679,24 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 29 },
 		},
 	},
+	/*challenges: {
+		11: {
+			name() {
+				if (colorvalue[0][1]) return '<h3 class="layer-ei">Open the Gate';
+				return '<h3>Open the Gate';
+			},
+			challengeDescription: " - Resets evil influence milestones<br> - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Forces an evil influence reset<br> - Divides evil power gain by 1e20<br>",
+			goalDescription: '1e245 evil power<br>',
+			canComplete() {
+				return player.ei.power.gte(1e225);
+			},
+			onEnter() {
+				player.ei.milestones = [];
+				player.ei.upgrades = [];
+				player.ei.power = new Decimal(0);
+			},
+			rewardDescription: "unlocks something new...",
+			doReset: true,
+		},
+	},*/
 });
