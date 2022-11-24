@@ -899,7 +899,7 @@ addLayer('e', {
 			if (layers.e.buyables[11].canAfford()) {
 				layers.e.buyables[11].buy();
 			};
-			if (layers.e.buyables[12].canAfford()) {
+			if (layers.e.buyables[12].unlocked() && layers.e.buyables[12].canAfford()) {
 				layers.e.buyables[12].buy();
 			};
 		};
@@ -5034,7 +5034,7 @@ addLayer('d', {
 			display() {
 				lasteff = new Decimal(1e25);
 				if (challengeCompletions('r', 11) >= 5) lasteff = lasteff.mul(player.r.relic_effects[2]);
-				if (getBuyableAmount('d', 21).eq(0)) return 'use hexes and subatomic particles in a sacrificial ceremony to worship the gods. you will gain 0.75 devotion per sacrificial ceremony. each sacrificial ceremony also multiplies subatomic particle gain by 1.2, light gain by 1, and divides worship cost by 1e25<br>Currently: 1.00x,<br>1.00x,<br>and /1.00<br><br>Devotion Reward: 0.00<br><br>Cost: ' + formatWhole(this.cost_h()) + ' hexes,<br>' + formatWhole(this.cost_sp()) + ' subatomic particles<br><br>Ceremonies Performed: 0';
+				if (getBuyableAmount('d', 21).eq(0)) return 'use hexes and subatomic particles in a sacrificial ceremony to worship the gods. you will gain 0.75 devotion per sacrificial ceremony. each sacrificial ceremony also multiplies subatomic particle gain by 1.2, light gain by 1 (additive; others are multiplicative), and divides worship cost by 1e25<br>Currently: 1.00x,<br>1.00x,<br>and /1.00<br><br>Devotion Reward: 0.00<br><br>Cost: ' + formatWhole(this.cost_h()) + ' hexes,<br>' + formatWhole(this.cost_sp()) + ' subatomic particles<br><br>Ceremonies Performed: 0';
 				return 'use hexes and subatomic particles in a sacrificial ceremony to worship the gods. you will gain 0.75 devotion per sacrificial ceremony. each sacrificial ceremony also multiplies subatomic particle gain by 1.2, light gain by 1 (additive; others are multiplicative), and divides worship cost by 1e25<br>Currently: ' + format(new Decimal(1.2).pow(getBuyableAmount('d', 21))) + 'x,<br>' + format(getBuyableAmount('d', 21)) + 'x,<br>and /' + format(lasteff.pow(getBuyableAmount('d', 21))) + '<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 21).mul(0.75)) + '<br><br>Cost: ' + formatWhole(this.cost_h()) + ' hexes,<br>' + formatWhole(this.cost_sp()) + ' subatomic particles<br><br>Ceremonies Performed: ' + formatWhole(getBuyableAmount('d', 21));
 			},
 			style() {
@@ -5165,6 +5165,7 @@ addLayer('r', {
 			let gain = getPointGen(true).pow(0.001).div(10);
 			if (hasUpgrade('r', 13)) {
 				gain = upgradeEffect('r', 13);
+				if (new Decimal(tmp.w.effect[2]).gt(1)) gain = gain.mul(tmp.w.effect[2]);
 				softcaps.r_l[0][1] = new Decimal(0);
 				player.r.lightlastcap = new Decimal(0);
 			} else {
@@ -5181,6 +5182,7 @@ addLayer('r', {
 					player.r.lightlastcap = softcaps.r_l[0][1];
 					gain = gain.sub(sc_start0).pow(softcaps.r_l[0][1]).add(sc_start0);
 				};
+				if (new Decimal(tmp.w.effect[2]).gt(1)) gain = gain.mul(tmp.w.effect[2]);
 			};
 			gain = gain.add(lightboost);
 			player.r.lightgain = gain;
@@ -5243,7 +5245,7 @@ addLayer('r', {
 				else if (challengeCompletions('r', 11) == 13) text += '<br>Next reward: double the first activated relic effect';
 				else if (challengeCompletions('r', 11) == 14) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.2';
 				else if (challengeCompletions('r', 11) == 15) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.1';
-				else if (challengeCompletions('r', 11) == 16) text += '<br>Next reward: sanctum layer autobuyers buy 2x faster';
+				else if (challengeCompletions('r', 11) == 16) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work<br>twice as fast';
 				else if (challengeCompletions('r', 11) == 17) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.05';
 				else if (challengeCompletions('r', 11) == 18) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.02';
 				else if (challengeCompletions('r', 11) == 19) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.01';
@@ -5272,7 +5274,7 @@ addLayer('r', {
 				return text;
 			},
 			canComplete() {
-				return player.r.light.gte(player.r.lightreq);
+				return player.r.light.gte(player.r.lightreq) && challengeCompletions('r', 11) < this.completionLimit();
 			},
 			completionLimit() {
 				return player.r.points;
@@ -5329,19 +5331,14 @@ addLayer('r', {
 			fullDisplay() {
 				let text = '';
 				if (player.nerdMode) text += ' <br>formula: (x*36+1)^10';
-				return '<h3 class="layer-r' + getdark(this, "title-hasend") + 'Good Light</h3><br>(based on your good influence) sets light gain after softcap to:<br>' + format(this.effect()) + '/sec' + text + '<br><br>Cost: ' + format(1e26) + ' light';
+				return '<h3 class="layer-r' + getdark(this, "title-hasend") + 'Good Light</h3><br>(based on your good influence) sets base light gain after softcap to:<br>' + format(this.effect()) + '/sec' + text + '<br><br>Cost: free<br>WARNING: may decrease light gain';
 			},
-			canAfford() {
-				if (player.r.light.gte(1e26)) return true;
-				return false;
-			},
-			pay() {
-				player.r.light = player.r.light.sub(1e26);
-			},
+			canAfford() { return true },
+			pay() {},
 			effect() {
 				return player.gi.points.mul(36).add(1).pow(10);
 			},
-			unlocked() { return hasMilestone('gi', 0) && player.r.lightbest.gte(1e20) },
+			unlocked() { return hasMilestone('gi', 0) && player.r.lightbest.gte(1e24) },
 		},
 	},
 });
@@ -5407,6 +5404,7 @@ addLayer('m', {
 	},
 	doReset(resettingLayer) {
 		let keep = [];
+			if (hasMilestone('w', 0)) keep.push('milestones');
 			if (layers[resettingLayer].row > this.row) layerDataReset('m', keep);
 		},
 	update(diff) {
@@ -5712,7 +5710,7 @@ addLayer('m', {
 			fullDisplay() {
 				let text = '';
 				if (player.nerdMode) text += ' <br>formula: x*1000';
-				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'O<tag style="font-size:10px">3</tag>, aka Ozone</h3><br>multiplies demon soul based on your total unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e10) + ' atoms';
+				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'O<tag style="font-size:10px">3</tag>, aka Ozone</h3><br>multiplies demon soul gain based on your total unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e10) + ' atoms';
 			},
 			canAfford() {
 				if (player.a.points.gte(1e10)) return true;
@@ -5847,6 +5845,7 @@ addLayer('gi', {
 		best: new Decimal(0),
 		total: new Decimal(0),
 		req_devotion: new Decimal(1),
+		auto_buyables: false,
 	}},
 	color() {
 		if (player.r.points.gte(15) || player.gi.unlocked) return "#08FF87";
@@ -5872,6 +5871,16 @@ addLayer('gi', {
 		{key: 'G', description: 'Shift-G: Reset for good influence', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown(){return player.m.unlocked},
+	automate() {
+		if (hasMilestone('w', 0) && player.gi.auto_buyables) {
+			if (layers.gi.buyables[11].canAfford()) {
+				layers.gi.buyables[11].buy();
+			};
+			if (layers.gi.buyables[12].unlocked() && layers.gi.buyables[12].canAfford()) {
+				layers.gi.buyables[12].buy();
+			};
+		};
+	},
 	effect() {
 		let effBase = new Decimal(2);
 		if (getBuyableAmount('gi', 11).gt(0)) effBase = effBase.add(getBuyableAmount('gi', 11));
@@ -5887,7 +5896,7 @@ addLayer('gi', {
 		return text;
 	},
 	doReset(resettingLayer) {
-		let keep = [];
+		let keep = ['auto_buyables'];
 			if (layers[resettingLayer].row > this.row) layerDataReset('gi', keep);
 		},
 	resetsNothing() {
@@ -6821,10 +6830,10 @@ addLayer('w', {
 	],
 	layerShown(){return hasChallenge('ei', 21) || player.w.unlocked},
 	effect() {
-		return [new Decimal(1e10).pow(player.w.points), player.w.points.add(1).log10().add(1).pow(0.25)];
+		return [new Decimal(1e10).pow(player.w.points), player.w.points.add(1).log10().add(1).pow(0.333), player.w.points.add(1).pow(1.5)];
 	},
 	effectDescription() {
-		return 'which multiplies essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x and atom, sanctum, relic, molecule, good influence, and evil influence by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x';
+		return 'which multiplies essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x, atom, sanctum, relic, molecule, good influence, and evil influence by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x, and also light gain after softcap by <h2 class="layer-w">' + format(tmp.w.effect[2]) + '</h2>x';
 	},
 	doReset(resettingLayer) {
 		let keep = [];
@@ -6835,5 +6844,14 @@ addLayer('w', {
 		"prestige-button",
 		["display-text", () => { return 'You have ' + formatWhole(player.gi.points) + ' good influence<br>You have ' + formatWhole(player.ei.points) + ' evil influence<br><br>Your best wars is ' + formatWhole(player.w.best) + '<br>You have made a total of ' + formatWhole(player.w.total) + ' wars<br><br>After unlocking War, you can always buy max on all resources below this row.' }],
 		"blank",
+		"milestones",
 	],
+	milestones: {
+		0: {
+			requirementDescription: '1 war',
+			effectDescription: 'keep molecule milestones on war resets, and you can autobuy good influence buyables',
+			done() { return player.w.points.gte(1) },
+			toggles: [['gi', 'auto_buyables']],
+		},
+	},
 });
