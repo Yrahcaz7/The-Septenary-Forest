@@ -164,11 +164,11 @@ function doReset(layer, force=false) {
 			if (tmp[layer].baseAmount.lt(tmp[layer].nextAt)) return;
 			gain = (tmp[layer].canBuyMax ? gain : 1);
 		};
-		if (layers[layer].onPrestige)
-			run(layers[layer].onPrestige, layers[layer], gain);
+		if (layers[layer].onPrestige && !layers[layer].onPrestigeIsAfterGain) run(layers[layer].onPrestige, layers[layer], gain);
 		addPoints(layer, gain);
 		updateMilestones(layer);
 		updateAchievements(layer);
+		if (layers[layer].onPrestigeIsAfterGain) run(layers[layer].onPrestige, layers[layer], gain);
 		if (!player[layer].unlocked) {
 			player[layer].unlocked = true;
 			needCanvasUpdate = true;

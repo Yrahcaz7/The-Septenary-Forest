@@ -610,6 +610,20 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 132) },
 			color: '#08FF87',
 		},
+		134: {
+			name: 'Maximum Good',
+			done() {return player.gi.points.gte(1000)},
+			tooltip: 'obtain 1,000 good influence.',
+			unlocked() { return hasAchievement('A', 133) },
+			color: '#08FF87',
+		},
+		136: {
+			name: 'Science is not Holy',
+			done() {return player.gi.points.gte(10) && player.m.total.eq(0)},
+			tooltip: 'obtain 10 good influence with no molecules.',
+			unlocked() { return hasAchievement('A', 132) && hasAchievement('A', 151) },
+			color: '#08FF87',
+		},
 		141: {
 			name: 'Malevolent Evil',
 			done() {return player.ei.points.gte(1)},
@@ -629,6 +643,20 @@ addLayer('A', {
 			done() {return player.ei.points.gte(100)},
 			tooltip: 'obtain 100 evil influence.',
 			unlocked() { return hasAchievement('A', 142) },
+			color: '#FF4400',
+		},
+		144: {
+			name: 'Invasion of Evil',
+			done() {return player.ei.points.gte(1000)},
+			tooltip: 'obtain 1,000 evil influence.',
+			unlocked() { return hasAchievement('A', 143) },
+			color: '#FF4400',
+		},
+		146: {
+			name: 'Disbelievers',
+			done() {return player.ei.points.gte(10) && player.m.total.eq(0)},
+			tooltip: 'obtain 10 evil influence with no molecules.',
+			unlocked() { return hasAchievement('A', 142) && hasAchievement('A', 151) },
 			color: '#FF4400',
 		},
 		151: {
@@ -1549,7 +1577,7 @@ addLayer('q', {
 	hotkeys: [
 		{key: 'q', description: 'Q: Reset for quarks', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
-	layerShown() { return player.c.unlocked },
+	layerShown() { return player.c.unlocked || player.q.unlocked },
 	passiveGeneration() {
 		gen = 0;
 		if (hasMilestone('a', 8)) {
@@ -2014,7 +2042,7 @@ addLayer('sp', {
 	hotkeys: [
 		{key: 'S', description: 'Shift-S: Reset for subatomic particles', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
-	layerShown() { return player.q.unlocked },
+	layerShown() { return player.q.unlocked || player.sp.unlocked },
 	automate() {
 		if (hasMilestone('m', 4) && player.sp.auto_upgrades && hasUpgrade('h', 53)) {
 			buyUpgrade('sp', 11);
@@ -2233,7 +2261,7 @@ addLayer('h', {
 	hotkeys: [
 		{key: 'h', description: 'H: Reset for hexes', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
-	layerShown() { return player.sp.unlocked },
+	layerShown() { return player.sp.unlocked || player.h.unlocked },
 	passiveGeneration() {
 		let gen = 0;
 		if (hasMilestone('s', 9)) gen += 0.001;
@@ -2683,7 +2711,7 @@ addLayer('ds', {
 	hotkeys: [
 		{key: 'd', description: 'D: Reset for demon souls', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
-	layerShown() { return player.h.unlocked },
+	layerShown() { return player.h.unlocked || player.ds.unlocked },
 	passiveGeneration() {
 		let gen = 0;
 		if (hasMilestone('s', 10)) gen += 0.00001;
@@ -3022,7 +3050,7 @@ addLayer('a', {
 	hotkeys: [
 		{key: 'a', description: 'A: Reset for atoms', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
-	layerShown() { return player.ds.unlocked },
+	layerShown() { return player.ds.unlocked || player.a.unlocked },
 	automate() {
 		if (hasMilestone('gi', 11) && player.a.auto_upgrades) {
 			for (const id in layers.a.upgrades) {
@@ -3528,7 +3556,7 @@ addLayer('p', {
 	hotkeys: [
 		{key: 'p', description: 'P: Reset for prayers', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
-	layerShown() { return player.a.unlocked },
+	layerShown() { return player.a.unlocked || player.p.unlocked },
 	passiveGeneration() {
 		let gen = 0;
 		if (hasMilestone('s', 7)) {
@@ -4047,7 +4075,7 @@ addLayer('p', {
 			title() {
 				return '<b class="layer-p' + getdark(this, "title") + 'Divine Sanctums';
 			},
-			description: 'multiplies divinity gain (unaffected by softcaps) based on your sanctums',
+			description: 'multiplies divinity gain after the softcap based on your sanctums',
 			cost: 1.00e30,
 			effect() {
 				return player.s.points.mul(30).add(1).pow(0.95);
@@ -4162,7 +4190,7 @@ addLayer('s', {
 	hotkeys: [
 		{key: 's', description: 'S: Reset for sanctums', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
-	layerShown() { return player.p.unlocked },
+	layerShown() { return player.p.unlocked || player.s.unlocked },
 	effect() {
 		return new Decimal(2).pow(player.s.points);
 	},
@@ -4874,7 +4902,7 @@ addLayer('r', {
 	hotkeys: [
 		{key: 'r', description: 'R: Reset for relics', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
-	layerShown() { return player.s.unlocked },
+	layerShown() { return player.s.unlocked || player.r.unlocked },
 	effect() {
 		let effBoost1 = new Decimal(1);
 		let effex1 = new Decimal(1);
@@ -4910,10 +4938,21 @@ addLayer('r', {
 	},
 	doReset(resettingLayer) {
 		let keep = [];
+		let save = 0;
 			if (hasMilestone('m', 0) && resettingLayer == 'm') return;
 			if (hasMilestone('gi', 0) && resettingLayer == 'gi') return;
 			if (hasMilestone('ei', 0) && resettingLayer == 'ei') return;
+			if (hasMilestone('w', 2) && resettingLayer == 'w') {
+				save = +challengeCompletions('r', 11);
+				if (new Decimal(save).gt(player.r.points)) save = player.r.points.toNumber();
+			};
 			if (layers[resettingLayer].row > this.row) layerDataReset('r', keep);
+			if (save > 0) {
+				player.r.points = new Decimal(save);
+				player.r.best = new Decimal(save);
+				player.r.total = new Decimal(save);
+				player.r.challenges[11] = save;
+			};
 		},
 	update(diff) {
 		player.r.lightreq = new Decimal(20000).mul(new Decimal(5).pow(challengeCompletions('r', 11)));
@@ -5126,6 +5165,7 @@ addLayer('m', {
 		unique_nonextra: new Decimal(0),
 		unique_extra: new Decimal(0),
 		unique_total: new Decimal(0),
+		auto_upgrades: false,
 	}},
 	color: "#00CCCC",
 	requires: 30000,
@@ -5155,6 +5195,13 @@ addLayer('m', {
 		};
 		return gen;
 	},
+	automate() {
+		if (hasMilestone('w', 2) && player.m.auto_upgrades) {
+			for (const id in layers.m.upgrades) {
+				if (layers.m.upgrades[id].unlocked) buyUpgrade('m', id);
+			};
+		};
+	},
 	effect() {
 		let eff = player.m.best.mul(0.5).add(1).pow(0.99);
 		let sc_start0 = softcaps.m_eff[0][0];
@@ -5167,7 +5214,7 @@ addLayer('m', {
 		return 'which multiplies atom gain by <h2 class="layer-m">' + format(tmp.m.effect) + '</h2>x (based on best)' + softcap;
 	},
 	doReset(resettingLayer) {
-		let keep = [];
+		let keep = ['auto_upgrades'];
 			if (hasMilestone('w', 0) && resettingLayer == 'w') keep.push('milestones');
 			if (layers[resettingLayer].row > this.row) layerDataReset('m', keep);
 		},
@@ -5592,11 +5639,12 @@ addLayer('gi', {
 		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
 		return gain;
 	},
+	autoPrestige() { return hasMilestone('w', 1) },
 	row: 4,
 	hotkeys: [
 		{key: 'G', description: 'Shift-G: Reset for good influence', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
-	layerShown() { return player.m.unlocked },
+	layerShown() { return player.m.unlocked || player.gi.unlocked },
 	automate() {
 		if (hasMilestone('w', 0) && player.gi.auto_buyables) {
 			if (layers.gi.buyables[11].canAfford()) {
@@ -5850,6 +5898,7 @@ addLayer('ei', {
 		if (hasUpgrade('ei', 41)) gain = gain.mul(upgradeEffect('ei', 41));
 		if (hasUpgrade('ei', 54)) gain = gain.mul(upgradeEffect('ei', 54));
 		if (hasUpgrade('ei', 64)) gain = gain.mul(upgradeEffect('ei', 64));
+		if (hasChallenge('ei', 22)) gain = gain.mul(1.75);
 		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
 		return gain;
 	},
@@ -5857,7 +5906,7 @@ addLayer('ei', {
 	hotkeys: [
 		{key: 'E', description: 'Shift-E: Reset for evil influence', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
-	layerShown() { return player.gi.unlocked },
+	layerShown() { return player.gi.unlocked || player.ei.unlocked },
 	automate() {
 		if (hasMilestone('w', 1) && player.ei.auto_upgrades) {
 			for (const id in layers.ei.upgrades) {
@@ -5896,7 +5945,8 @@ addLayer('ei', {
 		return 'which generates <h2 class="layer-ei">' + formatSmall(tmp.ei.effect) + '</h2> evil power per second';
 	},
 	doReset(resettingLayer) {
-		let keep = [];
+		let keep = ['auto_upgrades'];
+			if (hasMilestone('w', 2) && resettingLayer == 'w') keep.push('milestones');
 			if (layers[resettingLayer].row > this.row) layerDataReset('ei', keep);
 		},
 	resetsNothing() { return hasChallenge('ei', 12) },
@@ -5946,7 +5996,7 @@ addLayer('ei', {
 				];
 			},
 			unlocked() {
-				return hasMilestone('ei', 5);
+				return hasMilestone('ei', 5) || player.ei.activeChallenge;
 			},
 		},
 	},
@@ -6410,7 +6460,7 @@ addLayer('ei', {
 				player.ei.upgrades = [];
 				player.ei.power = new Decimal(0);
 			},
-			rewardDescription: 'exponentiate evil influence<br>gain by ^1.075',
+			rewardDescription: 'exponentiate evil power<br>gain by ^1.075',
 			doReset: true,
 			noAutoExit: true,
 		},
@@ -6427,7 +6477,7 @@ addLayer('ei', {
 				player.ei.upgrades = [];
 				player.ei.power = new Decimal(0);
 			},
-			rewardDescription: 'evil influence resets nothing, all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>influence gain by ^1.075',
+			rewardDescription: 'evil influence resets nothing, all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>power gain by ^1.075',
 			doReset: true,
 			noAutoExit: true,
 		},
@@ -6449,6 +6499,30 @@ addLayer('ei', {
 				player.r.challenges[11] = 0;
 			},
 			rewardDescription: 'unlock Wars',
+			noAutoExit: true,
+		},
+		22: {
+			name() {
+				if (colorvalue[0][1]) return '<h3 class="layer-ei">And Repeat';
+				return '<h3>And Repeat';
+			},
+			challengeDescription() {
+				return 'Endure the negative effects of all the other <b class="layer-ei' + getdark(this, "ref", true, true) + 'Gate of Evil</b> challenges. It is recommended to turn the evil influence upgrade autobuyer off.<br>';
+			},
+			goalDescription: '1e500 evil power and 144 relics<br>',
+			canComplete() { return player.ei.power.gte('1e500') && player.r.points.gte(144) },
+			unlocked() { return hasChallenge('ei', 21) && hasMilestone('w', 1) },
+			onEnter() {
+				player.ei.milestones = [];
+				player.ei.upgrades = [];
+				player.ei.power = new Decimal(0);
+				player.r.points = new Decimal(0);
+				player.r.best = new Decimal(0);
+				player.r.total = new Decimal(0);
+				player.r.challenges[11] = 0;
+			},
+			rewardDescription: 'multiply evil influence gain<br>by 1.75x',
+			countsAs: [11, 12, 21],
 			noAutoExit: true,
 		},
 	},
@@ -6483,7 +6557,7 @@ addLayer('w', {
 		return 'Reset for +<b>' + formatWhole(this.getResetGain()) + '</b> wars<br><br>' + (player.w.points.lt(30) ? (this.canBuyMax() ? 'Next:' : 'Req:') : '') + ' ' + formatWhole(player.gi.points) + ' / ' + formatWhole(this.getNextAt()) + ' GI<br>and ' + formatWhole(player.ei.points) + ' / ' + formatWhole(this.getNextAt()) + ' EI';
 	},
 	canBuyMax() { return false },
-	onPrestige(gain) {
+	onPrestige() {
 		player.c.unlocked = false;
 		player.q.unlocked = false;
 		player.sp.unlocked = false;
@@ -6492,11 +6566,12 @@ addLayer('w', {
 		player.a.unlocked = false;
 		player.p.unlocked = false;
 		player.s.unlocked = false;
-		player.r.unlocked = false;
+		if (!hasMilestone('w', 2)) player.r.unlocked = false;
 		if (!hasMilestone('w', 0)) player.m.unlocked = false;
 		if (!hasMilestone('w', 1)) player.gi.unlocked = false;
-		player.ei.unlocked = false;
+		if (!hasMilestone('w', 2)) player.ei.unlocked = false;
 	},
+	onPrestigeIsAfterGain: true,
 	gainExp() {
 		let gain = new Decimal(1);
 		return gain;
@@ -6541,9 +6616,17 @@ addLayer('w', {
 		},
 		1: {
 			requirementDescription: '2 wars',
-			effectDescription: 'keep good influence milestones on war resets, and you can autobuy evil influence upgrades',
+			effectDescription() {
+				return 'keep good influence milestones on war resets, you can autobuy evil influence upgrades, perform good influence resets automatically, and unlock a new <b class="layer-ei' + getdark(this, "ref", true, true) + 'Gate of Evil</b> challenge';
+			},
 			done() { return player.w.points.gte(2) },
 			toggles: [['ei', 'auto_upgrades']],
+		},
+		2: {
+			requirementDescription: '3 wars',
+			effectDescription: 'keep evil influence milestones and activated relics on war resets, and you can autobuy molecule upgrades',
+			done() { return player.w.points.gte(3) },
+			toggles: [['m', 'auto_upgrades']],
 		},
 	},
 	bars: {
