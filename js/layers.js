@@ -577,15 +577,15 @@ addLayer('A', {
 		},
 		124: {
 			name: 'Plethora of Molecules',
-			done() {return player.m.points.gte(1e24)},
-			tooltip: 'obtain 1e24 molecules.',
+			done() {return player.m.points.gte(1e25)},
+			tooltip: 'obtain 1e25 molecules.',
 			unlocked() { return hasAchievement('A', 123) },
 			color: '#00CCCC',
 		},
 		125: {
 			name: 'Molecules are Everything',
-			done() {return player.m.points.gte(1e48)},
-			tooltip: 'obtain 1e48 molecules.',
+			done() {return player.m.points.gte(1e75)},
+			tooltip: 'obtain 1e75 molecules.',
 			unlocked() { return hasAchievement('A', 124) },
 			color: '#00CCCC',
 		},
@@ -678,6 +678,13 @@ addLayer('A', {
 			done() {return player.w.points.gte(10)},
 			tooltip: 'obtain 10 wars.',
 			unlocked() { return hasAchievement('A', 151) },
+			color: '#A0A0A0',
+		},
+		153: {
+			name: 'Ravaging War',
+			done() {return player.w.points.gte(100)},
+			tooltip: 'obtain 100 wars.',
+			unlocked() { return hasAchievement('A', 152) },
 			color: '#A0A0A0',
 		},
 	},
@@ -1624,6 +1631,7 @@ addLayer('q', {
 		if (hasMilestone('m', 5) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 3) && resettingLayer == 'gi') return;
 		if (hasMilestone('ei', 2) && resettingLayer == 'ei') return;
+		if (hasMilestone('w', 9) && resettingLayer == 'w') return;
 		let keep = ['auto_upgrades'];
 			if (hasMilestone('sp', 3) && resettingLayer == 'sp') keep.push("milestones");
 			if (hasMilestone('sp', 5) && resettingLayer == 'sp') keep.push("upgrades");
@@ -5136,6 +5144,7 @@ addLayer('m', {
 		let mult = new Decimal(1);
 		if (challengeCompletions('r', 11) >= 12) mult = mult.mul(player.r.relic_effects[0]);
 		if (new Decimal(tmp.w.effect[1]).gt(1)) mult = mult.mul(tmp.w.effect[1]);
+		if (getBuyableAmount('w', 21).gt(0)) mult = mult.mul(buyableEffect('w', 21));
 		return mult;
 	},
 	row: 4,
@@ -6633,8 +6642,13 @@ addLayer('w', {
 		},
 		8: {
 			requirementDescription: '9 wars',
-			effectDescription: 'war resets don\'t reset good influence',
+			effectDescription: 'war resets don\'t reset good influence, and unlock another war rebuyable',
 			done() { return player.w.points.gte(9) },
+		},
+		9: {
+			requirementDescription: '10 wars',
+			effectDescription: 'war resets don\'t reset quarks',
+			done() { return player.w.points.gte(10) },
 		},
 	},
 	bars: {
@@ -6692,7 +6706,8 @@ addLayer('w', {
 				if (getBuyableAmount('w', this.id).eq(2)) return new Decimal(196);
 				if (getBuyableAmount('w', this.id).lt(5)) return getBuyableAmount('w', this.id).mul(12).add(168);
 				if (getBuyableAmount('w', this.id).eq(5)) return new Decimal(218);
-				return getBuyableAmount('w', this.id).mul(11).add(159);
+				if (getBuyableAmount('w', this.id).eq(6)) return new Decimal(225);
+				return getBuyableAmount('w', this.id).mul(8).add(170);
 			},
 			title: '<h3 class="layer-w-dark">Relic Hoarding',
 			canAfford() {
@@ -6734,6 +6749,29 @@ addLayer('w', {
 				return 'multiplies good influence gain based on your sanctums and the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' sanctums<br><br>Bought: ' + formatWhole(getBuyableAmount('w', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			unlocked() { return hasMilestone('w', 4) },
+		},
+		21: {
+			cost() {
+				return getBuyableAmount('w', this.id).mul(5).add(235);
+			},
+			title: '<h3 class="layer-w-dark">Race for Knowledge',
+			canAfford() {
+				return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost());
+			},
+			buy() {
+				player.gi.points = player.gi.points.sub(this.cost());
+				player.ei.points = player.ei.points.sub(this.cost());
+				setBuyableAmount('w', this.id, getBuyableAmount('w', this.id).add(1));
+			},
+			effect() {
+				return getBuyableAmount('w', this.id).add(1).pow(2.5);
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formula: (x+1)^2.5';
+				return 'multiplies molecule gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' EI and ' + formatWhole(this.cost()) + ' GI<br><br>Bought: ' + formatWhole(getBuyableAmount('w', this.id));
+			},
+			unlocked() { return hasMilestone('w', 8) },
 		},
 	},
 });
