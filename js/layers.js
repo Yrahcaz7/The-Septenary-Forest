@@ -1489,7 +1489,7 @@ addLayer('c', {
 				setBuyableAmount('c', 11, getBuyableAmount('c', 11).add(1));
 			},
 			display() {
-				text = '';
+				let text = '';
 				if (player.nerdMode) text += '<br>formula: x*5+1';
 				if (getBuyableAmount('c', 11).eq(0)) return 'multiplies point gain based on the amount of this upgrade bought.<br>Currently: 1.00x' + text + '<br><br>Cost: 1 core<br><br>Bought: 0';
 				else return 'multiplies point gain based on the amount of this upgrade bought.<br>Currently: ' + format(getBuyableAmount('c', 11).mul(5).add(1)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cores<br><br>Bought: ' + formatWhole(getBuyableAmount('c', 11));
@@ -1510,7 +1510,7 @@ addLayer('c', {
 				setBuyableAmount('c', 12, getBuyableAmount('c', 12).add(1));
 			},
 			display() {
-				text = '';
+				let text = '';
 				if (player.nerdMode) text += '<br>formula: 2^x';
 				if (getBuyableAmount('c', 12).eq(0)) return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: 1.00x' + text + '<br><br>Cost: 1 core<br><br>Bought: 0';
 				else return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(new Decimal(2).pow(getBuyableAmount('c', 12))) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cores<br><br>Bought: ' + formatWhole(getBuyableAmount('c', 12));
@@ -2159,7 +2159,7 @@ addLayer('sp', {
 				setBuyableAmount('sp', 11, getBuyableAmount('sp', 11).add(1));
 			},
 			display() {
-				text = '';
+				let text = '';
 				if (player.nerdMode) {
 					if (hasUpgrade('sp', 11)) text += '<br>formulas: 5^x^2 and (x+1)^-1';
 					else text += '<br>formulas: 5^x and (x+1)^-1';
@@ -2180,7 +2180,7 @@ addLayer('sp', {
 				setBuyableAmount('sp', 12, getBuyableAmount('sp', 12).add(1));
 			},
 			display() {
-				text = '';
+				let text = '';
 				if (player.nerdMode) {
 					if (hasUpgrade('sp', 12)) text += '<br>formulas: 5^x^2 and (x+1)^-1';
 					else text += '<br>formulas: 5^x and (x+1)^-1';
@@ -2201,7 +2201,7 @@ addLayer('sp', {
 				setBuyableAmount('sp', 21, getBuyableAmount('sp', 21).add(1));
 			},
 			display() {
-				text = '';
+				let text = '';
 				if (player.nerdMode) {
 					if (hasUpgrade('sp', 13)) text += '<br>formulas: 5^x^2 and (x+1)^-1';
 					else text += '<br>formulas: 5^x and (x+1)^-1';
@@ -2919,7 +2919,7 @@ addLayer('ds', {
 				setBuyableAmount('ds', 11, getBuyableAmount('ds', 11).add(1));
 			},
 			display() {
-				text = '';
+				let text = '';
 				if (player.nerdMode) text = '<br>formulas: 2^x and x*5+1';
 				return 'multiplies hex gain (and also subatomic particle gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(new Decimal(2).pow(getBuyableAmount('ds', 11))) + 'x<br>and ' + format(getBuyableAmount('ds', 11).mul(5).add(1)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' demon souls<br><br>Bought: ' + formatWhole(getBuyableAmount('ds', 11));
 			},
@@ -4876,6 +4876,7 @@ addLayer('r', {
 		relic_effects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
 		sanctummult: new Decimal(1),
 		essencemult: new Decimal(1),
+		auto_activate: false,
 	}},
 	color: "#B9A975",
 	branches: ['gi'],
@@ -4903,6 +4904,12 @@ addLayer('r', {
 		{key: 'r', description: 'R: Reset for relics', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return player.s.unlocked || player.r.unlocked },
+	automate() {
+		if (hasMilestone('w', 3) && player.r.auto_activate) {
+			if (getLightGain().gt(player.r.lightgainbest)) player.r.lightgainbest = getLightGain();
+			if (this.challenges[11].canComplete()) player.r.challenges[11]++;
+		};
+	},
 	effect() {
 		let effBoost1 = new Decimal(1);
 		let effex1 = new Decimal(1);
@@ -4972,38 +4979,8 @@ addLayer('r', {
 		if (challengeCompletions('r', 11) >= 8) mult2 = mult2.mul(2);
 		player.r.relic_effects[2] = player.r.light.div(1000).add(1).pow(0.25).mul(mult2);
 		player.r.relic_effects[3] = player.r.light.pow(0.0021);
-		let lightboost = new Decimal(0);
-		if (hasMilestone('m', 17)) lightboost = player.r.lightgainbest.mul(0.1);
-		else if (hasMilestone('m', 16)) lightboost = player.r.lightgainbest.mul(0.05);
-		else if (hasMilestone('m', 15)) lightboost = player.r.lightgainbest.mul(0.025);
-		else if (hasMilestone('m', 7)) lightboost = player.r.lightgainbest.mul(0.01);
-		else if (hasMilestone('m', 3)) lightboost = player.r.lightgainbest.mul(0.001);
-		if (inChallenge('r', 11)) {
-			let gain = getPointGen(true).pow(0.001).div(10);
-			if (hasUpgrade('r', 13)) {
-				gain = upgradeEffect('r', 13);
-				if (new Decimal(tmp.w.effect[2]).gt(1)) gain = gain.mul(tmp.w.effect[2]);
-				softcaps.r_l[0][1] = new Decimal(0);
-				player.r.lightlastcap = new Decimal(0);
-			} else {
-				if (hasUpgrade('r', 11)) gain = gain.mul(upgradeEffect('r', 11));
-				if (hasUpgrade('r', 12)) gain = gain.mul(upgradeEffect('r', 12));
-				if (getBuyableAmount('d', 21).gt(0)) gain = gain.mul(getBuyableAmount('d', 21));
-				if (hasMilestone('s', 30)) gain = gain.mul(2);
-				if (hasMilestone('s', 41)) gain = gain.mul(3);
-				if (hasMilestone('s', 50)) gain = gain.mul(3);
-				if (hasMilestone('s', 52)) gain = gain.mul(3);
-				let sc_start0 = softcaps.r_l[0][0];
-				if (gain.gt(sc_start0)) {
-					softcaps.r_l[0][1] = gain.div(1e24).add(1).pow(-0.01);
-					player.r.lightlastcap = softcaps.r_l[0][1];
-					gain = gain.sub(sc_start0).pow(softcaps.r_l[0][1]).add(sc_start0);
-				};
-				if (new Decimal(tmp.w.effect[2]).gt(1)) gain = gain.mul(tmp.w.effect[2]);
-			};
-			gain = gain.add(lightboost);
-			player.r.lightgain = gain;
-		} else player.r.lightgain = lightboost;
+		if (inChallenge('r', 11)) player.r.lightgain = getLightGain();
+		else player.r.lightgain = getLightBoost();
 		player.r.light = player.r.light.add(player.r.lightgain.mul(diff));
 		if (player.r.light.gt(player.r.lightbest)) player.r.lightbest = player.r.light;
 		if (player.r.lightgain.gt(player.r.lightgainbest)) player.r.lightgainbest = player.r.lightgain;
@@ -5148,7 +5125,7 @@ addLayer('r', {
 			effect() {
 				return player.gi.points.mul(36).add(1).pow(10);
 			},
-			unlocked() { return hasMilestone('gi', 0) && player.r.lightbest.gte(1e24) },
+			unlocked() { return hasMilestone('gi', 0) && player.r.lightbest.gte(1e20) },
 		},
 	},
 });
@@ -5637,6 +5614,7 @@ addLayer('gi', {
 		if (player.gi.req_devotion.gt(1)) gain = gain.mul(player.gi.req_devotion);
 		if (hasUpgrade('ei', 24)) gain = gain.mul(upgradeEffect('ei', 24));
 		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
+		if (getBuyableAmount('w', 11).gt(0)) gain = gain.mul(buyableEffect('w', 11)[0]);
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('w', 1) },
@@ -5900,8 +5878,10 @@ addLayer('ei', {
 		if (hasUpgrade('ei', 64)) gain = gain.mul(upgradeEffect('ei', 64));
 		if (hasChallenge('ei', 22)) gain = gain.mul(1.75);
 		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
+		if (getBuyableAmount('w', 11).gt(0)) gain = gain.mul(buyableEffect('w', 11)[1]);
 		return gain;
 	},
+	autoPrestige() { return hasMilestone('w', 3) },
 	row: 4,
 	hotkeys: [
 		{key: 'E', description: 'Shift-E: Reset for evil influence', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
@@ -5947,6 +5927,7 @@ addLayer('ei', {
 	doReset(resettingLayer) {
 		let keep = ['auto_upgrades'];
 			if (hasMilestone('w', 2) && resettingLayer == 'w') keep.push('milestones');
+			if (hasMilestone('w', 3) && resettingLayer == 'w') keep.push('challenges');
 			if (layers[resettingLayer].row > this.row) layerDataReset('ei', keep);
 		},
 	resetsNothing() { return hasChallenge('ei', 12) },
@@ -6606,6 +6587,17 @@ addLayer('w', {
 				"milestones",
 			],
 		},
+		"Rivalry": {
+			content: [
+				"main-display",
+				"prestige-button",
+				["display-text", () => { return 'You have ' + formatWhole(player.gi.points) + ' good influence<br>You have ' + formatWhole(player.ei.points) + ' evil influence<br><br>Your best wars is ' + formatWhole(player.w.best) + '<br>You have made a total of ' + formatWhole(player.w.total) + ' wars<br><br>After unlocking War, you can always buy max on all resources below this row.' }],
+				"blank",
+				["bar", "tide"],
+				"blank",
+				"buyables",
+			],
+		},
 	},
 	milestones: {
 		0: {
@@ -6628,6 +6620,12 @@ addLayer('w', {
 			done() { return player.w.points.gte(3) },
 			toggles: [['m', 'auto_upgrades']],
 		},
+		3: {
+			requirementDescription: '4 wars',
+			effectDescription: 'keep evil influence challenge completions on war resets, you can automatically activate relics, and perform evil influence resets automatically',
+			done() { return player.w.points.gte(4) },
+			toggles: [['r', 'auto_activate']],
+		},
 	},
 	bars: {
 		tide: {
@@ -6635,8 +6633,8 @@ addLayer('w', {
 			width: 600,
 			height: 50,
 			display() {
-				if (player.gi.points.gt(player.ei.points)) return 'the tide currently favors the good';
-				if (player.ei.points.gt(player.gi.points)) return 'the tide currently favors the evil';
+				if (player.gi.points.gt(player.ei.points)) return 'the tide currently favors good by ' + format(player.ei.points.div(player.gi.points).neg().add(1).mul(100)) + '%';
+				if (player.ei.points.gt(player.gi.points)) return 'the tide currently favors evil by ' + format(player.gi.points.div(player.ei.points).neg().add(1).mul(100)) + '%';
 				return 'the tide currently favors neither good nor evil';
 			},
 			progress() {
@@ -6646,6 +6644,30 @@ addLayer('w', {
 			baseStyle: {'background-image':'linear-gradient(#08FF87, #AAFF00)'},
 			fillStyle:  {'background-image':'linear-gradient(#FF4400, #BA0035)'},
 			textStyle: {'color':'#000000'},
+		},
+	},
+	buyables: {
+		11: {
+			cost() {
+				return getBuyableAmount('w', 11).mul(32).add(108);
+			},
+			title: '<h3 class="layer-w-dark">Rivalry',
+			canAfford() {
+				return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost());
+			},
+			buy() {
+				player.gi.points = player.gi.points.sub(this.cost());
+				player.ei.points = player.ei.points.sub(this.cost());
+				setBuyableAmount('w', 11, getBuyableAmount('w', 11).add(1));
+			},
+			effect() {
+				return [getBuyableAmount('w', 11).add(1).pow(0.09), getBuyableAmount('w', 11).add(1).pow(0.21)];
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formulas: (x+1)^0.09<br>and (x+1)^0.21';
+				return 'multiplies good influence and evil influence gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()[0]) + 'x<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' EI and ' + formatWhole(this.cost()) + ' GI<br><br>Bought: ' + formatWhole(getBuyableAmount('w', 11));
+			},
 		},
 	},
 });

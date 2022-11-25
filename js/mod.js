@@ -55,6 +55,43 @@ function getDevotionBulk() {
 	return bulk;
 };
 
+function getLightBoost() {
+	let lightboost = new Decimal(0);
+	if (hasMilestone('m', 17)) lightboost = player.r.lightgainbest.mul(0.1);
+	else if (hasMilestone('m', 16)) lightboost = player.r.lightgainbest.mul(0.05);
+	else if (hasMilestone('m', 15)) lightboost = player.r.lightgainbest.mul(0.025);
+	else if (hasMilestone('m', 7)) lightboost = player.r.lightgainbest.mul(0.01);
+	else if (hasMilestone('m', 3)) lightboost = player.r.lightgainbest.mul(0.001);
+	return lightboost;
+};
+
+function getLightGain() {
+	let gain = getPointGen(true).pow(0.001).div(10);
+	if (hasUpgrade('r', 13)) {
+		gain = upgradeEffect('r', 13);
+		if (new Decimal(tmp.w.effect[2]).gt(1)) gain = gain.mul(tmp.w.effect[2]);
+		softcaps.r_l[0][1] = new Decimal(0);
+		player.r.lightlastcap = new Decimal(0);
+	} else {
+		if (hasUpgrade('r', 11)) gain = gain.mul(upgradeEffect('r', 11));
+		if (hasUpgrade('r', 12)) gain = gain.mul(upgradeEffect('r', 12));
+		if (getBuyableAmount('d', 21).gt(0)) gain = gain.mul(getBuyableAmount('d', 21));
+		if (hasMilestone('s', 30)) gain = gain.mul(2);
+		if (hasMilestone('s', 41)) gain = gain.mul(3);
+		if (hasMilestone('s', 50)) gain = gain.mul(3);
+		if (hasMilestone('s', 52)) gain = gain.mul(3);
+		let sc_start0 = softcaps.r_l[0][0];
+		if (gain.gt(sc_start0)) {
+			softcaps.r_l[0][1] = gain.div(1e24).add(1).pow(-0.01);
+			player.r.lightlastcap = softcaps.r_l[0][1];
+			gain = gain.sub(sc_start0).pow(softcaps.r_l[0][1]).add(sc_start0);
+		};
+		if (new Decimal(tmp.w.effect[2]).gt(1)) gain = gain.mul(tmp.w.effect[2]);
+	};
+	gain = gain.add(getLightBoost());
+	return gain;
+};
+
 function removeachievement(value) {
 	for (var i = 0; i < player.A.achievements.length; i++) {
 		if (player.A.achievements[i] == value) {
