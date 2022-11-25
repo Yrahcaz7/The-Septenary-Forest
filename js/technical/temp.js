@@ -144,7 +144,6 @@ function setupBuyables(layer) {
 		if (isPlainObject(layers[layer].buyables[id])) {
 			let b = layers[layer].buyables[id];
 			b.actualCostFunction = b.cost;
-			console.log("update " + layer + " " + id + " buyable");
 			b.cost = function(x) {
 				x = (x === undefined ? player[this.layer].buyables[this.id] : x);
 				return layers[this.layer].buyables[this.id].actualCostFunction(x);

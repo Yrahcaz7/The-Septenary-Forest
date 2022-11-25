@@ -687,6 +687,20 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 152) },
 			color: '#A0A0A0',
 		},
+		161: {
+			name: 'Life is Born',
+			done() {return player.cl.points.gte(1)},
+			tooltip: 'obtain 1 cellular life.',
+			unlocked() { return hasAchievement('A', 161) },
+			color: '#008800',
+		},
+		162: {
+			name: 'Life Blossoms',
+			done() {return player.cl.points.gte(10)},
+			tooltip: 'obtain 10 cellular life.',
+			unlocked() { return hasAchievement('A', 161) },
+			color: '#008800',
+		},
 	},
 });
 
@@ -1221,7 +1235,9 @@ addLayer('c', {
 	type: 'normal',
 	exponent: 0.3,
 	gainMult() {
+		// init
 		let mult = new Decimal(1);
+		// mul
 		if (hasUpgrade('e', 32)) mult = mult.mul(upgradeEffect('e', 32));
 		if (hasUpgrade('c', 12)) mult = mult.mul(upgradeEffect('c', 12));
 		if (hasUpgrade('q', 21)) {
@@ -1242,6 +1258,9 @@ addLayer('c', {
 		if (inChallenge('ds', 11)) mult = mult.mul(0.01);
 		if (inChallenge('ds', 21)) mult = mult.mul(0.000000000000001);
 		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
+		// pow
+		if (getBuyableAmount('cl', 11).gt(0)) mult = mult.pow(buyableEffect('cl', 11)[0]);
+		// return
 		return mult;
 	},
 	softcap: new Decimal("1e1250"),
@@ -3060,6 +3079,7 @@ addLayer('a', {
 		if (hasChallenge('ds', 22)) gain = gain.mul(1.5);
 		if (tmp.m.effect.gt(1)) gain = gain.mul(tmp.m.effect);
 		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
+		if (getBuyableAmount('cl', 11).gt(0)) gain = gain.mul(buyableEffect('cl', 11)[1]);
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('a', 15) },
@@ -4175,6 +4195,7 @@ addLayer('s', {
 		auto_worship: false,
 		auto_sacrifice: false,
 		auto_sacrificial_ceremony: false,
+		no_speed_but_more_bulk: false,
 	}},
 	color: "#AAFF00",
 	branches: ['r', 'gi'],
@@ -4210,7 +4231,7 @@ addLayer('s', {
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone('s', 12) && resettingLayer == 'a') return;
-		let keep = ["auto_worship", "auto_sacrifice", "auto_sacrificial_ceremony"];
+		let keep = ["auto_worship", "auto_sacrifice", "auto_sacrificial_ceremony", "no_speed_but_more_bulk"];
 			if (challengeCompletions('r', 11) >= 9 && resettingLayer == 'r') keep.push("milestones");
 			if (layers[resettingLayer].row > this.row) {
 				layerDataReset('s', keep);
@@ -4666,40 +4687,46 @@ addLayer('d', {
 	row: 2,
 	layerShown() { return false },
 	automate() {
-		if (hasMilestone('s', 19) && player.s.auto_worship) {
-			let work = 1;
-			if (hasMilestone('s', 44)) work *= 2;
-			if (hasMilestone('s', 46)) work *= 2;
-			if (hasMilestone('s', 51)) work *= 3;
-			if (challengeCompletions('r', 11) >= 17) work *= 2;
-			if (challengeCompletions('r', 11) >= 38) work *= 2;
-			if (hasMilestone('gi', 10)) work *= 2;
-			for (let index = 0; index < work; index++) {
-				if (!layers.d.buyables[11].canAfford()) break;
-				layers.d.buyables[11].buy();
+		if (hasMilestone('cl', 1) && player.s.no_speed_but_more_bulk) {
+			if (hasMilestone('s', 19) && player.s.auto_worship && layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
+			if (hasMilestone('s', 38) && player.s.auto_sacrifice && layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
+			if (hasMilestone('s', 28) && player.s.auto_sacrificial_ceremony && layers.d.buyables[21].canAfford()) layers.d.buyables[21].buy();
+		} else {
+			if (hasMilestone('s', 19) && player.s.auto_worship) {
+				let work = 1;
+				if (hasMilestone('s', 44)) work *= 2;
+				if (hasMilestone('s', 46)) work *= 2;
+				if (hasMilestone('s', 51)) work *= 3;
+				if (challengeCompletions('r', 11) >= 17) work *= 2;
+				if (challengeCompletions('r', 11) >= 38) work *= 2;
+				if (hasMilestone('gi', 10)) work *= 2;
+				for (let index = 0; index < work; index++) {
+					if (!layers.d.buyables[11].canAfford()) break;
+					layers.d.buyables[11].buy();
+				};
 			};
-		};
-		if (hasMilestone('s', 38) && player.s.auto_sacrifice) {
-			let work = 1;
-			if (challengeCompletions('r', 11) >= 17) work *= 2;
-			if (challengeCompletions('r', 11) >= 22) work *= 2;
-			if (challengeCompletions('r', 11) >= 23) work *= 1.5;
-			if (challengeCompletions('r', 11) >= 32) work *= 2;
-			if (challengeCompletions('r', 11) >= 38) work *= 2;
-			if (hasMilestone('gi', 10)) work *= 2;
-			for (let index = 0; index < work; index++) {
-				if (!layers.d.buyables[12].canAfford()) break;
-				layers.d.buyables[12].buy();
+			if (hasMilestone('s', 38) && player.s.auto_sacrifice) {
+				let work = 1;
+				if (challengeCompletions('r', 11) >= 17) work *= 2;
+				if (challengeCompletions('r', 11) >= 22) work *= 2;
+				if (challengeCompletions('r', 11) >= 23) work *= 1.5;
+				if (challengeCompletions('r', 11) >= 32) work *= 2;
+				if (challengeCompletions('r', 11) >= 38) work *= 2;
+				if (hasMilestone('gi', 10)) work *= 2;
+				for (let index = 0; index < work; index++) {
+					if (!layers.d.buyables[12].canAfford()) break;
+					layers.d.buyables[12].buy();
+				};
 			};
-		};
-		if (hasMilestone('s', 28) && player.s.auto_sacrificial_ceremony) {
-			let work = 1;
-			if (challengeCompletions('r', 11) >= 17) work *= 2;
-			if (challengeCompletions('r', 11) >= 38) work *= 2;
-			if (hasMilestone('gi', 10)) work *= 2;
-			for (let index = 0; index < work; index++) {
-				if (!layers.d.buyables[21].canAfford()) break;
-				layers.d.buyables[21].buy();
+			if (hasMilestone('s', 28) && player.s.auto_sacrificial_ceremony) {
+				let work = 1;
+				if (challengeCompletions('r', 11) >= 17) work *= 2;
+				if (challengeCompletions('r', 11) >= 38) work *= 2;
+				if (hasMilestone('gi', 10)) work *= 2;
+				for (let index = 0; index < work; index++) {
+					if (!layers.d.buyables[21].canAfford()) break;
+					layers.d.buyables[21].buy();
+				};
 			};
 		};
 	},
@@ -4935,6 +4962,7 @@ addLayer('r', {
 		if (hasMilestone('gi', 0) && resettingLayer == 'gi') return;
 		if (hasMilestone('ei', 0) && resettingLayer == 'ei') return;
 		if (hasMilestone('w', 5) && resettingLayer == 'w') return;
+		if (hasMilestone('cl', 1) && resettingLayer == 'cl') return;
 		let keep = ['auto_activate', 'auto_upgrade_1', 'auto_upgrade_2', 'auto_upgrade_3'];
 		let save = 0;
 			if (hasMilestone('w', 2) && resettingLayer == 'w') {
@@ -5134,6 +5162,7 @@ addLayer('m', {
 		auto_upgrades: false,
 	}},
 	color: "#00CCCC",
+	branches: ['cl'],
 	requires: 30000,
 	resource: 'molecules',
 	baseResource: 'atoms',
@@ -5589,6 +5618,7 @@ addLayer('gi', {
 		total: new Decimal(0),
 		req_devotion: new Decimal(1),
 		auto_buyables: false,
+		auto_prestige: false,
 	}},
 	color: "#08FF87",
 	branches: ['w'],
@@ -5608,7 +5638,7 @@ addLayer('gi', {
 		if (getBuyableAmount('w', 13).gt(0)) gain = gain.mul(buyableEffect('w', 13));
 		return gain;
 	},
-	autoPrestige() { return hasMilestone('w', 1) },
+	autoPrestige() { return hasMilestone('w', 1) && (!hasMilestone('cl', 0) || player.gi.auto_prestige) },
 	row: 4,
 	hotkeys: [
 		{key: 'G', description: 'Shift-G: Reset for good influence', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
@@ -5640,8 +5670,9 @@ addLayer('gi', {
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone('w', 8) && resettingLayer == 'w') return;
-		let keep = ['auto_buyables'];
+		let keep = ['auto_buyables', 'auto_prestige'];
 			if (hasMilestone('w', 1) && resettingLayer == 'w') keep.push('milestones');
+			if (hasMilestone('cl', 0) && resettingLayer == 'cl') keep.push('milestones');
 			if (layers[resettingLayer].row > this.row) layerDataReset('gi', keep);
 		},
 	resetsNothing() { return hasMilestone('gi', 16) },
@@ -5838,6 +5869,7 @@ addLayer('ei', {
 		total: new Decimal(0),
 		power: new Decimal(0),
 		auto_upgrades: false,
+		auto_prestige: false,
 	}},
 	color: "#FF4400",
 	branches: ['w'],
@@ -5872,7 +5904,7 @@ addLayer('ei', {
 		if (getBuyableAmount('w', 12).gt(0)) gain = gain.mul(buyableEffect('w', 12));
 		return gain;
 	},
-	autoPrestige() { return hasMilestone('w', 3) },
+	autoPrestige() { return hasMilestone('w', 3) && (!hasMilestone('cl', 0) || player.ei.auto_prestige) },
 	row: 4,
 	hotkeys: [
 		{key: 'E', description: 'Shift-E: Reset for evil influence', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
@@ -5916,9 +5948,10 @@ addLayer('ei', {
 		return 'which generates <h2 class="layer-ei">' + formatSmall(tmp.ei.effect) + '</h2> evil power per second';
 	},
 	doReset(resettingLayer) {
-		let keep = ['auto_upgrades'];
+		let keep = ['auto_upgrades', 'auto_prestige'];
 			if (hasMilestone('w', 2) && resettingLayer == 'w') keep.push('milestones');
 			if (hasMilestone('w', 3) && resettingLayer == 'w') keep.push('challenges');
+			if (hasMilestone('cl', 0) && resettingLayer == 'cl') keep.push('milestones');
 			if (layers[resettingLayer].row > this.row) layerDataReset('ei', keep);
 		},
 	resetsNothing() { return hasChallenge('ei', 12) },
@@ -6003,14 +6036,11 @@ addLayer('ei', {
 			unlocked() { return hasMilestone('ei', 3) },
 		},
 		5: {
-			requirementDescription() {
-				if (inChallenge('ei', 11)) return '348 total evil influence and 1e230 evil power';
-				return '348 total evil influence and 1e245 evil power';
-			},
+			requirementDescription: '348 total evil influence and 1e245 evil power',
 			effectDescription() {
 				return 'unlock the <b class="layer-ei' + getdark(this, "ref", true, true) + 'Gate of Evil';
 			},
-			done() { return inChallenge('ei', 11) ? player.ei.total.gte(348) && player.ei.power.gte(1e230) : player.ei.total.gte(348) && player.ei.power.gte(1e245) },
+			done() { return player.ei.total.gte(348) && player.ei.power.gte(1e245) },
 			unlocked() { return hasMilestone('ei', 4) },
 		},
 	},
@@ -6647,7 +6677,7 @@ addLayer('w', {
 		},
 		9: {
 			requirementDescription: '10 wars',
-			effectDescription: 'war resets don\'t reset quarks',
+			effectDescription: 'war resets don\'t reset quarks, and unlock cellular life',
 			done() { return player.w.points.gte(10) },
 		},
 	},
@@ -6673,30 +6703,28 @@ addLayer('w', {
 	buyables: {
 		11: {
 			cost() {
-				if (getBuyableAmount('w', 11).eq(0)) return new Decimal(108);
-				if (getBuyableAmount('w', 11).eq(1)) return new Decimal(124);
-				if (getBuyableAmount('w', 11).lt(4)) return getBuyableAmount('w', 11).mul(20).add(104);
-				if (getBuyableAmount('w', 11).eq(4)) return new Decimal(177);
-				if (getBuyableAmount('w', 11).eq(5)) return new Decimal(188);
-				if (getBuyableAmount('w', 11).eq(6)) return new Decimal(194);
-				return getBuyableAmount('w', 11).mul(5).add(163);
+				if (getBuyableAmount('w', this.id).eq(0)) return new Decimal(108);
+				if (getBuyableAmount('w', this.id).eq(1)) return new Decimal(124);
+				if (getBuyableAmount('w', this.id).lt(4)) return getBuyableAmount('w', this.id).mul(20).add(104);
+				if (getBuyableAmount('w', this.id).eq(4)) return new Decimal(177);
+				if (getBuyableAmount('w', this.id).eq(5)) return new Decimal(188);
+				if (getBuyableAmount('w', this.id).eq(6)) return new Decimal(194);
+				return getBuyableAmount('w', this.id).mul(5).add(163);
 			},
 			title: '<h3 class="layer-w-dark">Rivalry',
-			canAfford() {
-				return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost());
-			},
+			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) },
 			buy() {
 				player.gi.points = player.gi.points.sub(this.cost());
 				player.ei.points = player.ei.points.sub(this.cost());
-				setBuyableAmount('w', 11, getBuyableAmount('w', 11).add(1));
+				setBuyableAmount('w', this.id, getBuyableAmount('w', this.id).add(1));
 			},
 			effect() {
-				return [getBuyableAmount('w', 11).add(1).pow(0.09), getBuyableAmount('w', 11).add(1).pow(0.21)];
+				return [getBuyableAmount('w', this.id).add(1).pow(0.09), getBuyableAmount('w', this.id).add(1).pow(0.21)];
 			},
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formulas: (x+1)^0.09<br>and (x+1)^0.21';
-				return 'multiplies good influence and evil influence gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()[0]) + 'x<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' EI and ' + formatWhole(this.cost()) + ' GI<br><br>Bought: ' + formatWhole(getBuyableAmount('w', 11));
+				return 'multiplies good influence and evil influence gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()[0]) + 'x<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' EI and ' + formatWhole(this.cost()) + ' GI<br><br>Bought: ' + formatWhole(getBuyableAmount('w', this.id));
 			},
 		},
 		12: {
@@ -6710,9 +6738,7 @@ addLayer('w', {
 				return getBuyableAmount('w', this.id).mul(8).add(170);
 			},
 			title: '<h3 class="layer-w-dark">Relic Hoarding',
-			canAfford() {
-				return player.r.points.gte(this.cost());
-			},
+			canAfford() { return player.r.points.gte(this.cost()) },
 			buy() {
 				player.r.points = player.r.points.sub(this.cost());
 				setBuyableAmount('w', this.id, getBuyableAmount('w', this.id).add(1));
@@ -6732,9 +6758,7 @@ addLayer('w', {
 				return getBuyableAmount('w', this.id).mul(70000).add(320000);
 			},
 			title: '<h3 class="layer-w-dark">Power of Good',
-			canAfford() {
-				return player.s.points.gte(this.cost());
-			},
+			canAfford() { return player.s.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 3,
 			buy() {
 				player.s.points = player.s.points.sub(this.cost());
@@ -6764,14 +6788,107 @@ addLayer('w', {
 				setBuyableAmount('w', this.id, getBuyableAmount('w', this.id).add(1));
 			},
 			effect() {
-				return getBuyableAmount('w', this.id).add(1).pow(2.5);
+				return getBuyableAmount('w', this.id).add(1).pow(3.25);
 			},
 			display() {
 				let text = '';
-				if (player.nerdMode) text = '<br>formula: (x+1)^2.5';
+				if (player.nerdMode) text = '<br>formula: (x+1)^3.25';
 				return 'multiplies molecule gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' EI and ' + formatWhole(this.cost()) + ' GI<br><br>Bought: ' + formatWhole(getBuyableAmount('w', this.id));
 			},
 			unlocked() { return hasMilestone('w', 8) },
+		},
+	},
+});
+
+addLayer('cl', {
+	name: 'Cellular Life',
+	symbol: 'CL',
+	position: 2,
+	startData() { return {
+		unlocked: false,
+		points: new Decimal(0),
+		best: new Decimal(0),
+		total: new Decimal(0),
+	}},
+	color: "#008800",
+	requires: 1e25,
+	resource: 'cellular life',
+	baseResource: 'molecules',
+	baseAmount() { return player.m.points },
+	type: 'static',
+	base: 100,
+	exponent: 1,
+	canBuyMax() { return hasMilestone('cl', 0) },
+	gainExp() {
+		let gain = new Decimal(1);
+		return gain;
+	},
+	row: 5,
+	hotkeys: [
+		{key: 'C', description: 'Shift-C: Reset for cellular life', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+	],
+	layerShown() { return hasMilestone('w', 9) || player.cl.unlocked },
+	doReset(resettingLayer) {
+		let keep = [];
+			if (layers[resettingLayer].row > this.row) layerDataReset('cl', keep);
+		},
+	tabFormat: {
+		"Life Tracker": {
+			content: [
+				"main-display",
+				"prestige-button",
+				"resource-display",
+				"blank",
+				"milestones",
+			],
+		},
+		"Tissues": {
+			content: [
+				"main-display",
+				"prestige-button",
+				"resource-display",
+				"blank",
+				"buyables",
+			],
+		},
+	},
+	milestones: {
+		0: {
+			requirementDescription: '1 total cellular life',
+			effectDescription: 'keep good influence and evil influence milestones on cellular life resets, unlock options to toggle good influence and evil influence auto prestiges, and you can buy max cellular life',
+			done() { return player.cl.total.gte(1) },
+			toggles: [['ei', 'auto_prestige'], ['gi', 'auto_prestige']],
+		},
+		1: {
+			requirementDescription: '2 total cellular life',
+			effectDescription() {
+				return 'cellular life doesn\'t reset relics, and unlock option to disable exta <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyer speed, but make all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers bulk buy 100x';
+			},
+			done() { return player.cl.total.gte(2) },
+			toggles: [['s', 'no_speed_but_more_bulk']],
+		},
+	},
+	buyables: {
+		11: {
+			cost() {
+				return getBuyableAmount('cl', this.id).add(1);
+			},
+			title() {
+				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Nervous Tissue';
+			},
+			canAfford() { return player.cl.points.gte(this.cost()) },
+			buy() {
+				player.cl.points = player.cl.points.sub(this.cost());
+				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+			},
+			effect() {
+				return [getBuyableAmount('cl', this.id).add(1).pow(0.005), getBuyableAmount('cl', this.id).add(1).pow(0.25)];
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formulas: (x+1)^0.005<br>and (x+1)^0.25';
+				return 'exponentiates core gain and multiplies atom gain based on the amount of this upgrade bought.<br>Currently: ^' + format(this.effect()[0]) + '<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+			},
 		},
 	},
 });

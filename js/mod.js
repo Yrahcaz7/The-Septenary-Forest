@@ -9,8 +9,8 @@ let modInfo = {
 };
 
 let VERSION = {
-	num: '2.5',
-	name: 'War, War, and more War',
+	num: '3.1',
+	name: 'Finally, Life',
 };
 
 let winText = '<h3>You won the game!</h3><br>However, it isn\'t the end yet...<br>Wait for more updates for further content.';
@@ -53,6 +53,7 @@ function getDevotionBulk() {
 	if (hasMilestone('gi', 17)) bulk *= 2;
 	if (hasChallenge('ei', 12)) bulk *= 5;
 	if (hasMilestone('w', 2)) bulk *= 2;
+	if (hasMilestone('cl', 1) && player.s.no_speed_but_more_bulk) bulk *= 100;
 	return bulk;
 };
 
