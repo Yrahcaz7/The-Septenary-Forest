@@ -898,7 +898,7 @@ addLayer('e', {
 		if (hasUpgrade('m', 11)) mult = mult.mul(upgradeEffect('m', 11));
 		if (hasUpgrade('m', 22)) mult = mult.mul(upgradeEffect('m', 22));
 		if (getBuyableAmount('e', 11).gt(0)) mult = mult.mul(getBuyableAmount('e', 11).mul(2.5).add(1));
-		if (getBuyableAmount('e', 12).gt(0)) mult = mult.mul(getBuyableAmount('e', 12).mul(0.25).add(1));
+		if (getBuyableAmount('e', 12).gt(0)) mult = mult.mul(getBuyableAmount('e', 12).add(1).pow(0.25));
 		if (getBuyableAmount('c', 12).gt(0)) mult = mult.mul(new Decimal(2).pow(getBuyableAmount('c', 12)));
 		if (getBuyableAmount('sp', 12).gt(0)) {
 			mult = mult.mul(new Decimal(5).pow(getBuyableAmount('sp', 12)));
@@ -1206,8 +1206,8 @@ addLayer('e', {
 				setBuyableAmount('e', 12, getBuyableAmount('e', 12).add(1));
 			},
 			display() {
-				if (player.nerdMode) return 'multiplies core gain (and essence gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(getBuyableAmount('e', 12).add(1)) + 'x<br>and ' + format(getBuyableAmount('e', 12).pow(0.25).add(1)) + 'x<br>formulas: x+1 and x^0.25+1<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount('e', 12));
-				return 'multiplies core gain (and essence gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(getBuyableAmount('e', 12).add(1)) + 'x<br>and ' + format(getBuyableAmount('e', 12).pow(0.25).add(1)) + 'x<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount('e', 12));
+				if (player.nerdMode) return 'multiplies core gain (and essence gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(getBuyableAmount('e', 12).add(1)) + 'x<br>and ' + format(getBuyableAmount('e', 12).add(1).pow(0.25)) + 'x<br>formulas: x+1 and (x+1)^0.25<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount('e', 12));
+				return 'multiplies core gain (and essence gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(getBuyableAmount('e', 12).add(1)) + 'x<br>and ' + format(getBuyableAmount('e', 12).add(1).pow(0.25)) + 'x<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount('e', 12));
 			},
 			unlocked() { return player.e.total.gte(85194) || getBuyableAmount('e', 12).gt(0) },
 		},
@@ -1310,6 +1310,7 @@ addLayer('c', {
 		if (hasMilestone('gi', 2) && resettingLayer == 'gi') return;
 		if (hasMilestone('ei', 1) && resettingLayer == 'ei') return;
 		if (hasMilestone('w', 7) && resettingLayer == 'w') return;
+		if (hasMilestone('cl', 2) && resettingLayer == 'cl') return;
 		let keep = ['auto_upgrades', 'auto_buyables'];
 			if (hasMilestone('h', 2) && resettingLayer == 'h') keep.push("upgrades");
 			if (hasMilestone('h', 3) && resettingLayer == 'h') keep.push("buyables");
@@ -2731,7 +2732,9 @@ addLayer('ds', {
 	type: 'normal',
 	exponent: 0.05,
 	gainMult() {
+		// init
 		let mult = new Decimal(1);
+		// mul
 		if (hasUpgrade('a', 11)) mult = mult.mul(upgradeEffect('a', 11));
 		if (hasUpgrade('a', 42)) mult = mult.mul(upgradeEffect('a', 42));
 		if (hasUpgrade('a', 71)) mult = mult.mul(upgradeEffect('a', 71));
@@ -2740,6 +2743,9 @@ addLayer('ds', {
 		if (hasChallenge('ds', 11)) mult = mult.mul(player.ds.points.add(1).pow(0.25));
 		if (hasChallenge('ds', 12)) mult = mult.mul(player.h.points.add(1).pow(0.02));
 		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
+		// pow
+		if (getBuyableAmount('cl', 12).gt(0)) mult = mult.pow(buyableEffect('cl', 12)[0]);
+		// return
 		return mult;
 	},
 	row: 3,
@@ -2779,6 +2785,7 @@ addLayer('ds', {
 				saveupg.push(22);
 			};
 			if (hasMilestone('w', 4) && resettingLayer == 'w') keep.push("challenges");
+			if (hasMilestone('cl', 3) && resettingLayer == 'cl') keep.push("challenges");
 			if (layers[resettingLayer].row > this.row) {
 				layerDataReset('ds', keep);
 				player[this.layer].upgrades = saveupg;
@@ -5948,6 +5955,7 @@ addLayer('ei', {
 		return 'which generates <h2 class="layer-ei">' + formatSmall(tmp.ei.effect) + '</h2> evil power per second';
 	},
 	doReset(resettingLayer) {
+		if (hasMilestone('cl', 3) && resettingLayer == 'cl') return;
 		let keep = ['auto_upgrades', 'auto_prestige'];
 			if (hasMilestone('w', 2) && resettingLayer == 'w') keep.push('milestones');
 			if (hasMilestone('w', 3) && resettingLayer == 'w') keep.push('challenges');
@@ -6817,10 +6825,11 @@ addLayer('cl', {
 	baseAmount() { return player.m.points },
 	type: 'static',
 	base: 100,
-	exponent: 1,
+	exponent: 1.5,
 	canBuyMax() { return hasMilestone('cl', 0) },
 	gainExp() {
 		let gain = new Decimal(1);
+		if (getBuyableAmount('cl', 12).gt(0)) gain = gain.mul(buyableEffect('cl', 12)[1]);
 		return gain;
 	},
 	row: 5,
@@ -6862,10 +6871,22 @@ addLayer('cl', {
 		1: {
 			requirementDescription: '2 total cellular life',
 			effectDescription() {
-				return 'cellular life doesn\'t reset relics, and unlock option to disable exta <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyer speed, but make all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers bulk buy 100x';
+				return 'cellular life doesn\'t reset relics, unlock option to disable exta <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyer speed, but make all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers bulk buy 100x, and unlock another <b class="layer-cl' + getdark(this, "ref", true, true) + 'Tissue</b>';
 			},
 			done() { return player.cl.total.gte(2) },
 			toggles: [['s', 'no_speed_but_more_bulk']],
+		},
+		2: {
+			requirementDescription: '4 total cellular life',
+			effectDescription() {
+				return 'cellular life doesn\'t reset cores, and all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk buy 2x';
+			},
+			done() { return player.cl.total.gte(4) },
+		},
+		3: {
+			requirementDescription: '6 total cellular life',
+			effectDescription: 'cellular life doesn\'t reset evil influence, and keep demon soul challenge completions on cellular life resets',
+			done() { return player.cl.total.gte(6) },
 		},
 	},
 	buyables: {
@@ -6882,13 +6903,35 @@ addLayer('cl', {
 				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
 			},
 			effect() {
-				return [getBuyableAmount('cl', this.id).add(1).pow(0.005), getBuyableAmount('cl', this.id).add(1).pow(0.25)];
+				return [getBuyableAmount('cl', this.id).add(1).pow(0.02), getBuyableAmount('cl', this.id).add(1).pow(1.5)];
 			},
 			display() {
 				let text = '';
-				if (player.nerdMode) text = '<br>formulas: (x+1)^0.005<br>and (x+1)^0.25';
+				if (player.nerdMode) text = '<br>formulas: (x+1)^0.02<br>and (x+1)^1.5';
 				return 'exponentiates core gain and multiplies atom gain based on the amount of this upgrade bought.<br>Currently: ^' + format(this.effect()[0]) + '<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
 			},
+		},
+		12: {
+			cost() {
+				return getBuyableAmount('cl', this.id).add(1);
+			},
+			title() {
+				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Muscle Tissue';
+			},
+			canAfford() { return player.cl.points.gte(this.cost()) },
+			buy() {
+				player.cl.points = player.cl.points.sub(this.cost());
+				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+			},
+			effect() {
+				return [getBuyableAmount('cl', this.id).add(1).pow(0.01), getBuyableAmount('cl', this.id).add(1).pow(0.5)];
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formulas: (x+1)^0.01<br>and (x+1)^0.5';
+				return 'exponentiates demon soul gain and multiplies cellular life gain based on the amount of this upgrade bought.<br>Currently: ^' + format(this.effect()[0]) + '<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+			},
+			unlocked() { return getBuyableAmount('cl', 11).gt(0) },
 		},
 	},
 });

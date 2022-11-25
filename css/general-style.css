@@ -171,8 +171,8 @@ h1, h2, h3, b, input {
 }
 
 .layer-cl-dark {
-	color: #006600;
-	text-shadow: 0 0 10px #006600;
+	color: #004400;
+	text-shadow: 0 0 10px #004400;
 }
 
 /* These are styles for different states of components. You can make layer-specific versions with .c.locked, for example */
