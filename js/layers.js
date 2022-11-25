@@ -142,7 +142,7 @@ addLayer('A', {
 		26: {
 			name: 'Empty Soul',
 			done() {return player.e.points .gte(1e10) && getBuyableAmount('e', 11).eq(0) && getBuyableAmount('e', 12).eq(0)},
-			tooltip: 'obtain 1e10 essence with no essence buyables.',
+			tooltip: 'obtain 1e10 essence with no essence rebuyables.',
 			unlocked() { return hasAchievement('A', 22) && hasAchievement('A', 31) },
 			image() { if (hasAchievement('A', 26)) return "images/achievements/26.png" },
 			color: '#4CED13',
@@ -190,7 +190,7 @@ addLayer('A', {
 		36: {
 			name: 'Pointless Core',
 			done() {return player.c.points.gte(1e10) && getBuyableAmount('c', 11).eq(0) && getBuyableAmount('c', 12).eq(0) && player.q.total.eq(0)},
-			tooltip: 'obtain 1e10 cores with no core buyables and quarks.',
+			tooltip: 'obtain 1e10 cores with no core rebuyables and quarks.',
 			unlocked() { return hasAchievement('A', 32) && hasAchievement('A', 41) },
 			image() { if (hasAchievement('A', 36)) return "images/achievements/36.png" },
 			color: '#D2D237',
@@ -286,7 +286,7 @@ addLayer('A', {
 		56: {
 			name: 'Hollow Particles',
 			done() {return player.sp.points.gte(10) && getBuyableAmount('sp', 11).eq(0) && getBuyableAmount('sp', 12).eq(0) && getBuyableAmount('sp', 21).eq(0) && player.h.total.eq(0)},
-			tooltip: 'obtain 10 subatomic particles with no subatomic particle buyables and hexes.',
+			tooltip: 'obtain 10 subatomic particles with no subatomic particle rebuyables and hexes.',
 			unlocked() { return hasAchievement('A', 52) && hasAchievement('A', 61) },
 			image() { if (hasAchievement('A', 56)) return "images/achievements/56.png" },
 			color: '#710CC4',
@@ -334,7 +334,7 @@ addLayer('A', {
 		66: {
 			name: 'Same Old Tricks',
 			done() {return player.h.points.gte(1e10) && getBuyableAmount('c', 11).eq(0) && getBuyableAmount('c', 12).eq(0) && player.sp.total.eq(0)},
-			tooltip: 'obtain 1e10 hexes with no subatomic particles and core buyables.',
+			tooltip: 'obtain 1e10 hexes with no subatomic particles and core rebuyables.',
 			unlocked() { return hasAchievement('A', 62) && hasAchievement('A', 71) },
 			image() { if (hasAchievement('A', 66)) return "images/achievements/66.png" },
 			color: '#E36409',
@@ -382,7 +382,7 @@ addLayer('A', {
 		76: {
 			name: 'Occult Uprising',
 			done() {return player.ds.points.gte(1e10) && getBuyableAmount('ds', 11).eq(0) && player.a.total.eq(0)},
-			tooltip: 'obtain 1e10 demon souls with no demon soul buyables and atoms.',
+			tooltip: 'obtain 1e10 demon souls with no demon soul rebuyables and atoms.',
 			unlocked() { return hasAchievement('A', 72) && hasAchievement('A', 81) },
 			image() { if (hasAchievement('A', 76)) return "images/achievements/76.png" },
 			color: '#BA0035',
@@ -1315,7 +1315,7 @@ addLayer('c', {
 		},
 		2: {
 			requirementDescription: '500 cores',
-			effectDescription: 'keep essence buyables on core resets',
+			effectDescription: 'keep essence rebuyables on core resets',
 			done() { return player.c.points.gte(500) },
 		},
 		3: {
@@ -1652,7 +1652,7 @@ addLayer('q', {
 		},
 		2: {
 			requirementDescription: '250,000,000 quarks',
-			effectDescription: 'keep essence buyables on quark resets',
+			effectDescription: 'keep essence rebuyables on quark resets',
 			done() { return player.q.points.gte(250000000) }
 		},
 	},
@@ -2105,7 +2105,7 @@ addLayer('sp', {
 		},
 		4: {
 			requirementDescription: '5 subatomic particles',
-			effectDescription: 'keep essence buyables on subatomic particle resets',
+			effectDescription: 'keep essence rebuyables on subatomic particle resets',
 			done() { return player.sp.points.gte(5) }
 		},
 		5: {
@@ -2300,7 +2300,7 @@ addLayer('h', {
 		},
 		1: {
 			requirementDescription: '25 hexes',
-			effectDescription: 'keep essence buyables on hex resets',
+			effectDescription: 'keep essence rebuyables on hex resets',
 			done() { return player.h.points.gte(25) }
 		},
 		2: {
@@ -2310,12 +2310,12 @@ addLayer('h', {
 		},
 		3: {
 			requirementDescription: '625 hexes',
-			effectDescription: 'keep core buyables on hex resets',
+			effectDescription: 'keep core rebuyables on hex resets',
 			done() { return player.h.points.gte(625) }
 		},
 		4: {
 			requirementDescription: '3,125 hexes',
-			effectDescription: 'keep core upgrades and buyables on subatomic particle resets',
+			effectDescription: 'keep core upgrades and rebuyables on subatomic particle resets',
 			done() { return player.h.points.gte(3125) }
 		},
 		5: {
@@ -2743,6 +2743,7 @@ addLayer('ds', {
 				keep.push("challenges");
 				saveupg.push(22);
 			};
+			if (hasMilestone('w', 4) && resettingLayer == 'w') keep.push("challenges");
 			if (layers[resettingLayer].row > this.row) {
 				layerDataReset('ds', keep);
 				player[this.layer].upgrades = saveupg;
@@ -2791,7 +2792,7 @@ addLayer('ds', {
 	milestones: {
 		0: {
 			requirementDescription: '1 demon soul',
-			effectDescription: 'keep subatomic particle buyables on demon soul resets',
+			effectDescription: 'keep subatomic particle rebuyables on demon soul resets',
 			done() { return player.ds.points.gte(1) }
 		},
 		1: {
@@ -2811,7 +2812,7 @@ addLayer('ds', {
 		},
 		4: {
 			requirementDescription: '125 demon souls',
-			effectDescription: 'keep essence buyables on all resets',
+			effectDescription: 'keep essence rebuyables on all resets',
 			done() { return player.ds.points.gte(125) }
 		},
 		5: {
@@ -2821,7 +2822,7 @@ addLayer('ds', {
 		},
 		6: {
 			requirementDescription: '3,125 demon souls',
-			effectDescription: 'keep core buyables on demon soul resets',
+			effectDescription: 'keep core rebuyables on demon soul resets',
 			done() { return player.ds.points.gte(3125) }
 		},
 		7: {
@@ -3087,15 +3088,9 @@ addLayer('a', {
 				"blank",
 				["display-text",
 					function() {
-						text = 'When you buy one of these upgrades, you cannot buy<br>any upgrades that are not on its path. When you<br>do a row 4 reset, all atom upgrades will be reset.';
-						if (hasMilestone('a', 10)) {
-							if (!colorvalue[0][2] || colorvalue[1] == 'none') text += '<br><br>From the effect of the 11th atom milestone:<br>you can buy all atom upgrades.';
-							else text += '<br><br>From the effect of the <b class="layer-a' + getdark(this, "ref", true, true) + '11th atom milestone</b>:<br>you can buy all atom upgrades.';
-						};
-						if (hasMilestone('a', 12)) {
-							if (!colorvalue[0][2] || colorvalue[1] == 'none') text += '<br><br>From the effect of the 13th atom milestone:<br>row 4 resets do not reset atom upgrades.';
-							else text += '<br><br>From the effect of the <b class="layer-a' + getdark(this, "ref", true, true) + '13th atom milestone:</b><br>row 4 resets do not reset atom upgrades.';
-						};
+						let text = 'When you buy one of these upgrades, you cannot buy<br>any upgrades that are not on its path. When you<br>do a row 4 reset, all atom upgrades will be reset.';
+						if (hasMilestone('a', 10)) text += '<br><br>From the effect of the <b class="layer-a' + getdark(this, "ref", true, true) + '11th atom milestone</b>:<br>you can buy all atom upgrades.';
+						if (hasMilestone('a', 12)) text += '<br><br>From the effect of the <b class="layer-a' + getdark(this, "ref", true, true) + '13th atom milestone:</b><br>row 4 resets do not reset atom upgrades.';
 						return text;
 					}],
 				"blank",
@@ -3118,12 +3113,12 @@ addLayer('a', {
 	milestones: {
 		0: {
 			requirementDescription: '1 atom',
-			effectDescription: 'keep subatomic particle buyables on atom resets',
+			effectDescription: 'keep subatomic particle rebuyables on atom resets',
 			done() { return player.a.points.gte(1) }
 		},
 		1: {
 			requirementDescription: '2 atoms',
-			effectDescription: 'keep core buyables on atom resets',
+			effectDescription: 'keep core rebuyables on atom resets',
 			done() { return player.a.points.gte(2) }
 		},
 		2: {
@@ -4278,7 +4273,7 @@ addLayer('s', {
 		},
 		2: {
 			requirementDescription: '3 sanctums',
-			effectDescription: 'you can autobuy core buyables',
+			effectDescription: 'you can autobuy core rebuyables',
 			done() { return player.s.points.gte(3) },
 			toggles: [['c', 'auto_buyables']],
 		},
@@ -4338,7 +4333,6 @@ addLayer('s', {
 		13: {
 			requirementDescription: '19 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'unlock Devotion';
 				return 'unlock <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion';
 			},
 			done() { return player.s.points.gte(19) },
@@ -4346,7 +4340,6 @@ addLayer('s', {
 		14: {
 			requirementDescription: '22 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'unlock Sacrificial Ceremonies';
 				return 'unlock <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrificial Ceremonies';
 			},
 			done() { return player.s.points.gte(22) },
@@ -4367,7 +4360,6 @@ addLayer('s', {
 		17: {
 			requirementDescription: '26 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'divide Worship cost scaling by 15';
 				return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> cost scaling by 15';
 			},
 			done() { return player.s.points.gte(26) },
@@ -4376,7 +4368,6 @@ addLayer('s', {
 		18: {
 			requirementDescription: '27 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'increase Devotion effect exponent<br>0.3 --> 0.4';
 				return 'increase <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> effect exponent<br>0.3 --> 0.375';
 			},
 			done() { return player.s.points.gte(27) },
@@ -4385,7 +4376,6 @@ addLayer('s', {
 		19: {
 			requirementDescription: '30 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'you can auto Worship';
 				return 'you can auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship';
 			},
 			done() { return player.s.points.gte(30) },
@@ -4401,7 +4391,6 @@ addLayer('s', {
 		21: {
 			requirementDescription: '32 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'increase Devotion effect exponent<br>0.375 --> 0.45';
 				return 'increase <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> effect exponent<br>0.375 --> 0.45';
 			},
 			done() { return player.s.points.gte(32) },
@@ -4410,7 +4399,6 @@ addLayer('s', {
 		22: {
 			requirementDescription: '35 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'increase Devotion effect exponent<br>0.45 --> 0.55';
 				return 'increase <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> effect exponent<br>0.45 --> 0.55';
 			},
 			done() { return player.s.points.gte(35) },
@@ -4419,7 +4407,6 @@ addLayer('s', {
 		23: {
 			requirementDescription: '39 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'divide Worship cost scaling by 2';
 				return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> cost scaling by 2';
 			},
 			done() { return player.s.points.gte(39) },
@@ -4428,7 +4415,6 @@ addLayer('s', {
 		24: {
 			requirementDescription: '42 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'double Sacrifice\'s effect';
 				return 'double <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b>\'s effect';
 			},
 			done() { return player.s.points.gte(42) },
@@ -4443,7 +4429,6 @@ addLayer('s', {
 		26: {
 			requirementDescription: '44 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'divide Sacrifice cost scaling by 2';
 				return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> cost scaling by 2';
 			},
 			done() { return player.s.points.gte(44) },
@@ -4452,7 +4437,6 @@ addLayer('s', {
 		27: {
 			requirementDescription: '46 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'divide Sacrificial Ceremony<br>cost scaling by 2';
 				return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrificial Ceremony</b><br>cost scaling by 2';
 			},
 			done() { return player.s.points.gte(46) },
@@ -4461,7 +4445,6 @@ addLayer('s', {
 		28: {
 			requirementDescription: '49 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'you can auto perform<br>Sacrificial Ceremonies';
 				return 'you can auto perform<br><b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrificial Ceremonies';
 			},
 			done() { return player.s.points.gte(49) },
@@ -4471,7 +4454,6 @@ addLayer('s', {
 		29: {
 			requirementDescription: '50 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'divide Sacrificial Ceremony<br>cost scaling by 1.5';
 				return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrificial Ceremony</b><br>cost scaling by 1.5';
 			},
 			done() { return player.s.points.gte(50) },
@@ -4486,7 +4468,6 @@ addLayer('s', {
 		31: {
 			requirementDescription: '66 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'divide Sacrificial Ceremony<br>cost scaling by 1.2';
 				return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrificial Ceremony</b><br>cost scaling by 1.2';
 			},
 			done() { return player.s.points.gte(66) },
@@ -4495,7 +4476,6 @@ addLayer('s', {
 		32: {
 			requirementDescription: '69 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'divide Worship<br>cost by 1e100';
 				return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b><br>cost by 1e100';
 			},
 			done() { return player.s.points.gte(69) },
@@ -4504,7 +4484,6 @@ addLayer('s', {
 		33: {
 			requirementDescription: '70 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'divide Sacrifice<br>cost scaling by 1.6';
 				return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b><br>cost scaling by 1.6';
 			},
 			done() { return player.s.points.gte(70) },
@@ -4513,7 +4492,6 @@ addLayer('s', {
 		34: {
 			requirementDescription: '71 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'change Sacrifice\'s cost<br>to a requirement';
 				return 'change <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b>\'s cost<br>to a requirement';
 			},
 			done() { return player.s.points.gte(71) },
@@ -4522,7 +4500,6 @@ addLayer('s', {
 		35: {
 			requirementDescription: '72 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'increase Devotion effect exponent<br>0.55 --> 0.575';
 				return 'increase <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> effect exponent<br>0.55 --> 0.575';
 			},
 			done() { return player.s.points.gte(72) },
@@ -4531,7 +4508,6 @@ addLayer('s', {
 		36: {
 			requirementDescription: '77 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'increase Devotion effect exponent<br>0.575 --> 0.6';
 				return 'increase <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> effect exponent<br>0.575 --> 0.6';
 			},
 			done() { return player.s.points.gte(77) },
@@ -4540,7 +4516,6 @@ addLayer('s', {
 		37: {
 			requirementDescription: '80 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'divide Sacrifice<br>cost scaling by 2';
 				return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b><br>cost scaling by 2';
 			},
 			done() { return player.s.points.gte(80) },
@@ -4549,7 +4524,6 @@ addLayer('s', {
 		38: {
 			requirementDescription: '85 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'you can auto Sacrifice';
 				return 'you can auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice';
 			},
 			done() { return player.s.points.gte(85) },
@@ -4559,7 +4533,6 @@ addLayer('s', {
 		39: {
 			requirementDescription: '87 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'divide Sacrifice<br>cost scaling by 2';
 				return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b><br>cost scaling by 2';
 			},
 			done() { return player.s.points.gte(87) },
@@ -4568,7 +4541,6 @@ addLayer('s', {
 		40: {
 			requirementDescription: '96 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'divide Worship<br>cost scaling by 1.5';
 				return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b><br>cost scaling by 1.5';
 			},
 			done() { return player.s.points.gte(96) },
@@ -4583,7 +4555,6 @@ addLayer('s', {
 		42: {
 			requirementDescription: '110 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'divide Sacrificial Ceremony<br>cost scaling by 1.5';
 				return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrificial Ceremony</b><br>cost scaling by 1.5';
 			},
 			done() { return player.s.points.gte(110) },
@@ -4592,7 +4563,6 @@ addLayer('s', {
 		43: {
 			requirementDescription: '112 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'divide Sacrificial Ceremony<br>hex cost scaling by 3';
 				return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrificial Ceremony</b><br>hex cost scaling by 3';
 			},
 			done() { return player.s.points.gte(112) },
@@ -4601,7 +4571,6 @@ addLayer('s', {
 		44: {
 			requirementDescription: '120 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'auto Worship<br>works twice as fast';
 				return 'auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b><br>works twice as fast';
 			},
 			done() { return player.s.points.gte(120) },
@@ -4610,7 +4579,6 @@ addLayer('s', {
 		45: {
 			requirementDescription: '125 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'divide Sacrificial Ceremony<br>hex cost scaling by 4';
 				return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrificial Ceremony</b><br>hex cost scaling by 4';
 			},
 			done() { return player.s.points.gte(125) },
@@ -4619,7 +4587,6 @@ addLayer('s', {
 		46: {
 			requirementDescription: '140 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'auto Worship works<br>twice as fast (4x total)';
 				return 'auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> works<br>twice as fast (4x total)';
 			},
 			done() { return player.s.points.gte(140) },
@@ -4640,7 +4607,6 @@ addLayer('s', {
 		49: {
 			requirementDescription: '175 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'increase Devotion effect exponent<br>0.6 --> 0.625';
 				return 'increase <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> effect exponent<br>0.6 --> 0.625';
 			},
 			done() { return player.s.points.gte(175) },
@@ -4655,7 +4621,6 @@ addLayer('s', {
 		51: {
 			requirementDescription: '200 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'auto Worship works<br>thrice as fast (12x total)';
 				return 'auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> works<br>thrice as fast (12x total)';
 			},
 			done() { return player.s.points.gte(200) && hasMilestone('m', 8) },
@@ -4670,7 +4635,6 @@ addLayer('s', {
 		53: {
 			requirementDescription: '215 sanctums',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'increase Devotion effect exponent<br>0.625 --> 0.666';
 				return 'increase <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> effect exponent<br>0.625 --> 0.666';
 			},
 			done() { return player.s.points.gte(215) && hasMilestone('m', 8) },
@@ -4795,9 +4759,9 @@ addLayer('d', {
 				setBuyableAmount('d', 12, getBuyableAmount('d', 12).add(getDevotionBulk()));
 			},
 			display() {
-				if (hasMilestone('s', 34)) return 'use sanctums as a sacrifice to worship the gods. you will gain<br>1 devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by 2<br>Currently: ' + format(new Decimal(2).pow(getBuyableAmount('d', 12))) + 'x<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 12)) + '<br><br>Req: ' + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed: ' + formatWhole(getBuyableAmount('d', 12));
-				if (hasMilestone('s', 24)) return 'use sanctums as a sacrifice to worship the gods. you will gain<br>1 devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by 2<br>Currently: ' + format(new Decimal(2).pow(getBuyableAmount('d', 12))) + 'x<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 12)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed: ' + formatWhole(getBuyableAmount('d', 12));
-				return 'use sanctums as a sacrifice to worship the gods. you will gain<br>0.5 devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by 1.5<br>Currently: ' + format(new Decimal(1.5).pow(getBuyableAmount('d', 12))) + 'x<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 12).mul(0.5)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed: ' + formatWhole(getBuyableAmount('d', 12));
+				if (hasMilestone('s', 34)) return 'use sanctums as a sacrifice to worship the gods. you will gain<br>1 devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by 2<br>Currently: ' + format(new Decimal(2).pow(getBuyableAmount('d', 12))) + 'x<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 12)) + '<br><br>Req: ' + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed:' + (formatWhole(getBuyableAmount('d', 12)).length >= 8 ? '<br>' : ' ') + formatWhole(getBuyableAmount('d', 12));
+				if (hasMilestone('s', 24)) return 'use sanctums as a sacrifice to worship the gods. you will gain<br>1 devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by 2<br>Currently: ' + format(new Decimal(2).pow(getBuyableAmount('d', 12))) + 'x<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 12)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed:' + (formatWhole(getBuyableAmount('d', 12)).length >= 8 ? '<br>' : ' ') + formatWhole(getBuyableAmount('d', 12));
+				return 'use sanctums as a sacrifice to worship the gods. you will gain<br>0.5 devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by 1.5<br>Currently: ' + format(new Decimal(1.5).pow(getBuyableAmount('d', 12))) + 'x<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 12).mul(0.5)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed:' + (formatWhole(getBuyableAmount('d', 12)).length >= 8 ? '<br>' : ' ') + formatWhole(getBuyableAmount('d', 12));
 			},
 			style() {
 				backcolors = '#224400, #336600';
@@ -4877,6 +4841,9 @@ addLayer('r', {
 		sanctummult: new Decimal(1),
 		essencemult: new Decimal(1),
 		auto_activate: false,
+		auto_upgrade_1: false,
+		auto_upgrade_2: false,
+		auto_upgrade_3: false,
 	}},
 	color: "#B9A975",
 	branches: ['gi'],
@@ -4899,6 +4866,7 @@ addLayer('r', {
 		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
 		return gain;
 	},
+	autoPrestige() { return hasMilestone('w', 4) },
 	row: 3,
 	hotkeys: [
 		{key: 'r', description: 'R: Reset for relics', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
@@ -4909,6 +4877,9 @@ addLayer('r', {
 			if (getLightGain().gt(player.r.lightgainbest)) player.r.lightgainbest = getLightGain();
 			if (this.challenges[11].canComplete()) player.r.challenges[11]++;
 		};
+		if (hasMilestone('w', 4) && player.r.auto_upgrade_1 && layers.r.upgrades[11].unlocked) buyUpgrade('r', 11);
+		if (hasMilestone('w', 4) && player.r.auto_upgrade_2 && layers.r.upgrades[12].unlocked) buyUpgrade('r', 12);
+		if (hasMilestone('w', 4) && player.r.auto_upgrade_3 && layers.r.upgrades[13].unlocked) buyUpgrade('r', 13);
 	},
 	effect() {
 		let effBoost1 = new Decimal(1);
@@ -4944,11 +4915,12 @@ addLayer('r', {
 		return 'which makes <h3 class="layer-e">Essence Influence\'s</h3> hardcap start <h2 class="layer-r">' + format(tmp.r.effect) + '</h2>x later' + text[0] + ', multiplies sanctum gain by <h2 class="layer-r">' + format(player.r.sanctummult) + '</h2>x, and also multiplies ' + text[1] + 'essence gain by <h2 class="layer-r">' + format(player.r.essencemult) + '</h2>x';
 	},
 	doReset(resettingLayer) {
-		let keep = [];
+		if (hasMilestone('m', 0) && resettingLayer == 'm') return;
+		if (hasMilestone('gi', 0) && resettingLayer == 'gi') return;
+		if (hasMilestone('ei', 0) && resettingLayer == 'ei') return;
+		if (hasMilestone('w', 5) && resettingLayer == 'w') return;
+		let keep = ['auto_activate', 'auto_upgrade_1', 'auto_upgrade_2', 'auto_upgrade_3'];
 		let save = 0;
-			if (hasMilestone('m', 0) && resettingLayer == 'm') return;
-			if (hasMilestone('gi', 0) && resettingLayer == 'gi') return;
-			if (hasMilestone('ei', 0) && resettingLayer == 'ei') return;
 			if (hasMilestone('w', 2) && resettingLayer == 'w') {
 				save = +challengeCompletions('r', 11);
 				if (new Decimal(save).gt(player.r.points)) save = player.r.points.toNumber();
@@ -4961,6 +4933,7 @@ addLayer('r', {
 				player.r.challenges[11] = save;
 			};
 		},
+	resetsNothing() { return hasMilestone('w', 4) },
 	update(diff) {
 		player.r.lightreq = new Decimal(20000).mul(new Decimal(5).pow(challengeCompletions('r', 11)));
 		let mult0 = new Decimal(1);
@@ -4994,7 +4967,7 @@ addLayer('r', {
 		["display-text",
 			function() {
 				text = 'relic resets reset everything on lower rows exept prayer milestones. also, you can still buy max sanctums.<br><br>';
-				text += 'you have <h2 class="layer-r">' + player.r.points.sub(challengeCompletions('r', 11)) + '</h2> unactivated relics and <h2 class="layer-r">' + challengeCompletions('r', 11) + '</h2> activated relics';
+				text += 'you have <h2 class="layer-r">' + player.r.points.sub(challengeCompletions('r', 11)).max(0) + '</h2> unactivated relics and <h2 class="layer-r">' + challengeCompletions('r', 11) + '</h2> activated relics';
 				return text;
 			}],
 		"blank",
@@ -5237,7 +5210,7 @@ addLayer('m', {
 	milestones: {
 		0: {
 			requirementDescription: '1 molecule',
-			effectDescription: 'molecules don\'t reset relics, and<br>you can autobuy essence buyables',
+			effectDescription: 'molecules don\'t reset relics, and<br>you can autobuy essence rebuyables',
 			done() { return player.m.points.gte(1) },
 			toggles: [['e', 'auto_buyables']],
 		},
@@ -5260,7 +5233,7 @@ addLayer('m', {
 		},
 		4: {
 			requirementDescription: '5 total molecules',
-			effectDescription: 'molecules don\'t reset cores, and<br>you can autobuy subatomic<br>particle upgrades and buyables',
+			effectDescription: 'molecules don\'t reset cores, and<br>you can autobuy subatomic<br>particle upgrades and rebuyables',
 			done() { return player.m.total.gte(5) },
 			toggles: [['sp', 'auto_upgrades'], ['sp', 'auto_buyables']],
 		},
@@ -5272,7 +5245,7 @@ addLayer('m', {
 		},
 		6: {
 			requirementDescription: '10 total molecules',
-			effectDescription: 'you can autobuy demon soul buyables',
+			effectDescription: 'you can autobuy demon soul rebuyables',
 			done() { return player.m.total.gte(10) },
 			toggles: [['ds', 'auto_buyables']],
 		},
@@ -5289,7 +5262,6 @@ addLayer('m', {
 		9: {
 			requirementDescription: '50 total molecules',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'keep the 1st sanctum milestone<br>on molecule resets';
 				return 'keep the <b class="layer-s' + getdark(this, "ref", true, true) + '1st sanctum milestone</b><br>on molecule resets';
 			},
 			done() { return player.m.total.gte(50) },
@@ -5615,6 +5587,7 @@ addLayer('gi', {
 		if (hasUpgrade('ei', 24)) gain = gain.mul(upgradeEffect('ei', 24));
 		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
 		if (getBuyableAmount('w', 11).gt(0)) gain = gain.mul(buyableEffect('w', 11)[0]);
+		if (getBuyableAmount('w', 13).gt(0)) gain = gain.mul(buyableEffect('w', 13));
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('w', 1) },
@@ -5736,7 +5709,6 @@ addLayer('gi', {
 		10: {
 			requirementDescription: '18 good influence',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'all Devotion autobuyers work twice as fast';
 				return 'all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work twice as fast';
 			},
 			done() { return player.gi.points.gte(18) },
@@ -5752,7 +5724,6 @@ addLayer('gi', {
 		12: {
 			requirementDescription: '22 good influence and<br>555 total good influence',
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'increase Devotion\'s effect exponent<br>on good influence gain<br>0.2 --> 0.22';
 				return 'increase <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b>\'s effect exponent<br>on good influence gain<br>0.2 --> 0.22';
 			},
 			done() { return player.gi.points.gte(22) && player.gi.total.gte(555) },
@@ -5879,6 +5850,7 @@ addLayer('ei', {
 		if (hasChallenge('ei', 22)) gain = gain.mul(1.75);
 		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
 		if (getBuyableAmount('w', 11).gt(0)) gain = gain.mul(buyableEffect('w', 11)[1]);
+		if (getBuyableAmount('w', 12).gt(0)) gain = gain.mul(buyableEffect('w', 12));
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('w', 3) },
@@ -6017,7 +5989,6 @@ addLayer('ei', {
 				return '348 total evil influence and 1e245 evil power';
 			},
 			effectDescription() {
-				if (!colorvalue[0][2] || colorvalue[1] == 'none') return 'unlock the Gate of Evil';
 				return 'unlock the <b class="layer-ei' + getdark(this, "ref", true, true) + 'Gate of Evil';
 			},
 			done() { return inChallenge('ei', 11) ? player.ei.total.gte(348) && player.ei.power.gte(1e230) : player.ei.total.gte(348) && player.ei.power.gte(1e245) },
@@ -6539,6 +6510,7 @@ addLayer('w', {
 	},
 	canBuyMax() { return false },
 	onPrestige() {
+		if (hasMilestone('w', 5)) return;
 		player.c.unlocked = false;
 		player.q.unlocked = false;
 		player.sp.unlocked = false;
@@ -6559,7 +6531,7 @@ addLayer('w', {
 	},
 	row: 5,
 	tooltipLocked() {
-		return 'Reach 60 GI and 60 EI to unlock (You have ' + formatWhole(player.gi.points) + ' GI and ' + formatWhole(player.ei.points) + ' EI)';
+		return 'Reach ' + this.requires + ' GI and ' + this.requires + ' EI to unlock (You have ' + formatWhole(player.gi.points) + ' GI and ' + formatWhole(player.ei.points) + ' EI)';
 	},
 	hotkeys: [
 		{key: 'w', description: 'W: Reset for wars', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
@@ -6587,7 +6559,7 @@ addLayer('w', {
 				"milestones",
 			],
 		},
-		"Rivalry": {
+		"Influences": {
 			content: [
 				"main-display",
 				"prestige-button",
@@ -6602,7 +6574,7 @@ addLayer('w', {
 	milestones: {
 		0: {
 			requirementDescription: '1 war',
-			effectDescription: 'keep molecule milestones on war resets, and you can autobuy good influence buyables',
+			effectDescription: 'keep molecule milestones on war resets, and you can autobuy good influence rebuyables',
 			done() { return player.w.points.gte(1) },
 			toggles: [['gi', 'auto_buyables']],
 		},
@@ -6616,15 +6588,28 @@ addLayer('w', {
 		},
 		2: {
 			requirementDescription: '3 wars',
-			effectDescription: 'keep evil influence milestones and activated relics on war resets, and you can autobuy molecule upgrades',
+			effectDescription() {
+				return 'keep evil influence milestones and activated relics on war resets, you can autobuy molecule upgrades, and all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk buy 2x';
+			},
 			done() { return player.w.points.gte(3) },
 			toggles: [['m', 'auto_upgrades']],
 		},
 		3: {
 			requirementDescription: '4 wars',
-			effectDescription: 'keep evil influence challenge completions on war resets, you can automatically activate relics, and perform evil influence resets automatically',
+			effectDescription: 'keep evil influence challenge completions on war resets, you can automatically activate relics, perform evil influence resets automatically, and unlock another war rebuyable',
 			done() { return player.w.points.gte(4) },
 			toggles: [['r', 'auto_activate']],
+		},
+		4: {
+			requirementDescription: '5 wars',
+			effectDescription: 'keep demon soul challenge completions on war resets, you can autobuy individual relic upgrades, relics reset nothing, perform relic resets automatically, and unlock another war rebuyable',
+			done() { return player.w.points.gte(5) },
+			toggles: [['r', 'auto_upgrade_1'], ['r', 'auto_upgrade_2'], ['r', 'auto_upgrade_3']],
+		},
+		5: {
+			requirementDescription: '6 wars',
+			effectDescription: 'war resets don\'t reset relics, and keep everything unlocked on war resets',
+			done() { return player.w.points.gte(6) },
 		},
 	},
 	bars: {
@@ -6649,7 +6634,9 @@ addLayer('w', {
 	buyables: {
 		11: {
 			cost() {
-				return getBuyableAmount('w', 11).mul(32).add(108);
+				if (getBuyableAmount('w', 11).eq(0)) return new Decimal(108);
+				if (getBuyableAmount('w', 11).eq(1)) return new Decimal(124);
+				return getBuyableAmount('w', 11).mul(20).add(104);
 			},
 			title: '<h3 class="layer-w-dark">Rivalry',
 			canAfford() {
@@ -6668,6 +6655,50 @@ addLayer('w', {
 				if (player.nerdMode) text = '<br>formulas: (x+1)^0.09<br>and (x+1)^0.21';
 				return 'multiplies good influence and evil influence gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()[0]) + 'x<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' EI and ' + formatWhole(this.cost()) + ' GI<br><br>Bought: ' + formatWhole(getBuyableAmount('w', 11));
 			},
+		},
+		12: {
+			cost() {
+				return getBuyableAmount('w', 12).mul(15).add(171);
+			},
+			title: '<h3 class="layer-w-dark">Relic Hoarding',
+			canAfford() {
+				return player.r.points.gte(this.cost());
+			},
+			buy() {
+				player.r.points = player.r.points.sub(this.cost());
+				setBuyableAmount('w', 12, getBuyableAmount('w', 12).add(1));
+			},
+			effect() {
+				return player.r.points.add(1).pow(0.1).mul(getBuyableAmount('w', 12)).add(1).pow(0.25);
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formula: (((x+1)^0.1)*y+1)^0.25';
+				return 'multiplies evil influence gain based on your relics and the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' relics<br><br>Bought: ' + formatWhole(getBuyableAmount('w', 12));
+			},
+			unlocked() { return hasMilestone('w', 3) },
+		},
+		13: {
+			cost() {
+				return getBuyableAmount('w', this.id).mul(80000).add(320000);
+			},
+			title: '<h3 class="layer-w-dark">Power of Good',
+			canAfford() {
+				return player.s.points.gte(this.cost());
+			},
+			buy() {
+				player.s.points = player.s.points.sub(this.cost());
+				setBuyableAmount('w', this.id, getBuyableAmount('w', this.id).add(1));
+			},
+			effect() {
+				return player.s.points.add(1).pow(0.025).mul(getBuyableAmount('w', this.id)).add(1).pow(0.025);
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formula: (((x+1)^0.025)*y+1)^0.025';
+				return 'multiplies good influence gain based on your sanctums and the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' sanctums<br><br>Bought: ' + formatWhole(getBuyableAmount('w', this.id));
+			},
+			unlocked() { return hasMilestone('w', 4) },
 		},
 	},
 });

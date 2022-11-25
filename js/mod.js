@@ -52,6 +52,7 @@ function getDevotionBulk() {
 	if (challengeCompletions('r', 11) >= 41) bulk *= 10;
 	if (hasMilestone('gi', 17)) bulk *= 2;
 	if (hasChallenge('ei', 12)) bulk *= 5;
+	if (hasMilestone('w', 2)) bulk *= 2;
 	return bulk;
 };
 
