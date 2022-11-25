@@ -582,6 +582,13 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 123) },
 			color: '#00CCCC',
 		},
+		125: {
+			name: 'Molecules are Everything',
+			done() {return player.m.points.gte(1e48)},
+			tooltip: 'obtain 1e48 molecules.',
+			unlocked() { return hasAchievement('A', 124) },
+			color: '#00CCCC',
+		},
 		126: {
 			name: 'Shiny New Molecules',
 			done() {return player.m.points.gte(1000000) && player.r.total.eq(0)},
@@ -1276,6 +1283,7 @@ addLayer('c', {
 		if (hasMilestone('m', 4) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 2) && resettingLayer == 'gi') return;
 		if (hasMilestone('ei', 1) && resettingLayer == 'ei') return;
+		if (hasMilestone('w', 7) && resettingLayer == 'w') return;
 		let keep = ['auto_upgrades', 'auto_buyables'];
 			if (hasMilestone('h', 2) && resettingLayer == 'h') keep.push("upgrades");
 			if (hasMilestone('h', 3) && resettingLayer == 'h') keep.push("buyables");
@@ -5164,6 +5172,7 @@ addLayer('m', {
 		return 'which multiplies atom gain by <h2 class="layer-m">' + format(tmp.m.effect) + '</h2>x (based on best)' + softcap;
 	},
 	doReset(resettingLayer) {
+		if (hasMilestone('w', 6) && resettingLayer == 'w') return;
 		let keep = ['auto_upgrades'];
 			if (hasMilestone('w', 0) && resettingLayer == 'w') keep.push('milestones');
 			if (layers[resettingLayer].row > this.row) layerDataReset('m', keep);
@@ -5621,6 +5630,7 @@ addLayer('gi', {
 		return text;
 	},
 	doReset(resettingLayer) {
+		if (hasMilestone('w', 8) && resettingLayer == 'w') return;
 		let keep = ['auto_buyables'];
 			if (hasMilestone('w', 1) && resettingLayer == 'w') keep.push('milestones');
 			if (layers[resettingLayer].row > this.row) layerDataReset('gi', keep);
@@ -6611,6 +6621,21 @@ addLayer('w', {
 			effectDescription: 'war resets don\'t reset relics, and keep everything unlocked on war resets',
 			done() { return player.w.points.gte(6) },
 		},
+		6: {
+			requirementDescription: '7 wars',
+			effectDescription: 'war resets don\'t reset molecules',
+			done() { return player.w.points.gte(7) },
+		},
+		7: {
+			requirementDescription: '8 wars',
+			effectDescription: 'war resets don\'t reset cores',
+			done() { return player.w.points.gte(8) },
+		},
+		8: {
+			requirementDescription: '9 wars',
+			effectDescription: 'war resets don\'t reset good influence',
+			done() { return player.w.points.gte(9) },
+		},
 	},
 	bars: {
 		tide: {
@@ -6636,7 +6661,11 @@ addLayer('w', {
 			cost() {
 				if (getBuyableAmount('w', 11).eq(0)) return new Decimal(108);
 				if (getBuyableAmount('w', 11).eq(1)) return new Decimal(124);
-				return getBuyableAmount('w', 11).mul(20).add(104);
+				if (getBuyableAmount('w', 11).lt(4)) return getBuyableAmount('w', 11).mul(20).add(104);
+				if (getBuyableAmount('w', 11).eq(4)) return new Decimal(177);
+				if (getBuyableAmount('w', 11).eq(5)) return new Decimal(188);
+				if (getBuyableAmount('w', 11).eq(6)) return new Decimal(194);
+				return getBuyableAmount('w', 11).mul(5).add(163);
 			},
 			title: '<h3 class="layer-w-dark">Rivalry',
 			canAfford() {
@@ -6658,7 +6687,12 @@ addLayer('w', {
 		},
 		12: {
 			cost() {
-				return getBuyableAmount('w', 12).mul(15).add(171);
+				if (getBuyableAmount('w', this.id).eq(0)) return new Decimal(171);
+				if (getBuyableAmount('w', this.id).eq(1)) return new Decimal(186);
+				if (getBuyableAmount('w', this.id).eq(2)) return new Decimal(196);
+				if (getBuyableAmount('w', this.id).lt(5)) return getBuyableAmount('w', this.id).mul(12).add(168);
+				if (getBuyableAmount('w', this.id).eq(5)) return new Decimal(218);
+				return getBuyableAmount('w', this.id).mul(11).add(159);
 			},
 			title: '<h3 class="layer-w-dark">Relic Hoarding',
 			canAfford() {
@@ -6666,26 +6700,27 @@ addLayer('w', {
 			},
 			buy() {
 				player.r.points = player.r.points.sub(this.cost());
-				setBuyableAmount('w', 12, getBuyableAmount('w', 12).add(1));
+				setBuyableAmount('w', this.id, getBuyableAmount('w', this.id).add(1));
 			},
 			effect() {
-				return player.r.points.add(1).pow(0.1).mul(getBuyableAmount('w', 12)).add(1).pow(0.25);
+				return player.r.points.add(1).pow(0.1).mul(getBuyableAmount('w', this.id)).add(1).pow(0.25);
 			},
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: (((x+1)^0.1)*y+1)^0.25';
-				return 'multiplies evil influence gain based on your relics and the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' relics<br><br>Bought: ' + formatWhole(getBuyableAmount('w', 12));
+				return 'multiplies evil influence gain based on your relics and the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' relics<br><br>Bought: ' + formatWhole(getBuyableAmount('w', this.id));
 			},
 			unlocked() { return hasMilestone('w', 3) },
 		},
 		13: {
 			cost() {
-				return getBuyableAmount('w', this.id).mul(80000).add(320000);
+				return getBuyableAmount('w', this.id).mul(70000).add(320000);
 			},
 			title: '<h3 class="layer-w-dark">Power of Good',
 			canAfford() {
 				return player.s.points.gte(this.cost());
 			},
+			purchaseLimit: 3,
 			buy() {
 				player.s.points = player.s.points.sub(this.cost());
 				setBuyableAmount('w', this.id, getBuyableAmount('w', this.id).add(1));
@@ -6696,7 +6731,7 @@ addLayer('w', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: (((x+1)^0.025)*y+1)^0.025';
-				return 'multiplies good influence gain based on your sanctums and the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' sanctums<br><br>Bought: ' + formatWhole(getBuyableAmount('w', this.id));
+				return 'multiplies good influence gain based on your sanctums and the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' sanctums<br><br>Bought: ' + formatWhole(getBuyableAmount('w', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			unlocked() { return hasMilestone('w', 4) },
 		},
