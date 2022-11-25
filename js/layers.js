@@ -30,8 +30,8 @@ addLayer('A', {
 					text[0] += ' (formula: x*0.1+1)';
 					text[1] += ' (formula: x*0.2)';
 				};
-				if (hasUpgrade('ds', 23) && !hasUpgrade('ds', 24) && !hasUpgrade('p', 31)) text[2] += ' (formula: x^2/100)';
-				if (hasUpgrade('ds', 23) && hasUpgrade('ds', 24)) text[1] += ' (formula: x^2/100)';
+				if (hasUpgrade('ds', 23) && !hasUpgrade('ds', 24) && !hasUpgrade('p', 31)) text[2] += ' (formula: (x^2)/100)';
+				if (hasUpgrade('ds', 23) && hasUpgrade('ds', 24)) text[1] += ' (formula: (x^2)/100)';
 			} else text[0] += ' (formula: x*0.1+1)';
 			if (hasUpgrade('a', 51)) text[3] += ' (formula: x^1.25)';
 		};
@@ -865,7 +865,7 @@ addLayer('e', {
 	hotkeys: [
 		{key: 'e', description: 'E: Reset for essence', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
-	layerShown(){return true},
+	layerShown() { return true },
 	passiveGeneration() {
 		let gen = 0;
 		if (hasMilestone('c', 3)) {
@@ -2063,10 +2063,7 @@ addLayer('sp', {
 		if (new Decimal(tmp.w.effect[0]).gt(1)) gain = gain.mul(tmp.w.effect[0]);
 		return gain;
 	},
-	autoPrestige() {
-		if (hasMilestone('s', 11)) return true;
-		return false;
-	},
+	autoPrestige() { return hasMilestone('s', 11) },
 	row: 2,
 	hotkeys: [
 		{key: 'S', description: 'Shift-S: Reset for subatomic particles', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
@@ -3004,10 +3001,7 @@ addLayer('ds', {
 				};
 				return '<b>Potential Essence Potential';
 			},
-			canComplete() {
-				if (hasUpgrade('h', 64)) return true;
-				return false;
-			},
+			canComplete() { return hasUpgrade('h', 64) },
 			rewardDescription: "multiplies hex and demon soul gain based on your demon souls",
 			rewardDisplay() {
 				text = format(player.ds.points.add(1).pow(0.25)) + 'x';
@@ -3029,13 +3023,8 @@ addLayer('ds', {
 				};
 				return '<b>Sub Core Particle Fusion';
 			},
-			canComplete() {
-				if (hasUpgrade('h', 63)) return true;
-				return false;
-			},
-			unlocked() {
-				return hasChallenge('ds', 11);
-			},
+			canComplete() { return hasUpgrade('h', 63) },
+			unlocked() { return hasChallenge('ds', 11) },
 			rewardDescription: "multiply demon soul gain based on your hexes",
 			rewardDisplay() {
 				text = format(player.h.points.add(1).pow(0.02)) + 'x';
@@ -3057,13 +3046,8 @@ addLayer('ds', {
 				};
 				return '<b>Sub Core Particle Fusion';
 			},
-			canComplete() {
-				if (hasUpgrade('h', 53)) return true;
-				return false;
-			},
-			unlocked() {
-				return hasChallenge('ds', 12);
-			},
+			canComplete() { return hasUpgrade('h', 53) },
+			unlocked() { return hasChallenge('ds', 12) },
 			rewardDescription: "multiply subatomic particle<br>gain based on your demon souls",
 			rewardDisplay() {
 				text = format(player.ds.points.add(1).pow(0.2)) + 'x';
@@ -3082,13 +3066,8 @@ addLayer('ds', {
 				if (colorvalue[0][2]) return '<b class="layer-a">Famed Atom\'s Donations';
 				return '<b>Famed Atom\'s Donations';
 			},
-			canComplete() {
-				if (hasUpgrade('a', 51)) return true;
-				return false;
-			},
-			unlocked() {
-				return hasMilestone('a', 7);
-			},
+			canComplete() { return hasUpgrade('a', 51) },
+			unlocked() { return hasMilestone('a', 7) },
 			rewardDescription: "multiply atom gain by 1.5",
 			doReset: true,
 		},
@@ -3131,10 +3110,7 @@ addLayer('a', {
 		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
 		return gain;
 	},
-	autoPrestige() {
-		if (hasMilestone('a', 15)) return true;
-		return false;
-	},
+	autoPrestige() { return hasMilestone('a', 15) },
 	row: 3,
 	hotkeys: [
 		{key: 'a', description: 'A: Reset for atoms', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
@@ -3879,14 +3855,11 @@ addLayer('p', {
 		},
 		14: {
 			fullDisplay() {
-				text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Prayer Divination</h3><br>Req: 100 divinity with having 0 holiness';
+				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Prayer Divination</h3><br>Req: 100 divinity with having 0 holiness';
 				if (this.canAfford()) text += '<br><br><b>Requirements met!';
 				return text;
 			},
-			canAfford() {
-				if (player.p.divinity.gte(100) && player.p.holiness.eq(0)) return true;
-				return false;
-			},
+			canAfford() { return player.p.divinity.gte(100) && player.p.holiness.eq(0) },
 			style: {'height':'120px','border':'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
 			unlocked() { return hasMilestone('s', 0) && !hasUpgrade('p', 14) },
 		},
@@ -3895,10 +3868,7 @@ addLayer('p', {
 				if (player.nerdMode) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Prayer Divination</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x <br>formula: (x+1)^0.02<br><br>Cost: 75 divinity';
 				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Prayer Divination</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 75 divinity';
 			},
-			canAfford() {
-				if (player.p.divinity.gte(75)) return true;
-				return false;
-			},
+			canAfford() { return player.p.divinity.gte(75) },
 			pay() {
 				player.p.divinity = player.p.divinity.sub(75);
 			},
@@ -3912,10 +3882,7 @@ addLayer('p', {
 				if (player.nerdMode) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine Prayers</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x <br>formula: (x+1)^0.01<br><br>Cost: 20 divinity';
 				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine Prayers</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 20 divinity';
 			},
-			canAfford() {
-				if (player.p.divinity.gte(20)) return true;
-				return false;
-			},
+			canAfford() { return player.p.divinity.gte(20) },
 			pay() {
 				player.p.divinity = player.p.divinity.sub(20);
 			},
@@ -3924,22 +3891,19 @@ addLayer('p', {
 			},
 		},
 		22: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Light</h3><br>unlocks <b class="layer-p' + getdark(this, "ref", true) + 'holiness</b><br><br>Cost: 45 divinity';
+			fullDisplay() {
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Light</h3><br>unlocks <b class="layer-p' + getdark(this, "ref", true) + 'holiness</b><br><br>Cost: 45 divinity';
 			},
-			canAfford() {
-				if (player.p.divinity.gte(45)) return true;
-				return false;
-			},
+			canAfford() { return player.p.divinity.gte(45) },
 			pay() {
 				player.p.divinity = player.p.divinity.sub(45);
 			},
 		},
 		23: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Channeling</h3><br>increases efficiency of holiness conversion<br>0.04x --> 0.06x<br><br>Cost: 10 holiness' },
-			canAfford() {
-				if (player.p.holiness.gte(10)) return true;
-				return false;
+			fullDisplay() {
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Channeling</h3><br>increases efficiency of holiness conversion<br>0.04x --> 0.06x<br><br>Cost: 10 holiness';
 			},
+			canAfford() { return player.p.holiness.gte(10) },
 			pay() {
 				player.p.holiness = player.p.holiness.sub(10);
 			},
@@ -3947,35 +3911,29 @@ addLayer('p', {
 		},
 		24: {
 			fullDisplay() {
-				text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Holy Conversion</h3><br>Req: 75 holiness without owning <b class="layer-p' + getdark(this, "ref", true, true) + 'Church Relics</b>';
+				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Holy Conversion</h3><br>Req: 75 holiness without owning <b class="layer-p' + getdark(this, "ref", true, true) + 'Church Relics</b>';
 				if (this.canAfford()) text += '<br><br><b>Requirements met!';
 				return text;
 			},
-			canAfford() {
-				if (player.p.holiness.gte(75) && !hasUpgrade('p', 31)) return true;
-				return false;
-			},
+			canAfford() { return player.p.holiness.gte(75) && !hasUpgrade('p', 31) },
 			style: {'height':'120px','border':'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
 			unlocked() { return hasMilestone('s', 0) && hasUpgrade('p', 22) && !hasUpgrade('p', 24) },
 		},
 		25: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Conversion</h3><br>increases efficiency of holiness conversion if you own <b class="layer-p' + getdark(this, "ref", true) + 'Holy Channeling</b><br>0.06x --> 0.08x<br><br>Cost: 50 holiness';
+			fullDisplay() {
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Conversion</h3><br>increases efficiency of holiness conversion if you own <b class="layer-p' + getdark(this, "ref", true) + 'Holy Channeling</b><br>0.06x --> 0.08x<br><br>Cost: 50 holiness';
 			},
-			canAfford() {
-				if (player.p.holiness.gte(50)) return true;
-				return false;
-			},
+			canAfford() { return player.p.holiness.gte(50) },
 			pay() {
 				player.p.holiness = player.p.holiness.sub(50);
 			},
 			unlocked() { return hasUpgrade('p', 24) },
 		},
 		31: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Church Relics</h3><br>achievements also multiply prayer gain if you have all subsequent achievement upgrades<br><br>Cost: 175 divinity,<br>40 holiness' },
-			canAfford() {
-				if (player.p.divinity.gte(175) && player.p.holiness.gte(40)) return true;
-				return false;
+			fullDisplay() {
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Church Relics</h3><br>achievements also multiply prayer gain if you have all subsequent achievement upgrades<br><br>Cost: 175 divinity,<br>40 holiness';
 			},
+			canAfford() { return player.p.divinity.gte(175) && player.p.holiness.gte(40) },
 			pay() {
 				player.p.divinity = player.p.divinity.sub(175);
 				player.p.holiness = player.p.holiness.sub(40);
@@ -3988,10 +3946,7 @@ addLayer('p', {
 				if (player.nerdMode) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine Synergy</h3><br>multiplies divinity gain based on your holiness<br>Currently: ' + format(this.effect()) + 'x <br>formula: (x+1)^0.025<br><br>Cost: 750 divinity,<br>50 holiness';
 				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine Synergy</h3><br>multiplies divinity gain based on your holiness<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 750 divinity,<br>50 holiness';
 			},
-			canAfford() {
-				if (player.p.divinity.gte(750) && player.p.holiness.gte(50)) return true;
-				return false;
-			},
+			canAfford() { return player.p.divinity.gte(750) && player.p.holiness.gte(50) },
 			pay() {
 				player.p.divinity = player.p.divinity.sub(750);
 				player.p.holiness = player.p.holiness.sub(50);
@@ -4005,9 +3960,7 @@ addLayer('p', {
 			title() {
 				return '<b class="layer-p' + getdark(this, "title") + 'Divine Recursion';
 			},
-			description() {
-				return 'multiplies divinity gain based on your divinity';
-			},
+			description: 'multiplies divinity gain based on your divinity',
 			cost: 1000,
 			effect() {
 				return player.p.divinity.add(1).pow(0.2);
@@ -4020,34 +3973,29 @@ addLayer('p', {
 		},
 		34: {
 			fullDisplay() {
-				text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Holy Shift</h3><br>Req: 1,000 holiness with 0 hymns';
+				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Holy Shift</h3><br>Req: 1,000 holiness with 0 hymns';
 				if (this.canAfford()) text += '<br><br><b>Requirements met!';
 				return text;
 			},
-			canAfford() {
-				if (player.p.holiness.gte(1000) && player.p.hymn.eq(0)) return true;
-				return false;
-			},
+			canAfford() { return player.p.holiness.gte(1000) && player.p.hymn.eq(0) },
 			style: {'height':'120px','border':'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
 			unlocked() { return hasMilestone('s', 0) && hasUpgrade('p', 22) && !hasUpgrade('p', 34) },
 		},
 		35: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Shift</h3><br>increases efficiency of holiness conversion if you own <b class="layer-p' + getdark(this, "ref", true) + 'Holy Conversion</b> and all subsequent upgrades<br>0.08x --> 0.11x<br><br>Cost: 500 holiness' },
-			canAfford() {
-				if (player.p.holiness.gte(500)) return true;
-				return false;
+			fullDisplay() {
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Shift</h3><br>increases efficiency of holiness conversion if you own <b class="layer-p' + getdark(this, "ref", true) + 'Holy Conversion</b> and all subsequent upgrades<br>0.08x --> 0.11x<br><br>Cost: 500 holiness';
 			},
+			canAfford() { return player.p.holiness.gte(500) },
 			pay() {
 				player.p.holiness = player.p.holiness.sub(500);
 			},
 			unlocked() { return hasUpgrade('p', 34) },
 		},
 		41: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Written hymns</h3><br>unlocks <b class="layer-p' + getdark(this, "ref", true) + 'hymns</b><br><br>Cost: 2,000 divinity,<br>450 holiness' },
-			canAfford() {
-				if (player.p.divinity.gte(2000) && player.p.holiness.gte(450)) return true;
-				return false;
+			fullDisplay() {
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Written hymns</h3><br>unlocks <b class="layer-p' + getdark(this, "ref", true) + 'hymns</b><br><br>Cost: 2,000 divinity,<br>450 holiness';
 			},
+			canAfford() { return player.p.divinity.gte(2000) && player.p.holiness.gte(450) },
 			pay() {
 				player.p.divinity = player.p.divinity.sub(2000);
 				player.p.holiness = player.p.holiness.sub(450);
@@ -4058,30 +4006,26 @@ addLayer('p', {
 			fullDisplay() {
 				if (player.nerdMode) {
 					if (hasUpgrade('p', 45)) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine hymns</h3><br>multiplies divinity gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x <br>formula: (x+1)^0.125<br><br>Cost: 1,000 holiness,<br>75 hymns';
-					else return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine hymns</h3><br>multiplies divinity gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x <br>formula: (x+1)^0.1<br><br>Cost: 1,000 holiness,<br>75 hymns';
+					return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine hymns</h3><br>multiplies divinity gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x <br>formula: (x+1)^0.1<br><br>Cost: 1,000 holiness,<br>75 hymns';
 				};
 				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine hymns</h3><br>multiplies divinity gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 1,000 holiness,<br>75 hymns';
 			},
-			canAfford() {
-				if (player.p.holiness.gte(1000) && player.p.hymn.gte(75)) return true;
-				return false;
-			},
+			canAfford() { return player.p.holiness.gte(1000) && player.p.hymn.gte(75) },
 			pay() {
 				player.p.holiness = player.p.holiness.sub(1000);
 				player.p.hymn = player.p.hymn.sub(75);
 			},
 			effect() {
 				if (hasUpgrade('p', 45)) return player.p.hymn.add(1).pow(0.125);
-				else return player.p.hymn.add(1).pow(0.1);
+				return player.p.hymn.add(1).pow(0.1);
 			},
 			unlocked() { return hasUpgrade('p', 41) },
 		},
 		43: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Singing</h3><br>increases hymn effect exponent<br>0.15 --> 0.2<br><br>Cost: 1,000,000 holiness,<br>50,000 hymns' },
-			canAfford() {
-				if (player.p.holiness.gte(1000000) && player.p.hymn.gte(50000)) return true;
-				return false;
+			fullDisplay() {
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Singing</h3><br>increases hymn effect exponent<br>0.15 --> 0.2<br><br>Cost: 1,000,000 holiness,<br>50,000 hymns';
 			},
+			canAfford() { return player.p.holiness.gte(1000000) && player.p.hymn.gte(50000) },
 			pay() {
 				player.p.holiness = player.p.holiness.sub(1000000);
 				player.p.hymn = player.p.hymn.sub(50000);
@@ -4090,58 +4034,49 @@ addLayer('p', {
 		},
 		44: {
 			fullDisplay() {
-				text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Hymn Divination</h3><br>Req: 10,000,000 hymns without owning <b class="layer-p' + getdark(this, "ref", true, true) + 'Shorter Hymns</b>';
+				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Hymn Divination</h3><br>Req: 10,000,000 hymns without owning <b class="layer-p' + getdark(this, "ref", true, true) + 'Shorter Hymns</b>';
 				if (this.canAfford()) text += '<br><br><b>Requirements met!';
 				return text;
 			},
-			canAfford() {
-				if (player.p.hymn.gte(10000000) && !hasUpgrade('p', 51)) return true;
-				return false;
-			},
+			canAfford() { return player.p.hymn.gte(10000000) && !hasUpgrade('p', 51) },
 			style: {'height':'120px','border':'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
 			unlocked() { return hasMilestone('s', 0) && hasUpgrade('p', 41) && !hasUpgrade('p', 44) },
 		},
 		45: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Divination</h3><br>increases the exponent of <b class="layer-p' + getdark(this, "ref", true) + 'Divine Hymns</b><br>^0.1 --> ^0.125<br><br>Cost: 2,500,000 hymns';
+			fullDisplay() {
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Divination</h3><br>increases the exponent of <b class="layer-p' + getdark(this, "ref", true) + 'Divine Hymns</b><br>^0.1 --> ^0.125<br><br>Cost: 2,500,000 hymns';
 			},
-			canAfford() {
-				if (player.p.hymn.gte(2500000)) return true;
-				return false;
-			},
+			canAfford() { return player.p.hymn.gte(2500000) },
 			pay() {
 				player.p.hymn = player.p.hymn.sub(2500000);
 			},
 			unlocked() { return hasUpgrade('p', 44) },
 		},
 		51: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Shorter Hymns</h3><br>decreases hymn requirement<br>250 --> 200<br><br>Cost: 1,000,000 hymns' },
-			canAfford() {
-				if (player.p.hymn.gte(1000000)) return true;
-				return false;
+			fullDisplay() {
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Shorter Hymns</h3><br>decreases hymn requirement<br>250 --> 200<br><br>Cost: 1,000,000 hymns';
 			},
+			canAfford() { return player.p.hymn.gte(1000000) },
 			pay() {
 				player.p.hymn = player.p.hymn.sub(1000000);
 			},
 			unlocked() { return hasUpgrade('p', 41) },
 		},
 		52: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Stronger Hymns</h3><br>increases hymn effect exponent if you have <b class="layer-p' + getdark(this, "ref", true) + 'Hymn Singing</b><br>0.2 --> 0.225<br><br>Cost: 10,000,000 hymns';
+			fullDisplay() {
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Stronger Hymns</h3><br>increases hymn effect exponent if you have <b class="layer-p' + getdark(this, "ref", true) + 'Hymn Singing</b><br>0.2 --> 0.225<br><br>Cost: 10,000,000 hymns';
 			},
-			canAfford() {
-				if (player.p.hymn.gte(10000000)) return true;
-				return false;
-			},
+			canAfford() { return player.p.hymn.gte(10000000) },
 			pay() {
 				player.p.hymn = player.p.hymn.sub(10000000);
 			},
 			unlocked() { return hasUpgrade('p', 41) },
 		},
 		53: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Strongest Hymns</h3><br>increases hymn effect exponent if you have all subsequent upgrades<br>0.225 --> 0.25<br><br>Cost: 100,000,000 hymns' },
-			canAfford() {
-				if (player.p.hymn.gte(100000000)) return true;
-				return false;
+			fullDisplay() {
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Strongest Hymns</h3><br>increases hymn effect exponent if you have all subsequent upgrades<br>0.225 --> 0.25<br><br>Cost: 100,000,000 hymns';
 			},
+			canAfford() { return player.p.hymn.gte(100000000) },
 			pay() {
 				player.p.hymn = player.p.hymn.sub(100000000);
 			},
@@ -4149,24 +4084,19 @@ addLayer('p', {
 		},
 		54: {
 			fullDisplay() {
-				text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Even Shorter</h3><br>Req: 1e10 hymns without owning <b class="layer-p' + getdark(this, "ref", true, true) + 'Holy Hymns</b>';
+				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Even Shorter</h3><br>Req: 1e10 hymns without owning <b class="layer-p' + getdark(this, "ref", true, true) + 'Holy Hymns</b>';
 				if (this.canAfford()) text += '<br><br><b>Requirements met!';
 				return text;
 			},
-			canAfford() {
-				if (player.p.hymn.gte(1e10) && !hasUpgrade('p', 61)) return true;
-				return false;
-			},
+			canAfford() { return player.p.hymn.gte(1e10) && !hasUpgrade('p', 61) },
 			style: {'height':'120px','border':'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
 			unlocked() { return hasMilestone('s', 0) && hasUpgrade('p', 41) && !hasUpgrade('p', 54) },
 		},
 		55: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Even Shorter</h3><br>decreases hymn requirement if you own <b class="layer-p' + getdark(this, "ref", true) + 'Shorter Hymns</b><br>200 --> 175<br><br>Cost: ' + format(2.5e9) + ' hymns';
+			fullDisplay() {
+				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Even Shorter</h3><br>decreases hymn requirement if you own <b class="layer-p' + getdark(this, "ref", true) + 'Shorter Hymns</b><br>200 --> 175<br><br>Cost: ' + format(2.5e9) + ' hymns';
 			},
-			canAfford() {
-				if (player.p.hymn.gte(2.5e9)) return true;
-				return false;
-			},
+			canAfford() { return player.p.hymn.gte(2.5e9) },
 			pay() {
 				player.p.hymn = player.p.hymn.sub(2.5e9);
 			},
@@ -4177,10 +4107,7 @@ addLayer('p', {
 				if (player.nerdMode) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Hymns</h3><br>multiplies holiness gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x <br>formula: (x+1)^0.02<br><br>Cost: ' + format(1e9) + ' hymns';
 				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Hymns</h3><br>multiplies holiness gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: ' + format(1e9) + ' hymns';
 			},
-			canAfford() {
-				if (player.p.hymn.gte(1e9)) return true;
-				return false;
-			},
+			canAfford() { return player.p.hymn.gte(1e9) },
 			pay() {
 				player.p.hymn = player.p.hymn.sub(1e9);
 			},
@@ -4194,10 +4121,7 @@ addLayer('p', {
 				if (player.nerdMode) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Deconstruction</h3><br>multiplies prayer gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x <br>formula: log5(x+10)<br><br>Cost: ' + format(1e11) + ' hymns';
 				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Deconstruction</h3><br>multiplies prayer gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: ' + format(1e11) + ' hymns';
 			},
-			canAfford() {
-				if (player.p.hymn.gte(1e11)) return true;
-				return false;
-			},
+			canAfford() { return player.p.hymn.gte(1e11) },
 			pay() {
 				player.p.hymn = player.p.hymn.sub(1e11);
 			},
@@ -4211,10 +4135,7 @@ addLayer('p', {
 				if (player.nerdMode) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Resolve</h3><br>multiplies the effect of <b class="layer-p' + getdark(this, "ref", true) + 'Hymn Deconstruction</b> based on your essence<br>Currently: ' + format(this.effect()) + 'x <br>formula: (x+1)^0.0015<br><br>Cost: ' + format(1e15) + ' hymns';
 				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Resolve</h3><br>multiplies the effect of <b class="layer-p' + getdark(this, "ref", true) + 'Hymn Deconstruction</b> based on your essence<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: ' + format(1e15) + ' hymns';
 			},
-			canAfford() {
-				if (player.p.hymn.gte(1e15)) return true;
-				return false;
-			},
+			canAfford() { return player.p.hymn.gte(1e15) },
 			pay() {
 				player.p.hymn = player.p.hymn.sub(1e15);
 			},
@@ -4225,14 +4146,11 @@ addLayer('p', {
 		},
 		64: {
 			fullDisplay() {
-				text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Silver Sanctums</h3><br>Req: 2.5e25 prayers, 2 sanctums, and all previous research';
+				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Silver Sanctums</h3><br>Req: 2.5e25 prayers, 2 sanctums, and all previous research';
 				if (this.canAfford()) text += '<br><br><b>Requirements met!';
 				return text;
 			},
-			canAfford() {
-				if (player.p.points.gte(2.5e25) && player.s.points.gte(2) && hasUpgrade('p', 15) && hasUpgrade('p', 25) && hasUpgrade('p', 35) && hasUpgrade('p', 45) && hasUpgrade('p', 55)) return true;
-				return false;
-			},
+			canAfford() { return player.p.points.gte(2.5e25) && player.s.points.gte(2) && hasUpgrade('p', 15) && hasUpgrade('p', 25) && hasUpgrade('p', 35) && hasUpgrade('p', 45) && hasUpgrade('p', 55) },
 			style: {'height':'120px','border':'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
 			unlocked() { return hasMilestone('s', 0) && hasUpgrade('p', 41) && !hasUpgrade('p', 64) },
 		},
@@ -4240,9 +4158,7 @@ addLayer('p', {
 			title() {
 				return '<b class="layer-p' + getdark(this, "title") + 'Silver Sanctums';
 			},
-			description() {
-				return 'reduces sanctum gain exponent<br>5 --> 4';
-			},
+			description: 'reduces sanctum gain exponent<br>5 --> 4',
 			cost: 1.00e25,
 			unlocked() { return hasUpgrade('p', 64) },
 		},
@@ -4250,15 +4166,13 @@ addLayer('p', {
 			title() {
 				return '<b class="layer-p' + getdark(this, "title") + 'Divine Sanctums';
 			},
-			description() {
-				return 'multiplies divinity gain (unaffected by softcaps) based on your sanctums';
-			},
+			description: 'multiplies divinity gain (unaffected by softcaps) based on your sanctums',
 			cost: 1.00e30,
 			effect() {
 				return player.s.points.mul(30).add(1).pow(0.95);
 			},
 			effectDisplay() {
-				text = format(this.effect()) + 'x';
+				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x*30+1)^0.95';
 				return text;
 			},
@@ -4268,15 +4182,13 @@ addLayer('p', {
 			title() {
 				return '<b class="layer-p' + getdark(this, "title") + 'Sanctum Sanctions';
 			},
-			description() {
-				return 'multiplies point gain based on your sanctums';
-			},
+			description: 'multiplies point gain based on your sanctums',
 			cost: 1.00e75,
 			effect() {
 				return player.s.points.mul(25).add(1).pow(0.5);
 			},
 			effectDisplay() {
-				text = format(this.effect()) + 'x';
+				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x*25+1)^0.5';
 				return text;
 			},
@@ -4286,15 +4198,13 @@ addLayer('p', {
 			title() {
 				return '<b class="layer-p' + getdark(this, "title") + 'Sanctum Prayers';
 			},
-			description() {
-				return 'multiplies prayer gain based on your sanctums';
-			},
+			description: 'multiplies prayer gain based on your sanctums',
 			cost: 1.00e125,
 			effect() {
 				return player.s.points.mul(2).add(1).pow(1.5);
 			},
 			effectDisplay() {
-				text = format(this.effect()) + 'x';
+				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x*2+1)^1.5';
 				return text;
 			},
@@ -4369,10 +4279,7 @@ addLayer('s', {
 		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
 		return gain;
 	},
-	autoPrestige() {
-		if (hasMilestone('s', 48)) return true;
-		return false;
-	},
+	autoPrestige() { return hasMilestone('s', 48) },
 	row: 2,
 	hotkeys: [
 		{key: 's', description: 'S: Reset for sanctums', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
@@ -4875,7 +4782,7 @@ addLayer('d', {
 	symbol: 'D',
 	position: 3,
 	row: 2,
-	layerShown() {return false},
+	layerShown() { return false },
 	automate() {
 		if (hasMilestone('s', 19) && player.s.auto_worship) {
 			let work = 1;
@@ -5297,10 +5204,7 @@ addLayer('r', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.3';
 				return '<h3 class="layer-r' + getdark(this, "title-hasend") + 'Brighter Light</h3><br>multiplies light gain based on your sanctums<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e12) + ' light';
 			},
-			canAfford() {
-				if (player.r.light.gte(1e12)) return true;
-				return false;
-			},
+			canAfford() { return player.r.light.gte(1e12) },
 			pay() {
 				player.r.light = player.r.light.sub(1e12);
 			},
@@ -5315,10 +5219,7 @@ addLayer('r', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.1';
 				return '<h3 class="layer-r' + getdark(this, "title-hasend") + 'Light of Light</h3><br>multiplies light gain based on your light<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e13) + ' light';
 			},
-			canAfford() {
-				if (player.r.light.gte(1e13)) return true;
-				return false;
-			},
+			canAfford() { return player.r.light.gte(1e13) },
 			pay() {
 				player.r.light = player.r.light.sub(1e13);
 			},
@@ -5334,7 +5235,6 @@ addLayer('r', {
 				return '<h3 class="layer-r' + getdark(this, "title-hasend") + 'Good Light</h3><br>(based on your good influence) sets base light gain after softcap to:<br>' + format(this.effect()) + '/sec' + text + '<br><br>Cost: free<br>WARNING: may decrease light gain';
 			},
 			canAfford() { return true },
-			pay() {},
 			effect() {
 				return player.gi.points.mul(36).add(1).pow(10);
 			},
@@ -5572,9 +5472,7 @@ addLayer('m', {
 			title() {
 				return '<b class="layer-m' + getdark(this, "title-light") + 'Oxygen Gas';
 			},
-			description() {
-				return 'multiplies essence gain based on your best molecules';
-			},
+			description: 'multiplies essence gain based on your best molecules',
 			cost: 1,
 			effect() {
 				return player.m.best.mul(100).add(1).pow(0.5);
@@ -5589,9 +5487,7 @@ addLayer('m', {
 			title() {
 				return '<b class="layer-m' + getdark(this, "title-light") + 'Carbon Monoxide';
 			},
-			description() {
-				return 'multiplies demon soul gain based on your best molecules';
-			},
+			description: 'multiplies demon soul gain based on your best molecules',
 			cost: 5,
 			effect() {
 				return player.m.best.mul(10).add(1).pow(0.2);
@@ -5606,9 +5502,7 @@ addLayer('m', {
 			title() {
 				return '<b class="layer-m' + getdark(this, "title-light") + 'Carbon Dioxide';
 			},
-			description() {
-				return 'multiplies quark gain based on your best molecules';
-			},
+			description: 'multiplies quark gain based on your best molecules',
 			cost: 10,
 			effect() {
 				return player.m.best.mul(50).add(1).pow(0.4);
@@ -5625,10 +5519,7 @@ addLayer('m', {
 				if (player.nerdMode) text += ' <br>formula: (x*25+1)^0.3';
 				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'Hydrogen Gas</h3><br>multiplies core gain based on your best molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: 360,000 atoms';
 			},
-			canAfford() {
-				if (player.a.points.gte(360000)) return true;
-				return false;
-			},
+			canAfford() { return player.a.points.gte(360000) },
 			pay() {
 				player.a.points = player.a.points.sub(360000);
 			},
@@ -5640,9 +5531,7 @@ addLayer('m', {
 			title() {
 				return '<b class="layer-m' + getdark(this, "title-light") + 'H<tag style="font-size:10px">2</tag>O, aka Water';
 			},
-			description() {
-				return 'multiplies essence gain based on your total unique molecules';
-			},
+			description: 'multiplies essence gain based on your total unique molecules',
 			cost: 125,
 			effect() {
 				return player.m.unique_total.add(1).mul(5);
@@ -5659,10 +5548,7 @@ addLayer('m', {
 				if (player.nerdMode) text += ' <br>formula: (x*250+1)^0.1';
 				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'Ammonia</h3><br>multiplies hex gain based on your best molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: 4,600,000 atoms';
 			},
-			canAfford() {
-				if (player.a.points.gte(4600000)) return true;
-				return false;
-			},
+			canAfford() { return player.a.points.gte(4600000) },
 			pay() {
 				player.a.points = player.a.points.sub(4600000);
 			},
@@ -5674,9 +5560,7 @@ addLayer('m', {
 			title() {
 				return '<b class="layer-m' + getdark(this, "title-light") + 'Nitrogen Gas';
 			},
-			description() {
-				return 'gives extra unique molecules based on your non-extra ones\' amount and worth';
-			},
+			description: 'gives extra unique molecules based on your non-extra ones\' amount and worth',
 			cost: 250,
 			effect() {
 				return player.m.unique_nonextra.div(2).add(1).floor();
@@ -5694,10 +5578,7 @@ addLayer('m', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.2';
 				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'NaCl, aka Salt</h3><br>gives extra unique molecules based on your atoms<br>Currently: +' + formatWhole(this.effect()) + text + '<br><br>Cost: 7,777,777 atoms';
 			},
-			canAfford() {
-				if (player.a.points.gte(7777777)) return true;
-				return false;
-			},
+			canAfford() { return player.a.points.gte(7777777) },
 			pay() {
 				player.a.points = player.a.points.sub(7777777);
 			},
@@ -5712,10 +5593,7 @@ addLayer('m', {
 				if (player.nerdMode) text += ' <br>formula: x*1000';
 				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'O<tag style="font-size:10px">3</tag>, aka Ozone</h3><br>multiplies demon soul gain based on your total unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e10) + ' atoms';
 			},
-			canAfford() {
-				if (player.a.points.gte(1e10)) return true;
-				return false;
-			},
+			canAfford() { return player.a.points.gte(1e10) },
 			pay() {
 				player.a.points = player.a.points.sub(1e10);
 			},
@@ -5728,15 +5606,13 @@ addLayer('m', {
 			title() {
 				return '<b class="layer-m' + getdark(this, "title-light") + 'Methane Gas';
 			},
-			description() {
-				return 'gives extra unique molecules based on your demon souls';
-			},
+			description: 'gives extra unique molecules based on your demon souls',
 			cost: 25000000,
 			effect() {
 				return player.ds.points.pow(10).log(10).add(1).floor();
 			},
 			effectDisplay() {
-				text = '+' + formatWhole(this.effect());
+				let text = '+' + formatWhole(this.effect());
 				if (player.nerdMode) text += ' <br>formula: log(x^10)+1';
 				return text;
 			},
@@ -5746,15 +5622,13 @@ addLayer('m', {
 			title() {
 				return '<b class="layer-m' + getdark(this, "title-light") + 'Calcium Oxide';
 			},
-			description() {
-				return 'non-extra unique molecules are worth more based on your relics';
-			},
+			description: 'non-extra unique molecules are worth more based on your relics',
 			cost: 50000000,
 			effect() {
 				return player.r.points.mul(5).add(1).pow(2);
 			},
 			effectDisplay() {
-				text = format(this.effect()) + 'x';
+				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x*5+1)^2';
 				return text;
 			},
@@ -5766,10 +5640,7 @@ addLayer('m', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
 				return'<h3 class="layer-m' + getdark(this, "title-light", true) + 'Calcium Hydroxide</h3><br>multiplies relic gain based on your extra unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1.61e10) + ' atoms';
 			},
-			canAfford() {
-				if (player.a.points.gte(1.61e10)) return true;
-				return false;
-			},
+			canAfford() { return player.a.points.gte(1.61e10) },
 			pay() {
 				player.a.points = player.a.points.sub(1.61e10);
 			},
@@ -5782,15 +5653,13 @@ addLayer('m', {
 			title() {
 				return '<b class="layer-m' + getdark(this, "title-light") + 'Neon Gas';
 			},
-			description() {
-				return 'gives extra unique molecules based on your total good influence';
-			},
+			description: 'gives extra unique molecules based on your total good influence',
 			cost: 1e13,
 			effect() {
 				return player.gi.total.add(1).pow(2.5).floor();
 			},
 			effectDisplay() {
-				text = '+' + formatWhole(this.effect());
+				let text = '+' + formatWhole(this.effect());
 				if (player.nerdMode) text += ' <br>formula: (x+1)^2.5';
 				return text;
 			},
@@ -5800,15 +5669,13 @@ addLayer('m', {
 			title() {
 				return '<b class="layer-m' + getdark(this, "title-light") + 'Sodium Oxide';
 			},
-			description() {
-				return 'multiplies point gain based on your total unique molecules';
-			},
+			description: 'multiplies point gain based on your total unique molecules',
 			cost: 1e14,
 			effect() {
 				return player.m.unique_total.add(1).pow(25);
 			},
 			effectDisplay() {
-				text = format(this.effect()) + 'x';
+				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^25';
 				return text;
 			},
@@ -5818,15 +5685,13 @@ addLayer('m', {
 			title() {
 				return '<b class="layer-m' + getdark(this, "title-light") + 'F<tag style="font-size:10px">2</tag>, Fluorine';
 			},
-			description() {
-				return 'gives extra unique molecules based on your atoms';
-			},
+			description: 'gives extra unique molecules based on your atoms',
 			cost: 1e13,
 			effect() {
 				return player.a.points.add(1).pow(0.45).floor();
 			},
 			effectDisplay() {
-				text = '+' + formatWhole(this.effect());
+				let text = '+' + formatWhole(this.effect());
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.45';
 				return text;
 			},
@@ -6718,9 +6583,7 @@ addLayer('ei', {
 			},
 			challengeDescription: ' - Resets evil influence milestones<br> - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Forces an evil influence reset<br> - Divides evil power gain by 1,000<br>',
 			goalDescription: '1e230 evil power<br>',
-			canComplete() {
-				return player.ei.power.gte(1e230);
-			},
+			canComplete() { return player.ei.power.gte(1e230) },
 			onEnter() {
 				player.ei.milestones = [];
 				player.ei.upgrades = [];
@@ -6737,9 +6600,8 @@ addLayer('ei', {
 			},
 			challengeDescription: " - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Forces an evil influence reset<br> - Divides evil power gain by 100,000,000<br>",
 			goalDescription: '1e21 evil power<br>',
-			canComplete() {
-				return player.ei.power.gte(1e21);
-			},
+			canComplete() { return player.ei.power.gte(1e21) },
+			unlocked() { return hasChallenge('ei', 11) },
 			onEnter() {
 				player.ei.upgrades = [];
 				player.ei.power = new Decimal(0);
@@ -6755,9 +6617,8 @@ addLayer('ei', {
 			},
 			challengeDescription: " - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Resets your relics to 0<br> - Divides evil power gain by 1e15<br>",
 			goalDescription: '1e18 evil power and 93 relics<br>',
-			canComplete() {
-				return player.ei.power.gte(1e18) && player.r.points.gte(93);
-			},
+			canComplete() { return player.ei.power.gte(1e18) && player.r.points.gte(93) },
+			unlocked() { return hasChallenge('ei', 12) },
 			onEnter() {
 				player.ei.upgrades = [];
 				player.ei.power = new Decimal(0);
@@ -6788,21 +6649,19 @@ addLayer('w', {
 	baseAmount() {return player.gi.points.min(player.ei.points)},
 	type: 'custom',
 	getResetGain() {
-		let gain = [player.gi.points.sub(60).div(10).mul(this.gainExp()).floor().sub(player.w.points).add(1), player.ei.points.sub(60).div(10).mul(this.gainExp()).floor().sub(player.w.points).add(1)];
+		let gain = [player.gi.points.sub(60).div(20).mul(this.gainExp()).floor().sub(player.w.points).add(1), player.ei.points.sub(60).div(20).mul(this.gainExp()).floor().sub(player.w.points).add(1)];
 		return gain[0].min(gain[1]).max(0);
 	},
 	getNextAt() {
-		if (this.canBuyMax()) return this.getResetGain().div(this.gainExp()).mul(10).add(60);
-		return player.w.points.div(this.gainExp()).mul(10).add(60);
+		if (this.canBuyMax()) return this.getResetGain().div(this.gainExp()).mul(20).add(60);
+		return player.w.points.div(this.gainExp()).mul(20).add(60);
 	},
 	canReset() { return this.getResetGain().gt(0) },
 	prestigeNotify() { return this.getResetGain().gt(0) },
 	prestigeButtonText() {
 		return 'Reset for +<b>' + formatWhole(this.getResetGain()) + '</b> wars<br><br>' + (player.w.points.lt(30) ? (this.canBuyMax() ? 'Next:' : 'Req:') : '') + ' ' + formatWhole(player.gi.points) + ' / ' + formatWhole(this.getNextAt()) + ' GI<br>and ' + formatWhole(player.ei.points) + ' / ' + formatWhole(this.getNextAt()) + ' EI';
 	},
-	canBuyMax() {
-		return false;
-	},
+	canBuyMax() { return false },
 	onPrestige(gain) {
 		player.c.unlocked = false;
 		player.q.unlocked = false;
@@ -6813,7 +6672,7 @@ addLayer('w', {
 		player.p.unlocked = false;
 		player.s.unlocked = false;
 		player.r.unlocked = false;
-		player.m.unlocked = false;
+		if (!hasMilestone('w', 0)) player.m.unlocked = false;
 		player.gi.unlocked = false;
 		player.ei.unlocked = false;
 	},
@@ -6845,6 +6704,7 @@ addLayer('w', {
 		["display-text", () => { return 'You have ' + formatWhole(player.gi.points) + ' good influence<br>You have ' + formatWhole(player.ei.points) + ' evil influence<br><br>Your best wars is ' + formatWhole(player.w.best) + '<br>You have made a total of ' + formatWhole(player.w.total) + ' wars<br><br>After unlocking War, you can always buy max on all resources below this row.' }],
 		"blank",
 		"milestones",
+		["bar", "tide"],
 	],
 	milestones: {
 		0: {
@@ -6852,6 +6712,25 @@ addLayer('w', {
 			effectDescription: 'keep molecule milestones on war resets, and you can autobuy good influence buyables',
 			done() { return player.w.points.gte(1) },
 			toggles: [['gi', 'auto_buyables']],
+		},
+	},
+	bars: {
+		tide: {
+			direction: RIGHT,
+			width: 600,
+			height: 50,
+			display() {
+				if (player.gi.points.gt(player.ei.points)) return 'the tide currently favors the good';
+				if (player.ei.points.gt(player.gi.points)) return 'the tide currently favors the evil';
+				return 'the tide currently favors neither good nor evil';
+			},
+			progress() {
+				if (player.gi.points.eq(player.ei.points)) return 0.5;
+				return player.ei.points.div(player.ei.points.add(player.gi.points)).toNumber();
+			},
+			baseStyle: {'background-image':'linear-gradient(#08FF87, #AAFF00)'},
+			fillStyle:  {'background-image':'linear-gradient(#FF4400, #BA0035)'},
+			textStyle: {'color':'#000000'},
 		},
 	},
 });
