@@ -701,6 +701,13 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 161) },
 			color: '#008800',
 		},
+		163: {
+			name: 'Many Cells',
+			done() {return player.cl.points.gte(100)},
+			tooltip: 'obtain 100 cellular life.',
+			unlocked() { return hasAchievement('A', 162) },
+			color: '#008800',
+		},
 	},
 });
 
@@ -1652,6 +1659,7 @@ addLayer('q', {
 		if (hasMilestone('gi', 3) && resettingLayer == 'gi') return;
 		if (hasMilestone('ei', 2) && resettingLayer == 'ei') return;
 		if (hasMilestone('w', 9) && resettingLayer == 'w') return;
+		if (hasMilestone('cl', 5) && resettingLayer == 'cl') return;
 		let keep = ['auto_upgrades'];
 			if (hasMilestone('sp', 3) && resettingLayer == 'sp') keep.push("milestones");
 			if (hasMilestone('sp', 5) && resettingLayer == 'sp') keep.push("upgrades");
@@ -2059,7 +2067,9 @@ addLayer('sp', {
 	exponent: 4.25,
 	canBuyMax() { return hasMilestone('sp', 0) || player.w.unlocked },
 	gainExp() {
+		// init
 		let gain = new Decimal(1);
+		// mul
 		if (hasUpgrade('q', 43)) gain = gain.mul(upgradeEffect('q', 43));
 		if (hasUpgrade('h', 63)) gain = gain.mul(upgradeEffect('h', 63));
 		if (hasUpgrade('a', 22)) gain = gain.mul(upgradeEffect('a', 22));
@@ -2071,6 +2081,9 @@ addLayer('sp', {
 		if (inChallenge('ds', 12)) gain = gain.mul(player.q.points.pow(-0.05));
 		if (inChallenge('ds', 22)) gain = gain.mul(0.0000000000000000000000000000000000000001);
 		if (new Decimal(tmp.w.effect[0]).gt(1)) gain = gain.mul(tmp.w.effect[0]);
+		// pow
+		if (getBuyableAmount('cl', 13).gt(0)) gain = gain.pow(buyableEffect('cl', 13)[0]);
+		// return
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('s', 11) },
@@ -3670,6 +3683,7 @@ addLayer('p', {
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone('ei', 3) && resettingLayer == 'ei') return;
+		if (hasMilestone('cl', 6) && resettingLayer == 'cl') return;
 		let keep = ['auto_upgrades', "smart_auto_upgrades"];
 			if (resettingLayer == 'h') keep.push("points", "best", "total", "milestones");
 			if (resettingLayer == 'sp') keep.push("points", "best", "total", "milestones");
@@ -4238,6 +4252,7 @@ addLayer('s', {
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone('s', 12) && resettingLayer == 'a') return;
+		if (hasMilestone('cl', 7) && resettingLayer == 'cl') return;
 		let keep = ["auto_worship", "auto_sacrifice", "auto_sacrificial_ceremony", "no_speed_but_more_bulk"];
 			if (challengeCompletions('r', 11) >= 9 && resettingLayer == 'r') keep.push("milestones");
 			if (layers[resettingLayer].row > this.row) {
@@ -4737,6 +4752,7 @@ addLayer('d', {
 			};
 		};
 	},
+	doReset(resettingLayer) {},
 	update(diff) {
 		eff = new Decimal(0);
 		eff = eff.add(getBuyableAmount('d', 11).mul(0.1));
@@ -5220,6 +5236,7 @@ addLayer('m', {
 		if (hasMilestone('w', 6) && resettingLayer == 'w') return;
 		let keep = ['auto_upgrades'];
 			if (hasMilestone('w', 0) && resettingLayer == 'w') keep.push('milestones');
+			if (hasMilestone('cl', 4) && resettingLayer == 'cl') keep.push('milestones');
 			if (layers[resettingLayer].row > this.row) layerDataReset('m', keep);
 		},
 	update(diff) {
@@ -5677,6 +5694,7 @@ addLayer('gi', {
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone('w', 8) && resettingLayer == 'w') return;
+		if (hasMilestone('cl', 4) && resettingLayer == 'cl') return;
 		let keep = ['auto_buyables', 'auto_prestige'];
 			if (hasMilestone('w', 1) && resettingLayer == 'w') keep.push('milestones');
 			if (hasMilestone('cl', 0) && resettingLayer == 'cl') keep.push('milestones');
@@ -6830,6 +6848,7 @@ addLayer('cl', {
 	gainExp() {
 		let gain = new Decimal(1);
 		if (getBuyableAmount('cl', 12).gt(0)) gain = gain.mul(buyableEffect('cl', 12)[1]);
+		if (getBuyableAmount('cl', 13).gt(0)) gain = gain.mul(buyableEffect('cl', 13)[1]);
 		return gain;
 	},
 	row: 5,
@@ -6885,13 +6904,36 @@ addLayer('cl', {
 		},
 		3: {
 			requirementDescription: '6 total cellular life',
-			effectDescription: 'cellular life doesn\'t reset evil influence, and keep demon soul challenge completions on cellular life resets',
+			effectDescription() {
+				return 'cellular life doesn\'t reset evil influence, keep demon soul challenge completions on cellular life resets, and unlock another <b class="layer-cl' + getdark(this, "ref", true, true) + 'Tissue</b>';
+			},
 			done() { return player.cl.total.gte(6) },
+		},
+		4: {
+			requirementDescription: '9 total cellular life',
+			effectDescription: 'cellular life doesn\'t reset good influence, and keep molecule milestones on cellular life resets',
+			done() { return player.cl.total.gte(9) },
+		},
+		5: {
+			requirementDescription: '18 total cellular life',
+			effectDescription: 'cellular life doesn\'t reset quarks',
+			done() { return player.cl.total.gte(18) },
+		},
+		6: {
+			requirementDescription: '63 total cellular life',
+			effectDescription: 'cellular life doesn\'t reset prayers',
+			done() { return player.cl.total.gte(63) },
+		},
+		7: {
+			requirementDescription: '135 total cellular life',
+			effectDescription: 'cellular life doesn\'t reset sanctums',
+			done() { return player.cl.total.gte(135) },
 		},
 	},
 	buyables: {
 		11: {
 			cost() {
+				if (getBuyableAmount('cl', this.id).gte(10)) return getBuyableAmount('cl', this.id).mul(2).sub(8);
 				return getBuyableAmount('cl', this.id).add(1);
 			},
 			title() {
@@ -6913,6 +6955,7 @@ addLayer('cl', {
 		},
 		12: {
 			cost() {
+				if (getBuyableAmount('cl', this.id).gte(10)) return getBuyableAmount('cl', this.id).mul(2).sub(8);
 				return getBuyableAmount('cl', this.id).add(1);
 			},
 			title() {
@@ -6931,7 +6974,31 @@ addLayer('cl', {
 				if (player.nerdMode) text = '<br>formulas: (x+1)^0.01<br>and (x+1)^0.5';
 				return 'exponentiates demon soul gain and multiplies cellular life gain based on the amount of this upgrade bought.<br>Currently: ^' + format(this.effect()[0]) + '<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
 			},
-			unlocked() { return getBuyableAmount('cl', 11).gt(0) },
+			unlocked() { return hasMilestone('cl', 1) },
 		},
+		13: {
+			cost() {
+				if (getBuyableAmount('cl', this.id).gte(10)) return getBuyableAmount('cl', this.id).mul(2).sub(8);
+				return getBuyableAmount('cl', this.id).add(1);
+			},
+			title() {
+				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Epithelial Tissue';
+			},
+			canAfford() { return player.cl.points.gte(this.cost()) },
+			buy() {
+				player.cl.points = player.cl.points.sub(this.cost());
+				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+			},
+			effect() {
+				return [getBuyableAmount('cl', this.id).add(1).pow(0.025), getBuyableAmount('cl', this.id).add(1).pow(0.75)];
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formulas: (x+1)^0.025<br>and (x+1)^0.75';
+				return 'exponentiates subatomic particle gain and multiplies cellular life gain based on the amount of this upgrade bought.<br>Currently: ^' + format(this.effect()[0]) + '<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+			},
+			unlocked() { return hasMilestone('cl', 3) },
+		},
+		// 21: Connective Tissue
 	},
 });
