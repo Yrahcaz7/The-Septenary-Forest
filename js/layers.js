@@ -1170,10 +1170,7 @@ addLayer('c', {
 		auto_upgrades: false,
 		auto_buyables: false,
 	}},
-	color() {
-		if (player.e.points.gte(10000) || player.c.unlocked) return "#D2D237";
-		return '#A0A0A0';
-	},
+	color: "#D2D237",
 	branches: ['h'],
 	requires: 10000,
 	resource: 'cores',
@@ -1505,10 +1502,7 @@ addLayer('q', {
 		total: new Decimal(0),
 		auto_upgrades: false,
 	}},
-	color() {
-		if (player.e.points.gte(1e9) || player.q.unlocked) return "#DB5196";
-		return '#A0A0A0';
-	},
+	color: "#DB5196",
 	branches: ['sp'],
 	requires: 1e9,
 	resource: 'quarks',
@@ -1991,10 +1985,7 @@ addLayer('sp', {
 		auto_upgrades: false,
 		auto_buyables: false,
 	}},
-	color() {
-		if (player.q.points.gte(1e15) || player.sp.unlocked) return "#710CC4";
-		return '#A0A0A0';
-	},
+	color: "#710CC4",
 	branches: ['a'],
 	requires: 1e15,
 	resource: 'subatomic particles',
@@ -2205,10 +2196,7 @@ addLayer('h', {
 		total: new Decimal(0),
 		auto_upgrades: false,
 	}},
-	color() {
-		if (player.c.points.gte(1e60) || player.h.unlocked) return "#E36409";
-		return '#A0A0A0';
-	},
+	color: "#E36409",
 	branches: ['ds'],
 	requires: 1e60,
 	resource: 'hexes',
@@ -2253,7 +2241,7 @@ addLayer('h', {
 	},
 	automate() {
 		if (hasMilestone('m', 1) && player.h.auto_upgrades) {
-			for (id in layers.h.upgrades) {
+			for (const id in layers.h.upgrades) {
 				if (layers.h.upgrades[id].unlocked) buyUpgrade('h', id);
 			};
 		};
@@ -2671,10 +2659,7 @@ addLayer('ds', {
 		auto_upgrades: false,
 		auto_buyables: false,
 	}},
-	color() {
-		if (player.h.points.gte(1e60) || player.ds.unlocked) return "#BA0035";
-		return '#A0A0A0';
-	},
+	color: "#BA0035",
 	branches: ['ei'],
 	requires: 1e60,
 	resource: 'demon souls',
@@ -3010,10 +2995,7 @@ addLayer('a', {
 		total: new Decimal(0),
 		auto_upgrades: false,
 	}},
-	color() {
-		if (player.sp.points.gte(10000) || player.a.unlocked) return "#4D2FE0";
-		return '#A0A0A0';
-	},
+	color: "#4D2FE0",
 	branches: ['m'],
 	requires: 1000,
 	resource: 'atoms',
@@ -3043,7 +3025,7 @@ addLayer('a', {
 	layerShown() { return player.ds.unlocked },
 	automate() {
 		if (hasMilestone('gi', 11) && player.a.auto_upgrades) {
-			for (id in layers.a.upgrades) {
+			for (const id in layers.a.upgrades) {
 				if (layers.a.upgrades[id].unlocked) buyUpgrade('a', id);
 			};
 		};
@@ -3519,10 +3501,7 @@ addLayer('p', {
 		auto_upgrades: false,
 		smart_auto_upgrades: false,
 	}},
-	color() {
-		if (player.e.points.gte(new Decimal('1e1000')) || player.p.unlocked) return "#FDBBFF";
-		return '#A0A0A0';
-	},
+	color: "#FDBBFF",
 	branches: ['s'],
 	requires: new Decimal('1e1000'),
 	resource: 'prayers',
@@ -4158,10 +4137,7 @@ addLayer('s', {
 		auto_sacrifice: false,
 		auto_sacrificial_ceremony: false,
 	}},
-	color() {
-		if (player.p.points.gte(1e15) || player.s.unlocked) return "#AAFF00";
-		return '#A0A0A0';
-	},
+	color: "#AAFF00",
 	branches: ['r', 'gi'],
 	requires: 1e15,
 	resource: 'sanctums',
@@ -4873,10 +4849,7 @@ addLayer('r', {
 		sanctummult: new Decimal(1),
 		essencemult: new Decimal(1),
 	}},
-	color() {
-		if (player.s.points.gte(10) || player.r.unlocked) return "#B9A975";
-		return '#A0A0A0';
-	},
+	color: "#B9A975",
 	branches: ['gi'],
 	tooltip() {
 		if (player.nerdMode) return formatWhole(challengeCompletions('r', 11)) + ' activated relics and ' + formatWhole(player.r.points) + ' total relics';
@@ -5154,10 +5127,7 @@ addLayer('m', {
 		unique_extra: new Decimal(0),
 		unique_total: new Decimal(0),
 	}},
-	color() {
-		if (player.a.points.gte(30000) || player.m.unlocked) return "#00CCCC";
-		return '#A0A0A0';
-	},
+	color: "#00CCCC",
 	requires: 30000,
 	resource: 'molecules',
 	baseResource: 'atoms',
@@ -5198,7 +5168,7 @@ addLayer('m', {
 	},
 	doReset(resettingLayer) {
 		let keep = [];
-			if (hasMilestone('w', 0)) keep.push('milestones');
+			if (hasMilestone('w', 0) && resettingLayer == 'w') keep.push('milestones');
 			if (layers[resettingLayer].row > this.row) layerDataReset('m', keep);
 		},
 	update(diff) {
@@ -5606,10 +5576,7 @@ addLayer('gi', {
 		req_devotion: new Decimal(1),
 		auto_buyables: false,
 	}},
-	color() {
-		if (player.r.points.gte(15) || player.gi.unlocked) return "#08FF87";
-		return '#A0A0A0';
-	},
+	color: "#08FF87",
 	branches: ['w'],
 	requires: 15,
 	resource: 'good influence',
@@ -5656,6 +5623,7 @@ addLayer('gi', {
 	},
 	doReset(resettingLayer) {
 		let keep = ['auto_buyables'];
+			if (hasMilestone('w', 1) && resettingLayer == 'w') keep.push('milestones');
 			if (layers[resettingLayer].row > this.row) layerDataReset('gi', keep);
 		},
 	resetsNothing() { return hasMilestone('gi', 16) },
@@ -5853,11 +5821,9 @@ addLayer('ei', {
 		best: new Decimal(0),
 		total: new Decimal(0),
 		power: new Decimal(0),
+		auto_upgrades: false,
 	}},
-	color() {
-		if (player.ds.points.gte('e3000') || player.ei.unlocked) return "#FF4400";
-		return '#A0A0A0';
-	},
+	color: "#FF4400",
 	branches: ['w'],
 	requires: 'e3000',
 	resource: 'evil influence',
@@ -5892,6 +5858,13 @@ addLayer('ei', {
 		{key: 'E', description: 'Shift-E: Reset for evil influence', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return player.gi.unlocked },
+	automate() {
+		if (hasMilestone('w', 1) && player.ei.auto_upgrades) {
+			for (const id in layers.ei.upgrades) {
+				if (layers.ei.upgrades[id].unlocked) buyUpgrade('ei', id);
+			};
+		};
+	},
 	effect() {
 		let effBase = new Decimal(2);
 		if (hasUpgrade('ei', 15)) effBase = new Decimal(4);
@@ -6521,7 +6494,7 @@ addLayer('w', {
 		player.s.unlocked = false;
 		player.r.unlocked = false;
 		if (!hasMilestone('w', 0)) player.m.unlocked = false;
-		player.gi.unlocked = false;
+		if (!hasMilestone('w', 1)) player.gi.unlocked = false;
 		player.ei.unlocked = false;
 	},
 	gainExp() {
@@ -6546,20 +6519,31 @@ addLayer('w', {
 		let keep = [];
 			if (layers[resettingLayer].row > this.row) layerDataReset('w', keep);
 		},
-	tabFormat: [
-		"main-display",
-		"prestige-button",
-		["display-text", () => { return 'You have ' + formatWhole(player.gi.points) + ' good influence<br>You have ' + formatWhole(player.ei.points) + ' evil influence<br><br>Your best wars is ' + formatWhole(player.w.best) + '<br>You have made a total of ' + formatWhole(player.w.total) + ' wars<br><br>After unlocking War, you can always buy max on all resources below this row.' }],
-		"blank",
-		"milestones",
-		["bar", "tide"],
-	],
+	tabFormat: {
+		"Progress": {
+			content: [
+				"main-display",
+				"prestige-button",
+				["display-text", () => { return 'You have ' + formatWhole(player.gi.points) + ' good influence<br>You have ' + formatWhole(player.ei.points) + ' evil influence<br><br>Your best wars is ' + formatWhole(player.w.best) + '<br>You have made a total of ' + formatWhole(player.w.total) + ' wars<br><br>After unlocking War, you can always buy max on all resources below this row.' }],
+				"blank",
+				["bar", "tide"],
+				"blank",
+				"milestones",
+			],
+		},
+	},
 	milestones: {
 		0: {
 			requirementDescription: '1 war',
 			effectDescription: 'keep molecule milestones on war resets, and you can autobuy good influence buyables',
 			done() { return player.w.points.gte(1) },
 			toggles: [['gi', 'auto_buyables']],
+		},
+		1: {
+			requirementDescription: '2 wars',
+			effectDescription: 'keep good influence milestones on war resets, and you can autobuy evil influence upgrades',
+			done() { return player.w.points.gte(2) },
+			toggles: [['ei', 'auto_upgrades']],
 		},
 	},
 	bars: {
