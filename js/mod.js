@@ -119,6 +119,7 @@ function getPointGen(forced = false) {
 	if (inChallenge('ds', 12)) gain = gain.mul(0.000001);
 	if (inChallenge('ds', 21)) gain = gain.mul(0.0000000001);
 	if (inChallenge('ds', 22)) gain = gain.mul(0.0000000001);
+	if (new Decimal(tmp.w.effect[0]).gt(1)) gain = gain.mul(tmp.w.effect[0]);
 	if (inChallenge('r', 11) && !forced) gain = new Decimal(0);
 	return gain;
 };

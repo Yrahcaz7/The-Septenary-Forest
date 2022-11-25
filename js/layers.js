@@ -6513,7 +6513,7 @@ addLayer('w', {
 		return [new Decimal(1e10).pow(player.w.points), player.w.points.add(1).log10().add(1).pow(0.333), player.w.points.add(1).pow(1.5)];
 	},
 	effectDescription() {
-		return 'which multiplies essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x, atom, sanctum, relic, molecule, good influence, and evil influence by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x, and also light gain after softcap by <h2 class="layer-w">' + format(tmp.w.effect[2]) + '</h2>x';
+		return 'which multiplies point, essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x, atom, sanctum, relic, molecule, good influence, and evil influence by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x, and also light gain after softcap by <h2 class="layer-w">' + format(tmp.w.effect[2]) + '</h2>x';
 	},
 	doReset(resettingLayer) {
 		let keep = [];
