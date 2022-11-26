@@ -892,7 +892,9 @@ addLayer('e', {
 	type: 'normal',
 	exponent: 0.5,
 	gainMult() {
+		// init
 		let mult = new Decimal(1);
+		// mul
 		if (hasUpgrade('e', 13)) mult = mult.mul(upgradeEffect('e', 13));
 		if (hasUpgrade('e', 22)) {
 			mult = mult.mul(upgradeEffect('e', 22));
@@ -925,6 +927,9 @@ addLayer('e', {
 		if (hasUpgrade('ds', 21)) mult = mult.mul(player.A.points.mul(0.2));
 		if (inChallenge('ds', 21)) mult = mult.mul(0.00000000000000000001);
 		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
+		// pow
+		if (getBuyableAmount('cl', 21).gt(0)) mult = mult.pow(buyableEffect('cl', 21)[0]);
+		// return
 		return mult;
 	},
 	row: 0,
@@ -1273,6 +1278,7 @@ addLayer('c', {
 		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
 		// pow
 		if (getBuyableAmount('cl', 11).gt(0)) mult = mult.pow(buyableEffect('cl', 11)[0]);
+		if (getBuyableAmount('cl', 21).gt(0)) mult = mult.pow(buyableEffect('cl', 21)[1]);
 		// return
 		return mult;
 	},
@@ -3129,6 +3135,7 @@ addLayer('a', {
 				if (hasMilestone('a', 12)) keep.push("upgrades");
 			};
 			if (hasMilestone('m', 12) && resettingLayer == 'm') keep.push("milestones");
+			if (hasMilestone('cl', 8) && resettingLayer == 'cl') keep.push("milestones");
 			if (layers[resettingLayer].row >= this.row) layerDataReset('a', keep);
 		},
 	resetsNothing() { return hasMilestone('a', 14) },
@@ -6926,14 +6933,26 @@ addLayer('cl', {
 			done() { return player.cl.total.gte(18) },
 		},
 		6: {
-			requirementDescription: '63 total cellular life',
+			requirementDescription: '30 total cellular life',
 			effectDescription: 'cellular life doesn\'t reset prayers',
-			done() { return player.cl.total.gte(63) },
+			done() { return player.cl.total.gte(30) },
 		},
 		7: {
-			requirementDescription: '135 total cellular life',
+			requirementDescription: '63 total cellular life',
 			effectDescription: 'cellular life doesn\'t reset sanctums',
+			done() { return player.cl.total.gte(63) },
+		},
+		8: {
+			requirementDescription: '135 total cellular life',
+			effectDescription: 'keep atom milestones on cellular life resets',
 			done() { return player.cl.total.gte(135) },
+		},
+		9: {
+			requirementDescription: '214 total cellular life',
+			effectDescription() {
+				return 'unlock another <b class="layer-cl' + getdark(this, "ref", true, true) + 'Tissue</b>';
+			},
+			done() { return player.cl.total.gte(214) },
 		},
 	},
 	buyables: {
@@ -6951,11 +6970,11 @@ addLayer('cl', {
 				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
 			},
 			effect() {
-				return [getBuyableAmount('cl', this.id).add(1).pow(0.02), getBuyableAmount('cl', this.id).add(1).pow(1.5)];
+				return [getBuyableAmount('cl', this.id).add(1).pow(0.05), getBuyableAmount('cl', this.id).add(1).pow(1.5)];
 			},
 			display() {
 				let text = '';
-				if (player.nerdMode) text = '<br>formulas: (x+1)^0.02<br>and (x+1)^1.5';
+				if (player.nerdMode) text = '<br>formulas: (x+1)^0.05<br>and (x+1)^1.5';
 				return 'exponentiates core gain and multiplies atom gain based on the amount of this upgrade bought.<br>Currently: ^' + format(this.effect()[0]) + '<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
 			},
 		},
@@ -6973,11 +6992,11 @@ addLayer('cl', {
 				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
 			},
 			effect() {
-				return [getBuyableAmount('cl', this.id).add(1).pow(0.01), getBuyableAmount('cl', this.id).add(1).pow(0.5)];
+				return [getBuyableAmount('cl', this.id).add(1).pow(0.0175), getBuyableAmount('cl', this.id).add(1).pow(0.5)];
 			},
 			display() {
 				let text = '';
-				if (player.nerdMode) text = '<br>formulas: (x+1)^0.01<br>and (x+1)^0.5';
+				if (player.nerdMode) text = '<br>formulas: (x+1)^0.0175<br>and (x+1)^0.5';
 				return 'exponentiates demon soul gain and multiplies cellular life gain based on the amount of this upgrade bought.<br>Currently: ^' + format(this.effect()[0]) + '<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
 			},
 			unlocked() { return hasMilestone('cl', 1) },
@@ -7005,6 +7024,27 @@ addLayer('cl', {
 			},
 			unlocked() { return hasMilestone('cl', 3) },
 		},
-		// 21: Connective Tissue
+		21: {
+			cost() {
+				return getBuyableAmount('cl', this.id).mul(10).add(10);
+			},
+			title() {
+				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Connective Tissue';
+			},
+			canAfford() { return player.cl.points.gte(this.cost()) },
+			buy() {
+				player.cl.points = player.cl.points.sub(this.cost());
+				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+			},
+			effect() {
+				return [getBuyableAmount('cl', this.id).add(1).pow(0.075), getBuyableAmount('cl', this.id).add(1).pow(0.36)];
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formulas: (x+1)^0.075<br>and (x+1)^0.36';
+				return 'exponentiates essence gain and exponentiates core gain based on the amount of this upgrade bought.<br>Currently: ^' + format(this.effect()[0]) + '<br>and ^' + format(this.effect()[1]) + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+			},
+			unlocked() { return hasMilestone('cl', 9) },
+		},
 	},
 });
