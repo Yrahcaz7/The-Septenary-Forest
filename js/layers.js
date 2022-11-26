@@ -440,6 +440,7 @@ addLayer('A', {
 			done() {return player.p.points.gte(1)},
 			tooltip: 'obtain 1 prayer.',
 			unlocked() { return hasAchievement('A', 91) },
+			image() { if (hasAchievement('A', 91)) return "images/achievements/91.png" },
 			color: '#FDBBFF',
 		},
 		92: {
@@ -447,6 +448,7 @@ addLayer('A', {
 			done() {return player.p.points.gte(1e10)},
 			tooltip: 'obtain 1e10 prayers.',
 			unlocked() { return hasAchievement('A', 91) },
+			image() { if (hasAchievement('A', 92)) return "images/achievements/92.png" },
 			color: '#FDBBFF',
 		},
 		93: {
@@ -454,6 +456,7 @@ addLayer('A', {
 			done() {return player.p.points.gte(1e100)},
 			tooltip: 'obtain 1e100 prayers.',
 			unlocked() { return hasAchievement('A', 92) },
+			image() { if (hasAchievement('A', 93)) return "images/achievements/93.png" },
 			color: '#FDBBFF',
 		},
 		94: {
@@ -461,6 +464,7 @@ addLayer('A', {
 			done() {return player.p.points.gte('1e1000')},
 			tooltip: 'obtain 1e1000 prayers.',
 			unlocked() { return hasAchievement('A', 93) },
+			image() { if (hasAchievement('A', 94)) return "images/achievements/94.png" },
 			color: '#FDBBFF',
 		},
 		95: {
@@ -468,6 +472,7 @@ addLayer('A', {
 			done() {return player.p.points.gte('1e10000')},
 			tooltip: 'obtain 1e10,000 prayers.',
 			unlocked() { return hasAchievement('A', 94) },
+			image() { if (hasAchievement('A', 95)) return "images/achievements/95.png" },
 			color: '#FDBBFF',
 		},
 		96: {
@@ -475,6 +480,7 @@ addLayer('A', {
 			done() {return player.p.points.gte(1e10) && player.h.total.eq(0) && player.sp.total.eq(0) && player.s.total.eq(0)},
 			tooltip: 'obtain 1e10 prayers with no hexes, subatomic particles, and sanctums.',
 			unlocked() { return hasAchievement('A', 92) && hasAchievement('A', 101) },
+			image() { if (hasAchievement('A', 96)) return "images/achievements/96.png" },
 			color: '#FDBBFF',
 		},
 		101: {
