@@ -3,7 +3,7 @@
 function respecBuyables(layer) {
 	if (!layers[layer].buyables) return;
 	if (!layers[layer].buyables.respec) return;
-	if (!player[layer].noRespecConfirm && !confirm(tmp[layer].buyables.respecMessage || 'Are you sure you want to respec? This will force you to do a "'+(tmp[layer].name?tmp[layer].name:layer)+'" reset as well!')) return;
+	if (!player[layer].noRespecConfirm && !confirm(tmp[layer].buyables.respecMessage || 'Are you sure you want to respec? This will force you to do a "' + (tmp[layer].name ? tmp[layer].name : layer) + '" reset as well!')) return;
 	run(layers[layer].buyables.respec, layers[layer].buyables);
 	updateBuyableTemp(layer);
 	document.activeElement.blur();
@@ -124,15 +124,14 @@ function inChallenge(layer, id) {
 
 // ************ Misc ************
 
-var onTreeTab = true
+var onTreeTab = true;
 
-function showTab(name, prev) {
+function showTab(name) {
 	if (LAYERS.includes(name) && !layerunlocked(name)) return;
 	if (player.tab !== name) clearParticles(function(p) {return p.layer === player.tab});
 	if (tmp[name] && player.tab === name && isPlainObject(tmp[name].tabFormat)) {
 		player.subtabs[name].mainTabs = Object.keys(layers[name].tabFormat)[0];
 	};
-	var toTreeTab = name == 'none';
 	player.tab = name;
 	if (tmp[name] && (tmp[name].row !== 'side') && (tmp[name].row !== 'otherside')) player.lastSafeTab = name;
 	updateTabFormats();
@@ -145,11 +144,9 @@ function showNavTab(name, prev) {
 	if (LAYERS.includes(name) && !layerunlocked(name)) return;
 	if (player.navTab !== name) clearParticles(function(p) {return p.layer === player.navTab});
 	if (tmp[name] && tmp[name].previousTab !== undefined) prev = tmp[name].previousTab;
-	var toTreeTab = name == 'tree-tab';
-	console.log(name + prev);
-	if (name!== 'none' && prev && !tmp[prev]?.leftTab == !tmp[name]?.leftTab) player[name].prevTab = prev;
-	else if (player[name])
-		player[name].prevTab = '';
+	console.log(name, prev);
+	if (name !== 'none' && prev && !tmp[prev]?.leftTab == !tmp[name]?.leftTab) player[name].prevTab = prev;
+	else if (player[name]) player[name].prevTab = '';
 	player.navTab = name;
 	updateTabFormats();
 	needCanvasUpdate = true;
@@ -244,7 +241,7 @@ function updateMilestones(layer) {
 			if (layers[layer].milestones[id].onComplete) layers[layer].milestones[id].onComplete();
 			if (layers[layer].milestones[id].color) color = layers[layer].milestones[id].color;
 			else color = tmp[layer].color;
-			if (tmp[layer].milestonePopups || tmp[layer].milestonePopups === undefined) doPopup('milestone',tmp[layer].milestones[id].requirementDescription,'Milestone Gotten!',3,color);
+			if (tmp[layer].milestonePopups || tmp[layer].milestonePopups === undefined) doPopup('milestone', tmp[layer].milestones[id].requirementDescription, 'Milestone Gotten!', 3, color);
 			player[layer].lastMilestone = id;
 		};
 	};
@@ -285,10 +282,10 @@ function addTime(diff, layer) {
 	else data.timePlayed = time;
 };
 
-shiftDown = false;
-ctrlDown = false;
+let shiftDown = false;
+let ctrlDown = false;
 
-document.onkeydown = function (e) {
+document.onkeydown = function(e) {
 	if (player === undefined) return;
 	shiftDown = e.shiftKey;
 	ctrlDown = e.ctrlKey;
@@ -304,7 +301,7 @@ document.onkeydown = function (e) {
 	};
 };
 
-document.onkeyup = function (e) {
+document.onkeyup = function(e) {
 	if (!ctrlDown && player.nerdMode) tmp.nerdMode = false;
 	shiftDown = e.shiftKey;
 	ctrlDown = e.ctrlKey;
@@ -361,7 +358,7 @@ function doPopup(type = 'none', text = 'This is a test popup.', title = '', time
 	if (title != '') popupTitle = title;
 	popupMessage = text;
 	popupTimer = timer;
-	activePopups.push({'time':popupTimer,'type':popupType,'title':popupTitle,'message':(popupMessage+'<br>'),'id':popupID,'color':color});
+	activePopups.push({'time':popupTimer, 'type':popupType, 'title':popupTitle, 'message':(popupMessage+'<br>'), 'id':popupID, 'color':color});
 	popupID++;
 };
 

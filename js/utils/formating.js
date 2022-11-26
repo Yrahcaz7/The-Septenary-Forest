@@ -90,12 +90,12 @@ function toPlaces(x, precision, maxAccepted) {
 };
 
 // Will also display very small numbers
-function formatSmall(x, precision = 2) { 
+function formatSmall(x, precision = 2) {
     return format(x, precision, true);
 };
 
 function invertOOM(x) {
     let e = x.log10().ceil();
     let m = x.div(Decimal.pow(10, e));
-    return new Decimal(10).pow(e.neg()).times(m);
+    return new Decimal(10).pow(e.neg()).mul(m);
 };
