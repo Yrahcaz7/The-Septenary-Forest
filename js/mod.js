@@ -3,7 +3,7 @@ let modInfo = {
 	id: 'Yrahcaz7-ModTree-ThePrimordialTree',
 	author: 'Yrahcaz7',
 	pointsName: 'points',
-	modFiles: ['layers.js', 'tree.js'],
+	modFiles: ['achievements.js', 'softcaps.js', 'layers.js', 'tree.js'],
 	initialStartPoints: new Decimal(0),
 	offlineLimit: 1, // In hours
 };
@@ -14,14 +14,6 @@ let VERSION = {
 };
 
 let winText = '<h3>You won the game!</h3><br>However, it isn\'t the end yet...<br>Wait for more updates for further content.';
-
-const softcaps = {
-	p_d: [[1e150, 0.95]],
-	m_eff: [[15000, 0.5]],
-	r_l: [[1e20, 0]],
-	r_eff1: [['e500000', 0.333]],
-	gi_eff: [['1e2500', 0.6666666666666666]],
-};
 
 function getdark(darkthis, type, special = false, research = false) {
 	if (darkthis.layer !== undefined) {
