@@ -5813,13 +5813,19 @@ addLayer('w', {
 		},
 		3: {
 			requirementDescription: '4 wars',
-			effectDescription: 'keep evil influence challenge completions on war resets, you can automatically activate relics, perform evil influence resets automatically, and unlock another war rebuyable',
+			effectDescription() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'keep evil influence challenge completions on war resets, you can automatically activate relics, perform evil influence resets automatically, and unlock another <b class="layer-w-dark">Influence</b>';
+				return 'keep evil influence challenge completions on war resets, you can automatically activate relics, perform evil influence resets automatically, and unlock another <b>Influence</b>';
+			},
 			done() { return player.w.points.gte(4) },
 			toggles: [['r', 'auto_activate']],
 		},
 		4: {
 			requirementDescription: '5 wars',
-			effectDescription: 'keep demon soul challenge completions on war resets, you can autobuy individual relic upgrades, relics reset nothing, perform relic resets automatically, and unlock another war rebuyable',
+			effectDescription() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'keep demon soul challenge completions on war resets, you can autobuy individual relic upgrades, relics reset nothing, perform relic resets automatically, and unlock another <b class="layer-w-dark">Influence</b>';
+				return 'keep demon soul challenge completions on war resets, you can autobuy individual relic upgrades, relics reset nothing, perform relic resets automatically, and unlock another <b>Influence</b>';
+			},
 			done() { return player.w.points.gte(5) },
 			toggles: [['r', 'auto_upgrade_1'], ['r', 'auto_upgrade_2'], ['r', 'auto_upgrade_3']],
 		},
@@ -5840,7 +5846,10 @@ addLayer('w', {
 		},
 		8: {
 			requirementDescription: '9 wars',
-			effectDescription: 'war resets don\'t reset good influence, and unlock another war rebuyable',
+			effectDescription() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'war resets don\'t reset good influence, and unlock another <b class="layer-w-dark">Influence</b>';
+				return 'war resets don\'t reset good influence, and unlock another <b>Influence</b>';
+			},
 			done() { return player.w.points.gte(9) },
 		},
 		9: {
@@ -5850,13 +5859,27 @@ addLayer('w', {
 		},
 		10: {
 			requirementDescription: '11 wars',
-			effectDescription: 'war resets don\'t reset prayers, and reduce <b class="layer-w-dark">Relic Hoarding</b> cost scaling past 6 of them',
+			effectDescription() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'war resets don\'t reset prayers, and reduce <b class="layer-w-dark">Relic Hoarding</b> cost scaling past 6 of them';
+				return 'war resets don\'t reset prayers, and reduce <b>Relic Hoarding</b> cost scaling past 6 of them';
+			},
 			done() { return player.w.points.gte(11) },
 		},
 		11: {
 			requirementDescription: '12 wars',
-			effectDescription: 'war resets don\'t reset sanctums, and increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 1',
+			effectDescription() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'war resets don\'t reset sanctums, and increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 1';
+				return 'war resets don\'t reset sanctums, and increase the maximum bought of <b>Power of Good</b> by 1'
+			},
 			done() { return player.w.points.gte(12) },
+		},
+		12: {
+			requirementDescription: '13 wars',
+			effectDescription() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 1';
+				return 'increase the maximum bought of <b>Power of Good</b> by 1';
+			},
+			done() { return player.w.points.gte(13) },
 		},
 	},
 	bars: {
@@ -5939,8 +5962,10 @@ addLayer('w', {
 			title: '<h3 class="layer-w-dark">Power of Good',
 			canAfford() { return player.s.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
 			purchaseLimit() {
-				if (hasMilestone('w', 11)) return 4;
-				return 3;
+				let max = 3;
+				if (hasMilestone('w', 11)) max++;
+				if (hasMilestone('w', 12)) max++;
+				return max;
 			},
 			buy() {
 				player.s.points = player.s.points.sub(this.cost());
