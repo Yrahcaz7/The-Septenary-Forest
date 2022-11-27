@@ -2239,6 +2239,7 @@ addLayer('a', {
 		if (tmp.m.effect.gt(1)) gain = gain.mul(tmp.m.effect);
 		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
 		if (getBuyableAmount('cl', 11).gt(0)) gain = gain.mul(buyableEffect('cl', 11)[1]);
+		if (getBuyableAmount('cl', 33).gt(0)) gain = gain.mul(buyableEffect('cl', 33));
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('a', 15) },
@@ -3896,7 +3897,7 @@ addLayer('d', {
 	},
 	doReset(resettingLayer) {},
 	update(diff) {
-		eff = new Decimal(0);
+		let eff = new Decimal(0);
 		eff = eff.add(getBuyableAmount('d', 11).mul(0.1));
 		if (hasMilestone('s', 24)) eff = eff.add(getBuyableAmount('d', 12));
 		else eff = eff.add(getBuyableAmount('d', 12).mul(0.5));
@@ -3910,6 +3911,7 @@ addLayer('d', {
 		else if (hasMilestone('s', 21)) player.s.devotion_effect = player.s.devotion.add(1).pow(0.45);
 		else if (hasMilestone('s', 18)) player.s.devotion_effect = player.s.devotion.add(1).pow(0.375);
 		else player.s.devotion_effect = player.s.devotion.add(1).pow(0.3);
+		if (player.d.buyables[11].gt(tmp.d.buyables[11].purchaseLimit)) player.d.buyables[11] = new Decimal(tmp.d.buyables[11].purchaseLimit);
 	},
 	buyables: {
 		11: {
@@ -3917,7 +3919,7 @@ addLayer('d', {
 				if (challengeCompletions('r', 11) >= 5) div = new Decimal(1e25).mul(player.r.relic_effects[2]).pow(getBuyableAmount('d', 21));
 				else div = new Decimal(1e25).pow(getBuyableAmount('d', 21));
 				if (hasMilestone('s', 32)) div = div.mul(1e100);
-				scale = new Decimal(50);
+				let scale = new Decimal(50);
 				if (hasMilestone('s', 17)) scale = scale.div(15);
 				if (hasMilestone('s', 23)) scale = scale.div(2);
 				if (hasMilestone('s', 40)) scale = scale.div(1.5);
@@ -3927,20 +3929,19 @@ addLayer('d', {
 			title() {
 				return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Worship<br>';
 			},
-			canAfford() {
-				return player.p.points.gte(this.cost());
-			},
+			canAfford() { return player.p.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 2e9,
 			buy() {
 				player.p.points = player.p.points.sub(this.cost());
 				setBuyableAmount('d', 11, getBuyableAmount('d', 11).add(getDevotionBulk()));
 			},
 			display() {
-				return 'use prayers to worship the gods. you will gain 0.1 devotion per worship.<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 11).mul(0.1)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' prayers<br><br>Times Worshipped: ' + formatWhole(getBuyableAmount('d', 11));
+				return 'use prayers to worship the gods. you will gain 0.1 devotion per worship.<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 11).mul(0.1)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' prayers<br><br>Times Worshipped:<br>' + formatWhole(getBuyableAmount('d', 11)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			style() {
-				backcolors = '#224400, #336600';
+				let backcolors = '#224400, #336600';
 				if (this.canAfford()) backcolors = '#112200, #448800';
-				textcolor = '#AAFF00';
+				let textcolor = '#AAFF00';
 				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-image':'radial-gradient('+backcolors+')','color':textcolor,'border-radius':'50%'};
 			},
@@ -3948,7 +3949,7 @@ addLayer('d', {
 		},
 		12: {
 			cost(x = 0) {
-				scale = new Decimal(1);
+				let scale = new Decimal(1);
 				if (hasMilestone('s', 26)) scale = scale.div(2);
 				if (hasMilestone('s', 33)) scale = scale.div(1.6);
 				if (hasMilestone('s', 37)) scale = scale.div(2);
@@ -3959,9 +3960,7 @@ addLayer('d', {
 			title() {
 				return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Sacrifice<br>';
 			},
-			canAfford() {
-				return player.s.points.gte(this.cost());
-			},
+			canAfford() { return player.s.points.gte(this.cost()) },
 			buy() {
 				if (!hasMilestone('s', 34)) player.s.points = player.s.points.sub(this.cost());
 				setBuyableAmount('d', 12, getBuyableAmount('d', 12).add(getDevotionBulk()));
@@ -3972,9 +3971,9 @@ addLayer('d', {
 				return 'use sanctums as a sacrifice to worship the gods. you will gain<br>0.5 devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by 1.5<br>Currently: ' + format(new Decimal(1.5).pow(getBuyableAmount('d', 12))) + 'x<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 12).mul(0.5)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed:' + (formatWhole(getBuyableAmount('d', 12)).length >= 8 ? '<br>' : ' ') + formatWhole(getBuyableAmount('d', 12));
 			},
 			style() {
-				backcolors = '#224400, #336600';
+				let backcolors = '#224400, #336600';
 				if (this.canAfford()) backcolors = '#112200, #448800';
-				textcolor = '#AAFF00';
+				let textcolor = '#AAFF00';
 				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-image':'radial-gradient('+backcolors+')','color':textcolor,'border-radius':'50%'};
 			},
@@ -3982,7 +3981,7 @@ addLayer('d', {
 		},
 		21: {
 			cost_h(x = 0) {
-				scale = new Decimal(50);
+				let scale = new Decimal(50);
 				if (hasMilestone('s', 27)) scale = scale.div(2);
 				if (hasMilestone('s', 29)) scale = scale.div(1.5);
 				if (hasMilestone('s', 31)) scale = scale.div(1.2);
@@ -3993,7 +3992,7 @@ addLayer('d', {
 				return new Decimal(10).pow(getBuyableAmount('d', 21).add(x).mul(scale)).mul(1e50);
 			},
 			cost_sp(x = 0) {
-				scale = new Decimal(1);
+				let scale = new Decimal(1);
 				if (hasMilestone('s', 27)) scale = scale.div(2);
 				if (hasMilestone('s', 29)) scale = scale.div(1.5);
 				if (hasMilestone('s', 31)) scale = scale.div(1.2);
@@ -4004,24 +4003,22 @@ addLayer('d', {
 			title() {
 				return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Sacrificial Ceremony<br>';
 			},
-			canAfford() {
-				return player.h.points.gte(this.cost_h()) && player.sp.points.gte(this.cost_sp());
-			},
+			canAfford() { return player.h.points.gte(this.cost_h()) && player.sp.points.gte(this.cost_sp()) },
 			buy() {
 				player.h.points = player.h.points.sub(this.cost_h());
 				player.sp.points = player.sp.points.sub(this.cost_sp());
 				setBuyableAmount('d', 21, getBuyableAmount('d', 21).add(getDevotionBulk()));
 			},
 			display() {
-				lasteff = new Decimal(1e25);
+				let lasteff = new Decimal(1e25);
 				if (challengeCompletions('r', 11) >= 5) lasteff = lasteff.mul(player.r.relic_effects[2]);
 				if (getBuyableAmount('d', 21).eq(0)) return 'use hexes and subatomic particles in a sacrificial ceremony to worship the gods. you will gain 0.75 devotion per sacrificial ceremony. each sacrificial ceremony also multiplies subatomic particle gain by 1.2, light gain by 1 (additive; others are multiplicative), and divides worship cost by 1e25<br>Currently: 1.00x,<br>1.00x,<br>and /1.00<br><br>Devotion Reward: 0.00<br><br>Cost: ' + formatWhole(this.cost_h()) + ' hexes,<br>' + formatWhole(this.cost_sp()) + ' subatomic particles<br><br>Ceremonies Performed: 0';
 				return 'use hexes and subatomic particles in a sacrificial ceremony to worship the gods. you will gain 0.75 devotion per sacrificial ceremony. each sacrificial ceremony also multiplies subatomic particle gain by 1.2, light gain by 1 (additive; others are multiplicative), and divides worship cost by 1e25<br>Currently: ' + format(new Decimal(1.2).pow(getBuyableAmount('d', 21))) + 'x,<br>' + format(getBuyableAmount('d', 21)) + 'x,<br>and /' + format(lasteff.pow(getBuyableAmount('d', 21))) + '<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 21).mul(0.75)) + '<br><br>Cost: ' + formatWhole(this.cost_h()) + ' hexes,<br>' + formatWhole(this.cost_sp()) + ' subatomic particles<br><br>Ceremonies Performed: ' + formatWhole(getBuyableAmount('d', 21));
 			},
 			style() {
-				backcolors = '#224400, #336600';
+				let backcolors = '#224400, #336600';
 				if (this.canAfford()) backcolors = '#112200, #448800';
-				textcolor = '#AAFF00';
+				let textcolor = '#AAFF00';
 				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-image':'radial-gradient('+backcolors+')','color':textcolor,'border-radius':'50%','height':'300px','width':'300px'};
 			},
@@ -5746,6 +5743,7 @@ addLayer('w', {
 		let gain = new Decimal(1);
 		return gain;
 	},
+	autoPrestige() { return hasMilestone('w', 17) },
 	row: 5,
 	tooltipLocked() {
 		return 'Reach ' + this.requires + ' GI and ' + this.requires + ' EI to unlock (You have ' + formatWhole(player.gi.points) + ' GI and ' + formatWhole(player.ei.points) + ' EI)';
@@ -5764,6 +5762,7 @@ addLayer('w', {
 		let keep = [];
 			if (layers[resettingLayer].row > this.row) layerDataReset('w', keep);
 		},
+	resetsNothing() { return hasMilestone('w', 17) },
 	tabFormat: {
 		"Progress": {
 			content: [
@@ -5906,6 +5905,19 @@ addLayer('w', {
 			},
 			done() { return player.w.points.gte(22) },
 		},
+		16: {
+			requirementDescription: '24 wars',
+			effectDescription() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 28, reduce <b class="layer-w-dark">Power of Good</b> scaling, and unlock <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protien</b>';
+				return 'increase the maximum bought of <b>Power of Good</b> by 28, reduce <b>Power of Good</b> scaling, and unlock <b>Protien</b>';
+			},
+			done() { return player.w.points.gte(24) },
+		},
+		17: {
+			requirementDescription: '36 wars',
+			effectDescription: 'war resets nothing and auto perform war resets',
+			done() { return player.w.points.gte(36) },
+		},
 	},
 	bars: {
 		tide: {
@@ -5983,6 +5995,7 @@ addLayer('w', {
 		},
 		13: {
 			cost() {
+				if (hasMilestone('w', 16)) return getBuyableAmount('w', this.id).mul(50000).add(320000);
 				return getBuyableAmount('w', this.id).mul(70000).add(320000);
 			},
 			title: '<h3 class="layer-w-dark">Power of Good',
@@ -5994,6 +6007,7 @@ addLayer('w', {
 				if (hasMilestone('w', 13)) max += 2;
 				if (hasMilestone('w', 14)) max += 3;
 				if (hasMilestone('w', 15)) max += 12;
+				if (hasMilestone('w', 16)) max += 28;
 				return max;
 			},
 			buy() {
@@ -6044,6 +6058,8 @@ addLayer('cl', {
 		points: new Decimal(0),
 		best: new Decimal(0),
 		total: new Decimal(0),
+		protein_conv: new Decimal(0),
+		protein: new Decimal(0),
 		auto_tissues: false,
 	}},
 	color: "#008800",
@@ -6084,6 +6100,14 @@ addLayer('cl', {
 			if (layers[resettingLayer].row > this.row) layerDataReset('cl', keep);
 		},
 	resetsNothing() { return hasMilestone('cl', 12) },
+	update(diff) {
+		let conv = new Decimal(0);
+		if (getBuyableAmount('cl', 31).gt(0)) conv = conv.add(buyableEffect('cl', 31));
+		if (getBuyableAmount('cl', 32).gt(0)) conv = conv.mul(buyableEffect('cl', 32));
+		if (getBuyableAmount('cl', 41).gt(0)) conv = conv.mul(buyableEffect('cl', 41));
+		if (getBuyableAmount('cl', 42).gt(0)) conv = conv.mul(buyableEffect('cl', 42));
+		player.cl.protein_conv = conv;
+	},
 	tabFormat: {
 		"Life Tracker": {
 			content: [
@@ -6100,8 +6124,34 @@ addLayer('cl', {
 				"prestige-button",
 				"resource-display",
 				"blank",
-				"buyables",
+				["buyables", "1"],
+				["buyables", "2"],
 			],
+		},
+		"Protien": {
+			content: function() {
+				if (this.unlocked) return [
+					"main-display",
+					"prestige-button",
+					"resource-display",
+					"blank",
+					["display-text", 'You are currently finding <h2 class="layer-cl">' + format(player.cl.protein_conv) + '</h2> proteins per cellular life<br>You currently have <h2 class="layer-cl">' + format(player.cl.protein) + '</h2> protein'],
+					"blank",
+					["buyables", "3"],
+					["buyables", "4"],
+					"blank",
+					"clickables",
+					"blank",
+				];
+				return [
+					"main-display",
+					"prestige-button",
+					"resource-display",
+					"blank",
+					"milestones",
+				];
+			},
+			unlocked() { return hasMilestone('w', 16)},
 		},
 	},
 	milestones: {
@@ -6275,6 +6325,122 @@ addLayer('cl', {
 				return 'exponentiates essence gain and exponentiates core gain based on the amount of this upgrade bought.<br>Currently: ^' + format(this.effect()[0]) + '<br>and ^' + format(this.effect()[1]) + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			unlocked() { return hasMilestone('cl', 9) },
+		},
+		31: {
+			cost() {
+				return getBuyableAmount('cl', this.id).mul(100).add(1000);
+			},
+			title() {
+				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Practice Makes Perfect';
+			},
+			canAfford() { return player.cl.points.gte(this.cost()) },
+			buy() {
+				player.cl.points = player.cl.points.sub(this.cost());
+				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+			},
+			effect() {
+				return player.cl.best.mul(getBuyableAmount('cl', this.id).pow(2)).add(1).pow(0.25);
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formula: (x(y^2)+1)^0.25';
+				return 'increases protein found from cellular life based on your best cellular life and the amount of this upgrade bought.<br>Currently: +' + format(this.effect()) + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+			},
+		},
+		32: {
+			cost() {
+				return new Decimal(1.5).pow(getBuyableAmount('cl', this.id)).mul(10000);
+			},
+			title() {
+				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Result Analyzing';
+			},
+			canAfford() { return player.cl.protein.gte(this.cost()) },
+			buy() {
+				player.cl.protein = player.cl.protein.sub(this.cost());
+				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+			},
+			effect() {
+				return player.w.points.mul(getBuyableAmount('cl', this.id)).add(1).pow(1.5);
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formula: (xy+1)^1.5';
+				return 'multiplies protein found from cellular life based on your wars and the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+			},
+		},
+		33: {
+			cost() {
+				return new Decimal(10).pow(getBuyableAmount('cl', this.id)).mul(1000000);
+			},
+			title() {
+				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Synergizing';
+			},
+			canAfford() { return player.cl.protein.gte(this.cost()) },
+			buy() {
+				player.cl.protein = player.cl.protein.sub(this.cost());
+				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+			},
+			effect() {
+				return new Decimal(6).pow(getBuyableAmount('cl', this.id));
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formula: 6^x';
+				return 'multiplies atom gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+			},
+		},
+		41: {
+			cost() {
+				return new Decimal(10).pow(getBuyableAmount('cl', this.id)).mul(1e45);
+			},
+			title() {
+				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Deeper Comprehension';
+			},
+			canAfford() { return player.m.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 30,
+			buy() {
+				player.m.points = player.m.points.sub(this.cost());
+				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+			},
+			effect() {
+				return new Decimal(3).pow(getBuyableAmount('cl', this.id));
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formula: 3^x';
+				return 'multiplies protein found from cellular life based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' molecules<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
+			},
+		},
+		42: {
+			cost() {
+				return new Decimal(100).pow(getBuyableAmount('cl', this.id)).mul(1e14);
+			},
+			title() {
+				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Intensive Research';
+			},
+			canAfford() { return player.cl.protein.gte(this.cost()) },
+			buy() {
+				player.cl.protein = player.cl.protein.sub(this.cost());
+				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+			},
+			effect() {
+				return new Decimal(5).pow(getBuyableAmount('cl', this.id));
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formula: 5^x';
+				return 'multiplies protein found from cellular life based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+			},
+		},
+	},
+	clickables: {
+		11: {
+			display() {return 'Convert all your cellular life to ' + format(player.cl.points.mul(player.cl.protein_conv)) + ' protein'},
+			canClick: true,
+			onClick() {
+				player.cl.protein = player.cl.protein.add(player.cl.points.mul(player.cl.protein_conv));
+				player.cl.points = new Decimal(0);
+			},
 		},
 	},
 });

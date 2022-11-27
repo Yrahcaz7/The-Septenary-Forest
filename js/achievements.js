@@ -627,6 +627,13 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 133) },
 			color: '#08FF87',
 		},
+        135: {
+			name: 'Good Exceeding',
+			done() {return player.gi.points.gte(10000)},
+			tooltip: 'obtain 10,000 good influence.',
+			unlocked() { return hasAchievement('A', 134) },
+			color: '#08FF87',
+		},
 		136: {
 			name: 'Science is not Holy',
 			done() {return player.gi.points.gte(10) && player.m.total.eq(0)},
@@ -660,6 +667,13 @@ addLayer('A', {
 			done() {return player.ei.points.gte(1000)},
 			tooltip: 'obtain 1,000 evil influence.',
 			unlocked() { return hasAchievement('A', 143) },
+			color: '#FF4400',
+		},
+        145: {
+			name: 'Evil to Infinity',
+			done() {return player.ei.points.gte(10000)},
+			tooltip: 'obtain 10,000 evil influence.',
+			unlocked() { return hasAchievement('A', 144) },
 			color: '#FF4400',
 		},
 		146: {

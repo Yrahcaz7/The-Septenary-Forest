@@ -9,8 +9,8 @@ let modInfo = {
 };
 
 let VERSION = {
-	num: '3.1',
-	name: 'Finally, Life',
+	num: '3.2',
+	name: 'Back and Forth',
 };
 
 let winText = '<h3>You won the game!</h3><br>However, it isn\'t the end yet...<br>Wait for more updates for further content.';
