@@ -2823,6 +2823,7 @@ addLayer('p', {
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone('ei', 3) && resettingLayer == 'ei') return;
+		if (hasMilestone('w', 10) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 6) && resettingLayer == 'cl') return;
 		let keep = ['auto_upgrades', "smart_auto_upgrades"];
 			if (resettingLayer == 'h') keep.push("points", "best", "total", "milestones");
@@ -3259,7 +3260,7 @@ addLayer('p', {
 			title() {
 				return '<b class="layer-p' + getdark(this, "title") + 'Silver Sanctums';
 			},
-			description: 'reduces sanctum gain exponent<br>5 --> 4',
+			description: 'reduces sanctum cost scaling<br>5 --> 4',
 			cost: 1.00e25,
 			unlocked() { return hasUpgrade('p', 64) },
 		},
@@ -3316,7 +3317,7 @@ addLayer('p', {
 				return '<b class="layer-p' + getdark(this, "title") + 'Gold Sanctums';
 			},
 			description() {
-				return 'reduces sanctum gain exponent if you have <b class="layer-p' + getdark(this, "ref") + 'Silver Sanctums</b><br>4 --> 3.48' 
+				return 'reduces sanctum cost scaling if you have <b class="layer-p' + getdark(this, "ref") + 'Silver Sanctums</b><br>4 --> 3.48' 
 			},
 			cost: 1.00e175,
 			unlocked() { return hasMilestone('s', 3) && hasUpgrade('p', 41) },
@@ -5246,7 +5247,7 @@ addLayer('ei', {
 			title() {
 				return '<b class="layer-ei' + getdark(this, "title") + 'More Evil';
 			},
-			description: 'reduces evil influence gain exponent<br>12 --> 7.75',
+			description: 'reduces evil influence cost scaling<br>12 --> 7.75',
 			cost: 3,
 			unlocked() { return hasUpgrade('ei', 12) },
 		},
@@ -5314,7 +5315,7 @@ addLayer('ei', {
 			title() {
 				return '<b class="layer-ei' + getdark(this, "title") + 'Even More Evil';
 			},
-			description: 'reduces evil influence gain exponent<br>7.75 --> 7.25',
+			description: 'reduces evil influence cost scaling<br>7.75 --> 7.25',
 			cost: 5,
 			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
@@ -5382,7 +5383,7 @@ addLayer('ei', {
 			title() {
 				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Gathering';
 			},
-			description: 'reduces evil influence gain exponent<br>7.25 --> 7',
+			description: 'reduces evil influence cost scaling<br>7.25 --> 7',
 			cost: 7,
 			unlocked() { return player.ei.upgrades.length >= 10 },
 		},
@@ -5450,7 +5451,7 @@ addLayer('ei', {
 			title() {
 				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Condensing';
 			},
-			description: 'reduces evil influence gain exponent<br>7 --> 6.75',
+			description: 'reduces evil influence cost scaling<br>7 --> 6.75',
 			cost: 9,
 			unlocked() { return player.ei.upgrades.length >= 15 },
 		},
@@ -5500,7 +5501,7 @@ addLayer('ei', {
 			title() {
 				return '<b class="layer-ei' + getdark(this, "title") + 'Amassing Evil';
 			},
-			description: 'reduces evil influence gain exponent<br>6.75 --> 6.55',
+			description: 'reduces evil influence cost scaling<br>6.75 --> 6.55',
 			cost: 12,
 			unlocked() { return player.ei.upgrades.length >= 20 },
 		},
@@ -5542,7 +5543,7 @@ addLayer('ei', {
 			title() {
 				return '<b class="layer-ei' + getdark(this, "title") + 'Army of Evil';
 			},
-			description: 'reduces evil influence gain exponent<br>6.55 --> 6.45',
+			description: 'reduces evil influence cost scaling<br>6.55 --> 6.45',
 			cost: 16,
 			unlocked() { return player.ei.upgrades.length >= 23 },
 		},
@@ -5584,7 +5585,7 @@ addLayer('ei', {
 			title() {
 				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Kingdom';
 			},
-			description: 'reduces evil influence gain exponent<br>6.45 --> 6.25',
+			description: 'reduces evil influence cost scaling<br>6.45 --> 6.25',
 			cost: 22,
 			unlocked() { return player.ei.upgrades.length >= 26 },
 		},
@@ -5608,7 +5609,7 @@ addLayer('ei', {
 			title() {
 				return '<b class="layer-ei' + getdark(this, "title") + 'Infinite Evil';
 			},
-			description: 'reduces evil influence gain exponent<br>6.25 --> 5.75',
+			description: 'reduces evil influence cost scaling<br>6.25 --> 5.75',
 			cost: 30,
 			unlocked() { return player.ei.upgrades.length >= 29 },
 		},
@@ -5846,6 +5847,11 @@ addLayer('w', {
 			effectDescription: 'war resets don\'t reset quarks, and unlock cellular life',
 			done() { return player.w.points.gte(10) },
 		},
+		10: {
+			requirementDescription: '11 wars',
+			effectDescription: 'war resets don\'t reset prayers',
+			done() { return player.w.points.gte(11) },
+		},
 	},
 	bars: {
 		tide: {
@@ -5983,7 +5989,10 @@ addLayer('cl', {
 	baseAmount() { return player.m.points },
 	type: 'static',
 	base: 100,
-	exponent: 1.5,
+	exponent() {
+		if (hasMilestone('cl', 10)) return 1.45;
+		return 1.5;
+	},
 	canBuyMax() { return hasMilestone('cl', 0) },
 	gainExp() {
 		let gain = new Decimal(1);
@@ -6080,6 +6089,11 @@ addLayer('cl', {
 				return 'unlock another <b class="layer-cl' + getdark(this, "ref", true, true) + 'Tissue</b>';
 			},
 			done() { return player.cl.total.gte(214) },
+		},
+		10: {
+			requirementDescription: '318 total cellular life',
+			effectDescription: 'reduce the cost scaling of cellular life (1.5 --> 1.45)',
+			done() { return player.cl.total.gte(318) },
 		},
 	},
 	buyables: {
