@@ -3393,6 +3393,7 @@ addLayer('s', {
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone('s', 12) && resettingLayer == 'a') return;
+		if (hasMilestone('w', 11) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 7) && resettingLayer == 'cl') return;
 		let keep = ["auto_worship", "auto_sacrifice", "auto_sacrificial_ceremony", "no_speed_but_more_bulk"];
 			if (challengeCompletions('r', 11) >= 9 && resettingLayer == 'r') keep.push("milestones");
@@ -5849,8 +5850,13 @@ addLayer('w', {
 		},
 		10: {
 			requirementDescription: '11 wars',
-			effectDescription: 'war resets don\'t reset prayers',
+			effectDescription: 'war resets don\'t reset prayers, and reduce <b class="layer-w-dark">Relic Hoarding</b> cost scaling past 6 of them',
 			done() { return player.w.points.gte(11) },
+		},
+		11: {
+			requirementDescription: '12 wars',
+			effectDescription: 'war resets don\'t reset sanctums, and increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 1',
+			done() { return player.w.points.gte(12) },
 		},
 	},
 	bars: {
@@ -5907,6 +5913,7 @@ addLayer('w', {
 				if (getBuyableAmount('w', this.id).lt(5)) return getBuyableAmount('w', this.id).mul(12).add(168);
 				if (getBuyableAmount('w', this.id).eq(5)) return new Decimal(218);
 				if (getBuyableAmount('w', this.id).eq(6)) return new Decimal(225);
+				if (hasMilestone('w', 10)) return getBuyableAmount('w', this.id).mul(7).add(170);
 				return getBuyableAmount('w', this.id).mul(8).add(170);
 			},
 			title: '<h3 class="layer-w-dark">Relic Hoarding',
@@ -5930,8 +5937,11 @@ addLayer('w', {
 				return getBuyableAmount('w', this.id).mul(70000).add(320000);
 			},
 			title: '<h3 class="layer-w-dark">Power of Good',
-			canAfford() { return player.s.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
-			purchaseLimit: 3,
+			canAfford() { return player.s.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			purchaseLimit() {
+				if (hasMilestone('w', 11)) return 4;
+				return 3;
+			},
 			buy() {
 				player.s.points = player.s.points.sub(this.cost());
 				setBuyableAmount('w', this.id, getBuyableAmount('w', this.id).add(1));
@@ -5942,7 +5952,7 @@ addLayer('w', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: (((x+1)^0.025)*y+1)^0.025';
-				return 'multiplies good influence gain based on your sanctums and the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' sanctums<br><br>Bought: ' + formatWhole(getBuyableAmount('w', this.id)) + '/' + formatWhole(this.purchaseLimit);
+				return 'multiplies good influence gain based on your sanctums and the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' sanctums<br><br>Bought: ' + formatWhole(getBuyableAmount('w', this.id)) + '/' + formatWhole(this.purchaseLimit());
 			},
 			unlocked() { return hasMilestone('w', 4) },
 		},
@@ -5990,6 +6000,7 @@ addLayer('cl', {
 	type: 'static',
 	base: 100,
 	exponent() {
+		if (hasMilestone('cl', 11)) return 1.4;
 		if (hasMilestone('cl', 10)) return 1.45;
 		return 1.5;
 	},
@@ -6094,6 +6105,11 @@ addLayer('cl', {
 			requirementDescription: '318 total cellular life',
 			effectDescription: 'reduce the cost scaling of cellular life (1.5 --> 1.45)',
 			done() { return player.cl.total.gte(318) },
+		},
+		11: {
+			requirementDescription: '677 total cellular life',
+			effectDescription: 'reduce the cost scaling of cellular life (1.45 --> 1.4)',
+			done() { return player.cl.total.gte(677) },
 		},
 	},
 	buyables: {
