@@ -706,9 +706,16 @@ addLayer('A', {
 		},
 		163: {
 			name: 'Many Cells',
-			done() {return player.cl.points.gte(100)},
-			tooltip: 'obtain 100 cellular life.',
+			done() {return player.cl.points.gte(1000)},
+			tooltip: 'obtain 1,000 cellular life.',
 			unlocked() { return hasAchievement('A', 162) },
+			color: '#008800',
+		},
+        164: {
+			name: 'Congealing Cells',
+			done() {return player.cl.points.gte(100000)},
+			tooltip: 'obtain 100,000 cellular life.',
+			unlocked() { return hasAchievement('A', 163) },
 			color: '#008800',
 		},
 	},

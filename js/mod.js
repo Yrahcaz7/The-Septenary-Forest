@@ -45,6 +45,7 @@ function getDevotionBulk() {
 	if (hasMilestone('gi', 17)) bulk *= 2;
 	if (hasChallenge('ei', 12)) bulk *= 5;
 	if (hasMilestone('w', 2)) bulk *= 2;
+	if (hasMilestone('w', 15)) bulk *= 5;
 	if (hasMilestone('cl', 1) && player.s.no_speed_but_more_bulk) bulk *= 100;
 	if (hasMilestone('cl', 2)) bulk *= 2;
 	return bulk;
