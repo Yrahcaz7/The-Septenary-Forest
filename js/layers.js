@@ -6477,11 +6477,11 @@ addLayer('cl', {
 				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
 			},
 			effect() {
-				return [getBuyableAmount('cl', this.id).div(500), getBuyableAmount('cl', this.id).mul(7.5).add(1).pow(2)];
+				return [new Decimal(1.025).pow(getBuyableAmount('cl', this.id)).sub(1), getBuyableAmount('cl', this.id).mul(7.5).add(1).pow(2)];
 			},
 			display() {
 				let text = '';
-				if (player.nerdMode) text = '<br>formulas: x/500<br>and (7.5x+1)^2';
+				if (player.nerdMode) text = '<br>formulas: 1.025^x-1<br>and (7.5x+1)^2';
 				return 'increases passive protein gain and multiplies protein found from cellular life based on the amount of this upgrade bought.<br>Currently: +' + format(this.effect()[0].mul(100)) + '%<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
 			},
 		},
@@ -6498,11 +6498,11 @@ addLayer('cl', {
 				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
 			},
 			effect() {
-				return getBuyableAmount('cl', this.id).add(1).pow(2);
+				return getBuyableAmount('cl', this.id).add(1).pow(10);
 			},
 			display() {
 				let text = '';
-				if (player.nerdMode) text = '<br>formula: (x+1)^2';
+				if (player.nerdMode) text = '<br>formula: (x+1)^10';
 				return 'multiplies protein found from cellular life based the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
 			},
 			unlocked() { return hasMilestone('w', 18) },
