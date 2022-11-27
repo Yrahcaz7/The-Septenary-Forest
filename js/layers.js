@@ -2896,6 +2896,7 @@ addLayer('p', {
 		"milestones",
 		"upgrades",
 		"clickables",
+		"blank",
 	],
 	milestones: {
 		0: {
@@ -5068,6 +5069,7 @@ addLayer('ei', {
 		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
 		if (getBuyableAmount('w', 11).gt(0)) gain = gain.mul(buyableEffect('w', 11)[1]);
 		if (getBuyableAmount('w', 12).gt(0)) gain = gain.mul(buyableEffect('w', 12));
+		if (getBuyableAmount('cl', 53).gt(0)) gain = gain.mul(buyableEffect('cl', 53));
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('w', 3) && (!hasMilestone('cl', 0) || player.ei.auto_prestige) },
@@ -5759,7 +5761,7 @@ addLayer('w', {
 	automate() {
 		if (hasMilestone('w', 18) && player.w.auto_influence) {
 			for (const id in layers.w.buyables) {
-				if (layers.w.buyables[id].unlocked() && layers.w.buyables[id].canAfford()) layers.w.buyables[id].buy();
+				if ((typeof layers.w.buyables[id].unlocked == "function" ? layers.w.buyables[id].unlocked() : layers.w.buyables[id].unlocked) && layers.w.buyables[id].canAfford()) layers.w.buyables[id].buy();
 			};
 		};
 	},
@@ -5933,8 +5935,8 @@ addLayer('w', {
 		18: {
 			requirementDescription: '60 wars',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'unlock 2 more cellular life (protein) buyables, and you can autobuy <b class="layer-w-dark">Influences</b>';
-				return 'unlock 2 more cellular life (protein) buyables, and you can autobuy <b>Influences</b>';
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'unlock 3 more cellular life (protein) buyables, and you can autobuy <b class="layer-w-dark">Influences</b>';
+				return 'unlock 3 more cellular life (protein) buyables, and you can autobuy <b>Influences</b>';
 			},
 			done() { return player.w.points.gte(60) },
 			toggles: [['w', 'auto_influence']],
@@ -6157,6 +6159,7 @@ addLayer('cl', {
 				"blank",
 				["buyables", "1"],
 				["buyables", "2"],
+				"blank",
 			],
 		},
 		"Protein": {
@@ -6526,6 +6529,28 @@ addLayer('cl', {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: 10^x';
 				return 'multiplies atom gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+			},
+			unlocked() { return hasMilestone('w', 18) },
+		},
+		53: {
+			cost() {
+				return new Decimal(1e5).pow(getBuyableAmount('cl', this.id)).mul(1e50);
+			},
+			title() {
+				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Innate Evil';
+			},
+			canAfford() { return player.cl.protein.gte(this.cost()) },
+			buy() {
+				player.cl.protein = player.cl.protein.sub(this.cost());
+				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+			},
+			effect() {
+				return getBuyableAmount('cl', this.id).add(1).pow(0.125);
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formula: (x+1)^0.125';
+				return 'multiplies evil influence gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
 			},
 			unlocked() { return hasMilestone('w', 18) },
 		},
