@@ -1901,7 +1901,7 @@ addLayer('ds', {
 		return mult;
 	},
 	softcap: new Decimal('e10000000'),
-	softcapPower: 0.1,
+	softcapPower: 0.8,
 	row: 3,
 	hotkeys: [
 		{key: 'd', description: 'D: Reset for demon souls', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
@@ -5705,6 +5705,7 @@ addLayer('w', {
 		points: new Decimal(0),
 		best: new Decimal(0),
 		total: new Decimal(0),
+		auto_influence: false,
 	}},
 	color: '#A0A0A0',
 	requires: 60,
@@ -5713,7 +5714,8 @@ addLayer('w', {
 	type: 'custom',
 	getResetGain() {
 		let gain = [player.gi.points.sub(60).div(20).mul(this.gainExp()).floor().sub(player.w.points).add(1), player.ei.points.sub(60).div(20).mul(this.gainExp()).floor().sub(player.w.points).add(1)];
-		return gain[0].min(gain[1]).max(0);
+		if (this.canBuyMax()) return gain[0].min(gain[1]).max(0);
+		return gain[0].min(gain[1]).max(0).min(1);
 	},
 	getNextAt() {
 		if (this.canBuyMax()) return this.getResetGain().div(this.gainExp()).mul(20).add(60);
@@ -5722,7 +5724,7 @@ addLayer('w', {
 	canReset() { return this.getResetGain().gt(0) },
 	prestigeNotify() { return this.getResetGain().gt(0) },
 	prestigeButtonText() {
-		return 'Reset for +<b>' + formatWhole(this.getResetGain()) + '</b> wars<br><br>' + (player.w.points.lt(30) ? (this.canBuyMax() ? 'Next:' : 'Req:') : '') + ' ' + formatWhole(player.gi.points) + ' / ' + formatWhole(this.getNextAt()) + ' GI<br>and ' + formatWhole(player.ei.points) + ' / ' + formatWhole(this.getNextAt()) + ' EI';
+		return 'Reset for +<b>' + formatWhole(this.getResetGain()) + '</b> wars<br><br>' + (player.w.points.lt(30) ? (this.canBuyMax() ? 'Next:' : 'Req:') : '') + ' ' + formatWhole(player.gi.points) + ' / ' + formatWhole(this.getNextAt()) + ' GI<br>' + (player.w.points.lt(30) ? 'and ' : '') + formatWhole(player.ei.points) + ' / ' + formatWhole(this.getNextAt()) + ' EI';
 	},
 	canBuyMax() { return false },
 	onPrestige() {
@@ -5754,6 +5756,13 @@ addLayer('w', {
 		{key: 'w', description: 'W: Reset for wars', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return hasChallenge('ei', 21) || player.w.unlocked},
+	automate() {
+		if (hasMilestone('w', 18) && player.w.auto_influence) {
+			for (const id in layers.w.buyables) {
+				if (layers.w.buyables[id].unlocked() && layers.w.buyables[id].canAfford()) layers.w.buyables[id].buy();
+			};
+		};
+	},
 	effect() {
 		return [new Decimal(1e10).pow(player.w.points), player.w.points.add(1).log10().add(1).pow(0.333), player.w.points.add(1).pow(1.5)];
 	},
@@ -5894,8 +5903,8 @@ addLayer('w', {
 		14: {
 			requirementDescription: '18 wars',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 3, and unlock the <b class="layer-cl' + getdark(this, "ref", true, true) + 'Tissue</b> autobuyer';
-				return 'increase the maximum bought of <b>Power of Good</b> by 3, and unlock the <b>Tissue</b> autobuyer';
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 3 and you can autobuy <b class="layer-cl' + getdark(this, "ref", true, true) + 'Tissues</b>';
+				return 'increase the maximum bought of <b>Power of Good</b> by 3, and you can autobuy <b>Tissues</b>';
 			},
 			done() { return player.w.points.gte(18) },
 			toggles: [['cl', 'auto_tissues']],
@@ -5922,9 +5931,13 @@ addLayer('w', {
 			done() { return player.w.points.gte(36) },
 		},
 		18: {
-			requirementDescription: '66 wars',
-			effectDescription: 'unlock 2 more cellular life (protein) buyables',
-			done() { return player.w.points.gte(66) },
+			requirementDescription: '60 wars',
+			effectDescription() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'unlock 2 more cellular life (protein) buyables, and you can autobuy <b class="layer-w-dark">Influences</b>';
+				return 'unlock 2 more cellular life (protein) buyables, and you can autobuy <b>Influences</b>';
+			},
+			done() { return player.w.points.gte(60) },
+			toggles: [['w', 'auto_influence']],
 		},
 	},
 	bars: {
@@ -6453,7 +6466,7 @@ addLayer('cl', {
 		},
 		43: {
 			cost() {
-				return new Decimal(100000).pow(getBuyableAmount('cl', this.id)).mul(1e35);
+				return new Decimal(10).pow(getBuyableAmount('cl', this.id)).mul(1e33);
 			},
 			title() {
 				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Passive Discovery';
@@ -6464,11 +6477,11 @@ addLayer('cl', {
 				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
 			},
 			effect() {
-				return [getBuyableAmount('cl', this.id).div(500), getBuyableAmount('cl', this.id).add(1).pow(2).mul(50)];
+				return [getBuyableAmount('cl', this.id).div(500), getBuyableAmount('cl', this.id).mul(7.5).add(1).pow(2)];
 			},
 			display() {
 				let text = '';
-				if (player.nerdMode) text = '<br>formulas: x/500<br>and 50(x+1)^2';
+				if (player.nerdMode) text = '<br>formulas: x/500<br>and (7.5x+1)^2';
 				return 'increases passive protein gain and multiplies protein found from cellular life based on the amount of this upgrade bought.<br>Currently: +' + format(this.effect()[0].mul(100)) + '%<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
 			},
 		},
@@ -6496,7 +6509,7 @@ addLayer('cl', {
 		},
 		52: {
 			cost() {
-				return new Decimal(1e5).pow(getBuyableAmount('cl', this.id)).mul(1e50);
+				return new Decimal(1e5).pow(getBuyableAmount('cl', this.id)).mul(1e40);
 			},
 			title() {
 				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'More Synergy';
