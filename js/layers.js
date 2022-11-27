@@ -1900,6 +1900,8 @@ addLayer('ds', {
 		// return
 		return mult;
 	},
+	softcap: new Decimal('e10000000'),
+	softcapPower: 0.1,
 	row: 3,
 	hotkeys: [
 		{key: 'd', description: 'D: Reset for demon souls', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
@@ -2240,6 +2242,7 @@ addLayer('a', {
 		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
 		if (getBuyableAmount('cl', 11).gt(0)) gain = gain.mul(buyableEffect('cl', 11)[1]);
 		if (getBuyableAmount('cl', 33).gt(0)) gain = gain.mul(buyableEffect('cl', 33));
+		if (getBuyableAmount('cl', 52).gt(0)) gain = gain.mul(buyableEffect('cl', 52));
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('a', 15) },
@@ -3912,6 +3915,8 @@ addLayer('d', {
 		else if (hasMilestone('s', 18)) player.s.devotion_effect = player.s.devotion.add(1).pow(0.375);
 		else player.s.devotion_effect = player.s.devotion.add(1).pow(0.3);
 		if (player.d.buyables[11].gt(tmp.d.buyables[11].purchaseLimit)) player.d.buyables[11] = new Decimal(tmp.d.buyables[11].purchaseLimit);
+		if (player.d.buyables[12].gt(tmp.d.buyables[12].purchaseLimit)) player.d.buyables[12] = new Decimal(tmp.d.buyables[12].purchaseLimit);
+		if (player.d.buyables[21].gt(tmp.d.buyables[21].purchaseLimit)) player.d.buyables[21] = new Decimal(tmp.d.buyables[21].purchaseLimit);
 	},
 	buyables: {
 		11: {
@@ -3930,7 +3935,7 @@ addLayer('d', {
 				return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Worship<br>';
 			},
 			canAfford() { return player.p.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
-			purchaseLimit: 2e9,
+			purchaseLimit: 1e9,
 			buy() {
 				player.p.points = player.p.points.sub(this.cost());
 				setBuyableAmount('d', 11, getBuyableAmount('d', 11).add(getDevotionBulk()));
@@ -3960,15 +3965,16 @@ addLayer('d', {
 			title() {
 				return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Sacrifice<br>';
 			},
-			canAfford() { return player.s.points.gte(this.cost()) },
+			canAfford() { return player.s.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 1e9,
 			buy() {
 				if (!hasMilestone('s', 34)) player.s.points = player.s.points.sub(this.cost());
 				setBuyableAmount('d', 12, getBuyableAmount('d', 12).add(getDevotionBulk()));
 			},
 			display() {
-				if (hasMilestone('s', 34)) return 'use sanctums as a sacrifice to worship the gods. you will gain<br>1 devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by 2<br>Currently: ' + format(new Decimal(2).pow(getBuyableAmount('d', 12))) + 'x<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 12)) + '<br><br>Req: ' + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed:' + (formatWhole(getBuyableAmount('d', 12)).length >= 8 ? '<br>' : ' ') + formatWhole(getBuyableAmount('d', 12));
-				if (hasMilestone('s', 24)) return 'use sanctums as a sacrifice to worship the gods. you will gain<br>1 devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by 2<br>Currently: ' + format(new Decimal(2).pow(getBuyableAmount('d', 12))) + 'x<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 12)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed:' + (formatWhole(getBuyableAmount('d', 12)).length >= 8 ? '<br>' : ' ') + formatWhole(getBuyableAmount('d', 12));
-				return 'use sanctums as a sacrifice to worship the gods. you will gain<br>0.5 devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by 1.5<br>Currently: ' + format(new Decimal(1.5).pow(getBuyableAmount('d', 12))) + 'x<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 12).mul(0.5)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed:' + (formatWhole(getBuyableAmount('d', 12)).length >= 8 ? '<br>' : ' ') + formatWhole(getBuyableAmount('d', 12));
+				if (hasMilestone('s', 34)) return 'use sanctums as a sacrifice to worship the gods. you will gain<br>1 devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by 2<br>Currently: ' + format(new Decimal(2).pow(getBuyableAmount('d', 12))) + 'x<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 12)) + '<br><br>Req: ' + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed:' + (formatWhole(getBuyableAmount('d', 12)).length >= 8 ? '<br>' : ' ') + formatWhole(getBuyableAmount('d', 12)) + '<br>/' + formatWhole(this.purchaseLimit);
+				if (hasMilestone('s', 24)) return 'use sanctums as a sacrifice to worship the gods. you will gain<br>1 devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by 2<br>Currently: ' + format(new Decimal(2).pow(getBuyableAmount('d', 12))) + 'x<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 12)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed:' + (formatWhole(getBuyableAmount('d', 12)).length >= 8 ? '<br>' : ' ') + formatWhole(getBuyableAmount('d', 12)) + '<br>/' + formatWhole(this.purchaseLimit);
+				return 'use sanctums as a sacrifice to worship the gods. you will gain<br>0.5 devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by 1.5<br>Currently: ' + format(new Decimal(1.5).pow(getBuyableAmount('d', 12))) + 'x<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 12).mul(0.5)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed:' + (formatWhole(getBuyableAmount('d', 12)).length >= 8 ? '<br>' : ' ') + formatWhole(getBuyableAmount('d', 12)) + '<br>/' + formatWhole(this.purchaseLimit);
 			},
 			style() {
 				let backcolors = '#224400, #336600';
@@ -4003,7 +4009,8 @@ addLayer('d', {
 			title() {
 				return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Sacrificial Ceremony<br>';
 			},
-			canAfford() { return player.h.points.gte(this.cost_h()) && player.sp.points.gte(this.cost_sp()) },
+			canAfford() { return player.h.points.gte(this.cost_h()) && player.sp.points.gte(this.cost_sp()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 1e9,
 			buy() {
 				player.h.points = player.h.points.sub(this.cost_h());
 				player.sp.points = player.sp.points.sub(this.cost_sp());
@@ -4012,8 +4019,8 @@ addLayer('d', {
 			display() {
 				let lasteff = new Decimal(1e25);
 				if (challengeCompletions('r', 11) >= 5) lasteff = lasteff.mul(player.r.relic_effects[2]);
-				if (getBuyableAmount('d', 21).eq(0)) return 'use hexes and subatomic particles in a sacrificial ceremony to worship the gods. you will gain 0.75 devotion per sacrificial ceremony. each sacrificial ceremony also multiplies subatomic particle gain by 1.2, light gain by 1 (additive; others are multiplicative), and divides worship cost by 1e25<br>Currently: 1.00x,<br>1.00x,<br>and /1.00<br><br>Devotion Reward: 0.00<br><br>Cost: ' + formatWhole(this.cost_h()) + ' hexes,<br>' + formatWhole(this.cost_sp()) + ' subatomic particles<br><br>Ceremonies Performed: 0';
-				return 'use hexes and subatomic particles in a sacrificial ceremony to worship the gods. you will gain 0.75 devotion per sacrificial ceremony. each sacrificial ceremony also multiplies subatomic particle gain by 1.2, light gain by 1 (additive; others are multiplicative), and divides worship cost by 1e25<br>Currently: ' + format(new Decimal(1.2).pow(getBuyableAmount('d', 21))) + 'x,<br>' + format(getBuyableAmount('d', 21)) + 'x,<br>and /' + format(lasteff.pow(getBuyableAmount('d', 21))) + '<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 21).mul(0.75)) + '<br><br>Cost: ' + formatWhole(this.cost_h()) + ' hexes,<br>' + formatWhole(this.cost_sp()) + ' subatomic particles<br><br>Ceremonies Performed: ' + formatWhole(getBuyableAmount('d', 21));
+				if (getBuyableAmount('d', 21).eq(0)) return 'use hexes and subatomic particles in a sacrificial ceremony to worship the gods. you will gain 0.75 devotion per sacrificial ceremony. each sacrificial ceremony also multiplies subatomic particle gain by 1.2, light gain by 1 (additive; others are multiplicative), and divides worship cost by 1e25<br>Currently: 1.00x,<br>1.00x,<br>and /1.00<br><br>Devotion Reward: 0.00<br><br>Cost: ' + formatWhole(this.cost_h()) + ' hexes,<br>' + formatWhole(this.cost_sp()) + ' subatomic particles<br><br>Ceremonies Performed: 0/' + formatWhole(this.purchaseLimit);
+				return 'use hexes and subatomic particles in a sacrificial ceremony to worship the gods. you will gain 0.75 devotion per sacrificial ceremony. each sacrificial ceremony also multiplies subatomic particle gain by 1.2, light gain by 1 (additive; others are multiplicative), and divides worship cost by 1e25<br>Currently: ' + format(new Decimal(1.2).pow(getBuyableAmount('d', 21))) + 'x,<br>' + format(getBuyableAmount('d', 21)) + 'x,<br>and /' + format(lasteff.pow(getBuyableAmount('d', 21))) + '<br><br>Devotion Reward: ' + format(getBuyableAmount('d', 21).mul(0.75)) + '<br><br>Cost: ' + formatWhole(this.cost_h()) + ' hexes,<br>' + formatWhole(this.cost_sp()) + ' subatomic particles<br><br>Ceremonies Performed: ' + formatWhole(getBuyableAmount('d', 21)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			style() {
 				let backcolors = '#224400, #336600';
@@ -4170,12 +4177,7 @@ addLayer('r', {
 		"prestige-button",
 		"resource-display",
 		"blank",
-		["display-text",
-			function() {
-				text = 'relic resets reset everything on lower rows exept prayer milestones. also, you can still buy max sanctums.<br><br>';
-				text += 'you have <h2 class="layer-r">' + player.r.points.sub(challengeCompletions('r', 11)).max(0) + '</h2> unactivated relics and <h2 class="layer-r">' + challengeCompletions('r', 11) + '</h2> activated relics';
-				return text;
-			}],
+		["display-text", () => { return 'you have <h2 class="layer-r">' + formatWhole(player.r.points.sub(challengeCompletions('r', 11)).max(0)) + '</h2> unactivated relics and <h2 class="layer-r">' + formatWhole(challengeCompletions('r', 11)) + '</h2> activated relics' }],
 		"blank",
 		"challenges",
 		"blank",
@@ -5784,6 +5786,7 @@ addLayer('w', {
 				["bar", "tide"],
 				"blank",
 				"buyables",
+				"blank",
 			],
 		},
 	},
@@ -5908,8 +5911,8 @@ addLayer('w', {
 		16: {
 			requirementDescription: '24 wars',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 28, reduce <b class="layer-w-dark">Power of Good</b> scaling, and unlock <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protien</b>';
-				return 'increase the maximum bought of <b>Power of Good</b> by 28, reduce <b>Power of Good</b> scaling, and unlock <b>Protien</b>';
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 28, reduce <b class="layer-w-dark">Power of Good</b> scaling, and unlock <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b>';
+				return 'increase the maximum bought of <b>Power of Good</b> by 28, reduce <b>Power of Good</b> scaling, and unlock <b>Protein</b>';
 			},
 			done() { return player.w.points.gte(24) },
 		},
@@ -5917,6 +5920,11 @@ addLayer('w', {
 			requirementDescription: '36 wars',
 			effectDescription: 'war resets nothing and auto perform war resets',
 			done() { return player.w.points.gte(36) },
+		},
+		18: {
+			requirementDescription: '66 wars',
+			effectDescription: 'unlock 2 more cellular life (protein) buyables',
+			done() { return player.w.points.gte(66) },
 		},
 	},
 	bars: {
@@ -6108,6 +6116,7 @@ addLayer('cl', {
 		if (getBuyableAmount('cl', 41).gt(0)) conv = conv.mul(buyableEffect('cl', 41));
 		if (getBuyableAmount('cl', 42).gt(0)) conv = conv.mul(buyableEffect('cl', 42));
 		if (getBuyableAmount('cl', 43).gt(0)) conv = conv.mul(buyableEffect('cl', 43)[1]);
+		if (getBuyableAmount('cl', 51).gt(0)) conv = conv.mul(buyableEffect('cl', 51));
 		player.cl.protein_conv = conv;
 		if (getBuyableAmount('cl', 43).gt(0)) {
 			let gain = player.cl.points.mul(player.cl.protein_conv).mul(buyableEffect('cl', 43)[0]);
@@ -6137,7 +6146,7 @@ addLayer('cl', {
 				["buyables", "2"],
 			],
 		},
-		"Protien": {
+		"Protein": {
 			content: function() {
 				if (this.unlocked) return [
 					"main-display",
@@ -6148,6 +6157,7 @@ addLayer('cl', {
 					"blank",
 					["buyables", "3"],
 					["buyables", "4"],
+					["buyables", "5"],
 					"blank",
 					"clickables",
 					"blank",
@@ -6320,7 +6330,7 @@ addLayer('cl', {
 				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Connective Tissue';
 			},
 			canAfford() { return player.cl.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
-			purchaseLimit: 750,
+			purchaseLimit: 400,
 			buy() {
 				player.cl.points = player.cl.points.sub(this.cost());
 				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
@@ -6454,13 +6464,57 @@ addLayer('cl', {
 				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
 			},
 			effect() {
-				return [getBuyableAmount('cl', this.id).div(500), new Decimal(250).pow(getBuyableAmount('cl', this.id))];
+				return [getBuyableAmount('cl', this.id).div(500), getBuyableAmount('cl', this.id).add(1).pow(2).mul(50)];
 			},
 			display() {
 				let text = '';
-				if (player.nerdMode) text = '<br>formulas: x/500<br>and 250^x';
+				if (player.nerdMode) text = '<br>formulas: x/500<br>and 50(x+1)^2';
 				return 'increases passive protein gain and multiplies protein found from cellular life based on the amount of this upgrade bought.<br>Currently: +' + format(this.effect()[0].mul(100)) + '%<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
 			},
+		},
+		51: {
+			cost() {
+				return getBuyableAmount('cl', this.id).mul(500).add(4000);
+			},
+			title() {
+				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'More Perfection';
+			},
+			canAfford() { return player.cl.points.gte(this.cost()) },
+			buy() {
+				player.cl.points = player.cl.points.sub(this.cost());
+				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+			},
+			effect() {
+				return getBuyableAmount('cl', this.id).add(1).pow(2);
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formula: (x+1)^2';
+				return 'multiplies protein found from cellular life based the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+			},
+			unlocked() { return hasMilestone('w', 18) },
+		},
+		52: {
+			cost() {
+				return new Decimal(1e5).pow(getBuyableAmount('cl', this.id)).mul(1e50);
+			},
+			title() {
+				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'More Synergy';
+			},
+			canAfford() { return player.cl.protein.gte(this.cost()) },
+			buy() {
+				player.cl.protein = player.cl.protein.sub(this.cost());
+				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+			},
+			effect() {
+				return new Decimal(10).pow(getBuyableAmount('cl', this.id));
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formula: 10^x';
+				return 'multiplies atom gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+			},
+			unlocked() { return hasMilestone('w', 18) },
 		},
 	},
 	clickables: {

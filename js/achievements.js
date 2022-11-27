@@ -550,6 +550,13 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 113) },
 			color: '#B9A975',
 		},
+        115: {
+			name: 'All of the Relics',
+			done() {return player.r.points.gte(10000)},
+			tooltip: 'obtain 10,000 relics.',
+			unlocked() { return hasAchievement('A', 114) },
+			color: '#B9A975',
+		},
 		116: {
 			name: 'Broken Relics',
 			done() {return player.r.points.gte(10) && player.m.total.eq(0)},
