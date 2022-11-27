@@ -6060,6 +6060,7 @@ addLayer('cl', {
 		total: new Decimal(0),
 		protein_conv: new Decimal(0),
 		protein: new Decimal(0),
+		protein_gain: new Decimal(0),
 		auto_tissues: false,
 	}},
 	color: "#008800",
@@ -6106,7 +6107,15 @@ addLayer('cl', {
 		if (getBuyableAmount('cl', 32).gt(0)) conv = conv.mul(buyableEffect('cl', 32));
 		if (getBuyableAmount('cl', 41).gt(0)) conv = conv.mul(buyableEffect('cl', 41));
 		if (getBuyableAmount('cl', 42).gt(0)) conv = conv.mul(buyableEffect('cl', 42));
+		if (getBuyableAmount('cl', 43).gt(0)) conv = conv.mul(buyableEffect('cl', 43)[1]);
 		player.cl.protein_conv = conv;
+		if (getBuyableAmount('cl', 43).gt(0)) {
+			let gain = player.cl.points.mul(player.cl.protein_conv).mul(buyableEffect('cl', 43)[0]);
+			player.cl.protein_gain = gain;
+			player.cl.protein = player.cl.protein.add(gain);
+		} else {
+			player.cl.protein_gain = new Decimal(0);
+		};
 	},
 	tabFormat: {
 		"Life Tracker": {
@@ -6135,7 +6144,7 @@ addLayer('cl', {
 					"prestige-button",
 					"resource-display",
 					"blank",
-					["display-text", 'You are currently finding <h2 class="layer-cl">' + format(player.cl.protein_conv) + '</h2> proteins per cellular life<br>You currently have <h2 class="layer-cl">' + format(player.cl.protein) + '</h2> protein'],
+					["display-text", 'You are currently finding <h2 class="layer-cl">' + format(player.cl.protein_conv) + '</h2> proteins per cellular life<br>' + (getBuyableAmount('cl', 43).gt(0) ? 'You are currently gaining <h2 class="layer-cl">' + format(player.cl.protein_gain) + '</h2> proteins per second<br>' : '') + 'You currently have <h2 class="layer-cl">' + format(player.cl.protein) + '</h2> protein'],
 					"blank",
 					["buyables", "3"],
 					["buyables", "4"],
@@ -6430,6 +6439,27 @@ addLayer('cl', {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: 5^x';
 				return 'multiplies protein found from cellular life based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+			},
+		},
+		43: {
+			cost() {
+				return new Decimal(100000).pow(getBuyableAmount('cl', this.id)).mul(1e35);
+			},
+			title() {
+				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Passive Discovery';
+			},
+			canAfford() { return player.cl.protein.gte(this.cost()) },
+			buy() {
+				player.cl.protein = player.cl.protein.sub(this.cost());
+				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+			},
+			effect() {
+				return [getBuyableAmount('cl', this.id).div(500), new Decimal(250).pow(getBuyableAmount('cl', this.id))];
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formulas: x/500<br>and 250^x';
+				return 'increases passive protein gain and multiplies protein found from cellular life based on the amount of this upgrade bought.<br>Currently: +' + format(this.effect()[0].mul(100)) + '%<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
 			},
 		},
 	},
