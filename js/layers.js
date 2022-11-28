@@ -2815,14 +2815,14 @@ addLayer('p', {
 		if (hasMilestone('p', 2)) effEx = new Decimal(1.5);
 		if (hasMilestone('p', 3)) effEx = new Decimal(1.6);
 		eff = effBoost.mul(player.p.points).pow(effEx);
-		sc_start0 = softcaps.p_d[0][0];
-		if (eff.gt(sc_start0)) eff = eff.sub(sc_start0).pow(softcaps.p_d[0][1]).add(sc_start0);
+		sc_start = softcaps.p_d[0];
+		if (eff.gt(sc_start)) eff = eff.div(sc_start).pow(softcaps.p_d[1]).mul(sc_start);
 		if (hasUpgrade('p', 71)) eff = eff.mul(upgradeEffect('p', 71));
 		return eff;
 	},
 	effectDescription() {
 		if (tmp.p.effect.lt(0.1)) return 'which are generating <h2 class="layer-p">' + tmp.p.effect.mul(100).round().div(100) + '</h2> divinity/sec';
-		if (tmp.p.effect.gt(softcaps.p_d[0][0])) return 'which are generating <h2 class="layer-p">' + format(tmp.p.effect) + '</h2> divinity/sec (softcapped)';
+		if (tmp.p.effect.gt(softcaps.p_d[0])) return 'which are generating <h2 class="layer-p">' + format(tmp.p.effect) + '</h2> divinity/sec (softcapped)';
 		return 'which are generating <h2 class="layer-p">' + format(tmp.p.effect) + '</h2> divinity/sec';
 	},
 	doReset(resettingLayer) {
@@ -4049,7 +4049,6 @@ addLayer('r', {
 		lightbest: new Decimal(0),
 		lightgain: new Decimal(0),
 		lightgainbest: new Decimal(0),
-		lightlastcap: new Decimal(0),
 		relic_effects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
 		sanctummult: new Decimal(1),
 		essencemult: new Decimal(1),
@@ -4116,12 +4115,12 @@ addLayer('r', {
 		player.r.sanctummult = player.r.points.add(1).pow(0.5).mul(effBoost2);
 		player.r.essencemult = player.r.points.mul(100).add(1).pow(0.25).mul(effBoost3);
 		let eff1 = player.r.points.mul(effBoost1).add(1).pow(1.1).pow(effex1);
-		if (eff1.gt(softcaps.r_eff1[0][0])) eff1 = eff1.sub(softcaps.r_eff1[0][0]).pow(softcaps.r_eff1[0][1]).add(softcaps.r_eff1[0][0]);
+		if (eff1.gt(softcaps.r_eff1[0])) eff1 = eff1.div(softcaps.r_eff1[0]).pow(softcaps.r_eff1[1]).mul(softcaps.r_eff1[0]);
 		return eff1;
 	},
 	effectDescription() {
 		let text = ['', ''];
-		if (tmp.r.effect.gte(softcaps.r_eff1[0][0])) text[0] = ' (softcapped)';
+		if (tmp.r.effect.gte(softcaps.r_eff1[0])) text[0] = ' (softcapped)';
 		if (challengeCompletions('r', 11) >= 2) text[1] = 'point and ';
 		if (colorvalue[1] == 'none') return 'which makes Essence Influence\'s hardcap start ' + format(tmp.r.effect) + 'x later' + text[0] + ', multiplies sanctum gain by ' + format(player.r.sanctummult) + 'x, and also multiplies ' + text[1] + 'essence gain by ' + format(player.r.essencemult) + 'x';
 		if (!colorvalue[0][2]) return 'which makes <h3>Essence Influence\'s</h3> hardcap start <h2 class="layer-r">' + format(tmp.r.effect) + '</h2>x later' + text[0] + ', multiplies sanctum gain by <h2 class="layer-r">' + format(player.r.sanctummult) + '</h2>x, and also multiplies ' + text[1] + 'essence gain by <h2 class="layer-r">' + format(player.r.essencemult) + '</h2>x';
@@ -4171,7 +4170,6 @@ addLayer('r', {
 		player.r.light = player.r.light.add(player.r.lightgain.mul(diff));
 		if (player.r.light.gt(player.r.lightbest)) player.r.lightbest = player.r.light;
 		if (player.r.lightgain.gt(player.r.lightgainbest)) player.r.lightgainbest = player.r.lightgain;
-		if (!softcaps.r_l[0][1]) softcaps.r_l[0][1] = player.r.lightlastcap;
 	},
 	tabFormat: [
 		"main-display",
@@ -4193,8 +4191,13 @@ addLayer('r', {
 			buttonText: ["Activate", "Cannot activate", "Enter activation", "Enter activation"],
 			challengeDescription: 'Temporarily converts all your point production into light production. Get enough light, and you can activate your relics for rewards.<br>',
 			goalDescription() {
-				if (maxedChallenge('r', 11)) text = 'You have ' + format(player.r.light) + ' light.<br>(' + format(player.r.lightgain) + '/sec)<br>';
-				else text = 'You have ' + format(player.r.light) + '/' + format(player.r.lightreq) + ' light.<br>(' + format(player.r.lightgain) + '/sec)<br>';
+				if (getLightGain().gte(1e25) && !hasUpgrade('r', 13)) {
+					if (maxedChallenge('r', 11)) text = 'You have ' + format(player.r.light) + ' light.<br>(' + format(player.r.lightgain) + '/sec - hardcapped at 1e25)<br>';
+					else text = 'You have ' + format(player.r.light) + '/' + format(player.r.lightreq) + ' light.<br>(' + format(player.r.lightgain) + '/sec - hardcapped at 1e25)<br>';
+				} else {
+					if (maxedChallenge('r', 11)) text = 'You have ' + format(player.r.light) + ' light.<br>(' + format(player.r.lightgain) + '/sec)<br>';
+					else text = 'You have ' + format(player.r.light) + '/' + format(player.r.lightreq) + ' light.<br>(' + format(player.r.lightgain) + '/sec)<br>';
+				};
 				if (player.nerdMode) text += 'Best: (' + format(player.r.lightgainbest) + '/sec)<br>';
 				return text;
 			},
@@ -4256,13 +4259,13 @@ addLayer('r', {
 				return player.r.points;
 			},
 			style() {
-				num = player.r.light.add(1).log(2).div(player.r.lightreq.add(1).log(2)).mul(100).floor();
-				color = 'rgb(' + num + ',' + num + ',' + (num + 50) + ')';
+				const num = player.r.light.add(1).log(2).div(player.r.lightreq.add(1).log(2)).mul(100).floor();
+				let color = 'rgb(' + num + ',' + num + ',' + (num + 50) + ')';
 				if (maxedChallenge('r', 11)) color = 'rgb(0,0,50)';
 				if (num > 205) color = 'rgb(205,205,255)';
-				textcolor = '#B9A975';
+				let textcolor = '#B9A975';
 				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
-				return {'background-color':color,'color':textcolor,'border-radius':'16%','height':'425px','width':'425px'};
+				return {'background-color':color, 'color':textcolor, 'border-radius':'70px', 'height':'425px', 'width':'425px'};
 			},
 		},
 	},
@@ -4301,7 +4304,7 @@ addLayer('r', {
 			fullDisplay() {
 				let text = '';
 				if (player.nerdMode) text += ' <br>formula: (x*36+1)^10';
-				return '<h3 class="layer-r' + getdark(this, "title-hasend") + 'Good Light</h3><br>(based on your good influence) sets base light gain after softcap to:<br>' + format(this.effect()) + '/sec' + text + '<br><br>Cost: free<br>WARNING: may decrease light gain';
+				return '<h3 class="layer-r' + getdark(this, "title-hasend") + 'Good Light</h3><br>makes base light gain based on your good influence (ignoring hardcap) to: ' + format(this.effect()) + '/sec' + text + '<br><br>Cost: free<br>WARNING: may decrease light gain';
 			},
 			canAfford() { return true },
 			effect() {
@@ -4365,13 +4368,13 @@ addLayer('m', {
 	},
 	effect() {
 		let eff = player.m.best.mul(0.5).add(1).pow(0.99);
-		let sc_start0 = softcaps.m_eff[0][0];
-		if (eff.gt(sc_start0)) eff = eff.sub(sc_start0).pow(softcaps.m_eff[0][1]).add(sc_start0);
+		const sc_start = softcaps.m_eff[0];
+		if (eff.gt(sc_start)) eff = eff.div(sc_start).pow(softcaps.m_eff[1]).mul(sc_start);
 		return eff;
 	},
 	effectDescription() {
 		let softcap = '';
-		if (tmp.m.effect.gt(softcaps.m_eff[0][0])) softcap = ' (softcapped)';
+		if (tmp.m.effect.gt(softcaps.m_eff[0])) softcap = ' (softcapped)';
 		return 'which multiplies atom gain by <h2 class="layer-m">' + format(tmp.m.effect) + '</h2>x (based on best)' + softcap;
 	},
 	doReset(resettingLayer) {
@@ -4824,14 +4827,14 @@ addLayer('gi', {
 		let effBase = new Decimal(2);
 		if (getBuyableAmount('gi', 11).gt(0)) effBase = effBase.add(getBuyableAmount('gi', 11));
 		let eff = effBase.pow(player.gi.total);
-		if (eff.gt(softcaps.gi_eff[0][0])) {
-			eff = eff.sub(softcaps.gi_eff[0][0]).pow(softcaps.gi_eff[0][1]).add(softcaps.gi_eff[0][0]);
+		if (eff.gt(softcaps.gi_eff[0])) {
+			eff = eff.div(softcaps.gi_eff[0]).pow(softcaps.gi_eff[1]).mul(softcaps.gi_eff[0]);
 		};
 		return eff;
 	},
 	effectDescription() {
 		let text = 'which multiplies prayer gain by <h2 class="layer-gi">' + format(tmp.gi.effect) + '</h2>x (based on total)';
-		if (this.effect().gte(softcaps.gi_eff[0][0])) text += ' (softcapped)';
+		if (this.effect().gte(softcaps.gi_eff[0])) text += ' (softcapped)';
 		return text;
 	},
 	doReset(resettingLayer) {
@@ -5769,7 +5772,7 @@ addLayer('w', {
 		return [new Decimal(1e10).pow(player.w.points), player.w.points.add(1).log10().add(1).pow(0.333), player.w.points.add(1).pow(1.5)];
 	},
 	effectDescription() {
-		return 'which multiplies point, essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x, atom, sanctum, relic, molecule, good influence, and evil influence by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x, and also light gain after softcap by <h2 class="layer-w">' + format(tmp.w.effect[2]) + '</h2>x';
+		return 'which multiplies point, essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x, atom, sanctum, relic, molecule, good influence, and evil influence by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x, and also light gain by <h2 class="layer-w">' + format(tmp.w.effect[2]) + '</h2>x';
 	},
 	doReset(resettingLayer) {
 		let keep = [];

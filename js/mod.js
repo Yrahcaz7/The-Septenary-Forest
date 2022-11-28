@@ -66,8 +66,6 @@ function getLightGain() {
 	if (hasUpgrade('r', 13)) {
 		gain = upgradeEffect('r', 13);
 		if (new Decimal(tmp.w.effect[2]).gt(1)) gain = gain.mul(tmp.w.effect[2]);
-		softcaps.r_l[0][1] = new Decimal(0);
-		player.r.lightlastcap = new Decimal(0);
 	} else {
 		if (hasUpgrade('r', 11)) gain = gain.mul(upgradeEffect('r', 11));
 		if (hasUpgrade('r', 12)) gain = gain.mul(upgradeEffect('r', 12));
@@ -76,13 +74,8 @@ function getLightGain() {
 		if (hasMilestone('s', 41)) gain = gain.mul(3);
 		if (hasMilestone('s', 50)) gain = gain.mul(3);
 		if (hasMilestone('s', 52)) gain = gain.mul(3);
-		let sc_start0 = softcaps.r_l[0][0];
-		if (gain.gt(sc_start0)) {
-			softcaps.r_l[0][1] = gain.div(1e24).add(1).pow(-0.01);
-			player.r.lightlastcap = softcaps.r_l[0][1];
-			gain = gain.sub(sc_start0).pow(softcaps.r_l[0][1]).add(sc_start0);
-		};
 		if (new Decimal(tmp.w.effect[2]).gt(1)) gain = gain.mul(tmp.w.effect[2]);
+		if (gain.gt(1e25)) gain = new Decimal(1e25);
 	};
 	gain = gain.add(getLightBoost());
 	return gain;
