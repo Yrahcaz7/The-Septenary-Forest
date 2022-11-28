@@ -38,11 +38,11 @@ var systemComponents = {
 
 	'particle': {
 		props: ['data', 'index'],
-		template: particle_,
+		template: _particle,
 	},
 
 	'bg': {
 		props: ['layer'],
-		template: bg_,
+		template: _bg,
 	},
 };

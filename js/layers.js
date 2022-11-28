@@ -4857,11 +4857,7 @@ addLayer('gi', {
 		"prestige-button",
 		"resource-display",
 		"blank",
-		["display-text",
-			function() {
-				if (player.nerdMode) return 'you have <h2 class="layer-s">' + format(player.s.devotion) + '</h2> devotion, which multiplies good influence gain by <h2 class="layer-gi">' + format(player.gi.req_devotion) + '</h2>x (formula: (x*1.05+1)^0.2)';
-				return 'you have <h2 class="layer-s">' + format(player.s.devotion) + '</h2> devotion, which multiplies good influence gain by <h2 class="layer-gi">' + format(player.gi.req_devotion) + '</h2>x';
-			}],
+		["display-text", () => { return 'you have <h2 class="layer-s">' + format(player.s.devotion) + '</h2> devotion, which multiplies good influence gain by <h2 class="layer-gi">' + format(player.gi.req_devotion) + '</h2>x' }],
 		"blank",
 		"milestones",
 		"buyables",
