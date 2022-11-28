@@ -17,18 +17,18 @@ function getResetGain(layer, useType = null) {
 	if (tmp[layer].type == "none")
 		return new Decimal (0);
 	if (tmp[layer].gainExp.eq(0)) return decimalZero;
-	if (type=="static") {
+	if (type == "static") {
 		if ((!tmp[layer].canBuyMax) || tmp[layer].baseAmount.lt(tmp[layer].requires)) return decimalOne;
 		let gain = tmp[layer].baseAmount.div(tmp[layer].requires).div(tmp[layer].gainMult).max(1).log(tmp[layer].base).times(tmp[layer].gainExp).pow(Decimal.pow(tmp[layer].exponent, -1));
 		gain = gain.times(tmp[layer].directMult);
 		return gain.floor().sub(player[layer].points).add(1).max(1);
-	} else if (type=="normal") {
+	} else if (type == "normal") {
 		if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return decimalZero;
 		let gain = tmp[layer].baseAmount.div(tmp[layer].requires).pow(tmp[layer].exponent).times(tmp[layer].gainMult).pow(tmp[layer].gainExp);
 		if (gain.gte(tmp[layer].softcap)) gain = gain.pow(tmp[layer].softcapPower).times(tmp[layer].softcap.pow(decimalOne.sub(tmp[layer].softcapPower)))
 		gain = gain.times(tmp[layer].directMult);
 		return gain.floor().max(0);
-	} else if (type=="custom") {
+	} else if (type == "custom") {
 		return layers[layer].getResetGain();
 	} else {
 		return decimalZero;
@@ -46,20 +46,20 @@ function getNextAt(layer, canMax=false, useType = null) {
 		return new Decimal(Infinity);
 	if (tmp[layer].gainMult.lte(0)) return new Decimal(Infinity);
 	if (tmp[layer].gainExp.lte(0)) return new Decimal(Infinity);
-	if (type=="static") {
+	if (type == "static") {
 		if (!tmp[layer].canBuyMax) canMax = false;
 		let amt = player[layer].points.plus((canMax&&tmp[layer].baseAmount.gte(tmp[layer].nextAt))?tmp[layer].resetGain:0).div(tmp[layer].directMult);
 		let extraCost = Decimal.pow(tmp[layer].base, amt.pow(tmp[layer].exponent).div(tmp[layer].gainExp)).times(tmp[layer].gainMult);
 		let cost = extraCost.times(tmp[layer].requires).max(tmp[layer].requires);
 		if (tmp[layer].roundUpCost) cost = cost.ceil();
 		return cost;
-	} else if (type=="normal") {
+	} else if (type == "normal") {
 		let next = tmp[layer].resetGain.add(1).div(tmp[layer].directMult);
 		if (next.gte(tmp[layer].softcap)) next = next.div(tmp[layer].softcap.pow(decimalOne.sub(tmp[layer].softcapPower))).pow(decimalOne.div(tmp[layer].softcapPower));
 		next = next.root(tmp[layer].gainExp).div(tmp[layer].gainMult).root(tmp[layer].exponent).times(tmp[layer].requires).max(tmp[layer].requires);
 		if (tmp[layer].roundUpCost) next = next.ceil();
 		return next;
-	} else if (type=="custom") {
+	} else if (type == "custom") {
 		return layers[layer].getNextAt(canMax);
 	} else {
 		return decimalZero;
@@ -74,16 +74,11 @@ function softcap(value, cap, power = 0.5) {
 function shouldNotify(layer) {
 	for (id in tmp[layer].upgrades) {
 		if (isPlainObject(layers[layer].upgrades[id])) {
-			if (canAffordUpgrade(layer, id) && !hasUpgrade(layer, id) && tmp[layer].upgrades[id].unlocked) {
-				return true;
-			};
+			if (canAffordUpgrade(layer, id) && !hasUpgrade(layer, id) && tmp[layer].upgrades[id].unlocked) return true;
 		};
 	};
-	if (player[layer].activeChallenge && canCompleteChallenge(layer, player[layer].activeChallenge)) {
-		return true;
-	};
-	if (tmp[layer].shouldNotify)
-		return true;
+	if (player[layer].activeChallenge && canCompleteChallenge(layer, player[layer].activeChallenge)) return true;
+	if (tmp[layer].shouldNotify) return true;
 	if (isPlainObject(tmp[layer].tabFormat)) {
 		for (subtab in tmp[layer].tabFormat) {
 			if (subtabShouldNotify(layer, 'mainTabs', subtab)) {
@@ -118,17 +113,16 @@ function rowReset(row, layer) {
 	for (lr in ROW_LAYERS[row]) {
 		if (layers[lr].doReset) {
 			if (!isNaN(row)) Vue.set(player[lr], "activeChallenge", null) // Exit challenges on any row reset on an equal or higher row
-			run(layers[lr].doReset, layers[lr], layer);
+				run(layers[lr].doReset, layers[lr], layer);
 		} else
 			if (tmp[layer].row > tmp[lr].row && !isNaN(row)) layerDataReset(lr);
 	};
 };
 
 function layerDataReset(layer, keep = []) {
-	let storedData = {unlocked: player[layer].unlocked, forceTooltip: player[layer].forceTooltip, noRespecConfirm: player[layer].noRespecConfirm, prevTab:player[layer].prevTab} // Always keep these
+	let storedData = {unlocked: player[layer].unlocked, forceTooltip: player[layer].forceTooltip, noRespecConfirm: player[layer].noRespecConfirm, prevTab: player[layer].prevTab} // Always keep these
 	for (thing in keep) {
-		if (player[layer][keep[thing]] !== undefined)
-			storedData[keep[thing]] = player[layer][keep[thing]];
+		if (player[layer][keep[thing]] !== undefined) storedData[keep[thing]] = player[layer][keep[thing]];
 	};
 	Vue.set(player[layer], "buyables", getStartBuyables(layer));
 	Vue.set(player[layer], "clickables", getStartClickables(layer));
@@ -196,11 +190,11 @@ function doReset(layer, force=false) {
 };
 
 function resetRow(row) {
-	if (prompt('Are you sure you want to reset this row? It is highly recommended that you wait until the end of your current run before doing this! Type "I WANT TO RESET THIS" to confirm')!="I WANT TO RESET THIS") return;
-	let pre_layers = ROW_LAYERS[row-1];
+	if (prompt('Are you sure you want to reset this row? It is highly recommended that you wait until the end of your current run before doing this! Type "I WANT TO RESET THIS" to confirm') != "I WANT TO RESET THIS") return;
+	let pre_layers = ROW_LAYERS[row - 1];
 	let layers = ROW_LAYERS[row];
-	let post_layers = ROW_LAYERS[row+1];
-	rowReset(row+1, post_layers[0]);
+	let post_layers = ROW_LAYERS[row + 1];
+	rowReset(row + 1, post_layers[0]);
 	doReset(pre_layers[0], true);
 	for (let layer in layers) {
 		player[layer].unlocked = false;
@@ -278,8 +272,7 @@ VERSION.withName = VERSION.withoutName + (VERSION.name ? ": " + VERSION.name : "
 function autobuyUpgrades(layer) {
 	if (!tmp[layer].upgrades) return;
 	for (id in tmp[layer].upgrades)
-		if (isPlainObject(tmp[layer].upgrades[id]) && (layers[layer].upgrades[id].canAfford === undefined || layers[layer].upgrades[id].canAfford() === true))
-			buyUpg(layer, id);
+		if (isPlainObject(tmp[layer].upgrades[id]) && (layers[layer].upgrades[id].canAfford === undefined || layers[layer].upgrades[id].canAfford() === true)) buyUpg(layer, id);
 };
 
 function gameLoop(diff) {
@@ -290,13 +283,11 @@ function gameLoop(diff) {
 	if (isNaN(diff) || diff < 0) diff = 0;
 	if (tmp.gameEnded && !player.keepGoing) {
 		diff = 0;
-		//player.tab = "tmp.gameEnded"
 		clearParticles();
 	};
 	if (maxTickLength) {
 		let limit = maxTickLength();
-		if (diff > limit)
-			diff = limit;
+		if (diff > limit) diff = limit;
 	};
 	addTime(diff);
 	player.points = player.points.add(tmp.pointGen.times(diff)).max(0);
@@ -350,7 +341,7 @@ function hardReset(resetOptions) {
 var ticking = false;
 
 var interval = setInterval(function() {
-	if (player===undefined||tmp===undefined) return;
+	if (player === undefined || tmp === undefined) return;
 	if (ticking) return;
 	if (tmp.gameEnded&&!player.keepGoing) return;
 	ticking = true;
@@ -377,7 +368,7 @@ var interval = setInterval(function() {
 	updateWidth();
 	updateTabFormats();
 	gameLoop(diff);
-	fixNaNs();
+	NaNcheck(player);
 	adjustPopupTime(trueDiff);
 	updateParticles(trueDiff);
 	ticking = false;

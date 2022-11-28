@@ -1,4 +1,4 @@
-let modInfo = {
+const modInfo = {
 	name: 'The Primordial Tree',
 	id: 'Yrahcaz7-ModTree-ThePrimordialTree',
 	author: 'Yrahcaz7',
@@ -8,12 +8,12 @@ let modInfo = {
 	offlineLimit: 1, // In hours
 };
 
-let VERSION = {
+const VERSION = {
 	num: '3.2',
 	name: 'Back and Forth',
 };
 
-let winText = '<h3>You won the game!</h3><br>However, it isn\'t the end yet...<br>Wait for more updates for further content.';
+const winText = '<h3>You won the game!</h3><br>However, it isn\'t the end yet...<br>Wait for more updates for further content.';
 
 function getdark(darkthis, type, special = false, research = false) {
 	if (darkthis.layer !== undefined) {
@@ -65,7 +65,6 @@ function getLightGain() {
 	let gain = getPointGen(true).pow(0.001).div(10);
 	if (hasUpgrade('r', 13)) {
 		gain = upgradeEffect('r', 13);
-		if (new Decimal(tmp.w.effect[2]).gt(1)) gain = gain.mul(tmp.w.effect[2]);
 	} else {
 		if (hasUpgrade('r', 11)) gain = gain.mul(upgradeEffect('r', 11));
 		if (hasUpgrade('r', 12)) gain = gain.mul(upgradeEffect('r', 12));
@@ -74,16 +73,16 @@ function getLightGain() {
 		if (hasMilestone('s', 41)) gain = gain.mul(3);
 		if (hasMilestone('s', 50)) gain = gain.mul(3);
 		if (hasMilestone('s', 52)) gain = gain.mul(3);
-		if (new Decimal(tmp.w.effect[2]).gt(1)) gain = gain.mul(tmp.w.effect[2]);
 		if (gain.gt(1e25)) gain = new Decimal(1e25);
 	};
+	if (new Decimal(tmp.w.effect[2]).gt(1)) gain = gain.mul(tmp.w.effect[2]);
 	gain = gain.add(getLightBoost());
 	return gain;
 };
 
-function removeachievement(value) {
+function removeAchievement(id = NaN) {
 	for (var i = 0; i < player.A.achievements.length; i++) {
-		if (player.A.achievements[i] == value) {
+		if (player.A.achievements[i] == id) {
 			player.A.achievements.splice(i, 1);
 			return true;
 		};
@@ -155,23 +154,21 @@ function addedPlayerData() { return {
 }};
 
 // Display extra things at the top of the page
-var displayThings = [
-];
+const displayThings = [];
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte('ee16');
+	return player.points.gte('e166000000');
 };
 
 // Style for the background, can be a function
-var backgroundStyle = {
-};
+const backgroundStyle = {};
 
 function maxTickLength() {
 	return 1; // In seconds
 };
 
 function fixOldSave(oldVersion) {
-	// this is for the achievement that had it's reqirement increased to be impossible to get in 2.2
-	if (oldVersion == '2.2' && player.A.achievements.includes('123')) removeachievement('123');
+	// this is for the achievement that had its reqirement increased to be impossible to get in 2.2
+	if (oldVersion == '2.2' && player.A.achievements.includes('123')) removeAchievement('123');
 };
