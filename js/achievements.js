@@ -485,6 +485,7 @@ addLayer('A', {
 			done() {return player.s.points.gte(1)},
 			tooltip: 'obtain 1 sanctum.',
 			unlocked() { return hasAchievement('A', 101) },
+			image() { if (hasAchievement('A', 101)) return "images/achievements/101.png" },
 			color: '#AAFF00',
 		},
 		102: {
@@ -492,13 +493,15 @@ addLayer('A', {
 			done() {return player.s.points.gte(10)},
 			tooltip: 'obtain 10 sanctums.',
 			unlocked() { return hasAchievement('A', 101) },
+			image() { if (hasAchievement('A', 102)) return "images/achievements/102.png" },
 			color: '#AAFF00',
 		},
 		103: {
-			name: 'Greatest Sanctum',
+			name: 'Greater Sanctum',
 			done() {return player.s.points.gte(100)},
 			tooltip: 'obtain 100 sanctums.',
 			unlocked() { return hasAchievement('A', 102) },
+			image() { if (hasAchievement('A', 103)) return "images/achievements/103.png" },
 			color: '#AAFF00',
 		},
 		104: {
@@ -506,6 +509,7 @@ addLayer('A', {
 			done() {return player.s.points.gte(1000)},
 			tooltip: 'obtain 1,000 sanctums.',
 			unlocked() { return hasAchievement('A', 103) },
+			image() { if (hasAchievement('A', 104)) return "images/achievements/104.png" },
 			color: '#AAFF00',
 		},
 		105: {
@@ -513,6 +517,7 @@ addLayer('A', {
 			done() {return player.s.points.gte(10000)},
 			tooltip: 'obtain 10,000 sanctums.',
 			unlocked() { return hasAchievement('A', 104) },
+			image() { if (hasAchievement('A', 105)) return "images/achievements/105.png" },
 			color: '#AAFF00',
 		},
 		106: {
@@ -520,6 +525,7 @@ addLayer('A', {
 			done() {return player.s.points.gte(10) && player.ds.total.eq(0) && player.a.total.eq(0)},
 			tooltip: 'obtain 10 sanctums with no demon souls and atoms.',
 			unlocked() { return hasAchievement('A', 102) && hasAchievement('A', 111) },
+			image() { if (hasAchievement('A', 106)) return "images/achievements/106.png" },
 			color: '#AAFF00',
 		},
 		111: {
@@ -550,7 +556,7 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 113) },
 			color: '#B9A975',
 		},
-        115: {
+		115: {
 			name: 'All of the Relics',
 			done() {return player.r.points.gte(10000)},
 			tooltip: 'obtain 10,000 relics.',
@@ -634,7 +640,7 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 133) },
 			color: '#08FF87',
 		},
-        135: {
+		135: {
 			name: 'Good Exceeding',
 			done() {return player.gi.points.gte(10000)},
 			tooltip: 'obtain 10,000 good influence.',
@@ -676,7 +682,7 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 143) },
 			color: '#FF4400',
 		},
-        145: {
+		145: {
 			name: 'Evil to Infinity',
 			done() {return player.ei.points.gte(10000)},
 			tooltip: 'obtain 10,000 evil influence.',
@@ -732,7 +738,7 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 162) },
 			color: '#008800',
 		},
-        164: {
+		164: {
 			name: 'Congealing Cells',
 			done() {return player.cl.points.gte(100000)},
 			tooltip: 'obtain 100,000 cellular life.',
