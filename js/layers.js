@@ -6111,7 +6111,7 @@ addLayer('cl', {
 	autoPrestige() { return hasMilestone('cl', 12) },
 	row: 5,
 	hotkeys: [
-		{key: 'C', description: 'Shift-C: Reset for cellular life', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+		{key: 'l', description: 'L: Reset for cellular life', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return hasMilestone('w', 9) || player.cl.unlocked },
 	automate() {

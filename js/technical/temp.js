@@ -27,7 +27,7 @@ function setupTemp() {
 	funcs = {};
 
 	setupTempData(layers, tmp, funcs);
-	for (layer in layers){
+	for (layer in layers) {
 		tmp[layer].resetGain = {};
 		tmp[layer].nextAt = {};
 		tmp[layer].nextAtDisp = {};
@@ -49,12 +49,12 @@ function setupTemp() {
 	updateWidth();
 
 	temp = tmp;
-}
+};
 
 const boolNames = ["unlocked", "deactivated"];
 
 function setupTempData(layerData, tmpData, funcsData) {
-	for (item in layerData){
+	for (item in layerData) {
 		if (layerData[item] == null) {
 			tmpData[item] = null;
 		} else if (layerData[item] instanceof Decimal)
@@ -70,12 +70,10 @@ function setupTempData(layerData, tmpData, funcsData) {
 		} else if ((!!layerData[item]) && (typeof layerData[item] === "object") && traversableClasses.includes(layerData[item].constructor.name)) {
 			tmpData[item] = new layerData[item].constructor();
 			funcsData[item] = new layerData[item].constructor();
-		} else if (isFunction(layerData[item]) && !activeFunctions.includes(item)){
+		} else if (isFunction(layerData[item]) && !activeFunctions.includes(item)) {
 			funcsData[item] = layerData[item];
-			if (boolNames.includes(item))
-				tmpData[item] = false;
-			else
-				tmpData[item] = decimalOne; // The safest thing to put probably?
+			if (boolNames.includes(item)) tmpData[item] = false;
+			else tmpData[item] = decimalOne; // The safest thing to put probably?
 		} else {
 			tmpData[item] = layerData[item];
 		};
@@ -84,12 +82,11 @@ function setupTempData(layerData, tmpData, funcsData) {
 
 
 function updateTemp() {
-	if (tmp === undefined)
-		setupTemp();
+	if (tmp === undefined) setupTemp();
 
 	updateTempData(layers, tmp, funcs);
 
-	for (layer in layers){
+	for (layer in layers) {
 		tmp[layer].resetGain = getResetGain(layer);
 		tmp[layer].nextAt = getNextAt(layer);
 		tmp[layer].nextAtDisp = getNextAt(layer, true);
@@ -104,7 +101,7 @@ function updateTemp() {
 	tmp.backgroundStyle = readData(backgroundStyle);
 
 	tmp.displayThings = [];
-	for (thing in displayThings){
+	for (thing in displayThings) {
 		let text = displayThings[thing];
 		if (isFunction(text)) text = text();
 		tmp.displayThings.push(text);
@@ -112,13 +109,13 @@ function updateTemp() {
 };
 
 function updateTempData(layerData, tmpData, funcsData, useThis) {
-	for (item in funcsData){
+	for (item in funcsData) {
 		if (Array.isArray(layerData[item])) {
 			if (item !== "tabFormat" && item !== "content") // These are only updated when needed
 				updateTempData(layerData[item], tmpData[item], funcsData[item], useThis);
 		} else if ((!!layerData[item]) && (layerData[item].constructor === Object) || (typeof layerData[item] === "object") && traversableClasses.includes(layerData[item].constructor.name)) {
 			updateTempData(layerData[item], tmpData[item], funcsData[item], useThis);
-		} else if (isFunction(layerData[item]) && !isFunction(tmpData[item])){
+		} else if (isFunction(layerData[item]) && !isFunction(tmpData[item])) {
 			let value;
 			if (useThis !== undefined) value = layerData[item].bind(useThis)();
 			else value = layerData[item]();

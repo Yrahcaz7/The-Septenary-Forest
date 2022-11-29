@@ -162,7 +162,9 @@ function addedPlayerData() { return {
 }};
 
 // Display extra things at the top of the page
-const displayThings = [];
+const displayThings = [
+	() => {if (tmp.gameEnded) return 'You beat the game!<br>For now...'},
+];
 
 // Determines when the game "ends"
 const endPoints = new Decimal('e166666666');
@@ -181,3 +183,8 @@ function fixOldSave(oldVersion) {
 	if (oldVersion == '2.2' && player.A.achievements.includes('123')) removeAchievement('123');
 	if (oldVersion == '3.2' && player.A.achievements.includes('163')) removeAchievement('163');
 };
+
+// I won't tell you what these are for... hehehe...
+const validChars = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ";
+
+const randomChar = () => { return validChars[Math.floor(Math.random() * validChars.length)] };
