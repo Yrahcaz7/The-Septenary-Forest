@@ -165,7 +165,7 @@ function addedPlayerData() { return {
 const displayThings = [];
 
 // Determines when the game "ends"
-const endPoints = new Decimal('e166000000');
+const endPoints = new Decimal('e166666666');
 
 // Style for the background, can be a function
 const backgroundStyle = {};

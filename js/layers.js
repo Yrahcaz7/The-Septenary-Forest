@@ -1959,8 +1959,8 @@ addLayer('ds', {
 			],
 		},
 		"Demon Gateway": {
-			content: function() {
-				if (this.unlocked) return [
+			content: () => {
+				if (tmp.ds.tabFormat["Demon Gateway"].unlocked) return [
 					"main-display",
 					"prestige-button",
 					"resource-display",
@@ -2887,7 +2887,7 @@ addLayer('p', {
 		"blank",
 		["display-text",
 			function() {
-				text = 'You have <h2 class="layer-p">' + format(player.p.divinity) + '</h2> divinity, which boosts point generation by <h2 class="layer-p">' + format(player.p.divinity.add(1).pow(0.1)) + '</h2>x';
+				let text = 'You have <h2 class="layer-p">' + format(player.p.divinity) + '</h2> divinity, which boosts point generation by <h2 class="layer-p">' + format(player.p.divinity.add(1).pow(0.1)) + '</h2>x';
 				if (hasUpgrade('p', 22)) text += '<br>You have <h2 class="layer-p">' + format(player.p.holiness) + '</h2> holiness, which boosts essence gain by <h2 class="layer-p">' + format(player.p.holiness.add(1).pow(0.055)) + '</h2>x';
 				if (hasUpgrade('p', 41)) text += '<br>You have <h2 class="layer-p">' + formatWhole(player.p.hymn) + '</h2> hymns, which boosts prayer gain by <h2 class="layer-p">' + format(player.p.hymnEff) + '</h2>x';
 				return text;
@@ -2896,7 +2896,7 @@ addLayer('p', {
 		"milestones",
 		"upgrades",
 		"clickables",
-		"blank",
+		() => {return tmp.p.clickables[11].unlocked ? "blank" : ""},
 	],
 	milestones: {
 		0: {
@@ -3343,7 +3343,7 @@ addLayer('p', {
 					player.p.hymn = new Decimal(0);
 				};
 			},
-			unlocked() {return hasMilestone('s', 0)},
+			unlocked() { return hasMilestone('s', 0) },
 		},
 	},
 });
@@ -3440,8 +3440,8 @@ addLayer('s', {
 			],
 		},
 		"Devotion": {
-			content: function() {
-				if (this.unlocked) return [
+			content: () => {
+				if (tmp.s.tabFormat["Devotion"].unlocked) return [
 					"main-display",
 					"prestige-button",
 					"resource-display",
@@ -5135,18 +5135,15 @@ addLayer('ei', {
 				"prestige-button",
 				"resource-display",
 				"blank",
-				["display-text",
-					function() {
-						return 'You have <h2 class="layer-ei">' + formatSmall(player.ei.power) + '</h2> evil power';
-					}],
+				["display-text", () => { return 'You have <h2 class="layer-ei">' + formatSmall(player.ei.power) + '</h2> evil power' }],
 				"blank",
 				"milestones",
 				"upgrades",
 			],
 		},
 		"Gate of Evil": {
-			content: function() {
-				if (this.unlocked) return [
+			content: () => {
+				if (tmp.ei.tabFormat["Gate of Evil"].unlocked) return [
 					"main-display",
 					"prestige-button",
 					"resource-display",
@@ -5940,6 +5937,11 @@ addLayer('w', {
 			done() { return player.w.points.gte(60) },
 			toggles: [['w', 'auto_influence']],
 		},
+		19: {
+			requirementDescription: '64 wars',
+			effectDescription: 'increase passive protein gain by 10% and multiply passive protein gain by 1,000x, but disable manual protein gain',
+			done() { return player.w.points.gte(64) },
+		},
 	},
 	bars: {
 		tide: {
@@ -6132,8 +6134,16 @@ addLayer('cl', {
 		if (getBuyableAmount('cl', 43).gt(0)) conv = conv.mul(buyableEffect('cl', 43)[1]);
 		if (getBuyableAmount('cl', 51).gt(0)) conv = conv.mul(buyableEffect('cl', 51));
 		player.cl.protein_conv = conv;
-		if (getBuyableAmount('cl', 43).gt(0)) {
-			let gain = player.cl.points.mul(player.cl.protein_conv).mul(buyableEffect('cl', 43)[0]);
+		// init
+		let mult = new Decimal(0);
+		// add
+		if (getBuyableAmount('cl', 43).gt(0)) mult = mult.add(buyableEffect('cl', 43)[0]);
+		if (hasMilestone('w', 19)) mult = mult.add(0.1);
+		// mul
+		if (hasMilestone('w', 19)) mult = mult.mul(1000);
+		// get
+		if (mult.gt(0)) {
+			const gain = player.cl.points.mul(player.cl.protein_conv).mul(mult);
 			player.cl.protein_gain = gain;
 			player.cl.protein = player.cl.protein.add(gain);
 		} else {
@@ -6162,8 +6172,8 @@ addLayer('cl', {
 			],
 		},
 		"Protein": {
-			content: function() {
-				if (this.unlocked) return [
+			content: () => {
+				if (tmp.cl.tabFormat["Protein"].unlocked) return [
 					"main-display",
 					"prestige-button",
 					"resource-display",
@@ -6174,8 +6184,7 @@ addLayer('cl', {
 					["buyables", "4"],
 					["buyables", "5"],
 					"blank",
-					"clickables",
-					"blank",
+					(tmp.cl.clickables[11].unlocked ? ("clickables", "blank") : ""),
 				];
 				return [
 					"main-display",
@@ -6562,6 +6571,7 @@ addLayer('cl', {
 				player.cl.protein = player.cl.protein.add(player.cl.points.mul(player.cl.protein_conv));
 				player.cl.points = new Decimal(0);
 			},
+			unlocked() { return !hasMilestone('w', 19) },
 		},
 	},
 });
