@@ -276,7 +276,7 @@ function autobuyUpgrades(layer) {
 };
 
 function gameLoop(diff) {
-	if (isEndgame() || tmp.gameEnded) {
+	if ((endPoints ? player.points.gte(endPoints) : (typeof isEndgame == "function" ? isEndgame() : isEndgame)) || tmp.gameEnded) {
 		tmp.gameEnded = true;
 		clearParticles();
 	};

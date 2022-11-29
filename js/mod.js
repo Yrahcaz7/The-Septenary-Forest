@@ -167,10 +167,6 @@ const displayThings = [];
 // Determines when the game "ends"
 const endPoints = new Decimal('e166000000');
 
-function isEndgame() {
-	return player.points.gte(endPoints);
-};
-
 // Style for the background, can be a function
 const backgroundStyle = {};
 
