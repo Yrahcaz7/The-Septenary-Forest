@@ -1,0 +1,175 @@
+/* Achievements */
+.layer-A {
+	color: #A5BCC2;
+	text-shadow: 0 0 10px #A5BCC2;
+}
+
+/* Essence */
+.layer-e {
+	color: #4CED13;
+	text-shadow: 0 0 10px #4CED13;
+}
+
+.layer-e-dark {
+	color: #078600;
+	text-shadow: 0 0 10px #078600;
+}
+
+/* Cores */
+.layer-c {
+	color: #D2D237;
+	text-shadow: 0 0 10px #D2D237;
+}
+
+.layer-c-dark {
+	color: #B1B10E;
+	text-shadow: 0 0 10px #B1B10E;
+}
+
+/* Quarks */
+.layer-q {
+	color: #DB5196;
+	text-shadow: 0 0 10px #DB5196;
+}
+
+.layer-q-dark {
+	color: #A91064;
+	text-shadow: 0 0 10px #A91064;
+}
+
+/* Subatomic Particles */
+.layer-sp {
+	color: #710CC4;
+	text-shadow: 0 0 10px #710CC4;
+}
+
+.layer-sp-dark {
+	color: #2E0874;
+	text-shadow: 0 0 10px #2E0874;
+}
+
+/* Hexes */
+.layer-h {
+	color: #E36409;
+	text-shadow: 0 0 10px #E36409;
+}
+
+.layer-h-dark {
+	color: #9B3404;
+	text-shadow: 0 0 10px #9B3404;
+}
+
+/* Demon Souls */
+.layer-ds {
+	color: #BA0035;
+	text-shadow: 0 0 10px #BA0035;
+}
+
+.layer-ds-dark {
+	color: #52050E;
+	text-shadow: 0 0 10px #52050E;
+}
+
+/* Atoms */
+.layer-a {
+	color: #4D2FE0;
+	text-shadow: 0 0 10px #4D2FE0;
+}
+
+.layer-a-dark {
+	color: #200992;
+	text-shadow: 0 0 10px #200992;
+}
+
+/* Prayers */
+.layer-p {
+	color: #FDBBFF;
+	text-shadow: 0 0 10px #FDBBFF;
+}
+
+.layer-p-dark {
+	color: #D766DD;
+	text-shadow: 0 0 10px #D766DD;
+}
+
+/* Sanctums */
+.layer-s {
+	color: #AAFF00;
+	text-shadow: 0 0 10px #AAFF00;
+}
+
+.layer-s-dark {
+	color: #88DD00;
+	text-shadow: 0 0 10px #88DD00;
+}
+
+/* Relics */
+.layer-r {
+	color: #B9A975;
+	text-shadow: 0 0 10px #B9A975;
+}
+
+.layer-r-dark {
+	color: #776B44;
+	text-shadow: 0 0 10px #776B44;
+}
+
+/* Molecules */
+.layer-m {
+	color: #00CCCC;
+	text-shadow: 0 0 10px #00CCCC;
+}
+
+.layer-m-dark {
+	color: #008080;
+	text-shadow: 0 0 10px #008080;
+}
+
+.layer-m-light {
+	color: #00E0E0;
+	text-shadow: 0 0 10px #00FFFF;
+}
+
+/* Good Influence */
+.layer-gi {
+	color: #08FF87;
+	text-shadow: 0 0 10px #08FF87;
+}
+
+.layer-gi-dark {
+	color: #07C268;
+	text-shadow: 0 0 10px #07C268;
+}
+
+/* Evil Influence */
+.layer-ei {
+	color: #FF4400;
+	text-shadow: 0 0 10px #FF4400;
+}
+
+.layer-ei-dark {
+	color: #661100;
+	text-shadow: 0 0 10px #661100;
+}
+
+/* Wars */
+.layer-w {
+	color: #A0A0A0;
+	text-shadow: 0 0 10px #A0A0A0;
+}
+
+.layer-w-dark {
+	color: #333333;
+	text-shadow: 0 0 10px #333333;
+}
+
+/* Cellular Life */
+.layer-cl {
+	color: #008800;
+	text-shadow: 0 0 10px #008800;
+}
+
+.layer-cl-dark {
+	color: #004400;
+	text-shadow: 0 0 10px #004400;
+}
