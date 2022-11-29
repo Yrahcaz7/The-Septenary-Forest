@@ -5941,8 +5941,17 @@ addLayer('w', {
 		},
 		19: {
 			requirementDescription: '64 wars',
-			effectDescription: 'increase passive protein gain by 10% and multiply passive protein gain by 1,000x, but disable manual protein gain',
+			effectDescription() {
+				return 'increase passive protein gain by 10%, multiply passive protein gain by 100x, improve <b class="layer-cl' + getdark(this, "ref", true, true) + 'Passive Discovery</b>\'s effect formulas, and disable manual protein gain';
+			},
 			done() { return player.w.points.gte(64) },
+		},
+		20: {
+			requirementDescription: '67 wars',
+			effectDescription() {
+				return 'improve <b class="layer-cl' + getdark(this, "ref", true, true) + 'Passive Discovery</b>\'s effect formulas and <b class="layer-cl' + getdark(this, "ref", true, true) + 'Innate Evil</b>\'s effect formula';
+			},
+			done() { return player.w.points.gte(67) },
 		},
 	},
 	bars: {
@@ -6142,7 +6151,7 @@ addLayer('cl', {
 		if (getBuyableAmount('cl', 43).gt(0)) mult = mult.add(buyableEffect('cl', 43)[0]);
 		if (hasMilestone('w', 19)) mult = mult.add(0.1);
 		// mul
-		if (hasMilestone('w', 19)) mult = mult.mul(1000);
+		if (hasMilestone('w', 19)) mult = mult.mul(100);
 		// get
 		if (mult.gt(0)) {
 			const gain = player.cl.points.mul(player.cl.protein_conv).mul(mult);
@@ -6490,11 +6499,17 @@ addLayer('cl', {
 				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
 			},
 			effect() {
-				return [new Decimal(1.025).pow(getBuyableAmount('cl', this.id)).sub(1), getBuyableAmount('cl', this.id).mul(7.5).add(1).pow(2)];
+				if (hasMilestone('w', 20)) return [new Decimal(1.36).pow(getBuyableAmount('cl', this.id)).sub(1), getBuyableAmount('cl', this.id).mul(50).add(1).pow(3)];
+				else if (hasMilestone('w', 19)) return [new Decimal(1.175).pow(getBuyableAmount('cl', this.id)).sub(1), getBuyableAmount('cl', this.id).mul(25).add(1).pow(3)];
+				else return [new Decimal(1.025).pow(getBuyableAmount('cl', this.id)).sub(1), getBuyableAmount('cl', this.id).mul(7.5).add(1).pow(2)];
 			},
 			display() {
 				let text = '';
-				if (player.nerdMode) text = '<br>formulas: 1.025^x-1<br>and (7.5x+1)^2';
+				if (player.nerdMode) {
+					if (hasMilestone('w', 20)) text = '<br>formulas: (1.36^x)-1<br>and (50x+1)^3';
+					else if (hasMilestone('w', 19)) text = '<br>formulas: (1.175^x)-1<br>and (25x+1)^3';
+					else text = '<br>formulas: (1.025^x)-1<br>and (7.5x+1)^2';
+				};
 				return 'increases passive protein gain and multiplies protein found from cellular life based on the amount of this upgrade bought.<br>Currently: +' + format(this.effect()[0].mul(100)) + '%<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
 			},
 		},
@@ -6555,11 +6570,15 @@ addLayer('cl', {
 				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
 			},
 			effect() {
+				if (hasMilestone('w', 20)) return getBuyableAmount('cl', this.id).add(1).pow(0.155);
 				return getBuyableAmount('cl', this.id).add(1).pow(0.125);
 			},
 			display() {
 				let text = '';
-				if (player.nerdMode) text = '<br>formula: (x+1)^0.125';
+				if (player.nerdMode) {
+					if (hasMilestone('w', 20)) text = '<br>formula: (x+1)^0.155';
+					else text = '<br>formula: (x+1)^0.125';
+				};
 				return 'multiplies evil influence gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
 			},
 			unlocked() { return hasMilestone('w', 18) },
