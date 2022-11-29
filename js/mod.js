@@ -177,6 +177,7 @@ function maxTickLength() {
 
 // fixes for old saves
 function fixOldSave(oldVersion) {
-	// this is for the achievement that had its reqirement increased to be impossible to get in 2.2
+	// achievement fixes
 	if (oldVersion == '2.2' && player.A.achievements.includes('123')) removeAchievement('123');
+	if (oldVersion == '3.2' && player.A.achievements.includes('163')) removeAchievement('163');
 };
