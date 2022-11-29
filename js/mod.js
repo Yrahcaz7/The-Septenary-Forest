@@ -13,8 +13,11 @@ const VERSION = {
 	name: 'Back and Forth',
 };
 
-const winText = '<h3>You won the game!</h3><br>However, it isn\'t the end yet...<br>Wait for more updates for further content.';
+const winText = () => {
+	return 'You reached ' + format(endPoints) + ' ' + modInfo.pointsName + ' and won the game!<br>However, it isn\'t the end yet...<br>Wait for more updates for further content.';
+};
 
+// gets the end of a color tag (no color, dark, or light)
 function getdark(darkthis, type, special = false, research = false) {
 	if (darkthis.layer !== undefined) {
 		if (colorvalue[1] == 'dark') return '-dark">';
@@ -39,6 +42,7 @@ function getdark(darkthis, type, special = false, research = false) {
 	return '">';
 };
 
+// gets the devotion bulk
 function getDevotionBulk() {
 	let bulk = 1;
 	if (challengeCompletions('r', 11) >= 41) bulk *= 10;
@@ -51,6 +55,7 @@ function getDevotionBulk() {
 	return bulk;
 };
 
+// gets the light boost
 function getLightBoost() {
 	let lightboost = new Decimal(0);
 	if (hasMilestone('m', 17)) lightboost = player.r.lightgainbest.mul(0.1);
@@ -61,6 +66,7 @@ function getLightBoost() {
 	return lightboost;
 };
 
+// gets the light gain
 function getLightGain() {
 	let gain = getPointGen(true).pow(0.001).div(10);
 	if (hasUpgrade('r', 13)) {
@@ -80,6 +86,7 @@ function getLightGain() {
 	return gain;
 };
 
+// removes an achievment
 function removeAchievement(id = NaN) {
 	for (var i = 0; i < player.A.achievements.length; i++) {
 		if (player.A.achievements[i] == id) {
@@ -149,6 +156,7 @@ function getPointGen(forced = false) {
 	return gain;
 };
 
+// added player[data]
 function addedPlayerData() { return {
 	nerdMode: false,
 }};
@@ -157,17 +165,21 @@ function addedPlayerData() { return {
 const displayThings = [];
 
 // Determines when the game "ends"
+const endPoints = new Decimal('e166000000');
+
 function isEndgame() {
-	return player.points.gte('e166000000');
+	return player.points.gte(endPoints);
 };
 
 // Style for the background, can be a function
 const backgroundStyle = {};
 
+// max tick length in seconds
 function maxTickLength() {
-	return 1; // In seconds
+	return 1;
 };
 
+// fixes for old saves
 function fixOldSave(oldVersion) {
 	// this is for the achievement that had its reqirement increased to be impossible to get in 2.2
 	if (oldVersion == '2.2' && player.A.achievements.includes('123')) removeAchievement('123');

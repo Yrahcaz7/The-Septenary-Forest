@@ -186,7 +186,7 @@ function loadOptions() {
 
 function setupModInfo() {
 	modInfo.changelog = changelog;
-	modInfo.winText = winText ? winText : `Congratulations! You have reached the end and beaten this game, but for now...`;
+	modInfo.winText = winText ? (typeof winText == "function" ? winText() : winText) : `Congratulations! You have reached the end and beaten this game, but for now...`;
 };
 
 function NaNcheck(data) {
