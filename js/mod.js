@@ -3,14 +3,14 @@ const modInfo = {
 	id: 'Yrahcaz7-ModTree-ThePrimordialTree',
 	author: 'Yrahcaz7',
 	pointsName: 'points',
-	modFiles: ['achievements.js', 'softcaps.js', 'layers.js', 'technical/tree.js'],
+	modFiles: ['achievements.js', 'softcaps.js', 'story.js', 'layers.js', 'technical/tree.js'],
 	initialStartPoints: new Decimal(0),
 	offlineLimit: 1, // In hours
 };
 
 const VERSION = {
-	num: '3.2',
-	name: 'Back and Forth',
+	num: '3.3',
+	name: 'Chaos Rises',
 };
 
 const winText = () => {
@@ -167,7 +167,7 @@ const displayThings = [
 ];
 
 // Determines when the game "ends"
-const endPoints = new Decimal('e179000000');
+const endPoints = new Decimal('e180000000');
 
 // Style for the background, can be a function
 const backgroundStyle = {};
@@ -185,6 +185,6 @@ function fixOldSave(oldVersion) {
 };
 
 // I won't tell you what these are for... hehehe...
-const validChars = "!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ";
+const validChars = "!\"#$%&'()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ";
 
 const randomChar = () => { return validChars[Math.floor(Math.random() * validChars.length)] };

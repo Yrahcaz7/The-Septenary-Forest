@@ -173,3 +173,14 @@
 	color: #004400;
 	text-shadow: 0 0 10px #004400;
 }
+
+/* Chaos */
+.layer-ch {
+	color: #FFFFFF;
+	text-shadow: 0 0 10px #FFFFFF;
+}
+
+.layer-ch-dark {
+	color: #888888;
+	text-shadow: 0 0 10px #888888;
+}

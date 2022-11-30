@@ -745,5 +745,19 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 163) },
 			color: '#008800',
 		},*/
+		171: {
+			name: 'Rising Chaos',
+			done() {return player.ch.points.gte(1)},
+			tooltip: 'obtain 1 chaos.',
+			unlocked() { return hasAchievement('A', 171) },
+			color: '#FFFFFF',
+		},
+		172: {
+			name: 'Madness of Chaos',
+			done() {return player.ch.points.gte(10)},
+			tooltip: 'obtain 10 chaos.',
+			unlocked() { return hasAchievement('A', 171) },
+			color: '#FFFFFF',
+		},
 	},
 });

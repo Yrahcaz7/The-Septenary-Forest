@@ -54,6 +54,7 @@ addLayer('e', {
 		if (hasUpgrade('ds', 21)) mult = mult.mul(player.A.points.mul(0.2));
 		if (inChallenge('ds', 21)) mult = mult.mul(0.00000000000000000001);
 		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
+		if (new Decimal(tmp.ch.effect[0]).gt(1)) mult = mult.mul(tmp.ch.effect[0]);
 		// pow
 		if (getBuyableAmount('cl', 21).gt(0)) mult = mult.pow(buyableEffect('cl', 21)[0]);
 		// return
@@ -4792,7 +4793,7 @@ addLayer('gi', {
 		auto_prestige: false,
 	}},
 	color: "#08FF87",
-	branches: ['w'],
+	branches: ['w', 'ch'],
 	requires: 15,
 	resource: 'good influence',
 	baseResource: 'relics',
@@ -5040,7 +5041,7 @@ addLayer('ei', {
 		auto_prestige: false,
 	}},
 	color: "#FF4400",
-	branches: ['w'],
+	branches: ['w', 'ch'],
 	requires: 'e3000',
 	resource: 'evil influence',
 	baseResource: 'demon souls',
@@ -5708,25 +5709,27 @@ addLayer('w', {
 		auto_influence: false,
 	}},
 	color: '#A0A0A0',
+	branches: ['ch'],
 	requires: 60,
 	resource: 'wars',
 	baseAmount() { return player.gi.points.min(player.ei.points) },
 	type: 'custom',
 	getResetGain() {
-		let gain = [player.gi.points.sub(60).div(20).mul(this.gainExp()).floor().sub(player.w.points).add(1), player.ei.points.sub(60).div(20).mul(this.gainExp()).floor().sub(player.w.points).add(1)];
-		if (this.canBuyMax()) return gain[0].min(gain[1]).max(0);
-		return gain[0].min(gain[1]).max(0).min(1);
+		if (tmp.w.baseAmount.lt(tmp.w.requires)) return new Decimal(0);
+		let gain = tmp.w.baseAmount.sub(tmp.w.requires).div(20).mul(this.gainExp()).floor().sub(player.w.points).add(1);
+		if (this.canBuyMax()) return gain.max(0);
+		return gain.max(0).min(1);
 	},
 	getNextAt() {
-		if (this.canBuyMax()) return this.getResetGain().div(this.gainExp()).mul(20).add(60);
-		return player.w.points.div(this.gainExp()).mul(20).add(60);
+		if (this.canBuyMax()) return player.w.points.add(this.getResetGain()).div(this.gainExp()).mul(20).add(tmp.w.requires);
+		return player.w.points.div(this.gainExp()).mul(20).add(tmp.w.requires);
 	},
 	canReset() { return this.getResetGain().gt(0) },
 	prestigeNotify() { return this.getResetGain().gt(0) },
 	prestigeButtonText() {
-		return 'Reset for +<b>' + formatWhole(this.getResetGain()) + '</b> wars<br><br>' + (player.w.points.lt(30) ? (this.canBuyMax() ? 'Next:' : 'Req:') : '') + ' ' + formatWhole(player.gi.points) + ' / ' + formatWhole(this.getNextAt()) + ' GI<br>' + (player.w.points.lt(30) ? 'and ' : '') + formatWhole(player.ei.points) + ' / ' + formatWhole(this.getNextAt()) + ' EI';
+		return 'Reset for +<b>' + formatWhole(this.getResetGain()) + '</b> wars<br><br>' + (player.w.points.lt(30) ? (this.canBuyMax() ? 'Next:' : 'Req:') : '') + ' ' + formatWhole(player.gi.points) + ' / ' + format(this.getNextAt()) + ' GI<br>' + (player.w.points.lt(30) ? 'and ' : '') + formatWhole(player.ei.points) + ' / ' + format(this.getNextAt()) + ' EI';
 	},
-	canBuyMax() { return false },
+	canBuyMax() { return hasMilestone('ch', 0) },
 	onPrestige() {
 		if (hasMilestone('w', 5)) return;
 		player.c.unlocked = false;
@@ -5745,6 +5748,7 @@ addLayer('w', {
 	onPrestigeIsAfterGain: true,
 	gainExp() {
 		let gain = new Decimal(1);
+		if (new Decimal(tmp.ch.effect[1]).gt(1)) gain = gain.mul(tmp.ch.effect[1]);
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('w', 17) },
@@ -5770,8 +5774,19 @@ addLayer('w', {
 		return 'which multiplies point, essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x, atom, sanctum, relic, molecule, good influence, and evil influence by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x, and also light gain after hardcap by <h2 class="layer-w">' + format(tmp.w.effect[2]) + '</h2>x';
 	},
 	doReset(resettingLayer) {
-		let keep = [];
-			if (layers[resettingLayer].row > this.row) layerDataReset('w', keep);
+		let keep = ['auto_influence'], save;
+			if (hasMilestone('ch', 0) && resettingLayer == 'ch') {
+				save = player.ch.points;
+				if (save.gt(player.w.points)) save = player.w.points;
+			};
+			if (layers[resettingLayer].row > this.row) {
+				layerDataReset('w', keep);
+				if (save) {
+					player.w.points = save;
+					player.w.best = save;
+					player.w.total = save;
+				};
+			};
 		},
 	resetsNothing() { return hasMilestone('w', 17) },
 	tabFormat: {
@@ -5933,8 +5948,8 @@ addLayer('w', {
 		18: {
 			requirementDescription: '60 wars',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'unlock 3 more cellular life (protein) buyables, and you can autobuy <b class="layer-w-dark">Influences</b>';
-				return 'unlock 3 more cellular life (protein) buyables, and you can autobuy <b>Influences</b>';
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'unlock 3 more protein buyables, and you can autobuy <b class="layer-w-dark">Influences</b>';
+				return 'unlock 3 more protein buyables, and you can autobuy <b>Influences</b>';
 			},
 			done() { return player.w.points.gte(60) },
 			toggles: [['w', 'auto_influence']],
@@ -6133,6 +6148,7 @@ addLayer('cl', {
 	},
 	doReset(resettingLayer) {
 		let keep = ['auto_tissues'];
+			if (hasMilestone('ch', 0) && resettingLayer == 'ch') keep.push('milestones');
 			if (layers[resettingLayer].row > this.row) layerDataReset('cl', keep);
 		},
 	resetsNothing() { return hasMilestone('cl', 12) },
@@ -6189,13 +6205,14 @@ addLayer('cl', {
 					"prestige-button",
 					"resource-display",
 					"blank",
-					["display-text", 'You are currently finding <h2 class="layer-cl">' + format(player.cl.protein_conv) + '</h2> proteins per cellular life<br>' + (getBuyableAmount('cl', 43).gt(0) ? 'You are currently gaining <h2 class="layer-cl">' + format(player.cl.protein_gain) + '</h2> proteins per second<br>' : '') + 'You currently have <h2 class="layer-cl">' + format(player.cl.protein) + '</h2> protein'],
+					["display-text", 'You are currently finding <h2 class="layer-cl">' + format(player.cl.protein_conv) + '</h2> protein per cellular life<br>' + (getBuyableAmount('cl', 43).gt(0) ? 'You are currently gaining <h2 class="layer-cl">' + format(player.cl.protein_gain) + '</h2> protein per second<br>' : '') + 'You currently have <h2 class="layer-cl">' + format(player.cl.protein) + '</h2> protein'],
 					"blank",
 					["buyables", "3"],
 					["buyables", "4"],
 					["buyables", "5"],
 					"blank",
-					(tmp.cl.clickables[11].unlocked ? ("clickables", "blank") : ""),
+					"clickables",
+					(tmp.cl.clickables[11].unlocked ? "blank" : ""),
 				];
 				return [
 					"main-display",
@@ -6593,6 +6610,110 @@ addLayer('cl', {
 				player.cl.points = new Decimal(0);
 			},
 			unlocked() { return !hasMilestone('w', 19) },
+		},
+	},
+});
+
+addLayer('ch', {
+	name: 'Chaos',
+	symbol: 'CHAOS',
+	position: 0,
+	startData() { return {
+		unlocked: false,
+		points: new Decimal(0),
+		best: new Decimal(0),
+		total: new Decimal(0),
+	}},
+	color: '#FFFFFF',
+	nodeStyle() {
+		if (this.getResetGain().gt(0) || player.ch.unlocked) return {width: '150px', height: '150px', 'background-image': 'radial-gradient(#4CED13, #D2D237, #DB5196, #710CC4, #E36409, #BA0035, #4D2FE0, #FDBBFF, #AAFF00, #B9A975, #00CCCC, #08FF87, #FF4400, #A0A0A0, #008800, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF)', 'border-width': '0px'};
+		else return {width: '150px', height: '150px'};
+	},
+	requires: 70,
+	resource: 'chaos',
+	baseResource: 'wars',
+	baseAmount() { return player.w.points },
+	type: 'custom',
+	getResetGain() {
+		if (tmp.ch.baseAmount.lt(tmp.ch.requires)) return new Decimal(0);
+		let gain = tmp.ch.baseAmount.sub(tmp.ch.requires).div(5).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
+		if (this.canBuyMax()) return gain.max(0);
+		return gain.max(0).min(1);
+	},
+	getNextAt() {
+		if (this.canBuyMax()) return this.getResetGain().div(this.gainExp()).mul(5).add(tmp.ch.requires);
+		return player.ch.points.div(this.gainExp()).mul(5).add(tmp.ch.requires);
+	},
+	canReset() { return this.getResetGain().gt(0) },
+	prestigeNotify() { return this.getResetGain().gt(0) },
+	prestigeButtonText() {
+		return randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + ' ' + randomChar() + randomChar() + randomChar() + ' +<b>' + formatWhole(this.getResetGain()) + '</b> ' + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + '<br><br>' + (player.ch.points.lt(30) ? (this.canBuyMax() ? randomChar() + randomChar() + randomChar() + randomChar() + ':' : randomChar() + randomChar() + randomChar() + ':') : '') + ' ' + formatWhole(tmp.ch.baseAmount) + ' / ' + formatWhole(this.getNextAt()) + ' ' + randomChar() + randomChar() + randomChar() + randomChar();
+	},
+	canBuyMax() { return false },
+	gainExp() {
+		let gain = new Decimal(1);
+		return gain;
+	},
+	row: 6,
+	tooltip() {
+		return formatWhole(player.ch.points) + ' ' + randomChar() + randomChar() + randomChar() + randomChar() + randomChar();
+	},
+	tooltipLocked() {
+		return randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + ' ' + this.requires + ' ' + randomChar() + randomChar() + randomChar() + randomChar() + ' ' + randomChar() + randomChar() + ' ' + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + ' (' + randomChar() + randomChar() + randomChar() + ' ' + randomChar() + randomChar() + randomChar() + randomChar() + ' ' + formatWhole(player.w.points) + ' ' + randomChar() + randomChar() + randomChar() + randomChar() + ')';
+	},
+	hotkeys: [
+		{key: 'C', description: 'Shift-C: Reset for chaos', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+	],
+	layerShown() { return player.cl.unlocked || player.ch.unlocked },
+	effect() {
+		return [new Decimal('1e1000').pow(player.ch.points), player.ch.points.add(1).log10().add(1).pow(0.1)];
+	},
+	effectDescription() {
+		return 'which multiplies essence gain by <h2 class="layer-ch">' + format(tmp.ch.effect[0]) + '</h2>x and multiplies war gain by <h2 class="layer-ch">' + format(tmp.ch.effect[1]) + '</h2>x';
+	},
+	doReset(resettingLayer) {
+		let keep = [];
+			if (layers[resettingLayer].row > this.row) layerDataReset('w', keep);
+		},
+	tabFormat: {
+		"Accumulation": {
+			content: [
+				"main-display",
+				"prestige-button",
+				"resource-display",
+				"blank",
+				"milestones",
+			],
+		},
+		"Story": {
+			content: [
+				"main-display",
+				"prestige-button",
+				"resource-display",
+				"blank",
+				["infobox", "story"],
+				["display-text", () => { return story.length > player.ch.best.toNumber() ? "<br><br>next story discovery at " + formatWhole(player.ch.best.add(1)) + " chaos" : "<br><br>all story discoveries found; wait for updates for more" }],
+				"blank",
+			],
+		},
+	},
+	milestones: {
+		0: {
+			requirementDescription: '1 chaos',
+			effectDescription: 'keep wars equal to your chaos on chaos resets, keep cellular life milestones on chaos resets, and you can buy max wars.',
+			done() { return player.ch.points.gte(1) },
+		},
+	},
+	infoboxes: {
+		story: {
+			title() { return "Story of " + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar()},
+			body() {
+				let text = "";
+				for (let index = 0; index < story.length && index < player.ch.best.toNumber(); index++) {
+					text += story[index];
+				};
+				return text;
+			},
 		},
 	},
 });
