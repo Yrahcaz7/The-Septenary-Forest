@@ -5779,6 +5779,7 @@ addLayer('w', {
 				save = player.ch.points;
 				if (save.gt(player.w.points)) save = player.w.points;
 			};
+			if (hasMilestone('ch', 1) && resettingLayer == 'ch') keep.push('milestones');
 			if (layers[resettingLayer].row > this.row) {
 				layerDataReset('w', keep);
 				if (save) {
@@ -6153,18 +6154,23 @@ addLayer('cl', {
 		},
 	resetsNothing() { return hasMilestone('cl', 12) },
 	update(diff) {
+		// init
 		let conv = new Decimal(0);
-		if (getBuyableAmount('cl', 31).gt(0)) conv = conv.add(buyableEffect('cl', 31));
-		if (getBuyableAmount('cl', 32).gt(0)) conv = conv.mul(buyableEffect('cl', 32));
-		if (getBuyableAmount('cl', 41).gt(0)) conv = conv.mul(buyableEffect('cl', 41));
-		if (getBuyableAmount('cl', 42).gt(0)) conv = conv.mul(buyableEffect('cl', 42));
-		if (getBuyableAmount('cl', 43).gt(0)) conv = conv.mul(buyableEffect('cl', 43)[1]);
-		if (getBuyableAmount('cl', 51).gt(0)) conv = conv.mul(buyableEffect('cl', 51));
+		// add
+		if (buyableEffect('cl', 31).gt(0)) conv = conv.add(buyableEffect('cl', 31));
+		// mul
+		if (buyableEffect('cl', 32).gt(1)) conv = conv.mul(buyableEffect('cl', 32));
+		if (buyableEffect('cl', 41).gt(1)) conv = conv.mul(buyableEffect('cl', 41));
+		if (buyableEffect('cl', 42).gt(1)) conv = conv.mul(buyableEffect('cl', 42));
+		if (buyableEffect('cl', 43)[1].gt(1)) conv = conv.mul(buyableEffect('cl', 43)[1]);
+		if (buyableEffect('cl', 51).gt(1)) conv = conv.mul(buyableEffect('cl', 51));
+		if (new Decimal(tmp.ch.effect[2]).gt(1)) conv = conv.mul(tmp.ch.effect[2]);
+		// set
 		player.cl.protein_conv = conv;
 		// init
 		let mult = new Decimal(0);
 		// add
-		if (getBuyableAmount('cl', 43).gt(0)) mult = mult.add(buyableEffect('cl', 43)[0]);
+		if (buyableEffect('cl', 43)[0].gt(0)) mult = mult.add(buyableEffect('cl', 43)[0]);
 		if (hasMilestone('w', 19)) mult = mult.add(0.1);
 		// mul
 		if (hasMilestone('w', 19)) mult = mult.mul(100);
@@ -6576,6 +6582,7 @@ addLayer('cl', {
 		},
 		53: {
 			cost() {
+				if (hasMilestone('ch', 0)) return new Decimal(1e5).pow(getBuyableAmount('cl', this.id).div(2)).mul(1e50);
 				return new Decimal(1e5).pow(getBuyableAmount('cl', this.id)).mul(1e50);
 			},
 			title() {
@@ -6666,10 +6673,10 @@ addLayer('ch', {
 	],
 	layerShown() { return player.cl.unlocked || player.ch.unlocked },
 	effect() {
-		return [new Decimal('1e1000').pow(player.ch.points), player.ch.points.add(1).log10().add(1).pow(0.1)];
+		return [new Decimal('1e1000').pow(player.ch.points), hasMilestone('ch', 1) ? player.ch.points.add(1).pow(0.05) : player.ch.points.add(1).log10().add(1).pow(0.125), new Decimal(25).pow(player.ch.points)];
 	},
 	effectDescription() {
-		return 'which multiplies essence gain by <h2 class="layer-ch">' + format(tmp.ch.effect[0]) + '</h2>x and multiplies war gain by <h2 class="layer-ch">' + format(tmp.ch.effect[1]) + '</h2>x';
+		return 'which multiplies essence gain by <h2 class="layer-ch">' + format(tmp.ch.effect[0]) + '</h2>x, multiplies war gain by <h2 class="layer-ch">' + format(tmp.ch.effect[1]) + '</h2>x, and multiplies protein found from cellular life by <h2 class="layer-ch">' + format(tmp.ch.effect[2]) + '</h2>x';
 	},
 	doReset(resettingLayer) {
 		let keep = [];
@@ -6700,8 +6707,15 @@ addLayer('ch', {
 	milestones: {
 		0: {
 			requirementDescription: '1 chaos',
-			effectDescription: 'keep wars equal to your chaos on chaos resets, keep cellular life milestones on chaos resets, and you can buy max wars.',
+			effectDescription() {
+				return 'keep wars equal to your chaos on chaos resets, keep cellular life milestones on chaos resets, you can buy max wars, and reduce <b class="layer-cl' + getdark(this, "ref", true, true) + 'Innate Evil</b> cost scaling'
+			},
 			done() { return player.ch.points.gte(1) },
+		},
+		1: {
+			requirementDescription: '2 chaos',
+			effectDescription: 'keep war milestones on chaos resets, and improve the formula for chaos\' second effect',
+			done() { return player.ch.points.gte(2) },
 		},
 	},
 	infoboxes: {
