@@ -30,7 +30,7 @@ body {
 	text-shadow: 0 0 7px var(--color);
 }
 
-.tooltip { 
+.tooltip {
     pointer-events: none;
     text-align: center;
     width: 150px;
