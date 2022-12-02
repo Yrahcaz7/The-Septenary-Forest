@@ -35,7 +35,7 @@ function getResetGain(layer, useType = null) {
 	};
 };
 
-function getNextAt(layer, canMax=false, useType = null) {
+function getNextAt(layer, canMax = false, useType = null) {
 	let type = useType;
 	if (!useType) {
 		type = tmp[layer].type;
@@ -98,15 +98,12 @@ function shouldNotify(layer) {
 	return false;
 };
 
-function canReset(layer) {	
-	if (layers[layer].canReset!== undefined)
-		return run(layers[layer].canReset, layers[layer]);
-	else if (tmp[layer].type == "normal")
-		return tmp[layer].baseAmount.gte(tmp[layer].requires);
-	else if (tmp[layer].type== "static")
-		return tmp[layer].baseAmount.gte(tmp[layer].nextAt);
-	else 
-		return false;
+function canReset(layer) {
+	if (tmp[layer].deactivated) return false;
+	else if (layers[layer].canReset !== undefined) return run(layers[layer].canReset, layers[layer]);
+	else if (tmp[layer].type == "normal") return tmp[layer].baseAmount.gte(tmp[layer].requires);
+	else if (tmp[layer].type == "static") return tmp[layer].baseAmount.gte(tmp[layer].nextAt);
+	else return false;
 };
 
 function rowReset(row, layer) {
@@ -147,7 +144,7 @@ function generatePoints(layer, diff) {
 	addPoints(layer, tmp[layer].resetGain.times(diff));
 };
 
-function doReset(layer, force=false) {
+function doReset(layer, force = false) {
 	if (tmp[layer].type == "none") return;
 	let row = tmp[layer].row, challenge = player[layer].activeChallenge;
 	if (!force) {

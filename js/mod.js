@@ -104,7 +104,9 @@ function canGenPoints() {
 
 // Calculate points/sec!
 function getPointGen(forced = false) {
+	// init
 	let gain = new Decimal(1);
+	// mul
 	if (hasUpgrade('e', 11)) gain = gain.mul(1.5);
 	if (hasUpgrade('e', 12)) {
 		gain = gain.mul(upgradeEffect('e', 12));
@@ -153,6 +155,8 @@ function getPointGen(forced = false) {
 	if (inChallenge('ds', 22)) gain = gain.mul(0.0000000001);
 	if (new Decimal(tmp.w.effect[0]).gt(1)) gain = gain.mul(tmp.w.effect[0]);
 	if (inChallenge('r', 11) && !forced) gain = new Decimal(0);
+	// pow
+	if (challengeCompletions('ch', 11) > 0) gain = gain.pow(challengeEffect('ch', 11));
 	return gain;
 };
 
@@ -167,7 +171,7 @@ const displayThings = [
 ];
 
 // Determines when the game "ends"
-const endPoints = new Decimal('e181000000');
+const endPoints = new Decimal('e210000000');
 
 // Style for the background, can be a function
 const backgroundStyle = {};
