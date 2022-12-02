@@ -13,14 +13,17 @@ function getStartOptions() { return {
 	colorDisplayMode: 0,
 	colorDisplay: 0,
 	extendplaces: false,
+	css: '',
 }};
 
 function toggleOpt(name) {
+	// toggle option
 	options[name] = !options[name];
+	// special
 	if (name == 'hqTree') changeTreeQuality();
+	// update canvas
+	if (name == 'forceOneTab' || name == 'forceTooltips') needsCanvasUpdate = true;
 };
-
-var styleCooldown = 0;
 
 function changeTreeQuality() {
 	var on = options.hqTree;
@@ -39,24 +42,8 @@ const MS_DISPLAYS = ['ALL', 'LAST, AUTO, INCOMPLETE', 'AUTOMATION, INCOMPLETE (r
 
 const MS_SETTINGS = ['always', 'last', 'automation', 'incomplete', 'never'];
 
-const DISPLAY_MODES = ['ALL (recommended)', 'ONLY SPECIAL', 'SPECIAL AND TITLES', 'SPECIAL AND REFRENCES'];
-
-const COLOR_DISPLAYS = ['ON - NORMAL (recommended)', 'ON - ALWAYS DARK', 'OFF (recommended for colorblind)'];
-
-var colorvalue = [[true, true, true], 'normal'];
-
 function adjustMSDisp() {
-	options.msDisplay = MS_SETTINGS[(MS_SETTINGS.indexOf(options.msDisplay) + 1) % 5];
-};
-
-function display_mode() {
-	options.colorDisplayMode += 1;
-	if (options.colorDisplayMode >= 4) options.colorDisplayMode = 0;
-};
-
-function color_display() {
-	options.colorDisplay += 1;
-	if (options.colorDisplay >= 3) options.colorDisplay = 0;
+	options.msDisplay = MS_SETTINGS[(MS_SETTINGS.indexOf(options.msDisplay) + 1) % MS_SETTINGS.length];
 };
 
 function milestoneShown(layer, id) {
@@ -76,6 +63,22 @@ function milestoneShown(layer, id) {
 			return false;
 	};
 	return false;
+};
+
+const DISPLAY_MODES = ['ALL (recommended)', 'ONLY SPECIAL', 'SPECIAL AND TITLES', 'SPECIAL AND REFRENCES'];
+
+const COLOR_DISPLAYS = ['ON - NORMAL (recommended)', 'ON - ALWAYS DARK', 'OFF (recommended for colorblind)'];
+
+var colorvalue = [[true, true, true], 'normal'];
+
+function display_mode() {
+	options.colorDisplayMode += 1;
+	if (options.colorDisplayMode >= 4) options.colorDisplayMode = 0;
+};
+
+function color_display() {
+	options.colorDisplay += 1;
+	if (options.colorDisplay >= 3) options.colorDisplay = 0;
 };
 
 function fullcolordisplay() {
@@ -104,4 +107,14 @@ function fullcolordisplay() {
 			colorvalue[1] = 'none';
 			break;
 	};
+};
+
+const CSS_SETTINGS = ['', '-webkit-', '-moz-', '-ms-', '-o-'];
+
+const CSS_DISPLAYS = ['no specific browser', 'Chrome, Safari, and Android', 'Firefox', 'Internet Explorer and Edge', 'Opera and Opera Mini'];
+
+function shiftCSS() {
+	options.css = CSS_SETTINGS[(CSS_SETTINGS.indexOf(options.css) + 1) % CSS_SETTINGS.length];
+	document.body.style.setProperty('--chaos-gradient', options.css + 'radial-gradient(#4CED13, #D2D237, #DB5196, #710CC4, #E36409, #BA0035, #4D2FE0, #FDBBFF, #AAFF00, #B9A975, #00CCCC, #08FF87, #FF4400, #A0A0A0, #008800, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF)');
+	needsCanvasUpdate = true;
 };

@@ -166,7 +166,7 @@ var options_tab = `<table>
 	<tr>
 		<td><button class="opt" onclick="exportSave()">Export to clipboard</td>
 		<td><button class="opt" onclick="importSave()">Import</td>
-		<td><button class="opt" onclick="toggleOpt('offlineProd')">Offline Prod: {{options.offlineProd ? "ON" : "OFF"}}</td>
+		<td><button class="opt" onclick="toggleOpt('offlineProd')">Offline Progress: {{options.offlineProd ? "ON" : "OFF"}}</td>
 		<td><button class="opt" onclick="color_display(); fullcolordisplay()">Colored Text: {{COLOR_DISPLAYS[options.colorDisplay]}}</td>
 	</tr>
 	<tr>
@@ -180,6 +180,9 @@ var options_tab = `<table>
 		<td><button class="opt" onclick="toggleOpt('forceOneTab'); needsCanvasUpdate = true">Single-Tab Mode: {{options.forceOneTab ? "ALWAYS" : "AUTO"}}</td>
 		<td><button class="opt" onclick="toggleOpt('forceTooltips'); needsCanvasUpdate = true">Shift-Click to Toggle Tooltips: {{options.forceTooltips ? "ON" : "OFF"}}</td>
 		<td><button class="opt" onclick="toggleOpt('extendplaces')">Extended Decimal Places: {{options.extendplaces ? "ON" : "OFF"}}</td>
+	</tr>
+	<tr>
+		<td><button class="opt" onclick="shiftCSS()">CSS gradient support: {{CSS_DISPLAYS[CSS_SETTINGS.indexOf(options.css)]}}</td>
 	</tr>
 </table>`
 
