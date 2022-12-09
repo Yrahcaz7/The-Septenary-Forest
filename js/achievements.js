@@ -717,6 +717,13 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 152) },
 			color: '#A0A0A0',
 		},
+		154: {
+			name: 'War of the World',
+			done() {return player.w.points.gte(1000)},
+			tooltip: 'obtain 1,000 wars.',
+			unlocked() { return hasAchievement('A', 153) },
+			color: '#A0A0A0',
+		},
 		161: {
 			name: 'Life is Born',
 			done() {return player.cl.points.gte(1)},

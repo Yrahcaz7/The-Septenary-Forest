@@ -1947,6 +1947,7 @@ addLayer('ds', {
 			};
 			if (hasMilestone('w', 4) && resettingLayer == 'w') keep.push("challenges");
 			if (hasMilestone('cl', 3) && resettingLayer == 'cl') keep.push("challenges");
+			if (hasMilestone('ch', 5) && resettingLayer == 'ch') keep.push("challenges");
 			if (layers[resettingLayer].row > this.row) {
 				layerDataReset('ds', keep);
 				player[this.layer].upgrades = saveupg;
@@ -6787,6 +6788,11 @@ addLayer('ch', {
 			effectDescription: "keep evil influence challenge completions on chaos resets",
 			done() { return player.ch.points.gte(5) },
 		},
+		5: {
+			requirementDescription: '6 chaos',
+			effectDescription: "keep demon soul challenge completions on chaos resets",
+			done() { return player.ch.points.gte(6) },
+		},
 	},
 	challenges: {
 		11: {
@@ -6795,7 +6801,12 @@ addLayer('ch', {
 				return '<h3>Tide of Evil';
 			},
 			challengeDescription: "- Forces a chaos reset<br>- Disables good influence<br>- Multiplies demon soul gain by 1e3200<br>- Multiplies evil influence gain by 1.1",
-			goal() { return 2 ** challengeCompletions('ch', this.id) + 16 },
+			goal() {
+				if (challengeCompletions('ch', this.id) === 0) return 17;
+				if (challengeCompletions('ch', this.id) === 1) return 18;
+				if (challengeCompletions('ch', this.id) === 2) return 60;
+				return Infinity;
+			},
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' evil influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit },
 			canComplete() { return player.ei.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
 			completionLimit() { return player.ch.points.div(2).floor().max(1).toNumber() },
@@ -6816,17 +6827,20 @@ addLayer('ch', {
 				return '<h3>Tide of Good';
 			},
 			challengeDescription: "- Forces a chaos reset<br>- Disables evil influence<br>",
-			goal() { return challengeCompletions('ch', this.id) * 1e9 + 85 },
+			goal() {
+				if (challengeCompletions('ch', this.id) < 3) return challengeCompletions('ch', this.id) * 25 + 85;
+				return challengeCompletions('ch', this.id) * 250;
+			},
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' good influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit + '<br>' },
 			canComplete() { return player.gi.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
 			completionLimit() { return player.ch.points.div(2).floor().max(1).toNumber() },
 			onEnter() { player.ei.unlocked = false },
 			onExit() { player.ei.unlocked = true },
 			rewardDescription: "exponentiates point and prayer gain based on completions",
-			rewardEffect() { return challengeCompletions('ch', this.id) / 100 + 1 },
+			rewardEffect() { return (challengeCompletions('ch', this.id) * 6.32 + 1) ** 0.005 },
 			rewardDisplay() {
 				let text = '^' + format(tmp.ch.challenges[this.id].rewardEffect);
-				if (player.nerdMode) text += '<br>formula: (x/100)+1';
+				if (player.nerdMode) text += '<br>formula: (6.32x+1)^0.005';
 				return text;
 			},
 			doReset: true,
