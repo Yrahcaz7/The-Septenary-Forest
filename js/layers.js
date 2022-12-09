@@ -2740,7 +2740,9 @@ addLayer('p', {
 	type: 'normal',
 	exponent: 0.012,
 	gainMult() {
+		// init
 		let mult = new Decimal(1);
+		// mult
 		if (hasUpgrade('p', 15)) mult = mult.mul(upgradeEffect('p', 15));
 		if (hasUpgrade('p', 21)) mult = mult.mul(upgradeEffect('p', 21));
 		if (hasUpgrade('ds', 21) && hasUpgrade('ds', 23) && hasUpgrade('ds', 24) && hasUpgrade('p', 31)) mult = mult.mul(player.A.points.pow(2).div(100));
@@ -2752,6 +2754,9 @@ addLayer('p', {
 		if (hasUpgrade('p', 73)) mult = mult.mul(upgradeEffect('p', 73));
 		if (tmp.gi.effect.gt(1)) mult = mult.mul(tmp.gi.effect);
 		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
+		// pow
+		if (challengeCompletions('ch', 12) > 0) mult = mult.pow(challengeEffect('ch', 12));
+		// return
 		return mult;
 	},
 	row: 1,
@@ -4392,6 +4397,7 @@ addLayer('m', {
 		let keep = ['auto_upgrades'];
 			if (hasMilestone('w', 0) && resettingLayer == 'w') keep.push('milestones');
 			if (hasMilestone('cl', 4) && resettingLayer == 'cl') keep.push('milestones');
+			if (hasMilestone('ch', 3) && resettingLayer == 'ch') keep.push('milestones');
 			if (layers[resettingLayer].row > this.row) layerDataReset('m', keep);
 		},
 	update(diff) {
@@ -5095,10 +5101,12 @@ addLayer('ei', {
 	},
 	autoPrestige() { return hasMilestone('w', 3) && (!hasMilestone('cl', 0) || player.ei.auto_prestige) },
 	row: 4,
+	tooltipLocked() { if (tmp.ei.deactivated) return 'evil influence is deactivated'},
 	hotkeys: [
 		{key: 'E', description: 'Shift-E: Reset for evil influence', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return player.gi.unlocked || player.ei.unlocked },
+	deactivated() { return inChallenge('ch', 12) },
 	automate() {
 		if (hasMilestone('w', 1) && player.ei.auto_upgrades) {
 			for (const id in layers.ei.upgrades) {
@@ -6692,7 +6700,7 @@ addLayer('ch', {
 	],
 	layerShown() { return player.cl.unlocked || player.ch.unlocked },
 	effect() {
-		return [new Decimal('1e1000').pow(player.ch.points), player.ch.points.add(1).pow(0.0485), new Decimal(25).pow(player.ch.points)];
+		return [new Decimal('1e1000').pow(player.ch.points), player.ch.points.add(1).pow(0.0485), (hasMilestone('ch', 3) ? new Decimal(75).pow(player.ch.points) : new Decimal(25).pow(player.ch.points))];
 	},
 	effectDescription() {
 		return 'which multiplies essence gain by <h2 class="layer-ch">' + format(tmp.ch.effect[0]) + '</h2>x, multiplies war gain by <h2 class="layer-ch">' + format(tmp.ch.effect[1]) + '</h2>x, and multiplies protein found from cellular life by <h2 class="layer-ch">' + format(tmp.ch.effect[2]) + '</h2>x';
@@ -6760,8 +6768,16 @@ addLayer('ch', {
 		},
 		2: {
 			requirementDescription: '3 chaos',
-			effectDescription: 'the good influence rebuyable autobuyer is 2x faster, and when you buy a good influence rebuyable, you do not spend any good influence, instead you gain total good influence equal to its cost',
+			effectDescription() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'the good influence rebuyable autobuyer is 2x faster, and when you buy a good influence rebuyable, you do not spend any good influence, instead you gain total good influence equal to its cost; also unlock another <b class="layer-ch">Tide</b>';
+				return 'the good influence rebuyable autobuyer is 2x faster, and when you buy a good influence rebuyable, you do not spend any good influence, instead you gain total good influence equal to its cost; also unlock another <b>Tide</b>';
+			},
 			done() { return player.ch.points.gte(3) },
+		},
+		3: {
+			requirementDescription: '4 chaos',
+			effectDescription: "keep molecule milestones on chaos resets, and improve the formula of chaos' third effect",
+			done() { return player.ch.points.gte(4) },
 		},
 	},
 	challenges: {
@@ -6771,7 +6787,7 @@ addLayer('ch', {
 				return '<h3>Tide of Evil';
 			},
 			challengeDescription: "- Forces a chaos reset<br>- Disables good influence<br>- Multiplies demon soul gain by 1e3200<br>- Multiplies evil influence gain by 1.1",
-			goal() { return challengeCompletions('ch', this.id) * 10000 + 17 },
+			goal() { return challengeCompletions('ch', this.id) * 1000 + 17 },
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' evil influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit },
 			canComplete() { return player.ei.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
 			completionLimit() { return player.ch.points.toNumber() },
@@ -6785,6 +6801,28 @@ addLayer('ch', {
 				return text;
 			},
 			doReset: true,
+		},
+		12: {
+			name() {
+				if (colorvalue[0][1]) return '<h3 class="layer-ch">Tide of Good';
+				return '<h3>Tide of Good';
+			},
+			challengeDescription: "- Forces a chaos reset<br>- Disables evil influence<br>",
+			goal() { return challengeCompletions('ch', this.id) * 1000 + 85 },
+			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' good influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit + '<br>' },
+			canComplete() { return player.gi.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
+			completionLimit() { return player.ch.points.toNumber() },
+			onEnter() { player.ei.unlocked = false },
+			onExit() { player.ei.unlocked = true },
+			rewardDescription: "exponentiates point and prayer gain based on completions",
+			rewardEffect() { return challengeCompletions('ch', this.id) / 100 + 1 },
+			rewardDisplay() {
+				let text = '^' + format(tmp.ch.challenges[this.id].rewardEffect);
+				if (player.nerdMode) text += '<br>formula: (x/100)+1';
+				return text;
+			},
+			doReset: true,
+			unlocked() { return hasMilestone('ch', 2) },
 		},
 	},
 	infoboxes: {
