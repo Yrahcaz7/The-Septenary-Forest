@@ -5150,6 +5150,7 @@ addLayer('ei', {
 			if (hasMilestone('w', 2) && resettingLayer == 'w') keep.push('milestones');
 			if (hasMilestone('w', 3) && resettingLayer == 'w') keep.push('challenges');
 			if (hasMilestone('cl', 0) && resettingLayer == 'cl') keep.push('milestones');
+			if (hasMilestone('ch', 4) && resettingLayer == 'ch') keep.push('challenges');
 			if (layers[resettingLayer].row > this.row) layerDataReset('ei', keep);
 		},
 	resetsNothing() { return hasChallenge('ei', 12) },
@@ -6726,6 +6727,8 @@ addLayer('ch', {
 					"prestige-button",
 					"resource-display",
 					"blank",
+					["display-text", "All completion limits start at 1. Starting at the fourth chaos, every even-numbered chaos increases all completion limits by 1."],
+					"blank",
 					"challenges",
 				];
 				return [
@@ -6779,6 +6782,11 @@ addLayer('ch', {
 			effectDescription: "keep molecule milestones on chaos resets, and improve the formula of chaos' third effect",
 			done() { return player.ch.points.gte(4) },
 		},
+		4: {
+			requirementDescription: '5 chaos',
+			effectDescription: "keep evil influence challenge completions on chaos resets",
+			done() { return player.ch.points.gte(5) },
+		},
 	},
 	challenges: {
 		11: {
@@ -6787,10 +6795,10 @@ addLayer('ch', {
 				return '<h3>Tide of Evil';
 			},
 			challengeDescription: "- Forces a chaos reset<br>- Disables good influence<br>- Multiplies demon soul gain by 1e3200<br>- Multiplies evil influence gain by 1.1",
-			goal() { return challengeCompletions('ch', this.id) * 1000 + 17 },
+			goal() { return 2 ** challengeCompletions('ch', this.id) + 16 },
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' evil influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit },
 			canComplete() { return player.ei.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
-			completionLimit() { return player.ch.points.toNumber() },
+			completionLimit() { return player.ch.points.div(2).floor().max(1).toNumber() },
 			onEnter() { player.gi.unlocked = false },
 			onExit() { player.gi.unlocked = true },
 			rewardDescription: "exponentiates point and demon soul gain based on completions",
@@ -6808,10 +6816,10 @@ addLayer('ch', {
 				return '<h3>Tide of Good';
 			},
 			challengeDescription: "- Forces a chaos reset<br>- Disables evil influence<br>",
-			goal() { return challengeCompletions('ch', this.id) * 1000 + 85 },
+			goal() { return challengeCompletions('ch', this.id) * 1e9 + 85 },
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' good influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit + '<br>' },
 			canComplete() { return player.gi.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
-			completionLimit() { return player.ch.points.toNumber() },
+			completionLimit() { return player.ch.points.div(2).floor().max(1).toNumber() },
 			onEnter() { player.ei.unlocked = false },
 			onExit() { player.ei.unlocked = true },
 			rewardDescription: "exponentiates point and prayer gain based on completions",
