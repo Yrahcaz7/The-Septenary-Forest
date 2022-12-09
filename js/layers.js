@@ -4836,6 +4836,7 @@ addLayer('gi', {
 		if (hasMilestone('w', 0) && player.gi.auto_buyables) {
 			let work = 1;
 			if (hasMilestone('ch', 2)) work *= 2;
+			if (hasMilestone('ch', 6)) work *= 5;
 			for (let index = 0; index < work; index++) {
 				if (!layers.gi.buyables[11].canAfford()) break;
 				layers.gi.buyables[11].buy();
@@ -6193,7 +6194,7 @@ addLayer('cl', {
 		};
 	},
 	doReset(resettingLayer) {
-		let keep = ['auto_tissues'];
+		let keep = ['auto_tissues', 'auto_buyable_31', 'auto_buyable_32', 'auto_buyable_33', 'auto_buyable_41', 'auto_buyable_42', 'auto_buyable_43'];
 			if (hasMilestone('ch', 0) && resettingLayer == 'ch') keep.push('milestones');
 			if (layers[resettingLayer].row > this.row) layerDataReset('cl', keep);
 		},
@@ -6689,12 +6690,17 @@ addLayer('ch', {
 	getResetGain() {
 		if (tmp.ch.baseAmount.lt(tmp.ch.requires)) return new Decimal(0);
 		let gain = tmp.ch.baseAmount.sub(tmp.ch.requires).div(5).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
+		if (player.ch.points.gte(9)) gain = tmp.ch.baseAmount.sub(tmp.ch.requires).add(40).div(10).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
 		if (this.canBuyMax()) return gain.max(0);
 		return gain.max(0).min(1);
 	},
 	getNextAt() {
-		if (this.canBuyMax()) return this.getResetGain().div(this.gainExp()).mul(5).add(tmp.ch.requires);
-		return player.ch.points.div(this.gainExp()).mul(5).add(tmp.ch.requires);
+		if (this.canBuyMax()) {
+			if (player.ch.points.add(this.getResetGain()).gte(9)) return this.getResetGain().div(this.gainExp()).mul(10).add(tmp.ch.requires).sub(40);
+			return this.getResetGain().div(this.gainExp()).mul(5).add(tmp.ch.requires);
+		};
+		if (player.ch.points.gte(9)) return player.ch.points.div(this.gainExp()).mul(10).add(tmp.ch.requires).sub(40);
+		else return player.ch.points.div(this.gainExp()).mul(5).add(tmp.ch.requires);
 	},
 	canReset() { return this.getResetGain().gt(0) },
 	prestigeNotify() { return this.getResetGain().gt(0) },
@@ -6725,7 +6731,7 @@ addLayer('ch', {
 	},
 	doReset(resettingLayer) {
 		let keep = [];
-			if (layers[resettingLayer].row > this.row) layerDataReset('w', keep);
+			if (layers[resettingLayer].row > this.row) layerDataReset('ch', keep);
 		},
 	tabFormat: {
 		"Accumulation": {
@@ -6821,7 +6827,7 @@ addLayer('ch', {
 		6: {
 			requirementDescription: '9 chaos',
 			effectDescription() {
-				return 'you can autobuy the fourth to sixth <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b> rebuyables individually';
+				return 'the good influence rebuyable autobuyer is 2x faster, and you can autobuy the fourth to sixth <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b> rebuyables individually';
 			},
 			done() { return player.ch.points.gte(9) },
 			toggles: [['cl', 'auto_buyable_41'], ['cl', 'auto_buyable_42'], ['cl', 'auto_buyable_43']],
@@ -6838,6 +6844,7 @@ addLayer('ch', {
 				if (challengeCompletions('ch', this.id) === 0) return 17;
 				if (challengeCompletions('ch', this.id) === 1) return 18;
 				if (challengeCompletions('ch', this.id) === 2) return 60;
+				if (challengeCompletions('ch', this.id) === 3) return 70;
 				return Infinity;
 			},
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' evil influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit },
@@ -6862,7 +6869,7 @@ addLayer('ch', {
 			challengeDescription: "- Forces a chaos reset<br>- Disables evil influence<br>",
 			goal() {
 				if (challengeCompletions('ch', this.id) < 3) return challengeCompletions('ch', this.id) * 25 + 85;
-				return challengeCompletions('ch', this.id) * 250;
+				return challengeCompletions('ch', this.id) * 50 + 600;
 			},
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' good influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit + '<br>' },
 			canComplete() { return player.gi.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
