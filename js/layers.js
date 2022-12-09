@@ -6142,6 +6142,12 @@ addLayer('cl', {
 		protein: new Decimal(0),
 		protein_gain: new Decimal(0),
 		auto_tissues: false,
+		auto_buyable_31: false,
+		auto_buyable_32: false,
+		auto_buyable_33: false,
+		auto_buyable_41: false,
+		auto_buyable_42: false,
+		auto_buyable_43: false,
 	}},
 	color: "#008800",
 	requires: 1e25,
@@ -6174,6 +6180,16 @@ addLayer('cl', {
 			if (layers.cl.buyables[13].unlocked() && layers.cl.buyables[13].canAfford()) layers.cl.buyables[13].buy();
 			if (layers.cl.buyables[12].unlocked() && layers.cl.buyables[12].canAfford()) layers.cl.buyables[12].buy();
 			if (layers.cl.buyables[11].canAfford()) layers.cl.buyables[11].buy();
+		};
+		if (hasMilestone('ch', 1)) {
+			if (player.cl.auto_buyable_31 && layers.cl.buyables[31].canAfford()) layers.cl.buyables[31].buy();
+			if (player.cl.auto_buyable_32 && layers.cl.buyables[32].canAfford()) layers.cl.buyables[32].buy();
+			if (player.cl.auto_buyable_33 && layers.cl.buyables[33].canAfford()) layers.cl.buyables[33].buy();
+		};
+		if (hasMilestone('ch', 6)) {
+			if (player.cl.auto_buyable_41 && layers.cl.buyables[41].canAfford()) layers.cl.buyables[41].buy();
+			if (player.cl.auto_buyable_42 && layers.cl.buyables[42].canAfford()) layers.cl.buyables[42].buy();
+			if (player.cl.auto_buyable_43 && layers.cl.buyables[43].canAfford()) layers.cl.buyables[43].buy();
 		};
 	},
 	doReset(resettingLayer) {
@@ -6766,10 +6782,11 @@ addLayer('ch', {
 		1: {
 			requirementDescription: '2 chaos',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'keep war milestones on chaos resets, and unlock <b class="layer-ch">The Tides</b>';
-				return 'keep war milestones on chaos resets, and unlock <b>The Tides</b>';
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'keep war milestones on chaos resets, unlock <b class="layer-ch">The Tides</b>, and you can autobuy the first three <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b> rebuyables individually';
+				return 'keep war milestones on chaos resets, unlock <b>The Tides</b>, and you can autobuy the first three <b>Protein</b> rebuyables individually';
 			},
 			done() { return player.ch.points.gte(2) },
+			toggles: [['cl', 'auto_buyable_31'], ['cl', 'auto_buyable_32'], ['cl', 'auto_buyable_33']],
 		},
 		2: {
 			requirementDescription: '3 chaos',
@@ -6793,6 +6810,14 @@ addLayer('ch', {
 			requirementDescription: '6 chaos',
 			effectDescription: "keep demon soul challenge completions on chaos resets",
 			done() { return player.ch.points.gte(6) },
+		},
+		6: {
+			requirementDescription: '9 chaos',
+			effectDescription() {
+				return 'you can autobuy the fourth to sixth <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b> rebuyables individually';
+			},
+			done() { return player.ch.points.gte(9) },
+			toggles: [['cl', 'auto_buyable_41'], ['cl', 'auto_buyable_42'], ['cl', 'auto_buyable_43']],
 		},
 	},
 	challenges: {
