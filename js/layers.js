@@ -6748,7 +6748,8 @@ addLayer('ch', {
 				"prestige-button",
 				"resource-display",
 				"blank",
-				["infobox", "story"],
+				["infobox", "story0"],
+				["infobox", "story1"],
 				["display-text", () => { return story.length > player.ch.best.toNumber() ? "<br><br>next story discovery at " + formatWhole(player.ch.best.add(1)) + " chaos" : "<br><br>all story discoveries found; wait for updates for more" }],
 				"blank",
 			],
@@ -6848,15 +6849,29 @@ addLayer('ch', {
 		},
 	},
 	infoboxes: {
-		story: {
-			title() { return "Story of " + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar()},
+		story0: {
+			title() {
+				if (player.ch.best.toNumber() > story[0].length) return "Story of the Being";
+				return "Story of " + randomChar() + randomChar() + randomChar() + " " + randomChar() + randomChar() + randomChar() + randomChar() + randomChar();
+			},
 			body() {
 				let text = "";
-				for (let index = 0; index < story.length && index < player.ch.best.toNumber(); index++) {
-					text += story[index];
+				for (let index = 0; index < story[0].length && index < player.ch.best.toNumber(); index++) {
+					text += story[0][index];
 				};
 				return text;
 			},
+		},
+		story1: {
+			title() { return "Story of " + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar()},
+			body() {
+				let text = "";
+				for (let index = 0; index < story[1].length && index < (player.ch.best.toNumber() - story[0].length); index++) {
+					text += story[1][index];
+				};
+				return text;
+			},
+			unlocked() { return player.ch.best.toNumber() > story[0].length},
 		},
 	},
 });

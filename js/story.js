@@ -1,4 +1,5 @@
-const story = [`
+const story = [
+	[`
 	"Where am I?"
 	"What am I?"
 	The Being became aware of its existence.
@@ -44,6 +45,33 @@ const story = [`
 	The Being's thoughts were also clearer.
 	The Being decided to reach for the Core again.
 	And the new cycle began.
-`].map(value => value.replace(/\n\t/g, '<br>...<br>').trim());
+`, `
+	As the Cores accumulated, the void filled with yellow.
+	Two bright colors now shined in the everlasting void.
+	However, the Being began to hit a wall.
+	There was only so much the Being could do without knowledge.
+	But then... the Being got an uneasy feeling...
+	And started to REMEMBER...
+`], [`
+	"I... I've found it! Haha! I was right!"
+	The scientist reveled in pleasure at finally proving his theory.
+	"The thing smaller than a quark... the essence of the universe!"
+	The scientist couldn't contain his exitement and started running around his lab. The lab was very messy, but he knew exactly where was safe and where was a death-by-slipping zone.
+`, `
+	"All I need to do now is submit my findings to the Committee!"
+	The scientist started hurrily packing up one of his samples.
+	"Hehe... I can't wait to see all of their shocked expressions!"
+	The scientist rushed out of the door in a flurry, and headed for the spacecraft dock.
+	"Alright... booting up... there we go!"
+	The spacecraft launched off of the dock and into the atmosphere.
+`]];
 
-story[0] = story[0].slice(4);
+for (let index = 0; index < story.length; index++) {
+	story[index][0] = story[index][0].slice(2);
+};
+
+story[0][0] = "...<br>" + story[0][0];
+
+story[0] = story[0].map(value => value.replace(/\n\t/g, '<br>...<br>').trim());
+
+story[1] = story[1].map(value => value.replace(/\n\t/g, '<br><br>').trim());
