@@ -724,6 +724,13 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 153) },
 			color: '#A0A0A0',
 		},
+		156: {
+			name: 'Just Pure War',
+			done() {return player.w.points.gte(10) && player.m.total.eq(0) && player.ch.total.eq(0)},
+			tooltip: 'obtain 10 wars with no molecules and chaos.',
+			unlocked() { return hasAchievement('A', 152) && hasAchievement('A', 171) },
+			color: '#FF4400',
+		},
 		161: {
 			name: 'Life is Born',
 			done() {return player.cl.points.gte(1)},
@@ -745,13 +752,20 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 162) },
 			color: '#008800',
 		},
-		/*164: {
+		164: {
 			name: 'Congealing Cells',
 			done() {return player.cl.points.gte(1000000)},
 			tooltip: 'obtain 1,000,000 cellular life.',
 			unlocked() { return hasAchievement('A', 163) },
 			color: '#008800',
-		},*/
+		},
+		166: {
+			name: 'Life At Peace',
+			done() {return player.cl.points.gte(100) && player.w.total.eq(0) && player.ch.total.eq(0)},
+			tooltip: 'obtain 100 cellular life with no wars and chaos.',
+			unlocked() { return hasAchievement('A', 162) && hasAchievement('A', 171) },
+			color: '#FF4400',
+		},
 		171: {
 			name: 'Rising Chaos',
 			done() {return player.ch.points.gte(1)},
@@ -764,6 +778,13 @@ addLayer('A', {
 			done() {return player.ch.points.gte(10)},
 			tooltip: 'obtain 10 chaos.',
 			unlocked() { return hasAchievement('A', 171) },
+			color: '#FFFFFF',
+		},
+		173: {
+			name: 'Chaos Engulfs',
+			done() {return player.ch.points.gte(100)},
+			tooltip: 'obtain 100 chaos.',
+			unlocked() { return hasAchievement('A', 172) },
 			color: '#FFFFFF',
 		},
 	},
