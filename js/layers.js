@@ -6766,7 +6766,14 @@ addLayer('ch', {
 				"blank",
 				["infobox", "story0"],
 				["infobox", "story1"],
-				["display-text", () => { return story.length > player.ch.best.toNumber() ? "<br><br>next story discovery at " + formatWhole(player.ch.best.add(1)) + " chaos" : "<br><br>all story discoveries found; wait for updates for more" }],
+				["display-text", function() {
+					let storySegments = 0;
+					for (let index = 0; index < story.length; index++) {
+						storySegments += story[index].length;
+					};
+					if (storySegments > player.ch.best.toNumber()) return "<br><br>next story discovery at " + formatWhole(player.ch.best.add(1)) + " chaos";
+					else return "<br><br>all story discoveries found; wait for updates for more";
+				}],
 				"blank",
 			],
 		},
