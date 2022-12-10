@@ -5,7 +5,7 @@ const modInfo = {
 	pointsName: 'points',
 	modFiles: ['achievements.js', 'softcaps.js', 'story.js', 'layers.js', 'technical/tree.js'],
 	initialStartPoints: new Decimal(0),
-	offlineLimit: 1, // In hours
+	offlineLimit: 1, // in hours
 };
 
 const VERSION = {
@@ -74,7 +74,7 @@ function getLightGain() {
 	} else {
 		if (hasUpgrade('r', 11)) gain = gain.mul(upgradeEffect('r', 11));
 		if (hasUpgrade('r', 12)) gain = gain.mul(upgradeEffect('r', 12));
-		if (getBuyableAmount('d', 21).gt(0)) gain = gain.mul(getBuyableAmount('d', 21));
+		if (getBuyableAmount('d', 21).gt(0)) gain = gain.mul(buyableEffect('d', 21)[1]);
 		if (hasMilestone('s', 30)) gain = gain.mul(2);
 		if (hasMilestone('s', 41)) gain = gain.mul(3);
 		if (hasMilestone('s', 50)) gain = gain.mul(3);
@@ -97,12 +97,12 @@ function removeAchievement(id = NaN) {
 	return false;
 };
 
-// Determines if it should show points/sec
+// determines if it should show points/sec
 function canGenPoints() {
 	return true;
 };
 
-// Calculate points/sec!
+// calculates points/sec
 function getPointGen(forced = false) {
 	// init
 	let gain = new Decimal(1);
@@ -139,12 +139,9 @@ function getPointGen(forced = false) {
 	}}};
 	if (hasUpgrade('p', 72)) gain = gain.mul(upgradeEffect('p', 72));
 	if (hasUpgrade('m', 52)) gain = gain.mul(upgradeEffect('m', 52));
-	if (getBuyableAmount('c', 11).gt(0)) gain = gain.mul(getBuyableAmount('c', 11).mul(5).add(1));
-	if (getBuyableAmount('sp', 21).gt(0)) {
-		gain = gain.mul(new Decimal(5).pow(getBuyableAmount('sp', 21)));
-		if (hasUpgrade('sp', 13)) gain = gain.mul(new Decimal(5).pow(getBuyableAmount('sp', 21)));
-	};
-	if (getBuyableAmount('sp', 12).gt(0)) gain = gain.mul(getBuyableAmount('sp', 12).add(1).pow(-1));
+	if (getBuyableAmount('c', 11).gt(0)) gain = gain.mul(buyableEffect('c', 11));
+	if (getBuyableAmount('sp', 21).gt(0)) gain = gain.mul(buyableEffect('sp', 21)[0]);
+	if (getBuyableAmount('sp', 12).gt(0)) gain = gain.mul(buyableEffect('sp', 12)[1]);
 	if (player.p.divinity.gt(0)) gain = gain.mul(player.p.divinity.add(1).pow(0.1));
 	if (challengeCompletions('r', 11) >= 2) gain = gain.mul(player.r.essencemult);
 	if (hasUpgrade('ds', 21) && hasUpgrade('ds', 24)) gain = gain.mul(player.A.points.mul(0.2));
@@ -167,15 +164,15 @@ function addedPlayerData() { return {
 	nerdMode: false,
 }};
 
-// Display extra things at the top of the page
+// display extra things at the top of the page
 const displayThings = [
 	() => {if (tmp.gameEnded) return 'You beat the game!<br>For now...'},
 ];
 
-// Determines when the game "ends"
+// determines when the game "ends"
 const endPoints = new Decimal('e750000000');
 
-// Style for the background, can be a function
+// style for the background, can be a function
 const backgroundStyle = {};
 
 // max tick length in seconds
