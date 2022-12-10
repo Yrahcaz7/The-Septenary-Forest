@@ -533,13 +533,15 @@ addLayer('A', {
 			done() {return player.r.points.gte(1)},
 			tooltip: 'obtain 1 relic.',
 			unlocked() { return hasAchievement('A', 111) },
+			image() { if (hasAchievement('A', 111)) return "images/achievements/111.png" },
 			color: '#B9A975',
 		},
 		112: {
-			name: 'Relic Stash',
+			name: 'Giant Relics',
 			done() {return player.r.points.gte(10)},
 			tooltip: 'obtain 10 relics.',
 			unlocked() { return hasAchievement('A', 111) },
+			image() { if (hasAchievement('A', 112)) return "images/achievements/112.png" },
 			color: '#B9A975',
 		},
 		113: {
@@ -547,6 +549,7 @@ addLayer('A', {
 			done() {return player.r.points.gte(100)},
 			tooltip: 'obtain 100 relics.',
 			unlocked() { return hasAchievement('A', 112) },
+			image() { if (hasAchievement('A', 113)) return "images/achievements/113.png" },
 			color: '#B9A975',
 		},
 		114: {
@@ -554,13 +557,15 @@ addLayer('A', {
 			done() {return player.r.points.gte(1000)},
 			tooltip: 'obtain 1,000 relics.',
 			unlocked() { return hasAchievement('A', 113) },
+			image() { if (hasAchievement('A', 114)) return "images/achievements/114.png" },
 			color: '#B9A975',
 		},
 		115: {
-			name: 'All of the Relics',
+			name: 'Dragon\'s Hoard',
 			done() {return player.r.points.gte(10000)},
 			tooltip: 'obtain 10,000 relics.',
 			unlocked() { return hasAchievement('A', 114) },
+			image() { if (hasAchievement('A', 115)) return "images/achievements/115.png" },
 			color: '#B9A975',
 		},
 		116: {
@@ -568,6 +573,7 @@ addLayer('A', {
 			done() {return player.r.points.gte(10) && player.m.total.eq(0)},
 			tooltip: 'obtain 10 relics with no molecules.',
 			unlocked() { return hasAchievement('A', 112) && hasAchievement('A', 121) },
+			image() { if (hasAchievement('A', 116)) return "images/achievements/116.png" },
 			color: '#B9A975',
 		},
 		121: {
