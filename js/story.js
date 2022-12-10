@@ -59,11 +59,19 @@ const story = [
 	The scientist couldn't contain his exitement and started running around his lab. The lab was very messy, but he knew exactly where was safe and where was a death-by-slipping zone.
 `, `
 	"All I need to do now is submit my findings to the Committee!"
-	The scientist started hurrily packing up one of his samples.
+	The scientist started hurriedly packing up one of his samples.
 	"Hehe... I can't wait to see all of their shocked expressions!"
-	The scientist rushed out of the door in a flurry, and headed for the spacecraft dock.
-	"Alright... booting up... there we go!"
-	The spacecraft launched off of the dock and into the atmosphere.
+	The scientist rushed out of the door in a flurry, and headed for the spacecraft at the dock.
+	"Alright... booting up... come on... there we go!"
+	The spacecraft launched off of the dock, carrying the scientist up into the atmosphere.
+`, `
+	Spacecraft: "Where is your destination?"
+	Scientist: "The Committee in sector fifty nine."
+	Spacecraft: "Do you mean Coast City in sector fifty?"
+	The scientist frantically flailed his arms.
+	Scientist: "No, no! The Committee! Nine sectors over!"
+	Spacecraft: "Command received; now exiting atmosphere."
+	Scientist: "When I get rich, I'll replace this damn broken thing."
 `]];
 
 for (let index = 0; index < story.length; index++) {

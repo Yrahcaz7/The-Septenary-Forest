@@ -6890,8 +6890,8 @@ addLayer('ch', {
 	infoboxes: {
 		story0: {
 			title() {
-				if (player.ch.best.toNumber() > story[0].length) return "Story of the Being";
-				return "Story of " + randomChar() + randomChar() + randomChar() + " " + randomChar() + randomChar() + randomChar() + randomChar() + randomChar();
+				if (player.ch.best.toNumber() > story[0].length) return "Story of the Endless Void";
+				return "Story of " + randomChar() + randomChar() + randomChar() + " " + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + " " + randomChar() + randomChar() + randomChar() + randomChar();
 			},
 			body() {
 				let text = "";
@@ -6902,7 +6902,7 @@ addLayer('ch', {
 			},
 		},
 		story1: {
-			title() { return "Story of " + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar()},
+			title() { return "Story of " + randomChar() + randomChar() + randomChar() + " " + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + " " + randomChar() + randomChar() + randomChar()},
 			body() {
 				let text = "";
 				for (let index = 0; index < story[1].length && index < (player.ch.best.toNumber() - story[0].length); index++) {
