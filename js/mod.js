@@ -190,7 +190,22 @@ function fixOldSave(oldVersion) {
 	if (oldVersion == '3.2' && player.A.achievements.includes('163')) removeAchievement('163');
 };
 
-// I won't tell you what these are for... hehehe...
+// glitch text
 const validChars = "!\"#$%&'()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ";
 
-const randomChar = () => { return validChars[Math.floor(Math.random() * validChars.length)] };
+function randomChar() {
+	return validChars[Math.floor(Math.random() * validChars.length)];
+};
+
+function randomStr(length = 1, sameChar = false) {
+	if (sameChar) {
+		return randomChar().repeat(length);
+	};
+	if (length > 100) length = 100;
+	if (length <= 0) return "";
+	let result = "";
+	for (let index = 0; index < length; index++) {
+		result += randomChar();
+	};
+	return result;
+};

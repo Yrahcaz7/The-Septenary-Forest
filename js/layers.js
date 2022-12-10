@@ -6705,7 +6705,7 @@ addLayer('ch', {
 	canReset() { return this.getResetGain().gt(0) },
 	prestigeNotify() { return this.getResetGain().gt(0) },
 	prestigeButtonText() {
-		return randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + ' ' + randomChar() + randomChar() + randomChar() + ' +<b>' + formatWhole(this.getResetGain()) + '</b> ' + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + '<br><br>' + (player.ch.points.lt(30) ? (this.canBuyMax() ? randomChar() + randomChar() + randomChar() + randomChar() + ':' : randomChar() + randomChar() + randomChar() + ':') : '') + ' ' + formatWhole(tmp.ch.baseAmount) + ' / ' + formatWhole(this.getNextAt()) + ' ' + randomChar() + randomChar() + randomChar() + randomChar();
+		return randomStr(5) + ' ' + randomStr(3) + ' +<b>' + formatWhole(this.getResetGain()) + '</b> ' + randomStr(5) + '<br><br>' + (player.ch.points.lt(30) ? (this.canBuyMax() ? randomStr(4) + ':' : randomStr(3) + ':') : '') + ' ' + formatWhole(tmp.ch.baseAmount) + ' / ' + formatWhole(this.getNextAt()) + ' ' + randomStr(4);
 	},
 	canBuyMax() { return false },
 	gainExp() {
@@ -6714,10 +6714,10 @@ addLayer('ch', {
 	},
 	row: 6,
 	tooltip() {
-		return formatWhole(player.ch.points) + ' ' + randomChar() + randomChar() + randomChar() + randomChar() + randomChar();
+		return formatWhole(player.ch.points) + ' ' + randomStr(5);
 	},
 	tooltipLocked() {
-		return randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + ' ' + this.requires + ' ' + randomChar() + randomChar() + randomChar() + randomChar() + ' ' + randomChar() + randomChar() + ' ' + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + ' (' + randomChar() + randomChar() + randomChar() + ' ' + randomChar() + randomChar() + randomChar() + randomChar() + ' ' + formatWhole(player.w.points) + ' ' + randomChar() + randomChar() + randomChar() + randomChar() + ')';
+		return randomStr(5) + ' ' + this.requires + ' ' + randomStr(4) + ' ' + randomStr(2) + ' ' + randomStr(6) + ' (' + randomStr(3) + ' ' + randomStr(4) + ' ' + formatWhole(player.w.points) + ' ' + randomStr(4) + ')';
 	},
 	hotkeys: [
 		{key: 'C', description: 'Shift-C: Reset for chaos', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
@@ -6891,7 +6891,7 @@ addLayer('ch', {
 		story0: {
 			title() {
 				if (player.ch.best.toNumber() > story[0].length) return "Story of the Endless Void";
-				return "Story of " + randomChar() + randomChar() + randomChar() + " " + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + " " + randomChar() + randomChar() + randomChar() + randomChar();
+				return "Story of " + randomStr(3) + " " + randomStr(7) + " " + randomStr(4);
 			},
 			body() {
 				let text = "";
@@ -6902,7 +6902,7 @@ addLayer('ch', {
 			},
 		},
 		story1: {
-			title() { return "Story of " + randomChar() + randomChar() + randomChar() + " " + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + randomChar() + " " + randomChar() + randomChar() + randomChar()},
+			title() { return "Story of " + randomStr(3) + " " + randomStr(7) + " " + randomStr(3) },
 			body() {
 				let text = "";
 				for (let index = 0; index < story[1].length && index < (player.ch.best.toNumber() - story[0].length); index++) {
