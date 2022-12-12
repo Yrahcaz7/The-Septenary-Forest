@@ -32,7 +32,7 @@ addLayer('SC', {
 		if (player.h.points.gte(layers.h.softcap)) player.SC.softcaps.push("h");
 		if (player.ds.points.gte(layers.ds.softcap)) player.SC.softcaps.push("ds");
 		if (player.p.divinity.gte(softcaps.p_d[0])) player.SC.softcaps.push("p-d");
-		if (tmp.r.effect.gte(softcaps.r_eff1[0])) player.SC.softcaps.push("r-eff1");
+		if (tmp.r.effect[0].gte(softcaps.r_eff1[0])) player.SC.softcaps.push("r-eff1");
 		if (tmp.m.effect.gte(softcaps.m_eff[0])) player.SC.softcaps.push("m-eff");
 		if (tmp.gi.effect.gte(softcaps.gi_eff[0])) player.SC.softcaps.push("gi-eff");
 		player.SC.points = new Decimal(player.SC.softcaps.length);

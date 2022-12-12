@@ -46,8 +46,8 @@ addLayer('e', {
 		if (getBuyableAmount('sp', 11).gt(0)) mult = mult.mul(buyableEffect('sp', 11)[1]);
 		if (getBuyableAmount('gi', 12).gt(0) && !tmp.gi.deactivated) mult = mult.mul(buyableEffect('gi', 12));
 		if (hasUpgrade('p', 22)) mult = mult.mul(player.p.holiness.add(1).pow(0.055));
-		if (player.s.points.gt(0)) mult = mult.mul(tmp.s.effect);
-		if (player.r.points.gt(0)) mult = mult.mul(player.r.essencemult);
+		if (tmp.s.effect.gt(1)) mult = mult.mul(tmp.s.effect);
+		if (new Decimal(tmp.r.effect[2]).gt(1)) mult = mult.mul(tmp.r.effect[2]);
 		if (hasUpgrade('ds', 21)) mult = mult.mul(player.A.points.mul(0.2));
 		if (inChallenge('ds', 21)) mult = mult.mul(0.00000000000000000001);
 		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
@@ -144,12 +144,12 @@ addLayer('e', {
 			cost: 2,
 			hardcap() {
 				let hardcap = new Decimal("1e1750");
-				if (tmp.r.effect.gt(1)) hardcap = hardcap.mul(tmp.r.effect);
+				if (new Decimal(tmp.r.effect[0]).gt(1)) hardcap = hardcap.mul(tmp.r.effect[0]);
 				return hardcap;
 			},
 			effect() {
+				const hardcap = this.hardcap();
 				let eff = player.e.points.add(1).pow(0.5);
-				let hardcap = this.hardcap();
 				if (eff.gt(hardcap)) return hardcap;
 				return eff;
 			},
@@ -3393,7 +3393,7 @@ addLayer('s', {
 	canBuyMax() { return hasMilestone('s', 0) || player.r.total.gt(0) || player.w.unlocked },
 	gainExp() {
 		let gain = new Decimal(1);
-		if (player.r.sanctummult.gt(1)) gain = gain.mul(player.r.sanctummult);
+		if (new Decimal(tmp.r.effect[1]).gt(1)) gain = gain.mul(tmp.r.effect[1]);
 		if (player.s.devotion_effect.gt(1)) gain = gain.mul(player.s.devotion_effect);
 		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
 		return gain;
@@ -4069,8 +4069,6 @@ addLayer('r', {
 		lightgain: new Decimal(0),
 		lightgainbest: new Decimal(0),
 		relic_effects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
-		sanctummult: new Decimal(1),
-		essencemult: new Decimal(1),
 		auto_activate: false,
 		auto_upgrade_1: false,
 		auto_upgrade_2: false,
@@ -4128,19 +4126,17 @@ addLayer('r', {
 			effBoost2 = effBoost2.mul(player.r.relic_effects[0]);
 			effBoost3 = effBoost3.mul(player.r.relic_effects[0]);
 		};
-		player.r.sanctummult = player.r.points.add(1).pow(0.5).mul(effBoost2);
-		player.r.essencemult = player.r.points.mul(100).add(1).pow(0.25).mul(effBoost3);
 		let eff1 = player.r.points.mul(effBoost1).add(1).pow(1.1).pow(effex1);
 		if (eff1.gt(softcaps.r_eff1[0])) eff1 = eff1.div(softcaps.r_eff1[0]).pow(softcaps.r_eff1[1]).mul(softcaps.r_eff1[0]);
-		return eff1;
+		return [eff1, player.r.points.add(1).pow(0.5).mul(effBoost2), player.r.points.mul(100).add(1).pow(0.25).mul(effBoost3)];
 	},
 	effectDescription() {
 		let text = ['', ''];
-		if (tmp.r.effect.gte(softcaps.r_eff1[0])) text[0] = ' (softcapped)';
+		if (tmp.r.effect[0].gte(softcaps.r_eff1[0])) text[0] = ' (softcapped)';
 		if (challengeCompletions('r', 11) >= 2) text[1] = 'point and ';
-		if (colorvalue[1] == 'none') return 'which makes Essence Influence\'s hardcap start ' + format(tmp.r.effect) + 'x later' + text[0] + ', multiplies sanctum gain by ' + format(player.r.sanctummult) + 'x, and also multiplies ' + text[1] + 'essence gain by ' + format(player.r.essencemult) + 'x';
-		if (!colorvalue[0][2]) return 'which makes <h3>Essence Influence\'s</h3> hardcap start <h2 class="layer-r">' + format(tmp.r.effect) + '</h2>x later' + text[0] + ', multiplies sanctum gain by <h2 class="layer-r">' + format(player.r.sanctummult) + '</h2>x, and also multiplies ' + text[1] + 'essence gain by <h2 class="layer-r">' + format(player.r.essencemult) + '</h2>x';
-		return 'which makes <h3 class="layer-e">Essence Influence\'s</h3> hardcap start <h2 class="layer-r">' + format(tmp.r.effect) + '</h2>x later' + text[0] + ', multiplies sanctum gain by <h2 class="layer-r">' + format(player.r.sanctummult) + '</h2>x, and also multiplies ' + text[1] + 'essence gain by <h2 class="layer-r">' + format(player.r.essencemult) + '</h2>x';
+		if (colorvalue[1] == 'none') return 'which makes Essence Influence\'s hardcap start ' + format(tmp.r.effect[0]) + 'x later' + text[0] + ', multiplies sanctum gain by ' + format(tmp.r.effect[1]) + 'x, and also multiplies ' + text[1] + 'essence gain by ' + format(tmp.r.effect[2]) + 'x';
+		if (!colorvalue[0][2]) return 'which makes <h3>Essence Influence\'s</h3> hardcap start <h2 class="layer-r">' + format(tmp.r.effect[0]) + '</h2>x later' + text[0] + ', multiplies sanctum gain by <h2 class="layer-r">' + format(tmp.r.effect[1]) + '</h2>x, and also multiplies ' + text[1] + 'essence gain by <h2 class="layer-r">' + format(tmp.r.effect[2]) + '</h2>x';
+		return 'which makes <h3 class="layer-e">Essence Influence\'s</h3> hardcap start <h2 class="layer-r">' + format(tmp.r.effect[0]) + '</h2>x later' + text[0] + ', multiplies sanctum gain by <h2 class="layer-r">' + format(tmp.r.effect[1]) + '</h2>x, and also multiplies ' + text[1] + 'essence gain by <h2 class="layer-r">' + format(tmp.r.effect[2]) + '</h2>x';
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone('m', 0) && resettingLayer == 'm') return;

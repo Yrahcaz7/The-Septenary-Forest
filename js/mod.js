@@ -143,7 +143,7 @@ function getPointGen(forced = false) {
 	if (getBuyableAmount('sp', 21).gt(0)) gain = gain.mul(buyableEffect('sp', 21)[0]);
 	if (getBuyableAmount('sp', 12).gt(0)) gain = gain.mul(buyableEffect('sp', 12)[1]);
 	if (player.p.divinity.gt(0)) gain = gain.mul(player.p.divinity.add(1).pow(0.1));
-	if (challengeCompletions('r', 11) >= 2) gain = gain.mul(player.r.essencemult);
+	if (challengeCompletions('r', 11) >= 2) gain = gain.mul(tmp.r.effect[2]);
 	if (hasUpgrade('ds', 21) && hasUpgrade('ds', 24)) gain = gain.mul(player.A.points.mul(0.2));
 	else gain = gain.mul(player.A.points.mul(0.1).add(1));
 	if (inChallenge('ds', 11)) gain = gain.mul(0.0001);
@@ -185,6 +185,9 @@ function fixOldSave(oldVersion) {
 	// achievement fixes
 	if (oldVersion == '2.2' && player.A.achievements.includes('123')) removeAchievement('123');
 	if (oldVersion == '3.2' && player.A.achievements.includes('163')) removeAchievement('163');
+	// remove unused vars
+	delete player.r.sanctummult;
+	delete player.r.essencemult;
 };
 
 // glitch text
