@@ -1,13 +1,13 @@
 function hasUpgrade(layer, id) {
-	return ((player[layer].upgrades.includes(toNumber(id)) || player[layer].upgrades.includes(id.toString())) && !tmp[layer].deactivated);
+	return ((player[layer].upgrades.includes(+id) || player[layer].upgrades.includes("" + id)) && !tmp[layer].deactivated);
 };
 
 function hasMilestone(layer, id) {
-	return ((player[layer].milestones.includes(toNumber(id)) || player[layer].milestones.includes(id.toString())) && !tmp[layer].deactivated);
+	return ((player[layer].milestones.includes(+id) || player[layer].milestones.includes("" + id)) && !tmp[layer].deactivated);
 };
 
 function hasAchievement(layer, id) {
-	return ((player[layer].achievements.includes(toNumber(id)) || player[layer].achievements.includes(id.toString())) && !tmp[layer].deactivated);
+	return ((player[layer].achievements.includes(+id) || player[layer].achievements.includes("" + id)) && !tmp[layer].deactivated);
 };
 
 function hasChallenge(layer, id) {
@@ -20,6 +20,10 @@ function maxedChallenge(layer, id) {
 
 function challengeCompletions(layer, id) {
 	return (player[layer].challenges[id]);
+};
+
+function hasBuyable(layer, id) {
+	return ((new Decimal(player[layer].buyables[id]).gt(0)) && !tmp[layer].deactivated);
 };
 
 function getBuyableAmount(layer, id) {

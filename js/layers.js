@@ -39,12 +39,12 @@ addLayer('e', {
 		if (hasUpgrade('p', 11)) mult = mult.mul(upgradeEffect('p', 11));
 		if (hasUpgrade('m', 11)) mult = mult.mul(upgradeEffect('m', 11));
 		if (hasUpgrade('m', 22)) mult = mult.mul(upgradeEffect('m', 22));
-		if (getBuyableAmount('e', 11).gt(0)) mult = mult.mul(buyableEffect('e', 11));
-		if (getBuyableAmount('e', 12).gt(0)) mult = mult.mul(buyableEffect('e', 12)[1]);
-		if (getBuyableAmount('c', 12).gt(0)) mult = mult.mul(buyableEffect('c', 12));
-		if (getBuyableAmount('sp', 12).gt(0)) mult = mult.mul(buyableEffect('sp', 12)[0]);
-		if (getBuyableAmount('sp', 11).gt(0)) mult = mult.mul(buyableEffect('sp', 11)[1]);
-		if (getBuyableAmount('gi', 12).gt(0) && !tmp.gi.deactivated) mult = mult.mul(buyableEffect('gi', 12));
+		if (hasBuyable('e', 11)) mult = mult.mul(buyableEffect('e', 11));
+		if (hasBuyable('e', 12)) mult = mult.mul(buyableEffect('e', 12)[1]);
+		if (hasBuyable('c', 12)) mult = mult.mul(buyableEffect('c', 12));
+		if (hasBuyable('sp', 12)) mult = mult.mul(buyableEffect('sp', 12)[0]);
+		if (hasBuyable('sp', 11)) mult = mult.mul(buyableEffect('sp', 11)[1]);
+		if (hasBuyable('gi', 12)) mult = mult.mul(buyableEffect('gi', 12));
 		if (hasUpgrade('p', 22)) mult = mult.mul(player.p.holiness.add(1).pow(0.055));
 		if (tmp.s.effect.gt(1)) mult = mult.mul(tmp.s.effect);
 		if (new Decimal(tmp.r.effect[2]).gt(1)) mult = mult.mul(tmp.r.effect[2]);
@@ -53,7 +53,7 @@ addLayer('e', {
 		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
 		if (new Decimal(tmp.ch.effect[0]).gt(1)) mult = mult.mul(tmp.ch.effect[0]);
 		// pow
-		if (getBuyableAmount('cl', 21).gt(0)) mult = mult.pow(buyableEffect('cl', 21)[0]);
+		if (hasBuyable('cl', 21)) mult = mult.pow(buyableEffect('cl', 21)[0]);
 		// return
 		return mult;
 	},
@@ -321,14 +321,12 @@ addLayer('e', {
 	buyables: {
 		11: {
 			cost() { return new Decimal(12).pow(getBuyableAmount('e', this.id)).add(20) },
-			title() {
-				return '<b class="layer-e' + getdark(this, "title-buyable") + 'Purer Essence';
-			},
+			title() { return '<b class="layer-e' + getdark(this, "title-buyable") + 'Purer Essence' },
 			canAfford() { return player.e.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 14,
 			buy() {
 				player.e.points = player.e.points.sub(this.cost());
-				setBuyableAmount('e', this.id, getBuyableAmount('e', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return getBuyableAmount('e', this.id).mul(2.5).add(1);
@@ -341,14 +339,12 @@ addLayer('e', {
 		},
 		12: {
 			cost() { return new Decimal(44).pow(getBuyableAmount('e', this.id)).mul(10).add(85184) },
-			title() {
-				return '<b class="layer-e' + getdark(this, "title-buyable") + 'Radiant Essence';
-			},
+			title() { return '<b class="layer-e' + getdark(this, "title-buyable") + 'Radiant Essence' },
 			canAfford() { return player.e.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 99,
 			buy() {
 				player.e.points = player.e.points.sub(this.cost());
-				setBuyableAmount('e', this.id, buyableEffect('e', this.id)[0]);
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return [getBuyableAmount('e', this.id).add(1), getBuyableAmount('e', this.id).add(1).pow(0.25)];
@@ -402,14 +398,14 @@ addLayer('c', {
 		}};
 		if (hasUpgrade('h', 24)) mult = mult.mul(3);
 		if (hasUpgrade('m', 21)) mult = mult.mul(upgradeEffect('m', 21));
-		if (getBuyableAmount('e', 12).gt(0)) mult = mult.mul(buyableEffect('e', 12)[0]);
+		if (hasBuyable('e', 12)) mult = mult.mul(buyableEffect('e', 12)[0]);
 		if (hasUpgrade('ds', 21) && hasUpgrade('ds', 23)) mult = mult.mul(player.A.points.pow(2).div(100));
 		if (inChallenge('ds', 11)) mult = mult.mul(0.01);
 		if (inChallenge('ds', 21)) mult = mult.mul(0.000000000000001);
 		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
 		// pow
-		if (getBuyableAmount('cl', 11).gt(0)) mult = mult.pow(buyableEffect('cl', 11)[0]);
-		if (getBuyableAmount('cl', 21).gt(0)) mult = mult.pow(buyableEffect('cl', 21)[1]);
+		if (hasBuyable('cl', 11)) mult = mult.pow(buyableEffect('cl', 11)[0]);
+		if (hasBuyable('cl', 21)) mult = mult.pow(buyableEffect('cl', 21)[1]);
 		// return
 		return mult;
 	},
@@ -661,14 +657,12 @@ addLayer('c', {
 	buyables: {
 		11: {
 			cost() { return getBuyableAmount('c', this.id).mul(2).add(1) },
-			title() {
-				return '<b class="layer-c' + getdark(this, "title-buyable") + 'Empowered Points';
-			},
+			title() { return '<b class="layer-c' + getdark(this, "title-buyable") + 'Empowered Points' },
 			canAfford() { return player.c.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 99,
 			buy() {
 				player.c.points = player.c.points.sub(this.cost());
-				setBuyableAmount('c', this.id, getBuyableAmount('c', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return getBuyableAmount('c', this.id).mul(5).add(1);
@@ -681,14 +675,12 @@ addLayer('c', {
 		},
 		12: {
 			cost() { return new Decimal(6).pow(getBuyableAmount('c', this.id)) },
-			title() {
-				return '<b class="layer-c' + getdark(this, "title-buyable") + 'Empowered Essence';
-			},
+			title() { return '<b class="layer-c' + getdark(this, "title-buyable") + 'Empowered Essence' },
 			canAfford() { return player.c.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 49,
 			buy() {
 				player.c.points = player.c.points.sub(this.cost());
-				setBuyableAmount('c', this.id, getBuyableAmount('c', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return new Decimal(2).pow(getBuyableAmount('c', this.id));
@@ -743,8 +735,8 @@ addLayer('q', {
 		if (hasUpgrade('h', 34)) mult = mult.mul(2);
 		if (hasUpgrade('a', 41)) mult = mult.mul(upgradeEffect('a', 41));
 		if (hasUpgrade('m', 13)) mult = mult.mul(upgradeEffect('m', 13));
-		if (getBuyableAmount('sp', 11).gt(0)) mult = mult.mul(buyableEffect('sp', 11)[0]);
-		if (getBuyableAmount('sp', 21).gt(0)) mult = mult.mul(buyableEffect('sp', 21)[1]);
+		if (hasBuyable('sp', 11)) mult = mult.mul(buyableEffect('sp', 11)[0]);
+		if (hasBuyable('sp', 21)) mult = mult.mul(buyableEffect('sp', 21)[1]);
 		if (hasUpgrade('ds', 21) && hasUpgrade('ds', 23)) mult = mult.mul(player.A.points.pow(2).div(100));
 		if (inChallenge('ds', 11)) mult = mult.mul(0.1);
 		if (inChallenge('ds', 22)) mult = mult.mul(0.0000000000000000000000000000000000000001);
@@ -1212,15 +1204,15 @@ addLayer('sp', {
 		if (hasUpgrade('h', 63)) gain = gain.mul(upgradeEffect('h', 63));
 		if (hasUpgrade('a', 22)) gain = gain.mul(upgradeEffect('a', 22));
 		if (hasUpgrade('a', 31)) gain = gain.mul(upgradeEffect('a', 31));
-		if (getBuyableAmount('ds', 11).gt(0)) gain = gain.mul(buyableEffect('ds', 11)[1]);
-		if (getBuyableAmount('d', 21).gt(0)) gain = gain.mul(buyableEffect('d', 21)[1]);
+		if (hasBuyable('ds', 11)) gain = gain.mul(buyableEffect('ds', 11)[1]);
+		if (hasBuyable('d', 21)) gain = gain.mul(buyableEffect('d', 21)[1]);
 		if (hasUpgrade('a', 51)) gain = gain.mul(player.A.points.pow(2.5).div(100));
 		if (hasChallenge('ds', 21)) gain = gain.mul(player.ds.points.add(1).pow(0.2));
 		if (inChallenge('ds', 12)) gain = gain.mul(player.q.points.pow(-0.05));
 		if (inChallenge('ds', 22)) gain = gain.mul(0.0000000000000000000000000000000000000001);
 		if (new Decimal(tmp.w.effect[0]).gt(1)) gain = gain.mul(tmp.w.effect[0]);
 		// pow
-		if (getBuyableAmount('cl', 13).gt(0)) gain = gain.pow(buyableEffect('cl', 13)[0]);
+		if (hasBuyable('cl', 13)) gain = gain.pow(buyableEffect('cl', 13)[0]);
 		// return
 		return gain;
 	},
@@ -1336,14 +1328,12 @@ addLayer('sp', {
 	buyables: {
 		11: {
 			cost() { return getBuyableAmount('sp', this.id).add(1) },
-			title() {
-				return '<b class="layer-sp' + getdark(this, "title-buyable") + 'Protons';
-			},
+			title() { return '<b class="layer-sp' + getdark(this, "title-buyable") + 'Protons' },
 			canAfford() { return player.sp.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 9,
 			buy() {
 				player.sp.points = player.sp.points.sub(this.cost());
-				setBuyableAmount('sp', this.id, getBuyableAmount('sp', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				if (hasUpgrade('sp', 11)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(2), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
@@ -1360,14 +1350,12 @@ addLayer('sp', {
 		},
 		12: {
 			cost() { return getBuyableAmount('sp', this.id).add(1) },
-			title() {
-				return '<b class="layer-sp' + getdark(this, "title-buyable") + 'Neutrons';
-			},
+			title() { return '<b class="layer-sp' + getdark(this, "title-buyable") + 'Neutrons' },
 			canAfford() { return player.sp.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 9,
 			buy() {
 				player.sp.points = player.sp.points.sub(this.cost());
-				setBuyableAmount('sp', this.id, getBuyableAmount('sp', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				if (hasUpgrade('sp', 12)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(2), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
@@ -1384,14 +1372,12 @@ addLayer('sp', {
 		},
 		21: {
 			cost() { return getBuyableAmount('sp', this.id).add(1) },
-			title() {
-				return '<b class="layer-sp' + getdark(this, "title-buyable") + 'Electrons';
-			},
+			title() { return '<b class="layer-sp' + getdark(this, "title-buyable") + 'Electrons' },
 			canAfford() { return player.sp.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 9,
 			buy() {
 				player.sp.points = player.sp.points.sub(this.cost());
-				setBuyableAmount('sp', this.id, getBuyableAmount('sp', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				if (hasUpgrade('sp', 13)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(2), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
@@ -1443,7 +1429,7 @@ addLayer('h', {
 		if (hasUpgrade('h', 11) && hasUpgrade('ds', 11)) mult = mult.mul(upgradeEffect('h', 11));
 		if (hasUpgrade('p', 12)) mult = mult.mul(1.05);
 		if (hasUpgrade('m', 23)) mult = mult.mul(upgradeEffect('m', 23));
-		if (getBuyableAmount('ds', 11).gt(0)) mult = mult.mul(buyableEffect('ds', 11)[0]);
+		if (hasBuyable('ds', 11)) mult = mult.mul(buyableEffect('ds', 11)[0]);
 		if (hasChallenge('ds', 11)) mult = mult.mul(player.ds.points.add(1).pow(0.25));
 		if (inChallenge('ds', 11)) mult = mult.mul(0.001);
 		if (inChallenge('ds', 12)) mult = mult.mul(0.0000000001);
@@ -1905,7 +1891,7 @@ addLayer('ds', {
 		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
 		if (inChallenge('ch', 11)) mult = mult.mul('1e4000');
 		// pow
-		if (getBuyableAmount('cl', 12).gt(0)) mult = mult.pow(buyableEffect('cl', 12)[0]);
+		if (hasBuyable('cl', 12)) mult = mult.pow(buyableEffect('cl', 12)[0]);
 		if (challengeCompletions('ch', 11) > 0) mult = mult.pow(challengeEffect('ch', 11));
 		// return
 		return mult;
@@ -2112,14 +2098,12 @@ addLayer('ds', {
 	buyables: {
 		11: {
 			cost() { return new Decimal(2).pow(getBuyableAmount('ds', this.id)).add(1) },
-			title() {
-				return '<h3 class="layer-ds' + getdark(this, "title-buyable") + 'Demonic Energy';
-			},
+			title() { return '<h3 class="layer-ds' + getdark(this, "title-buyable") + 'Demonic Energy' },
 			canAfford() { return player.ds.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 22,
 			buy() {
 				player.ds.points = player.ds.points.sub(this.cost());
-				setBuyableAmount('ds', this.id, getBuyableAmount('ds', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return [new Decimal(2).pow(getBuyableAmount('ds', this.id)), getBuyableAmount('ds', this.id).mul(5).add(1)];
@@ -2249,9 +2233,9 @@ addLayer('a', {
 		if (hasChallenge('ds', 22)) gain = gain.mul(1.5);
 		if (tmp.m.effect.gt(1)) gain = gain.mul(tmp.m.effect);
 		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
-		if (getBuyableAmount('cl', 11).gt(0)) gain = gain.mul(buyableEffect('cl', 11)[1]);
-		if (getBuyableAmount('cl', 33).gt(0)) gain = gain.mul(buyableEffect('cl', 33));
-		if (getBuyableAmount('cl', 52).gt(0)) gain = gain.mul(buyableEffect('cl', 52));
+		if (hasBuyable('cl', 11)) gain = gain.mul(buyableEffect('cl', 11)[1]);
+		if (hasBuyable('cl', 33)) gain = gain.mul(buyableEffect('cl', 33));
+		if (hasBuyable('cl', 52)) gain = gain.mul(buyableEffect('cl', 52));
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('a', 15) },
@@ -3940,14 +3924,12 @@ addLayer('d', {
 				if (hasMilestone('s', 40)) scale = scale.div(1.5);
 				return new Decimal(10).pow(getBuyableAmount('d', this.id).add(1).mul(scale)).mul(1e50).div(div);
 			},
-			title() {
-				return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Worship<br>';
-			},
+			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Worship<br>' },
 			canAfford() { return player.p.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 1e9,
 			buy() {
 				player.p.points = player.p.points.sub(this.cost());
-				setBuyableAmount('d', this.id, getBuyableAmount('d', this.id).add(getDevotionBulk()));
+				addBuyables(this.layer, this.id, getDevotionBulk());
 			},
 			devotion() {
 				return getBuyableAmount('d', this.id).mul(0.1);
@@ -3975,14 +3957,12 @@ addLayer('d', {
 				if (hasMilestone('s', 39)) scale = scale.div(2);
 				return getBuyableAmount('d', this.id).mul(scale).add(20).floor();
 			},
-			title() {
-				return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Sacrifice<br>';
-			},
+			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Sacrifice<br>' },
 			canAfford() { return player.s.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 1e9,
 			buy() {
 				if (!hasMilestone('s', 34)) player.s.points = player.s.points.sub(this.cost());
-				setBuyableAmount('d', this.id, getBuyableAmount('d', this.id).add(getDevotionBulk()));
+				addBuyables(this.layer, this.id, getDevotionBulk());
 			},
 			effect() {
 				return new Decimal(2).pow(getBuyableAmount('d', this.id));
@@ -4022,15 +4002,13 @@ addLayer('d', {
 				if (hasMilestone('s', 42)) scale = scale.div(1.5);
 				return getBuyableAmount('d', this.id).mul(scale).add(1).mul(1e15).floor();
 			},
-			title() {
-				return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Sacrificial Ceremony<br>';
-			},
+			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Sacrificial Ceremony<br>' },
 			canAfford() { return player.h.points.gte(this.cost_h()) && player.sp.points.gte(this.cost_sp()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 1e9,
 			buy() {
 				player.h.points = player.h.points.sub(this.cost_h());
 				player.sp.points = player.sp.points.sub(this.cost_sp());
-				setBuyableAmount('d', this.id, getBuyableAmount('d', this.id).add(getDevotionBulk()));
+				addBuyables(this.layer, this.id, getDevotionBulk());
 			},
 			effect() {
 				if (challengeCompletions('r', 11) >= 5) return [undefined, getBuyableAmount('d', this.id), new Decimal(1e25).mul(player.r.relic_effects[2]).pow(getBuyableAmount('d', this.id))];
@@ -4115,7 +4093,7 @@ addLayer('r', {
 		let effex1 = new Decimal(1);
 		let effBoost2 = new Decimal(1);
 		let effBoost3 = new Decimal(1);
-		if (getBuyableAmount('d', 12).gt(0)) effBoost1 = effBoost1.mul(buyableEffect('d', 12));
+		if (hasBuyable('d', 12)) effBoost1 = effBoost1.mul(buyableEffect('d', 12));
 		if (challengeCompletions('r', 11) >= 3) {
 			effBoost1 = effBoost1.mul(10000);
 			effex1 = new Decimal(3.5);
@@ -4356,7 +4334,7 @@ addLayer('m', {
 		let mult = new Decimal(1);
 		if (challengeCompletions('r', 11) >= 12) mult = mult.mul(player.r.relic_effects[0]);
 		if (new Decimal(tmp.w.effect[1]).gt(1)) mult = mult.mul(tmp.w.effect[1]);
-		if (getBuyableAmount('w', 21).gt(0)) mult = mult.mul(buyableEffect('w', 21));
+		if (hasBuyable('w', 21)) mult = mult.mul(buyableEffect('w', 21));
 		return mult;
 	},
 	row: 4,
@@ -4819,8 +4797,8 @@ addLayer('gi', {
 		if (player.gi.req_devotion.gt(1)) gain = gain.mul(player.gi.req_devotion);
 		if (hasUpgrade('ei', 24)) gain = gain.mul(upgradeEffect('ei', 24));
 		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
-		if (getBuyableAmount('w', 11).gt(0)) gain = gain.mul(buyableEffect('w', 11)[0]);
-		if (getBuyableAmount('w', 13).gt(0)) gain = gain.mul(buyableEffect('w', 13));
+		if (hasBuyable('w', 11)) gain = gain.mul(buyableEffect('w', 11)[0]);
+		if (hasBuyable('w', 13)) gain = gain.mul(buyableEffect('w', 13));
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('w', 1) && (!hasMilestone('cl', 0) || player.gi.auto_prestige) && !tmp.gi.deactivated },
@@ -4851,7 +4829,7 @@ addLayer('gi', {
 	effect() {
 		if (tmp.gi.deactivated) return new Decimal(1);
 		let effBase = new Decimal(2);
-		if (getBuyableAmount('gi', 11).gt(0)) effBase = effBase.add(buyableEffect('gi', 11));
+		if (hasBuyable('gi', 11)) effBase = effBase.add(buyableEffect('gi', 11));
 		let eff = effBase.pow(player.gi.total);
 		if (eff.gt(softcaps.gi_eff[0])) {
 			eff = eff.div(softcaps.gi_eff[0]).pow(softcaps.gi_eff[1]).mul(softcaps.gi_eff[0]);
@@ -5006,20 +4984,14 @@ addLayer('gi', {
 	},
 	buyables: {
 		11: {
-			cost() {
-				return getBuyableAmount('gi', this.id).add(1);
-			},
-			title() {
-				return '<h3 class="layer-gi' + getdark(this, "title-buyable") + 'Better Good';
-			},
-			canAfford() {
-				return player.gi.points.gte(this.cost()) && getBuyableAmount('gi', this.id).lt(this.purchaseLimit);
-			},
+			cost() { return getBuyableAmount('gi', this.id).add(1) },
+			title() { return '<h3 class="layer-gi' + getdark(this, "title-buyable") + 'Better Good' },
+			canAfford() { return player.gi.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 8,
 			buy() {
 				if (hasMilestone('ch', 2)) player.gi.total = player.gi.total.add(this.cost());
 				else player.gi.points = player.gi.points.sub(this.cost());
-				setBuyableAmount('gi', this.id, getBuyableAmount('gi', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return getBuyableAmount('gi', this.id);
@@ -5029,22 +5001,14 @@ addLayer('gi', {
 			},
 		},
 		12: {
-			cost() {
-				return getBuyableAmount('gi', this.id).div(5).add(1).floor();
-			},
-			title() {
-				return '<h3 class="layer-gi' + getdark(this, "title-buyable") + 'Drive out Evil';
-			},
-			canAfford() {
-				return player.gi.points.gte(this.cost()) && getBuyableAmount('gi', this.id).lt(this.purchaseLimit());
-			},
-			purchaseLimit() {
-				return player.ds.points.add(1).log(10).div(12.5).floor();
-			},
+			cost() { return getBuyableAmount('gi', this.id).div(5).add(1).floor() },
+			title() { return '<h3 class="layer-gi' + getdark(this, "title-buyable") + 'Drive out Evil' },
+			canAfford() { return player.gi.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			purchaseLimit() { return player.ds.points.add(1).log(10).div(12.5).floor() },
 			buy() {
 				if (hasMilestone('ch', 2)) player.gi.total = player.gi.total.add(this.cost());
 				else player.gi.points = player.gi.points.sub(this.cost());
-				setBuyableAmount('gi', this.id, getBuyableAmount('gi', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return new Decimal(10).pow(getBuyableAmount('gi', this.id).pow(1.5));
@@ -5100,9 +5064,9 @@ addLayer('ei', {
 		if (hasUpgrade('ei', 64)) gain = gain.mul(upgradeEffect('ei', 64));
 		if (hasChallenge('ei', 22)) gain = gain.mul(1.75);
 		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
-		if (getBuyableAmount('w', 11).gt(0)) gain = gain.mul(buyableEffect('w', 11)[1]);
-		if (getBuyableAmount('w', 12).gt(0)) gain = gain.mul(buyableEffect('w', 12));
-		if (getBuyableAmount('cl', 53).gt(0)) gain = gain.mul(buyableEffect('cl', 53));
+		if (hasBuyable('w', 11)) gain = gain.mul(buyableEffect('w', 11)[1]);
+		if (hasBuyable('w', 12)) gain = gain.mul(buyableEffect('w', 12));
+		if (hasBuyable('cl', 53)) gain = gain.mul(buyableEffect('cl', 53));
 		if (inChallenge('ch', 11)) gain = gain.mul(1.1);
 		return gain;
 	},
@@ -6040,7 +6004,7 @@ addLayer('w', {
 			buy() {
 				player.gi.points = player.gi.points.sub(this.cost());
 				player.ei.points = player.ei.points.sub(this.cost());
-				setBuyableAmount('w', this.id, getBuyableAmount('w', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return [getBuyableAmount('w', this.id).add(1).pow(0.09), getBuyableAmount('w', this.id).add(1).pow(0.21)];
@@ -6067,7 +6031,7 @@ addLayer('w', {
 			purchaseLimit: 15,
 			buy() {
 				player.r.points = player.r.points.sub(this.cost());
-				setBuyableAmount('w', this.id, getBuyableAmount('w', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return player.r.points.add(1).pow(0.1).mul(getBuyableAmount('w', this.id)).add(1).pow(0.25);
@@ -6098,7 +6062,7 @@ addLayer('w', {
 			},
 			buy() {
 				player.s.points = player.s.points.sub(this.cost());
-				setBuyableAmount('w', this.id, getBuyableAmount('w', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return player.s.points.add(1).pow(0.025).mul(getBuyableAmount('w', this.id)).add(1).pow(0.025);
@@ -6111,16 +6075,14 @@ addLayer('w', {
 			unlocked() { return hasMilestone('w', 4) },
 		},
 		21: {
-			cost() {
-				return getBuyableAmount('w', this.id).mul(5).add(235);
-			},
+			cost() { return getBuyableAmount('w', this.id).mul(5).add(235) },
 			title: '<h3 class="layer-w-dark">Race for Knowledge',
 			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 20,
 			buy() {
 				player.gi.points = player.gi.points.sub(this.cost());
 				player.ei.points = player.ei.points.sub(this.cost());
-				setBuyableAmount('w', this.id, getBuyableAmount('w', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return getBuyableAmount('w', this.id).add(1).pow(3.25);
@@ -6170,8 +6132,8 @@ addLayer('cl', {
 	canBuyMax() { return hasMilestone('cl', 0) },
 	gainExp() {
 		let gain = new Decimal(1);
-		if (getBuyableAmount('cl', 12).gt(0)) gain = gain.mul(buyableEffect('cl', 12)[1]);
-		if (getBuyableAmount('cl', 13).gt(0)) gain = gain.mul(buyableEffect('cl', 13)[1]);
+		if (hasBuyable('cl', 12)) gain = gain.mul(buyableEffect('cl', 12)[1]);
+		if (hasBuyable('cl', 13)) gain = gain.mul(buyableEffect('cl', 13)[1]);
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('cl', 12) },
@@ -6208,20 +6170,21 @@ addLayer('cl', {
 		// init
 		let conv = new Decimal(0);
 		// add
-		if (buyableEffect('cl', 31).gt(0)) conv = conv.add(buyableEffect('cl', 31));
+		if (hasBuyable('cl', 31)) conv = conv.add(buyableEffect('cl', 31));
+		else if (!tmp.cl.deactivated) conv = conv.add(1);
 		// mul
-		if (buyableEffect('cl', 32).gt(1)) conv = conv.mul(buyableEffect('cl', 32));
-		if (buyableEffect('cl', 41).gt(1)) conv = conv.mul(buyableEffect('cl', 41));
-		if (buyableEffect('cl', 42).gt(1)) conv = conv.mul(buyableEffect('cl', 42));
-		if (buyableEffect('cl', 43)[1].gt(1)) conv = conv.mul(buyableEffect('cl', 43)[1]);
-		if (buyableEffect('cl', 51).gt(1)) conv = conv.mul(buyableEffect('cl', 51));
+		if (hasBuyable('cl', 32)) conv = conv.mul(buyableEffect('cl', 32));
+		if (hasBuyable('cl', 41)) conv = conv.mul(buyableEffect('cl', 41));
+		if (hasBuyable('cl', 42)) conv = conv.mul(buyableEffect('cl', 42));
+		if (hasBuyable('cl', 43)) conv = conv.mul(buyableEffect('cl', 43)[1]);
+		if (hasBuyable('cl', 51)) conv = conv.mul(buyableEffect('cl', 51));
 		if (new Decimal(tmp.ch.effect[2]).gt(1)) conv = conv.mul(tmp.ch.effect[2]);
 		// set
 		player.cl.protein_conv = conv;
 		// init
 		let mult = new Decimal(0);
 		// add
-		if (buyableEffect('cl', 43)[0].gt(0)) mult = mult.add(buyableEffect('cl', 43)[0]);
+		if (hasBuyable('cl', 43)) mult = mult.add(buyableEffect('cl', 43)[0]);
 		if (hasMilestone('w', 19)) mult = mult.add(0.1);
 		// mul
 		if (hasMilestone('w', 19)) mult = mult.mul(100);
@@ -6365,14 +6328,12 @@ addLayer('cl', {
 				if (getBuyableAmount('cl', this.id).gte(10)) return getBuyableAmount('cl', this.id).mul(2).sub(8);
 				return getBuyableAmount('cl', this.id).add(1);
 			},
-			title() {
-				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Nervous Tissue';
-			},
+			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Nervous Tissue' },
 			canAfford() { return player.cl.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 750,
 			buy() {
 				player.cl.points = player.cl.points.sub(this.cost());
-				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return [getBuyableAmount('cl', this.id).add(1).pow(0.05), getBuyableAmount('cl', this.id).add(1).pow(1.5)];
@@ -6388,14 +6349,12 @@ addLayer('cl', {
 				if (getBuyableAmount('cl', this.id).gte(10)) return getBuyableAmount('cl', this.id).mul(2).sub(8);
 				return getBuyableAmount('cl', this.id).add(1);
 			},
-			title() {
-				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Muscle Tissue';
-			},
+			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Muscle Tissue' },
 			canAfford() { return player.cl.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 750,
 			buy() {
 				player.cl.points = player.cl.points.sub(this.cost());
-				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return [getBuyableAmount('cl', this.id).add(1).pow(0.0175), getBuyableAmount('cl', this.id).add(1).pow(0.5)];
@@ -6412,14 +6371,12 @@ addLayer('cl', {
 				if (getBuyableAmount('cl', this.id).gte(10)) return getBuyableAmount('cl', this.id).mul(2).sub(8);
 				return getBuyableAmount('cl', this.id).add(1);
 			},
-			title() {
-				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Epithelial Tissue';
-			},
+			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Epithelial Tissue' },
 			canAfford() { return player.cl.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 750,
 			buy() {
 				player.cl.points = player.cl.points.sub(this.cost());
-				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return [getBuyableAmount('cl', this.id).add(1).pow(0.025), getBuyableAmount('cl', this.id).add(1).pow(0.75)];
@@ -6432,17 +6389,13 @@ addLayer('cl', {
 			unlocked() { return hasMilestone('cl', 3) },
 		},
 		21: {
-			cost() {
-				return getBuyableAmount('cl', this.id).mul(10).add(10);
-			},
-			title() {
-				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Connective Tissue';
-			},
+			cost() { return getBuyableAmount('cl', this.id).mul(10).add(10) },
+			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Connective Tissue' },
 			canAfford() { return player.cl.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 400,
 			buy() {
 				player.cl.points = player.cl.points.sub(this.cost());
-				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return [getBuyableAmount('cl', this.id).add(1).pow(0.075), getBuyableAmount('cl', this.id).add(1).pow(0.36)];
@@ -6455,16 +6408,12 @@ addLayer('cl', {
 			unlocked() { return hasMilestone('cl', 9) },
 		},
 		31: {
-			cost() {
-				return getBuyableAmount('cl', this.id).mul(100).add(1000);
-			},
-			title() {
-				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Practice Makes Perfect';
-			},
+			cost() { return getBuyableAmount('cl', this.id).mul(100).add(1000) },
+			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Practice Makes Perfect' },
 			canAfford() { return player.cl.points.gte(this.cost()) },
 			buy() {
 				player.cl.points = player.cl.points.sub(this.cost());
-				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return player.cl.best.mul(getBuyableAmount('cl', this.id).pow(2)).add(1).pow(0.25);
@@ -6476,16 +6425,12 @@ addLayer('cl', {
 			},
 		},
 		32: {
-			cost() {
-				return new Decimal(1.5).pow(getBuyableAmount('cl', this.id)).mul(10000);
-			},
-			title() {
-				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Result Analyzing';
-			},
+			cost() { return new Decimal(1.5).pow(getBuyableAmount('cl', this.id)).mul(10000) },
+			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Result Analyzing' },
 			canAfford() { return player.cl.protein.gte(this.cost()) },
 			buy() {
 				player.cl.protein = player.cl.protein.sub(this.cost());
-				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return player.w.points.mul(getBuyableAmount('cl', this.id)).add(1).pow(1.5);
@@ -6497,16 +6442,12 @@ addLayer('cl', {
 			},
 		},
 		33: {
-			cost() {
-				return new Decimal(10).pow(getBuyableAmount('cl', this.id)).mul(1000000);
-			},
-			title() {
-				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Synergizing';
-			},
+			cost() { return new Decimal(10).pow(getBuyableAmount('cl', this.id)).mul(1000000) },
+			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Synergizing' },
 			canAfford() { return player.cl.protein.gte(this.cost()) },
 			buy() {
 				player.cl.protein = player.cl.protein.sub(this.cost());
-				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return new Decimal(6).pow(getBuyableAmount('cl', this.id));
@@ -6518,17 +6459,13 @@ addLayer('cl', {
 			},
 		},
 		41: {
-			cost() {
-				return new Decimal(10).pow(getBuyableAmount('cl', this.id)).mul(1e45);
-			},
-			title() {
-				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Deeper Comprehension';
-			},
+			cost() { return new Decimal(10).pow(getBuyableAmount('cl', this.id)).mul(1e45) },
+			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Deeper Comprehension' },
 			canAfford() { return player.m.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 30,
 			buy() {
 				player.m.points = player.m.points.sub(this.cost());
-				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return new Decimal(3).pow(getBuyableAmount('cl', this.id));
@@ -6540,16 +6477,12 @@ addLayer('cl', {
 			},
 		},
 		42: {
-			cost() {
-				return new Decimal(100).pow(getBuyableAmount('cl', this.id)).mul(1e14);
-			},
-			title() {
-				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Intensive Research';
-			},
+			cost() { return new Decimal(100).pow(getBuyableAmount('cl', this.id)).mul(1e14) },
+			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Intensive Research' },
 			canAfford() { return player.cl.protein.gte(this.cost()) },
 			buy() {
 				player.cl.protein = player.cl.protein.sub(this.cost());
-				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return new Decimal(5).pow(getBuyableAmount('cl', this.id));
@@ -6561,16 +6494,12 @@ addLayer('cl', {
 			},
 		},
 		43: {
-			cost() {
-				return new Decimal(10).pow(getBuyableAmount('cl', this.id)).mul(1e33);
-			},
-			title() {
-				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Passive Discovery';
-			},
+			cost() { return new Decimal(10).pow(getBuyableAmount('cl', this.id)).mul(1e33) },
+			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Passive Discovery' },
 			canAfford() { return player.cl.protein.gte(this.cost()) },
 			buy() {
 				player.cl.protein = player.cl.protein.sub(this.cost());
-				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				if (hasMilestone('w', 20)) return [new Decimal(1.36).pow(getBuyableAmount('cl', this.id)).sub(1), getBuyableAmount('cl', this.id).mul(50).add(1).pow(3)];
@@ -6588,16 +6517,12 @@ addLayer('cl', {
 			},
 		},
 		51: {
-			cost() {
-				return getBuyableAmount('cl', this.id).mul(500).add(4000);
-			},
-			title() {
-				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'More Perfection';
-			},
+			cost() { return getBuyableAmount('cl', this.id).mul(500).add(4000) },
+			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'More Perfection' },
 			canAfford() { return player.cl.points.gte(this.cost()) },
 			buy() {
 				player.cl.points = player.cl.points.sub(this.cost());
-				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return getBuyableAmount('cl', this.id).add(1).pow(10);
@@ -6610,16 +6535,12 @@ addLayer('cl', {
 			unlocked() { return hasMilestone('w', 18) },
 		},
 		52: {
-			cost() {
-				return new Decimal(1e5).pow(getBuyableAmount('cl', this.id)).mul(1e40);
-			},
-			title() {
-				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'More Synergy';
-			},
+			cost() { return new Decimal(1e5).pow(getBuyableAmount('cl', this.id)).mul(1e40) },
+			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'More Synergy' },
 			canAfford() { return player.cl.protein.gte(this.cost()) },
 			buy() {
 				player.cl.protein = player.cl.protein.sub(this.cost());
-				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				return new Decimal(10).pow(getBuyableAmount('cl', this.id));
@@ -6636,13 +6557,11 @@ addLayer('cl', {
 				if (hasMilestone('ch', 0)) return new Decimal(1e5).pow(getBuyableAmount('cl', this.id).div(2)).mul(1e50);
 				return new Decimal(1e5).pow(getBuyableAmount('cl', this.id)).mul(1e50);
 			},
-			title() {
-				return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Innate Evil';
-			},
+			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Innate Evil' },
 			canAfford() { return player.cl.protein.gte(this.cost()) },
 			buy() {
 				player.cl.protein = player.cl.protein.sub(this.cost());
-				setBuyableAmount('cl', this.id, getBuyableAmount('cl', this.id).add(1));
+				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
 				if (hasMilestone('w', 20)) return getBuyableAmount('cl', this.id).add(1).pow(0.155);

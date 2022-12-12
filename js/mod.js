@@ -35,8 +35,7 @@ function getdark(darkthis, type, special = false, research = false) {
 			if (darkcanafford && !hasUpgrade(darkthis.layer, darkthis.id)) return '-dark">';
 			return '-light">';
 		} else if (type == 'title-buyable' && colorvalue[0][1]) {
-			darkcanafford = darkthis.canAfford();
-			if (darkcanafford && getBuyableAmount(darkthis.layer, darkthis.id)) return '-dark">';
+			if (darkthis.canAfford() && getBuyableAmount(darkthis.layer, darkthis.id)) return '-dark">';
 		} else return '-OFF">'
 	};
 	return '">';
@@ -74,7 +73,7 @@ function getLightGain() {
 	} else {
 		if (hasUpgrade('r', 11)) gain = gain.mul(upgradeEffect('r', 11));
 		if (hasUpgrade('r', 12)) gain = gain.mul(upgradeEffect('r', 12));
-		if (getBuyableAmount('d', 21).gt(0)) gain = gain.mul(buyableEffect('d', 21)[1]);
+		if (hasBuyable('d', 21)) gain = gain.mul(buyableEffect('d', 21)[1]);
 		if (hasMilestone('s', 30)) gain = gain.mul(2);
 		if (hasMilestone('s', 41)) gain = gain.mul(3);
 		if (hasMilestone('s', 50)) gain = gain.mul(3);
@@ -118,7 +117,7 @@ function getPointGen(forced = false) {
 			gain = gain.mul(upgradeEffect('e', 23));
 			if (hasUpgrade('e', 31)) gain = gain.mul(upgradeEffect('e', 31));
 	}};
-	if (hasUpgrade('e', 32) && getBuyableAmount('e', 12).gt(0)) gain = gain.mul(upgradeEffect('e', 32));
+	if (hasUpgrade('e', 32) && hasBuyable('e', 12)) gain = gain.mul(upgradeEffect('e', 32));
 	if (hasUpgrade('q', 12)) {
 		gain = gain.mul(upgradeEffect('q', 12));
 		if (hasUpgrade('q', 13)) gain = gain.mul(upgradeEffect('q', 13));
@@ -139,9 +138,9 @@ function getPointGen(forced = false) {
 	}}};
 	if (hasUpgrade('p', 72)) gain = gain.mul(upgradeEffect('p', 72));
 	if (hasUpgrade('m', 52)) gain = gain.mul(upgradeEffect('m', 52));
-	if (getBuyableAmount('c', 11).gt(0)) gain = gain.mul(buyableEffect('c', 11));
-	if (getBuyableAmount('sp', 21).gt(0)) gain = gain.mul(buyableEffect('sp', 21)[0]);
-	if (getBuyableAmount('sp', 12).gt(0)) gain = gain.mul(buyableEffect('sp', 12)[1]);
+	if (hasBuyable('c', 11)) gain = gain.mul(buyableEffect('c', 11));
+	if (hasBuyable('sp', 21)) gain = gain.mul(buyableEffect('sp', 21)[0]);
+	if (hasBuyable('sp', 12)) gain = gain.mul(buyableEffect('sp', 12)[1]);
 	if (player.p.divinity.gt(0)) gain = gain.mul(player.p.divinity.add(1).pow(0.1));
 	if (challengeCompletions('r', 11) >= 2) gain = gain.mul(tmp.r.effect[2]);
 	if (hasUpgrade('ds', 21) && hasUpgrade('ds', 24)) gain = gain.mul(player.A.points.mul(0.2));
