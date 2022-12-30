@@ -19,7 +19,7 @@ function maxedChallenge(layer, id) {
 };
 
 function challengeCompletions(layer, id) {
-	return (player[layer].challenges[id]);
+	return (tmp[layer].deactivated ? 0 : player[layer].challenges[id]);
 };
 
 function hasBuyable(layer, id) {

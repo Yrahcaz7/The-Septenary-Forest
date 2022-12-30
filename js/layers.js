@@ -46,12 +46,12 @@ addLayer('e', {
 		if (hasBuyable('sp', 11)) mult = mult.mul(buyableEffect('sp', 11)[1]);
 		if (hasBuyable('gi', 12)) mult = mult.mul(buyableEffect('gi', 12));
 		if (hasUpgrade('p', 22)) mult = mult.mul(player.p.holiness.add(1).pow(0.055));
-		if (tmp.s.effect.gt(1)) mult = mult.mul(tmp.s.effect);
-		if (new Decimal(tmp.r.effect[2]).gt(1)) mult = mult.mul(tmp.r.effect[2]);
+		if (tmp.s.effect.gt(1) && !tmp.s.deactivated) mult = mult.mul(tmp.s.effect);
+		if (new Decimal(tmp.r.effect[2]).gt(1) && !tmp.r.deactivated) mult = mult.mul(tmp.r.effect[2]);
 		if (hasUpgrade('ds', 21)) mult = mult.mul(player.A.points.mul(0.2));
 		if (inChallenge('ds', 21)) mult = mult.mul(0.00000000000000000001);
-		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
-		if (new Decimal(tmp.ch.effect[0]).gt(1)) mult = mult.mul(tmp.ch.effect[0]);
+		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
+		if (new Decimal(tmp.ch.effect[0]).gt(1) && !tmp.ch.deactivated) mult = mult.mul(tmp.ch.effect[0]);
 		// pow
 		if (hasBuyable('cl', 21)) mult = mult.pow(buyableEffect('cl', 21)[0]);
 		// return
@@ -62,6 +62,7 @@ addLayer('e', {
 		{key: 'e', description: 'E: Reset for essence', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return true },
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
 		if (hasMilestone('c', 3)) {
@@ -120,7 +121,7 @@ addLayer('e', {
 		},
 	tabFormat: [
 		"main-display",
-		"prestige-button",
+		["row", ["prestige-button", "assimilate-button"]],
 		"resource-display",
 		"blank",
 		"blank",
@@ -144,7 +145,7 @@ addLayer('e', {
 			cost: 2,
 			hardcap() {
 				let hardcap = new Decimal("1e1750");
-				if (new Decimal(tmp.r.effect[0]).gt(1)) hardcap = hardcap.mul(tmp.r.effect[0]);
+				if (new Decimal(tmp.r.effect[0]).gt(1) && !tmp.r.deactivated) hardcap = hardcap.mul(tmp.r.effect[0]);
 				return hardcap;
 			},
 			effect() {
@@ -402,7 +403,7 @@ addLayer('c', {
 		if (hasUpgrade('ds', 21) && hasUpgrade('ds', 23)) mult = mult.mul(player.A.points.pow(2).div(100));
 		if (inChallenge('ds', 11)) mult = mult.mul(0.01);
 		if (inChallenge('ds', 21)) mult = mult.mul(0.000000000000001);
-		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
+		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
 		// pow
 		if (hasBuyable('cl', 11)) mult = mult.pow(buyableEffect('cl', 11)[0]);
 		if (hasBuyable('cl', 21)) mult = mult.pow(buyableEffect('cl', 21)[1]);
@@ -416,6 +417,7 @@ addLayer('c', {
 		{key: 'c', description: 'C: Reset for cores', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return true },
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
 		if (hasUpgrade('h', 43)) {
@@ -475,7 +477,7 @@ addLayer('c', {
 		},
 	tabFormat: [
 		"main-display",
-		"prestige-button",
+		["row", ["prestige-button", "assimilate-button"]],
 		"resource-display",
 		"blank",
 		"milestones",
@@ -740,7 +742,7 @@ addLayer('q', {
 		if (hasUpgrade('ds', 21) && hasUpgrade('ds', 23)) mult = mult.mul(player.A.points.pow(2).div(100));
 		if (inChallenge('ds', 11)) mult = mult.mul(0.1);
 		if (inChallenge('ds', 22)) mult = mult.mul(0.0000000000000000000000000000000000000001);
-		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
+		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
 		return mult;
 	},
 	softcap: new Decimal("1e1250"),
@@ -750,6 +752,7 @@ addLayer('q', {
 		{key: 'q', description: 'Q: Reset for quarks', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return player.c.unlocked || player.q.unlocked },
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
 		gen = 0;
 		if (hasMilestone('a', 8)) {
@@ -807,7 +810,7 @@ addLayer('q', {
 	},
 	tabFormat: [
 		"main-display",
-		"prestige-button",
+		["row", ["prestige-button", "assimilate-button"]],
 		"resource-display",
 		"blank",
 		"milestones",
@@ -1210,7 +1213,7 @@ addLayer('sp', {
 		if (hasChallenge('ds', 21)) gain = gain.mul(player.ds.points.add(1).pow(0.2));
 		if (inChallenge('ds', 12)) gain = gain.mul(player.q.points.pow(-0.05));
 		if (inChallenge('ds', 22)) gain = gain.mul(0.0000000000000000000000000000000000000001);
-		if (new Decimal(tmp.w.effect[0]).gt(1)) gain = gain.mul(tmp.w.effect[0]);
+		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[0]);
 		// pow
 		if (hasBuyable('cl', 13)) gain = gain.pow(buyableEffect('cl', 13)[0]);
 		// return
@@ -1222,6 +1225,7 @@ addLayer('sp', {
 		{key: 'S', description: 'Shift-S: Reset for subatomic particles', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return player.q.unlocked || player.sp.unlocked },
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	automate() {
 		if (hasMilestone('m', 4) && player.sp.auto_upgrades && hasUpgrade('h', 53)) {
 			buyUpgrade('sp', 11);
@@ -1253,7 +1257,7 @@ addLayer('sp', {
 	resetsNothing() { return hasMilestone('s', 11) },
 	tabFormat: [
 		"main-display",
-		"prestige-button",
+		["row", ["prestige-button", "assimilate-button"]],
 		"resource-display",
 		"blank",
 		"milestones",
@@ -1434,7 +1438,7 @@ addLayer('h', {
 		if (inChallenge('ds', 11)) mult = mult.mul(0.001);
 		if (inChallenge('ds', 12)) mult = mult.mul(0.0000000001);
 		if (inChallenge('ds', 21)) mult = mult.mul(0.00001);
-		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
+		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
 		return mult;
 	},
 	softcap: new Decimal('1e1000'),
@@ -1444,6 +1448,7 @@ addLayer('h', {
 		{key: 'h', description: 'H: Reset for hexes', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return player.sp.unlocked || player.h.unlocked },
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
 		if (hasMilestone('s', 9)) gen += 0.001;
@@ -1468,7 +1473,7 @@ addLayer('h', {
 		},
 	tabFormat: [
 		"main-display",
-		"prestige-button",
+		["row", ["prestige-button", "assimilate-button"]],
 		"resource-display",
 		"blank",
 		"milestones",
@@ -1888,7 +1893,7 @@ addLayer('ds', {
 		if (hasUpgrade('m', 33)) mult = mult.mul(upgradeEffect('m', 33));
 		if (hasChallenge('ds', 11)) mult = mult.mul(player.ds.points.add(1).pow(0.25));
 		if (hasChallenge('ds', 12)) mult = mult.mul(player.h.points.add(1).pow(0.02));
-		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
+		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
 		if (inChallenge('ch', 11)) mult = mult.mul('1e4000');
 		// pow
 		if (hasBuyable('cl', 12)) mult = mult.pow(buyableEffect('cl', 12)[0]);
@@ -1903,6 +1908,7 @@ addLayer('ds', {
 		{key: 'd', description: 'D: Reset for demon souls', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return player.h.unlocked || player.ds.unlocked },
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
 		if (hasMilestone('s', 10)) gen += 0.00001;
@@ -1946,7 +1952,7 @@ addLayer('ds', {
 		"Demonic Curses": {
 			content: [
 				"main-display",
-				"prestige-button",
+				["row", ["prestige-button", "assimilate-button"]],
 				"resource-display",
 				"blank",
 				"milestones",
@@ -1959,7 +1965,7 @@ addLayer('ds', {
 			content: () => {
 				if (tmp.ds.tabFormat["Demon Gateway"].unlocked) return [
 					"main-display",
-					"prestige-button",
+					["row", ["prestige-button", "assimilate-button"]],
 					"resource-display",
 					"blank",
 					"blank",
@@ -1968,7 +1974,7 @@ addLayer('ds', {
 				];
 				return [
 					"main-display",
-					"prestige-button",
+					["row", ["prestige-button", "assimilate-button"]],
 					"resource-display",
 					"blank",
 					"milestones",
@@ -2118,7 +2124,7 @@ addLayer('ds', {
 	challenges: {
 		11: {
 			name() {
-				if (colorvalue[0][1]) return '<h3 class="layer-ds">Blazing Curse';
+				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ds">Blazing Curse';
 				return '<h3>Blazing Curse';
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Quark gain is divided by 100,000<br> - Point gain is divided by 10,000<br> - Hex gain is divided by 1,000<br> - Core gain is divided by 100<br> - Quark gain is divided by 10",
@@ -2140,7 +2146,7 @@ addLayer('ds', {
 		},
 		12: {
 			name() {
-				if (colorvalue[0][1]) return '<h3 class="layer-ds">Hellfire';
+				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ds">Hellfire';
 				return '<h3>Hellfire';
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1,000,000<br> - Hex gain is divided by 1e10<br> - Subatomic Particle gain is divided by the number of Quarks",
@@ -2163,7 +2169,7 @@ addLayer('ds', {
 		},
 		21: {
 			name() {
-				if (colorvalue[0][1]) return '<h3 class="layer-ds">Opposite Polarity';
+				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ds">Opposite Polarity';
 				return '<h3>Opposite Polarity';
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Hex gain is divided by 100,000<br> - Point gain is divided by 1e10<br> - Core gain is divided by 1e15<br> - Essence gain is divided by 1e20",
@@ -2186,7 +2192,7 @@ addLayer('ds', {
 		},
 		22: {
 			name() {
-				if (colorvalue[0][1]) return '<h3 class="layer-ds">Dreaded Science';
+				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ds">Dreaded Science';
 				return '<h3>Dreaded Science';
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1e10<br> - Quark and Subatomic Particle gain is divided by 1e40",
@@ -2231,8 +2237,8 @@ addLayer('a', {
 		if (hasUpgrade('a', 62)) gain = gain.mul(upgradeEffect('a', 62));
 		if (hasUpgrade('a', 72)) gain = gain.mul(upgradeEffect('a', 72));
 		if (hasChallenge('ds', 22)) gain = gain.mul(1.5);
-		if (tmp.m.effect.gt(1)) gain = gain.mul(tmp.m.effect);
-		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
+		if (tmp.m.effect.gt(1) && !tmp.m.deactivated) gain = gain.mul(tmp.m.effect);
+		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
 		if (hasBuyable('cl', 11)) gain = gain.mul(buyableEffect('cl', 11)[1]);
 		if (hasBuyable('cl', 33)) gain = gain.mul(buyableEffect('cl', 33));
 		if (hasBuyable('cl', 52)) gain = gain.mul(buyableEffect('cl', 52));
@@ -2244,6 +2250,7 @@ addLayer('a', {
 		{key: 'a', description: 'A: Reset for atoms', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return player.ds.unlocked || player.a.unlocked },
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	automate() {
 		if (hasMilestone('gi', 11) && player.a.auto_upgrades) {
 			for (const id in layers.a.upgrades) {
@@ -2267,7 +2274,7 @@ addLayer('a', {
 		"Atomic Progress": {
 			content: [
 				"main-display",
-				"prestige-button",
+				["row", ["prestige-button", "assimilate-button"]],
 				"resource-display",
 				"blank",
 				"milestones",
@@ -2276,7 +2283,7 @@ addLayer('a', {
 		"Atomic Tree": {
 			content: [
 				"main-display",
-				"prestige-button",
+				["row", ["prestige-button", "assimilate-button"]],
 				"resource-display",
 				"blank",
 				["display-text",
@@ -2738,8 +2745,8 @@ addLayer('p', {
 			if (hasUpgrade('p', 63)) mult = mult.mul(upgradeEffect('p', 63));
 		};
 		if (hasUpgrade('p', 73)) mult = mult.mul(upgradeEffect('p', 73));
-		if (tmp.gi.effect.gt(1)) mult = mult.mul(tmp.gi.effect);
-		if (new Decimal(tmp.w.effect[0]).gt(1)) mult = mult.mul(tmp.w.effect[0]);
+		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated) mult = mult.mul(tmp.gi.effect);
+		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
 		// pow
 		if (challengeCompletions('ch', 12) > 0) mult = mult.pow(challengeEffect('ch', 12));
 		// return
@@ -2750,6 +2757,7 @@ addLayer('p', {
 		{key: 'p', description: 'P: Reset for prayers', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return player.a.unlocked || player.p.unlocked },
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
 		if (hasMilestone('s', 7)) {
@@ -2852,7 +2860,7 @@ addLayer('p', {
 			};
 		},
 	update(diff) {
-		if (tmp.p.effect.gt(0)) {
+		if (tmp.p.effect.gt(0) && !tmp.p.deactivated) {
 			player.p.divinity = player.p.divinity.add(tmp.p.effect.mul(diff));
 		};
 		if (hasMilestone('s', 8)) {
@@ -2880,7 +2888,7 @@ addLayer('p', {
 	},
 	tabFormat: [
 		"main-display",
-		"prestige-button",
+		["row", ["prestige-button", "assimilate-button"]],
 		"resource-display",
 		"blank",
 		["display-text",
@@ -3377,9 +3385,9 @@ addLayer('s', {
 	canBuyMax() { return hasMilestone('s', 0) || player.r.total.gt(0) || player.w.unlocked },
 	gainExp() {
 		let gain = new Decimal(1);
-		if (new Decimal(tmp.r.effect[1]).gt(1)) gain = gain.mul(tmp.r.effect[1]);
+		if (new Decimal(tmp.r.effect[1]).gt(1) && !tmp.r.deactivated) gain = gain.mul(tmp.r.effect[1]);
 		if (player.s.devotion_effect.gt(1)) gain = gain.mul(player.s.devotion_effect);
-		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
+		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('s', 48) },
@@ -3388,6 +3396,7 @@ addLayer('s', {
 		{key: 's', description: 'S: Reset for sanctums', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return player.p.unlocked || player.s.unlocked },
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	effect() {
 		return new Decimal(2).pow(player.s.points);
 	},
@@ -3431,7 +3440,7 @@ addLayer('s', {
 		"Landmarks": {
 			content: [
 				"main-display",
-				"prestige-button",
+				["row", ["prestige-button", "assimilate-button"]],
 				"resource-display",
 				"blank",
 				"milestones",
@@ -3441,7 +3450,7 @@ addLayer('s', {
 			content: () => {
 				if (tmp.s.tabFormat["Devotion"].unlocked) return [
 					"main-display",
-					"prestige-button",
+					["row", ["prestige-button", "assimilate-button"]],
 					"resource-display",
 					"blank",
 					["display-text", 'you have <h2 class="layer-s">' + format(player.s.devotion) + '</h2> devotion, which multiplies sanctum gain by <h2 class="layer-s">' + format(player.s.devotion_effect) + '</h2>x'],
@@ -3452,7 +3461,7 @@ addLayer('s', {
 				];
 				return [
 					"main-display",
-					"prestige-button",
+					["row", ["prestige-button", "assimilate-button"]],
 					"resource-display",
 					"blank",
 					"milestones",
@@ -3853,6 +3862,7 @@ addLayer('d', {
 	position: 3,
 	row: 2,
 	layerShown() { return false },
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate('s')},
 	automate() {
 		if (hasMilestone('cl', 1) && player.s.no_speed_but_more_bulk) {
 			if (hasMilestone('s', 19) && player.s.auto_worship && layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
@@ -4070,7 +4080,7 @@ addLayer('r', {
 		if (hasUpgrade('m', 43)) gain = gain.mul(upgradeEffect('m', 43));
 		if (challengeCompletions('r', 11) >= 13) gain = gain.mul(player.r.relic_effects[3]);
 		if (hasUpgrade('ei', 34)) gain = gain.mul(upgradeEffect('ei', 34));
-		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
+		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('w', 4) },
@@ -4079,6 +4089,7 @@ addLayer('r', {
 		{key: 'r', description: 'R: Reset for relics', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return player.s.unlocked || player.r.unlocked },
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	automate() {
 		if (hasMilestone('w', 3) && player.r.auto_activate) {
 			if (getLightGain().gt(player.r.lightgainbest)) player.r.lightgainbest = getLightGain();
@@ -4165,7 +4176,7 @@ addLayer('r', {
 	},
 	tabFormat: [
 		"main-display",
-		"prestige-button",
+		["row", ["prestige-button", "assimilate-button"]],
 		"resource-display",
 		"blank",
 		["display-text", () => { return 'you have <h2 class="layer-r">' + formatWhole(player.r.points.sub(challengeCompletions('r', 11)).max(0)) + '</h2> unactivated relics and <h2 class="layer-r">' + formatWhole(challengeCompletions('r', 11)) + '</h2> activated relics' }],
@@ -4177,7 +4188,7 @@ addLayer('r', {
 	challenges: {
 		11: {
 			name() {
-				if (colorvalue[0][1]) return '<h3 class="layer-r">Activate Relics';
+				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-r">Activate Relics';
 				return '<h3>Activate Relics';
 			},
 			buttonText: ["Activate", "Cannot activate", "Enter activation", "Enter activation"],
@@ -4333,7 +4344,7 @@ addLayer('m', {
 	gainMult() {
 		let mult = new Decimal(1);
 		if (challengeCompletions('r', 11) >= 12) mult = mult.mul(player.r.relic_effects[0]);
-		if (new Decimal(tmp.w.effect[1]).gt(1)) mult = mult.mul(tmp.w.effect[1]);
+		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[1]);
 		if (hasBuyable('w', 21)) mult = mult.mul(buyableEffect('w', 21));
 		return mult;
 	},
@@ -4342,6 +4353,7 @@ addLayer('m', {
 		{key: 'm', description: 'M: Reset for molecules', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return challengeCompletions('r', 11) >= 10 || player.m.unlocked },
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
 		if (hasMilestone('m', 20)) {
@@ -4395,7 +4407,7 @@ addLayer('m', {
 		"Microscope": {
 			content: [
 				"main-display",
-				"prestige-button",
+				["row", ["prestige-button", "assimilate-button"]],
 				"resource-display",
 				"blank",
 				"milestones",
@@ -4404,7 +4416,7 @@ addLayer('m', {
 		"Constructor": {
 			content: [
 				"main-display",
-				"prestige-button",
+				["row", ["prestige-button", "assimilate-button"]],
 				"resource-display",
 				"blank",
 				["display-text",
@@ -4796,19 +4808,18 @@ addLayer('gi', {
 		let gain = new Decimal(1);
 		if (player.gi.req_devotion.gt(1)) gain = gain.mul(player.gi.req_devotion);
 		if (hasUpgrade('ei', 24)) gain = gain.mul(upgradeEffect('ei', 24));
-		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
+		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
 		if (hasBuyable('w', 11)) gain = gain.mul(buyableEffect('w', 11)[0]);
 		if (hasBuyable('w', 13)) gain = gain.mul(buyableEffect('w', 13));
 		return gain;
 	},
-	autoPrestige() { return hasMilestone('w', 1) && (!hasMilestone('cl', 0) || player.gi.auto_prestige) && !tmp.gi.deactivated },
+	autoPrestige() { return hasMilestone('w', 1) && (!hasMilestone('cl', 0) || player.gi.auto_prestige) },
 	row: 4,
-	tooltipLocked() { if (tmp.gi.deactivated) return 'good influence is deactivated'},
 	hotkeys: [
 		{key: 'G', description: 'Shift-G: Reset for good influence', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return player.m.unlocked || player.gi.unlocked },
-	deactivated() { return inChallenge('ch', 11) },
+	deactivated() { return inChallenge('ch', 11) || (getClickableState('mo', 11) && !canAssimilate(this.layer))},
 	automate() {
 		if (hasMilestone('w', 0) && player.gi.auto_buyables) {
 			let work = 1;
@@ -4827,7 +4838,6 @@ addLayer('gi', {
 		};
 	},
 	effect() {
-		if (tmp.gi.deactivated) return new Decimal(1);
 		let effBase = new Decimal(2);
 		if (hasBuyable('gi', 11)) effBase = effBase.add(buyableEffect('gi', 11));
 		let eff = effBase.pow(player.gi.total);
@@ -4858,7 +4868,7 @@ addLayer('gi', {
 	},
 	tabFormat: [
 		"main-display",
-		"prestige-button",
+		["row", ["prestige-button", "assimilate-button"]],
 		"resource-display",
 		"blank",
 		["display-text", () => { return 'you have <h2 class="layer-s">' + format(player.s.devotion) + '</h2> devotion, which multiplies good influence gain by <h2 class="layer-gi">' + format(player.gi.req_devotion) + '</h2>x' }],
@@ -5063,7 +5073,7 @@ addLayer('ei', {
 		if (hasUpgrade('ei', 54)) gain = gain.mul(upgradeEffect('ei', 54));
 		if (hasUpgrade('ei', 64)) gain = gain.mul(upgradeEffect('ei', 64));
 		if (hasChallenge('ei', 22)) gain = gain.mul(1.75);
-		if (new Decimal(tmp.w.effect[1]).gt(1)) gain = gain.mul(tmp.w.effect[1]);
+		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
 		if (hasBuyable('w', 11)) gain = gain.mul(buyableEffect('w', 11)[1]);
 		if (hasBuyable('w', 12)) gain = gain.mul(buyableEffect('w', 12));
 		if (hasBuyable('cl', 53)) gain = gain.mul(buyableEffect('cl', 53));
@@ -5072,12 +5082,11 @@ addLayer('ei', {
 	},
 	autoPrestige() { return hasMilestone('w', 3) && (!hasMilestone('cl', 0) || player.ei.auto_prestige) },
 	row: 4,
-	tooltipLocked() { if (tmp.ei.deactivated) return 'evil influence is deactivated'},
 	hotkeys: [
 		{key: 'E', description: 'Shift-E: Reset for evil influence', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return player.gi.unlocked || player.ei.unlocked },
-	deactivated() { return inChallenge('ch', 12) },
+	deactivated() { return inChallenge('ch', 12) || (getClickableState('mo', 11) && !canAssimilate(this.layer)) },
 	automate() {
 		if (hasMilestone('w', 1) && player.ei.auto_upgrades) {
 			for (const id in layers.ei.upgrades) {
@@ -5126,7 +5135,7 @@ addLayer('ei', {
 		},
 	resetsNothing() { return hasChallenge('ei', 12) },
 	update(diff) {
-		if (tmp.ei.effect.gt(0)) {
+		if (tmp.ei.effect.gt(0) && !tmp.ei.deactivated) {
 			player.ei.power = player.ei.power.add(tmp.ei.effect.mul(diff));
 		};
 	},
@@ -5134,7 +5143,7 @@ addLayer('ei', {
 		"Cycle of Evil": {
 			content: [
 				"main-display",
-				"prestige-button",
+				["row", ["prestige-button", "assimilate-button"]],
 				"resource-display",
 				"blank",
 				["display-text", () => { return 'You have <h2 class="layer-ei">' + formatSmall(player.ei.power) + '</h2> evil power' }],
@@ -5147,7 +5156,7 @@ addLayer('ei', {
 			content: () => {
 				if (tmp.ei.tabFormat["Gate of Evil"].unlocked) return [
 					"main-display",
-					"prestige-button",
+					["row", ["prestige-button", "assimilate-button"]],
 					"resource-display",
 					"blank",
 					["display-text", 'You have <h2 class="layer-ei">' + formatSmall(player.ei.power) + '</h2> evil power'],
@@ -5158,7 +5167,7 @@ addLayer('ei', {
 				];
 				return [
 					"main-display",
-					"prestige-button",
+					["row", ["prestige-button", "assimilate-button"]],
 					"resource-display",
 					"blank",
 					["display-text", 'You have <h2 class="layer-ei">' + formatSmall(player.ei.power) + '</h2> evil power'],
@@ -5617,7 +5626,7 @@ addLayer('ei', {
 	challenges: {
 		11: {
 			name() {
-				if (colorvalue[0][1]) return '<h3 class="layer-ei">Build the Gate';
+				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ei">Build the Gate';
 				return '<h3>Build the Gate';
 			},
 			challengeDescription: ' - Resets evil influence milestones<br> - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Forces an evil influence reset<br> - Divides evil power gain by 1,000<br>',
@@ -5634,7 +5643,7 @@ addLayer('ei', {
 		},
 		12: {
 			name() {
-				if (colorvalue[0][1]) return '<h3 class="layer-ei">Power the Gate';
+				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ei">Power the Gate';
 				return '<h3>Power the Gate';
 			},
 			challengeDescription: " - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Forces an evil influence reset<br> - Divides evil power gain by 100,000,000<br>",
@@ -5651,7 +5660,7 @@ addLayer('ei', {
 		},
 		21: {
 			name() {
-				if (colorvalue[0][1]) return '<h3 class="layer-ei">Enter the Gate';
+				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ei">Enter the Gate';
 				return '<h3>Enter the Gate';
 			},
 			challengeDescription: " - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Resets your relics to 0<br> - Divides evil power gain by 1e15<br>",
@@ -5671,7 +5680,7 @@ addLayer('ei', {
 		},
 		22: {
 			name() {
-				if (colorvalue[0][1]) return '<h3 class="layer-ei">And Repeat';
+				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ei">And Repeat';
 				return '<h3>And Repeat';
 			},
 			challengeDescription() {
@@ -5747,7 +5756,7 @@ addLayer('w', {
 	onPrestigeIsAfterGain: true,
 	gainExp() {
 		let gain = new Decimal(1);
-		if (new Decimal(tmp.ch.effect[1]).gt(1)) gain = gain.mul(tmp.ch.effect[1]);
+		if (new Decimal(tmp.ch.effect[1]).gt(1) && !tmp.ch.deactivated) gain = gain.mul(tmp.ch.effect[1]);
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('w', 17) },
@@ -5759,6 +5768,7 @@ addLayer('w', {
 		{key: 'w', description: 'W: Reset for wars', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return hasChallenge('ei', 21) || player.w.unlocked},
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	automate() {
 		if (hasMilestone('w', 18) && player.w.auto_influence) {
 			for (const id in layers.w.buyables) {
@@ -5793,7 +5803,7 @@ addLayer('w', {
 		"Progress": {
 			content: [
 				"main-display",
-				"prestige-button",
+				["row", ["prestige-button", "assimilate-button"]],
 				["display-text", () => { return 'You have ' + formatWhole(player.gi.points) + ' good influence<br>You have ' + formatWhole(player.ei.points) + ' evil influence<br><br>Your best wars is ' + formatWhole(player.w.best) + '<br>You have made a total of ' + formatWhole(player.w.total) + ' wars<br><br>After unlocking War, you can always buy max on all resources below this row.' }],
 				"blank",
 				["bar", "tide"],
@@ -5804,7 +5814,7 @@ addLayer('w', {
 		"Influences": {
 			content: [
 				"main-display",
-				"prestige-button",
+				["row", ["prestige-button", "assimilate-button"]],
 				["display-text", () => { return 'You have ' + formatWhole(player.gi.points) + ' good influence<br>You have ' + formatWhole(player.ei.points) + ' evil influence<br><br>Your best wars is ' + formatWhole(player.w.best) + '<br>You have made a total of ' + formatWhole(player.w.total) + ' wars<br><br>After unlocking War, you can always buy max on all resources below this row.' }],
 				"blank",
 				["bar", "tide"],
@@ -6118,6 +6128,7 @@ addLayer('cl', {
 		auto_buyable_43: false,
 	}},
 	color: "#008800",
+	branches: ['mo'],
 	requires: 1e25,
 	resource: 'cellular life',
 	baseResource: 'molecules',
@@ -6142,6 +6153,7 @@ addLayer('cl', {
 		{key: 'l', description: 'L: Reset for cellular life', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return hasMilestone('w', 9) || player.cl.unlocked },
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	automate() {
 		if (hasMilestone('w', 14) && player.cl.auto_tissues) {
 			if (layers.cl.buyables[21].unlocked() && layers.cl.buyables[21].canAfford()) layers.cl.buyables[21].buy();
@@ -6178,7 +6190,7 @@ addLayer('cl', {
 		if (hasBuyable('cl', 42)) conv = conv.mul(buyableEffect('cl', 42));
 		if (hasBuyable('cl', 43)) conv = conv.mul(buyableEffect('cl', 43)[1]);
 		if (hasBuyable('cl', 51)) conv = conv.mul(buyableEffect('cl', 51));
-		if (new Decimal(tmp.ch.effect[2]).gt(1)) conv = conv.mul(tmp.ch.effect[2]);
+		if (new Decimal(tmp.ch.effect[2]).gt(1) && !tmp.ch.deactivated) conv = conv.mul(tmp.ch.effect[2]);
 		// set
 		player.cl.protein_conv = conv;
 		// init
@@ -6201,7 +6213,7 @@ addLayer('cl', {
 		"Life Tracker": {
 			content: [
 				"main-display",
-				"prestige-button",
+				["row", ["prestige-button", "assimilate-button"]],
 				"resource-display",
 				"blank",
 				"milestones",
@@ -6210,7 +6222,7 @@ addLayer('cl', {
 		"Tissues": {
 			content: [
 				"main-display",
-				"prestige-button",
+				["row", ["prestige-button", "assimilate-button"]],
 				"resource-display",
 				"blank",
 				["buyables", "1"],
@@ -6222,7 +6234,7 @@ addLayer('cl', {
 			content: () => {
 				if (tmp.cl.tabFormat["Protein"].unlocked) return [
 					"main-display",
-					"prestige-button",
+					["row", ["prestige-button", "assimilate-button"]],
 					"resource-display",
 					"blank",
 					["display-text", 'You are currently finding <h2 class="layer-cl">' + format(player.cl.protein_conv) + '</h2> protein per cellular life<br>' + (player.cl.protein_gain.gt(0) ? 'You are currently gaining <h2 class="layer-cl">' + format(player.cl.protein_gain) + '</h2> protein per second<br>' : '') + 'You currently have <h2 class="layer-cl">' + format(player.cl.protein) + '</h2> protein'],
@@ -6236,7 +6248,7 @@ addLayer('cl', {
 				];
 				return [
 					"main-display",
-					"prestige-button",
+					["row", ["prestige-button", "assimilate-button"]],
 					"resource-display",
 					"blank",
 					"milestones",
@@ -6647,6 +6659,7 @@ addLayer('ch', {
 		{key: 'C', description: 'Shift-C: Reset for chaos', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return player.cl.unlocked || player.ch.unlocked },
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	effect() {
 		return [new Decimal('1e1000').pow(player.ch.points), player.ch.points.add(1).pow(0.0485), (hasMilestone('ch', 3) ? new Decimal(75).pow(player.ch.points) : new Decimal(25).pow(player.ch.points))];
 	},
@@ -6661,7 +6674,7 @@ addLayer('ch', {
 		"Accumulation": {
 			content: [
 				"main-display",
-				"prestige-button",
+				["row", ["prestige-button", "assimilate-button"]],
 				"resource-display",
 				"blank",
 				"milestones",
@@ -6671,7 +6684,7 @@ addLayer('ch', {
 			content: () => {
 				if (tmp.ch.tabFormat["The Tides"].unlocked) return [
 					"main-display",
-					"prestige-button",
+					["row", ["prestige-button", "assimilate-button"]],
 					"resource-display",
 					"blank",
 					["display-text", "All completion limits start at 1. Starting at the fourth chaos, every even-numbered chaos increases all completion limits by 1."],
@@ -6680,7 +6693,7 @@ addLayer('ch', {
 				];
 				return [
 					"main-display",
-					"prestige-button",
+					["row", ["prestige-button", "assimilate-button"]],
 					"resource-display",
 					"blank",
 					"milestones",
@@ -6691,7 +6704,7 @@ addLayer('ch', {
 		"Story": {
 			content: [
 				"main-display",
-				"prestige-button",
+				["row", ["prestige-button", "assimilate-button"]],
 				"resource-display",
 				"blank",
 				["infobox", "story0"],
@@ -6760,7 +6773,7 @@ addLayer('ch', {
 	challenges: {
 		11: {
 			name() {
-				if (colorvalue[0][1]) return '<h3 class="layer-ch">Tide of Evil';
+				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ch">Tide of Evil';
 				return '<h3>Tide of Evil';
 			},
 			challengeDescription: "- Forces a chaos reset<br>- Disables good influence<br>- Multiplies demon soul gain by 1e3200<br>- Multiplies evil influence gain by 1.1",
@@ -6787,7 +6800,7 @@ addLayer('ch', {
 		},
 		12: {
 			name() {
-				if (colorvalue[0][1]) return '<h3 class="layer-ch">Tide of Good';
+				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ch">Tide of Good';
 				return '<h3>Tide of Good';
 			},
 			challengeDescription: "- Forces a chaos reset<br>- Disables evil influence<br>",
@@ -6835,6 +6848,96 @@ addLayer('ch', {
 				return text;
 			},
 			unlocked() { return player.ch.best.toNumber() > story[0].length},
+		},
+	},
+});
+
+addLayer('mo', {
+	name: 'Multicellular Organisms',
+	symbol: 'MO',
+	position: 1,
+	startData() { return {
+		unlocked: false,
+		points: new Decimal(0),
+		best: new Decimal(0),
+		total: new Decimal(0),
+		assimilating: null,
+		assimilated: [],
+		hadLayers: [],
+	}},
+	color: '#88CC44',
+	requires: 10000,
+	resource: 'multicellular organisms',
+	baseResource: 'cellular life',
+	baseAmount() { return player.cl.points },
+	type: 'static',
+	base: 1.5,
+	exponent: 2,
+	gainExp() {
+		let gain = new Decimal(1);
+		return gain;
+	},
+	row: 6,
+	hotkeys: [
+		{key: 'o', description: 'O: Reset for multicellular organisms', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+	],
+	layerShown() { return player.ch.unlocked || player.mo.unlocked },
+	doReset(resettingLayer) {
+		let keep = [];
+			if (layers[resettingLayer].row > this.row) layerDataReset('mo', keep);
+		},
+	resetsNothing() { return true },
+	tabFormat: {
+		"Assimilation": {
+			content: [
+				"main-display",
+				"prestige-button",
+				"resource-display",
+				"blank",
+				["display-text", () => { return 'Multicellular organism resets do not reset anything.' }],
+				"blank",
+				"clickables",
+			],
+		},
+		"Rewards": {
+			content: [
+				"main-display",
+				"prestige-button",
+				"resource-display",
+				"blank",
+				["display-text", () => {
+					return 'Assimilation rewards will be shown here.';
+				}],
+			],
+		},
+	},
+	clickables: {
+		11: {
+			title() { return '<b class="layer-mo' + getdark(this, "title-clickable") + 'Assimilation' },
+			display() {
+				if (player.mo.assimilating !== null) return "Currently Assimilating: " + tmp[player.mo.assimilating].name + ". Click to exit the run.";
+				else if (getClickableState('mo', 11)) return '<br>You are in an Assimilation Search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click to exit this search.';
+				else return '<br>Begin an Assimilation Search.<br><br>This feature is in progress and most likely will not work correctly.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
+			},
+			req() { return [1, Infinity][player.mo.assimilated.length] },
+			canClick() { return getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req) },
+			onClick() {
+				if (player.mo.assimilating !== null) {
+					if (!confirm('Are you sure you want to exit this Assimilation run? This will reset all ' + tmp[player.mo.assimilating].name + ' layer content, and put you back into a normal run.')) return;
+					setClickableState('mo', 11, false);
+					player.points = new Decimal(0);
+					tmp[player.mo.assimilating].doReset('mo');
+					player.mo.assimilating = null;
+					unlockLayers();
+				} else if (getClickableState('mo', 11)) {
+					setClickableState('mo', 11, false);
+					unlockLayers();
+				} else {
+					setClickableState('mo', 11, true);
+					lockLayers();
+				};
+			},
+			style: {height: '200px', width: '200px'},
 		},
 	},
 });

@@ -11,11 +11,11 @@ function loadVue() {
 
 	// data = a function returning the content (actually HTML)
 	Vue.component('raw-html', {
-			props: ['layer', 'data'],
-			template: `
-				<span class="instant"  v-html="data"></span>
-			`
-		})
+		props: ['layer', 'data'],
+		template: `
+			<span class="instant"  v-html="data"></span>
+		`
+	})
 
 	// Blank space, data = optional height in px or pair with width and height in px
 	Vue.component('blank', {
@@ -217,19 +217,28 @@ function loadVue() {
 	Vue.component('toggle', {
 		props: ['layer', 'data'],
 		template: `
-		<button class="smallUpg can" v-bind:style="{'background-color': tmp[data[0]].color}" v-on:click="toggleAuto(data)">{{player[data[0]][data[1]]?"ON":"OFF"}}</button>
+		<button class="smallUpg can" v-bind:style="{'background-color': tmp[data[0]].color}" v-on:click="toggleAuto(data)">{{player[data[0]][data[1]] ? "ON" : "OFF"}}</button>
 		`
 	})
 
 	Vue.component('prestige-button', {
 		props: ['layer', 'data'],
 		template: `
-		<button v-if="(tmp[layer].type !== 'none')" v-bind:class="{ [layer]: true, reset: true, locked: !tmp[layer].canReset, can: tmp[layer].canReset}"
+		<button v-if="(tmp[layer].type !== 'none')" v-bind:class="{ [layer]: true, reset: true, locked: !tmp[layer].canReset, can: tmp[layer].canReset }"
 			v-bind:style="[tmp[layer].canReset ? {'background-color': tmp[layer].color} : {}, tmp[layer].componentStyles['prestige-button']]"
 			v-html="prestigeButtonText(layer)" v-on:click="doReset(layer)">
 		</button>
 		`
-	
+	})
+
+	Vue.component('assimilate-button', {
+		props: ['layer', 'data'],
+		template: `
+		<button v-if="(canAssimilate(layer) && player.mo.assimilating === layer)" v-bind:class="{ mo: true, reset: true, locked: player[layer].points.lt(assimilationReq[layer]), can: player[layer].points.gte(assimilationReq[layer]) }"
+			v-bind:style="[player[layer].points.gte(assimilationReq[layer]) ? {'margin-left': '16px', 'background-color': tmp.mo.color} : {'margin-left': '16px'}, tmp[layer].componentStyles['prestige-button']]"
+			v-html="(player[layer].points.gte(assimilationReq[layer]) ? 'Assimilate this layer!' : 'Reach ' + format(assimilationReq[layer]) + ' ' + tmp[layer].resource + ' to fully Assimilate this layer.')" v-on:click="completeAssimilation(layer)">
+		</button>
+		`
 	})
 
 	// Displays the main resource for the layer
@@ -287,7 +296,7 @@ function loadVue() {
 			<sell-all :layer="layer" :data="data" v-bind:style="tmp[layer].componentStyles['sell-all']" v-if="(tmp[layer].buyables[data].sellAll)&& !(tmp[layer].buyables[data].canSellAll !== undefined && tmp[layer].buyables[data].canSellAll == false)"></sell-all>
 		</div>
 		`,
-		data() { return { interval: false, time: 0,}},
+		data() { return { interval: false, time: 0 }},
 		methods: {
 			start() {
 				if (!this.interval) {

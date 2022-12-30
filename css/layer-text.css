@@ -184,3 +184,14 @@
 	color: #888888;
 	text-shadow: 0 0 10px #888888;
 }
+
+/* Multicellular Organisms */
+.layer-mo {
+	color: #88CC44;
+	text-shadow: 0 0 10px #88CC44;
+}
+
+.layer-mo-dark {
+	color: #448822;
+	text-shadow: 0 0 10px #448822;
+}

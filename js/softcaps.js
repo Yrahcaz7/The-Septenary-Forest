@@ -27,14 +27,14 @@ addLayer('SC', {
 	tooltip() { return player.SC.points + ' softcaps' },
 	update(diff) {
 		player.SC.softcaps = [];
-		if (player.c.points.gte(layers.c.softcap)) player.SC.softcaps.push("c");
-		if (player.q.points.gte(layers.q.softcap)) player.SC.softcaps.push("q");
-		if (player.h.points.gte(layers.h.softcap)) player.SC.softcaps.push("h");
-		if (player.ds.points.gte(layers.ds.softcap)) player.SC.softcaps.push("ds");
-		if (player.p.divinity.gte(softcaps.p_d[0])) player.SC.softcaps.push("p-d");
-		if (tmp.r.effect[0].gte(softcaps.r_eff1[0])) player.SC.softcaps.push("r-eff1");
-		if (tmp.m.effect.gte(softcaps.m_eff[0])) player.SC.softcaps.push("m-eff");
-		if (tmp.gi.effect.gte(softcaps.gi_eff[0])) player.SC.softcaps.push("gi-eff");
+		if (player.c.points.gte(layers.c.softcap) && !tmp.c.deactivated) player.SC.softcaps.push("c");
+		if (player.q.points.gte(layers.q.softcap) && !tmp.q.deactivated) player.SC.softcaps.push("q");
+		if (player.h.points.gte(layers.h.softcap) && !tmp.h.deactivated) player.SC.softcaps.push("h");
+		if (player.ds.points.gte(layers.ds.softcap) && !tmp.ds.deactivated) player.SC.softcaps.push("ds");
+		if (player.p.divinity.gte(softcaps.p_d[0]) && !tmp.p.deactivated) player.SC.softcaps.push("p-d");
+		if (tmp.r.effect[0].gte(softcaps.r_eff1[0]) && !tmp.r.deactivated) player.SC.softcaps.push("r-eff1");
+		if (tmp.m.effect.gte(softcaps.m_eff[0]) && !tmp.m.deactivated) player.SC.softcaps.push("m-eff");
+		if (tmp.gi.effect.gte(softcaps.gi_eff[0]) && !tmp.gi.deactivated) player.SC.softcaps.push("gi-eff");
 		player.SC.points = new Decimal(player.SC.softcaps.length);
 	},
 	tabFormat: [

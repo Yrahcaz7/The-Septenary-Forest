@@ -3,14 +3,14 @@ const modInfo = {
 	id: 'Yrahcaz7-ModTree-ThePrimordialTree',
 	author: 'Yrahcaz7',
 	pointsName: 'points',
-	modFiles: ['achievements.js', 'softcaps.js', 'story.js', 'layers.js', 'technical/tree.js'],
+	modFiles: ['assimilation.js', 'achievements.js', 'softcaps.js', 'story.js', 'layers.js', 'technical/tree.js'],
 	initialStartPoints: new Decimal(0),
 	offlineLimit: 1, // in hours
 };
 
 const VERSION = {
-	num: '3.3',
-	name: 'Chaos Rises',
+	num: '3.4',
+	name: 'Organisms Emerge',
 };
 
 const winText = () => {
@@ -36,6 +36,8 @@ function getdark(darkthis, type, special = false, research = false) {
 			return '-light">';
 		} else if (type == 'title-buyable' && colorvalue[0][1]) {
 			if (darkthis.canAfford() && getBuyableAmount(darkthis.layer, darkthis.id)) return '-dark">';
+		} else if (type == 'title-clickable' && colorvalue[0][1]) {
+			if (darkthis.canClick()) return '-dark">';
 		} else return '-OFF">'
 	};
 	return '">';
@@ -80,7 +82,7 @@ function getLightGain() {
 		if (hasMilestone('s', 52)) gain = gain.mul(3);
 		if (gain.gt(1e25)) gain = new Decimal(1e25);
 	};
-	if (new Decimal(tmp.w.effect[2]).gt(1)) gain = gain.mul(tmp.w.effect[2]);
+	if (new Decimal(tmp.w.effect[2]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[2]);
 	gain = gain.add(getLightBoost());
 	return gain;
 };
@@ -141,7 +143,7 @@ function getPointGen(forced = false) {
 	if (hasBuyable('c', 11)) gain = gain.mul(buyableEffect('c', 11));
 	if (hasBuyable('sp', 21)) gain = gain.mul(buyableEffect('sp', 21)[0]);
 	if (hasBuyable('sp', 12)) gain = gain.mul(buyableEffect('sp', 12)[1]);
-	if (player.p.divinity.gt(0)) gain = gain.mul(player.p.divinity.add(1).pow(0.1));
+	if (player.p.divinity.gt(0) && !tmp.p.deactivated) gain = gain.mul(player.p.divinity.add(1).pow(0.1));
 	if (challengeCompletions('r', 11) >= 2) gain = gain.mul(tmp.r.effect[2]);
 	if (hasUpgrade('ds', 21) && hasUpgrade('ds', 24)) gain = gain.mul(player.A.points.mul(0.2));
 	else gain = gain.mul(player.A.points.mul(0.1).add(1));
@@ -149,7 +151,7 @@ function getPointGen(forced = false) {
 	if (inChallenge('ds', 12)) gain = gain.mul(0.000001);
 	if (inChallenge('ds', 21)) gain = gain.mul(0.0000000001);
 	if (inChallenge('ds', 22)) gain = gain.mul(0.0000000001);
-	if (new Decimal(tmp.w.effect[0]).gt(1)) gain = gain.mul(tmp.w.effect[0]);
+	if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[0]);
 	if (inChallenge('r', 11) && !forced) gain = new Decimal(0);
 	// pow
 	if (challengeCompletions('ch', 11) > 0) gain = gain.pow(challengeEffect('ch', 11));
@@ -169,7 +171,7 @@ const displayThings = [
 ];
 
 // determines when the game "ends"
-const endPoints = new Decimal('e750000000');
+const endPoints = new Decimal('e900000000');
 
 // style for the background, can be a function
 const backgroundStyle = {};
