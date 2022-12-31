@@ -109,7 +109,7 @@ function getAssimilationRewards() {
 	let text = '';
 	if (player.mo.assimilated.includes('e')) {
 		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += '<h2 class=layer-e>Essence</h2><br><br>Increases the cap of <b class=layer-e>Purer Essence</b> by 85<br>Improves the effect formulas of <b class=layer-e>Radiant Essence</b><br>Unlocks a new buyable, <b class=layer-e>Exponential Essence</b><br>Makes all essence upgrades always unlockable<br>Unlocks a new upgrade, <b class=layer-e>Essence of the Flow</b>';
-		else text += '<h2>Essence</h2><br><br>Increases the cap of <b>Purer Essence</b> by 85<br>Improves the effect formulas of <b>Radiant Essence</b><br>Unlocks a new buyable, <b>Exponential Essence</b><br>Makes all essence upgrades always unlockable<br>Unlocks a new upgrade, <b>Essence of the Flow</b>';
+		else text += '<h2>Essence</h2><br><br>Increases the cap of <b>Purer Essence</b> by 85<br>Improves the effect formulas of <b>Radiant Essence</b><br>Unlocks a new rebuyable, <b>Exponential Essence</b><br>Makes all essence upgrades always unlockable<br>Unlocks a new upgrade, <b>Essence of the Flow</b>';
 	};
 	return text;
 };

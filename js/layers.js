@@ -6829,6 +6829,7 @@ addLayer('ch', {
 				if (challengeCompletions('ch', this.id) === 1) return 18;
 				if (challengeCompletions('ch', this.id) === 2) return 60;
 				if (challengeCompletions('ch', this.id) === 3) return 70;
+				if (challengeCompletions('ch', this.id) === 4) return 80;
 				return Infinity;
 			},
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' evil influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit },
@@ -6965,7 +6966,7 @@ addLayer('mo', {
 			display() {
 				if (player.mo.assimilating !== null) return "<br>Currently Assimilating: " + tmp[player.mo.assimilating].name + ".<br><br>Click to exit the run.";
 				else if (getClickableState('mo', 11)) return '<br>You are in an Assimilation Search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click to exit this search.';
-				else return '<br>Begin an Assimilation Search.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
+				else return '<br>Begin an Assimilation search.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
 			},
 			req() { return [1, Infinity][player.mo.assimilated.length] },
 			canClick() { return getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req) },

@@ -171,7 +171,7 @@ const displayThings = [
 ];
 
 // determines when the game "ends"
-const endPoints = new Decimal('e1.05e9');
+const endPoints = new Decimal('e1.5e9');
 
 // style for the background, can be a function
 const backgroundStyle = {};
