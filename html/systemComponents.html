@@ -24,11 +24,13 @@ var tab_buttons = `<div class="upgRow">
 var tree_node = `<button v-if="nodeShown(layer)" v-bind:id="layer" v-on:click="() => {
 	(shiftDown && options.forceTooltips) ?
 		player[layer].forceTooltip=!player[layer].forceTooltip
-		: tmp[layer].isLayer ?
-			(tmp[layer].leftTab ?
-				showNavTab(layer, prev)
-				: showTab(layer, prev))
-			: run(layers[layer].onClick, layers[layer])
+		: (typeof overrideTreeNodeClick == 'function' && overrideTreeNodeClick(layer) ?
+			overrideTreeNodeClick(layer)()
+			: (tmp[layer].isLayer ?
+				(tmp[layer].leftTab ?
+					showNavTab(layer, prev)
+					: showTab(layer, prev))
+				: run(layers[layer].onClick, layers[layer])))
 }" v-bind:class="{
 	treeNode: tmp[layer].isLayer,
 	treeButton: !tmp[layer].isLayer,
@@ -46,7 +48,7 @@ var tree_node = `<button v-if="nodeShown(layer)" v-bind:id="layer" v-on:click="(
 }" v-bind:style="constructNodeStyle(layer)">
 	<span class="nodeLabel" v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : ''"></span>
 	<tooltip v-if="tmp[layer].tooltip != ''" :text="
-		typeof overrideTooltip != 'undefined' && overrideTooltip(layer) ?
+		typeof overrideTooltip == 'function' && overrideTooltip(layer) ?
 			overrideTooltip(layer)
 			: (tmp[layer].isLayer ?
 				(player[layer].unlocked ?
@@ -128,13 +130,16 @@ var overlay_head = `<div class="overlayThing" style="
 		<br>Offline Time: {{formatTime(player.offTime.remain)}}<br>
 	</span>
 	<br>
-	<span v-if="player.points.lt('1e1000')" class="overlayThing">You have </span>
-	<h2 class="overlayThing" id="points">{{format(player.points)}}</h2>
-	<span v-if="player.points.lt('e1000000')" class="overlayThing">{{modInfo.pointsName}}</span><br>
-	<span v-if="canGenPoints()" class="overlayThing">
-		{{tmp.other.oompsMag != 0 ?
-			format(tmp.other.oomps) + " OOM" + (tmp.other.oompsMag < 0 ? "^OOM" : tmp.other.oompsMag > 1 ? "^" + tmp.other.oompsMag : "") + "s"
-			: formatSmall(getPointGen())}}/sec
+	<span v-if="typeof overridePointDisplay == 'function' && overridePointDisplay()" v-html="overridePointDisplay()" class="overlayThing"></span>
+	<span v-else>
+		<span v-if="player.points.lt('1e1000')" class="overlayThing">You have </span>
+		<h2 class="overlayThing" id="points">{{format(player.points)}}</h2>
+		<span v-if="player.points.lt('e1000000')" class="overlayThing">{{modInfo.pointsName}}</span><br>
+		<span v-if="canGenPoints()" class="overlayThing">
+			{{tmp.other.oompsMag != 0 ?
+				format(tmp.other.oomps) + " OOM" + (tmp.other.oompsMag < 0 ? "^OOM" : tmp.other.oompsMag > 1 ? "^" + tmp.other.oompsMag : "") + "s"
+				: formatSmall(getPointGen())}}/sec
+		</span>
 	</span>
 	<div v-for="thing in tmp.displayThings" class="overlayThing">
 		<span v-if="thing" v-html="thing"></span>

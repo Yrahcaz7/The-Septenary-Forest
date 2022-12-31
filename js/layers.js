@@ -53,6 +53,7 @@ addLayer('e', {
 		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
 		if (new Decimal(tmp.ch.effect[0]).gt(1) && !tmp.ch.deactivated) mult = mult.mul(tmp.ch.effect[0]);
 		// pow
+		if (hasBuyable('e', 13)) mult = mult.pow(buyableEffect('e', 13));
 		if (hasBuyable('cl', 21)) mult = mult.pow(buyableEffect('cl', 21)[0]);
 		// return
 		return mult;
@@ -65,6 +66,7 @@ addLayer('e', {
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
+		if (hasUpgrade('e', 43)) gen += 2e20;
 		if (hasMilestone('c', 3)) {
 			gen += 0.5;
 			if (hasUpgrade('h', 51)) {
@@ -80,17 +82,18 @@ addLayer('e', {
 	},
 	automate() {
 		if (hasMilestone('m', 2) && player.e.auto_upgrades) {
-			buyUpgrade('e', 11);
-			if (hasUpgrade('e', 11)) buyUpgrade('e', 12);
-			if (hasUpgrade('e', 12)) buyUpgrade('e', 13);
-			if (hasUpgrade('e', 13)) buyUpgrade('e', 21);
-			if (hasUpgrade('e', 21)) buyUpgrade('e', 22);
-			if (hasUpgrade('e', 22)) buyUpgrade('e', 23);
-			if (hasUpgrade('e', 23)) buyUpgrade('e', 31);
-			if (hasMilestone('q', 0) && hasUpgrade('e', 31)) buyUpgrade('e', 32);
-			if (hasMilestone('q', 0) && hasUpgrade('e', 32)) buyUpgrade('e', 33);
-			if (hasMilestone('q', 0) && hasUpgrade('e', 33)) buyUpgrade('e', 41);
-			if (hasMilestone('q', 0) && hasUpgrade('e', 41)) buyUpgrade('e', 42);
+			if (tmp.e.upgrades[11].unlocked) buyUpgrade('e', 11);
+			if (tmp.e.upgrades[12].unlocked) buyUpgrade('e', 12);
+			if (tmp.e.upgrades[13].unlocked) buyUpgrade('e', 13);
+			if (tmp.e.upgrades[21].unlocked) buyUpgrade('e', 21);
+			if (tmp.e.upgrades[22].unlocked) buyUpgrade('e', 22);
+			if (tmp.e.upgrades[23].unlocked) buyUpgrade('e', 23);
+			if (tmp.e.upgrades[31].unlocked) buyUpgrade('e', 31);
+			if (tmp.e.upgrades[32].unlocked) buyUpgrade('e', 32);
+			if (tmp.e.upgrades[33].unlocked) buyUpgrade('e', 33);
+			if (tmp.e.upgrades[41].unlocked) buyUpgrade('e', 41);
+			if (tmp.e.upgrades[42].unlocked) buyUpgrade('e', 42);
+			if (tmp.e.upgrades[43].unlocked) buyUpgrade('e', 43);
 		};
 		if (hasMilestone('m', 0) && player.e.auto_buyables) {
 			if (layers.e.buyables[11].canAfford()) {
@@ -98,6 +101,9 @@ addLayer('e', {
 			};
 			if (layers.e.buyables[12].unlocked() && layers.e.buyables[12].canAfford()) {
 				layers.e.buyables[12].buy();
+			};
+			if (layers.e.buyables[13].unlocked() && layers.e.buyables[13].canAfford()) {
+				layers.e.buyables[13].buy();
 			};
 		};
 	},
@@ -235,7 +241,7 @@ addLayer('e', {
 			description() {
 				return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Recurring Recursion</b> based on your points';
 			},
-			cost: 1.11e11,
+			cost: 1e11,
 			effect() {
 				return player.points.add(1).pow(0.01);
 			},
@@ -244,7 +250,7 @@ addLayer('e', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
 				return text;
 			},
-			unlocked() { return hasMilestone('q', 0) && hasUpgrade('e', 23) },
+			unlocked() { return (hasMilestone('q', 0) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 23) },
 		},
 		32: {
 			title() {
@@ -253,7 +259,7 @@ addLayer('e', {
 			description() {
 				return 'some of the effect of <b class="layer-e' + getdark(this, "ref") + 'Radiant Essence</b> is applied to point gain (based on essence)';
 			},
-			cost: 3.33e33,
+			cost: 3e33,
 			effect() {
 				return player.e.points.add(1).pow(0.001);
 			},
@@ -262,7 +268,7 @@ addLayer('e', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.001';
 				return text;
 			},
-			unlocked() { return hasMilestone('q', 0) && hasUpgrade('e', 31) },
+			unlocked() { return (hasMilestone('q', 0) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 31) },
 		},
 		33: {
 			title() {
@@ -271,7 +277,7 @@ addLayer('e', {
 			description() {
 				return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Essence Influence</b> based on your essence';
 			},
-			cost: 5.55e55,
+			cost: 5e55,
 			effect() {
 				return player.e.points.add(1).pow(0.025);
 			},
@@ -280,7 +286,7 @@ addLayer('e', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.025';
 				return text;
 			},
-			unlocked() { return hasMilestone('q', 0) && hasUpgrade('e', 32) },
+			unlocked() { return (hasMilestone('q', 0) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 32) },
 		},
 		41: {
 			title() {
@@ -289,7 +295,7 @@ addLayer('e', {
 			description() {
 				return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Essence of Essence</b> based on your essence';
 			},
-			cost: 7.77e77,
+			cost: 7e77,
 			effect() {
 				return player.e.points.add(1).pow(0.001);
 			},
@@ -298,7 +304,7 @@ addLayer('e', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.001';
 				return text;
 			},
-			unlocked() { return hasMilestone('q', 0) && hasUpgrade('e', 33) },
+			unlocked() { return (hasMilestone('q', 0) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 33) },
 		},
 		42: {
 			title() {
@@ -307,7 +313,7 @@ addLayer('e', {
 			description() {
 				return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Essence Recursion</b> based on your essence';
 			},
-			cost: 9.99e99,
+			cost: 9e99,
 			effect() {
 				return player.e.points.add(1).pow(0.01);
 			},
@@ -316,15 +322,26 @@ addLayer('e', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
 				return text;
 			},
-			unlocked() { return hasMilestone('q', 0) && hasUpgrade('e', 41) },
+			unlocked() { return (hasMilestone('q', 0) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 41) },
+		},
+		43: {
+			title() {
+				return '<b class="layer-e' + getdark(this, "title") + 'Essence of the Flow';
+			},
+			description: 'gain 2e22% of your essence gain per second',
+			cost: '1e1111',
+			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 42) },
 		},
 	},
 	buyables: {
 		11: {
 			cost() { return new Decimal(12).pow(getBuyableAmount('e', this.id)).add(20) },
 			title() { return '<b class="layer-e' + getdark(this, "title-buyable") + 'Purer Essence' },
-			canAfford() { return player.e.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
-			purchaseLimit: 14,
+			canAfford() { return player.e.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			purchaseLimit() {
+				if (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) return 99;
+				else return 14;
+			},
 			buy() {
 				player.e.points = player.e.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -335,7 +352,7 @@ addLayer('e', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text += '<br>formula: x*2.5+1';
-				return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('e', this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount('e', this.id));
+				return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('e', this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount('e', this.id)) + '/' + this.purchaseLimit();
 			},
 		},
 		12: {
@@ -348,14 +365,44 @@ addLayer('e', {
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
-				return [getBuyableAmount('e', this.id).add(1), getBuyableAmount('e', this.id).add(1).pow(0.25)];
+				if (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) return [getBuyableAmount('e', this.id).add(1).pow(2), getBuyableAmount('e', this.id).add(1)];
+				else return [getBuyableAmount('e', this.id).add(1), getBuyableAmount('e', this.id).add(1).pow(0.25)];
 			},
 			display() {
 				let text = '';
-				if (player.nerdMode) text += '<br>formulas: x+1<br>and (x+1)^0.25';
-				return 'multiplies core gain (and essence gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('e', this.id)[0]) + 'x<br>and ' + format(buyableEffect('e', this.id)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount('e', this.id));
+				if (player.nerdMode) {
+					if (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) text += '<br>formulas: (x+1)^2<br>and x+1';
+					else text += '<br>formulas: x+1<br>and (x+1)^0.25';
+				};
+				return 'multiplies core gain (and essence gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('e', this.id)[0]) + 'x<br>and ' + format(buyableEffect('e', this.id)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount('e', this.id)) + '/' + this.purchaseLimit;
 			},
-			unlocked() { return player.e.total.gte(85194) || getBuyableAmount('e', this.id).gt(0) },
+			unlocked() { return player.e.total.gte(85194) || getBuyableAmount('e', this.id).gt(0) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer },
+		},
+		13: {
+			cost() {
+				if (player.mo.assimilating === this.layer) return new Decimal(10).pow(getBuyableAmount('e', this.id).add(2));
+				else return new Decimal('e10000000').pow(getBuyableAmount('e', this.id)).mul('e750000000');
+			},
+			title() { return '<b class="layer-e' + getdark(this, "title-buyable") + 'Exponential Essence' },
+			canAfford() { return player.e.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 99,
+			buy() {
+				player.e.points = player.e.points.sub(this.cost());
+				addBuyables(this.layer, this.id, 1);
+			},
+			effect() {
+				if (player.mo.assimilating === this.layer) return getBuyableAmount('e', this.id).add(1).pow(0.2);
+				else return getBuyableAmount('e', this.id).add(1).pow(0.0025);
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) {
+					if (player.mo.assimilating === this.layer) text += '<br>formula: (x+1)^0.2';
+					else text += '<br>formula: (x+1)^0.0025';
+				};
+				return 'exponentiates essence gain based on the amount of this upgrade bought.<br>Currently: ^' + format(buyableEffect('e', this.id)) + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount('e', this.id)) + '/' + this.purchaseLimit;
+			},
+			unlocked() { return player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer },
 		},
 	},
 });
@@ -503,7 +550,7 @@ addLayer('c', {
 		},
 		3: {
 			requirementDescription: '1e64 cores',
-			effectDescription: 'gain 50% of essence gain per second',
+			effectDescription: 'gain 50% of your essence gain per second',
 			done() { return player.c.points.gte(1e64) },
 			unlocked() { return player.c.best.gte(1e60) },
 		},
@@ -6871,7 +6918,7 @@ addLayer('mo', {
 	baseResource: 'cellular life',
 	baseAmount() { return player.cl.points },
 	type: 'static',
-	base: 1.5,
+	base: 1.25,
 	exponent: 2,
 	gainExp() {
 		let gain = new Decimal(1);
@@ -6906,7 +6953,8 @@ addLayer('mo', {
 				"resource-display",
 				"blank",
 				["display-text", () => {
-					return 'Assimilation rewards will be shown here.';
+					if (player.mo.assimilated.length === 0) return 'Assimilation rewards will be shown here.';
+					return getAssimilationRewards();
 				}],
 			],
 		},
@@ -6915,15 +6963,15 @@ addLayer('mo', {
 		11: {
 			title() { return '<b class="layer-mo' + getdark(this, "title-clickable") + 'Assimilation' },
 			display() {
-				if (player.mo.assimilating !== null) return "Currently Assimilating: " + tmp[player.mo.assimilating].name + ". Click to exit the run.";
+				if (player.mo.assimilating !== null) return "<br>Currently Assimilating: " + tmp[player.mo.assimilating].name + ".<br><br>Click to exit the run.";
 				else if (getClickableState('mo', 11)) return '<br>You are in an Assimilation Search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click to exit this search.';
-				else return '<br>Begin an Assimilation Search.<br><br>This feature is in progress and most likely will not work correctly.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
+				else return '<br>Begin an Assimilation Search.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
 			},
 			req() { return [1, Infinity][player.mo.assimilated.length] },
 			canClick() { return getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req) },
 			onClick() {
 				if (player.mo.assimilating !== null) {
-					if (!confirm('Are you sure you want to exit this Assimilation run? This will reset all ' + tmp[player.mo.assimilating].name + ' layer content, and put you back into a normal run.')) return;
+					if (!confirm('Are you sure you want to exit this Assimilation run? This will reset all ' + tmp[player.mo.assimilating].name + ' content, and put you back into a normal run.')) return;
 					setClickableState('mo', 11, false);
 					player.points = new Decimal(0);
 					tmp[player.mo.assimilating].doReset('mo');
