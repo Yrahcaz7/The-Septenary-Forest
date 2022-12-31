@@ -72,6 +72,43 @@ const story = [
 	Scientist: "No, no! The Committee! Nine sectors over!"
 	Spacecraft: "Command received; now exiting atmosphere."
 	Scientist: "When I get rich, I'll replace this damn broken thing."
+`, `
+	As the spacecraft hurtled through space, the scientist began organizing his luggage, sprawled all over the floor.
+	"Oh, so <b>that's</b> where I put the arthropod!"
+	The scientist picked up what looked like a mass of goo and teeth, and began staring at it.
+	"What was it called again? A septendoras?"
+	By the time the scientist had put everything in the spacecraft in neat piles, it had arrived at the Comittee.
+`, `
+	"Well, here goes nothing!"
+	The scientist opened the door, and jumped out of the spacecraft.
+	"It's been a long time since i've been here..."
+	The scientist started walking across the floating metal platform, towards the towering structure in the center, having no idea what would come next...
+	Building: "Do you have an appointment?"
+	Scientist: "No. LS14H is here to report his findings."
+	Building: "Verifying identity... verified. Please enter."
+`, `
+	The scientist entered the building, and then the floor started moving up very quickly.
+	"I remember the first time I came here... throwing up my lunch was not very pleasant. Got fined for it too."
+	As the elevator stopped, part of the wall slid upwards, revealing the chamber of the Comittee.
+	Meanwhile, at the scientist's lab, an unfriendly visitor opened the door. The visitor looked completely robotic, even though there existed sufficently advanced technology to hide the fact. The visitor began searching through the scientist's samples...
+`, `
+	The visitor found what they were looking for; a sample of the essence. The visitor then placed it inside their robotic skull, and swiftly exited the lab.
+	The visitor didn't know, however, that some types of essence are highly reactive with each other...
+	<br><br>And suddenly everything was bathed in a pitch-black light.
+`, `
+	<br><br>Meanwhile, the scientist was presenting his findings to the Comittee, and was getting a lot of skeptical looks.
+	Comittee member: "And how, exactly, do you know that everthing is made up of this?"
+	Scientist: "I have already found evidence of seven flavors of quarks being made up of essence. Right here, I have a sample of a bottom quark."
+	Comittee member: "I know that, but what about the other four?"
+	Scientist: "I don't see any point in arguing about this."
+	Comittee member: "Oh really? The files say that you, LS14H, have faked a discovery before!"
+	Then suddenly, the scientist's sample broke its container, as something similar to an explosion seemed to occur.
+`, `
+	The scientist dissapeared in an instant upon contact, and then the strange explosion shrank back down again.
+	The comittee barely had any time to wonder what just happened, as black light broke through the side of the building...
+	<br><br>And then everything was gone.
+`], [`
+	More story coming soon!
 `]];
 
 for (let index = 0; index < story.length; index++) {

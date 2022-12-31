@@ -6773,6 +6773,7 @@ addLayer('ch', {
 				"blank",
 				["infobox", "story0"],
 				["infobox", "story1"],
+				["infobox", "story2"],
 				["display-text", function() {
 					let storySegments = 0;
 					for (let index = 0; index < story.length; index++) {
@@ -6912,8 +6913,8 @@ addLayer('ch', {
 	infoboxes: {
 		story0: {
 			title() {
-				if (player.ch.best.toNumber() > story[0].length) return "Story of the Endless Void";
-				return "Story of " + randomStr(3) + " " + randomStr(7) + " " + randomStr(4);
+				if (player.ch.best.toNumber() >= story[0].length) return "Story of the Endless Void";
+				else return "Story of " + randomStr(3) + " " + randomStr(7) + " " + randomStr(4);
 			},
 			body() {
 				let text = "";
@@ -6924,7 +6925,10 @@ addLayer('ch', {
 			},
 		},
 		story1: {
-			title() { return "Story of " + randomStr(3) + " " + randomStr(7) + " " + randomStr(3) },
+			title() {
+				if (player.ch.best.toNumber() >= story[0].length + story[1].length) return "Story of the World's End";
+				else return "Story of " + randomStr(3) + " " + randomStr(7) + " " + randomStr(3);
+			},
 			body() {
 				let text = "";
 				for (let index = 0; index < story[1].length && index < (player.ch.best.toNumber() - story[0].length); index++) {
@@ -6933,6 +6937,17 @@ addLayer('ch', {
 				return text;
 			},
 			unlocked() { return player.ch.best.toNumber() > story[0].length},
+		},
+		story2: {
+			title() { return "Story of " + randomStr(3) + " " + randomStr(10) + " " + randomStr(4); },
+			body() {
+				let text = "";
+				for (let index = 0; index < story[2].length && index < (player.ch.best.toNumber() - (story[0].length + story[1].length)); index++) {
+					text += story[2][index];
+				};
+				return text;
+			},
+			unlocked() { return player.ch.best.toNumber() > story[0].length + story[1].length},
 		},
 	},
 });
