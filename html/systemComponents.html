@@ -24,7 +24,7 @@ var tab_buttons = `<div class="upgRow">
 var tree_node = `<button v-if="nodeShown(layer)" v-bind:id="layer" v-on:click="() => {
 	(shiftDown && options.forceTooltips) ?
 		player[layer].forceTooltip=!player[layer].forceTooltip
-		: (typeof overrideTreeNodeClick == 'function' && overrideTreeNodeClick(layer) ?
+		: (typeof overrideTreeNodeClick == 'function' && typeof overrideTreeNodeClick(layer) == 'function' ?
 			overrideTreeNodeClick(layer)()
 			: (tmp[layer].isLayer ?
 				(tmp[layer].leftTab ?
