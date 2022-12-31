@@ -719,7 +719,7 @@ addLayer('c', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text += '<br>formula: x*5+1';
-				return 'multiplies point gain based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('c', this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cores<br><br>Bought: ' + formatWhole(getBuyableAmount('c', this.id));
+				return 'multiplies point gain based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('c', this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cores<br><br>Bought: ' + formatWhole(getBuyableAmount('c', this.id)) + '/' + this.purchaseLimit;
 			},
 		},
 		12: {
@@ -737,7 +737,7 @@ addLayer('c', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text += '<br>formula: 2^x';
-				return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('c', this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cores<br><br>Bought: ' + formatWhole(getBuyableAmount('c', this.id));
+				return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('c', this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cores<br><br>Bought: ' + formatWhole(getBuyableAmount('c', this.id)) + '/' + this.purchaseLimit;
 			},
 		},
 	},
@@ -1396,7 +1396,7 @@ addLayer('sp', {
 					if (hasUpgrade('sp', 11)) text += '<br>formulas: (5^x)^2<br>and 1/(x+1)';
 					else text += '<br>formulas: 5^x and 1/(x+1)';
 				};
-				return 'multiplies quark gain (but also decreases essence gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('sp', this.id)[0]) + 'x<br>and ' + format(buyableEffect('sp', this.id)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' subatomic particles<br><br>Bought: ' + formatWhole(getBuyableAmount('sp', this.id));
+				return 'multiplies quark gain (but also decreases essence gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('sp', this.id)[0]) + 'x<br>and ' + format(buyableEffect('sp', this.id)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' subatomic particles<br><br>Bought: ' + formatWhole(getBuyableAmount('sp', this.id)) + '/' + this.purchaseLimit;
 			},
 		},
 		12: {
@@ -1418,7 +1418,7 @@ addLayer('sp', {
 					if (hasUpgrade('sp', 12)) text += '<br>formulas: (5^x)^2<br>and 1/(x+1)';
 					else text += '<br>formulas: 5^x and 1/(x+1)';
 				};
-				return 'multiplies essence gain (but also decreases point gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('sp', this.id)[0]) + 'x<br>and ' + format(buyableEffect('sp', this.id)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' subatomic particles<br><br>Bought: ' + formatWhole(getBuyableAmount('sp', this.id));
+				return 'multiplies essence gain (but also decreases point gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('sp', this.id)[0]) + 'x<br>and ' + format(buyableEffect('sp', this.id)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' subatomic particles<br><br>Bought: ' + formatWhole(getBuyableAmount('sp', this.id)) + '/' + this.purchaseLimit;
 			},
 		},
 		21: {
@@ -1440,7 +1440,7 @@ addLayer('sp', {
 					if (hasUpgrade('sp', 13)) text += '<br>formulas: (5^x)^2<br>and 1/(x+1)';
 					else text += '<br>formulas: 5^x and 1/(x+1)';
 				};
-				return 'multiplies point gain (but also decreases quark gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('sp', this.id)[0]) + 'x<br>and ' + format(buyableEffect('sp', this.id)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' subatomic particles<br><br>Bought: ' + formatWhole(getBuyableAmount('sp', this.id));
+				return 'multiplies point gain (but also decreases quark gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('sp', this.id)[0]) + 'x<br>and ' + format(buyableEffect('sp', this.id)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' subatomic particles<br><br>Bought: ' + formatWhole(getBuyableAmount('sp', this.id)) + '/' + this.purchaseLimit;
 			},
 		},
 	},
@@ -2164,7 +2164,7 @@ addLayer('ds', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formulas: 2^x<br>and x*5+1';
-				return 'multiplies hex gain (and also subatomic particle gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('ds', 11)[0]) + 'x<br>and ' + format(buyableEffect('ds', 11)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' demon souls<br><br>Bought: ' + formatWhole(getBuyableAmount('ds', this.id));
+				return 'multiplies hex gain (and also subatomic particle gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('ds', 11)[0]) + 'x<br>and ' + format(buyableEffect('ds', 11)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' demon souls<br><br>Bought: ' + formatWhole(getBuyableAmount('ds', this.id)) + '/' + this.purchaseLimit;
 			},
 		},
 	},
@@ -4904,6 +4904,7 @@ addLayer('gi', {
 		let keep = ['auto_buyables', 'auto_prestige'];
 			if (hasMilestone('w', 1) && resettingLayer == 'w') keep.push('milestones');
 			if (hasMilestone('cl', 0) && resettingLayer == 'cl') keep.push('milestones');
+			if (hasMilestone('ch', 8) && resettingLayer == 'ch') keep.push('milestones');
 			if (layers[resettingLayer].row > this.row) layerDataReset('gi', keep);
 		},
 	resetsNothing() { return hasMilestone('gi', 16) },
@@ -5054,7 +5055,7 @@ addLayer('gi', {
 				return getBuyableAmount('gi', this.id);
 			},
 			display() {
-				return 'increases the good influence effect base by 1 per this upgrade bought.<br>Currently: +' + format(buyableEffect('gi', this.id)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', this.id));
+				return 'increases the good influence effect base by 1 per this upgrade bought.<br>Currently: +' + format(buyableEffect('gi', this.id)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 		},
 		12: {
@@ -6134,20 +6135,28 @@ addLayer('w', {
 		21: {
 			cost() { return getBuyableAmount('w', this.id).mul(5).add(235) },
 			title: '<h3 class="layer-w-dark">Race for Knowledge',
-			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
-			purchaseLimit: 20,
+			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			purchaseLimit() {
+				let max = new Decimal(20);
+				if (hasMilestone('ch', 7)) max = max.add(tmp.ch.milestones[7].effect);
+				return max;
+			},
 			buy() {
 				player.gi.points = player.gi.points.sub(this.cost());
 				player.ei.points = player.ei.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
-				return getBuyableAmount('w', this.id).add(1).pow(3.25);
+				if (hasMilestone('ch', 8)) return getBuyableAmount('w', this.id).add(1).pow(7.5).add(new Decimal(2.5).pow(getBuyableAmount('w', this.id))).sub(1);
+				else return getBuyableAmount('w', this.id).add(1).pow(3.25);
 			},
 			display() {
 				let text = '';
-				if (player.nerdMode) text = '<br>formula: (x+1)^3.25';
-				return 'multiplies molecule gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' EI and ' + formatWhole(this.cost()) + ' GI<br><br>Bought: ' + formatWhole(getBuyableAmount('w', this.id)) + '/' + formatWhole(this.purchaseLimit);
+				if (player.nerdMode) {
+					if (hasMilestone('ch', 8)) text = '<br>formula: ((x+1)^7.5)+(2.5^x)-1';
+					else text = '<br>formula: (x+1)^3.25';
+				};
+				return 'multiplies molecule gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' EI and ' + formatWhole(this.cost()) + ' GI<br><br>Bought: ' + formatWhole(getBuyableAmount('w', this.id)) + '/' + formatWhole(this.purchaseLimit());
 			},
 			unlocked() { return hasMilestone('w', 8) },
 		},
@@ -6173,6 +6182,9 @@ addLayer('cl', {
 		auto_buyable_41: false,
 		auto_buyable_42: false,
 		auto_buyable_43: false,
+		auto_buyable_51: false,
+		auto_buyable_52: false,
+		auto_buyable_53: false,
 	}},
 	color: "#008800",
 	branches: ['mo'],
@@ -6218,9 +6230,14 @@ addLayer('cl', {
 			if (player.cl.auto_buyable_42 && layers.cl.buyables[42].canAfford()) layers.cl.buyables[42].buy();
 			if (player.cl.auto_buyable_43 && layers.cl.buyables[43].canAfford()) layers.cl.buyables[43].buy();
 		};
+		if (hasMilestone('ch', 7)) {
+			if (player.cl.auto_buyable_51 && layers.cl.buyables[51].canAfford()) layers.cl.buyables[51].buy();
+			if (player.cl.auto_buyable_52 && layers.cl.buyables[52].canAfford()) layers.cl.buyables[52].buy();
+			if (player.cl.auto_buyable_53 && layers.cl.buyables[53].canAfford()) layers.cl.buyables[53].buy();
+		};
 	},
 	doReset(resettingLayer) {
-		let keep = ['auto_tissues', 'auto_buyable_31', 'auto_buyable_32', 'auto_buyable_33', 'auto_buyable_41', 'auto_buyable_42', 'auto_buyable_43'];
+		let keep = ['auto_tissues', 'auto_buyable_31', 'auto_buyable_32', 'auto_buyable_33', 'auto_buyable_41', 'auto_buyable_42', 'auto_buyable_43', 'auto_buyable_51', 'auto_buyable_52', 'auto_buyable_53'];
 			if (hasMilestone('ch', 0) && resettingLayer == 'ch') keep.push('milestones');
 			if (layers[resettingLayer].row > this.row) layerDataReset('cl', keep);
 		},
@@ -6816,6 +6833,26 @@ addLayer('ch', {
 			done() { return player.ch.points.gte(9) },
 			toggles: [['cl', 'auto_buyable_41'], ['cl', 'auto_buyable_42'], ['cl', 'auto_buyable_43']],
 		},
+		7: {
+			requirementDescription: '13 chaos',
+			effect() {
+				return player.ch.points.sub(10).max(0).mul(2);
+			},
+			effectDescription() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'you can autobuy the seventh to ninth <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b class="layer-w-dark">Race for Knowledge</b> by 2<br>Currently: +' + format(tmp.ch.milestones[7].effect);
+				else return 'you can autobuy the seventh to ninth <b>Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b>Race for Knowledge</b> by 2<br>Currently: +' + format(tmp.ch.milestones[7].effect);
+			},
+			done() { return player.ch.points.gte(13) },
+			toggles: [['cl', 'auto_buyable_51'], ['cl', 'auto_buyable_52'], ['cl', 'auto_buyable_53']],
+		},
+		8: {
+			requirementDescription: '16 chaos',
+			effectDescription() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'keep good influence milestones on chaos resets, and improve <b class="layer-w-dark">Race for Knowledge</b>\'s effect formula';
+				else return 'keep good influence milestones on chaos resets, and improve <b>Race for Knowledge</b>\'s effect formula';
+			},
+			done() { return player.ch.points.gte(16) },
+		},
 	},
 	challenges: {
 		11: {
@@ -6919,8 +6956,8 @@ addLayer('mo', {
 	baseResource: 'cellular life',
 	baseAmount() { return player.cl.points },
 	type: 'static',
-	base: 1.25,
-	exponent: 2,
+	base: 1.2,
+	exponent: 1,
 	gainExp() {
 		let gain = new Decimal(1);
 		return gain;
