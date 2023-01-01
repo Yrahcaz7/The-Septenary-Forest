@@ -119,7 +119,7 @@ function getPointGen(forced = false) {
 			gain = gain.mul(upgradeEffect('e', 23));
 			if (hasUpgrade('e', 31)) gain = gain.mul(upgradeEffect('e', 31));
 	}};
-	if (hasUpgrade('e', 32) && hasBuyable('e', 12)) gain = gain.mul(upgradeEffect('e', 32));
+	if (hasUpgrade('e', 32)) gain = gain.mul(upgradeEffect('e', 32));
 	if (hasUpgrade('q', 12)) {
 		gain = gain.mul(upgradeEffect('q', 12));
 		if (hasUpgrade('q', 13)) gain = gain.mul(upgradeEffect('q', 13));
@@ -171,7 +171,7 @@ const displayThings = [
 ];
 
 // determines when the game "ends"
-const endPoints = new Decimal('e2.5e9');
+const endPoints = new Decimal('e3.5e9');
 
 // style for the background, can be a function
 const backgroundStyle = {};

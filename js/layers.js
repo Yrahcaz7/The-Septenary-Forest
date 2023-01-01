@@ -261,11 +261,11 @@ addLayer('e', {
 			},
 			cost: 3e33,
 			effect() {
-				return player.e.points.add(1).pow(0.001);
+				return (buyableEffect('e', 12)[0] || new Decimal(1)).pow(0.1).mul(player.e.points).add(1).pow(0.001);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
-				if (player.nerdMode) text += ' <br>formula: (x+1)^0.001';
+				if (player.nerdMode) text += ' <br>formula: ((x^0.1)y+1)^0.001';
 				return text;
 			},
 			unlocked() { return (hasMilestone('q', 0) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 31) },

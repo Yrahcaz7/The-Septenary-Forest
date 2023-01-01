@@ -15,9 +15,9 @@ function startAssimilation(layer) {
 	// confirmation and such
 	if (!tmp[layer]) {
 		console.error("'" + layer + "' is not a valid layer");
-		return;
+		return false;
 	};
-	if (!confirm('Are you sure you want to start Assimilating ' + tmp[layer].name + '? This will reset all Assimilated layers content, all ' + tmp[layer].name + ' content, and put you in a run where only Assimilated layers and this layer will be active!')) return;
+	if (!confirm('Are you sure you want to start Assimilating ' + tmp[layer].name + '? This will reset all Assimilated layers content, all ' + tmp[layer].name + ' content, and put you in a run where only Assimilated layers and this layer will be active!')) return false;
 	// enter assimilation
 	player.mo.assimilating = layer;
 	// reset things
@@ -26,6 +26,7 @@ function startAssimilation(layer) {
 		tmp[player.mo.assimilated[index]].doReset('mo');
 	};
 	tmp[layer].doReset('mo');
+	return true;
 };
 
 // completes an assimilation run
@@ -50,7 +51,7 @@ const assimilationReq = {
 
 function completeAssimilation(layer) {
 	// exit assimilation
-	if (player[layer].points.lt(assimilationReq[layer]) || !assimilationReq[layer]) return;
+	if (player[layer].points.lt(assimilationReq[layer]) || !assimilationReq[layer]) return false;
 	if (!player.mo.assimilated.includes(layer)) player.mo.assimilated.push(layer);
 	setClickableState('mo', 11, false);
 	player.mo.assimilating = null;
@@ -60,6 +61,7 @@ function completeAssimilation(layer) {
 		tmp[player.mo.assimilated[index]].doReset('mo');
 	};
 	unlockLayers();
+	return true;
 };
 
 // lock non-assimilated layers
@@ -96,9 +98,9 @@ function overridePointDisplay() {
 
 // override tree node clicks
 function overrideTreeNodeClick(layer) {
-	if (getClickableState('mo', 11) && assimilationOrder.includes(layer)) {
+	if (getClickableState('mo', 11) && assimilationOrder.includes(layer) && !(player.mo.assimilated.includes(layer) && player.mo.assimilating)) {
 		if (assimilationOrder[player.mo.assimilated.length] === layer) {
-			if (player.mo.assimilating === null) return () => {startAssimilation(layer); showTab(layer)};
+			if (player.mo.assimilating === null) return () => {if (startAssimilation(layer)) showTab(layer)};
 			else return undefined;
 		} else return () => {};
 	};

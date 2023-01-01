@@ -23,7 +23,7 @@ addLayer('SC', {
 	color: '#DFDFDF',
 	resource: 'discovered softcaps',
 	row: 'side',
-	layerShown() { return player.SC.points.gt(0) },
+	layerShown() { return player.SC.points.gt(0) && !getClickableState('mo', 11) },
 	tooltip() { return player.SC.points + ' softcaps' },
 	update(diff) {
 		player.SC.softcaps = [];
