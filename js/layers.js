@@ -5930,7 +5930,9 @@ addLayer('w', {
 			content: [
 				"main-display",
 				["row", ["prestige-button", "assimilate-button"]],
-				["display-text", () => { return 'You have ' + formatWhole(player.gi.points) + ' good influence<br>You have ' + formatWhole(player.ei.points) + ' evil influence<br><br>Your best wars is ' + formatWhole(player.w.best) + '<br>You have made a total of ' + formatWhole(player.w.total) + ' wars<br><br>After unlocking War, you can always buy max on all resources below this row.' }],
+				["custom-resource-display", () => { return 'You have ' + formatWhole(player.gi.points) + ' good influence<br>You have ' + formatWhole(player.ei.points) + ' evil influence<br><br>Your best wars is ' + formatWhole(player.w.best) + '<br>You have made a total of ' + formatWhole(player.w.total) + ' wars' }],
+				"blank",
+				["display-text", () => { return 'After unlocking War, you can always buy max on all resources below this row.' }],
 				"blank",
 				["bar", "tide"],
 				"blank",
@@ -5941,7 +5943,9 @@ addLayer('w', {
 			content: [
 				"main-display",
 				["row", ["prestige-button", "assimilate-button"]],
-				["display-text", () => { return 'You have ' + formatWhole(player.gi.points) + ' good influence<br>You have ' + formatWhole(player.ei.points) + ' evil influence<br><br>Your best wars is ' + formatWhole(player.w.best) + '<br>You have made a total of ' + formatWhole(player.w.total) + ' wars<br><br>After unlocking War, you can always buy max on all resources below this row.' }],
+				["custom-resource-display", () => { return 'You have ' + formatWhole(player.gi.points) + ' good influence<br>You have ' + formatWhole(player.ei.points) + ' evil influence<br><br>Your best wars is ' + formatWhole(player.w.best) + '<br>You have made a total of ' + formatWhole(player.w.total) + ' wars' }],
+				"blank",
+				["display-text", () => { return 'After unlocking War, you can always buy max on all resources below this row.' }],
 				"blank",
 				["bar", "tide"],
 				"blank",
