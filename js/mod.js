@@ -53,6 +53,7 @@ function getDevotionBulk() {
 	if (hasMilestone('w', 15)) bulk *= 5;
 	if (hasMilestone('cl', 1) && player.s.no_speed_but_more_bulk) bulk *= 100;
 	if (hasMilestone('cl', 2)) bulk *= 2;
+	if (hasMilestone('ch', 9)) bulk *= 5;
 	return bulk;
 };
 
@@ -171,7 +172,7 @@ const displayThings = [
 ];
 
 // determines when the game "ends"
-const endPoints = new Decimal('e3.5e9');
+const endPoints = new Decimal('e1.5e10');
 
 // style for the background, can be a function
 const backgroundStyle = {};
