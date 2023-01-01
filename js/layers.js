@@ -433,6 +433,7 @@ addLayer('c', {
 		// mul
 		if (hasUpgrade('e', 32)) mult = mult.mul(upgradeEffect('e', 32));
 		if (hasUpgrade('c', 12)) mult = mult.mul(upgradeEffect('c', 12));
+		if (hasUpgrade('c', 42)) mult = mult.mul(upgradeEffect('c', 42));
 		if (hasUpgrade('q', 21)) {
 			mult = mult.mul(upgradeEffect('q', 21));
 			if (hasUpgrade('q', 22)) mult = mult.mul(upgradeEffect('q', 22));
@@ -478,10 +479,7 @@ addLayer('c', {
 					if (hasUpgrade('c', 33)) {
 						gen += 0.25;
 		}}}};
-		if (hasUpgrade('c', 41)) {
-			if (hasUpgrade('c', 42)) gen += upgradeEffect('c', 41).div(100).mul(upgradeEffect('c', 42)).toNumber();
-			else gen += upgradeEffect('c', 41).div(100).toNumber();
-		};
+		if (hasUpgrade('c', 41)) gen += upgradeEffect('c', 41).div(100).toNumber();
 		return gen;
 	},
 	automate() {
@@ -715,17 +713,12 @@ addLayer('c', {
 		},
 		42: {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Core of Recursion' },
-			description() {
-				return 'multiplies the effect of <b class="layer-c' + getdark(this, "ref") + 'Core of the Flow</b> based on your cores';
-			},
+			description: 'multiplies core gain based on your cores',
 			effect() {
-				let eff = player.c.points.add(1).log10().add(1).pow(80);
-				if (eff.gte(2e222)) eff = new Decimal(2e222);
-				return eff;
+				return player.c.points.add(1).log10().add(1).pow(80);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
-				if (this.effect().gte(2e222)) text += ' (maxed)';
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^80';
 				return text;
 			},
@@ -735,12 +728,12 @@ addLayer('c', {
 		43: {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Exponential Core' },
 			description() {
-				if (player.mo.assimilating === this.layer) return 'exponentiates core gain by ^???';
+				if (player.mo.assimilating === this.layer) return 'exponentiates core gain by ^1.25';
 				else return 'exponentiates core gain by ^1.005';
 			},
 			cost: '1e480',
 			effect() {
-				if (player.mo.assimilating === this.layer) return new Decimal(5.25);
+				if (player.mo.assimilating === this.layer) return new Decimal(1.25);
 				else return new Decimal(1.005);
 			},
 			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 42) },
@@ -795,7 +788,10 @@ addLayer('c', {
 			},
 		},
 		13: {
-			cost() { return new Decimal(1e5).pow(getBuyableAmount('c', this.id).div(2).add(2)) },
+			cost() {
+				if (player.mo.assimilating === this.layer) return new Decimal(1e5).pow(getBuyableAmount('c', this.id).div(2).add(2));
+				else return new Decimal(1e10).pow(getBuyableAmount('c', this.id).add(1));
+			},
 			title() { return '<b class="layer-c' + getdark(this, "title-buyable") + 'Empowered Cores' },
 			canAfford() { return player.c.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 99,

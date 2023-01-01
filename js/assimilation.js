@@ -32,7 +32,7 @@ function startAssimilation(layer) {
 // completes an assimilation run
 const assimilationReq = {
 	e: new Decimal('1e3555'),
-	c: new Decimal('1e550'),
+	c: new Decimal('5e555'),
 	q: new Decimal(Infinity),
 	sp: new Decimal(Infinity),
 	h: new Decimal(Infinity),
