@@ -5894,7 +5894,9 @@ addLayer('w', {
 	automate() {
 		if (hasMilestone('w', 18) && player.w.auto_influence) {
 			for (const id in layers.w.buyables) {
-				if ((typeof layers.w.buyables[id].unlocked == "function" ? layers.w.buyables[id].unlocked() : layers.w.buyables[id].unlocked) && layers.w.buyables[id].canAfford()) layers.w.buyables[id].buy();
+				if (tmp.w.buyables[id].unlocked && tmp.w.buyables[id].canAfford) {
+					layers.w.buyables[id].buy();
+				};
 			};
 		};
 	},
@@ -5906,7 +5908,10 @@ addLayer('w', {
 	},
 	doReset(resettingLayer) {
 		let keep = ['auto_influence'], save;
-			if (hasMilestone('ch', 9) && resettingLayer == 'ch') {
+			if (hasMilestone('ch', 10) && resettingLayer == 'ch') {
+				save = player.ch.points.mul(10);
+				if (save.gt(player.w.points)) save = player.w.points;
+			} else if (hasMilestone('ch', 9) && resettingLayer == 'ch') {
 				save = player.ch.points.mul(5);
 				if (save.gt(player.w.points)) save = player.w.points;
 			} else if (hasMilestone('ch', 0) && resettingLayer == 'ch') {
@@ -6137,8 +6142,13 @@ addLayer('w', {
 			title: '<h3 class="layer-w-dark">Rivalry',
 			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) },
 			buy() {
-				player.gi.points = player.gi.points.sub(this.cost());
-				player.ei.points = player.ei.points.sub(this.cost());
+				if (hasMilestone('ch', 10)) {
+					player.gi.total = player.gi.total.add(this.cost());
+					player.ei.total = player.ei.total.add(this.cost());
+				} else {
+					player.gi.points = player.gi.points.sub(this.cost());
+					player.ei.points = player.ei.points.sub(this.cost());
+				};
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
@@ -6165,7 +6175,8 @@ addLayer('w', {
 			canAfford() { return player.r.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 15,
 			buy() {
-				player.r.points = player.r.points.sub(this.cost());
+				if (hasMilestone('ch', 10)) player.r.total = player.r.total.add(this.cost());
+				else player.r.points = player.r.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
@@ -6196,7 +6207,8 @@ addLayer('w', {
 				return max;
 			},
 			buy() {
-				player.s.points = player.s.points.sub(this.cost());
+				if (hasMilestone('ch', 10)) player.s.total = player.s.total.add(this.cost());
+				else player.s.points = player.s.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
@@ -6219,8 +6231,13 @@ addLayer('w', {
 				return max;
 			},
 			buy() {
-				player.gi.points = player.gi.points.sub(this.cost());
-				player.ei.points = player.ei.points.sub(this.cost());
+				if (hasMilestone('ch', 10)) {
+					player.gi.total = player.gi.total.add(this.cost());
+					player.ei.total = player.ei.total.add(this.cost());
+				} else {
+					player.gi.points = player.gi.points.sub(this.cost());
+					player.ei.points = player.ei.points.sub(this.cost());
+				};
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
@@ -6940,6 +6957,14 @@ addLayer('ch', {
 			},
 			done() { return player.ch.points.gte(19) },
 		},
+		10: {
+			requirementDescription: '24 chaos',
+			effectDescription() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'keep wars equal to ten times your chaos on chaos resets, all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk buy 2x, and when you buy an <b class="layer-w-dark">Influence</b>, you do not spend any currency, instead you gain total amount(s) of the kind(s) of currency spent equal to its cost';
+				else return 'keep wars equal to ten times your chaos on chaos resets, all <b>Devotion</b> autobuyers can bulk buy 2x, and when you buy an <b>Influence</b>, you do not spend any currency, instead you gain total amount(s) of the kind(s) of currency spent equal to its cost';
+			},
+			done() { return player.ch.points.gte(24) },
+		},
 	},
 	challenges: {
 		11: {
@@ -6956,6 +6981,7 @@ addLayer('ch', {
 				if (challengeCompletions('ch', this.id) === 4) return 80;
 				if (challengeCompletions('ch', this.id) === 5) return 100;
 				if (challengeCompletions('ch', this.id) === 6) return 120;
+				if (challengeCompletions('ch', this.id) === 7) return 140;
 				return Infinity;
 			},
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' evil influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit },
