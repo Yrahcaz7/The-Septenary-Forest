@@ -6933,11 +6933,11 @@ addLayer('ch', {
 		7: {
 			requirementDescription: '13 chaos',
 			effect() {
-				return player.ch.points.sub(10).max(0).mul(2);
+				return player.ch.points.sub(10).max(0).mul(2.25).floor();
 			},
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'you can autobuy the seventh to ninth <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b class="layer-w-dark">Race for Knowledge</b> by 2<br>Currently: +' + format(tmp.ch.milestones[7].effect);
-				else return 'you can autobuy the seventh to ninth <b>Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b>Race for Knowledge</b> by 2<br>Currently: +' + format(tmp.ch.milestones[7].effect);
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'you can autobuy the seventh to ninth <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b class="layer-w-dark">Race for Knowledge</b> by 2.25, rounded down (currently +' + formatWhole(tmp.ch.milestones[7].effect) + ')';
+				else return 'you can autobuy the seventh to ninth <b>Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b>Race for Knowledge</b> by 2.25, rounded down: (currently +' + formatWhole(tmp.ch.milestones[7].effect) + ')';
 			},
 			done() { return player.ch.points.gte(13) },
 			toggles: [['cl', 'auto_buyable_51'], ['cl', 'auto_buyable_52'], ['cl', 'auto_buyable_53']],
