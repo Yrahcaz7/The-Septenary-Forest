@@ -6872,11 +6872,7 @@ addLayer('ch', {
 				["infobox", "story2"],
 				["infobox", "story3"],
 				["display-text", function() {
-					let storySegments = 0;
-					for (let index = 0; index < story.length; index++) {
-						storySegments += story[index].length;
-					};
-					if (storySegments > player.ch.best.toNumber()) return "<br><br>next story discovery at " + formatWhole(player.ch.best.add(1)) + " chaos";
+					if (player.ch.best.toNumber() < storyLength(Infinity)) return "<br><br>next story discovery at " + formatWhole(player.ch.best.add(1)) + " chaos";
 					else return "<br><br>all story discoveries found; wait for updates for more";
 				}],
 				"blank",
@@ -7028,12 +7024,12 @@ addLayer('ch', {
 	infoboxes: {
 		story0: {
 			title() {
-				if (player.ch.best.toNumber() >= story[0].length) return "The Endless Void";
+				if (player.ch.best.toNumber() >= storyLength(0)) return "The Endless Void";
 				else return randomStr(3) + " " + randomStr(7) + " " + randomStr(4);
 			},
 			body() {
 				let text = "";
-				for (let index = 0; index < story[0].length && index < player.ch.best.toNumber(); index++) {
+				for (let index = 0; index < storyLength(0) && index < player.ch.best.toNumber(); index++) {
 					text += story[0][index];
 				};
 				return filterStory(text);
@@ -7041,42 +7037,42 @@ addLayer('ch', {
 		},
 		story1: {
 			title() {
-				if (player.ch.best.toNumber() >= story[0].length + story[1].length) return "The World's End";
+				if (player.ch.best.toNumber() >= storyLength(1)) return "The World's End";
 				else return randomStr(3) + " " + randomStr(7) + " " + randomStr(3);
 			},
 			body() {
 				let text = "";
-				for (let index = 0; index < story[1].length && index < (player.ch.best.toNumber() - story[0].length); index++) {
+				for (let index = 0; index < story[1].length && index < (player.ch.best.toNumber() - storyLength(0)); index++) {
 					text += story[1][index];
 				};
 				return filterStory(text);
 			},
-			unlocked() { return player.ch.best.toNumber() > story[0].length},
+			unlocked() { return player.ch.best.toNumber() > storyLength(0)},
 		},
 		story2: {
 			title() {
-				if (player.ch.best.toNumber() >= story[0].length + story[1].length + story[2].length) return "Knowledge of the Old World";
+				if (player.ch.best.toNumber() >= storyLength(2)) return "Knowledge of the Old World";
 				else return randomStr(9) + " " + randomStr(2) + " " + randomStr(3) + " " + randomStr(3) + " " + randomStr(5);
 			},
 			body() {
 				let text = "";
-				for (let index = 0; index < story[2].length && index < (player.ch.best.toNumber() - (story[0].length + story[1].length)); index++) {
+				for (let index = 0; index < story[2].length && index < (player.ch.best.toNumber() - (storyLength(1))); index++) {
 					text += story[2][index];
 				};
 				return filterStory(text);
 			},
-			unlocked() { return player.ch.best.toNumber() > story[0].length + story[1].length},
+			unlocked() { return player.ch.best.toNumber() > storyLength(1)},
 		},
 		story3: {
 			title: "Coming Soon",
 			body() {
 				let text = "";
-				for (let index = 0; index < story[3].length && index < (player.ch.best.toNumber() - (story[0].length + story[1].length + story[2].length)); index++) {
+				for (let index = 0; index < story[3].length && index < (player.ch.best.toNumber() - (storyLength(2))); index++) {
 					text += story[3][index];
 				};
 				return filterStory(text);
 			},
-			unlocked() { return player.ch.best.toNumber() > story[0].length + story[1].length + story[2].length},
+			unlocked() { return player.ch.best.toNumber() > storyLength(2)},
 		},
 	},
 });

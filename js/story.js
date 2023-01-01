@@ -169,9 +169,18 @@ story[1] = story[1].map(value => value.replace(/\n\t/g, '<br><br>').trim());
 
 story[2] = story[2].map(value => value.replace(/\n\t/g, '<br>...<br>').trim());
 
+function storyLength(number) {
+	if (number < 0) return 0;
+	let length = 0;
+	for (let index = 0; index < story.length && index <= number; index++) {
+		length += story[index].length;
+	};
+	return length;
+};
+
 function filterStory(string) {
-	if (player.ch.best.toNumber() < story[0].length) string = string.replace(/[Vv]oid/g, randomStr(4));
-	if (player.ch.best.toNumber() < story[0].length + story[1].length) string = string.replace(/[Pp]itch/g, randomStr(5)).replace(/[Bb]lack/g, randomStr(5)).replace(/[Ll]ight/g, randomStr(5));
-	if (player.ch.best.toNumber() < story[0].length + story[1].length + story[2].length) string = string.replace(/[Kk]nowledge/g, randomStr(9)).replace(/[Mm]emories/g, randomStr(8));
+	if (player.ch.best.toNumber() < storyLength(0)) string = string.replace(/[Vv]oid/g, randomStr(4));
+	if (player.ch.best.toNumber() < storyLength(1)) string = string.replace(/[Pp]itch/g, randomStr(5)).replace(/[Bb]lack/g, randomStr(5)).replace(/[Ll]ight/g, randomStr(5));
+	if (player.ch.best.toNumber() < storyLength(2)) string = string.replace(/[Kk]nowledge/g, randomStr(9)).replace(/[Mm]emories/g, randomStr(8));
 	return string;
 };
