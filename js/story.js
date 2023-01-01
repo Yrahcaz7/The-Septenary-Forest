@@ -74,9 +74,9 @@ const story = [
 	Scientist: "When I get rich, I'll replace this damn broken thing."
 `, `
 	As the spacecraft hurtled through space, the scientist began organizing his luggage, sprawled all over the floor.
-	"Oh, so <b>that's</b> where I put the arthropod!"
+	"Oh, so <i>that's</i> where I put the arthropod!"
 	The scientist picked up what looked like a mass of goo and teeth, and began staring at it.
-	"What was it called again? A septendoras?"
+	"What was it called again? A septenagipoda?"
 	By the time the scientist had put everything in the spacecraft in neat piles, it had arrived at the Comittee.
 `, `
 	"Well, here goes nothing!"
@@ -90,29 +90,75 @@ const story = [
 	The scientist entered the building, and then the floor started moving up very quickly.
 	"I remember the first time I came here... throwing up my lunch was not very pleasant. Got fined for it too."
 	As the elevator stopped, part of the wall slid upwards, revealing the chamber of the Comittee.
-	Meanwhile, at the scientist's lab, an unfriendly visitor opened the door. The visitor looked completely robotic, even though there existed sufficently advanced technology to hide the fact. The visitor began searching through the scientist's samples...
+	Meanwhile, at the scientist's lab, an unfriendly visitor opened the door.
+	The visitor looked completely robotic, even though there existed sufficently advanced technology to hide the fact.
+	The visitor began searching through the scientist's samples...
 `, `
-	The visitor found what they were looking for; a sample of the essence. The visitor then placed it inside their robotic skull, and swiftly exited the lab.
+	The visitor found what they were looking for; a sample of the essence.
+	The visitor then placed it inside their robotic skull, and swiftly exited the lab.
 	The visitor didn't know, however, that some types of essence are highly reactive with each other...
 	<br><br>And suddenly everything was bathed in a pitch-black light.
 `, `
 	<br><br>Meanwhile, the scientist was presenting his findings to the Comittee, and was getting a lot of skeptical looks.
 	Comittee member: "And how, exactly, do you know that everthing is made up of this?"
-	Scientist: "I have already found evidence of seven flavors of quarks being made up of essence. Right here, I have a sample of a bottom quark."
-	Comittee member: "I know that, but what about the other four?"
+	Scientist: "I have already found evidence of four flavors of quarks being made up of essence. Right here, I have a sample of a bottom quark."
+	Comittee member: "I know that, but what about the others?"
 	Scientist: "I don't see any point in arguing about this."
 	Comittee member: "Oh really? The files say that you, LS14H, have faked a discovery before!"
-	Then suddenly, the scientist's sample broke its container, as something similar to an explosion seemed to occur.
+	Suddenly, the scientist's sample broke its container, as something similar to an explosion seemed to occur.
 `, `
 	The scientist dissapeared in an instant upon contact, and then the strange explosion shrank back down again.
 	The comittee barely had any time to wonder what just happened, as black light broke through the side of the building...
 	<br><br>And then everything was gone.
 `], [`
+	The Being remembered.
+	Remembered the times of old.
+	When the world was not just a void.
+	The world was completely different back then.
+	"Why... did everything dissapear?"
+	"Why... am I the only Being left?"
+`, `
+	The Being decided that thinking about that was useless.
+	However, the Being could use this new knowledge to create even more Essence.
+	The Being started again, with renewed determination.
+	More thoughts. More Essence. More Cores.
+	The Being started to piece together the memories.
+`, `
+	This knowledge contained information about Quarks.
+	Quarks were the smallest discovered particles; they were the building blocks of the world.
+	But the Being didn't see any Quarks in the endless void.
+	The void contained nothing that was the same as in the knowledge.
+	But then the being remembered something more...
+`, `
+	Quarks were made of Essence.
+	Essence was the root of everything, the source.
+	The Being began constructing Quarks with Essence in its mind.
+	However, the Being could not construct real Quarks.
+	It was like the world was broken.
+`, `
+	The Being did not give up, and instead went further.
+	The Being delved deep into the memories, and saw something.
+	Larger particles were constructed from quarks.
+	There were three known types: protons, neutrons, and electrons.
+	These particles were called Subatomic Particles.
+`, `
+	With all this new knowledge, the Being created many more thoughts.
+	And these thoughts, in turn, generated more essence.
+	This new essence allowed for many more cores, as well.
+	But the being reached the limit of the knowledge, and hit a wall.
+	The being needed something new; something unique to the void.
+`, `
+	The Being delved deep into its Being, reaching further than the core.
+	Searching for something, anything that would help.
+	The Being saw nothing, but did not give up.
+	The Being used all of its senses, and probed as far as it could.
+	Finally, the Being saw something new...
+`], [`
 	More story coming soon!
 `]];
 
 for (let index = 0; index < story.length; index++) {
-	story[index][0] = story[index][0].slice(2);
+	if (story[index][0].startsWith('\n\t')) story[index][0] = story[index][0].slice(2);
 };
 
 story[0][0] = "...<br>" + story[0][0];
@@ -120,3 +166,12 @@ story[0][0] = "...<br>" + story[0][0];
 story[0] = story[0].map(value => value.replace(/\n\t/g, '<br>...<br>').trim());
 
 story[1] = story[1].map(value => value.replace(/\n\t/g, '<br><br>').trim());
+
+story[2] = story[2].map(value => value.replace(/\n\t/g, '<br>...<br>').trim());
+
+function filterStory(string) {
+	if (player.ch.best.toNumber() < story[0].length) string = string.replace(/[Vv]oid/g, randomStr(4));
+	if (player.ch.best.toNumber() < story[0].length + story[1].length) string = string.replace(/[Pp]itch/g, randomStr(5)).replace(/[Bb]lack/g, randomStr(5)).replace(/[Ll]ight/g, randomStr(5));
+	if (player.ch.best.toNumber() < story[0].length + story[1].length + story[2].length) string = string.replace(/[Kk]nowledge/g, randomStr(9)).replace(/[Mm]emories/g, randomStr(8));
+	return string;
+};

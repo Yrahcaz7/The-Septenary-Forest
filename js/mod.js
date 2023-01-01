@@ -194,18 +194,16 @@ function fixOldSave(oldVersion) {
 };
 
 // glitch text
-const validChars = "!\"#$%&'()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ";
+const validChars = "!\"#$%'()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ";
 
 function randomChar() {
 	return validChars[Math.floor(Math.random() * validChars.length)];
 };
 
 function randomStr(length = 1, sameChar = false) {
-	if (sameChar) {
-		return randomChar().repeat(length);
-	};
-	if (length > 100) length = 100;
+	if (length > 1000) length = 1000;
 	if (length <= 0) return "";
+	if (sameChar) return randomChar().repeat(length);
 	let result = "";
 	for (let index = 0; index < length; index++) {
 		result += randomChar();
