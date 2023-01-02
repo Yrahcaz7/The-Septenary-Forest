@@ -4,7 +4,7 @@ Welcome to The Modding Tree!
 
 Using the Modding Tree, at its simplest level, just requires getting a copy of it onto your computer. However, if you do it the right way, it will help in many ways.
 
-Don't let the word "Github" scare you away. It's actually much easier to use than most people think, especially because most people use it the hard way. The key is Github Desktop, which lets you do everything you need to, without even touching the command line. 
+Don't let the word "Github" scare you away. It's actually much easier to use than most people think, especially because most people use it the hard way. The key is Github Desktop, which lets you do everything you need to, without even touching the command line.
 
 The benefits of using Github:
 
@@ -13,7 +13,7 @@ The benefits of using Github:
 - It lets you undo changes to your code, and to have multiple versions of it.
 - It lets you collaborate with other people, if you want to.
 
-## Getting set up with Github Desktop, Visual Studio Code, and The Modding Tree:
+## Getting set up with Github Desktop, Visual Studio Code, and The Modding Tree
 
 1. Install [Github Desktop](https://desktop.github.com) and [Visual Studio Code](https://code.visualstudio.com).
 
@@ -23,7 +23,7 @@ The benefits of using Github:
 
 4. Open Github Desktop and log in. Ignore everything else and choose "clone a repository". A "repository" is basically a "Github project", like The Modding Tree. "Cloning" is downloading a copy of the repository to your computer.
 
-5. Look for The Modding Tree in the list of repositiories (it should be the only one) and click "clone". 
+5. Look for The Modding Tree in the list of repositiories (it should be the only one) and click "clone".
 
 6. Select that you're using it for your own purposes, and click continue. It will download the files and handle everything.
 

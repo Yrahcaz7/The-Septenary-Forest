@@ -2,7 +2,7 @@
 
 Making a game in The Modding Tree mostly involves defining parameters or functions on objects. If you aren't following the [getting started guide](tutorials/getting-started.md), you should start by [setting up your basic mod info](main-mod-info.md) in [mod.js](/js/mod.js). It's important to set a mod id to ensure saving works properly.
 
-Beyond that, the main way to add content is through creating layers. You can add new layers by calling `addLayer(layername, layerdata)`. You can use the layers in [layers.js](/js/layers.js) as examples. You can also use them as references or as bases for your own layers. 
+Beyond that, the main way to add content is through creating layers. You can add new layers by calling `addLayer(layername, layerdata)`. You can use the layers in [layers.js](/js/layers.js) as examples. You can also use them as references or as bases for your own layers.
 
 You can test your mod by opening the [index.html](/index.html) file in your browser.
 
@@ -34,8 +34,7 @@ Also, things labeled with **additional** are unique to `The Primordial Tree`, an
 - [Basic layer breakdown](basic-layer-breakdown.md): Breaking down the components of a layer with minimal features.
 - [Layer features](layer-features.md): Explanations of all of the different properties that you can give a layer.
 - [Custom Tab Layouts](custom-tab-layouts.md): An optional way to give your tabs a different layout. You can even create entirely new components to use.
-- [Custom Game Layouts](trees-and-tree-customization.md): You can get rid of the tree tab, add buttons and other things to the tree,
-    or even customize the tab's layout like a layer tab.
+- [Custom Game Layouts](trees-and-tree-customization.md): You can get rid of the tree tab, add buttons and other things to the tree, or even customize the tab's layout like a layer tab.
 - [Updating TMT](tutorials/updating-tmt.md): Using Github Desktop to update your mod's version of TMT.
 - [Other Things](other.md): Other neat features that TMT has that don't merit their own page.
 
@@ -51,8 +50,7 @@ Also, things labeled with **additional** are unique to `The Primordial Tree`, an
 
 - [Challenges](challenges.md): How to create challenges for a layer.
 - [Bars](bars.md): Display some information as a progress bar, gauge, or similar. They are highly customizable, and can be horizontal and vertical as well.
-- [Subtabs and Microtabs](subtabs-and-microtabs.md): Create subtabs for your tabs, as well as "microtab" components that you can put inside the tabs.
-                        You can even use them to embed a layer inside another layer!
+- [Subtabs and Microtabs](subtabs-and-microtabs.md): Create subtabs for your tabs, as well as "microtab" components that you can put inside the tabs. You can even use them to embed a layer inside another layer!
 - [Grids](grids.md): Create a group buttons that behave the same, but have their own data. Good for map tiles, an inventory grid, and more!
 - [Infoboxes](infoboxes.md): Boxes containing text that can be shown or hidden.
 - [Trees](trees-and-tree-customization.md): Make your own trees. You can make non-layer button nodes too!

@@ -49,6 +49,8 @@ Individual upgrades can have these features:
 
 - `id`: **assigned automagically**. It's the "key" which the upgrade was stored under, for convenient access. The upgrade in the example's id is 11.
 
+- `branches`: **optional**, This is primarially useful for upgrade trees. An array of upgrade ids. A line will appear from this upgrade to all of the upgrades in the list. Alternatively, an entry in the array can be a 2-element array consisting of the upgrade id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). A third element in the array optionally specifies line width.
+
 By default, upgrades use the main prestige currency for the layer. You can include these to change them (but it needs to be a Decimal):
 
 - `currencyDisplayName`: **optional**. The name to display for the currency for the upgrade.
@@ -64,5 +66,3 @@ If you want to do something more complicated like upgrades that cost two currenc
 - `canAfford()`: **OVERRIDE**, a function determining if you are able to buy the upgrade. (If you also have a cost, it will check both the cost and this function)
 
 - `pay()`: **OVERRIDE**, a function that reduces your currencies when you buy the upgrade
-
-- `branches`: **optional**, This is primarially useful for upgrade trees. An array of upgrade ids. A line will appear from this upgrade to all of the upgrades in the list. Alternatively, an entry in the array can be a 2-element array consisting of the upgrade id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). A third element in the array optionally specifies line width.

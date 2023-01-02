@@ -6,20 +6,16 @@ Everything in [mod.js](/js/mod.js) will not be altered by updates, besides the a
 Here's a breakdown of what's in it:
 
 - `modInfo` is where most of the basic configuration for the mod is. It contains:
+
     - `name`: The name of your mod. (a string)
     - `id`: The id for your mod, a unique string that is used to determine savefile location. Be sure to set it when you start making a mod, and don't change it later because it will erase all saves.
     - `author`: The name of the author, displayed in the info tab.
     - `pointsName`: This changes what is displayed instead of "points" for the main currency. (It does not affect it in the code.)
     - `modFiles`: An array of file addresses which will be loaded for this mod. Using smaller files makes it easier to find what you're looking for.
-    
     - `discordName`, `discordLink`: If you have a Discord server or other discussion place, you can add a link to it.
-
         "discordName" is the text on the link, and "discordLink" is the url of an invite. If you're using a Discord invite, please make sure it's set to never expire.
-
     - `offlineLimit`: The maximum amount of offline time that the player can accumulate, in hours. Any extra time is lost. (a number)
-
         This is useful because most of these mods are fast-paced enough that too much offline time ruins the balance, such as the time in between updates. That is why I suggest developers disable offline time on their own savefile.
-
     - `initialStartPoints`: A Decimal for the amount of points a new player should start with.
 
 - `VERSION` is used to describe the current version of your mod. It contains:
@@ -37,7 +33,7 @@ var doNotCallTheseFunctionsEveryTick = ["doReset", "buy", "onPurchase", "blowUpE
 
 - `getStartPoints()`: A function to determine the amount of points the player starts with after a reset. (returns a Decimal value)
 
-- `canGenPoints()`: A function returning a boolean for if points should be generated. Use this if you want an upgrade to unlock generating points. 
+- `canGenPoints()`: A function returning a boolean for if points should be generated. Use this if you want an upgrade to unlock generating points.
 
 - `getPointGen()`: A function that calculates your points per second. Anything that affects your point gain should go into the calculation here.
 
@@ -45,8 +41,8 @@ var doNotCallTheseFunctionsEveryTick = ["doReset", "buy", "onPurchase", "blowUpE
 
 ```js
 function addedPlayerData() { return {
-	weather: "Yes",
-	happiness: new Decimal(72),
+    weather: "Yes",
+    happiness: new Decimal(72),
 }}
 ```
 

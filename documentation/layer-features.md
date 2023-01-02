@@ -14,15 +14,14 @@ You can make almost any value dynamic by using a function in its place, includin
 
     Standard values:
 
-        - Required:
-            - unlocked: a bool determining if this layer is unlocked or not
-            - points: a Decimal, the main currency for the layer
-
-        - Optional:
-            - total: A Decimal, tracks total amount of main prestige currency. Always tracked, but only shown if you add it here.
-            - best: A Decimal, tracks highest amount of main prestige currency. Always tracked, but only shown if you add it here.
-            - unlockOrder: used to keep track of relevant layers unlocked before this one.
-            - resetTime: A number, time since this layer was last prestiged (or reset by another layer)
+    - Required:
+        - unlocked: a bool determining if this layer is unlocked or not
+        - points: a Decimal, the main currency for the layer
+    - Optional:
+        - total: A Decimal, tracks total amount of main prestige currency. Always tracked, but only shown if you add it here.
+        - best: A Decimal, tracks highest amount of main prestige currency. Always tracked, but only shown if you add it here.
+        - unlockOrder: used to keep track of relevant layers unlocked before this one.
+        - resetTime: A number, time since this layer was last prestiged (or reset by another layer)
 
 - `color`: A color associated with this layer, used in many places. (A string in hex format with a #)
 
@@ -124,14 +123,14 @@ You can make almost any value dynamic by using a function in its place, includin
 - `prestigeButtonText()`: **sometimes required**. Use this to make the entirety of the text a Prestige button contains. Only required for custom layers, but usable by all types.
 
 - `passiveGeneration()`: **optional**, returns a regular number. You automatically generate your gain times this number every second (does nothing if absent)
-        This is good for automating Normal layers.
+    This is good for automating Normal layers.
 
 - `autoPrestige()`: **optional**, returns a boolean, if true, the layer will always automatically do a prestige if it can.
-        This is good for automating Static layers.
+    This is good for automating Static layers.
 
 Additional prestige-related features:
 
-- `onPrestigeIsAfterGain`: **very optional**. A boolean indicating whether this layer's `onPrestige()` function triggers after prestige resource gain but before resetting anything. By default is false, which makes `onPrestige()` trigger before both.
+- `onPrestigeIsAfterGain`: **optional**. A boolean indicating whether this layer's `onPrestige()` function triggers after prestige resource gain but before resetting anything. By default is false, which makes `onPrestige()` trigger before both.
 
 ## Tree/node features
 
@@ -153,14 +152,14 @@ Additional prestige-related features:
 ## Other features
 
 - `doReset(resettingLayer)`: **optional**. Is triggered when a layer on a row greater than or equal to this one does a reset. The default behavior is to reset everything on the row, but only if it was triggered by a layer in a higher row. `doReset` is always called for side layers, but for these the default behavior is to reset nothing.
-                
+
     If you want to keep things, determine what to keep based on `resettingLayer`, `milestones`, and such, then call `layerDataReset(layer, keep)`, where `layer` is this layer, and `keep` is an array of the names of things to keep. It can include things like "points", "best", "total" (for this layer's prestige currency), "upgrades",  any unique variables like "generatorPower", etc. If you want to only keep specific upgrades or something like that, save them in a separate variable, then call `layerDataReset`, and then set `player[this.layer].upgrades` to the saved upgrades.
 
-- `update(diff)`: **optional**. This function is called every game tick. Use it for any passive resource production or time-based things. `diff` is the time since the last tick. 
+- `update(diff)`: **optional**. This function is called every game tick. Use it for any passive resource production or time-based things. `diff` is the time since the last tick.
 
 - `autoUpgrade`: **optional**, a boolean value, if true, the game will attempt to buy this layer's upgrades every tick. Defaults to false.
 
-- `automate()`: **optional**. This function is called every game tick, after production. Use it to activate automation things that aren't otherwise supported. 
+- `automate()`: **optional**. This function is called every game tick, after production. Use it to activate automation things that aren't otherwise supported.
 
 - `resetsNothing`: **optional**. Returns true if this layer shouldn't trigger any resets when you prestige.
 
@@ -181,11 +180,12 @@ componentStyles: {
 
 - `leftTab`: **optional**, if true, this layer will use the left tab instead of the right tab.
 
-- `previousTab`: **optional**, a layer's id. If a layer has a previousTab, the layer will always have a back arrow and pressing the back arrow on this layer will take you to the layer with this id. 
+- `previousTab`: **optional**, a layer's id. If a layer has a previousTab, the layer will always have a back arrow and pressing the back arrow on this layer will take you to the layer with this id.
 
 - `deactivated`: **optional**, if this is true, hasUpgrade, hasChallenge, hasAchievement, and hasMilestone will return false for things in the layer, and you will be unable to buy or click things, or gain achievements/milestones on the layer. You will have to disable effects of buyables, the innate layer effect, and possibly other things yourself.
 
-## Custom Prestige type  
+## Custom Prestige type
+
 (All of these can also be used by other prestige types)
 
 - `getResetGain()`: **mostly for custom prestige type**. Returns how many points you should get if you reset now. You can call `getResetGain(this.layer, useType = "static")` or similar to calculate what your gain would be under another prestige type (provided you have all of the required features in the layer).
@@ -194,5 +194,4 @@ componentStyles: {
 
 - `canReset()`: **mostly for custom prestige type**. Return true only if you have the resources required to do a prestige here.
 
-- `prestigeNotify()`: **mostly for custom prestige types**, returns true if this layer should be subtly highlighted to indicate you
-        can prestige for a meaningful gain.
+- `prestigeNotify()`: **mostly for custom prestige types**, returns true if this layer should be subtly highlighted to indicate you can prestige for a meaningful gain.

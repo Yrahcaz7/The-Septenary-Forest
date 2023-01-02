@@ -8,7 +8,7 @@ Note: this guide is a bit different from the original.
 
 Open mod.js. This is where you define things that are for the mod in general as opposed to layer-specific. For now, `modInfo`, you can set the mod name and author name, and also the points name, which changes what the game calls your basic points (but they're still referred to as `player.points` in the code). **Be sure that you set a mod id as well**.
 
-One suggestion: When you're testing your mod, you should turn off offline progress in the in-game settings, and don't leave the game running when you aren't using it. You could unintentionally balance your game with large timewalls caused by this extra time. 
+One suggestion: When you're testing your mod, you should turn off offline progress in the in-game settings, and don't leave the game running when you aren't using it. You could unintentionally balance your game with large timewalls caused by this extra time.
 
 ## Making a layer
 

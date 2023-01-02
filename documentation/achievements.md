@@ -6,8 +6,8 @@ You can make global achievements by putting them in a side layer by making its r
 
 Useful functions for dealing with achievements and implementing their effects:
 
-- hasAchievement(layer, id): determine if the player has the Achievement.
-- achievementEffect(layer, id): Returns the current effects of the achievement, if any.
+- `hasAchievement(layer, id)`: determine if the player has the Achievement.
+- `achievementEffect(layer, id)`: Returns the current effects of the achievement, if any.
 
 Achievements should be formatted like this:
 

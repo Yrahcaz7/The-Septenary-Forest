@@ -2,7 +2,7 @@
 
 Buyables are usually things that can be bought multiple times with scaling costs. They come with optional buttons that can be used for respeccing or selling buyables, among other things.
 
-The amount of a buyable owned is a `Decimal`. 
+The amount of a buyable owned is a `Decimal`.
 
 Useful functions for dealing with buyables and implementing their effects:
 
@@ -62,6 +62,8 @@ Features:
 
 - `id`: **assigned automagically**. It's the "key" which the buyable was stored under, for convenient access. The buyable in the example's id is 11.
 
+- `branches`: **optional**, This is primarially useful for buyable trees. An array of buyable ids. A line will appear from this buyable to all of the buyables in the list. Alternatively, an entry in the array can be a 2-element array consisting of the buyable id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). A third element in the array optionally specifies line width.
+
 Sell One/Sell All:
 
 Including a `sellOne` or `sellAll` function will cause an additional button to appear beneath the buyable. They are functionally identical, but "sell one" appears above "sell all". You can also use them for other things.
@@ -71,7 +73,7 @@ Including a `sellOne` or `sellAll` function will cause an additional button to a
 - `canSellOne()`, `canSellAll()`: **optional**. booleans determining whether or not to show the buttons. If "canSellOne/All" is absent but "sellOne/All" is present, the appropriate button will always show.
 
 To add a respec button, or something similar, add the respecBuyables function to the main buyables object (not individual buyables).
-You can use these features along with it: 
+You can use these features along with it:
 
 - `respec()`: **optional**. This is called when the button is pressed (after a toggleable confirmation message).
 
@@ -80,5 +82,3 @@ You can use these features along with it:
 - `showRespec()`: **optional**. A function determining whether or not to show the button, if respecBuyables is defined. Defaults to true if absent.
 
 - `respecMessage`: **optional**. A custom confirmation message on respec, in place of the default one.
-
-- `branches`: **optional**, This is primarially useful for buyable trees. An array of buyable ids. A line will appear from this buyable to all of the buyables in the list. Alternatively, an entry in the array can be a 2-element array consisting of the buyable id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). A third element in the array optionally specifies line width.

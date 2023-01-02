@@ -14,7 +14,7 @@ CSS tip: Every component is automatically given a CSS class with the same name a
 
 - `overridePointDisplay()`: **OVERRIDE**. What this function returns overrides the point display at the top of the page. Any extra display things will still be displayed; this just replaces the point and point per second display. If it returns a [falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) value, however, it will use the default.
 
-- `extraMainDisplay()`: **optional**. What this function returns adds to the main point display of each layer. It inserts it after the amount, but before the name. For example, if you had:
+- `extraMainDisplay()`: **optional**. What this function returns adds to the main point display of each layer. It inserts it after the amount, but before the name. (Can use basic HTML.) For example, if you had:
 
     ```js
     function extraMainDisplay(layer) {
