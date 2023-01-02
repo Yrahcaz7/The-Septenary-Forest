@@ -51,3 +51,11 @@ Features:
 
 - `position`: **optional**, Determines the horizontal position of the layer in its row in a default tree. By default, it uses the id,
 and layers/nodes are sorted in alphabetical order.
+
+## Overriding functions (additional)
+
+- `overrideTooltip(layer)`: **OVERRIDE**. What this function returns overrides all tree node tooltips. You can use the layer parameter to make it only apply to certain layers. If it returns a [falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) value, however, it will use the default.
+
+- `overrideTreeNodeClick(layer)`: **OVERRIDE**. This function should return another function, which overrides what happens when you click on a tree node. If it does not return a function, it will use the default (which, if it is a layer, is going to that layer's tab).
+
+- `overridePointDisplay()`: **OVERRIDE**. What this function returns overrides the point display at the top of the page. Any extra display things will still be displayed; this just replaces the point and point per second display. If it returns a [falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) value, however, it will use the default.
