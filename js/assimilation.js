@@ -110,12 +110,18 @@ function overrideTreeNodeClick(layer) {
 function getAssimilationRewards() {
 	let text = '';
 	if (player.mo.assimilated.includes('e')) {
-		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += '<br><br><h2 class=layer-e>Essence</h2><br><br>Increases the cap of <b class=layer-e>Purer Essence</b> by 85<br>Improves the effect formulas of <b class=layer-e>Radiant Essence</b><br>Unlocks a new essence rebuyable, <b class=layer-e>Exponential Essence</b><br>Makes all previous essence upgrades always unlockable<br>Unlocks a new essence upgrade, <b class=layer-e>Essence of the Flow</b>';
-		else text += '<br><br><h2>Essence</h2><br><br>Increases the cap of <b>Purer Essence</b> by 85<br>Improves the effect formulas of <b>Radiant Essence</b><br>Unlocks a new essence rebuyable, <b>Exponential Essence</b><br>Makes all previous essence upgrades always unlockable<br>Unlocks a new essence upgrade, <b>Essence of the Flow</b>';
+		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class=layer-e>Essence</h2><br><br>';
+		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Increases the cap of <b class=layer-e>Purer Essence</b> by 85<br>Improves the effect formulas of <b class=layer-e>Radiant Essence</b><br>Unlocks a new essence rebuyable, <b class=layer-e>Exponential Essence</b><br>Makes all previous essence upgrades always unlockable<br>Unlocks a new essence upgrade, <b class=layer-e>Essence of the Flow</b>';
+		else text += 'Increases the cap of <b>Purer Essence</b> by 85<br>Improves the effect formulas of <b>Radiant Essence</b><br>Unlocks a new essence rebuyable, <b>Exponential Essence</b><br>Makes all previous essence upgrades always unlockable<br>Unlocks a new essence upgrade, <b>Essence of the Flow</b>';
 	};
 	if (player.mo.assimilated.includes('c')) {
-		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += '<br><br><h2 class=layer-c>Cores</h2><br><br>Increases the cost scaling and improves the effect formula of <b class=layer-c>Empowered Points</b><br>Increases the cap of <b class=layer-c>Empowered Essence</b> by 50<br>Unlocks a new core rebuyable, <b class=layer-c>Empowered Cores</b><br>Makes all previous core upgrades always unlockable<br>Unlocks three new core upgrades, <b class=layer-c>Core of the Flow</b>, <b class=layer-c>Core of Recursion</b>, and <b class=layer-c>Exponential Core</b>';
-		else text += '<br><br><h2>Cores</h2><br><br>Increases the cost scaling and improves the effect formula of <b>Empowered Points</b><br>Increases the cap of <b>Empowered Essence</b> by 50<br>Unlocks a new core rebuyable, <b>Empowered Cores</b><br>Makes all previous core upgrades always unlockable<br>Unlocks three new core upgrades, <b>Core of the Flow</b>, <b>Core of Recursion</b>, and <b>Exponential Core</b>';
+		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class=layer-c>Cores</h2><br><br>';
+		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Increases the cost scaling and improves the effect formula of <b class=layer-c>Empowered Points</b><br>Increases the cap of <b class=layer-c>Empowered Essence</b> by 50<br>Unlocks a new core rebuyable, <b class=layer-c>Empowered Cores</b><br>Makes all previous core upgrades always unlockable<br>Unlocks three new core upgrades, <b class=layer-c>Core of the Flow</b>, <b class=layer-c>Core of Recursion</b>, and <b class=layer-c>Exponential Core</b>';
+		else text += 'Increases the cost scaling and improves the effect formula of <b>Empowered Points</b><br>Increases the cap of <b>Empowered Essence</b> by 50<br>Unlocks a new core rebuyable, <b>Empowered Cores</b><br>Makes all previous core upgrades always unlockable<br>Unlocks three new core upgrades, <b>Core of the Flow</b>, <b>Core of Recursion</b>, and <b>Exponential Core</b>';
 	};
 	return text.replace("<br><br>", "");
+};
+
+function extraMainDisplay(layer) {
+	if (player.mo.assimilated.includes(layer)) return "<b class='layer-mo'>Assimilated</b> ";
 };

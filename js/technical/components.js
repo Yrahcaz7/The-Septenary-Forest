@@ -210,19 +210,19 @@ function loadVue() {
 	});
 
 	Vue.component('prestige-button', {
-		props: ['layer', 'data'],
+		props: ['layer'],
 		template: `<button v-if="(tmp[layer].type !== 'none')" v-bind:class="{[layer]: true, reset: true, locked: !tmp[layer].canReset, can: tmp[layer].canReset}" v-bind:style="[tmp[layer].canReset ? {'background-color': tmp[layer].color} : {}, tmp[layer].componentStyles['prestige-button']]" v-html="prestigeButtonText(layer)" v-on:click="doReset(layer)"></button>`
 	});
 
 	Vue.component('assimilate-button', {
-		props: ['layer', 'data'],
+		props: ['layer'],
 		template: `<button v-if="(canAssimilate(layer) && player.mo.assimilating === layer)" v-bind:class="{mo: true, reset: true, locked: player[layer].points.lt(assimilationReq[layer]), can: player[layer].points.gte(assimilationReq[layer])}" v-bind:style="[player[layer].points.gte(assimilationReq[layer]) ? {'margin-left': '16px', 'background-color': tmp.mo.color} : {'margin-left': '16px'}, tmp[layer].componentStyles['prestige-button']]" v-html="(player[layer].points.gte(assimilationReq[layer]) ? 'Assimilate this layer!' : 'Reach ' + format(assimilationReq[layer]) + ' ' + tmp[layer].resource + ' to fully Assimilate this layer.')" v-on:click="completeAssimilation(layer)"></button>`
 	});
 
 	// Displays the main resource for the layer
 	Vue.component('main-display', {
 		props: ['layer', 'data'],
-		template: `<div><span v-if="player[layer].points.lt('1e1000')">You have </span><h2 v-bind:style="{'color': tmp[layer].color, 'text-shadow': '0px 0px 10px' + tmp[layer].color}">{{data ? format(player[layer].points, data) : formatWhole(player[layer].points)}}</h2> {{tmp[layer].resource}}<span v-if="layers[layer].effectDescription">, <span v-html="run(layers[layer].effectDescription, layers[layer])"></span></span><br><br></div>`
+		template: `<div><span v-if="player[layer].points.lt('1e1000')">You have </span><h2 v-bind:style="{'color': tmp[layer].color, 'text-shadow': '0px 0px 10px' + tmp[layer].color}">{{data ? format(player[layer].points, data) : formatWhole(player[layer].points)}}</h2> <span v-if="typeof extraMainDisplay === 'function' && extraMainDisplay(layer)" v-html="extraMainDisplay(layer)"></span>{{tmp[layer].resource}}<span v-if="layers[layer].effectDescription">, <span v-html="run(layers[layer].effectDescription, layers[layer])"></span></span><br><br></div>`
 	});
 
 	// Displays the base resource for the layer, as well as the best and total values for the layer's currency, if tracked
@@ -290,7 +290,7 @@ function loadVue() {
 	});
 
 	Vue.component('respec-button', {
-		props: ['layer', 'data'],
+		props: ['layer'],
 		template: `
 		<div v-if="tmp[layer].buyables && tmp[layer].buyables.respec && !(tmp[layer].buyables.showRespec !== undefined && tmp[layer].buyables.showRespec == false)">
 			<div class="tooltipBox respecCheckbox">
@@ -352,7 +352,7 @@ function loadVue() {
 	})
 
 	Vue.component('master-button', {
-		props: ['layer', 'data'],
+		props: ['layer'],
 		template: `<button v-if="tmp[layer].clickables && tmp[layer].clickables.masterButtonPress && !(tmp[layer].clickables.showMasterButton !== undefined && tmp[layer].clickables.showMasterButton == false)" v-on:click="run(tmp[layer].clickables.masterButtonPress, tmp[layer].clickables)" v-bind:class="{longUpg: true, can: player[layer].unlocked, locked: !player[layer].unlocked}">{{tmp[layer].clickables.masterButtonText ? tmp[layer].clickables.masterButtonText : "Click me!"}}</button>`
 	});
 

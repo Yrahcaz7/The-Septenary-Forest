@@ -5,11 +5,15 @@ of the tree, including making non-layer nodes, change it into something other th
 This also introduces the "tree" component, which can be used in your layers as well.
 
 ## layoutInfo
+
 The most important part is layoutInfo, containing:
+
 - `startTab`: The id of the default tab to show on the right at the start.
+
 - `startNavTab`: The id of the default tab to show on the left at the start.
 
 - `showTree`: True if the tree tab should be shown at the start of the game. (The other tab will fill the whole page)
+
 - `treeLayout`: If present, overrides the tree layout and places nodes as you describe instead (explained in the next section).
 
 Additionally, if you want the main layout to not be a tree, you can edit the "tree-tab" layer at the bottom of tree.js to modify it just like a normal layer's tab. You can even switch between left tabs, using `showNavTab(layer)` to make that layer appear on the left.
@@ -19,6 +23,7 @@ Additionally, if you want the main layout to not be a tree, you can edit the "tr
 The tree component is defined as an array of arrays of names of layers or nodes to show in the tree. They work just like layers/nodes in the main tree (but branches between nodes will only work on the first node if you have duplicates.)
 
 Here is an example tree:
+
 ```js
 [["p"],
  ["left", "blank", "right", "blank"]
@@ -57,5 +62,3 @@ and layers/nodes are sorted in alphabetical order.
 - `overrideTooltip(layer)`: **OVERRIDE**. What this function returns overrides all tree node tooltips. You can use the layer parameter to make it only apply to certain layers. If it returns a [falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) value, however, it will use the default.
 
 - `overrideTreeNodeClick(layer)`: **OVERRIDE**. This function should return another function, which overrides what happens when you click on a tree node. If it does not return a function, it will use the default (which, if it is a layer, is going to that layer's tab).
-
-- `overridePointDisplay()`: **OVERRIDE**. What this function returns overrides the point display at the top of the page. Any extra display things will still be displayed; this just replaces the point and point per second display. If it returns a [falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) value, however, it will use the default.
