@@ -34,7 +34,7 @@ function hasBuyable(layer, id) {
 };
 
 function getBuyableAmount(layer, id) {
-	if (!player[layer] || !tmp[layer] || tmp[layer].deactivated) return 0;
+	if (!player[layer] || !tmp[layer] || tmp[layer].deactivated) return new Decimal(0);
 	return (player[layer].buyables[id]);
 };
 
