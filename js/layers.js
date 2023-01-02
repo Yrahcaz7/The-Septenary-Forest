@@ -790,7 +790,7 @@ addLayer('c', {
 		13: {
 			cost() {
 				if (player.mo.assimilating === this.layer) return new Decimal(1e5).pow(getBuyableAmount('c', this.id).div(2).add(2));
-				else return new Decimal(1e10).pow(getBuyableAmount('c', this.id).add(1));
+				else return new Decimal(1e20).pow(getBuyableAmount('c', this.id).add(1));
 			},
 			title() { return '<b class="layer-c' + getdark(this, "title-buyable") + 'Empowered Cores' },
 			canAfford() { return player.c.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
@@ -850,6 +850,7 @@ addLayer('q', {
 			if (hasUpgrade('q', 44)) mult = mult.mul(upgradeEffect('q', 44));
 		};
 		if (hasUpgrade('q', 45)) mult = mult.mul(upgradeEffect('q', 45));
+		if (hasUpgrade('q', 52)) mult = mult.mul(upgradeEffect('q', 52));
 		if (hasUpgrade('h', 34)) mult = mult.mul(2);
 		if (hasUpgrade('a', 41)) mult = mult.mul(upgradeEffect('a', 41));
 		if (hasUpgrade('m', 13)) mult = mult.mul(upgradeEffect('m', 13));
@@ -870,7 +871,8 @@ addLayer('q', {
 	layerShown() { return player.c.unlocked || player.q.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
-		gen = 0;
+		let gen = 0;
+		if (hasUpgrade('q', 51)) gen += 1e28;
 		if (hasMilestone('a', 8)) {
 			gen += 0.01;
 			if (hasMilestone('a', 9)) {
@@ -880,26 +882,31 @@ addLayer('q', {
 	},
 	automate() {
 		if (hasMilestone('s', 4) && player.q.auto_upgrades) {
-			buyUpgrade('q', 11);
-			if (hasUpgrade('q', 11)) buyUpgrade('q', 12);
-			if (hasUpgrade('q', 12)) buyUpgrade('q', 13);
-			if (hasUpgrade('q', 13)) buyUpgrade('q', 14);
-			if (hasUpgrade('q', 14)) buyUpgrade('q', 15);
-			if (hasUpgrade('q', 15)) buyUpgrade('q', 21);
-			if (hasUpgrade('q', 21)) buyUpgrade('q', 22);
-			if (hasUpgrade('q', 22)) buyUpgrade('q', 23);
-			if (hasUpgrade('q', 23)) buyUpgrade('q', 24);
-			if (hasUpgrade('q', 24)) buyUpgrade('q', 25);
-			if (hasUpgrade('q', 25)) buyUpgrade('q', 31);
-			if (hasUpgrade('q', 31)) buyUpgrade('q', 32);
-			if (hasUpgrade('q', 32)) buyUpgrade('q', 33);
-			if (hasUpgrade('q', 33)) buyUpgrade('q', 34);
-			if (hasUpgrade('q', 34)) buyUpgrade('q', 35);
-			if (hasMilestone('sp', 2) && hasUpgrade('q', 35)) buyUpgrade('q', 41);
-			if (hasMilestone('sp', 2) && hasUpgrade('q', 41)) buyUpgrade('q', 42);
-			if (hasMilestone('sp', 2) && hasUpgrade('q', 42)) buyUpgrade('q', 43);
-			if (hasMilestone('sp', 2) && hasUpgrade('q', 43)) buyUpgrade('q', 44);
-			if (hasMilestone('sp', 2) && hasUpgrade('q', 44)) buyUpgrade('q', 45);
+			if (tmp.q.upgrades[11].unlocked) buyUpgrade('q', 11);
+			if (tmp.q.upgrades[12].unlocked) buyUpgrade('q', 12);
+			if (tmp.q.upgrades[13].unlocked) buyUpgrade('q', 13);
+			if (tmp.q.upgrades[14].unlocked) buyUpgrade('q', 14);
+			if (tmp.q.upgrades[15].unlocked) buyUpgrade('q', 15);
+			if (tmp.q.upgrades[21].unlocked) buyUpgrade('q', 21);
+			if (tmp.q.upgrades[22].unlocked) buyUpgrade('q', 22);
+			if (tmp.q.upgrades[23].unlocked) buyUpgrade('q', 23);
+			if (tmp.q.upgrades[24].unlocked) buyUpgrade('q', 24);
+			if (tmp.q.upgrades[25].unlocked) buyUpgrade('q', 25);
+			if (tmp.q.upgrades[31].unlocked) buyUpgrade('q', 31);
+			if (tmp.q.upgrades[32].unlocked) buyUpgrade('q', 32);
+			if (tmp.q.upgrades[33].unlocked) buyUpgrade('q', 33);
+			if (tmp.q.upgrades[34].unlocked) buyUpgrade('q', 34);
+			if (tmp.q.upgrades[35].unlocked) buyUpgrade('q', 35);
+			if (tmp.q.upgrades[41].unlocked) buyUpgrade('q', 41);
+			if (tmp.q.upgrades[42].unlocked) buyUpgrade('q', 42);
+			if (tmp.q.upgrades[43].unlocked) buyUpgrade('q', 43);
+			if (tmp.q.upgrades[44].unlocked) buyUpgrade('q', 44);
+			if (tmp.q.upgrades[45].unlocked) buyUpgrade('q', 45);
+			if (tmp.q.upgrades[51].unlocked) buyUpgrade('q', 51);
+			if (tmp.q.upgrades[52].unlocked) buyUpgrade('q', 52);
+			if (tmp.q.upgrades[53].unlocked) buyUpgrade('q', 53);
+			if (tmp.q.upgrades[54].unlocked) buyUpgrade('q', 54);
+			if (tmp.q.upgrades[55].unlocked) buyUpgrade('q', 55);
 		};
 	},
 	doReset(resettingLayer) {
@@ -951,13 +958,11 @@ addLayer('q', {
 	},
 	upgrades: {
 		11: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'The Point of Quarks';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'The Point of Quarks' },
 			description: 'multiplies quark gain based on your points',
 			cost: 1,
 			effect() {
-			   return player.points.add(1).pow(0.01);
+				return player.points.add(1).pow(0.01);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
@@ -966,13 +971,11 @@ addLayer('q', {
 			},
 		},
 		12: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'Quark Power';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quark Power' },
 			description: 'multiplies point gain based on your quarks',
 			cost: 2,
 			effect() {
-			   return player.q.points.add(1).pow(0.09);
+				return player.q.points.add(1).pow(0.09);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
@@ -982,15 +985,11 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 11) },
 		},
 		13: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'Super Quarks';
-			},
-			description() {
-				return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Quark Power</b> based on your points';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Super Quarks' },
+			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Quark Power</b> based on your points' },
 			cost: 25,
 			effect() {
-			   return player.points.add(1).pow(0.0025);
+				return player.points.add(1).pow(0.0025);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
@@ -1000,15 +999,11 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 12) },
 		},
 		14: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'Essence of Quarks';
-			},
-			description() {
-				return '<b class="layer-q' + getdark(this, "ref") + 'Quark Power</b> also affects essence gain at a reduced rate (<b class="layer-q' + getdark(this, "ref") + 'Super Quarks</b> does not affect this)';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Essence of Quarks' },
+			description() { return '<b class="layer-q' + getdark(this, "ref") + 'Quark Power</b> also affects essence gain at a reduced rate (<b class="layer-q' + getdark(this, "ref") + 'Super Quarks</b> does not affect this)' },
 			cost: 100,
 			effect() {
-			   return player.q.points.add(1).pow(0.2);
+				return player.q.points.add(1).pow(0.2);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
@@ -1018,15 +1013,11 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 13) },
 		},
 		15: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'Quark Fusion';
-			},
-			description() {
-				return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Essence of Quarks</b> based on your cores';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quark Fusion' },
+			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Essence of Quarks</b> based on your cores' },
 			cost: 750,
 			effect() {
-			   return player.c.points.add(1).pow(0.02);
+				return player.c.points.add(1).pow(0.02);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
@@ -1036,13 +1027,11 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 14) },
 		},
 		21: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'Quirky Quarks';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quirky Quarks' },
 			description: 'multiplies core gain and quark gain based on your quarks',
 			cost: 2500,
 			effect() {
-			   return player.q.points.add(1).pow(0.05);
+				return player.q.points.add(1).pow(0.05);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
@@ -1052,15 +1041,11 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 15) },
 		},
 		22: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'Very Quirky';
-			},
-			description() {
-				return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Quirky Quarks</b> based on your points';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Very Quirky' },
+			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Quirky Quarks</b> based on your points' },
 			cost: 7500,
 			effect() {
-			   return player.points.add(1).pow(0.02);
+				return player.points.add(1).pow(0.02);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
@@ -1070,15 +1055,11 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 21) },
 		},
 		23: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'Quark Extreme';
-			},
-			description() {
-				return '<b class="layer-q' + getdark(this, "ref") + 'Quark Power</b> also affects quark gain at a reduced rate (<b class="layer-q' + getdark(this, "ref") + 'Super Quarks</b> does not affect this)';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quark Extreme' },
+			description() { return '<b class="layer-q' + getdark(this, "ref") + 'Quark Power</b> also affects quark gain at a reduced rate (<b class="layer-q' + getdark(this, "ref") + 'Super Quarks</b> does not affect this)' },
 			cost: 25000,
 			effect() {
-			   return player.q.points.add(1).pow(0.1);
+				return player.q.points.add(1).pow(0.1);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
@@ -1088,15 +1069,11 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 22) },
 		},
 		24: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'Recurring Quarks';
-			},
-			description() {
-				return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Quark Extreme</b> based on your quarks';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Recurring Quarks' },
+			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Quark Extreme</b> based on your quarks' },
 			cost: 100000,
 			effect() {
-			   return player.q.points.add(1).pow(0.2);
+				return player.q.points.add(1).pow(0.2);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
@@ -1106,15 +1083,11 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 23) },
 		},
 		25: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'Recurring More';
-			},
-			description() {
-				return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Recurring Quarks</b> based on your quarks';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Recurring More' },
+			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Recurring Quarks</b> based on your quarks' },
 			cost: 1500000,
 			effect() {
-			   return player.q.points.add(1).pow(0.05);
+				return player.q.points.add(1).pow(0.05);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
@@ -1124,15 +1097,11 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 24) },
 		},
 		31: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'Infinite Recur';
-			},
-			description() {
-				return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Recurring More</b> based on your quarks';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Infinite Recur' },
+			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Recurring More</b> based on your quarks' },
 			cost: 50000000,
 			effect() {
-			   return player.q.points.add(1).pow(0.01);
+				return player.q.points.add(1).pow(0.01);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
@@ -1142,13 +1111,11 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 25) },
 		},
 		32: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'Compact Quarks';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Compact Quarks' },
 			description: 'multiplies essence gain based on your quarks',
 			cost: 1e9,
 			effect() {
-			   return player.q.points.add(1).pow(0.15);
+				return player.q.points.add(1).pow(0.15);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
@@ -1158,13 +1125,11 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 31) },
 		},
 		33: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'Quark Fission';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quark Fission' },
 			description: 'multiplies core gain based on your quarks',
 			cost: 1e10,
 			effect() {
-			   return player.q.points.add(1).pow(0.075);
+				return player.q.points.add(1).pow(0.075);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
@@ -1174,13 +1139,11 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 32) },
 		},
 		34: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'The Quark Count';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'The Quark Count' },
 			description: 'multiplies point gain based on your quarks',
 			cost: 2.5e11,
 			effect() {
-			   return player.q.points.add(1).pow(0.01);
+				return player.q.points.add(1).pow(0.01);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
@@ -1190,15 +1153,11 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 33) },
 		},
 		35: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'Quark Counting';
-			},
-			description() {
-				return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'The Quark Count</b> based on your quarks';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quark Counting' },
+			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'The Quark Count</b> based on your quarks' },
 			cost: 1e13,
 			effect() {
-			   return player.q.points.add(1).pow(0.015);
+				return player.q.points.add(1).pow(0.015);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
@@ -1208,88 +1167,125 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 34) },
 		},
 		41: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'Ticking Quarks';
-			},
-			description() {
-				return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Quark Counting</b> based on your quarks';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Ticking Quarks' },
+			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Quark Counting</b> based on your quarks' },
 			cost: 1e14,
 			effect() {
-			   return player.q.points.add(1).pow(0.005);
+				return player.q.points.add(1).pow(0.005);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.005';
 				return text;
 			},
-			unlocked() { return hasMilestone('sp', 2) && hasUpgrade('q', 35) },
+			unlocked() { return (hasMilestone('sp', 2) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 35) },
 		},
 		42: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'Subatomic Quarks';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Subatomic Quarks' },
 			description: 'multiplies quark gain based on your subatomic particles',
 			cost: 1e16,
 			effect() {
-			   return player.sp.points.add(1).pow(0.5);
+				if (player.mo.assimilating === this.layer) return new Decimal(1);
+				return player.sp.points.add(1).pow(0.5);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.5';
 				return text;
 			},
-			unlocked() { return hasMilestone('sp', 2) && hasUpgrade('q', 41) },
+			unlocked() { return (hasMilestone('sp', 2) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 41) },
 		},
 		43: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'Quirky Particles';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quirky Particles' },
 			description: 'multiplies subatomic particle gain based on your quarks',
 			cost: 1e18,
 			effect() {
-			   return player.q.points.add(1).pow(0.01);
+				return player.q.points.add(1).pow(0.01);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
 				return text;
 			},
-			unlocked() { return hasMilestone('sp', 2) && hasUpgrade('q', 42) },
+			unlocked() { return (hasMilestone('sp', 2) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 42) },
 		},
 		44: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'Particle Quarks';
-			},
-			description() {
-				return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Subatomic Quarks</b> based on your quarks';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Particle Quarks' },
+			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Subatomic Quarks</b> based on your quarks' },
 			cost: 1e20,
 			effect() {
-			   return player.q.points.add(1).pow(0.005);
+				return player.q.points.add(1).pow(0.005);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.005';
 				return text;
 			},
-			unlocked() { return hasMilestone('sp', 2) && hasUpgrade('q', 43) },
+			unlocked() { return (hasMilestone('sp', 2) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 43) },
 		},
 		45: {
-			title() {
-				return '<b class="layer-q' + getdark(this, "title") + 'The Ultra Quark';
-			},
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'The Ultra Quark' },
 			description: 'multiplies quark gain based on your quarks',
 			cost: 1e22,
 			effect() {
-			   return player.q.points.add(1).pow(0.125);
+				return player.q.points.add(1).pow(0.125);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.125';
 				return text;
 			},
-			unlocked() { return hasMilestone('sp', 2) && hasUpgrade('q', 44) },
+			unlocked() { return (hasMilestone('sp', 2) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 44) },
+		},
+		51: {
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quark of the Flow' },
+			description: 'gain +1e30% of your quark gain per second',
+			cost: '1e825',
+			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 45) },
+		},
+		52: {
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Mystery Quark' },
+			description() { return 'multiplies quark gain based on your ' + randomStr(9) },
+			cost: '1e1050',
+			effect() {
+				if (hasUpgrade('q', 54)) return player.points.add(1).log10().mul((Math.sin(new Date().getTime() / 2000) + 1) * 10).add(1).pow(12.5);
+				else if (hasUpgrade('q', 53)) return player.points.add(1).log10().mul((Math.sin(new Date().getTime() / 1000) + 1) * 10).add(1).pow(5);
+				else return player.points.add(1).log10().mul(Math.sin(new Date().getTime() / 2000) + 1).add(1).pow(5);
+			},
+			effectDisplay() {
+				return format(this.effect()) + 'x';
+			},
+			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 51) },
+		},
+		53: {
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Valued Mystery' },
+			description() { return 'multiplies ' + randomStr(9) + ' value by 10 and frequency by 2' },
+			cost: '1e1148',
+			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 52) },
+		},
+		54: {
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Bigger Mystery' },
+			description() { return 'multiplies ' + randomStr(9) + ' exponent by 2.5 and frequency by 0.5' },
+			cost: '1e1175',
+			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 53) },
+		},
+		55: {
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'What\'s the Point?' },
+			description() { return 'multiplies point gain based on your ' + randomStr(9) },
+			cost: '1e1295',
+			effect() {
+				return player.points.add(1).log10().mul((Math.sin(new Date().getTime() / 2000) + 1) * 10).add(1).pow(21);
+			},
+			effectDisplay() {
+				return format(this.effect()) + 'x';
+			},
+			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 54) },
+		},
+		61: {
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Purge the Mystery' },
+			description() { return 'unlocks the <b class="layer-q' + getdark(this, "ref") + 'Decipherer</b> (not implemented yet)' },
+			cost: 'e8.333e10',
+			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 55) },
 		},
 	},
 });
@@ -1653,7 +1649,7 @@ addLayer('h', {
 			},
 			cost: 1,
 			effect() {
-			   return player.h.points.add(1).pow(0.005);
+				return player.h.points.add(1).pow(0.005);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
@@ -2496,14 +2492,14 @@ addLayer('a', {
 		14: {
 			requirementDescription: '10,000 atoms and 1e600 prayers',
 			effectDescription: 'atoms reset nothing',
-			done() { return player.a.points.gte(10000) && player.p.points.gte("1e600") },
-			unlocked() { return hasMilestone('a', 13) && player.r.points.gt(0) }
+			done() { return player.a.points.gte(10000) && player.p.points.gte('1e600') },
+			unlocked() { return hasMilestone('a', 13) && player.r.unlocked }
 		},
 		15: {
 			requirementDescription: '18,000 atoms and 40 sanctums',
 			effectDescription: 'perform atom resets automatically',
 			done() { return player.a.points.gte(18000) && player.s.points.gte(40) && hasMilestone('a', 14) },
-			unlocked() { return hasMilestone('a', 14) && player.r.points.gt(0) }
+			unlocked() { return hasMilestone('a', 14) && player.r.unlocked }
 		},
 	},
 	upgrades: {
@@ -2976,7 +2972,7 @@ addLayer('p', {
 			player.p.divinity = player.p.divinity.add(tmp.p.effect.mul(diff));
 		};
 		if (hasMilestone('s', 8)) {
-			gen = 0.002;
+			let gen = 0.002;
 			if (hasMilestone('s', 16)) gen = gen + 0.023;
 			if (hasUpgrade('p', 22)) {
 				let mult = new Decimal(1);
@@ -7116,7 +7112,7 @@ addLayer('mo', {
 				"prestige-button",
 				"resource-display",
 				"blank",
-				["display-text", () => { return 'Multicellular organism resets do not reset anything.' }],
+				["display-text", 'Multicellular organism resets do not reset anything.' ],
 				"blank",
 				"clickables",
 			],
@@ -7142,13 +7138,16 @@ addLayer('mo', {
 				else if (getClickableState('mo', 11)) return '<br>You are in an Assimilation Search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click to exit this search.';
 				else return '<br>Begin an Assimilation search.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
 			},
-			req() { return [1, 2, Infinity][player.mo.assimilated.length] },
+			req() { return [1, 2, 3, Infinity][player.mo.assimilated.length] },
 			canClick() { return getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req) },
 			onClick() {
 				if (player.mo.assimilating !== null) {
-					if (!confirm('Are you sure you want to exit this Assimilation run? This will reset all ' + tmp[player.mo.assimilating].name + ' content, and put you back into a normal run.')) return;
+					if (!confirm('Are you sure you want to exit this Assimilation run? This will reset all Assimilated layers content, all ' + tmp[player.mo.assimilating].name + ' content, and put you back into a normal run.')) return;
 					setClickableState('mo', 11, false);
 					player.points = new Decimal(0);
+					for (let index = 0; index < player.mo.assimilated.length; index++) {
+						tmp[player.mo.assimilated[index]].doReset('mo');
+					};
 					tmp[player.mo.assimilating].doReset('mo');
 					player.mo.assimilating = null;
 					unlockLayers();
