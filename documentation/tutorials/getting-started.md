@@ -15,7 +15,7 @@ The benefits of using Github:
 
 ## Getting set up with Github Desktop, Visual Studio Code, and The Modding Tree:
 
-1. Install [Github Desktop](https://desktop.github.com/) and [Visual Studio Code](https://code.visualstudio.com/).
+1. Install [Github Desktop](https://desktop.github.com) and [Visual Studio Code](https://code.visualstudio.com).
 
 2. Make a Github account. You can handle this on your own.
 
@@ -33,7 +33,7 @@ The benefits of using Github:
 
 2. To edit your project, click "open in VSCode" in Github Desktop.
 
-3. Open [mod.js](/js/mod.js) in VSCode, and look at the top part where it has a "modInfo" object. Fill in your mod's name to whatever you want, and change the id as well. (It can be any string value, and it's used to determine where the savefile is. Make it something that's probably unique, and don't change it again later or else it'll effectively wipe existing saves)
+3. Open [mod.js](/js/mod.js) in VSCode, and look at the top part where it has a `modInfo` object. Fill in your mod's name to whatever you want, and change the id as well. (It can be any string value, and it's used to determine where the savefile is. Make it something that's probably unique, and don't change it again later or else it'll effectively wipe existing saves)
 
 4. Save [mod.js](/js/mod.js), and then reload [index.html](/index.html) in your browser. The title on the tab, as well as on the info page, will now be updated! **You can reload the page every time you change the code to test it quickly and easily.**
 
