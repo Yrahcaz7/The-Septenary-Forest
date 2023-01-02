@@ -30,11 +30,11 @@ microtabs: {
         second: {
             content: [tab format things],
             *subtab features*
-        }
+        },
     },
     otherStuff: {
         // There could be another set of microtabs here
-    }
+    },
 }
 ```
 
@@ -42,18 +42,18 @@ Normal subtabs and microtab subtabs both use the same features:
 
 # Features:
 
-- content: The tab layout code for the subtab, in [the tab layout format](custom-tab-layouts.md).
+- `content`: The tab layout code for the subtab, in [the tab layout format](custom-tab-layouts.md).
 
-- style: **optional**. Applies CSS to the whole subtab when switched to, in the form of an "CSS Object", where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
+- `style`: **optional**. Applies CSS to the whole subtab when switched to, in the form of an "CSS Object", where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
 
-- buttonStyle: **optional**. A CSS object, which affects the appearance of the button for that subtab.
+- `buttonStyle`: **optional**. A CSS object, which affects the appearance of the button for that subtab.
 
-- unlocked(): **optional**. a function to determine if the button for this subtab should be visible. By default, a subtab is always unlocked. You can't use the "this" keyword in this function.
+- `unlocked()`: **optional**. a function to determine if the button for this subtab should be visible. By default, a subtab is always unlocked. You can't use the "this" keyword in this function.
 
-- shouldNotify()/prestigeNotify(): **optional**, if true, the tab button will be highlighted to notify the player that there is something there.
+- `shouldNotify()`/`prestigeNotify()`: **optional**, if true, the tab button will be highlighted to notify the player that there is something there.
 
-- glowColor: **optional**, specifies the color that the subtab glows. If this subtab is causing the main layer to node glow
+- `glowColor`: **optional**, specifies the color that the subtab glows. If this subtab is causing the main layer to node glow
     (and it would't otherwise) the node also glows this color. Is NOT overridden by embedding a layer.
 
-- embedLayer: **SIGNIFICANT**, the id of another layer. If you have this, it will override "content", "style" and "shouldNotify",
+- `embedLayer`: **SIGNIFICANT**, the id of another layer. If you have this, it will override "content", "style" and "shouldNotify",
                 instead displaying the entire layer in the subtab.
