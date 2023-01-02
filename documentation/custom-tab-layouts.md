@@ -31,9 +31,9 @@ These are the existing components, but you can create more in [components.js](/j
 
 - `h-line`, `v-line`: Display a horizontal or vertical divider line, respectively.
 
-- `raw-html`: Displays some basic HTML, can also be a function.
+- `raw-html`: Displays some basic HTML, can also be a function. Functionally the same as `display-text`.
 
-- `blank`: Adds empty space. The default dimensions are 8px x 17px. The argument changes the dimensions. If it's a single value (e.g. `"20px"`), that determines the height. If you have a pair of arguments, the first is width and the second is height.
+- `blank`: Adds empty space. The default dimensions are 8px by 17px. The argument changes the dimensions. If it's a single value (e.g. `"20px"`), that determines the height. If you have a pair of arguments, the first is width and the second is height.
 
 - `row`: Display a list of components horizontally. The argument is an array of components in the tab layout format.
 
@@ -49,7 +49,7 @@ These are the existing components, but you can create more in [components.js](/j
     (Works with strings, numbers, and Decimals!)
 
 - `slider`: Lets the user input a value with a slider. The argument a 3-element array: `[name, min, max]`.
-    The name is the name of the variable in `player[layer]` that the input  is for, and min and max are the limits of the slider.
+    The name is the name of the variable in `player[layer]` that the input is for, and min and max are the limits of the slider.
     (Does not work for Decimal values)
 
 - `drop-down`: Lets the user input a value with a dropdown menu. The argument a 2-element array: `[name, options]`.

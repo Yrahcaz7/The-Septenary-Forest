@@ -2404,25 +2404,21 @@ addLayer('a', {
 				"blank",
 				["display-text",
 					function() {
-						let text = 'When you buy one of these upgrades, you cannot buy<br>any upgrades that are not on its path. When you<br>do a row 4 reset, all atom upgrades will be reset.';
-						if (hasMilestone('a', 10)) text += '<br><br>From the effect of the <b class="layer-a' + getdark(this, "ref", true, true) + '11th atom milestone</b>:<br>you can buy all atom upgrades.';
-						if (hasMilestone('a', 12)) text += '<br><br>From the effect of the <b class="layer-a' + getdark(this, "ref", true, true) + '13th atom milestone:</b><br>row 4 resets do not reset atom upgrades.';
-						return text;
+						if (hasMilestone('a', 10) && hasMilestone('a', 12)) return 'All limitations have been removed.';
+						else if (hasMilestone('a', 10)) return 'When you do a row 4 reset, all atom upgrades will be reset.';
+						else if (hasMilestone('a', 12)) return 'When you buy one of these upgrades, you cannot buy<br>any upgrades that are not on its path.';
+						else return 'When you buy one of these upgrades, you cannot buy<br>any upgrades that are not on its path. When you<br>do a row 4 reset, all atom upgrades will be reset.';
 					}],
 				"blank",
-				["upgrades", [1]],
-				"blank",
-				["upgrades", [2]],
-				"blank",
-				["upgrades", [3]],
-				"blank",
-				["upgrades", [4]],
-				"blank",
-				["upgrades", [5]],
-				"blank",
-				["upgrades", [6]],
-				"blank",
-				["upgrades", [7]],
+				["upgrade-tree", [
+					[11],
+					[21, 22],
+					[31, 32, 33],
+					[41, 42],
+					[51],
+					[61, 62],
+					[71, 72, 73],
+				]],
 			],
 		},
 	},
