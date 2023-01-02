@@ -145,7 +145,7 @@ function getPointGen(forced = false) {
 	if (hasBuyable('c', 11)) gain = gain.mul(buyableEffect('c', 11));
 	if (hasBuyable('sp', 21)) gain = gain.mul(buyableEffect('sp', 21)[0]);
 	if (hasBuyable('sp', 12)) gain = gain.mul(buyableEffect('sp', 12)[1]);
-	if (player.p.divinity.gt(0) && !tmp.p.deactivated) gain = gain.mul(player.p.divinity.add(1).pow(0.1));
+	if (tmp.p.unlocked && !tmp.p.deactivated) gain = gain.mul(player.p.divinity.add(1).pow(0.1));
 	if (challengeCompletions('r', 11) >= 2) gain = gain.mul(tmp.r.effect[2]);
 	if (hasUpgrade('ds', 21) && hasUpgrade('ds', 24)) gain = gain.mul(player.A.points.mul(0.2));
 	else gain = gain.mul(player.A.points.mul(0.1).add(1));

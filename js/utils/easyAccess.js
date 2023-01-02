@@ -1,56 +1,70 @@
 function hasUpgrade(layer, id) {
-	return ((player[layer].upgrades.includes(+id) || player[layer].upgrades.includes("" + id)) && !tmp[layer].deactivated);
+	if (!player[layer] || !tmp[layer] || tmp[layer].deactivated) return false;
+	return (player[layer].upgrades.includes(+id) || player[layer].upgrades.includes("" + id));
 };
 
 function hasMilestone(layer, id) {
-	return ((player[layer].milestones.includes(+id) || player[layer].milestones.includes("" + id)) && !tmp[layer].deactivated);
+	if (!player[layer] || !tmp[layer] || tmp[layer].deactivated) return false;
+	return (player[layer].milestones.includes(+id) || player[layer].milestones.includes("" + id));
 };
 
 function hasAchievement(layer, id) {
-	return ((player[layer].achievements.includes(+id) || player[layer].achievements.includes("" + id)) && !tmp[layer].deactivated);
+	if (!player[layer] || !tmp[layer] || tmp[layer].deactivated) return false;
+	return (player[layer].achievements.includes(+id) || player[layer].achievements.includes("" + id));
 };
 
 function hasChallenge(layer, id) {
-	return ((player[layer].challenges[id]) && !tmp[layer].deactivated);
+	if (!player[layer] || !tmp[layer] || tmp[layer].deactivated) return false;
+	return (player[layer].challenges[id]);
 };
 
 function maxedChallenge(layer, id) {
-	return ((player[layer].challenges[id] >= tmp[layer].challenges[id].completionLimit) && !tmp[layer].deactivated);
+	if (!player[layer] || !tmp[layer] || tmp[layer].deactivated) return false;
+	return (player[layer].challenges[id] >= tmp[layer].challenges[id].completionLimit);
 };
 
 function challengeCompletions(layer, id) {
-	return (tmp[layer].deactivated ? 0 : player[layer].challenges[id]);
+	if (!player[layer] || !tmp[layer] || tmp[layer].deactivated) return 0;
+	return (player[layer].challenges[id]);
 };
 
 function hasBuyable(layer, id) {
-	return ((new Decimal(player[layer].buyables[id]).gt(0)) && !tmp[layer].deactivated);
+	if (!player[layer] || !player[layer].buyables[id] || !tmp[layer] || tmp[layer].deactivated) return false;
+	return (player[layer].buyables[id].gt(0));
 };
 
 function getBuyableAmount(layer, id) {
+	if (!player[layer] || !tmp[layer] || tmp[layer].deactivated) return 0;
 	return (player[layer].buyables[id]);
 };
 
 function setBuyableAmount(layer, id, amt) {
+	if (!player[layer] || !tmp[layer] || tmp[layer].deactivated) return;
 	player[layer].buyables[id] = amt;
 };
 
 function addBuyables(layer, id, amt) {
+	if (!player[layer] || !player[layer].buyables[id] || !tmp[layer] || tmp[layer].deactivated) return;
 	player[layer].buyables[id] = player[layer].buyables[id].add(amt);
 };
 
 function getClickableState(layer, id) {
+	if (!player[layer] || !tmp[layer] || tmp[layer].deactivated) return undefined;
 	return (player[layer].clickables[id]);
 };
 
 function setClickableState(layer, id, state) {
+	if (!player[layer] || !tmp[layer] || tmp[layer].deactivated) return;
 	player[layer].clickables[id] = state;
 };
 
 function getGridData(layer, id) {
+	if (!player[layer] || !tmp[layer] || tmp[layer].deactivated) return undefined;
 	return (player[layer].grid[id]);
 };
 
 function setGridData(layer, id, data) {
+	if (!player[layer] || !tmp[layer] || tmp[layer].deactivated) return;
 	player[layer].grid[id] = data;
 };
 
