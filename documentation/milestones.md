@@ -43,4 +43,4 @@ Disable milestone popups by adding `milestonePopups: false` to the layer.
 
 Additional features:
 
-- `color`: **optional**. Overrides the default color of that milestone.
+- `color`: **optional**. Overrides the default color of the milestone.
