@@ -1301,7 +1301,9 @@ addLayer('q', {
 				else return getGlitch().pow(5);
 			},
 			effectDisplay() {
-				return format(this.effect()) + 'x';
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += '<br>formula: ???';
+				return text;
 			},
 			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 51) },
 		},
@@ -1325,7 +1327,9 @@ addLayer('q', {
 				return getGlitch().pow(21);
 			},
 			effectDisplay() {
-				return format(this.effect()) + 'x';
+				let text = format(this.effect()) + 'x';
+				if (player.nerdMode) text += '<br>formula: ???';
+				return text;
 			},
 			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 54) },
 		},
@@ -1336,9 +1340,9 @@ addLayer('q', {
 			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 55) },
 		},
 		62: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Optimal Placement' },
-			description() { return 'increases the ' + randomStr(9) + ' rounding element by 2.5, and improves the <b class="layer-q' + getdark(this, "ref") + 'Sample Quarks</b> formula' },
-			cost: 'e8.334e10',
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Optimizing' },
+			description() { return 'increases the ' + randomStr(9) + ' rounding element by 2.5, and improves the <b class="layer-q' + getdark(this, "ref") + 'Sample Quarks</b> effect formula' },
+			cost: 'e8.333e10',
 			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 61) },
 		},
 	},
@@ -1407,11 +1411,11 @@ addLayer('q', {
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
-				return new Decimal(1.25).pow(getBuyableAmount(this.layer, this.id)).add(getBuyableAmount(this.layer, this.id).pow(2));
+				return new Decimal(1.25).pow(getBuyableAmount(this.layer, this.id)).add(getBuyableAmount(this.layer, this.id).pow(2.15));
 			},
 			display() {
 				let text = '';
-				if (player.nerdMode) text += '<br>formula: (1.25^x)+(x^2)';
+				if (player.nerdMode) text += '<br>formula: (1.25^x)+(x^2.15)';
 				return 'multiplies insight gain based on the amount of this upgrade bought.<br>Currently: ' + formatSmall(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' insight<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + this.purchaseLimit;
 			},
 			unlocked() { return hasMilestone('ch', 11) },
@@ -7255,6 +7259,7 @@ addLayer('mo', {
 				["display-text", 'Multicellular organism resets do not reset anything.'],
 				"blank",
 				"clickables",
+				"blank",
 			],
 		},
 		"Rewards": {
@@ -7267,6 +7272,7 @@ addLayer('mo', {
 					if (player.mo.assimilated.length === 0) return 'Assimilation rewards will be shown here.';
 					return getAssimilationRewards();
 				}],
+				"blank",
 			],
 		},
 	},
