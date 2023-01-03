@@ -941,7 +941,9 @@ addLayer('q', {
 			// update deciphered rate
 			if (diff > 0) player.q.decipher = player.q.decipher.mul(0.001 ** diff).add(gain.mul(diff));
 			// calculate insight
-			player.q.insight = player.q.decipher.mul('1e1000').add(1).pow(0.1).floor().sub(1);
+			let mul = new Decimal(1);
+			if (hasBuyable('q', 21)) mul = mul.mul(buyableEffect('q', 21));
+			player.q.insight = player.q.decipher.mul('1e1000').add(1).pow(0.1).sub(1).mul(mul).floor();
 		} else {
 			player.q.decipher = new Decimal(0);
 			player.q.insight = new Decimal(0);
@@ -968,6 +970,7 @@ addLayer('q', {
 					["display-text", 'Your ' + randomStr(9) + ' is currently <h2 class="layer-q">' + formatSmall(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + '</h2> insight<br><br>Deciphered rate decays over time with a decay factor of 0.001'],
 					"blank",
 					"buyables",
+					"blank",
 				];
 				return [
 					"main-display",
@@ -1292,9 +1295,8 @@ addLayer('q', {
 			description() { return 'multiplies quark gain based on your ' + randomStr(9) },
 			cost: '1e1050',
 			effect() {
-				if (hasUpgrade('q', 54)) return player.points.add(1).log10().mul((Math.sin(new Date().getTime() / 2000) + 1) * 10).add(1).pow(12.5);
-				else if (hasUpgrade('q', 53)) return player.points.add(1).log10().mul((Math.sin(new Date().getTime() / 1000) + 1) * 10).add(1).pow(5);
-				else return player.points.add(1).log10().mul(Math.sin(new Date().getTime() / 2000) + 1).add(1).pow(5);
+				if (hasUpgrade('q', 54)) return getGlitch().pow(12.5);
+				else return getGlitch().pow(5);
 			},
 			effectDisplay() {
 				return format(this.effect()) + 'x';
@@ -1318,7 +1320,7 @@ addLayer('q', {
 			description() { return 'multiplies point gain based on your ' + randomStr(9) },
 			cost: '1e1295',
 			effect() {
-				return player.points.add(1).log10().mul((Math.sin(new Date().getTime() / 2000) + 1) * 10).add(1).pow(21);
+				return getGlitch().pow(21);
 			},
 			effectDisplay() {
 				return format(this.effect()) + 'x';
@@ -1330,6 +1332,12 @@ addLayer('q', {
 			description() { return 'unlocks the <b class="layer-q' + getdark(this, "ref") + 'Decipherer</b>' },
 			cost: 'e8.325e10',
 			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 55) },
+		},
+		62: {
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Optimal Placement' },
+			description() { return 'increases the ' + randomStr(9) + ' rounding element by 2.5, and improves the <b class="layer-q' + getdark(this, "ref") + 'Sample Quarks</b> formula' },
+			cost: 'e8.334e10',
+			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 61) },
 		},
 	},
 	buyables: {
@@ -1343,7 +1351,8 @@ addLayer('q', {
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
-				return new Decimal(100).pow(getBuyableAmount(this.layer, this.id)).div(player.points.add(1).log10().mul((Math.sin(new Date().getTime() / 2000) + 1.01) * 10).add(1).pow(100));
+				if (hasUpgrade('q', 62)) return new Decimal(100).pow(getBuyableAmount(this.layer, this.id)).div(getGlitch(true).pow(97.25))
+				return new Decimal(100).pow(getBuyableAmount(this.layer, this.id)).div(getGlitch(true).pow(100));
 			},
 			display() {
 				let text = '';
@@ -1386,6 +1395,24 @@ addLayer('q', {
 				if (player.nerdMode) text += '<br>formula: 10^x';
 				return 'multiplies deciphering based on the amount of this upgrade bought.<br>Currently: ' + formatSmall(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + this.purchaseLimit;
 			},
+		},
+		21: {
+			cost() { return new Decimal(5).pow(getBuyableAmount(this.layer, this.id)) },
+			title() { return '<b class="layer-q' + getdark(this, "title-buyable") + 'Insight Into Insight' },
+			canAfford() { return player.q.insight.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 99,
+			buy() {
+				addBuyables(this.layer, this.id, 1);
+			},
+			effect() {
+				return new Decimal(1.25).pow(getBuyableAmount(this.layer, this.id)).add(getBuyableAmount(this.layer, this.id).pow(2));
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text += '<br>formula: (1.25^x)+(x^2)';
+				return 'multiplies insight gain based on the amount of this upgrade bought.<br>Currently: ' + formatSmall(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' insight<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + this.purchaseLimit;
+			},
+			unlocked() { return hasMilestone('ch', 11) },
 		},
 	},
 });
@@ -7055,6 +7082,15 @@ addLayer('ch', {
 				else return 'keep wars equal to ten times your chaos on chaos resets, all <b>Devotion</b> autobuyers can bulk buy 2x, and when you buy an <b>Influence</b>, you do not spend any currency, instead you gain total amount(s) of the kind(s) of currency spent equal to its cost';
 			},
 			done() { return player.ch.points.gte(24) },
+		},
+		11: {
+			requirementDescription: '26 chaos',
+			effectDescription() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'if you have <b class="layer-mo-dark">Assimilated</b> quarks, unlock another quark upgrade and another quark rebuyable';
+				else return 'if you have <b>Assimilated</b> quarks, unlock another quark upgrade and another quark rebuyable';
+			},
+			done() { return player.ch.points.gte(26) },
+			unlocked() { return player.mo.unlocked },
 		},
 	},
 	challenges: {
