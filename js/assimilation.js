@@ -147,8 +147,8 @@ function getGlitch(tweak = false) {
 	// with rounding (based on the answer found here: https://math.stackexchange.com/a/107491)
 	if (round) {
 		const result = val * Math.sqrt((1 + (round ** 2)) / (1 + ((round ** 2) * (val ** 2))));
-		return player.points.add(1).log10().mul((result + skew) * mult).add(1);
+		return player.points.max(player.q.basePointTotal).add(1).log10().mul((result + skew) * mult).add(1);
 	};
 	// without rounding
-	return player.points.add(1).log10().mul((val + skew) * mult).add(1);
+	return player.points.max(player.q.basePointTotal).add(1).log10().mul((val + skew) * mult).add(1);
 };

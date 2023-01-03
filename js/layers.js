@@ -821,6 +821,7 @@ addLayer('q', {
 		points: new Decimal(0),
 		best: new Decimal(0),
 		total: new Decimal(0),
+		basePointTotal: new Decimal(0),
 		decipher: new Decimal(0),
 		insight: new Decimal(0),
 		auto_upgrades: false,
@@ -948,6 +949,7 @@ addLayer('q', {
 			player.q.decipher = new Decimal(0);
 			player.q.insight = new Decimal(0);
 		};
+		if (player.points.gt(player.q.basePointTotal)) player.q.basePointTotal = player.points;
 	},
 	tabFormat: {
 		"Quark Central": {
@@ -1293,7 +1295,7 @@ addLayer('q', {
 		52: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Mystery Quark' },
 			description() { return 'multiplies quark gain based on your ' + randomStr(9) },
-			cost: '1e1050',
+			cost: '1e1048',
 			effect() {
 				if (hasUpgrade('q', 54)) return getGlitch().pow(12.5);
 				else return getGlitch().pow(5);
@@ -1306,13 +1308,13 @@ addLayer('q', {
 		53: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Valued Mystery' },
 			description() { return 'multiplies ' + randomStr(9) + ' value by 10 and frequency by 2' },
-			cost: '1e1148',
+			cost: '1e1145',
 			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 52) },
 		},
 		54: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Bigger Mystery' },
-			description() { return 'multiplies ' + randomStr(9) + ' exponent by 2.5 and frequency by 0.5' },
-			cost: '1e1175',
+			description() { return 'multiplies <b class="layer-q' + getdark(this, "ref") + 'Mystery Quark</b> effect exponent by 2.5 and divides ' + randomStr(9) + ' frequency by 2' },
+			cost: '1e1171',
 			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 53) },
 		},
 		55: {
@@ -1329,7 +1331,7 @@ addLayer('q', {
 		},
 		61: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Purge the Mystery' },
-			description() { return 'unlocks the <b class="layer-q' + getdark(this, "ref") + 'Decipherer</b>' },
+			description() { return 'unlocks the <b class="layer-q' + getdark(this, "ref") + 'Decipherer</b>,<br>a new tab' },
 			cost: 'e8.325e10',
 			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 55) },
 		},
