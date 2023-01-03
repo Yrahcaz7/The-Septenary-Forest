@@ -157,6 +157,7 @@ function getPointGen(forced = false) {
 	if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[0]);
 	if (inChallenge('r', 11) && !forced) gain = new Decimal(0);
 	// pow
+	if (hasUpgrade('q', 63)) gain = gain.pow(upgradeEffect('q', 63));
 	if (challengeCompletions('ch', 11) > 0) gain = gain.pow(challengeEffect('ch', 11));
 	if (challengeCompletions('ch', 12) > 0) gain = gain.pow(challengeEffect('ch', 12));
 	// return
@@ -174,7 +175,7 @@ const displayThings = [
 ];
 
 // determines when the game "ends"
-const endPoints = new Decimal('e2.453e11');
+const endPoints = new Decimal('e3.220e11');
 
 // style for the background, can be a function
 const backgroundStyle = {};

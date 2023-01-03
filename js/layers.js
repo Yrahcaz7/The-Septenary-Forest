@@ -940,7 +940,10 @@ addLayer('q', {
 			if (hasBuyable('q', 11)) gain = gain.add(buyableEffect('q', 11));
 			if (hasBuyable('q', 13)) gain = gain.mul(buyableEffect('q', 13));
 			// update deciphered rate
-			if (diff > 0) player.q.decipher = player.q.decipher.mul(0.001 ** diff).add(gain.mul(diff));
+			if (diff > 0) {
+				if (hasUpgrade('q', 65)) player.q.decipher = player.q.decipher.mul(0.01 ** diff).add(gain.mul(diff));
+				else player.q.decipher = player.q.decipher.mul(0.001 ** diff).add(gain.mul(diff));
+			};
 			// calculate insight
 			let mul = new Decimal(1);
 			if (hasBuyable('q', 21)) mul = mul.mul(buyableEffect('q', 21));
@@ -969,7 +972,7 @@ addLayer('q', {
 					["row", ["prestige-button", "assimilate-button"]],
 					"resource-display",
 					"blank",
-					["display-text", 'Your ' + randomStr(9) + ' is currently <h2 class="layer-q">' + formatSmall(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + '</h2> insight<br><br>Deciphered rate decays over time with a decay factor of 0.001'],
+					["display-text", 'Your ' + randomStr(9) + ' is currently <h2 class="layer-q">' + formatSmall(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + '</h2> insight<br><br>Deciphered rate decays over time with a decay factor of ' + (hasUpgrade('q', 65) ? 0.01 : 0.001)],
 					"blank",
 					"buyables",
 					"blank",
@@ -1345,6 +1348,32 @@ addLayer('q', {
 			cost: 'e8.333e10',
 			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 61) },
 		},
+		63: {
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Estimation on Point' },
+			description() { return 'exponentiates point gain based on your ' + randomStr(9) },
+			cost: 'e8.340e10',
+			effect() {
+				return getGlitch().log10().add(1).pow(0.05);
+			},
+			effectDisplay() {
+				let text = '^' + format(this.effect());
+				if (player.nerdMode) text += '<br>formula: ???';
+				return text;
+			},
+			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 62) },
+		},
+		64: {
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Optimizing' },
+			description() { return 'multiplies ' + randomStr(9) + ' value by 2.5, and improves the <b class="layer-q' + getdark(this, "ref") + 'Sample Quarks</b> effect formula' },
+			cost: 'e1.091e11',
+			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 63) },
+		},
+		65: {
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'Mystery Surge' },
+			description() { return 'multiplies ' + randomStr(9) + ' frequency by 2, increases the ' + randomStr(9) + ' rounding element by 2.5, and increases decay factor to 0.01' },
+			cost: 'e1.094e11',
+			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 64) },
+		},
 	},
 	buyables: {
 		11: {
@@ -1357,8 +1386,9 @@ addLayer('q', {
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
-				if (hasUpgrade('q', 62)) return new Decimal(100).pow(getBuyableAmount(this.layer, this.id)).div(getGlitch(true).pow(97.25))
-				return new Decimal(100).pow(getBuyableAmount(this.layer, this.id)).div(getGlitch(true).pow(100));
+				if (hasUpgrade('q', 64)) return new Decimal(100).pow(getBuyableAmount(this.layer, this.id)).div(getGlitch(true).pow(92))
+				else if (hasUpgrade('q', 62)) return new Decimal(100).pow(getBuyableAmount(this.layer, this.id)).div(getGlitch(true).pow(97.25))
+				else return new Decimal(100).pow(getBuyableAmount(this.layer, this.id)).div(getGlitch(true).pow(100));
 			},
 			display() {
 				let text = '';
@@ -7092,8 +7122,8 @@ addLayer('ch', {
 		11: {
 			requirementDescription: '26 chaos',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'if you have <b class="layer-mo-dark">Assimilated</b> quarks, unlock another quark upgrade and another quark rebuyable';
-				else return 'if you have <b>Assimilated</b> quarks, unlock another quark upgrade and another quark rebuyable';
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'if you have <b class="layer-mo-dark">Assimilated</b> quarks, unlock four new quark upgrades and another quark rebuyable';
+				else return 'if you have <b>Assimilated</b> quarks, unlock four new quark upgrades and another quark rebuyable';
 			},
 			done() { return player.ch.points.gte(26) },
 			unlocked() { return player.mo.unlocked },

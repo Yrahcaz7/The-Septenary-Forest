@@ -136,14 +136,21 @@ function getGlitch(tweak = false) {
 	// rounding
 	let round = 0;
 	if (hasUpgrade('q', 62)) round += 2.5;
+	if (hasUpgrade('q', 65)) round += 2.5;
 	// skewing
 	let skew = 1;
 	if (tweak) skew += 0.01;
 	// multiplying
 	let mult = 1;
 	if (hasUpgrade('q', 53)) mult *= 10;
+	if (hasUpgrade('q', 64)) mult *= 2.5;
+	// frequency
+	let frequency = 1;
+	if (hasUpgrade('q', 53)) frequency *= 2;
+	if (hasUpgrade('q', 54)) frequency /= 2;
+	if (hasUpgrade('q', 65)) frequency *= 2;
 	// calculate
-	const val = (hasUpgrade('q', 53) && !hasUpgrade('q', 54) ? Math.sin(new Date().getTime() / 1000) : Math.sin(new Date().getTime() / 2000));
+	const val = Math.sin(new Date().getTime() / (2000 / frequency));
 	// with rounding (based on the answer found here: https://math.stackexchange.com/a/107491)
 	if (round) {
 		const result = val * Math.sqrt((1 + (round ** 2)) / (1 + ((round ** 2) * (val ** 2))));
