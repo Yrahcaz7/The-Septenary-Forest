@@ -509,6 +509,8 @@ options_tab: `<table>
 	</tr>
 </table>`,
 
+tooltip: `<div class="tooltip" v-html="text"></div>`,
+
 particle: `<div>
 	<div class='particle instant' v-bind:style="[constructParticleStyle(data), data.style]" v-on:click="run(data.onClick, data)" v-on:mouseenter="run(data.onMouseOver, data)" v-on:mouseleave="run(data.onMouseLeave, data)">
 		<span v-html="data.text"></span>

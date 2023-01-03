@@ -377,7 +377,7 @@ function loadVue() {
 
 	Vue.component('tooltip', {
 		props: ['text'],
-		template: '<div class="tooltip" v-html="text">',
+		template: components.tooltip,
 	});
 
 	Vue.component('particle', {

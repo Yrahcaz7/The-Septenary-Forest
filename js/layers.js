@@ -821,6 +821,8 @@ addLayer('q', {
 		points: new Decimal(0),
 		best: new Decimal(0),
 		total: new Decimal(0),
+		decipher: new Decimal(0),
+		insight: new Decimal(0),
 		auto_upgrades: false,
 	}},
 	color: "#DB5196",
@@ -925,20 +927,62 @@ addLayer('q', {
 			if (hasMilestone('h', 7) && resettingLayer == 'h') keep.push("upgrades");
 			if (hasMilestone('ds', 2) && resettingLayer == 'ds') keep.push("milestones");
 			if (hasMilestone('ds', 7) && resettingLayer == 'ds') keep.push("upgrades");
-			if (hasMilestone('a', 0) && resettingLayer == 'a') keep.push("buyables");
 			if (hasMilestone('a', 1) && resettingLayer == 'a') keep.push("upgrades");
 			if (hasMilestone('a', 5) && resettingLayer == 'a') keep.push("milestones");
 			if (hasMilestone('s', 25) && resettingLayer == 's') keep.push("milestones");
 			if (layers[resettingLayer].row > this.row) layerDataReset('q', keep);
 	},
-	tabFormat: [
-		"main-display",
-		["row", ["prestige-button", "assimilate-button"]],
-		"resource-display",
-		"blank",
-		"milestones",
-		"upgrades",
-	],
+	update(diff) {
+		if (tmp.q.tabFormat["The Decipherer"].unlocked) {
+			// calculate gain
+			let gain = new Decimal(0);
+			if (hasBuyable('q', 11)) gain = gain.add(buyableEffect('q', 11));
+			if (hasBuyable('q', 13)) gain = gain.mul(buyableEffect('q', 13));
+			// update deciphered rate
+			if (diff > 0) player.q.decipher = player.q.decipher.mul(0.001 ** diff).add(gain.mul(diff));
+			// calculate insight
+			player.q.insight = player.q.decipher.mul('1e1000').add(1).pow(0.1).floor().sub(1);
+		} else {
+			player.q.decipher = new Decimal(0);
+			player.q.insight = new Decimal(0);
+		};
+	},
+	tabFormat: {
+		"Quark Central": {
+			content: [
+				"main-display",
+				["row", ["prestige-button", "assimilate-button"]],
+				"resource-display",
+				"blank",
+				"milestones",
+				"upgrades",
+			],
+		},
+		"The Decipherer": {
+			content: () => {
+				if (tmp.q.tabFormat["The Decipherer"].unlocked) return [
+					"main-display",
+					["row", ["prestige-button", "assimilate-button"]],
+					"resource-display",
+					"blank",
+					["display-text", 'Your ' + randomStr(9) + ' is currently <h2 class="layer-q">' + formatSmall(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + '</h2> insight<br><br>Deciphered rate decays over time with a decay factor of 0.001'],
+					"blank",
+					"buyables",
+				];
+				return [
+					"main-display",
+					["row", ["prestige-button", "assimilate-button"]],
+					"resource-display",
+					"blank",
+					"milestones",
+					"upgrades",
+				];
+			},
+			unlocked() {
+				return hasUpgrade('q', 61);
+			},
+		},
+	},
 	milestones: {
 		0: {
 			requirementDescription: '5 quarks',
@@ -1283,9 +1327,65 @@ addLayer('q', {
 		},
 		61: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Purge the Mystery' },
-			description() { return 'unlocks the <b class="layer-q' + getdark(this, "ref") + 'Decipherer</b> (not implemented yet)' },
-			cost: 'e8.333e10',
+			description() { return 'unlocks the <b class="layer-q' + getdark(this, "ref") + 'Decipherer</b>' },
+			cost: 'e8.325e10',
 			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 55) },
+		},
+	},
+	buyables: {
+		11: {
+			cost() { return new Decimal('e2.5e9').pow(getBuyableAmount(this.layer, this.id)).mul('e1e10') },
+			title() { return '<b class="layer-q' + getdark(this, "title-buyable") + 'Sample Quarks' },
+			canAfford() { return player.q.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 99,
+			buy() {
+				player.q.points = player.q.points.sub(this.cost());
+				addBuyables(this.layer, this.id, 1);
+			},
+			effect() {
+				return new Decimal(100).pow(getBuyableAmount(this.layer, this.id)).div(player.points.add(1).log10().mul((Math.sin(new Date().getTime() / 2000) + 1.01) * 10).add(1).pow(100));
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text += '<br>formula: (100^x)/???';
+				return 'increases deciphering based on the amount of this upgrade bought. Becomes less effective based on your ' + randomStr(9) + '.<br>Currently: +' + formatSmall(buyableEffect(this.layer, this.id)) + '%' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' quarks<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + this.purchaseLimit;
+			},
+		},
+		12: {
+			cost() { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
+			title() { return '<b class="layer-q' + getdark(this, "title-buyable") + 'Atomic Insight' },
+			canAfford() { return player.q.insight.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 99,
+			buy() {
+				addBuyables(this.layer, this.id, 1);
+			},
+			effect() {
+				if (getBuyableAmount(this.layer, this.id).eq(0)) return new Decimal(1);
+				else return player.q.insight.add(1).pow(0.1).mul(new Decimal(10).pow(getBuyableAmount(this.layer, this.id)));
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text += '<br>formula: ((x+1)^0.1)(10^y)';
+				return 'multiplies atom gain based on your insight and the amount of this upgrade bought.<br>Currently: ' + formatSmall(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' insight<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + this.purchaseLimit;
+			},
+		},
+		13: {
+			cost() { return new Decimal(10).pow(new Decimal(10).pow(getBuyableAmount(this.layer, this.id))) },
+			title() { return '<b class="layer-q' + getdark(this, "title-buyable") + 'Analyze Essence' },
+			canAfford() { return player.e.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 99,
+			buy() {
+				player.e.points = player.e.points.sub(this.cost());
+				addBuyables(this.layer, this.id, 1);
+			},
+			effect() {
+				return new Decimal(10).pow(getBuyableAmount(this.layer, this.id));
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text += '<br>formula: 10^x';
+				return 'multiplies deciphering based on the amount of this upgrade bought.<br>Currently: ' + formatSmall(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + this.purchaseLimit;
+			},
 		},
 	},
 });
@@ -2342,6 +2442,7 @@ addLayer('a', {
 	canBuyMax() { return true },
 	gainExp() {
 		let gain = new Decimal(1);
+		if (hasBuyable('q', 12)) gain = gain.mul(buyableEffect('q', 12));
 		if (hasUpgrade('a', 22)) gain = gain.mul(upgradeEffect('a', 22));
 		if (hasUpgrade('a', 32)) gain = gain.mul(upgradeEffect('a', 32));
 		if (hasUpgrade('a', 33)) gain = gain.mul(upgradeEffect('a', 33));
@@ -5924,7 +6025,7 @@ addLayer('w', {
 				["row", ["prestige-button", "assimilate-button"]],
 				["custom-resource-display", () => { return 'You have ' + formatWhole(player.gi.points) + ' good influence<br>You have ' + formatWhole(player.ei.points) + ' evil influence<br><br>Your best wars is ' + formatWhole(player.w.best) + '<br>You have made a total of ' + formatWhole(player.w.total) + ' wars' }],
 				"blank",
-				["display-text", 'After unlocking War, you can always buy max on all resources below this row.' ],
+				["display-text", 'After unlocking War, you can always buy max on all resources below this row.'],
 				"blank",
 				["bar", "tide"],
 				"blank",
@@ -5937,7 +6038,7 @@ addLayer('w', {
 				["row", ["prestige-button", "assimilate-button"]],
 				["custom-resource-display", () => { return 'You have ' + formatWhole(player.gi.points) + ' good influence<br>You have ' + formatWhole(player.ei.points) + ' evil influence<br><br>Your best wars is ' + formatWhole(player.w.best) + '<br>You have made a total of ' + formatWhole(player.w.total) + ' wars' }],
 				"blank",
-				["display-text", 'After unlocking War, you can always buy max on all resources below this row.' ],
+				["display-text", 'After unlocking War, you can always buy max on all resources below this row.'],
 				"blank",
 				["bar", "tide"],
 				"blank",
@@ -6720,7 +6821,8 @@ addLayer('cl', {
 				return new Decimal(1e5).pow(getBuyableAmount('cl', this.id)).mul(1e50);
 			},
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Innate Evil' },
-			canAfford() { return player.cl.protein.gte(this.cost()) },
+			canAfford() { return player.cl.protein.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 60,
 			buy() {
 				player.cl.protein = player.cl.protein.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -6735,7 +6837,7 @@ addLayer('cl', {
 					if (hasMilestone('w', 20)) text = '<br>formula: (x+1)^0.155';
 					else text = '<br>formula: (x+1)^0.125';
 				};
-				return 'multiplies evil influence gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+				return 'multiplies evil influence gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + this.purchaseLimit;
 			},
 			unlocked() { return hasMilestone('w', 18) },
 		},
@@ -7112,7 +7214,7 @@ addLayer('mo', {
 				"prestige-button",
 				"resource-display",
 				"blank",
-				["display-text", 'Multicellular organism resets do not reset anything.' ],
+				["display-text", 'Multicellular organism resets do not reset anything.'],
 				"blank",
 				"clickables",
 			],
