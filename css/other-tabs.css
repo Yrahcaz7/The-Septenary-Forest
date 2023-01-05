@@ -73,8 +73,10 @@
 
 a {
 	color: #007fff;
+	-webkit-text-decoration-line: none;
+	-moz-text-decoration-line: none;
 	text-decoration-line: none;
-	cursor: pointer
+	cursor: pointer;
 }
 
 .link {

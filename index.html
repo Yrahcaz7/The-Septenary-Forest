@@ -41,8 +41,8 @@
 		<!-- canvas -->
 		<canvas id="treeCanvas" class="canvas" v-if="!(tmp.gameEnded && !player.keepGoing)"></canvas>
 		<!-- loading screen -->
-		<div v-if="false" id="loadingSection" class="fullWidth">
-			<h1>Loading... (If this takes too long it means there was a serious error!)</h1>
+		<div v-if="false" class="fullWidth" style="display: flex; flex-direction: column; justify-content: center; background-color: black; z-index: 999999999999999">
+			<div><h1>Loading...</h1><br><h2>If this takes too long it means there was a serious error!</h2></div>
 		</div>
 		<div class="vl" v-if="player.navTab !== 'none' && tmp.other.splitScreen && player.tab!='none' && !(tmp.gameEnded && !player.keepGoing)"></div>
 		<!-- game end screen -->

@@ -13,7 +13,7 @@
 
 .popup-container {
 	position: absolute;
-	z-index: 9999999999999999999999999999999999;
+	z-index: 9999999999;
 	right: 30px;
 	width: 300px;
 }
@@ -27,15 +27,15 @@
 }
 
 .fade-enter-active, .fade-leave-active {
-	transition: opacity .3s
+	transition: opacity .3s;
 }
 
 .fade-transition {
-	transition: opacity .3s
+	transition: opacity .3s;
 }
 
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-	opacity: 0
+	opacity: 0;
 }
 
 .redtext {
@@ -45,7 +45,7 @@
 .particle {
 	background-color: transparent;
 	display: block;
-	position:absolute;
+	position: absolute;
 	z-index: 99999;
-	background-size:contain;
+	background-size: contain;
 }

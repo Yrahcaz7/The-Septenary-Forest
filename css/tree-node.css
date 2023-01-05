@@ -7,7 +7,7 @@
 	border-radius: 50%;
 	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
 	font-size: 40px;
-	font-family: "Lucida Console", "Courier New", "monospace";
+	font-family: "Lucida Console", "Courier New", monospace;
 	color: rgba(0, 0, 0, 0.5);
 	text-shadow: var(--hqProperty3);
 	padding: 0;
@@ -27,7 +27,7 @@
 	border-radius: 33%;
 	box-shadow: var(--hqProperty2a), var(--hqProperty2b);
 	font-size: 40px;
-	font-family: "Lucida Console", "Courier New", "monospace";
+	font-family: "Lucida Console", "Courier New", monospace;
 	color: rgba(0, 0, 0, 0.5);
 	text-shadow: var(--hqProperty3);
 	padding: 0;
@@ -67,7 +67,7 @@
 	border-bottom: 0.7em solid transparent;
 	border-left: 0.3em solid transparent;
 	font-size: 10px;
-	overflow:auto;
+	overflow: auto;
 	pointer-events: none;
 }
 
@@ -85,7 +85,6 @@
 	border-left: 0.3em solid transparent;
 	font-size: 10px;
 	pointer-events: none;
-
 }
 
 .star:before, .star:after {
