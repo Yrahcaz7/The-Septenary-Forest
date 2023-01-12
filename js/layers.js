@@ -941,7 +941,7 @@ addLayer('q', {
 			if (hasBuyable('q', 13)) gain = gain.mul(buyableEffect('q', 13));
 			// update deciphered rate
 			if (diff > 0) {
-				if (hasUpgrade('q', 65)) player.q.decipher = player.q.decipher.mul(0.01 ** diff).add(gain.mul(diff));
+				if (hasUpgrade('q', 65)) player.q.decipher = player.q.decipher.mul(0.1 ** diff).add(gain.mul(diff));
 				else player.q.decipher = player.q.decipher.mul(0.001 ** diff).add(gain.mul(diff));
 			};
 			// calculate insight
@@ -972,7 +972,7 @@ addLayer('q', {
 					["row", ["prestige-button", "assimilate-button"]],
 					"resource-display",
 					"blank",
-					["display-text", 'Your ' + randomStr(9) + ' is currently <h2 class="layer-q">' + formatSmall(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + '</h2> insight<br><br>Deciphered rate decays over time with a decay factor of ' + (hasUpgrade('q', 65) ? 0.01 : 0.001)],
+					["display-text", 'Your ' + randomStr(9) + ' is currently <h2 class="layer-q">' + formatSmall(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + '</h2> insight<br><br>Deciphered rate decays over time with a decay factor of ' + (hasUpgrade('q', 65) ? 0.1 : 0.001)],
 					"blank",
 					"buyables",
 					"blank",
@@ -1351,7 +1351,7 @@ addLayer('q', {
 		63: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Estimation on Point' },
 			description() { return 'exponentiates point gain based on your ' + randomStr(9) },
-			cost: 'e8.340e10',
+			cost: 'e8.34e10',
 			effect() {
 				return getGlitch().log10().add(1).pow(0.05);
 			},
@@ -1370,8 +1370,8 @@ addLayer('q', {
 		},
 		65: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Mystery Surge' },
-			description() { return 'multiplies ' + randomStr(9) + ' frequency by 2, increases the ' + randomStr(9) + ' rounding element by 2.5, and increases decay factor to 0.01' },
-			cost: 'e1.094e11',
+			description() { return 'multiplies ' + randomStr(9) + ' frequency by 2, increases the ' + randomStr(9) + ' rounding element by 2.5, and increases decay factor to 0.1' },
+			cost: 'e1.0945e11',
 			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 64) },
 		},
 	},
@@ -1397,7 +1397,11 @@ addLayer('q', {
 			},
 		},
 		12: {
-			cost() { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
+			cost() {
+				let div = new Decimal(1);
+				if (getBuyableAmount(this.layer, this.id).eq(29)) div = div.mul(1.8);
+				return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)).div(div);
+			},
 			title() { return '<b class="layer-q' + getdark(this, "title-buyable") + 'Atomic Insight' },
 			canAfford() { return player.q.insight.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 99,
@@ -6059,6 +6063,7 @@ addLayer('w', {
 		return 'which multiplies point, essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x, atom, sanctum, relic, molecule, good influence, and evil influence by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x, and also light gain after hardcap by <h2 class="layer-w">' + format(tmp.w.effect[2]) + '</h2>x';
 	},
 	doReset(resettingLayer) {
+		if (hasMilestone('ch', 12) && resettingLayer == 'ch') return;
 		let keep = ['auto_influence'], save;
 			if (hasMilestone('ch', 10) && resettingLayer == 'ch') {
 				save = player.ch.points.mul(10);
@@ -7126,6 +7131,12 @@ addLayer('ch', {
 				else return 'if you have <b>Assimilated</b> quarks, unlock four new quark upgrades and another quark rebuyable';
 			},
 			done() { return player.ch.points.gte(26) },
+			unlocked() { return player.mo.unlocked },
+		},
+		12: {
+			requirementDescription: '28 chaos',
+			effectDescription: 'chaos resets don\'t reset wars',
+			done() { return player.ch.points.gte(28) },
 			unlocked() { return player.mo.unlocked },
 		},
 	},
