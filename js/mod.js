@@ -141,6 +141,7 @@ function getPointGen(forced = false) {
 				gain = gain.mul(upgradeEffect('h', 31));
 				if (hasUpgrade('h', 41)) gain = gain.mul(upgradeEffect('h', 41));
 	}}};
+	if (hasUpgrade('h', 73)) gain = gain.mul(upgradeEffect('h', 73));
 	if (hasUpgrade('p', 72)) gain = gain.mul(upgradeEffect('p', 72));
 	if (hasUpgrade('m', 52)) gain = gain.mul(upgradeEffect('m', 52));
 	if (hasBuyable('c', 11)) gain = gain.mul(buyableEffect('c', 11));
@@ -160,6 +161,8 @@ function getPointGen(forced = false) {
 	if (hasUpgrade('q', 63)) gain = gain.pow(upgradeEffect('q', 63));
 	if (challengeCompletions('ch', 11) > 0) gain = gain.pow(challengeEffect('ch', 11));
 	if (challengeCompletions('ch', 12) > 0) gain = gain.pow(challengeEffect('ch', 12));
+	// limit to endgame
+	if (gain.gte(endPoints)) gain = endPoints;
 	// return
 	return gain;
 };
@@ -175,7 +178,7 @@ const displayThings = [
 ];
 
 // determines when the game "ends"
-const endPoints = new Decimal('e2e14');
+const endPoints = new Decimal('e1e15');
 
 // style for the background, can be a function
 const backgroundStyle = {};
