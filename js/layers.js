@@ -7178,6 +7178,21 @@ addLayer('ch', {
 			done() { return player.ch.points.gte(28) },
 			unlocked() { return player.mo.unlocked },
 		},
+		13: {
+			requirementDescription: '30 chaos',
+			effectDescription() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'improve <b class="layer-ch">Tide of Good</b>\'s effect formula, and do something with ' + randomStr(9);
+				else return 'improve <b>Tide of Good</b>\'s effect formula, and do something with ' + randomStr(9);
+			},
+			done() { return player.ch.points.gte(30) },
+			unlocked() { return player.mo.unlocked },
+		},
+		14: {
+			requirementDescription: '33 chaos',
+			effectDescription: 'reduce the multicellular organism cost base (1.2 --> 1.1)',
+			done() { return player.ch.points.gte(33) },
+			unlocked() { return player.mo.unlocked },
+		},
 	},
 	challenges: {
 		11: {
@@ -7228,10 +7243,16 @@ addLayer('ch', {
 			onEnter() { player.ei.unlocked = false },
 			onExit() { player.ei.unlocked = true },
 			rewardDescription: "exponentiates point and prayer gain based on completions",
-			rewardEffect() { return (challengeCompletions('ch', this.id) * 6.32 + 1) ** 0.005 },
+			rewardEffect() {
+				if (hasMilestone('ch', 13)) return (challengeCompletions('ch', this.id) + 1) ** 0.2;
+				else return (challengeCompletions('ch', this.id) * 6.32 + 1) ** 0.005;
+			},
 			rewardDisplay() {
 				let text = '^' + format(tmp.ch.challenges[this.id].rewardEffect);
-				if (player.nerdMode) text += '<br>formula: (6.32x+1)^0.005';
+				if (player.nerdMode) {
+					if (hasMilestone('ch', 13)) text += '<br>formula: (x+1)^0.2';
+					else text += '<br>formula: (6.32x+1)^0.005';
+				};
 				return text;
 			},
 			doReset: true,
@@ -7313,7 +7334,10 @@ addLayer('mo', {
 	baseResource: 'cellular life',
 	baseAmount() { return player.cl.points },
 	type: 'static',
-	base: 1.2,
+	base() {
+		if (hasMilestone('ch', 14)) return 1.1;
+		else return 1.2;
+	},
 	exponent: 1,
 	canBuyMax() { return false },
 	gainExp() {
