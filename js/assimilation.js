@@ -34,7 +34,7 @@ const assimilationReq = {
 	e: new Decimal('1e3555'),
 	c: new Decimal('5e555'),
 	q: new Decimal('1e1355'),
-	sp: new Decimal(Infinity),
+	sp: new Decimal(110000),
 	h: new Decimal(Infinity),
 	ds: new Decimal(Infinity),
 	a: new Decimal(Infinity),
@@ -123,6 +123,11 @@ function getAssimilationRewards() {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-q">Quarks</h2><br><br>';
 		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Unlocks unlocking the <b class="layer-q">Decipherer</b>, a new tab<br>Unlocks three new quark rebuyables: <b class="layer-q">Sample Quarks</b>, <b class="layer-q">Atomic Insight</b>, and <b class="layer-q">Analyze Essence</b><br>Makes all previous quark upgrades always unlockable<br>Unlocks six new quark upgrades: <b class="layer-q">Quark of the Flow</b>, <b class="layer-q">Mystery Quark</b>, <b class="layer-q">Valued Mystery</b>, <b class="layer-q">Bigger Mystery</b>, <b class="layer-q">What\'s the Point?</b>, and <b class="layer-q">Purge the Mystery</b>';
 		else text += 'Unlocks unlocking the <b>Decipherer</b>, a new tab<br>Unlocks three new quark rebuyables: <b>Sample Quarks</b>, <b>Atomic Insight</b>, and <b>Analyze Essence</b><br>Makes all previous quark upgrades always unlockable<br>Unlocks six new quark upgrades: <b>Quark of the Flow</b>, <b>Mystery Quark</b>, <b>Valued Mystery</b>, <b>Bigger Mystery</b>, <b>What\'s the Point?</b>, and <b>Purge the Mystery</b>';
+	};
+	if (player.mo.assimilated.includes('sp')) {
+		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-sp">Subatomic Particles</h2><br><br>';
+		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Makes you always be able to buy max subatomic particles<br>Increases the cap of <b class="layer-sp">Protons</b>, <b class="layer-sp">Neutrons</b>, and <b class="layer-sp">Electrons</b> by 90<br>Makes all previous subatomic particle upgrades always unlockable<br>Unlocks four new subatomic particle upgrades: <b class="layer-sp">Proton Decay</b>, <b class="layer-sp">Neutron Decay</b>, <b class="layer-sp">Electron Decay</b>, and <b class="layer-sp">Particle of the Flow</b>';
+		else text += 'Makes you always be able to buy max subatomic particles<br>Increases the cap of <b>Protons</b>, <b>Neutrons</b>, and <b>Electrons</b> by 90<br>Makes all previous subatomic particle upgrades always unlockable<br>Unlocks four new subatomic particle upgrades: <b>Proton Decay</b>, <b>Neutron Decay</b>, <b>Electron Decay</b>, and <b>Particle of the Flow</b>';
 	};
 	return text.replace("<br><br>", "");
 };

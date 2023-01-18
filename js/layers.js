@@ -517,6 +517,9 @@ addLayer('c', {
 		if (hasMilestone('w', 7) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 2) && resettingLayer == 'cl') return;
 		let keep = ['auto_upgrades', 'auto_buyables'];
+			if (hasUpgrade('sp', 21) && resettingLayer == 'sp') keep.push("buyables");
+			if (hasUpgrade('sp', 22) && resettingLayer == 'sp') keep.push("upgrades");
+			if (hasUpgrade('sp', 23) && resettingLayer == 'sp') keep.push("milestones");
 			if (hasMilestone('h', 2) && resettingLayer == 'h') keep.push("upgrades");
 			if (hasMilestone('h', 3) && resettingLayer == 'h') keep.push("buyables");
 			if (hasMilestone('h', 4) && resettingLayer == 'sp') keep.push("upgrades");
@@ -1363,7 +1366,7 @@ addLayer('q', {
 			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 62) },
 		},
 		64: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Optimizing' },
+			title() { return '<b class="layer-q' + getdark(this, "title") + 'More Optimal' },
 			description() { return 'multiplies ' + randomStr(9) + ' value by 2.5, and improves the <b class="layer-q' + getdark(this, "ref") + 'Sample Quarks</b> effect formula' },
 			cost: 'e1.091e11',
 			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 63) },
@@ -1477,12 +1480,13 @@ addLayer('sp', {
 	baseAmount() { return player.q.points },
 	type: 'static',
 	exponent: 4.25,
-	canBuyMax() { return hasMilestone('sp', 0) || player.w.unlocked },
+	canBuyMax() { return hasMilestone('sp', 0) || player.w.unlocked || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer },
 	gainExp() {
 		// init
 		let gain = new Decimal(1);
 		// mul
 		if (hasUpgrade('q', 43)) gain = gain.mul(upgradeEffect('q', 43));
+		if (hasUpgrade('sp', 31)) gain = gain.mul(2.5);
 		if (hasUpgrade('h', 63)) gain = gain.mul(upgradeEffect('h', 63));
 		if (hasUpgrade('a', 22)) gain = gain.mul(upgradeEffect('a', 22));
 		if (hasUpgrade('a', 31)) gain = gain.mul(upgradeEffect('a', 31));
@@ -1494,6 +1498,7 @@ addLayer('sp', {
 		if (inChallenge('ds', 22)) gain = gain.mul(0.0000000000000000000000000000000000000001);
 		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[0]);
 		// pow
+		if (hasUpgrade('sp', 31) && player.mo.assimilating !== this.layer) gain = gain.pow(3.36);
 		if (hasBuyable('cl', 13)) gain = gain.pow(buyableEffect('cl', 13)[0]);
 		// return
 		return gain;
@@ -1507,9 +1512,13 @@ addLayer('sp', {
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	automate() {
 		if (hasMilestone('m', 4) && player.sp.auto_upgrades && hasUpgrade('h', 53)) {
-			buyUpgrade('sp', 11);
-			buyUpgrade('sp', 12);
-			buyUpgrade('sp', 13);
+			if (tmp.sp.upgrades[11].unlocked) buyUpgrade('sp', 11);
+			if (tmp.sp.upgrades[12].unlocked) buyUpgrade('sp', 12);
+			if (tmp.sp.upgrades[13].unlocked) buyUpgrade('sp', 13);
+			if (tmp.sp.upgrades[21].unlocked) buyUpgrade('sp', 21);
+			if (tmp.sp.upgrades[22].unlocked) buyUpgrade('sp', 22);
+			if (tmp.sp.upgrades[23].unlocked) buyUpgrade('sp', 23);
+			if (tmp.sp.upgrades[31].unlocked) buyUpgrade('sp', 31);
 		};
 		if (hasMilestone('m', 4) && player.sp.auto_buyables) {
 			if (layers.sp.buyables[11].canAfford()) {
@@ -1533,7 +1542,7 @@ addLayer('sp', {
 			if (hasMilestone('a', 13) && resettingLayer == 'a') keep.push("milestones");
 			if (layers[resettingLayer].row > this.row) layerDataReset('sp', keep);
 		},
-	resetsNothing() { return hasMilestone('s', 11) },
+	resetsNothing() { return hasMilestone('s', 11) || hasUpgrade('sp', 31) },
 	tabFormat: [
 		"main-display",
 		["row", ["prestige-button", "assimilate-button"]],
@@ -1578,48 +1587,70 @@ addLayer('sp', {
 	},
 	upgrades: {
 		11: {
-			title() {
-				return '<b class="layer-sp' + getdark(this, "title") + 'Positrons';
-			},
-			description() {
-				return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Protons';
-			},
+			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Positrons' },
+			description() { return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Protons' },
 			cost: 6,
-			unlocked() { return hasUpgrade('h', 53) },
+			unlocked() { return hasUpgrade('h', 53) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer },
 		},
 		12: {
-			title() {
-				return '<b class="layer-sp' + getdark(this, "title") + 'Beta Particles';
-			},
-			description() {
-				return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Neutrons';
-			},
+			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Beta Particles' },
+			description() { return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Neutrons' },
 			cost: 6,
-			unlocked() { return hasUpgrade('h', 53) },
+			unlocked() { return hasUpgrade('h', 53) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer },
 		},
 		13: {
-			title() {
-				return '<b class="layer-sp' + getdark(this, "title") + 'Gamma Particles';
-			},
-			description() {
-				return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Electrons';
-			},
+			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Gamma Particles' },
+			description() { return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Electrons' },
 			cost: 6,
-			unlocked() { return hasUpgrade('h', 53) },
+			unlocked() { return hasUpgrade('h', 53) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer },
+		},
+		21: {
+			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Proton Decay' },
+			description() { return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Protons</b>, and keep core rebuyables on subatomic particle resets' },
+			cost: 32000,
+			unlocked() { return hasUpgrade('sp', 11) && (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) },
+		},
+		22: {
+			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Neutron Decay' },
+			description() { return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Neutrons</b>, and keep core upgrades on subatomic particle resets' },
+			cost: 68000,
+			unlocked() { return hasUpgrade('sp', 12) && (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) },
+		},
+		23: {
+			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Electron Decay' },
+			description() { return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Electrons</b>, and keep core milestones on subatomic particle resets' },
+			cost: 76000,
+			unlocked() { return hasUpgrade('sp', 13) && (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) },
+		},
+		31: {
+			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Particle of the Flow' },
+			description() {
+				if (player.mo.assimilating === this.layer) return 'multiplies subatomic particle gain by 2.5x and subatomic particles reset nothing';
+				else return 'multiplies subatomic particle gain by 2.5x, exponentiates subatomic particle gain by ^3.36, and subatomic particles reset nothing';
+			},
+			cost() {
+				if (player.mo.assimilating === this.layer) return 88888;
+				else return 'e2.66e9';
+			},
+			unlocked() { return hasUpgrade('sp', 21) && hasUpgrade('sp', 22) && hasUpgrade('sp', 23) && (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) },
 		},
 	},
 	buyables: {
 		11: {
 			cost() { return getBuyableAmount('sp', this.id).add(1) },
 			title() { return '<b class="layer-sp' + getdark(this, "title-buyable") + 'Protons' },
-			canAfford() { return player.sp.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
-			purchaseLimit: 9,
+			canAfford() { return player.sp.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			purchaseLimit() {
+				if (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) return 99;
+				return 9;
+			},
 			buy() {
 				player.sp.points = player.sp.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
-				if (hasUpgrade('sp', 11)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(2), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
+				if (hasUpgrade('sp', 21)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(4), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
+				else if (hasUpgrade('sp', 11)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(2), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
 				else return [new Decimal(5).pow(getBuyableAmount('sp', this.id)), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
 			},
 			display() {
@@ -1628,20 +1659,24 @@ addLayer('sp', {
 					if (hasUpgrade('sp', 11)) text += '<br>formulas: (5^x)^2<br>and 1/(x+1)';
 					else text += '<br>formulas: 5^x and 1/(x+1)';
 				};
-				return 'multiplies quark gain (but also decreases essence gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('sp', this.id)[0]) + 'x<br>and ' + format(buyableEffect('sp', this.id)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' subatomic particles<br><br>Bought: ' + formatWhole(getBuyableAmount('sp', this.id)) + '/' + this.purchaseLimit;
+				return 'multiplies quark gain (but also decreases essence gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('sp', this.id)[0]) + 'x<br>and ' + format(buyableEffect('sp', this.id)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' subatomic particles<br><br>Bought: ' + formatWhole(getBuyableAmount('sp', this.id)) + '/' + this.purchaseLimit();
 			},
 		},
 		12: {
 			cost() { return getBuyableAmount('sp', this.id).add(1) },
 			title() { return '<b class="layer-sp' + getdark(this, "title-buyable") + 'Neutrons' },
-			canAfford() { return player.sp.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
-			purchaseLimit: 9,
+			canAfford() { return player.sp.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			purchaseLimit() {
+				if (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) return 99;
+				return 9;
+			},
 			buy() {
 				player.sp.points = player.sp.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
-				if (hasUpgrade('sp', 12)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(2), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
+				if (hasUpgrade('sp', 22)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(4), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
+				else if (hasUpgrade('sp', 12)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(2), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
 				else return [new Decimal(5).pow(getBuyableAmount('sp', this.id)), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
 			},
 			display() {
@@ -1650,20 +1685,24 @@ addLayer('sp', {
 					if (hasUpgrade('sp', 12)) text += '<br>formulas: (5^x)^2<br>and 1/(x+1)';
 					else text += '<br>formulas: 5^x and 1/(x+1)';
 				};
-				return 'multiplies essence gain (but also decreases point gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('sp', this.id)[0]) + 'x<br>and ' + format(buyableEffect('sp', this.id)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' subatomic particles<br><br>Bought: ' + formatWhole(getBuyableAmount('sp', this.id)) + '/' + this.purchaseLimit;
+				return 'multiplies essence gain (but also decreases point gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('sp', this.id)[0]) + 'x<br>and ' + format(buyableEffect('sp', this.id)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' subatomic particles<br><br>Bought: ' + formatWhole(getBuyableAmount('sp', this.id)) + '/' + this.purchaseLimit();
 			},
 		},
 		21: {
 			cost() { return getBuyableAmount('sp', this.id).add(1) },
 			title() { return '<b class="layer-sp' + getdark(this, "title-buyable") + 'Electrons' },
-			canAfford() { return player.sp.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
-			purchaseLimit: 9,
+			canAfford() { return player.sp.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			purchaseLimit() {
+				if (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) return 99;
+				return 9;
+			},
 			buy() {
 				player.sp.points = player.sp.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
-				if (hasUpgrade('sp', 13)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(2), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
+				if (hasUpgrade('sp', 23)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(4), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
+				else if (hasUpgrade('sp', 13)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(2), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
 				else return [new Decimal(5).pow(getBuyableAmount('sp', this.id)), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
 			},
 			display() {
@@ -1672,7 +1711,7 @@ addLayer('sp', {
 					if (hasUpgrade('sp', 13)) text += '<br>formulas: (5^x)^2<br>and 1/(x+1)';
 					else text += '<br>formulas: 5^x and 1/(x+1)';
 				};
-				return 'multiplies point gain (but also decreases quark gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('sp', this.id)[0]) + 'x<br>and ' + format(buyableEffect('sp', this.id)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' subatomic particles<br><br>Bought: ' + formatWhole(getBuyableAmount('sp', this.id)) + '/' + this.purchaseLimit;
+				return 'multiplies point gain (but also decreases quark gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('sp', this.id)[0]) + 'x<br>and ' + format(buyableEffect('sp', this.id)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' subatomic particles<br><br>Bought: ' + formatWhole(getBuyableAmount('sp', this.id)) + '/' + this.purchaseLimit();
 			},
 		},
 	},
@@ -7180,7 +7219,8 @@ addLayer('ch', {
 			challengeDescription: "- Forces a chaos reset<br>- Disables evil influence<br>",
 			goal() {
 				if (challengeCompletions('ch', this.id) < 3) return challengeCompletions('ch', this.id) * 25 + 85;
-				return challengeCompletions('ch', this.id) * 50 + 600;
+				if (challengeCompletions('ch', this.id) < 14) return challengeCompletions('ch', this.id) * 50 + 600;
+				return challengeCompletions('ch', this.id) * 200 + 200;
 			},
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' good influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit + '<br>' },
 			canComplete() { return player.gi.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
@@ -7325,7 +7365,7 @@ addLayer('mo', {
 				else if (getClickableState('mo', 11)) return '<br>You are in an Assimilation Search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click to exit this search.';
 				else return '<br>Begin an Assimilation search.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
 			},
-			req() { return [1, 2, 3, Infinity][player.mo.assimilated.length] },
+			req() { return [1, 2, 3, 4, Infinity][player.mo.assimilated.length] },
 			canClick() { return getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req) },
 			onClick() {
 				if (player.mo.assimilating !== null) {
