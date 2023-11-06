@@ -36,7 +36,7 @@ const story = [
 	But then, an idea occured to the Being.
 	There is only Essence; but what is that Essence of?
 	The Being delved deep into its thoughts.
-	Down to the very core of its Being.
+	Down to the very core of its being.
 	"This... is what the Essence is coming from. The Core."
 `, `
 	When the Being came back to, all the Essence was gone.
@@ -116,7 +116,7 @@ const story = [
 	When the world was not just a void.
 	The world was completely different back then.
 	"Why... did everything dissapear?"
-	"Why... am I the only Being left?"
+	"Why... am I the only being left?"
 `, `
 	The Being decided that thinking about that was useless.
 	However, the Being could use this new knowledge to create even more Essence.
@@ -148,26 +148,99 @@ const story = [
 	But the being reached the limit of the knowledge, and hit a wall.
 	The being needed something new; something unique to the void.
 `, `
-	The Being delved deep into its Being, reaching further than the core.
+	The Being delved deep into its being, reaching further than the core.
 	Searching for something, anything that would help.
 	The Being saw nothing, but did not give up.
 	The Being used all of its senses, and probed as far as it could.
 	Finally, the Being saw something new...
+`], [`
+	The Being glimpsed a new memory.
+	Something of the kind it had never seen before.
+	Great anger and hatred directed every way.
+	Curses rooting from the very soul of beings.
+	The Being then created an embodiment of this.
+	And these new Hexes began filling the void.
+`, `
+	The Being was filled with hate of the old world.
+	Anger and hatred permeated throughout it.
+	The Being vowed to create a new, better world.
+	It continued pouring out more and more Hexes...
+	And the Being created a new cycle fueled with hatred.
+`, `
+	The Being's progress increased by leaps and bounds.
+	It had filled much more of the never-ending void.
+	But the Being was still not satisfied.
+	The void was nowhere close to the new world it wanted.
+	The Being searched through all of the Hexes for any clues...
+`, `
+	Then, the it found what it was looking for.
+	A passage to another plane of existence.
+	A world filled with demons, still remaining even now.
+	All had failed to break the barrier between worlds.
+	The Being knew that, but it did not give up.
+`, `
+	The Being looked through a narrow crack...
+	It then observed what a complete world looked like.
+	The Being began using the thoughts of the demons for Essence.
+	Much more Essence filled the void, tainted by darkness.
+	The void now held six distinct colors.
+	The being had replicated the very Souls of the demons.
+`, `
+	The color of Demon Souls, a violent red.
+	The Being created more and more, cycling many times.
+	The colors blended and meshed, improving each other.
+	A spectrum of color radiated throughout the darkness.
+	However, the Being saw missing colors still.
+	Something was still missing...
+`, `
+	The demon world was too different from the void.
+	The Being had no choice but to remember the old world.
+	It delved into its memories, hoping to uncover something new.
+	The Being reached further than it ever had before.
+	As more and more hatred filled its thoughts...
+`], [`
+	The Being saw a glimpse of something hopeful.
+	Something it had never considered before.
+	A warm, fuzzy feeling grew in the middle of the anger.
+	The anger and hatred began to subside...
+	And the Being began piecing things together.
+`, `
+	Quarks formed Particles, and Particles formed Atoms.
+	The Being found more invaluable knowledge.
+	However, the Being went further into its memories.
+	The Being wanted to find the source of that warm feeling.
+	The feeling that was completely opposite of the dark hatred.
+`, `
+	More of the Being's memories began to gush forth.
+	The Being absorbed all of the knowledge, but was never satisfied.
+	It didn't care about the many variations of Atoms.
+	The Being almost forgot about the endless void.
+	Then, all of a sudden, the Being found the source of that feeling.
+`, `
+	Memories of happiness flooded the Being's thoughts.
+	The Being felt liberated from the darkness.
+	The Being bathed in light for the first time.
+	The void began being filled with blinding light...
+	And then, the being discovered a mechanism to create more.
+`, `
+	The Being discovered Prayers, and began creating more.
+	Everything was so much easier than before.
+	Barely anything had to be reset to pray for light.
+	The Being finally found a respite in the lonely void.
+	The Being did not know who responded to its Prayers...
+	But it felt grateful towards that unkown existence.
 `], [`
 	More story coming soon!
 `]];
 
 for (let index = 0; index < story.length; index++) {
 	if (story[index][0].startsWith('\n\t')) story[index][0] = story[index][0].slice(2);
+	story[index] = story[index].map(value => value.replace(/\n\t/g, '<br><br>').trim());
 };
 
 story[0][0] = "...<br>" + story[0][0];
 
-story[0] = story[0].map(value => value.replace(/\n\t/g, '<br>...<br>').trim());
-
-story[1] = story[1].map(value => value.replace(/\n\t/g, '<br><br>').trim());
-
-story[2] = story[2].map(value => value.replace(/\n\t/g, '<br>...<br>').trim());
+story[0][0] = story[0][0].replace(/<br><br>/g, '<br>...<br>');
 
 function storyLength(number) {
 	if (number < 0) return 0;
@@ -182,5 +255,7 @@ function filterStory(string) {
 	if (player.ch.best.toNumber() < storyLength(0)) string = string.replace(/[Vv]oid/g, randomStr(4));
 	if (player.ch.best.toNumber() < storyLength(1)) string = string.replace(/[Pp]itch/g, randomStr(5)).replace(/[Bb]lack/g, randomStr(5)).replace(/[Ll]ight/g, randomStr(5));
 	if (player.ch.best.toNumber() < storyLength(2)) string = string.replace(/[Kk]nowledge/g, randomStr(9)).replace(/[Mm]emories/g, randomStr(8));
+	if (player.ch.best.toNumber() < storyLength(3)) string = string.replace(/[Aa]nger/g, randomStr(5)).replace(/[Hh]atred/g, randomStr(6)).replace(/[Cc]urses/g, randomStr(6)).replace(/[Hh]ate/g, randomStr(4));
+	if (player.ch.best.toNumber() < storyLength(4)) string = string.replace(/[Ww]arm/g, randomStr(4)).replace(/[Ff]uzzy/g, randomStr(5)).replace(/[Ff]eeling/g, randomStr(7)).replace(/[Hh]appiness/g, randomStr(9));
 	return string;
 };

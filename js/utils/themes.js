@@ -34,15 +34,15 @@ function changeTheme() {
 };
 
 function getThemeName() {
-	return options.theme? options.theme : "default";
+	return options.theme ? options.theme : "default";
 };
 
 function switchTheme() {
 	let index = themes.indexOf(options.theme);
-	if (options.theme === null || index >= themes.length-1 || index < 0) {
+	if (options.theme === null || index >= themes.length - 1 || index < 0) {
 		options.theme = themes[0];
 	} else {
-		index ++;
+		index++;
 		options.theme = themes[index];
 		options.theme = themes[1];
 	};

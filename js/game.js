@@ -9,13 +9,13 @@ const TMT_VERSION = {
 
 function getResetGain(layer, useType = null) {
 	let type = useType;
-	if (!useType) { 
+	if (!useType) {
 		type = tmp[layer].type;
 		if (layers[layer].getResetGain !== undefined)
 			return layers[layer].getResetGain();
 	};
 	if (tmp[layer].type == "none")
-		return new Decimal (0);
+		return new Decimal(0);
 	if (tmp[layer].gainExp.eq(0)) return decimalZero;
 	if (type == "static") {
 		if ((!tmp[layer].canBuyMax) || tmp[layer].baseAmount.lt(tmp[layer].requires)) return decimalOne;
@@ -48,7 +48,7 @@ function getNextAt(layer, canMax = false, useType = null) {
 	if (tmp[layer].gainExp.lte(0)) return new Decimal(Infinity);
 	if (type == "static") {
 		if (!tmp[layer].canBuyMax) canMax = false;
-		let amt = player[layer].points.plus((canMax&&tmp[layer].baseAmount.gte(tmp[layer].nextAt))?tmp[layer].resetGain:0).div(tmp[layer].directMult);
+		let amt = player[layer].points.plus((canMax && tmp[layer].baseAmount.gte(tmp[layer].nextAt)) ? tmp[layer].resetGain : 0).div(tmp[layer].directMult);
 		let extraCost = Decimal.pow(tmp[layer].base, amt.pow(tmp[layer].exponent).div(tmp[layer].gainExp)).times(tmp[layer].gainMult);
 		let cost = extraCost.times(tmp[layer].requires).max(tmp[layer].requires);
 		if (tmp[layer].roundUpCost) cost = cost.ceil();
@@ -130,7 +130,7 @@ function layerDataReset(layer, keep = []) {
 	player[layer].milestones = [];
 	player[layer].achievements = [];
 	for (thing in storedData) {
-		player[layer][thing] =storedData[thing];
+		player[layer][thing] = storedData[thing];
 	};
 };
 
@@ -151,7 +151,7 @@ function doReset(layer, force = false) {
 		if (tmp[layer].canReset === false) return;
 		if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return;
 		let gain = tmp[layer].resetGain;
-		if (tmp[layer].type=="static") {
+		if (tmp[layer].type == "static") {
 			if (tmp[layer].baseAmount.lt(tmp[layer].nextAt)) return;
 			gain = (tmp[layer].canBuyMax ? gain : 1);
 		};
@@ -159,7 +159,7 @@ function doReset(layer, force = false) {
 		addPoints(layer, gain);
 		updateMilestones(layer);
 		updateAchievements(layer);
-		if (layers[layer].onPrestigeIsAfterGain) run(layers[layer].onPrestige, layers[layer], gain);
+		if (layers[layer].onPrestige && layers[layer].onPrestigeIsAfterGain) run(layers[layer].onPrestige, layers[layer], gain);
 		if (!player[layer].unlocked) {
 			player[layer].unlocked = true;
 			needCanvasUpdate = true;

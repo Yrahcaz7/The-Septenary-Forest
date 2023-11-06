@@ -9,8 +9,8 @@ const modInfo = {
 };
 
 const VERSION = {
-	num: '3.4',
-	name: 'Organisms Emerge',
+	num: '3.4.1',
+	name: 'Organisms Emerge - Bugfix Sub-Update',
 };
 
 const winText = () => {
@@ -161,8 +161,12 @@ function getPointGen(forced = false) {
 	if (hasUpgrade('q', 63)) gain = gain.pow(upgradeEffect('q', 63));
 	if (challengeCompletions('ch', 11) > 0) gain = gain.pow(challengeEffect('ch', 11));
 	if (challengeCompletions('ch', 12) > 0) gain = gain.pow(challengeEffect('ch', 12));
-	// limit to endgame
-	if (gain.gte(endPoints)) gain = endPoints;
+	// softcap
+	if (gain.gt(softcaps.points[0])) {
+		let excessGain = gain.div(softcaps.points[0]);
+		excessGain = excessGain.pow(softcaps.points[1]);
+		gain = excessGain.mul(softcaps.points[0]);
+	};
 	// return
 	return gain;
 };
@@ -193,13 +197,23 @@ function fixOldSave(oldVersion) {
 	// achievement fixes
 	if (oldVersion == '2.2' && player.A.achievements.includes('123')) removeAchievement('123');
 	if (oldVersion == '3.2' && player.A.achievements.includes('163')) removeAchievement('163');
+	if (oldVersion == '3.4' && player.points.gte('e1e14')) {
+		setTimeout(() => {
+			doReset('ch', true);
+			if (player.ch.points.gt(33) || player.ch.best.gt(33) || player.ch.total.gt(33)) {
+				player.ch.points = new Decimal(33);
+				player.ch.best = new Decimal(33);
+				player.ch.total = new Decimal(33);
+			};
+		});
+	};
 	// remove unused vars
 	delete player.r.sanctummult;
 	delete player.r.essencemult;
 };
 
 // glitch text
-const validChars = "!\"#$%'()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ";
+const validChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ";
 
 function randomChar() {
 	return validChars[Math.floor(Math.random() * validChars.length)];

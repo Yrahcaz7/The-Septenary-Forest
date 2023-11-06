@@ -12,7 +12,8 @@ addLayer('e', {
 	}},
 	color: '#4CED13',
 	branches: ['c', 'q', 'p'],
-	requires: new Decimal(5),
+	requires: 5,
+	marked() { return isAssimilated(this.layer) },
 	resource: 'essence',
 	baseResource: 'points',
 	baseAmount() { return player.points },
@@ -81,19 +82,10 @@ addLayer('e', {
 		return gen;
 	},
 	automate() {
-		if (hasMilestone('m', 2) && player.e.auto_upgrades) {
-			if (tmp.e.upgrades[11].unlocked) buyUpgrade('e', 11);
-			if (tmp.e.upgrades[12].unlocked) buyUpgrade('e', 12);
-			if (tmp.e.upgrades[13].unlocked) buyUpgrade('e', 13);
-			if (tmp.e.upgrades[21].unlocked) buyUpgrade('e', 21);
-			if (tmp.e.upgrades[22].unlocked) buyUpgrade('e', 22);
-			if (tmp.e.upgrades[23].unlocked) buyUpgrade('e', 23);
-			if (tmp.e.upgrades[31].unlocked) buyUpgrade('e', 31);
-			if (tmp.e.upgrades[32].unlocked) buyUpgrade('e', 32);
-			if (tmp.e.upgrades[33].unlocked) buyUpgrade('e', 33);
-			if (tmp.e.upgrades[41].unlocked) buyUpgrade('e', 41);
-			if (tmp.e.upgrades[42].unlocked) buyUpgrade('e', 42);
-			if (tmp.e.upgrades[43].unlocked) buyUpgrade('e', 43);
+		if (hasMilestone('m', 2) && player[this.layer].auto_upgrades) {
+			for (const id in tmp[this.layer].upgrades) {
+				if (tmp[this.layer].upgrades[id].unlocked) buyUpgrade(this.layer, id);
+			};
 		};
 		if (hasMilestone('m', 0) && player.e.auto_buyables) {
 			if (layers.e.buyables[11].canAfford()) {
@@ -400,7 +392,7 @@ addLayer('e', {
 					if (player.mo.assimilating === this.layer) text += '<br>formula: (x+1)^0.2';
 					else text += '<br>formula: (x+1)^0.0025';
 				};
-				return 'exponentiates essence gain based on the amount of this upgrade bought.<br>Currently: ^' + format(buyableEffect('e', this.id)) + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount('e', this.id)) + '/' + this.purchaseLimit;
+				return 'exponentiates essence gain multiplier based on the amount of this upgrade bought.<br>Currently: ^' + format(buyableEffect('e', this.id)) + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount('e', this.id)) + '/' + this.purchaseLimit;
 			},
 			unlocked() { return player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer },
 		},
@@ -422,6 +414,7 @@ addLayer('c', {
 	color: "#D2D237",
 	branches: ['h'],
 	requires: 10000,
+	marked() { return isAssimilated(this.layer) },
 	resource: 'cores',
 	baseResource: 'essence',
 	baseAmount() { return player.e.points },
@@ -484,19 +477,10 @@ addLayer('c', {
 		return gen;
 	},
 	automate() {
-		if (hasMilestone('s', 1) && player.c.auto_upgrades) {
-			if (tmp.c.upgrades[11].unlocked) buyUpgrade('c', 11);
-			if (tmp.c.upgrades[12].unlocked) buyUpgrade('c', 12);
-			if (tmp.c.upgrades[13].unlocked) buyUpgrade('c', 13);
-			if (tmp.c.upgrades[21].unlocked) buyUpgrade('c', 21);
-			if (tmp.c.upgrades[22].unlocked) buyUpgrade('c', 22);
-			if (tmp.c.upgrades[23].unlocked) buyUpgrade('c', 23);
-			if (tmp.c.upgrades[31].unlocked) buyUpgrade('c', 31);
-			if (tmp.c.upgrades[32].unlocked) buyUpgrade('c', 32);
-			if (tmp.c.upgrades[33].unlocked) buyUpgrade('c', 33);
-			if (tmp.c.upgrades[41].unlocked) buyUpgrade('c', 41);
-			if (tmp.c.upgrades[42].unlocked) buyUpgrade('c', 42);
-			if (tmp.c.upgrades[43].unlocked) buyUpgrade('c', 43);
+		if (hasMilestone('s', 1) && player[this.layer].auto_upgrades) {
+			for (const id in tmp[this.layer].upgrades) {
+				if (tmp[this.layer].upgrades[id].unlocked) buyUpgrade(this.layer, id);
+			};
 		};
 		if (hasMilestone('s', 2) && player.c.auto_buyables) {
 			if (tmp.c.buyables[11].unlocked && tmp.c.buyables[11].canAfford) {
@@ -732,8 +716,8 @@ addLayer('c', {
 		43: {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Exponential Core' },
 			description() {
-				if (player.mo.assimilating === this.layer) return 'exponentiates core gain by ^1.25';
-				else return 'exponentiates core gain by ^1.005';
+				if (player.mo.assimilating === this.layer) return 'exponentiates core gain multiplier by ^1.25';
+				else return 'exponentiates core gain multiplier by ^1.005';
 			},
 			cost: '1e480',
 			effect() {
@@ -833,6 +817,7 @@ addLayer('q', {
 	color: "#DB5196",
 	branches: ['sp'],
 	requires: 1e9,
+	marked() { return isAssimilated(this.layer) },
 	resource: 'quarks',
 	baseResource: 'essence',
 	baseAmount() { return player.e.points },
@@ -888,32 +873,10 @@ addLayer('q', {
 		return gen;
 	},
 	automate() {
-		if (hasMilestone('s', 4) && player.q.auto_upgrades) {
-			if (tmp.q.upgrades[11].unlocked) buyUpgrade('q', 11);
-			if (tmp.q.upgrades[12].unlocked) buyUpgrade('q', 12);
-			if (tmp.q.upgrades[13].unlocked) buyUpgrade('q', 13);
-			if (tmp.q.upgrades[14].unlocked) buyUpgrade('q', 14);
-			if (tmp.q.upgrades[15].unlocked) buyUpgrade('q', 15);
-			if (tmp.q.upgrades[21].unlocked) buyUpgrade('q', 21);
-			if (tmp.q.upgrades[22].unlocked) buyUpgrade('q', 22);
-			if (tmp.q.upgrades[23].unlocked) buyUpgrade('q', 23);
-			if (tmp.q.upgrades[24].unlocked) buyUpgrade('q', 24);
-			if (tmp.q.upgrades[25].unlocked) buyUpgrade('q', 25);
-			if (tmp.q.upgrades[31].unlocked) buyUpgrade('q', 31);
-			if (tmp.q.upgrades[32].unlocked) buyUpgrade('q', 32);
-			if (tmp.q.upgrades[33].unlocked) buyUpgrade('q', 33);
-			if (tmp.q.upgrades[34].unlocked) buyUpgrade('q', 34);
-			if (tmp.q.upgrades[35].unlocked) buyUpgrade('q', 35);
-			if (tmp.q.upgrades[41].unlocked) buyUpgrade('q', 41);
-			if (tmp.q.upgrades[42].unlocked) buyUpgrade('q', 42);
-			if (tmp.q.upgrades[43].unlocked) buyUpgrade('q', 43);
-			if (tmp.q.upgrades[44].unlocked) buyUpgrade('q', 44);
-			if (tmp.q.upgrades[45].unlocked) buyUpgrade('q', 45);
-			if (tmp.q.upgrades[51].unlocked) buyUpgrade('q', 51);
-			if (tmp.q.upgrades[52].unlocked) buyUpgrade('q', 52);
-			if (tmp.q.upgrades[53].unlocked) buyUpgrade('q', 53);
-			if (tmp.q.upgrades[54].unlocked) buyUpgrade('q', 54);
-			if (tmp.q.upgrades[55].unlocked) buyUpgrade('q', 55);
+		if (hasMilestone('s', 4) && player[this.layer].auto_upgrades) {
+			for (const id in tmp[this.layer].upgrades) {
+				if (tmp[this.layer].upgrades[id].unlocked && id < 60) buyUpgrade(this.layer, id);
+			};
 		};
 	},
 	doReset(resettingLayer) {
@@ -1354,7 +1317,7 @@ addLayer('q', {
 		},
 		63: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Estimation on Point' },
-			description() { return 'exponentiates point gain based on your ' + randomStr(9) },
+			description() { return 'exponentiates point gain multiplier based on your ' + randomStr(9) },
 			cost: 'e8.34e10',
 			effect() {
 				return getGlitch().log10().add(1).pow(0.05);
@@ -1476,6 +1439,7 @@ addLayer('sp', {
 	color: "#710CC4",
 	branches: ['a'],
 	requires: 1e15,
+	marked() { return isAssimilated(this.layer) },
 	resource: 'subatomic particles',
 	baseResource: 'quarks',
 	baseAmount() { return player.q.points },
@@ -1512,14 +1476,10 @@ addLayer('sp', {
 	layerShown() { return player.q.unlocked || player.sp.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	automate() {
-		if (hasMilestone('m', 4) && player.sp.auto_upgrades && hasUpgrade('h', 53)) {
-			if (tmp.sp.upgrades[11].unlocked) buyUpgrade('sp', 11);
-			if (tmp.sp.upgrades[12].unlocked) buyUpgrade('sp', 12);
-			if (tmp.sp.upgrades[13].unlocked) buyUpgrade('sp', 13);
-			if (tmp.sp.upgrades[21].unlocked) buyUpgrade('sp', 21);
-			if (tmp.sp.upgrades[22].unlocked) buyUpgrade('sp', 22);
-			if (tmp.sp.upgrades[23].unlocked) buyUpgrade('sp', 23);
-			if (tmp.sp.upgrades[31].unlocked) buyUpgrade('sp', 31);
+		if (hasMilestone('m', 4) && player[this.layer].auto_upgrades) {
+			for (const id in tmp[this.layer].upgrades) {
+				if (tmp[this.layer].upgrades[id].unlocked) buyUpgrade(this.layer, id);
+			};
 		};
 		if (hasMilestone('m', 4) && player.sp.auto_buyables) {
 			if (layers.sp.buyables[11].canAfford()) {
@@ -1627,7 +1587,7 @@ addLayer('sp', {
 			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Particle of the Flow' },
 			description() {
 				if (player.mo.assimilating === this.layer) return 'multiplies subatomic particle gain by 2.5x and subatomic particles reset nothing';
-				else return 'multiplies subatomic particle gain by 2.5x, exponentiates subatomic particle gain by ^3.36, and subatomic particles reset nothing';
+				else return 'multiplies subatomic particle gain by 2.5x, exponentiates subatomic particle gain multiplier by ^3.36, and subatomic particles reset nothing';
 			},
 			cost() {
 				if (player.mo.assimilating === this.layer) return 88888;
@@ -1732,6 +1692,7 @@ addLayer('h', {
 	color: "#E36409",
 	branches: ['ds'],
 	requires: 1e60,
+	marked() { return isAssimilated(this.layer) },
 	resource: 'hexes',
 	baseResource: 'cores',
 	baseAmount() { return player.c.points },
@@ -1771,14 +1732,14 @@ addLayer('h', {
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
-		if (hasUpgrade('h', 74)) gen += 1e64;
+		if (hasUpgrade('h', 74)) gen += 6e64;
 		if (hasMilestone('s', 9)) gen += 0.001;
 		return gen;
 	},
 	automate() {
-		if (hasMilestone('m', 1) && player.h.auto_upgrades) {
-			for (const id in layers.h.upgrades) {
-				if (layers.h.upgrades[id].unlocked) buyUpgrade('h', id);
+		if (hasMilestone('m', 1) && player[this.layer].auto_upgrades) {
+			for (const id in tmp[this.layer].upgrades) {
+				if (tmp[this.layer].upgrades[id].unlocked && id < 80) buyUpgrade(this.layer, id);
 			};
 		};
 	},
@@ -2139,25 +2100,25 @@ addLayer('h', {
 			description: 'multiplies point gain based on your hexes',
 			cost: '1e1395',
 			effect() {
-				return player.h.points.add(1).log10().add(1).pow(333);
+				return player.h.points.add(1).log10().add(1).pow(336);
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
-				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^333';
+				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^336';
 				return text;
 			},
 			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 61) && hasUpgrade('h', 62) && hasUpgrade('h', 63) && hasUpgrade('h', 64) },
 		},
 		74: {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hex of the Flow' },
-			description: 'gain +1e66% of your hex gain per second',
+			description: 'gain +6e66% of your hex gain per second',
 			cost: '1e1505',
 			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 61) && hasUpgrade('h', 62) && hasUpgrade('h', 63) && hasUpgrade('h', 64) },
 		},
 		81: {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'True Hexes' },
 			description: 'unlocks something... coming soom!',
-			cost: Infinity,
+			cost: new Decimal('e9.55e13'),
 			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 71) && hasUpgrade('h', 72) && hasUpgrade('h', 73) && hasUpgrade('h', 74) },
 		},
 	},
@@ -2178,6 +2139,7 @@ addLayer('ds', {
 	color: "#BA0035",
 	branches: ['ei'],
 	requires: 1e60,
+	marked() { return isAssimilated(this.layer) },
 	resource: 'demon souls',
 	baseResource: 'hexes',
 	baseAmount() { return player.h.points },
@@ -2216,14 +2178,9 @@ addLayer('ds', {
 		return gen;
 	},
 	automate() {
-		if (hasMilestone('m', 5) && player.ds.auto_upgrades) {
-			buyUpgrade('ds', 11);
-			buyUpgrade('ds', 12);
-			if (hasUpgrade('ds', 11) && hasUpgrade('ds', 12)) {
-				buyUpgrade('ds', 21);
-				buyUpgrade('ds', 22);
-				if (hasUpgrade('ds', 21)) buyUpgrade('ds', 23);
-				if (hasUpgrade('ds', 23)) buyUpgrade('ds', 24);
+		if (hasMilestone('m', 5) && player[this.layer].auto_upgrades) {
+			for (const id in tmp[this.layer].upgrades) {
+				if (tmp[this.layer].upgrades[id].unlocked) buyUpgrade(this.layer, id);
 			};
 		};
 		if (hasMilestone('m', 6) && player.ds.auto_buyables) {
@@ -2523,6 +2480,7 @@ addLayer('a', {
 	color: "#4D2FE0",
 	branches: ['m'],
 	requires: 1000,
+	marked() { return isAssimilated(this.layer) },
 	resource: 'atoms',
 	baseResource: 'subatomic particles',
 	baseAmount() { return player.sp.points },
@@ -2554,9 +2512,9 @@ addLayer('a', {
 	layerShown() { return player.ds.unlocked || player.a.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	automate() {
-		if (hasMilestone('gi', 11) && player.a.auto_upgrades) {
-			for (const id in layers.a.upgrades) {
-				if (layers.a.upgrades[id].unlocked) buyUpgrade('a', id);
+		if (hasMilestone('gi', 11) && player[this.layer].auto_upgrades) {
+			for (const id in tmp[this.layer].upgrades) {
+				if (tmp[this.layer].upgrades[id].unlocked) buyUpgrade(this.layer, id);
 			};
 		};
 	},
@@ -3025,6 +2983,7 @@ addLayer('p', {
 	color: "#FDBBFF",
 	branches: ['s'],
 	requires: new Decimal('1e1000'),
+	marked() { return isAssimilated(this.layer) },
 	resource: 'prayers',
 	baseResource: 'essence',
 	baseAmount() { return player.e.points },
@@ -3671,6 +3630,7 @@ addLayer('s', {
 	color: "#AAFF00",
 	branches: ['r', 'gi'],
 	requires: 1e15,
+	marked() { return isAssimilated(this.layer) },
 	resource: 'sanctums',
 	baseResource: 'prayers',
 	baseAmount() { return player.p.points },
@@ -4305,6 +4265,7 @@ addLayer('r', {
 		return formatWhole(player.r.points) + ' relics';
 	},
 	requires: 10,
+	marked() { return isAssimilated(this.layer) },
 	resource: 'relics',
 	baseResource: 'sanctums',
 	baseAmount() { return player.s.points },
@@ -4572,6 +4533,7 @@ addLayer('m', {
 	color: "#00CCCC",
 	branches: ['cl'],
 	requires: 30000,
+	marked() { return isAssimilated(this.layer) },
 	resource: 'molecules',
 	baseResource: 'atoms',
 	baseAmount() { return player.a.points },
@@ -4601,9 +4563,9 @@ addLayer('m', {
 		return gen;
 	},
 	automate() {
-		if (hasMilestone('w', 2) && player.m.auto_upgrades) {
-			for (const id in layers.m.upgrades) {
-				if (layers.m.upgrades[id].unlocked) buyUpgrade('m', id);
+		if (hasMilestone('w', 2) && player[this.layer].auto_upgrades) {
+			for (const id in tmp[this.layer].upgrades) {
+				if (tmp[this.layer].upgrades[id].unlocked) buyUpgrade(this.layer, id);
 			};
 		};
 	},
@@ -5032,6 +4994,7 @@ addLayer('gi', {
 	color: "#08FF87",
 	branches: ['w', 'ch'],
 	requires: 15,
+	marked() { return isAssimilated(this.layer) },
 	resource: 'good influence',
 	baseResource: 'relics',
 	baseAmount() { return player.r.points },
@@ -5244,7 +5207,7 @@ addLayer('gi', {
 			cost() { return getBuyableAmount('gi', this.id).div(5).add(1).floor() },
 			title() { return '<h3 class="layer-gi' + getdark(this, "title-buyable") + 'Drive out Evil' },
 			canAfford() { return player.gi.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
-			purchaseLimit() { return player.ds.points.add(1).log(10).div(12.5).floor() },
+			purchaseLimit() { return player.ds.points.add(1).log(10).div(12.5).floor().min(1e9) },
 			buy() {
 				if (hasMilestone('ch', 2)) player.gi.total = player.gi.total.add(this.cost());
 				else player.gi.points = player.gi.points.sub(this.cost());
@@ -5254,7 +5217,7 @@ addLayer('gi', {
 				return new Decimal(10).pow(getBuyableAmount('gi', this.id).pow(1.5));
 			},
 			display() {
-				if (player.nerdMode) return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(new Decimal(10).pow(getBuyableAmount('gi', this.id).pow(1.5))) + 'x<br>formula: 10^(x^1.5)<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', this.id)) + '/' + formatWhole(this.purchaseLimit()) + '<br>limit formula: log10(x+1)/12.5 (floored) where x is demon souls';
+				if (player.nerdMode) return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(new Decimal(10).pow(getBuyableAmount('gi', this.id).pow(1.5))) + 'x<br>formula: 10^(x^1.5)<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', this.id)) + '/' + formatWhole(this.purchaseLimit()) + '<br>limit formula: log10(x+1)/12.5 (floored) where x is demon souls<br>limit maxes at 1e9';
 				return 'multiplies essence gain based on the amount of this upgrade bought.<br>Currently: ' + format(new Decimal(10).pow(getBuyableAmount('gi', this.id).pow(1.5))) + 'x<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', this.id)) + '/' + formatWhole(this.purchaseLimit());
 			},
 			unlocked() { return getBuyableAmount('gi', 11).gte(8) },
@@ -5278,6 +5241,7 @@ addLayer('ei', {
 	color: "#FF4400",
 	branches: ['w', 'ch'],
 	requires: 'e3000',
+	marked() { return isAssimilated(this.layer) },
 	resource: 'evil influence',
 	baseResource: 'demon souls',
 	baseAmount() { return player.ds.points },
@@ -5318,9 +5282,9 @@ addLayer('ei', {
 	layerShown() { return player.gi.unlocked || player.ei.unlocked },
 	deactivated() { return inChallenge('ch', 12) || (getClickableState('mo', 11) && !canAssimilate(this.layer)) },
 	automate() {
-		if (hasMilestone('w', 1) && player.ei.auto_upgrades) {
-			for (const id in layers.ei.upgrades) {
-				if (layers.ei.upgrades[id].unlocked) buyUpgrade('ei', id);
+		if (hasMilestone('w', 1) && player[this.layer].auto_upgrades) {
+			for (const id in tmp[this.layer].upgrades) {
+				if (tmp[this.layer].upgrades[id].unlocked) buyUpgrade(this.layer, id);
 			};
 		};
 	},
@@ -5947,6 +5911,7 @@ addLayer('w', {
 	color: '#A0A0A0',
 	branches: ['ch'],
 	requires: 60,
+	marked() { return isAssimilated(this.layer) },
 	resource: 'wars',
 	baseAmount() { return player.gi.points.min(player.ei.points) },
 	type: 'custom',
@@ -6043,7 +6008,7 @@ addLayer('w', {
 				["row", ["prestige-button", "assimilate-button"]],
 				["custom-resource-display", () => { return 'You have ' + formatWhole(player.gi.points) + ' good influence<br>You have ' + formatWhole(player.ei.points) + ' evil influence<br><br>Your best wars is ' + formatWhole(player.w.best) + '<br>You have made a total of ' + formatWhole(player.w.total) + ' wars' }],
 				"blank",
-				["display-text", 'After unlocking War, you can always buy max on all resources below this row.'],
+				["display-text", 'After unlocking War, you can always buy max on all resources before this row.'],
 				"blank",
 				["bar", "tide"],
 				"blank",
@@ -6056,7 +6021,7 @@ addLayer('w', {
 				["row", ["prestige-button", "assimilate-button"]],
 				["custom-resource-display", () => { return 'You have ' + formatWhole(player.gi.points) + ' good influence<br>You have ' + formatWhole(player.ei.points) + ' evil influence<br><br>Your best wars is ' + formatWhole(player.w.best) + '<br>You have made a total of ' + formatWhole(player.w.total) + ' wars' }],
 				"blank",
-				["display-text", 'After unlocking War, you can always buy max on all resources below this row.'],
+				["display-text", 'After unlocking War, you can always buy max on all resources before this row.'],
 				"blank",
 				["bar", "tide"],
 				"blank",
@@ -6388,6 +6353,7 @@ addLayer('cl', {
 	color: "#008800",
 	branches: ['mo'],
 	requires: 1e25,
+	marked() { return isAssimilated(this.layer) },
 	resource: 'cellular life',
 	baseResource: 'molecules',
 	baseAmount() { return player.m.points },
@@ -6608,7 +6574,7 @@ addLayer('cl', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formulas: (x+1)^0.05<br>and (x+1)^1.5';
-				return 'exponentiates core gain and multiplies atom gain based on the amount of this upgrade bought.<br>Currently: ^' + format(this.effect()[0]) + '<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
+				return 'exponentiates core gain multiplier and multiplies atom gain based on the amount of this upgrade bought.<br>Currently: ^' + format(this.effect()[0]) + '<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 		},
 		12: {
@@ -6629,7 +6595,7 @@ addLayer('cl', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formulas: (x+1)^0.0175<br>and (x+1)^0.5';
-				return 'exponentiates demon soul gain and multiplies cellular life gain based on the amount of this upgrade bought.<br>Currently: ^' + format(this.effect()[0]) + '<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
+				return 'exponentiates demon soul gain multiplier and multiplies cellular life gain based on the amount of this upgrade bought.<br>Currently: ^' + format(this.effect()[0]) + '<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			unlocked() { return hasMilestone('cl', 1) },
 		},
@@ -6651,7 +6617,7 @@ addLayer('cl', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formulas: (x+1)^0.025<br>and (x+1)^0.75';
-				return 'exponentiates subatomic particle gain and multiplies cellular life gain based on the amount of this upgrade bought.<br>Currently: ^' + format(this.effect()[0]) + '<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
+				return 'exponentiates subatomic particle gain multiplier and multiplies cellular life gain based on the amount of this upgrade bought.<br>Currently: ^' + format(this.effect()[0]) + '<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			unlocked() { return hasMilestone('cl', 3) },
 		},
@@ -6670,7 +6636,7 @@ addLayer('cl', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formulas: (x+1)^0.075<br>and (x+1)^0.36';
-				return 'exponentiates essence gain and exponentiates core gain based on the amount of this upgrade bought.<br>Currently: ^' + format(this.effect()[0]) + '<br>and ^' + format(this.effect()[1]) + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
+				return 'exponentiates essence gain multiplier and exponentiates core gain multiplier based on the amount of this upgrade bought.<br>Currently: ^' + format(this.effect()[0]) + '<br>and ^' + format(this.effect()[1]) + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			unlocked() { return hasMilestone('cl', 9) },
 		},
@@ -6884,14 +6850,9 @@ addLayer('ch', {
 		let gain = tmp.ch.baseAmount.sub(tmp.ch.requires).div(5).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
 		if (player.ch.points.gte(20)) gain = tmp.ch.baseAmount.sub(tmp.ch.requires).add(230).div(20).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
 		else if (player.ch.points.gte(9)) gain = tmp.ch.baseAmount.sub(tmp.ch.requires).add(40).div(10).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
-		// if (this.canBuyMax()) return gain.max(0);
 		return gain.max(0).min(1);
 	},
 	getNextAt() {
-		/* if (this.canBuyMax()) {
-			if (player.ch.points.add(this.getResetGain()).gte(9)) return this.getResetGain().div(this.gainExp()).mul(10).add(tmp.ch.requires).sub(40);
-			return this.getResetGain().div(this.gainExp()).mul(5).add(tmp.ch.requires);
-		}; */
 		if (player.ch.points.gte(20)) return player.ch.points.div(this.gainExp()).mul(20).add(tmp.ch.requires).sub(230);
 		else if (player.ch.points.gte(9)) return player.ch.points.div(this.gainExp()).mul(10).add(tmp.ch.requires).sub(40);
 		else return player.ch.points.div(this.gainExp()).mul(5).add(tmp.ch.requires);
@@ -6969,6 +6930,7 @@ addLayer('ch', {
 				["infobox", "story1"],
 				["infobox", "story2"],
 				["infobox", "story3"],
+				["infobox", "story4"],
 				["display-text", function() {
 					if (player.ch.best.toNumber() < storyLength(Infinity)) return "<br><br>next story discovery at " + formatWhole(player.ch.best.add(1)) + " chaos";
 					else return "<br><br>all story discoveries found; wait for updates for more";
@@ -7108,7 +7070,7 @@ addLayer('ch', {
 			completionLimit() { return player.ch.points.div(2).floor().max(1).toNumber() },
 			onEnter() { player.gi.unlocked = false },
 			onExit() { player.gi.unlocked = true },
-			rewardDescription: "exponentiates point and demon soul gain based on completions",
+			rewardDescription: "exponentiates point gain and demon soul gain multiplier based on completions",
 			rewardEffect() { return challengeCompletions('ch', this.id) / 100 + 1 },
 			rewardDisplay() {
 				let text = '^' + format(tmp.ch.challenges[this.id].rewardEffect);
@@ -7126,14 +7088,14 @@ addLayer('ch', {
 			goal() {
 				if (challengeCompletions('ch', this.id) < 3) return challengeCompletions('ch', this.id) * 25 + 85;
 				if (challengeCompletions('ch', this.id) < 14) return challengeCompletions('ch', this.id) * 50 + 600;
-				return challengeCompletions('ch', this.id) * 200 + 200;
+				return challengeCompletions('ch', this.id) * 400 + 400;
 			},
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' good influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit + '<br>' },
 			canComplete() { return player.gi.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
 			completionLimit() { return player.ch.points.div(2).floor().max(1).toNumber() },
 			onEnter() { player.ei.unlocked = false },
 			onExit() { player.ei.unlocked = true },
-			rewardDescription: "exponentiates point and prayer gain based on completions",
+			rewardDescription: "exponentiates point gain and prayer gain multiplier based on completions",
 			rewardEffect() {
 				if (hasMilestone('ch', 13)) return (challengeCompletions('ch', this.id) + 1) ** 0.2;
 				else return (challengeCompletions('ch', this.id) * 6.32 + 1) ** 0.005;
@@ -7193,7 +7155,10 @@ addLayer('ch', {
 			unlocked() { return player.ch.best.toNumber() > storyLength(1)},
 		},
 		story3: {
-			title: "Coming Soon",
+			title() {
+				if (player.ch.best.toNumber() >= storyLength(3)) return "Negative Emotions Given Form";
+				else return randomStr(8) + " " + randomStr(8) + " " + randomStr(5) + " " + randomStr(4);
+			},
 			body() {
 				let text = "";
 				for (let index = 0; index < story[3].length && index < (player.ch.best.toNumber() - (storyLength(2))); index++) {
@@ -7202,6 +7167,31 @@ addLayer('ch', {
 				return filterStory(text);
 			},
 			unlocked() { return player.ch.best.toNumber() > storyLength(2)},
+		},
+		story4: {
+			title() {
+				if (player.ch.best.toNumber() >= storyLength(4)) return "Hope and Faith";
+				else return randomStr(4) + " " + randomStr(3) + " " + randomStr(5);
+			},
+			body() {
+				let text = "";
+				for (let index = 0; index < story[4].length && index < (player.ch.best.toNumber() - (storyLength(3))); index++) {
+					text += story[4][index];
+				};
+				return filterStory(text);
+			},
+			unlocked() { return player.ch.best.toNumber() > storyLength(3)},
+		},
+		story5: {
+			title: "Coming Soon",
+			body() {
+				let text = "";
+				for (let index = 0; index < story[5].length && index < (player.ch.best.toNumber() - (storyLength(4))); index++) {
+					text += story[5][index];
+				};
+				return filterStory(text);
+			},
+			unlocked() { return player.ch.best.toNumber() > storyLength(4)},
 		},
 	},
 });
