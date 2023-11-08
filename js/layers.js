@@ -242,7 +242,7 @@ addLayer('e', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
 				return text;
 			},
-			unlocked() { return (hasMilestone('q', 0) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 23) },
+			unlocked() { return (hasMilestone('q', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 23) },
 		},
 		32: {
 			title() {
@@ -260,7 +260,7 @@ addLayer('e', {
 				if (player.nerdMode) text += ' <br>formula: ((x^0.1)y+1)^0.001';
 				return text;
 			},
-			unlocked() { return (hasMilestone('q', 0) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 31) },
+			unlocked() { return (hasMilestone('q', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 31) },
 		},
 		33: {
 			title() {
@@ -278,7 +278,7 @@ addLayer('e', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.025';
 				return text;
 			},
-			unlocked() { return (hasMilestone('q', 0) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 32) },
+			unlocked() { return (hasMilestone('q', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 32) },
 		},
 		41: {
 			title() {
@@ -296,7 +296,7 @@ addLayer('e', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.001';
 				return text;
 			},
-			unlocked() { return (hasMilestone('q', 0) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 33) },
+			unlocked() { return (hasMilestone('q', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 33) },
 		},
 		42: {
 			title() {
@@ -314,7 +314,7 @@ addLayer('e', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
 				return text;
 			},
-			unlocked() { return (hasMilestone('q', 0) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 41) },
+			unlocked() { return (hasMilestone('q', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 41) },
 		},
 		43: {
 			title() {
@@ -322,7 +322,7 @@ addLayer('e', {
 			},
 			description: 'gain +2e22% of your essence gain per second',
 			cost: '1e1111',
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 42) },
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 42) },
 		},
 	},
 	buyables: {
@@ -331,7 +331,7 @@ addLayer('e', {
 			title() { return '<b class="layer-e' + getdark(this, "title-buyable") + 'Purer Essence' },
 			canAfford() { return player.e.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
 			purchaseLimit() {
-				if (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) return 99;
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 99;
 				else return 14;
 			},
 			buy() {
@@ -357,18 +357,18 @@ addLayer('e', {
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
-				if (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) return [getBuyableAmount('e', this.id).add(1).pow(2), getBuyableAmount('e', this.id).add(1)];
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return [getBuyableAmount('e', this.id).add(1).pow(2), getBuyableAmount('e', this.id).add(1)];
 				else return [getBuyableAmount('e', this.id).add(1), getBuyableAmount('e', this.id).add(1).pow(0.25)];
 			},
 			display() {
 				let text = '';
 				if (player.nerdMode) {
-					if (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) text += '<br>formulas: (x+1)^2<br>and x+1';
+					if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) text += '<br>formulas: (x+1)^2<br>and x+1';
 					else text += '<br>formulas: x+1<br>and (x+1)^0.25';
 				};
 				return 'multiplies core gain (and essence gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('e', this.id)[0]) + 'x<br>and ' + format(buyableEffect('e', this.id)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount('e', this.id)) + '/' + this.purchaseLimit;
 			},
-			unlocked() { return player.e.total.gte(85194) || getBuyableAmount('e', this.id).gt(0) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer },
+			unlocked() { return player.e.total.gte(85194) || getBuyableAmount('e', this.id).gt(0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 		13: {
 			cost() {
@@ -394,7 +394,7 @@ addLayer('e', {
 				};
 				return 'exponentiates essence gain multiplier based on the amount of this upgrade bought.<br>Currently: ^' + format(buyableEffect('e', this.id)) + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount('e', this.id)) + '/' + this.purchaseLimit;
 			},
-			unlocked() { return player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer },
+			unlocked() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 	},
 });
@@ -610,7 +610,7 @@ addLayer('c', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.005';
 				return text;
 			},
-			unlocked() { return (hasMilestone('h', 8) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 13) },
+			unlocked() { return (hasMilestone('h', 8) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 13) },
 		},
 		22: {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Quirky Core' },
@@ -626,7 +626,7 @@ addLayer('c', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.002';
 				return text;
 			},
-			unlocked() { return (hasMilestone('h', 8) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 21) },
+			unlocked() { return (hasMilestone('h', 8) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 21) },
 		},
 		23: {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Super Core' },
@@ -640,7 +640,7 @@ addLayer('c', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
 				return text;
 			},
-			unlocked() { return (hasMilestone('h', 8) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 22) },
+			unlocked() { return (hasMilestone('h', 8) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 22) },
 		},
 		31: {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Ultra Core' },
@@ -656,7 +656,7 @@ addLayer('c', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.0025';
 				return text;
 			},
-			unlocked() { return (hasUpgrade('h', 53) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 23) },
+			unlocked() { return (hasUpgrade('h', 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 23) },
 		},
 		32: {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Core of Cores' },
@@ -672,7 +672,7 @@ addLayer('c', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.001';
 				return text;
 			},
-			unlocked() { return (hasUpgrade('h', 53) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 31) },
+			unlocked() { return (hasUpgrade('h', 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 31) },
 		},
 		33: {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Core Liberation' },
@@ -680,7 +680,7 @@ addLayer('c', {
 				return 'if you own <b class="layer-h' + getdark(this, "ref") + 'Core Production Line</b> and all subsequent upgrades, gain +25% of your core gain per second';
 			},
 			cost: 1e80,
-			unlocked() { return (hasUpgrade('h', 53) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 32) },
+			unlocked() { return (hasUpgrade('h', 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 32) },
 		},
 		41: {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Core of the Flow' },
@@ -697,7 +697,7 @@ addLayer('c', {
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^13.3';
 				return text;
 			},
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 33) },
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 33) },
 		},
 		42: {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Core of Recursion' },
@@ -711,7 +711,7 @@ addLayer('c', {
 				return text;
 			},
 			cost: 1e199,
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 41) },
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 41) },
 		},
 		43: {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Exponential Core' },
@@ -724,13 +724,13 @@ addLayer('c', {
 				if (player.mo.assimilating === this.layer) return new Decimal(1.25);
 				else return new Decimal(1.005);
 			},
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 42) },
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 42) },
 		},
 	},
 	buyables: {
 		11: {
 			cost() {
-				if (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) return new Decimal(6).pow(getBuyableAmount('c', this.id));
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return new Decimal(6).pow(getBuyableAmount('c', this.id));
 				else return getBuyableAmount('c', this.id).mul(2).add(1);
 			},
 			title() { return '<b class="layer-c' + getdark(this, "title-buyable") + 'Empowered Points' },
@@ -741,13 +741,13 @@ addLayer('c', {
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
-				if (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) return new Decimal(2).add(buyableEffect('c', 13)).pow(getBuyableAmount('c', this.id));
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return new Decimal(2).add(buyableEffect('c', 13)).pow(getBuyableAmount('c', this.id));
 				else return getBuyableAmount('c', this.id).mul(5).add(1);
 			},
 			display() {
 				let text = '';
 				if (player.nerdMode) {
-					if (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) text += '<br>formula: 2^x';
+					if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) text += '<br>formula: 2^x';
 					else text += '<br>formula: x*5+1';
 				};
 				return 'multiplies point gain based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('c', this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cores<br><br>Bought: ' + formatWhole(getBuyableAmount('c', this.id)) + '/' + this.purchaseLimit;
@@ -758,7 +758,7 @@ addLayer('c', {
 			title() { return '<b class="layer-c' + getdark(this, "title-buyable") + 'Empowered Essence' },
 			canAfford() { return player.c.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
 			purchaseLimit() {
-				if (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) return 99;
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 99;
 				else return 49;
 			},
 			buy() {
@@ -766,7 +766,7 @@ addLayer('c', {
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
-				if (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) return new Decimal(2).add(buyableEffect('c', 13)).pow(getBuyableAmount('c', this.id));
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return new Decimal(2).add(buyableEffect('c', 13)).pow(getBuyableAmount('c', this.id));
 				else return new Decimal(2).pow(getBuyableAmount('c', this.id));
 			},
 			display() {
@@ -795,7 +795,7 @@ addLayer('c', {
 				if (player.nerdMode) text += '<br>formula: x*0.05';
 				return 'increases the base of the previous two rebuyables based on the amount of this upgrade bought.<br>Currently: +' + format(buyableEffect('c', this.id)) + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cores<br><br>Bought: ' + formatWhole(getBuyableAmount('c', this.id)) + '/' + this.purchaseLimit;
 			},
-			unlocked() { return player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer },
+			unlocked() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 	},
 });
@@ -1197,7 +1197,7 @@ addLayer('q', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.005';
 				return text;
 			},
-			unlocked() { return (hasMilestone('sp', 2) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 35) },
+			unlocked() { return (hasMilestone('sp', 2) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 35) },
 		},
 		42: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Subatomic Quarks' },
@@ -1212,7 +1212,7 @@ addLayer('q', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.5';
 				return text;
 			},
-			unlocked() { return (hasMilestone('sp', 2) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 41) },
+			unlocked() { return (hasMilestone('sp', 2) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 41) },
 		},
 		43: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quirky Particles' },
@@ -1226,7 +1226,7 @@ addLayer('q', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
 				return text;
 			},
-			unlocked() { return (hasMilestone('sp', 2) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 42) },
+			unlocked() { return (hasMilestone('sp', 2) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 42) },
 		},
 		44: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Particle Quarks' },
@@ -1240,7 +1240,7 @@ addLayer('q', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.005';
 				return text;
 			},
-			unlocked() { return (hasMilestone('sp', 2) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 43) },
+			unlocked() { return (hasMilestone('sp', 2) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 43) },
 		},
 		45: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'The Ultra Quark' },
@@ -1254,13 +1254,13 @@ addLayer('q', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.125';
 				return text;
 			},
-			unlocked() { return (hasMilestone('sp', 2) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 44) },
+			unlocked() { return (hasMilestone('sp', 2) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 44) },
 		},
 		51: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quark of the Flow' },
 			description: 'gain +1e30% of your quark gain per second',
 			cost: '1e825',
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 45) },
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 45) },
 		},
 		52: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Mystery Quark' },
@@ -1275,19 +1275,19 @@ addLayer('q', {
 				if (player.nerdMode) text += '<br>formula: ???';
 				return text;
 			},
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 51) },
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 51) },
 		},
 		53: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Valued Mystery' },
 			description() { return 'multiplies ' + randomStr(9) + ' value by 10 and frequency by 2' },
 			cost: '1e1145',
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 52) },
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 52) },
 		},
 		54: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Bigger Mystery' },
 			description() { return 'multiplies <b class="layer-q' + getdark(this, "ref") + 'Mystery Quark</b> effect exponent by 2.5 and divides ' + randomStr(9) + ' frequency by 2' },
 			cost: '1e1171',
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 53) },
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 53) },
 		},
 		55: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'What\'s the Point?' },
@@ -1301,19 +1301,19 @@ addLayer('q', {
 				if (player.nerdMode) text += '<br>formula: ???';
 				return text;
 			},
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 54) },
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 54) },
 		},
 		61: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Purge the Mystery' },
 			description() { return 'unlocks the <b class="layer-q' + getdark(this, "ref") + 'Decipherer</b>,<br>a new tab' },
 			cost: 'e8.325e10',
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 55) },
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 55) },
 		},
 		62: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Optimizing' },
 			description() { return 'increases the ' + randomStr(9) + ' rounding element by 2.5, and improves the <b class="layer-q' + getdark(this, "ref") + 'Sample Quarks</b> effect formula' },
 			cost: 'e8.333e10',
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 61) },
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 61) },
 		},
 		63: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Estimation on Point' },
@@ -1327,19 +1327,19 @@ addLayer('q', {
 				if (player.nerdMode) text += '<br>formula: ???';
 				return text;
 			},
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 62) },
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 62) },
 		},
 		64: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'More Optimal' },
 			description() { return 'multiplies ' + randomStr(9) + ' value by 2.5, and improves the <b class="layer-q' + getdark(this, "ref") + 'Sample Quarks</b> effect formula' },
 			cost: 'e1.091e11',
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 63) },
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 63) },
 		},
 		65: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Mystery Surge' },
 			description() { return 'multiplies ' + randomStr(9) + ' frequency by 2, increases the ' + randomStr(9) + ' rounding element by 2.5, and increases decay factor to 0.1' },
 			cost: 'e1.0945e11',
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 64) },
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 64) },
 		},
 	},
 	buyables: {
@@ -1445,7 +1445,7 @@ addLayer('sp', {
 	baseAmount() { return player.q.points },
 	type: 'static',
 	exponent: 4.25,
-	canBuyMax() { return hasMilestone('sp', 0) || player.w.unlocked || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer },
+	canBuyMax() { return hasMilestone('sp', 0) || player.w.unlocked || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 	gainExp() {
 		// init
 		let gain = new Decimal(1);
@@ -1551,37 +1551,37 @@ addLayer('sp', {
 			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Positrons' },
 			description() { return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Protons' },
 			cost: 6,
-			unlocked() { return hasUpgrade('h', 53) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer },
+			unlocked() { return hasUpgrade('h', 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 		12: {
 			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Beta Particles' },
 			description() { return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Neutrons' },
 			cost: 6,
-			unlocked() { return hasUpgrade('h', 53) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer },
+			unlocked() { return hasUpgrade('h', 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 		13: {
 			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Gamma Particles' },
 			description() { return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Electrons' },
 			cost: 6,
-			unlocked() { return hasUpgrade('h', 53) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer },
+			unlocked() { return hasUpgrade('h', 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 		21: {
 			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Proton Decay' },
 			description() { return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Protons</b>, and keep core rebuyables on subatomic particle resets' },
 			cost: 32000,
-			unlocked() { return hasUpgrade('sp', 11) && (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) },
+			unlocked() { return hasUpgrade('sp', 11) && (isAssimilated(this.layer) || player.mo.assimilating === this.layer) },
 		},
 		22: {
 			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Neutron Decay' },
 			description() { return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Neutrons</b>, and keep core upgrades on subatomic particle resets' },
 			cost: 68000,
-			unlocked() { return hasUpgrade('sp', 12) && (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) },
+			unlocked() { return hasUpgrade('sp', 12) && (isAssimilated(this.layer) || player.mo.assimilating === this.layer) },
 		},
 		23: {
 			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Electron Decay' },
 			description() { return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Electrons</b>, and keep core milestones on subatomic particle resets' },
 			cost: 76000,
-			unlocked() { return hasUpgrade('sp', 13) && (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) },
+			unlocked() { return hasUpgrade('sp', 13) && (isAssimilated(this.layer) || player.mo.assimilating === this.layer) },
 		},
 		31: {
 			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Particle of the Flow' },
@@ -1593,7 +1593,7 @@ addLayer('sp', {
 				if (player.mo.assimilating === this.layer) return 88888;
 				else return 'e2.66e9';
 			},
-			unlocked() { return hasUpgrade('sp', 21) && hasUpgrade('sp', 22) && hasUpgrade('sp', 23) && (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) },
+			unlocked() { return hasUpgrade('sp', 21) && hasUpgrade('sp', 22) && hasUpgrade('sp', 23) && (isAssimilated(this.layer) || player.mo.assimilating === this.layer) },
 		},
 	},
 	buyables: {
@@ -1602,7 +1602,7 @@ addLayer('sp', {
 			title() { return '<b class="layer-sp' + getdark(this, "title-buyable") + 'Protons' },
 			canAfford() { return player.sp.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
 			purchaseLimit() {
-				if (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) return 99;
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 99;
 				return 9;
 			},
 			buy() {
@@ -1628,7 +1628,7 @@ addLayer('sp', {
 			title() { return '<b class="layer-sp' + getdark(this, "title-buyable") + 'Neutrons' },
 			canAfford() { return player.sp.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
 			purchaseLimit() {
-				if (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) return 99;
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 99;
 				return 9;
 			},
 			buy() {
@@ -1654,7 +1654,7 @@ addLayer('sp', {
 			title() { return '<b class="layer-sp' + getdark(this, "title-buyable") + 'Electrons' },
 			canAfford() { return player.sp.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
 			purchaseLimit() {
-				if (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) return 99;
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 99;
 				return 9;
 			},
 			buy() {
@@ -1687,7 +1687,9 @@ addLayer('h', {
 		points: new Decimal(0),
 		best: new Decimal(0),
 		total: new Decimal(0),
+		limitsBroken: 0,
 		auto_upgrades: false,
+		keep_breaking: false,
 	}},
 	color: "#E36409",
 	branches: ['ds'],
@@ -1722,8 +1724,14 @@ addLayer('h', {
 		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
 		return mult;
 	},
-	softcap: new Decimal('1e1000'),
-	softcapPower: 0.5,
+	softcap() {
+		if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return new Decimal('1e100');
+		return new Decimal('1e1000');
+	},
+	softcapPower() {
+		if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 0.51;
+		return 0.5;
+	},
 	row: 2,
 	hotkeys: [
 		{key: 'h', description: 'H: Reset for hexes', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
@@ -1747,20 +1755,51 @@ addLayer('h', {
 		if (challengeCompletions('r', 11) >= 27 && resettingLayer == 'r') return;
 		if (hasMilestone('m', 13) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 4) && resettingLayer == 'gi') return;
-		let keep = ['auto_upgrades'];
+		let keep = ['auto_upgrades', 'keep_breaking'];
 			if (hasMilestone('ds', 8) && resettingLayer == 'ds') keep.push("milestones");
 			if (hasMilestone('a', 6) && resettingLayer == 'a') keep.push("milestones");
 			if (hasMilestone('a', 11) && (resettingLayer == 'a' || resettingLayer == 'ds')) keep.push("upgrades");
+			if (hasMilestone('ch', 15) && resettingLayer == 'ch' && player.h.keep_breaking) keep.push("limitsBroken");
+			if (layers[resettingLayer].row < 6) keep.push("limitsBroken");
 			if (layers[resettingLayer].row > this.row) layerDataReset('h', keep);
 		},
-	tabFormat: [
-		"main-display",
-		["row", ["prestige-button", "assimilate-button"]],
-		"resource-display",
-		"blank",
-		"milestones",
-		"upgrades",
-	],
+	tabFormat: {
+		"Classic Hexes": {
+			content: [
+				"main-display",
+				["row", ["prestige-button", "assimilate-button"]],
+				"resource-display",
+				"blank",
+				"milestones",
+				"upgrades",
+			],
+		},
+		"The Breaker": {
+			content: () => {
+				if (tmp.h.tabFormat["The Breaker"].unlocked) return [
+					"main-display",
+					["row", ["prestige-button", "assimilate-button"]],
+					"resource-display",
+					"blank",
+					["clickable", "11"],
+					"blank",
+					["clickable", "21"],
+					"blank",
+				];
+				return [
+					"main-display",
+					["row", ["prestige-button", "assimilate-button"]],
+					"resource-display",
+					"blank",
+					"milestones",
+					"upgrades",
+				];
+			},
+			unlocked() {
+				return hasUpgrade('h', 81);
+			},
+		},
+	},
 	milestones: {
 		0: {
 			requirementDescription: '5 hexes',
@@ -2007,7 +2046,7 @@ addLayer('h', {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Faster Essence' },
 			description() { return 'increases essence gain per second by 25% if you have the <b class="layer-c' + getdark(this, "ref") + '4th core milestone</b> (total: 75%)' },
 			cost: 9e90,
-			unlocked() { return (hasUpgrade('ds', 11) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 41) && hasUpgrade('h', 42) && hasUpgrade('h', 43) && hasUpgrade('h', 44) },
+			unlocked() { return (hasUpgrade('ds', 11) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 41) && hasUpgrade('h', 42) && hasUpgrade('h', 43) && hasUpgrade('h', 44) },
 		},
 		52: {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Core Production Line' },
@@ -2025,13 +2064,13 @@ addLayer('h', {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Fastest Essence' },
 			description() { return 'increases the effect of <b class="layer-h' + getdark(this, "ref") + 'Faster Essence</b> by 25% (total: 100%)' },
 			cost: 9.5e95,
-			unlocked() { return (hasUpgrade('ds', 11) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 41) && hasUpgrade('h', 42) && hasUpgrade('h', 43) && hasUpgrade('h', 44) },
+			unlocked() { return (hasUpgrade('ds', 11) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 41) && hasUpgrade('h', 42) && hasUpgrade('h', 43) && hasUpgrade('h', 44) },
 		},
 		61: {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Essence Overdrive' },
 			description() { return 'increases the effect of <b class="layer-h' + getdark(this, "ref") + 'Fastest Essence</b> by 25% (total: 125%)' },
 			cost: 1e100,
-			unlocked() { return (hasUpgrade('ds', 12) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 51) && hasUpgrade('h', 52) && hasUpgrade('h', 53) && hasUpgrade('h', 54) },
+			unlocked() { return (hasUpgrade('ds', 12) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 51) && hasUpgrade('h', 52) && hasUpgrade('h', 53) && hasUpgrade('h', 54) },
 		},
 		62: {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Sub Hex Particle' },
@@ -2065,12 +2104,12 @@ addLayer('h', {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Potential Essence Potential' },
 			description() { return 'increases the effect of <b class="layer-h' + getdark(this, "ref") + 'Essence Overdrive</b> by 25% (total: 150%)' },
 			cost: 1.11e111,
-			unlocked() { return (hasUpgrade('ds', 12) || player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 51) && hasUpgrade('h', 52) && hasUpgrade('h', 53) && hasUpgrade('h', 54) },
+			unlocked() { return (hasUpgrade('ds', 12) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 51) && hasUpgrade('h', 52) && hasUpgrade('h', 53) && hasUpgrade('h', 54) },
 		},
 		71: {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hex the Hex' },
 			description: 'multiplies hex gain based on your hexes',
-			cost: '1e1081',
+			cost: '1e570',
 			effect() {
 				return player.h.points.add(1).log10().add(1).pow(75);
 			},
@@ -2079,12 +2118,12 @@ addLayer('h', {
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^75';
 				return text;
 			},
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 61) && hasUpgrade('h', 62) && hasUpgrade('h', 63) && hasUpgrade('h', 64) },
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 61) && hasUpgrade('h', 62) && hasUpgrade('h', 63) && hasUpgrade('h', 64) },
 		},
 		72: {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hex the Core' },
 			description: 'multiplies core gain based on your hexes',
-			cost: '1e1215',
+			cost: '1e696',
 			effect() {
 				return player.h.points.add(1).log10().add(1).pow(250);
 			},
@@ -2093,12 +2132,12 @@ addLayer('h', {
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^250';
 				return text;
 			},
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 61) && hasUpgrade('h', 62) && hasUpgrade('h', 63) && hasUpgrade('h', 64) },
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 61) && hasUpgrade('h', 62) && hasUpgrade('h', 63) && hasUpgrade('h', 64) },
 		},
 		73: {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hexes are the Point' },
 			description: 'multiplies point gain based on your hexes',
-			cost: '1e1395',
+			cost: '1e870',
 			effect() {
 				return player.h.points.add(1).log10().add(1).pow(336);
 			},
@@ -2107,19 +2146,66 @@ addLayer('h', {
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^336';
 				return text;
 			},
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 61) && hasUpgrade('h', 62) && hasUpgrade('h', 63) && hasUpgrade('h', 64) },
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 61) && hasUpgrade('h', 62) && hasUpgrade('h', 63) && hasUpgrade('h', 64) },
 		},
 		74: {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hex of the Flow' },
 			description: 'gain +6e66% of your hex gain per second',
-			cost: '1e1505',
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 61) && hasUpgrade('h', 62) && hasUpgrade('h', 63) && hasUpgrade('h', 64) },
+			cost: '1e977',
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 61) && hasUpgrade('h', 62) && hasUpgrade('h', 63) && hasUpgrade('h', 64) },
 		},
 		81: {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'True Hexes' },
-			description: 'unlocks something... coming soom!',
-			cost: new Decimal('e9.55e13'),
-			unlocked() { return (player.mo.assimilated.includes(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 71) && hasUpgrade('h', 72) && hasUpgrade('h', 73) && hasUpgrade('h', 74) },
+			description() { return 'Unlocks the <b class="layer-h' + getdark(this, "ref") + 'Breaker</b>,<br>a new tab' },
+			cost: new Decimal('e1.132e14'),
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 71) && hasUpgrade('h', 72) && hasUpgrade('h', 73) && hasUpgrade('h', 74) },
+		},
+	},
+	clickables: {
+		11: {
+			title() { return '<b class="layer-h' + getdark(this, "title-clickable") + 'The Breaker' },
+			display() {
+				let text = 'Use to break a new limit. Using this will reset your evil influence, evil power, and evil influence upgrades. Additionally, it will divide evil influence gain.<br><br>';
+				if (player.h.limitsBroken === 0) {
+					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: break the limit of <b class="layer-w-dark">Power of Good</b> and improve its effect formula, but its cost scales much faster. Also divide evil influence gain by 100.<br><br>Limits broken:<br>none so far';
+					else text += 'Next effect: break the limit of <b>Power of Good</b> and improve its effect formula, but its cost scales much faster. Also divide evil influence gain by 100.<br><br>Limits broken:<br>none so far';
+				} else {
+					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: you have broken all the limits!<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b>';
+					else text += 'Next effect: you have broken all the limits!<br><br>Limits broken:<br><b>Power of Good</b>';
+				};
+				return text + '<br><br>Effect on evil influence gain: /' + format(tmp.h.clickables[11].nerf) + '<br><br>Req: ' + formatWhole(tmp.h.clickables[11].req[0]) + ' achievements and ' + formatWhole(tmp.h.clickables[11].req[1]) + ' evil influence';
+			},
+			req() { return [90 + player.h.limitsBroken * 2, 25000] },
+			nerfLayers: [100],
+			nerf() {
+				let nerf = new Decimal(1);
+				for (let index = 0; index < this.nerfLayers.length && index < player.h.limitsBroken; index++) {
+					nerf = nerf.mul(this.nerfLayers[index]);
+				};
+				return nerf;
+			},
+			canClick() { return player.A.points.gte(tmp.h.clickables[11].req[0]) && player.ei.points.gte(tmp.h.clickables[11].req[1]) && player.h.limitsBroken < this.nerfLayers.length },
+			onClick() {
+				player.ei.points = new Decimal(0);
+				player.ei.best = new Decimal(0);
+				player.ei.total = new Decimal(0);
+				player.ei.power = new Decimal(0);
+				player.ei.upgrades = [];
+				player.h.limitsBroken++;
+			},
+			style: {height: '300px', width: '300px'},
+		},
+		21: {
+			title() { return '<b class="layer-h' + getdark(this, "title-clickable") + 'Reset Breaking' },
+			display() { return 'Breaking only resets on Assimilation and row 7+ resets. Click to reset Breaking and force a chaos reset.' },
+			canClick() { return player.h.limitsBroken > 0 },
+			onClick() {
+				if (confirm('Are you sure you want to force a chaos reset to reset Breaking?')) {
+					player.h.limitsBroken = 0;
+					doReset('ch', true);
+				};
+			},
+			style: {'min-height': '60px', width: '200px'},
 		},
 	},
 });
@@ -2225,7 +2311,6 @@ addLayer('ds', {
 					"main-display",
 					["row", ["prestige-button", "assimilate-button"]],
 					"resource-display",
-					"blank",
 					"blank",
 					"challenges",
 					"blank",
@@ -2387,7 +2472,7 @@ addLayer('ds', {
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Quark gain is divided by 100,000<br> - Point gain is divided by 10,000<br> - Hex gain is divided by 1,000<br> - Core gain is divided by 100<br> - Quark gain is divided by 10",
 			goalDescription() {
-				if (colorvalue[0][2]) {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) {
 					if (hasChallenge('ds', this.id)) return '<b class="layer-h">Potential Essence Potential';
 					return '<b class="layer-h-dark">Potential Essence Potential';
 				};
@@ -2409,7 +2494,7 @@ addLayer('ds', {
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1,000,000<br> - Hex gain is divided by 1e10<br> - Subatomic Particle gain is divided by the number of Quarks",
 			goalDescription() {
-				if (colorvalue[0][2]) {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) {
 					if (hasChallenge('ds', this.id)) return '<b class="layer-h">Sub Core Particle Fusion';
 					return '<b class="layer-h-dark">Sub Core Particle Fusion';
 				};
@@ -2432,7 +2517,7 @@ addLayer('ds', {
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Hex gain is divided by 100,000<br> - Point gain is divided by 1e10<br> - Core gain is divided by 1e15<br> - Essence gain is divided by 1e20",
 			goalDescription() {
-				if (colorvalue[0][2]) {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) {
 					if (hasChallenge('ds', this.id)) return '<b class="layer-h">Sub Core Particle Fusion';
 					return '<b class="layer-h-dark">Sub Core Particle Fusion';
 				};
@@ -2455,7 +2540,7 @@ addLayer('ds', {
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1e10<br> - Quark and Subatomic Particle gain is divided by 1e40",
 			goalDescription() {
-				if (colorvalue[0][2]) return '<b class="layer-a">Famed Atom\'s Donations';
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return '<b class="layer-a">Famed Atom\'s Donations';
 				return '<b>Famed Atom\'s Donations';
 			},
 			canComplete() { return hasUpgrade('a', 51) },
@@ -2982,7 +3067,7 @@ addLayer('p', {
 	}},
 	color: "#FDBBFF",
 	branches: ['s'],
-	requires: new Decimal('1e1000'),
+	requires: '1e1000',
 	marked() { return isAssimilated(this.layer) },
 	resource: 'prayers',
 	baseResource: 'essence',
@@ -5272,6 +5357,7 @@ addLayer('ei', {
 		if (hasBuyable('w', 12)) gain = gain.mul(buyableEffect('w', 12));
 		if (hasBuyable('cl', 53)) gain = gain.mul(buyableEffect('cl', 53));
 		if (inChallenge('ch', 11)) gain = gain.mul(1.1);
+		if (player.h.limitsBroken > 0) gain = gain.div(tmp.h.clickables[11].nerf);
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('w', 3) && (!hasMilestone('cl', 0) || player.ei.auto_prestige) },
@@ -5354,7 +5440,6 @@ addLayer('ei', {
 					"resource-display",
 					"blank",
 					["display-text", 'You have <h2 class="layer-ei">' + formatSmall(player.ei.power) + '</h2> evil power'],
-					"blank",
 					"blank",
 					"challenges",
 					"blank",
@@ -5846,7 +5931,10 @@ addLayer('ei', {
 				player.ei.upgrades = [];
 				player.ei.power = new Decimal(0);
 			},
-			rewardDescription: 'evil influence resets nothing, all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>power gain by ^1.075',
+			rewardDescription() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'evil influence resets nothing, all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>power gain by ^1.075'
+				return 'evil influence resets nothing, all <b>Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>power gain by ^1.075'
+			},
 			doReset: true,
 			noAutoExit: true,
 		},
@@ -6209,8 +6297,12 @@ addLayer('w', {
 				if (getBuyableAmount('w', this.id).eq(6)) return new Decimal(194);
 				return getBuyableAmount('w', this.id).mul(5).add(163);
 			},
-			title: '<h3 class="layer-w-dark">Rivalry',
+			title() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return '<h3 class="layer-w-dark">Rivalry';
+				return '<h3>Rivalry';
+			},
 			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) },
+			purchaseLimit: 1e9,
 			buy() {
 				if (hasMilestone('ch', 10)) {
 					player.gi.total = player.gi.total.add(this.cost());
@@ -6227,7 +6319,7 @@ addLayer('w', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formulas: (x+1)^0.09<br>and (x+1)^0.21';
-				return 'multiplies good influence and evil influence gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()[0]) + 'x<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' EI and ' + formatWhole(this.cost()) + ' GI<br><br>Bought: ' + formatWhole(getBuyableAmount('w', this.id));
+				return 'multiplies good influence and evil influence gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()[0]) + 'x<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' EI and ' + formatWhole(this.cost()) + ' GI<br><br>Bought: ' + formatWhole(getBuyableAmount('w', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 		},
 		12: {
@@ -6241,7 +6333,10 @@ addLayer('w', {
 				if (hasMilestone('w', 10)) return getBuyableAmount('w', this.id).mul(7).add(170);
 				return getBuyableAmount('w', this.id).mul(8).add(170);
 			},
-			title: '<h3 class="layer-w-dark">Relic Hoarding',
+			title() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return '<h3 class="layer-w-dark">Relic Hoarding';
+				return '<h3>Relic Hoarding';
+			},
 			canAfford() { return player.r.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
 			purchaseLimit: 15,
 			buy() {
@@ -6261,12 +6356,17 @@ addLayer('w', {
 		},
 		13: {
 			cost() {
+				if (player.h.limitsBroken >= 1) return new Decimal(1.1).pow(getBuyableAmount('w', this.id)).mul(10000000);
 				if (hasMilestone('w', 16)) return getBuyableAmount('w', this.id).mul(50000).add(320000);
 				return getBuyableAmount('w', this.id).mul(70000).add(320000);
 			},
-			title: '<h3 class="layer-w-dark">Power of Good',
+			title() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return '<h3 class="layer-w-dark">Power of Good';
+				return '<h3>Power of Good';
+			},
 			canAfford() { return player.s.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
 			purchaseLimit() {
+				if (player.h.limitsBroken >= 1) return 1e9;
 				let max = 3;
 				if (hasMilestone('w', 11)) max += 1;
 				if (hasMilestone('w', 12)) max += 1;
@@ -6282,18 +6382,25 @@ addLayer('w', {
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
+				if (player.h.limitsBroken >= 1) return player.s.points.add(1).pow(0.025).mul(getBuyableAmount('w', this.id)).add(1).pow(0.05);
 				return player.s.points.add(1).pow(0.025).mul(getBuyableAmount('w', this.id)).add(1).pow(0.025);
 			},
 			display() {
 				let text = '';
-				if (player.nerdMode) text = '<br>formula: (((x+1)^0.025)*y+1)^0.025';
+				if (player.nerdMode) {
+					if (player.h.limitsBroken >= 1) text = '<br>formula: (((x+1)^0.025)*y+1)^0.05';
+					else text = '<br>formula: (((x+1)^0.025)*y+1)^0.025';
+				};
 				return 'multiplies good influence gain based on your sanctums and the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' sanctums<br><br>Bought: ' + formatWhole(getBuyableAmount('w', this.id)) + '/' + formatWhole(this.purchaseLimit());
 			},
 			unlocked() { return hasMilestone('w', 4) },
 		},
 		21: {
 			cost() { return getBuyableAmount('w', this.id).mul(5).add(235) },
-			title: '<h3 class="layer-w-dark">Race for Knowledge',
+			title() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return '<h3 class="layer-w-dark">Race for Knowledge';
+				return '<h3>Race for Knowledge';
+			},
 			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
 			purchaseLimit() {
 				let max = new Decimal(20);
@@ -6841,6 +6948,7 @@ addLayer('ch', {
 		else return {width: '150px', height: '150px'};
 	},
 	requires: 70,
+	marked() { return isAssimilated(this.layer) },
 	resource: 'chaos',
 	baseResource: 'wars',
 	baseAmount() { return player.w.points },
@@ -6880,7 +6988,7 @@ addLayer('ch', {
 	layerShown() { return player.cl.unlocked || player.ch.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	effect() {
-		return [new Decimal('1e1000').pow(player.ch.points), player.ch.points.add(1).pow(0.0485), (hasMilestone('ch', 3) ? new Decimal(75).pow(player.ch.points) : new Decimal(25).pow(player.ch.points))];
+		return [(hasMilestone('ch', 15) ? new Decimal('e1e11').pow(player.ch.points) : new Decimal('1e1000').pow(player.ch.points)), player.ch.points.add(1).pow(0.0485), (hasMilestone('ch', 3) ? new Decimal(75).pow(player.ch.points) : new Decimal(25).pow(player.ch.points))];
 	},
 	effectDescription() {
 		return 'which multiplies essence gain by <h2 class="layer-ch">' + format(tmp.ch.effect[0]) + '</h2>x, multiplies war gain by <h2 class="layer-ch">' + format(tmp.ch.effect[1]) + '</h2>x, and multiplies protein found from cellular life by <h2 class="layer-ch">' + format(tmp.ch.effect[2]) + '</h2>x';
@@ -6931,6 +7039,7 @@ addLayer('ch', {
 				["infobox", "story2"],
 				["infobox", "story3"],
 				["infobox", "story4"],
+				["infobox", "story5"],
 				["display-text", function() {
 					if (player.ch.best.toNumber() < storyLength(Infinity)) return "<br><br>next story discovery at " + formatWhole(player.ch.best.add(1)) + " chaos";
 					else return "<br><br>all story discoveries found; wait for updates for more";
@@ -6964,17 +7073,17 @@ addLayer('ch', {
 		},
 		3: {
 			requirementDescription: '4 chaos',
-			effectDescription: "keep molecule milestones on chaos resets, and improve the formula of chaos' third effect",
+			effectDescription: 'keep molecule milestones on chaos resets, and improve the formula of chaos\'s third effect',
 			done() { return player.ch.points.gte(4) },
 		},
 		4: {
 			requirementDescription: '5 chaos',
-			effectDescription: "keep evil influence challenge completions on chaos resets",
+			effectDescription: 'keep evil influence challenge completions on chaos resets',
 			done() { return player.ch.points.gte(5) },
 		},
 		5: {
 			requirementDescription: '6 chaos',
-			effectDescription: "keep demon soul challenge completions on chaos resets",
+			effectDescription: 'keep demon soul challenge completions on chaos resets',
 			done() { return player.ch.points.gte(6) },
 		},
 		6: {
@@ -7044,6 +7153,16 @@ addLayer('ch', {
 			requirementDescription: '33 chaos',
 			effectDescription: 'reduce the multicellular organism cost base (1.2 --> 1.1)',
 			done() { return player.ch.points.gte(33) },
+			unlocked() { return player.mo.unlocked },
+		},
+		15: {
+			requirementDescription: '38 chaos',
+			effectDescription() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'unlock the option to keep Breaking on chaos resets (<b class="layer-h-dark">Reset Breaking</b> will still work), improve the formula of chaos\'s first effect, and reduce the multicellular organism cost base (1.1 --> 1.067)';
+				return 'unlock the option to keep Breaking on chaos resets (<b>Reset Breaking</b> will still work), improve the formula of chaos\'s first effect, and reduce the multicellular organism cost base (1.1 --> 1.067)';
+			},
+			done() { return player.ch.points.gte(38) },
+			toggles: [['h', 'keep_breaking']],
 			unlocked() { return player.mo.unlocked },
 		},
 	},
@@ -7216,8 +7335,9 @@ addLayer('mo', {
 	baseAmount() { return player.cl.points },
 	type: 'static',
 	base() {
+		if (hasMilestone('ch', 15)) return 1.067;
 		if (hasMilestone('ch', 14)) return 1.1;
-		else return 1.2;
+		return 1.2;
 	},
 	exponent: 1,
 	canBuyMax() { return false },
@@ -7266,8 +7386,8 @@ addLayer('mo', {
 		11: {
 			title() { return '<b class="layer-mo' + getdark(this, "title-clickable") + 'Assimilation' },
 			display() {
-				if (player.mo.assimilating !== null) return "<br>Currently Assimilating: " + tmp[player.mo.assimilating].name + ".<br><br>Click to exit the run.";
-				else if (getClickableState('mo', 11)) return '<br>You are in an Assimilation Search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click to exit this search.';
+				if (player.mo.assimilating !== null) return '<br>Currently Assimilating: " + tmp[player.mo.assimilating].name + ".<br><br>Click to exit the run.';
+				else if (getClickableState('mo', 11)) return '<br>You are in an Assimilation Search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click here to exit the search.';
 				else return '<br>Begin an Assimilation search.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
 			},
 			req() { return [1, 2, 3, 4, 7, Infinity][player.mo.assimilated.length] },

@@ -29,10 +29,10 @@ addLayer('SC', {
 	update(diff) {
 		player.SC.softcaps = [];
 		if (player.points.gte(softcaps.points[0])) player.SC.softcaps.push("points");
-		if (player.c.points.gte(layers.c.softcap) && !tmp.c.deactivated) player.SC.softcaps.push("c");
-		if (player.q.points.gte(layers.q.softcap) && !tmp.q.deactivated) player.SC.softcaps.push("q");
-		if (player.h.points.gte(layers.h.softcap) && !tmp.h.deactivated) player.SC.softcaps.push("h");
-		if (player.ds.points.gte(layers.ds.softcap) && !tmp.ds.deactivated) player.SC.softcaps.push("ds");
+		if (player.c.points.gte(tmp.c.softcap) && !tmp.c.deactivated) player.SC.softcaps.push("c");
+		if (player.q.points.gte(tmp.q.softcap) && !tmp.q.deactivated) player.SC.softcaps.push("q");
+		if (player.h.points.gte(tmp.h.softcap) && !tmp.h.deactivated) player.SC.softcaps.push("h");
+		if (player.ds.points.gte(tmp.ds.softcap) && !tmp.ds.deactivated) player.SC.softcaps.push("ds");
 		if (player.p.divinity.gte(softcaps.p_d[0]) && !tmp.p.deactivated) player.SC.softcaps.push("p-d");
 		if (tmp.r.effect[0].gte(softcaps.r_eff1[0]) && !tmp.r.deactivated) player.SC.softcaps.push("r-eff1");
 		if (tmp.m.effect.gte(softcaps.m_eff[0]) && !tmp.m.deactivated) player.SC.softcaps.push("m-eff");
@@ -44,10 +44,10 @@ addLayer('SC', {
 		["display-text", function() {
 			let text = '';
 			if (player.SC.softcaps.includes("points")) text += '<br><h2 class="pointSoftcap">Point Gain Softcap</h2><br>starts at ' + format(softcaps.points[0]) + ', gain to ^' + format(softcaps.points[1]) + '<br>';
-			if (player.SC.softcaps.includes("c")) text += '<br><h2 class="layer-c">Core Gain Softcap</h2><br>starts at ' + format(layers.c.softcap) + ', gain to ^' + format(layers.c.softcapPower) + '<br>';
-			if (player.SC.softcaps.includes("q")) text += '<br><h2 class="layer-q">Quark Gain Softcap</h2><br>starts at ' + format(layers.q.softcap) + ', gain to ^' + format(layers.q.softcapPower) + '<br>';
-			if (player.SC.softcaps.includes("h")) text += '<br><h2 class="layer-h">Hex Gain Softcap</h2><br>starts at ' + format(layers.h.softcap) + ', gain to ^' + format(layers.h.softcapPower) + '<br>';
-			if (player.SC.softcaps.includes("ds")) text += '<br><h2 class="layer-ds">Demon Soul Gain Softcap</h2><br>starts at ' + format(layers.ds.softcap) + ', gain to ^' + format(layers.ds.softcapPower) + '<br>';
+			if (player.SC.softcaps.includes("c")) text += '<br><h2 class="layer-c">Core Gain Softcap</h2><br>starts at ' + format(tmp.c.softcap) + ', gain to ^' + format(tmp.c.softcapPower) + '<br>';
+			if (player.SC.softcaps.includes("q")) text += '<br><h2 class="layer-q">Quark Gain Softcap</h2><br>starts at ' + format(tmp.q.softcap) + ', gain to ^' + format(tmp.q.softcapPower) + '<br>';
+			if (player.SC.softcaps.includes("h")) text += '<br><h2 class="layer-h">Hex Gain Softcap</h2><br>starts at ' + format(tmp.h.softcap) + ', gain to ^' + format(tmp.h.softcapPower) + '<br>';
+			if (player.SC.softcaps.includes("ds")) text += '<br><h2 class="layer-ds">Demon Soul Gain Softcap</h2><br>starts at ' + format(tmp.ds.softcap) + ', gain to ^' + format(tmp.ds.softcapPower) + '<br>';
 			if (player.SC.softcaps.includes("p-d")) text += '<br><h2 class="layer-p">Divinity Gain Softcap</h2><br>starts at ' + format(softcaps.p_d[0]) + ', gain to ^' + format(softcaps.p_d[1]) + '<br>';
 			if (player.SC.softcaps.includes("r-eff1")) text += '<br><h2 class="layer-r">Relic\'s First Effect Softcap</h2><br>starts at ' + format(softcaps.r_eff1[0]) + ', effect to ^' + format(softcaps.r_eff1[1]) + '<br>';
 			if (player.SC.softcaps.includes("m-eff")) text += '<br><h2 class="layer-m">Molecule Effect Softcap</h2><br>starts at ' + format(softcaps.m_eff[0]) + ', effect to ^' + format(softcaps.m_eff[1]) + '<br>';

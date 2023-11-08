@@ -801,10 +801,17 @@ addLayer('A', {
 			color: '#88CC44',
 		},
 		182: {
-			name: 'Organism Population',
+			name: 'Growing Organisms',
 			done() {return player.mo.points.gte(10)},
 			tooltip: 'obtain 10 multicellular organisms.',
 			unlocked() { return hasAchievement('A', 181) },
+			color: '#88CC44',
+		},
+		183: {
+			name: 'Organism Population',
+			done() {return player.mo.points.gte(100)},
+			tooltip: 'obtain 100 multicellular organisms.',
+			unlocked() { return hasAchievement('A', 182) },
 			color: '#88CC44',
 		},
 	},

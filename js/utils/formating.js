@@ -60,7 +60,7 @@ function format(decimal, precision = 2, small) {
 	if (decimal.eq(0)) return (0).toFixed(precision);
 	decimal = invertOOM(decimal);
 	let val = "";
-	if (decimal.lt("1e1000")) {
+	if (decimal.lt("1e10000")) {
 		val = exponentialFormat(decimal, precision);
 		return val.replace(/([^(?:e|F)]*)$/, '-$1');
 	};

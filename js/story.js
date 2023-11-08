@@ -205,7 +205,7 @@ const story = [
 	The anger and hatred began to subside...
 	And the Being began piecing things together.
 `, `
-	Quarks formed Particles, and Particles formed Atoms.
+	Just as Quarks formed Particles, Particles formed Atoms.
 	The Being found more invaluable knowledge.
 	However, the Being went further into its memories.
 	The Being wanted to find the source of that warm feeling.
@@ -221,14 +221,26 @@ const story = [
 	The Being felt liberated from the darkness.
 	The Being bathed in light for the first time.
 	The void began being filled with blinding light...
-	And then, the being discovered a mechanism to create more.
+	And then, the being discovered a mechanism to create more light.
 `, `
-	The Being discovered Prayers, and began creating more.
+	This mechanism the Being found was called praying.
 	Everything was so much easier than before.
 	Barely anything had to be reset to pray for light.
 	The Being finally found a respite in the lonely void.
 	The Being did not know who responded to its Prayers...
 	But it felt grateful towards that unkown existence.
+`, `
+	The Being was filled with happiness.
+	It began filling the void with divinity and holiness.
+	All the colors in the void swirled in a marvelous spiral.
+	The being then used their knowledge to go even further...
+	And the Prayers started transforming into hymns.
+`, `
+	However, the feelings of anger and hatred would not fully subside.
+	The Being tried to make the dark and light work together...
+	But none of its countless attempts succeeded.
+	The darkness was still too much stronger than the light.
+	So the Being tried to condense all of their prayers...
 `], [`
 	More story coming soon!
 `]];

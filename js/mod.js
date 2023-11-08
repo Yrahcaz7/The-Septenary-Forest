@@ -197,7 +197,9 @@ function fixOldSave(oldVersion) {
 	// achievement fixes
 	if (oldVersion == '2.2' && player.A.achievements.includes('123')) removeAchievement('123');
 	if (oldVersion == '3.2' && player.A.achievements.includes('163')) removeAchievement('163');
+	// endgame fixes
 	if (oldVersion == '3.4' && player.points.gte('e1e14')) {
+		if (isAssimilated('h')) player.mo.assimilated = ['e', 'c', 'q', 'sp'];
 		setTimeout(() => {
 			doReset('ch', true);
 			if (player.ch.points.gt(33) || player.ch.best.gt(33) || player.ch.total.gt(33)) {
