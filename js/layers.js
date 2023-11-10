@@ -813,6 +813,7 @@ addLayer('q', {
 		decipher: new Decimal(0),
 		insight: new Decimal(0),
 		auto_upgrades: false,
+		auto_buyable_11: false,
 	}},
 	color: "#DB5196",
 	branches: ['sp'],
@@ -878,6 +879,9 @@ addLayer('q', {
 				if (tmp[this.layer].upgrades[id].unlocked && id < 60) buyUpgrade(this.layer, id);
 			};
 		};
+		if (hasMilestone('ch', 16)) {
+			if (player.q.auto_buyable_11 && tmp.q.buyables[11].unlocked && layers.q.buyables[11].canAfford()) layers.q.buyables[11].buy();
+		};
 	},
 	doReset(resettingLayer) {
 		if (challengeCompletions('r', 11) >= 30 && resettingLayer == 'r') return;
@@ -886,7 +890,7 @@ addLayer('q', {
 		if (hasMilestone('ei', 2) && resettingLayer == 'ei') return;
 		if (hasMilestone('w', 9) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 5) && resettingLayer == 'cl') return;
-		let keep = ['auto_upgrades'];
+		let keep = ['auto_upgrades', 'auto_buyable_11'];
 			if (hasMilestone('sp', 3) && resettingLayer == 'sp') keep.push("milestones");
 			if (hasMilestone('sp', 5) && resettingLayer == 'sp') keep.push("upgrades");
 			if (hasMilestone('h', 5) && resettingLayer == 'h') keep.push("milestones");
@@ -1362,6 +1366,7 @@ addLayer('q', {
 				if (player.nerdMode) text += '<br>formula: (100^x)/???';
 				return 'increases deciphering based on the amount of this upgrade bought. Becomes less effective based on your ' + randomStr(9) + '.<br>Currently: +' + formatSmall(buyableEffect(this.layer, this.id)) + '%' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' quarks<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + this.purchaseLimit;
 			},
+			unlocked() { return hasUpgrade('q', 61) },
 		},
 		12: {
 			cost() {
@@ -1384,6 +1389,7 @@ addLayer('q', {
 				if (player.nerdMode) text += '<br>formula: ((x+1)^0.1)(10^y)';
 				return 'multiplies atom gain based on your insight and the amount of this upgrade bought.<br>Currently: ' + formatSmall(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' insight<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + this.purchaseLimit;
 			},
+			unlocked() { return hasUpgrade('q', 61) },
 		},
 		13: {
 			cost() { return new Decimal(10).pow(new Decimal(10).pow(getBuyableAmount(this.layer, this.id))) },
@@ -1402,6 +1408,7 @@ addLayer('q', {
 				if (player.nerdMode) text += '<br>formula: 10^x';
 				return 'multiplies deciphering based on the amount of this upgrade bought.<br>Currently: ' + formatSmall(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + this.purchaseLimit;
 			},
+			unlocked() { return hasUpgrade('q', 61) },
 		},
 		21: {
 			cost() { return new Decimal(5).pow(getBuyableAmount(this.layer, this.id)) },
@@ -1419,7 +1426,7 @@ addLayer('q', {
 				if (player.nerdMode) text += '<br>formula: (1.25^x)+(x^2.15)';
 				return 'multiplies insight gain based on the amount of this upgrade bought.<br>Currently: ' + formatSmall(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' insight<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + this.purchaseLimit;
 			},
-			unlocked() { return hasMilestone('ch', 11) },
+			unlocked() { return hasMilestone('ch', 11) && hasUpgrade('q', 61) },
 		},
 	},
 });
@@ -1701,7 +1708,9 @@ addLayer('h', {
 	type: 'normal',
 	exponent: 0.5,
 	gainMult() {
+		// setup
 		let mult = new Decimal(1);
+		// buff
 		if (hasUpgrade('h', 12)) {
 			mult = mult.mul(upgradeEffect('h', 12));
 			if (hasUpgrade('h', 22)) {
@@ -1718,10 +1727,13 @@ addLayer('h', {
 		if (hasUpgrade('m', 23)) mult = mult.mul(upgradeEffect('m', 23));
 		if (hasBuyable('ds', 11)) mult = mult.mul(buyableEffect('ds', 11)[0]);
 		if (hasChallenge('ds', 11)) mult = mult.mul(player.ds.points.add(1).pow(0.25));
+		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
+		// nerf
 		if (inChallenge('ds', 11)) mult = mult.mul(0.001);
 		if (inChallenge('ds', 12)) mult = mult.mul(0.0000000001);
 		if (inChallenge('ds', 21)) mult = mult.mul(0.00001);
-		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
+		if (inChallenge('ds', 31)) mult = mult.pow(-1);
+		// return
 		return mult;
 	},
 	softcap() {
@@ -1729,6 +1741,8 @@ addLayer('h', {
 		return new Decimal('1e1000');
 	},
 	softcapPower() {
+		if (hasChallenge('ds', 31)) return 0.55;
+		if (hasUpgrade('ds', 31)) return 0.52;
 		if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 0.51;
 		return 0.5;
 	},
@@ -2165,18 +2179,22 @@ addLayer('h', {
 		11: {
 			title() { return '<b class="layer-h' + getdark(this, "title-clickable") + 'The Breaker' },
 			display() {
+				const nextNerf = format(this.nerfLayers[player.h.limitsBroken]);
 				let text = 'Use to break a new limit. Using this will reset your evil influence, evil power, and evil influence upgrades. Additionally, it will divide evil influence gain.<br><br>';
 				if (player.h.limitsBroken === 0) {
-					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: break the limit of <b class="layer-w-dark">Power of Good</b> and improve its effect formula, but its cost scales much faster. Also divide evil influence gain by 100.<br><br>Limits broken:<br>none so far';
-					else text += 'Next effect: break the limit of <b>Power of Good</b> and improve its effect formula, but its cost scales much faster. Also divide evil influence gain by 100.<br><br>Limits broken:<br>none so far';
+					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: break the limit of <b class="layer-w-dark">Power of Good</b> and improve its effect formula, but its cost scales much faster. Also divide evil influence gain by ' + nextNerf + '.<br><br>Limits broken:<br>none so far';
+					else text += 'Next effect: break the limit of <b>Power of Good</b> and improve its effect formula, but its cost scales much faster. Also divide evil influence gain by ' + nextNerf + '.<br><br>Limits broken:<br>none so far';
+				} else if (player.h.limitsBroken === 1) {
+					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: break the limit of <b class="layer-cl-dark">Deeper Comprehension</b>, but its cost scales much faster. Also divide evil influence gain by ' + nextNerf + '.<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b>';
+					else text += 'Next effect: break the limit of <b>Deeper Comprehension</b>, but its cost scales much faster. Also divide evil influence gain by ' + nextNerf + '.<br><br>Limits broken:<br><b>Power of Good</b>';
 				} else {
-					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: you have broken all the limits!<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b>';
-					else text += 'Next effect: you have broken all the limits!<br><br>Limits broken:<br><b>Power of Good</b>';
+					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: you have broken all the limits!<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b><br><b class="layer-cl-dark">Deeper Comprehension</b>';
+					else text += 'Next effect: you have broken all the limits!<br><br>Limits broken:<br><b>Power of Good</b><br><b>Deeper Comprehension</b>';
 				};
 				return text + '<br><br>Effect on evil influence gain: /' + format(tmp.h.clickables[11].nerf) + '<br><br>Req: ' + formatWhole(tmp.h.clickables[11].req[0]) + ' achievements and ' + formatWhole(tmp.h.clickables[11].req[1]) + ' evil influence';
 			},
-			req() { return [90 + player.h.limitsBroken * 2, 25000] },
-			nerfLayers: [100],
+			req() { return [90 + player.h.limitsBroken * 2, 33133] },
+			nerfLayers: [100, 10],
 			nerf() {
 				let nerf = new Decimal(1);
 				for (let index = 0; index < this.nerfLayers.length && index < player.h.limitsBroken; index++) {
@@ -2235,6 +2253,7 @@ addLayer('ds', {
 		// init
 		let mult = new Decimal(1);
 		// mul
+		if (hasUpgrade('ds', 31)) mult = mult.mul(upgradeEffect('ds', 31));
 		if (hasUpgrade('a', 11)) mult = mult.mul(upgradeEffect('a', 11));
 		if (hasUpgrade('a', 42)) mult = mult.mul(upgradeEffect('a', 42));
 		if (hasUpgrade('a', 71)) mult = mult.mul(upgradeEffect('a', 71));
@@ -2380,27 +2399,17 @@ addLayer('ds', {
 	},
 	upgrades: {
 		11: {
-			title() {
-				return '<b class="layer-ds' + getdark(this, "title") + 'Mad Hexes';
-			},
-			description() {
-				return 'you can explore 2 further hex upgrades, and <b class="layer-h' + getdark(this, "ref", true, true) + 'Hex Leak</b> also applies to hex gain (and not any other upgrades in the chain)';
-			},
+			title() { return '<b class="layer-ds' + getdark(this, "title") + 'Mad Hexes' },
+			description() { return 'you can explore 2 further hex upgrades, and <b class="layer-h' + getdark(this, "ref", true, true) + 'Hex Leak</b> also applies to hex gain (and not any other upgrades in the chain)' },
 			cost: 10,
 		},
 		12: {
-			title() {
-				return '<b class="layer-ds' + getdark(this, "title") + 'Hex Mania';
-			},
-			description() {
-				return 'you can explore 2 further hex upgrades, and <b class="layer-h' + getdark(this, "ref", true, true) + 'Stronger Hexes</b>\' effect is squared';
-			},
+			title() { return '<b class="layer-ds' + getdark(this, "title") + 'Hex Mania' },
+			description() { return 'you can explore 2 further hex upgrades, and <b class="layer-h' + getdark(this, "ref", true, true) + 'Stronger Hexes</b>\' effect is squared' },
 			cost: 75,
 		},
 		21: {
-			title() {
-				return '<b class="layer-ds' + getdark(this, "title") + 'Hall of Fame';
-			},
+			title() { return '<b class="layer-ds' + getdark(this, "title") + 'Hall of Fame' },
 			description() {
 				let text = 'achievements also multiply essence gain';
 				if (player.nerdMode) text += ' <br>formula: x*0.2';
@@ -2410,46 +2419,57 @@ addLayer('ds', {
 			unlocked() { return hasUpgrade('ds', 11) && hasUpgrade('ds', 12) }
 		},
 		22: {
-			title() {
-				return '<b class="layer-ds' + getdark(this, "title") + 'Demonic Key';
-			},
-			description() {
-				return 'unlocks the <b class="layer-ds' + getdark(this, "ref") + 'Demon Gateway</b>';
-			},
+			title() { return '<b class="layer-ds' + getdark(this, "title") + 'Demonic Key' },
+			description() { return 'unlocks the <b class="layer-ds' + getdark(this, "ref") + 'Demon Gateway</b>, a new tab' },
 			cost: 100000,
 			unlocked() { return hasUpgrade('ds', 11) && hasUpgrade('ds', 12) }
 		},
 		23: {
-			title() {
-				return '<b class="layer-ds' + getdark(this, "title") + 'Trophy of Glory';
-			},
+			title() { return '<b class="layer-ds' + getdark(this, "title") + 'Trophy of Glory' },
 			description() {
 				let text = 'achievements also multiply core and quark gain if you own <b class="layer-ds' + getdark(this, "ref") + 'Hall of Fame';
-				if (player.nerdMode) text += '</b> <br>formula: x^2/100';
+				if (player.nerdMode) text += '</b><br>formula: x^2/100';
 				return text;
 			},
 			cost: 2500000,
-			unlocked() { return hasUpgrade('ds', 11) && hasUpgrade('ds', 12) && hasUpgrade('ds', 21) }
+			unlocked() { return hasUpgrade('ds', 21) }
 		},
 		24: {
-			title() {
-				return '<b class="layer-ds' + getdark(this, "title") + 'Buried History';
-			},
+			title() { return '<b class="layer-ds' + getdark(this, "title") + 'Buried History' },
 			description() {
 				let text = 'achievements boosting point gain uses a better formula if you own <b class="layer-ds' + getdark(this, "ref") + 'Hall of Fame';
-				if (player.nerdMode) text += '</b> <br>formula: x*0.2';
+				if (player.nerdMode) text += '</b><br>formula: x*0.2';
 				return text;
 			},
 			cost: 1.11e11,
-			unlocked() { return hasUpgrade('ds', 11) && hasUpgrade('ds', 12) && hasUpgrade('ds', 23) }
+			unlocked() { return hasUpgrade('ds', 23) }
+		},
+		31: {
+			title() { return '<b class="layer-ds' + getdark(this, "title") + 'Demonic Hexes' },
+			description() { return 'makes hex gain softcap weaker (^0.51 --> ^0.52) and multiplies demon soul gain by ' + format(this.effect()) + 'x' },
+			cost: 1e105,
+			effect() { return 1e10 },
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('ds', 24) }
+		},
+		32: {
+			title() { return '<b class="layer-ds' + getdark(this, "title") + 'Wider Gate' },
+			description: 'unlocks 2 new demon soul challenges',
+			cost: 'e1.132e13',
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('ds', 31) }
 		},
 	},
 	buyables: {
 		11: {
-			cost() { return new Decimal(2).pow(getBuyableAmount('ds', this.id)).add(1) },
+			cost() {
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return new Decimal(10).pow(getBuyableAmount('ds', this.id).add(50));
+				else return new Decimal(2).pow(getBuyableAmount('ds', this.id));
+			},
 			title() { return '<h3 class="layer-ds' + getdark(this, "title-buyable") + 'Demonic Energy' },
-			canAfford() { return player.ds.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
-			purchaseLimit: 22,
+			canAfford() { return player.ds.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			purchaseLimit() {
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 99;
+				return 22;
+			},
 			buy() {
 				player.ds.points = player.ds.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -2460,7 +2480,7 @@ addLayer('ds', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formulas: 2^x<br>and x*5+1';
-				return 'multiplies hex gain (and also subatomic particle gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('ds', 11)[0]) + 'x<br>and ' + format(buyableEffect('ds', 11)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' demon souls<br><br>Bought: ' + formatWhole(getBuyableAmount('ds', this.id)) + '/' + this.purchaseLimit;
+				return 'multiplies hex gain (and also subatomic particle gain at a reduced rate) based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('ds', 11)[0]) + 'x<br>and ' + format(buyableEffect('ds', 11)[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' demon souls<br><br>Bought: ' + formatWhole(getBuyableAmount('ds', this.id)) + '/' + this.purchaseLimit();
 			},
 		},
 	},
@@ -2472,13 +2492,20 @@ addLayer('ds', {
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Quark gain is divided by 100,000<br> - Point gain is divided by 10,000<br> - Hex gain is divided by 1,000<br> - Core gain is divided by 100<br> - Quark gain is divided by 10",
 			goalDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) {
-					if (hasChallenge('ds', this.id)) return '<b class="layer-h">Potential Essence Potential';
-					return '<b class="layer-h-dark">Potential Essence Potential';
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) {
+					return format('1e1133') + ' hexes';
+				} else {
+					if (colorvalue[1] != 'none' && colorvalue[0][2]) {
+						if (hasChallenge('ds', this.id)) return '<b class="layer-h">Potential Essence Potential';
+						return '<b class="layer-h-dark">Potential Essence Potential';
+					};
+					return '<b>Potential Essence Potential';
 				};
-				return '<b>Potential Essence Potential';
 			},
-			canComplete() { return hasUpgrade('h', 64) },
+			canComplete() {
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return player.h.points.gte('1e1133');
+				return hasUpgrade('h', 64);
+			},
 			rewardDescription: "multiplies hex and demon soul gain based on your demon souls",
 			rewardDisplay() {
 				text = format(player.ds.points.add(1).pow(0.25)) + 'x';
@@ -2494,13 +2521,20 @@ addLayer('ds', {
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1,000,000<br> - Hex gain is divided by 1e10<br> - Subatomic Particle gain is divided by the number of Quarks",
 			goalDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) {
-					if (hasChallenge('ds', this.id)) return '<b class="layer-h">Sub Core Particle Fusion';
-					return '<b class="layer-h-dark">Sub Core Particle Fusion';
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) {
+					return format('1e1127') + ' hexes';
+				} else {
+					if (colorvalue[1] != 'none' && colorvalue[0][2]) {
+						if (hasChallenge('ds', this.id)) return '<b class="layer-h">Sub Core Particle Fusion';
+						return '<b class="layer-h-dark">Sub Core Particle Fusion';
+					};
+					return '<b>Sub Core Particle Fusion';
 				};
-				return '<b>Sub Core Particle Fusion';
 			},
-			canComplete() { return hasUpgrade('h', 63) },
+			canComplete() {
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return player.h.points.gte('1e1127');
+				return hasUpgrade('h', 63);
+			},
 			unlocked() { return hasChallenge('ds', 11) },
 			rewardDescription: "multiply demon soul gain based on your hexes",
 			rewardDisplay() {
@@ -2517,13 +2551,20 @@ addLayer('ds', {
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Hex gain is divided by 100,000<br> - Point gain is divided by 1e10<br> - Core gain is divided by 1e15<br> - Essence gain is divided by 1e20",
 			goalDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) {
-					if (hasChallenge('ds', this.id)) return '<b class="layer-h">Sub Core Particle Fusion';
-					return '<b class="layer-h-dark">Sub Core Particle Fusion';
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) {
+					return format('1e1155') + ' hexes';
+				} else {
+					if (colorvalue[1] != 'none' && colorvalue[0][2]) {
+						if (hasChallenge('ds', this.id)) return '<b class="layer-h">Sub Core Particle Fusion';
+						return '<b class="layer-h-dark">Sub Core Particle Fusion';
+					};
+					return '<b>Sub Core Particle Fusion';
 				};
-				return '<b>Sub Core Particle Fusion';
 			},
-			canComplete() { return hasUpgrade('h', 53) },
+			canComplete() {
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return player.h.points.gte('1e1155');
+				return hasUpgrade('h', 53);
+			},
 			unlocked() { return hasChallenge('ds', 12) },
 			rewardDescription: "multiply subatomic particle<br>gain based on your demon souls",
 			rewardDisplay() {
@@ -2538,14 +2579,46 @@ addLayer('ds', {
 				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ds">Dreaded Science';
 				return '<h3>Dreaded Science';
 			},
-			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1e10<br> - Quark and Subatomic Particle gain is divided by 1e40",
+			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1e10<br> - Quark and Subatomic Particle gain is divided by 1e40<br>",
 			goalDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return '<b class="layer-a">Famed Atom\'s Donations';
-				return '<b>Famed Atom\'s Donations';
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) {
+					return format('e1e9') + ' hexes<br>';
+				} else {
+					if (colorvalue[1] != 'none' && colorvalue[0][2]) return '<b class="layer-a">Famed Atom\'s Donations</b><br>';
+					return '<b>Famed Atom\'s Donations</b><br>';
+				};
 			},
-			canComplete() { return hasUpgrade('a', 51) },
-			unlocked() { return hasMilestone('a', 7) },
+			canComplete() {
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return player.h.points.gte('e1e9');
+				return hasUpgrade('a', 51);
+			},
+			unlocked() { return hasMilestone('a', 7) && hasChallenge('ds', 21) },
 			rewardDescription: "multiply atom gain by 1.5",
+			doReset: true,
+		},
+		31: {
+			name() {
+				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ds">Reversed Hexes';
+				return '<h3>Reversed Hexes';
+			},
+			challengeDescription: " - Forces a Demon Soul reset<br> - Hex gain multiplier is divides hex gain instead of multipling it<br>",
+			goalDescription() { return format('e3.88e13') + ' hexes<br>' },
+			canComplete() { return player.h.points.gte('e3.88e13') },
+			unlocked() { return hasUpgrade('ds', 32) && hasChallenge('ds', 22) },
+			rewardDescription: "make hex gain softcap weaker (^0.52 --> ^0.55)",
+			doReset: true,
+		},
+		32: {
+			name() {
+				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ds">Point Deficiency';
+				return '<h3>Point Deficiency';
+			},
+			challengeDescription: "- Applies all previous demon soul challenge effects at once<br> - Point gain is log10(log10(gain+1)+1)<br>",
+			countsAs: [11, 12, 21, 22, 31],
+			goalDescription() { return format('e5.29e13') + ' hexes and ' + format(1000) + ' points<br>' },
+			canComplete() { return player.h.points.gte('e5.29e13') && player.points.gte(1000) },
+			unlocked() { return hasUpgrade('ds', 32) && hasChallenge('ds', 31) },
+			rewardDescription: "make point gain softcap weaker (^0.25 --> ^0.3)",
 			doReset: true,
 		},
 	},
@@ -5108,6 +5181,8 @@ addLayer('gi', {
 			if (hasMilestone('ch', 2)) work *= 2;
 			if (hasMilestone('ch', 6)) work *= 5;
 			if (hasMilestone('ch', 9)) work *= 2;
+			if (hasMilestone('ch', 14)) work *= 2;
+			if (hasMilestone('ch', 16)) work *= 2;
 			for (let index = 0; index < work; index++) {
 				if (!layers.gi.buyables[11].canAfford()) break;
 				layers.gi.buyables[11].buy();
@@ -6404,7 +6479,7 @@ addLayer('w', {
 			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
 			purchaseLimit() {
 				let max = new Decimal(20);
-				if (hasMilestone('ch', 7)) max = max.add(tmp.ch.milestones[7].effect);
+				if (hasMilestone('ch', 7)) max = max.add(milestoneEffect('ch', 7));
 				return max;
 			},
 			buy() {
@@ -6750,7 +6825,8 @@ addLayer('cl', {
 		31: {
 			cost() { return getBuyableAmount('cl', this.id).mul(100).add(1000) },
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Practice Makes Perfect' },
-			canAfford() { return player.cl.points.gte(this.cost()) },
+			canAfford() { return player.cl.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 1e9,
 			buy() {
 				player.cl.points = player.cl.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -6761,13 +6837,14 @@ addLayer('cl', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: (x(y^2)+1)^0.25';
-				return 'increases protein found from cellular life based on your best cellular life and the amount of this upgrade bought.<br>Currently: +' + format(this.effect()) + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+				return 'increases protein found from cellular life based on your best cellular life and the amount of this upgrade bought.<br>Currently: +' + format(this.effect()) + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 		},
 		32: {
 			cost() { return new Decimal(1.5).pow(getBuyableAmount('cl', this.id)).mul(10000) },
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Result Analyzing' },
-			canAfford() { return player.cl.protein.gte(this.cost()) },
+			canAfford() { return player.cl.protein.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 1e9,
 			buy() {
 				player.cl.protein = player.cl.protein.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -6778,13 +6855,14 @@ addLayer('cl', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: (xy+1)^1.5';
-				return 'multiplies protein found from cellular life based on your wars and the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+				return 'multiplies protein found from cellular life based on your wars and the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 		},
 		33: {
 			cost() { return new Decimal(10).pow(getBuyableAmount('cl', this.id)).mul(1000000) },
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Synergizing' },
-			canAfford() { return player.cl.protein.gte(this.cost()) },
+			canAfford() { return player.cl.protein.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 1e9,
 			buy() {
 				player.cl.protein = player.cl.protein.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -6795,14 +6873,20 @@ addLayer('cl', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: 6^x';
-				return 'multiplies atom gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+				return 'multiplies atom gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 		},
 		41: {
-			cost() { return new Decimal(10).pow(getBuyableAmount('cl', this.id)).mul(1e45) },
+			cost() {
+				if (player.h.limitsBroken >= 2) return new Decimal(1e10).pow(getBuyableAmount('cl', this.id));
+				return new Decimal(10).pow(getBuyableAmount('cl', this.id)).mul(1e45);
+			},
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Deeper Comprehension' },
-			canAfford() { return player.m.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
-			purchaseLimit: 30,
+			canAfford() { return player.m.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			purchaseLimit() {
+				if (player.h.limitsBroken >= 2) return 1e9;
+				return 30;
+			},
 			buy() {
 				player.m.points = player.m.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -6813,13 +6897,14 @@ addLayer('cl', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: 3^x';
-				return 'multiplies protein found from cellular life based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' molecules<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
+				return 'multiplies protein found from cellular life based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' molecules<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit());
 			},
 		},
 		42: {
 			cost() { return new Decimal(100).pow(getBuyableAmount('cl', this.id)).mul(1e14) },
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Intensive Research' },
-			canAfford() { return player.cl.protein.gte(this.cost()) },
+			canAfford() { return player.cl.protein.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 1e9,
 			buy() {
 				player.cl.protein = player.cl.protein.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -6830,13 +6915,14 @@ addLayer('cl', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: 5^x';
-				return 'multiplies protein found from cellular life based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+				return 'multiplies protein found from cellular life based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 		},
 		43: {
 			cost() { return new Decimal(10).pow(getBuyableAmount('cl', this.id)).mul(1e33) },
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Passive Discovery' },
-			canAfford() { return player.cl.protein.gte(this.cost()) },
+			canAfford() { return player.cl.protein.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 1e9,
 			buy() {
 				player.cl.protein = player.cl.protein.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -6853,13 +6939,14 @@ addLayer('cl', {
 					else if (hasMilestone('w', 19)) text = '<br>formulas: (1.175^x)-1<br>and (25x+1)^3';
 					else text = '<br>formulas: (1.025^x)-1<br>and (7.5x+1)^2';
 				};
-				return 'increases passive protein gain and multiplies protein found from cellular life based on the amount of this upgrade bought.<br>Currently: +' + format(this.effect()[0].mul(100)) + '%<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+				return 'increases passive protein gain and multiplies protein found from cellular life based on the amount of this upgrade bought.<br>Currently: +' + format(this.effect()[0].mul(100)) + '%<br>and ' + format(this.effect()[1]) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 		},
 		51: {
 			cost() { return getBuyableAmount('cl', this.id).mul(500).add(4000) },
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'More Perfection' },
-			canAfford() { return player.cl.points.gte(this.cost()) },
+			canAfford() { return player.cl.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 1e9,
 			buy() {
 				player.cl.points = player.cl.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -6870,14 +6957,15 @@ addLayer('cl', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: (x+1)^10';
-				return 'multiplies protein found from cellular life based the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+				return 'multiplies protein found from cellular life based the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' cellular life<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			unlocked() { return hasMilestone('w', 18) },
 		},
 		52: {
 			cost() { return new Decimal(1e5).pow(getBuyableAmount('cl', this.id)).mul(1e40) },
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'More Synergy' },
-			canAfford() { return player.cl.protein.gte(this.cost()) },
+			canAfford() { return player.cl.protein.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 1e9,
 			buy() {
 				player.cl.protein = player.cl.protein.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -6888,7 +6976,7 @@ addLayer('cl', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: 10^x';
-				return 'multiplies atom gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id));
+				return 'multiplies atom gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			unlocked() { return hasMilestone('w', 18) },
 		},
@@ -6914,7 +7002,7 @@ addLayer('cl', {
 					if (hasMilestone('w', 20)) text = '<br>formula: (x+1)^0.155';
 					else text = '<br>formula: (x+1)^0.125';
 				};
-				return 'multiplies evil influence gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + this.purchaseLimit;
+				return 'multiplies evil influence gain based on the amount of this upgrade bought.<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' protein<br><br>Bought: ' + formatWhole(getBuyableAmount('cl', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			unlocked() { return hasMilestone('w', 18) },
 		},
@@ -7094,12 +7182,10 @@ addLayer('ch', {
 		},
 		7: {
 			requirementDescription: '13 chaos',
-			effect() {
-				return player.ch.points.sub(10).max(0).mul(2.25).floor();
-			},
+			effect() { return player.ch.points.sub(10).max(0).mul(2.25).floor() },
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'you can autobuy the seventh to ninth <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b class="layer-w-dark">Race for Knowledge</b> by 2.25, rounded down (currently +' + formatWhole(tmp.ch.milestones[7].effect) + ')';
-				else return 'you can autobuy the seventh to ninth <b>Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b>Race for Knowledge</b> by 2.25, rounded down: (currently +' + formatWhole(tmp.ch.milestones[7].effect) + ')';
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'you can autobuy the seventh to ninth <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b class="layer-w-dark">Race for Knowledge</b> by 2.25, rounded down (currently +' + formatWhole(milestoneEffect('ch', 7)) + ')';
+				else return 'you can autobuy the seventh to ninth <b>Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b>Race for Knowledge</b> by 2.25, rounded down (currently +' + formatWhole(milestoneEffect('ch', 7)) + ')';
 			},
 			done() { return player.ch.points.gte(13) },
 			toggles: [['cl', 'auto_buyable_51'], ['cl', 'auto_buyable_52'], ['cl', 'auto_buyable_53']],
@@ -7151,7 +7237,7 @@ addLayer('ch', {
 		},
 		14: {
 			requirementDescription: '33 chaos',
-			effectDescription: 'reduce the multicellular organism cost base (1.2 --> 1.1)',
+			effectDescription: 'reduce the multicellular organism cost base (1.2 --> 1.1) and the good influence rebuyable autobuyer is 2x faster',
 			done() { return player.ch.points.gte(33) },
 			unlocked() { return player.mo.unlocked },
 		},
@@ -7163,6 +7249,17 @@ addLayer('ch', {
 			},
 			done() { return player.ch.points.gte(38) },
 			toggles: [['h', 'keep_breaking']],
+			unlocked() { return player.mo.unlocked },
+		},
+		16: {
+			requirementDescription: '42 chaos',
+			effect() { return (player.ch.challenges[11] + player.ch.challenges[12]) ** 0.049 },
+			effectDescription() {
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'you can autobuy the first quark rebuyable, the good influence rebuyable autobuyer is 2x faster, and divide the multicellular organism cost based on <b class="layer-ch">Tide</b> completions (currently /' + format(milestoneEffect('ch', 16)) + ')';
+				return 'you can autobuy the first quark rebuyable, the good influence rebuyable autobuyer is 2x faster, and divide the multicellular organism cost based on <b>Tide</b> completions (currently /' + format(milestoneEffect('ch', 16)) + ')';
+			},
+			done() { return player.ch.points.gte(42) },
+			toggles: [['q', 'auto_buyable_11']],
 			unlocked() { return player.mo.unlocked },
 		},
 	},
@@ -7182,6 +7279,10 @@ addLayer('ch', {
 				if (challengeCompletions('ch', this.id) === 5) return 100;
 				if (challengeCompletions('ch', this.id) === 6) return 120;
 				if (challengeCompletions('ch', this.id) === 7) return 140;
+				if (challengeCompletions('ch', this.id) === 8) return 64175;
+				if (challengeCompletions('ch', this.id) === 9) return 64500;
+				if (challengeCompletions('ch', this.id) === 10) return 64888;
+				if (challengeCompletions('ch', this.id) === 11) return 65250;
 				return Infinity;
 			},
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' evil influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit },
@@ -7343,6 +7444,7 @@ addLayer('mo', {
 	canBuyMax() { return false },
 	gainExp() {
 		let gain = new Decimal(1);
+		if (hasMilestone('ch', 16)) gain = gain.mul(milestoneEffect('ch', 16));
 		return gain;
 	},
 	row: 6,
@@ -7386,11 +7488,11 @@ addLayer('mo', {
 		11: {
 			title() { return '<b class="layer-mo' + getdark(this, "title-clickable") + 'Assimilation' },
 			display() {
-				if (player.mo.assimilating !== null) return '<br>Currently Assimilating: " + tmp[player.mo.assimilating].name + ".<br><br>Click to exit the run.';
+				if (player.mo.assimilating !== null) return '<br>Currently Assimilating: ' + tmp[player.mo.assimilating].name + '.<br><br>Click to exit the run.';
 				else if (getClickableState('mo', 11)) return '<br>You are in an Assimilation Search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click here to exit the search.';
 				else return '<br>Begin an Assimilation search.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
 			},
-			req() { return [1, 2, 3, 4, 7, Infinity][player.mo.assimilated.length] },
+			req() { return [1, 2, 3, 4, 7, 12, Infinity][player.mo.assimilated.length] },
 			canClick() { return getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req) },
 			onClick() {
 				if (player.mo.assimilating !== null) {

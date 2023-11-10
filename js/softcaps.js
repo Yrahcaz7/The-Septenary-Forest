@@ -1,5 +1,8 @@
 const softcaps = {
-	points: ['e1e14', 0.25],
+	points: ['e1e14', () => {
+		if (hasChallenge('ds', 32)) return 0.3;
+		return 0.25;
+	}],
 	p_d: [1e150, 0.95],
 	m_eff: [15000, 0.5],
 	r_eff1: ['e1000000', 0.2],
@@ -43,7 +46,7 @@ addLayer('SC', {
 		"main-display",
 		["display-text", function() {
 			let text = '';
-			if (player.SC.softcaps.includes("points")) text += '<br><h2 class="pointSoftcap">Point Gain Softcap</h2><br>starts at ' + format(softcaps.points[0]) + ', gain to ^' + format(softcaps.points[1]) + '<br>';
+			if (player.SC.softcaps.includes("points")) text += '<br><h2 class="pointSoftcap">Point Gain Softcap</h2><br>starts at ' + format(softcaps.points[0]) + ', gain to ^' + format(softcaps.points[1]()) + '<br>';
 			if (player.SC.softcaps.includes("c")) text += '<br><h2 class="layer-c">Core Gain Softcap</h2><br>starts at ' + format(tmp.c.softcap) + ', gain to ^' + format(tmp.c.softcapPower) + '<br>';
 			if (player.SC.softcaps.includes("q")) text += '<br><h2 class="layer-q">Quark Gain Softcap</h2><br>starts at ' + format(tmp.q.softcap) + ', gain to ^' + format(tmp.q.softcapPower) + '<br>';
 			if (player.SC.softcaps.includes("h")) text += '<br><h2 class="layer-h">Hex Gain Softcap</h2><br>starts at ' + format(tmp.h.softcap) + ', gain to ^' + format(tmp.h.softcapPower) + '<br>';

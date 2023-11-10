@@ -156,15 +156,17 @@ function getPointGen(forced = false) {
 	if (inChallenge('ds', 21)) gain = gain.mul(0.0000000001);
 	if (inChallenge('ds', 22)) gain = gain.mul(0.0000000001);
 	if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[0]);
-	if (inChallenge('r', 11) && !forced) gain = new Decimal(0);
 	// pow
 	if (hasUpgrade('q', 63)) gain = gain.pow(upgradeEffect('q', 63));
 	if (challengeCompletions('ch', 11) > 0) gain = gain.pow(challengeEffect('ch', 11));
 	if (challengeCompletions('ch', 12) > 0) gain = gain.pow(challengeEffect('ch', 12));
+	// special nerf
+	if (inChallenge('ds', 32)) gain = gain.add(1).log10().add(1).log10();
+	if (inChallenge('r', 11) && !forced) gain = new Decimal(0);
 	// softcap
 	if (gain.gt(softcaps.points[0])) {
 		let excessGain = gain.div(softcaps.points[0]);
-		excessGain = excessGain.pow(softcaps.points[1]);
+		excessGain = excessGain.pow(softcaps.points[1]());
 		gain = excessGain.mul(softcaps.points[0]);
 	};
 	// return

@@ -36,7 +36,7 @@ const assimilationReq = {
 	q: new Decimal('1e1355'),
 	sp: new Decimal(110000),
 	h: new Decimal('1e1060'),
-	ds: new Decimal(Infinity),
+	ds: new Decimal(1e122),
 	a: new Decimal(Infinity),
 	p: new Decimal(Infinity),
 	s: new Decimal(Infinity),
@@ -133,6 +133,11 @@ function getAssimilationRewards() {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-h">Hexes</h2><br><br>';
 		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Unlocks unlocking the <b class="layer-h">Breaker</b>, a new tab<br>Makes all previous hex upgrades always unlockable<br>Unlocks five new hex upgrades: <b class="layer-h">Hex the Hex</b>, <b class="layer-h">Hex the Core</b>, <b class="layer-h">Hexes are the Point</b>, <b class="layer-h">Hex of the Flow</b>, and <b class="layer-h">True Hexes</b><br>Makes the hex softcap start sooner (1e1000 --> 1e100)<br>Makes the hex softcap weaker (^0.5 --> ^0.51)';
 		else text += 'Unlocks unlocking the <b>Breaker</b>, a new tab<br>Makes all previous hex upgrades always unlockable<br>Unlocks five new hex upgrades: <b>Hex the Hex</b>, <b>Hex the Core</b>, <b>Hexes are the Point</b>, <b>Hex of the Flow</b>, and <b>True Hexes</b><br>Makes the hex softcap start sooner (1e1000 --> 1e100)<br>Makes the hex softcap weaker (^0.5 --> ^0.51)';
+	};
+	if (isAssimilated('ds')) {
+		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-ds">Demon Souls</h2><br><br>';
+		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Increases the cap of <b class="layer-ds">Demonic Energy</b> by 77<br>Makes the <b class="layer-ds">Demonic Energy</b> cost formula worse<br>Changes the goals of the first four demon soul challenges<br>Makes all previous demon soul upgrades always unlockable<br>Unlocks two new demon soul upgrades: <b class="layer-ds">Demonic Hexes</b> and <b class="layer-ds">Wider Gate</b>';
+		else text += 'Increases the cap of <b>Demonic Energy</b> by 77<br>Makes the <b>Demonic Energy</b> cost formula worse<br>Changes the goals of the first three demon soul challenges<br>Makes all previous demon soul upgrades always unlockable<br>Unlocks two new demon soul upgrades: <b>Demonic Hexes</b> and <b>Wider Gate</b>';
 	};
 	return text.replace("<br><br>", "");
 };
