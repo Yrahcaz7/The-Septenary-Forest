@@ -245,6 +245,15 @@ const story = [
 	More story coming soon!
 `]];
 
+const storyNames = [
+	["The Endless Void", () => randomStr(3) + " " + randomStr(7) + " " + randomStr(4)],
+	["The World's End", () => randomStr(3) + " " + randomStr(7) + " " + randomStr(3)],
+	["Knowledge of the Old World", () => randomStr(9) + " " + randomStr(2) + " " + randomStr(3) + " " + randomStr(3) + " " + randomStr(5)],
+	["Negative Emotions Given Form", () => randomStr(8) + " " + randomStr(8) + " " + randomStr(5) + " " + randomStr(4)],
+	["Hope and Faith", () => randomStr(4) + " " + randomStr(3) + " " + randomStr(5)],
+	["Coming Soon", () => "Coming Soon"],
+];
+
 for (let index = 0; index < story.length; index++) {
 	if (story[index][0].startsWith('\n\t')) story[index][0] = story[index][0].slice(2);
 	story[index] = story[index].map(value => value.replace(/\n\t/g, '<br><br>').trim());
@@ -270,4 +279,25 @@ function filterStory(string) {
 	if (player.ch.best.toNumber() < storyLength(3)) string = string.replace(/[Aa]nger/g, randomStr(5)).replace(/[Hh]atred/g, randomStr(6)).replace(/[Cc]urses/g, randomStr(6)).replace(/[Hh]ate/g, randomStr(4));
 	if (player.ch.best.toNumber() < storyLength(4)) string = string.replace(/[Ww]arm/g, randomStr(4)).replace(/[Ff]uzzy/g, randomStr(5)).replace(/[Ff]eeling/g, randomStr(7)).replace(/[Hh]appiness/g, randomStr(9));
 	return string;
+};
+
+function getChaosInfoBoxes() {
+	let infoBoxes = {};
+	for (let row = 0; row < story.length; row++) {
+		infoBoxes['story' + row] = {
+			title() {
+				if (player.ch.best.toNumber() >= storyLength(row)) return storyNames[row][0];
+				else return storyNames[row][1]();
+			},
+			body() {
+				let text = "";
+				for (let index = 0; index < story[row].length && index < player.ch.best.toNumber(); index++) {
+					text += story[row][index];
+				};
+				return filterStory(text);
+			},
+			unlocked() { return player.ch.best.toNumber() > storyLength(row - 1)},
+		};
+	};
+	return infoBoxes;
 };

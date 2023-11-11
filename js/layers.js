@@ -7253,7 +7253,7 @@ addLayer('ch', {
 		},
 		16: {
 			requirementDescription: '42 chaos',
-			effect() { return (player.ch.challenges[11] + player.ch.challenges[12]) ** 0.049 },
+			effect() { return ((player.ch.challenges[11] + player.ch.challenges[12]) / 250 + 1) ** 1.35 },
 			effectDescription() {
 				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'you can autobuy the first quark rebuyable, the good influence rebuyable autobuyer is 2x faster, and divide the multicellular organism cost based on <b class="layer-ch">Tide</b> completions (currently /' + format(milestoneEffect('ch', 16)) + ')';
 				return 'you can autobuy the first quark rebuyable, the good influence rebuyable autobuyer is 2x faster, and divide the multicellular organism cost based on <b>Tide</b> completions (currently /' + format(milestoneEffect('ch', 16)) + ')';
@@ -7332,88 +7332,7 @@ addLayer('ch', {
 			unlocked() { return hasMilestone('ch', 2) },
 		},
 	},
-	infoboxes: {
-		story0: {
-			title() {
-				if (player.ch.best.toNumber() >= storyLength(0)) return "The Endless Void";
-				else return randomStr(3) + " " + randomStr(7) + " " + randomStr(4);
-			},
-			body() {
-				let text = "";
-				for (let index = 0; index < storyLength(0) && index < player.ch.best.toNumber(); index++) {
-					text += story[0][index];
-				};
-				return filterStory(text);
-			},
-		},
-		story1: {
-			title() {
-				if (player.ch.best.toNumber() >= storyLength(1)) return "The World's End";
-				else return randomStr(3) + " " + randomStr(7) + " " + randomStr(3);
-			},
-			body() {
-				let text = "";
-				for (let index = 0; index < story[1].length && index < (player.ch.best.toNumber() - storyLength(0)); index++) {
-					text += story[1][index];
-				};
-				return filterStory(text);
-			},
-			unlocked() { return player.ch.best.toNumber() > storyLength(0)},
-		},
-		story2: {
-			title() {
-				if (player.ch.best.toNumber() >= storyLength(2)) return "Knowledge of the Old World";
-				else return randomStr(9) + " " + randomStr(2) + " " + randomStr(3) + " " + randomStr(3) + " " + randomStr(5);
-			},
-			body() {
-				let text = "";
-				for (let index = 0; index < story[2].length && index < (player.ch.best.toNumber() - (storyLength(1))); index++) {
-					text += story[2][index];
-				};
-				return filterStory(text);
-			},
-			unlocked() { return player.ch.best.toNumber() > storyLength(1)},
-		},
-		story3: {
-			title() {
-				if (player.ch.best.toNumber() >= storyLength(3)) return "Negative Emotions Given Form";
-				else return randomStr(8) + " " + randomStr(8) + " " + randomStr(5) + " " + randomStr(4);
-			},
-			body() {
-				let text = "";
-				for (let index = 0; index < story[3].length && index < (player.ch.best.toNumber() - (storyLength(2))); index++) {
-					text += story[3][index];
-				};
-				return filterStory(text);
-			},
-			unlocked() { return player.ch.best.toNumber() > storyLength(2)},
-		},
-		story4: {
-			title() {
-				if (player.ch.best.toNumber() >= storyLength(4)) return "Hope and Faith";
-				else return randomStr(4) + " " + randomStr(3) + " " + randomStr(5);
-			},
-			body() {
-				let text = "";
-				for (let index = 0; index < story[4].length && index < (player.ch.best.toNumber() - (storyLength(3))); index++) {
-					text += story[4][index];
-				};
-				return filterStory(text);
-			},
-			unlocked() { return player.ch.best.toNumber() > storyLength(3)},
-		},
-		story5: {
-			title: "Coming Soon",
-			body() {
-				let text = "";
-				for (let index = 0; index < story[5].length && index < (player.ch.best.toNumber() - (storyLength(4))); index++) {
-					text += story[5][index];
-				};
-				return filterStory(text);
-			},
-			unlocked() { return player.ch.best.toNumber() > storyLength(4)},
-		},
-	},
+	infoboxes: getChaosInfoBoxes(),
 });
 
 addLayer('mo', {
