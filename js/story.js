@@ -242,6 +242,66 @@ const story = [
 	The darkness was still too much stronger than the light.
 	So the Being tried to condense all of their prayers...
 `], [`
+	<b>--- 37th sunset ---</b>
+	Today, I found some ruins of human structures.
+	There was some paper and ink in some of the fallen houses.
+	I still can't remember anything before the first sunrise,
+	but I'm writing my discoveries now so I don't forget agin.
+	I can't find any corpses here, though, which is odd.
+`, `
+	<b>--- 61st sunset ---</b>
+	Today, I found a cave suitable to construct a home.
+	Lots of trees good for building and edible plants for food nearby.
+	I just have to be careful of the bear territory towards the west.
+	I still haven't enoutered a creature I can communicate with.
+	You know, I wonder where all the rivers lead...
+`, `
+	<b>--- 80th sunset ---</b>
+	Yesterday, my home was destroyed by the bears.
+	I have never see a whole pack of them like that before.
+	At least I managed to salvage this record and a small amount of food.
+	However, food is getting harder to find now that the temperature is dropping.
+	Just gathering and hunting won't be enough now that my home is gone.
+`, `
+	<b>--- 102nd sunset ---</b>
+	Today, I discovered a human settlement while on the brink of death.
+	The people living there provided me with food and water.
+	However, conflict is rife throughout the settlement.
+	I have decided to stay here until it gets deadly.
+	This place is even more dangerous than the forest,
+	but their farming techniques should prove very helpful.
+`, `
+	<b>--- 134th sunset ---</b>
+	Somehow, I managed to convince the leaders of both factions to hold a meeting at the triangle.
+	It's very dangerous being the intermediary, but if this succeeds...
+	I have everything prepared to escape the settlement if I fail.
+	As I'm reading through all the previous 48 entries, I feel confidence.
+	I have survived through so much, so something like this can't stop me.
+`, `
+	<b>--- Year 1, Day 253 ---</b>
+	I met with the chiefs of the other villages today on the plateau.
+	We established a trade route to trade some crops for weapons.
+	As methods of communication improve, our village really needs to be ready for anything.
+	Humans are becoming a bigger threat to our lives than most wild animals.
+	I can't believe so much has changed in the hundred sunrises I have witnessed as the chief.
+`, `
+	<b>--- Year 2, Day 126 ---</b>
+	I haven't been able to write much recently because I have been so busy.
+	But if the citizens are content, that is enough for me.
+	Leading over a thousand people is truly very, very tiring.
+	I can't belive it has been over a year since that fateful day...
+	Anyway, new tribes and villages have joined us recently.
+	The new citizens seem to look up to me and keep calling me Tzar.
+	I'll have to ask one what that word means tomorrow.
+`, `
+	<b>--- Year 8, Day 357 ---</b>
+	A new year is fast approaching, and the festives are already underway.
+	It's always nice to see the citizens having a good time.
+	However, I think my time left in this world is almost up.
+	I am going pass on what is left of these records.
+	I'm sure that child will lead the people brilliantly.
+	May the Spectrum's blessing be with you, children of the future.
+`], [`
 	More story coming soon!
 `]];
 
@@ -251,6 +311,7 @@ const storyNames = [
 	["Knowledge of the Old World", () => randomStr(9) + " " + randomStr(2) + " " + randomStr(3) + " " + randomStr(3) + " " + randomStr(5)],
 	["Negative Emotions Given Form", () => randomStr(8) + " " + randomStr(8) + " " + randomStr(5) + " " + randomStr(4)],
 	["Hope and Faith", () => randomStr(4) + " " + randomStr(3) + " " + randomStr(5)],
+	["Records of the Founder", () => randomStr(7) + " " + randomStr(2) + " " + randomStr(3) + " " + randomStr(7)],
 	["Coming Soon", () => "Coming Soon"],
 ];
 
@@ -278,6 +339,7 @@ function filterStory(string) {
 	if (player.ch.best.toNumber() < storyLength(2)) string = string.replace(/[Kk]nowledge/g, randomStr(9)).replace(/[Mm]emories/g, randomStr(8));
 	if (player.ch.best.toNumber() < storyLength(3)) string = string.replace(/[Aa]nger/g, randomStr(5)).replace(/[Hh]atred/g, randomStr(6)).replace(/[Cc]urses/g, randomStr(6)).replace(/[Hh]ate/g, randomStr(4));
 	if (player.ch.best.toNumber() < storyLength(4)) string = string.replace(/[Ww]arm/g, randomStr(4)).replace(/[Ff]uzzy/g, randomStr(5)).replace(/[Ff]eeling/g, randomStr(7)).replace(/[Hh]appiness/g, randomStr(9));
+	// if (player.ch.best.toNumber() < storyLength(5)) nothing to filter here!
 	return string;
 };
 
@@ -291,7 +353,7 @@ function getChaosInfoBoxes() {
 			},
 			body() {
 				let text = "";
-				for (let index = 0; index < story[row].length && index < player.ch.best.toNumber(); index++) {
+				for (let index = 0; index < story[row].length && index < player.ch.best.toNumber() - storyLength(row - 1); index++) {
 					text += story[row][index];
 				};
 				return filterStory(text);
