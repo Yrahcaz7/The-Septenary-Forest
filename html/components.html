@@ -34,7 +34,7 @@ column: `<div class="upgTable instant">
 
 layer_proxy: `<div><column :layer="data[0]" :data="data[1]" :key="key + 'col'"></column></div>`,
 
-infobox: `<div class="story instant" v-if="tmp[layer].infoboxes && tmp[layer].infoboxes[data] !== undefined && tmp[layer].infoboxes[data].unlocked" v-bind:style="[{'border-color': tmp[layer].color, 'border-radius': player.infoboxes[layer][data] ? 0 : '8px'}, tmp[layer].infoboxes[data].style]">
+infobox: `<div class="story instant" v-if="tmp[layer].infoboxes && tmp[layer].infoboxes[data] !== undefined && tmp[layer].infoboxes[data].unlocked" v-bind:style="[{'border-bottom-style': player.infoboxes[layer][data] ? 'solid' : 'none', 'border-color': tmp[layer].color, 'border-radius': player.infoboxes[layer][data] ? 0 : '8px'}, tmp[layer].infoboxes[data].style]">
 	<button class="story-title" v-bind:style="[{'background-color': tmp[layer].color}, tmp[layer].infoboxes[data].titleStyle]" v-on:click="player.infoboxes[layer][data] = !player.infoboxes[layer][data]">
 		<span class="story-toggle">{{player.infoboxes[layer][data] ? "+" : "-"}}</span>
 		<span v-html="tmp[layer].infoboxes[data].title ? tmp[layer].infoboxes[data].title : (tmp[layer].name)"></span>

@@ -731,7 +731,7 @@ addLayer('A', {
 			color: '#A0A0A0',
 		},
 		156: {
-			name: 'Just Pure War',
+			name: 'Fantasy War',
 			done() {return player.w.points.gte(10) && player.m.total.eq(0) && player.ch.total.eq(0)},
 			tooltip: 'obtain 10 wars with no molecules and chaos.',
 			unlocked() { return hasAchievement('A', 152) && hasAchievement('A', 171) },

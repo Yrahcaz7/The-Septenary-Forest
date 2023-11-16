@@ -315,14 +315,21 @@ const storyNames = [
 	["Coming Soon", () => "Coming Soon"],
 ];
 
+const storyColors = [
+	["#4CED13", "#D2D237"],
+	[],
+	["#DB5196", "#710CC4"],
+	["#E36409", "#BA0035"],
+	["#4D2FE0", "#FDBBFF"],
+	[],
+];
+
 for (let index = 0; index < story.length; index++) {
 	if (story[index][0].startsWith('\n\t')) story[index][0] = story[index][0].slice(2);
 	story[index] = story[index].map(value => value.replace(/\n\t/g, '<br><br>').trim());
 };
 
-story[0][0] = "...<br>" + story[0][0];
-
-story[0][0] = story[0][0].replace(/<br><br>/g, '<br>...<br>');
+story[0][0] = '...<br>' + story[0][0].replace(/<br><br>/g, '<br>...<br>');
 
 function storyLength(number) {
 	if (number < 0) return 0;
@@ -348,17 +355,26 @@ function getChaosInfoBoxes() {
 	for (let row = 0; row < story.length; row++) {
 		infoBoxes['story' + row] = {
 			title() {
-				if (player.ch.best.toNumber() >= storyLength(row)) return storyNames[row][0];
-				else return storyNames[row][1]();
+				if (player.ch.best.toNumber() >= storyLength(row)) return '<span style="margin-left: 2px">' + storyNames[row][0];
+				else return '<span style="margin-left: 2px">' + storyNames[row][1]();
 			},
 			body() {
-				let text = "";
+				let text = '';
 				for (let index = 0; index < story[row].length && index < player.ch.best.toNumber() - storyLength(row - 1); index++) {
 					text += story[row][index];
 				};
 				return filterStory(text);
 			},
-			unlocked() { return player.ch.best.toNumber() > storyLength(row - 1)},
+			unlocked() { return player.ch.best.toNumber() > storyLength(row - 1) },
+		};
+		if (storyColors[row] && storyColors[row].length > 0) {
+			infoBoxes['story' + row].style = {'border-color': storyColors[row][0], 'border-radius': '0px'};
+			infoBoxes['story' + row].titleStyle = {'background-color': storyColors[row][0], 'border-radius': '0px'};
+			infoBoxes['story' + row].bodyStyle = {'margin-bottom': '0px', 'border-image-source': 'linear-gradient(' + storyColors[row][0] + ', ' + storyColors[row][1] + ')', 'border-image-slice': '4', 'border-radius': '0px'};
+		} else {
+			infoBoxes['story' + row].style = {'border-radius': '0px'};
+			infoBoxes['story' + row].titleStyle = {'border-radius': '0px'};
+			infoBoxes['story' + row].bodyStyle = {'margin-bottom': '0px', 'border-radius': '0px'};
 		};
 	};
 	return infoBoxes;
