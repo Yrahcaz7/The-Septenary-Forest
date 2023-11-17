@@ -285,7 +285,7 @@ const story = [
 	Humans are becoming a bigger threat to our lives than most wild animals.
 	I can't believe so much has changed in the hundred sunrises I have witnessed as the chief.
 `, `
-	<b>--- Year 2, Day 126 ---</b>
+	<b>--- Year 3, Day 126 ---</b>
 	I haven't been able to write much recently because I have been so busy.
 	But if the citizens are content, that is enough for me.
 	Leading over a thousand people is truly very, very tiring.

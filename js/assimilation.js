@@ -37,7 +37,7 @@ const assimilationReq = {
 	sp: new Decimal(110000),
 	h: new Decimal('1e1060'),
 	ds: new Decimal(1e122),
-	a: new Decimal(Infinity),
+	a: new Decimal(75000),
 	p: new Decimal(Infinity),
 	s: new Decimal(Infinity),
 	r: new Decimal(Infinity),
@@ -137,7 +137,12 @@ function getAssimilationRewards() {
 	if (isAssimilated('ds')) {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-ds">Demon Souls</h2><br><br>';
 		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Increases the cap of <b class="layer-ds">Demonic Energy</b> by 77<br>Makes the <b class="layer-ds">Demonic Energy</b> cost formula worse<br>Changes the goals of the first four demon soul challenges<br>Makes all previous demon soul upgrades always unlockable<br>Unlocks two new demon soul upgrades: <b class="layer-ds">Demonic Hexes</b> and <b class="layer-ds">Wider Gate</b>';
-		else text += 'Increases the cap of <b>Demonic Energy</b> by 77<br>Makes the <b>Demonic Energy</b> cost formula worse<br>Changes the goals of the first three demon soul challenges<br>Makes all previous demon soul upgrades always unlockable<br>Unlocks two new demon soul upgrades: <b>Demonic Hexes</b> and <b>Wider Gate</b>';
+		else text += 'Increases the cap of <b>Demonic Energy</b> by 77<br>Makes the <b>Demonic Energy</b> cost formula worse<br>Changes the goals of the first four demon soul challenges<br>Makes all previous demon soul upgrades always unlockable<br>Unlocks two new demon soul upgrades: <b>Demonic Hexes</b> and <b>Wider Gate</b>';
+	};
+	if (isAssimilated('a')) {
+		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-a">Atoms</h2><br><br>';
+		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Unlocks the <b class="layer-a">Atomic Reactor</b>, a new tab<br>Removes all <b class="layer-a">Atomic Tree</b> limitations<br>Unlocks <b class="layer-mo">Synergism</b>, a new tab (coming soon)<br>Unlocks the first <b class="layer-mo">Synergy</b> (coming soon)';
+		else text += 'Unlocks the <b>Atomic Reactor</b>, a new tab<br>Removes all <b>Atomic Tree</b> limitations<br>Unlocks <b>Synergism</b>, a new tab (coming soon)<br>Unlocks the first <b>Synergy</b> (coming soon)';
 	};
 	return text.replace("<br><br>", "");
 };

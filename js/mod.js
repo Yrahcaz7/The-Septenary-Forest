@@ -36,7 +36,7 @@ function getdark(darkthis, type, special = false, research = false) {
 			return '-light">';
 		} else if (type == 'title-buyable' && colorvalue[0][1]) {
 			if (darkthis.canAfford() && getBuyableAmount(darkthis.layer, darkthis.id)) return '-dark">';
-		} else if (type == 'title-clickable' && colorvalue[0][1]) {
+		} else if (type == 'clickable' && colorvalue[0][1]) {
 			if (darkthis.canClick()) return '-dark">';
 		} else return '-OFF">'
 	};
@@ -184,7 +184,7 @@ const displayThings = [
 ];
 
 // determines when the game "ends"
-const endPoints = new Decimal('e1e15');
+const endPoints = new Decimal('e1.41e14');
 
 // style for the background, can be a function
 const backgroundStyle = {};

@@ -2177,7 +2177,7 @@ addLayer('h', {
 	},
 	clickables: {
 		11: {
-			title() { return '<b class="layer-h' + getdark(this, "title-clickable") + 'The Breaker' },
+			title() { return '<b class="layer-h' + getdark(this, "clickable") + 'The Breaker' },
 			display() {
 				const nextNerf = format(this.nerfLayers[player.h.limitsBroken]);
 				let text = 'Use to break a new limit. Using this will reset your evil influence, evil power, and evil influence upgrades. Additionally, it will divide evil influence gain.<br><br>';
@@ -2214,7 +2214,7 @@ addLayer('h', {
 			style: {height: '300px', width: '300px'},
 		},
 		21: {
-			title() { return '<b class="layer-h' + getdark(this, "title-clickable") + 'Reset Breaking' },
+			title() { return '<b class="layer-h' + getdark(this, "clickable") + 'Reset Breaking' },
 			display() { return 'Breaking only resets on Assimilation and row 7+ resets. Click to reset Breaking and force a chaos reset.' },
 			canClick() { return player.h.limitsBroken > 0 },
 			onClick() {
@@ -2582,14 +2582,14 @@ addLayer('ds', {
 			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1e10<br> - Quark and Subatomic Particle gain is divided by 1e40<br>",
 			goalDescription() {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) {
-					return format('e1e9') + ' hexes<br>';
+					return format('1e1195') + ' hexes<br>';
 				} else {
 					if (colorvalue[1] != 'none' && colorvalue[0][2]) return '<b class="layer-a">Famed Atom\'s Donations</b><br>';
 					return '<b>Famed Atom\'s Donations</b><br>';
 				};
 			},
 			canComplete() {
-				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return player.h.points.gte('e1e9');
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return player.h.points.gte('1e1195');
 				return hasUpgrade('a', 51);
 			},
 			unlocked() { return hasMilestone('a', 7) && hasChallenge('ds', 21) },
@@ -2680,8 +2680,8 @@ addLayer('a', {
 		if (hasMilestone('ei', 4) && resettingLayer == 'ei') return;
 		let keep = ['auto_upgrades'];
 			if (layers[resettingLayer].row == this.row) {
-				keep.push("milestones", "points", "best", "total");
-				if (hasMilestone('a', 12)) keep.push("upgrades");
+				keep.push("milestones", "points", "best", "total", "clickables");
+				if (hasMilestone('a', 12) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) keep.push("upgrades");
 			};
 			if (hasMilestone('m', 12) && resettingLayer == 'm') keep.push("milestones");
 			if (hasMilestone('cl', 8) && resettingLayer == 'cl') keep.push("milestones");
@@ -2706,7 +2706,7 @@ addLayer('a', {
 				"blank",
 				["display-text",
 					function() {
-						if (hasMilestone('a', 10) && hasMilestone('a', 12)) return 'All limitations have been removed.';
+						if ((hasMilestone('a', 10) && hasMilestone('a', 12)) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 'All limitations have been removed.';
 						else if (hasMilestone('a', 10)) return 'When you do a row 4 reset, all atom upgrades will be reset.';
 						else if (hasMilestone('a', 12)) return 'When you buy one of these upgrades, you cannot buy<br>any upgrades that are not on its path.';
 						else return 'When you buy one of these upgrades, you cannot buy<br>any upgrades that are not on its path. When you<br>do a row 4 reset, all atom upgrades will be reset.';
@@ -2722,6 +2722,29 @@ addLayer('a', {
 					[71, 72, 73],
 				]],
 			],
+		},
+		"Atomic Reactor": {
+			content: () => {
+				if (tmp.a.tabFormat["Atomic Reactor"].unlocked) return [
+					"main-display",
+					["row", ["prestige-button", "assimilate-button"]],
+					"resource-display",
+					"blank",
+					["clickables", "1"],
+					"blank",
+					["clickables", "2"],
+				];
+				return [
+					"main-display",
+					["row", ["prestige-button", "assimilate-button"]],
+					"resource-display",
+					"blank",
+					"milestones",
+				];
+			},
+			unlocked() {
+				return isAssimilated('a') || player.mo.assimilating === 'a';
+			},
 		},
 	},
 	milestones: {
@@ -2810,17 +2833,15 @@ addLayer('a', {
 	},
 	upgrades: {
 		11: {
-			title() {
-				return '<b class="layer-a' + getdark(this, "title") + 'The Demon of the Atom';
-			},
+			title() { return '<b class="layer-a' + getdark(this, "title") + 'The Demon of the Atom' },
 			description() {
 				if (hasMilestone('m', 11)) return 'multiplies demon soul gain by 1,000x';
 				return 'multiplies demon soul gain based on your atoms';
 			},
 			cost: 1,
 			effect() {
-				eff = player.a.points.add(1).pow(0.5);
-				hardcap = new Decimal(1000);
+				let eff = player.a.points.add(1).pow(0.5);
+				let hardcap = new Decimal(1000);
 				if (eff.gt(hardcap) || hasMilestone('m', 11)) return hardcap;
 				return eff;
 			},
@@ -2834,9 +2855,7 @@ addLayer('a', {
 			branches: [21, 22],
 		},
 		21: {
-			title() {
-				return '<b class="layer-a' + getdark(this, "title") + 'Decaying Atoms';
-			},
+			title() { return '<b class="layer-a' + getdark(this, "title") + 'Decaying Atoms' },
 			description: 'multiplies subatomic particle gain based on your best atoms',
 			cost: 1,
 			effect() {
@@ -2848,41 +2867,42 @@ addLayer('a', {
 				return text;
 			},
 			branches: [31, 32],
-			unlocked() {
-				return !hasUpgrade('a', 22) && !hasUpgrade('a', 33) || hasMilestone('a', 10);
-			},
+			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 22) && !hasUpgrade('a', 33)) },
 		},
 		22: {
-			title() {
-				return '<b class="layer-a' + getdark(this, "title") + 'Atom Construction';
-			},
+			title() { return '<b class="layer-a' + getdark(this, "title") + 'Atom Construction' },
 			description() {
-				if (hasMilestone('m', 11)) return 'multiplies atom gain by 2.50x';
+				if (hasMilestone('m', 11) && getClickableState('a', 11) < 2) return 'multiplies atom gain by 2.50x';
 				return 'multiplies atom gain based on your subatomic particles';
 			},
 			cost: 1,
 			effect() {
-				eff = player.sp.points.add(1).pow(0.02);
-				hardcap = new Decimal(2.5);
+				if (getClickableState('a', 11) >= 2) {
+					return player.sp.points.add(1).pow(0.02).log10().add(1);
+				};
+				let eff = player.sp.points.add(1).pow(0.02);
+				let hardcap = new Decimal(2.5);
 				if (eff.gt(hardcap) || hasMilestone('m', 11)) return hardcap;
 				return eff;
 			},
 			effectDisplay() {
+				let text = '';
+				if (getClickableState('a', 11) >= 2) {
+					text = format(this.effect()) + 'x';
+					if (player.nerdMode) text += ' <br>formula: log10((x+1)^0.02)+1';
+					return text;
+				};
 				if (hasMilestone('m', 11)) return 'max effect';
 				if (this.effect().gte(2.5)) text = format(this.effect()) + 'x<br>(hardcapped)';
 				else text = format(this.effect()) + 'x';
-				if (player.nerdMode) text += ' <br>formula: (x+1)^0.2';
+				if (player.nerdMode) text += ' <br>formula: (x+1)^0.02';
 				return text;
 			},
 			branches: [32, 33],
-			unlocked() {
-				return !hasUpgrade('a', 21) && !hasUpgrade('a', 31) || hasMilestone('a', 10);
-			},
+			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 21) && !hasUpgrade('a', 31)) },
 		},
 		31: {
-			title() {
-				return '<b class="layer-a' + getdark(this, "title") + 'Decayed Atoms';
-			},
+			title() { return '<b class="layer-a' + getdark(this, "title") + 'Decayed Atoms' },
 			description: 'multiplies subatomic particle gain based on your total atoms',
 			cost: 2,
 			effect() {
@@ -2894,26 +2914,31 @@ addLayer('a', {
 				return text;
 			},
 			branches: [41],
-			unlocked() {
-				return !hasUpgrade('a', 22) && !hasUpgrade('a', 32) && !hasUpgrade('a', 33) && !hasUpgrade('a', 42) || hasMilestone('a', 10);
-			},
+			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 22) && !hasUpgrade('a', 32) && !hasUpgrade('a', 33) && !hasUpgrade('a', 42)) },
 		},
 		32: {
-			title() {
-				return '<b class="layer-a' + getdark(this, "title") + 'Atomic Recursion';
-			},
+			title() { return '<b class="layer-a' + getdark(this, "title") + 'Atomic Recursion' },
 			description() {
-				if (hasMilestone('m', 11)) return 'multiplies atom gain by 2.25x';
+				if (hasMilestone('m', 11) && getClickableState('a', 11) < 3) return 'multiplies atom gain by 2.25x';
 				return 'multiplies atom gain based on your total atoms';
 			},
 			cost: 2,
 			effect() {
-				eff = player.a.total.add(1).pow(0.05);
-				hardcap = new Decimal(2.25);
+				if (getClickableState('a', 11) >= 3) {
+					return player.a.total.add(1).pow(0.01);
+				};
+				let eff = player.a.total.add(1).pow(0.05);
+				let hardcap = new Decimal(2.25);
 				if (eff.gt(hardcap) || hasMilestone('m', 11)) return hardcap;
 				return eff;
 			},
 			effectDisplay() {
+				let text = '';
+				if (getClickableState('a', 11) >= 3) {
+					text = format(this.effect()) + 'x';
+					if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
+					return text;
+				};
 				if (hasMilestone('m', 11)) return 'max effect';
 				if (this.effect().gte(2.25)) text = format(this.effect()) + 'x<br>(hardcapped)';
 				else text = format(this.effect()) + 'x';
@@ -2921,26 +2946,31 @@ addLayer('a', {
 				return text;
 			},
 			branches: [41, 42],
-			unlocked() {
-				return !hasUpgrade('a', 31) && !hasUpgrade('a', 33) || hasMilestone('a', 10);
-			},
+			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 31) && !hasUpgrade('a', 33)) },
 		},
 		33: {
-			title() {
-				return '<b class="layer-a' + getdark(this, "title") + 'Atom Production';
-			},
+			title() { return '<b class="layer-a' + getdark(this, "title") + 'Atom Production' },
 			description() {
-				if (hasMilestone('m', 11)) return 'multiplies atom gain by 3.15x';
+				if (hasMilestone('m', 11) && getClickableState('a', 11) < 1) return 'multiplies atom gain by 3.15x';
 				return 'multiplies atom gain based on your subatomic particles';
 			},
 			cost: 2,
 			effect() {
-				eff = player.sp.points.add(1).pow(0.025);
-				hardcap = new Decimal(3.15);
+				if (getClickableState('a', 11) >= 1) {
+					return player.sp.points.add(1).pow(0.025).log10().add(1);
+				};
+				let eff = player.sp.points.add(1).pow(0.025);
+				let hardcap = new Decimal(3.15);
 				if (eff.gt(hardcap) || hasMilestone('m', 11)) return hardcap;
 				return eff;
 			},
 			effectDisplay() {
+				let text = '';
+				if (getClickableState('a', 11) >= 1) {
+					text = format(this.effect()) + 'x';
+					if (player.nerdMode) text += ' <br>formula: log10((x+1)^0.025)+1';
+					return text;
+				};
 				if (hasMilestone('m', 11)) return 'max effect';
 				if (this.effect().gte(3.15)) text = format(this.effect()) + 'x<br>(hardcapped)';
 				else text = format(this.effect()) + 'x';
@@ -2948,14 +2978,10 @@ addLayer('a', {
 				return text;
 			},
 			branches: [42],
-			unlocked() {
-				return !hasUpgrade('a', 21) && !hasUpgrade('a', 31) && !hasUpgrade('a', 32) && !hasUpgrade('a', 41) || hasMilestone('a', 10);
-			},
+			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 21) && !hasUpgrade('a', 31) && !hasUpgrade('a', 32) && !hasUpgrade('a', 41)) },
 		},
 		41: {
-			title() {
-				return '<b class="layer-a' + getdark(this, "title") + 'Atom Revenants';
-			},
+			title() { return '<b class="layer-a' + getdark(this, "title") + 'Atom Revenants' },
 			description: 'multiplies quark gain based on your total atoms minus your current atoms',
 			cost: 2,
 			effect() {
@@ -2967,14 +2993,10 @@ addLayer('a', {
 				return text;
 			},
 			branches: [51],
-			unlocked() {
-				return !hasUpgrade('a', 33) && !hasUpgrade('a', 42) || hasMilestone('a', 10);
-			},
+			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 33) && !hasUpgrade('a', 42)) },
 		},
 		42: {
-			title() {
-				return '<b class="layer-a' + getdark(this, "title") + 'The Fallen';
-			},
+			title() { return '<b class="layer-a' + getdark(this, "title") + 'The Fallen' },
 			description: 'multiplies demon soul gain based on your best atoms minus your current atoms',
 			cost: 2,
 			effect() {
@@ -2982,18 +3004,14 @@ addLayer('a', {
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
-				if (player.nerdMode) text += ' <br>formula:<br>(x*1.5-y)^1.05';
+				if (player.nerdMode) text += ' <br>formula:<br>(1.5x-y)^1.05';
 				return text;
 			},
 			branches: [51],
-			unlocked() {
-				return !hasUpgrade('a', 31) && !hasUpgrade('a', 41) || hasMilestone('a', 10);
-			},
+			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 31) && !hasUpgrade('a', 41)) },
 		},
 		51: {
-			title() {
-				return '<b class="layer-a' + getdark(this, "title") + 'Famed Atoms\' Donations';
-			},
+			title() { return '<b class="layer-a' + getdark(this, "title") + 'Famed Atoms\' Donations' },
 			description() {
 				let text = 'multiplies subatomic particle gain based on your number of achievements';
 				if (player.nerdMode) text += ' <br>formula: x^1.25';
@@ -3001,20 +3019,17 @@ addLayer('a', {
 			},
 			cost: 3,
 			branches: [61, 62],
-			unlocked() { return true },
 		},
 		61: {
-			title() {
-				return '<b class="layer-a' + getdark(this, "title") + 'Unpeaked';
-			},
+			title() { return '<b class="layer-a' + getdark(this, "title") + 'Unpeaked' },
 			description() {
 				if (hasMilestone('m', 11)) return 'multiplies atom gain by 15.00x';
 				return 'multiplies atom gain based on your total atoms minus your best atoms';
 			},
 			cost: 3,
 			effect() {
-				eff = player.a.total.sub(player.a.best).add(1).pow(0.2);
-				hardcap = new Decimal(15);
+				let eff = player.a.total.sub(player.a.best).add(1).pow(0.2);
+				let hardcap = new Decimal(15);
 				if (eff.gt(hardcap) || hasMilestone('m', 11)) return hardcap;
 				return eff;
 			},
@@ -3026,22 +3041,18 @@ addLayer('a', {
 				return text;
 			},
 			branches: [71, 72],
-			unlocked() {
-				return !hasUpgrade('a', 62) && !hasUpgrade('a', 73) || hasMilestone('a', 10);
-			},
+			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 62) && !hasUpgrade('a', 73)) },
 		},
 		62: {
-			title() {
-				return '<b class="layer-a' + getdark(this, "title") + 'Higher Peak';
-			},
+			title() { return '<b class="layer-a' + getdark(this, "title") + 'Higher Peak' },
 			description() {
 				if (hasMilestone('m', 11)) return 'multiplies atom gain by 6.66x';
 				return 'multiplies atom gain based on your total atoms times your current atoms';
 			},
 			cost: 3,
 			effect() {
-				eff = player.a.total.mul(player.a.points).pow(0.05).add(1);
-				hardcap = new Decimal(6.66);
+				let eff = player.a.total.mul(player.a.points).pow(0.05).add(1);
+				let hardcap = new Decimal(6.66);
 				if (eff.gt(hardcap) || hasMilestone('m', 11)) return hardcap;
 				return eff;
 			},
@@ -3049,13 +3060,11 @@ addLayer('a', {
 				if (hasMilestone('m', 11)) return 'max effect';
 				if (this.effect().gte(6.66)) text = format(this.effect()) + 'x<br>(hardcapped)';
 				else text = format(this.effect()) + 'x';
-				if (player.nerdMode) text += ' <br>formula: (x*y)^0.05+1';
+				if (player.nerdMode) text += ' <br>formula: (xy)^0.05+1';
 				return text;
 			},
 			branches: [72, 73],
-			unlocked() {
-				return !hasUpgrade('a', 61) && !hasUpgrade('a', 71) || hasMilestone('a', 10);
-			},
+			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 61) && !hasUpgrade('a', 71)) },
 		},
 		71: {
 			title() {
@@ -3068,25 +3077,21 @@ addLayer('a', {
 			},
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
-				if (player.nerdMode) text += ' <br>formula: (x*y*2.5)^0.15';
+				if (player.nerdMode) text += ' <br>formula: (2.5xy)^0.15';
 				return text;
 			},
-			unlocked() {
-				return !hasUpgrade('a', 62) && !hasUpgrade('a', 72) && !hasUpgrade('a', 73) || hasMilestone('a', 10);
-			},
+			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 62) && !hasUpgrade('a', 72) && !hasUpgrade('a', 73)) },
 		},
 		72: {
-			title() {
-				return '<b class="layer-a' + getdark(this, "title") + 'Recurred, Recurring';
-			},
+			title() { return '<b class="layer-a' + getdark(this, "title") + 'Recurred, Recurring' },
 			description() {
 				if (hasMilestone('m', 11)) return 'multiplies atom gain by 5.00x';
 				return 'multiplies atom gain based on your total atoms';
 			},
 			cost: 4,
 			effect() {
-				eff = player.a.total.add(1).pow(0.1);
-				hardcap = new Decimal(5);
+				let eff = player.a.total.add(1).pow(0.1);
+				let hardcap = new Decimal(5);
 				if (eff.gt(hardcap) || hasMilestone('m', 11)) return hardcap;
 				return eff;
 			},
@@ -3097,14 +3102,10 @@ addLayer('a', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.1';
 				return text;
 			},
-			unlocked() {
-				return !hasUpgrade('a', 71) && !hasUpgrade('a', 73) || hasMilestone('a', 10);
-			},
+			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 71) && !hasUpgrade('a', 73)) },
 		},
 		73: {
-			title() {
-				return '<b class="layer-a' + getdark(this, "title") + 'Atomic Essence';
-			},
+			title() { return '<b class="layer-a' + getdark(this, "title") + 'Atomic Essence' },
 			description: 'multiplies essence gain based on your atoms',
 			cost: 4,
 			effect() {
@@ -3115,9 +3116,72 @@ addLayer('a', {
 				if (player.nerdMode) text += ' <br>formula: (x+1)^1.75';
 				return text;
 			},
-			unlocked() {
-				return !hasUpgrade('a', 61) && !hasUpgrade('a', 71) && !hasUpgrade('a', 72) || hasMilestone('a', 10);
+			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 61) && !hasUpgrade('a', 71) && !hasUpgrade('a', 72)) },
+		},
+	},
+	clickables: {
+		11: {
+			title() { return '<b class="layer-a' + getdark(this, "clickable") + 'Atomic Reactor' },
+			display() {
+				const num = getClickableState('a', 11) || 0;
+				let text = 'Removes maximums on the effects of atom upgrades, but worsens the respective effect formulas.<br><br>Next Effect: ' + (this.upgrades[num] ? 'Removes the maximum of ' + tmp.a.upgrades[this.upgrades[num]].title + '</b>\'s effect, but worsen its effect formula.' : 'You have all the effects!') + '<br><br>Upgrades Affected:';
+				if (num > 0) {
+					for (let index = 0; index < num; index++) {
+						text += '<br>' + tmp.a.upgrades[this.upgrades[index]].title + '</b>';
+					};
+				} else {
+					text += '<br>none so far';
+				};
+				text += '<br><br>Cost: ' + formatWhole(this.cost()) + ' atoms<br><br>Bought: ' + formatWhole(num) + '/' + formatWhole(this.upgrades.length);
+				if (this.canClick()) text = text.replace(/layer-a/g, 'layer-a-dark');
+				else text = text.replace(/layer-a-dark/g, 'layer-a');
+				return text;
 			},
+			upgrades: [33, 22, 32],
+			assimilationReq: [36000, 61000],
+			req: ['1e690', '1e728', '1e771'],
+			cost() {
+				const num = getClickableState('a', 11) || 0;
+				if (player.mo.assimilating === this.layer) {
+					return this.assimilationReq[num] || Infinity;
+				} else {
+					return this.req[num] || Infinity;
+				};
+			},
+			canClick() {
+				const num = getClickableState('a', 11) || 0;
+				if (player.mo.assimilating === this.layer) return player.a.points.gte(this.assimilationReq[num]) && num < this.assimilationReq.length && num < this.upgrades.length;
+				return player.a.points.gte(this.req[num]) && num < this.req.length && num < this.upgrades.length;
+			},
+			onClick() {
+				player.a.points = player.a.points.sub(this.cost());
+				setClickableState('a', 11, (getClickableState('a', 11) || 0) + 1);
+			},
+			style: {height: '300px', width: '300px'},
+		},
+		21: {
+			title() {
+				if (getClickableState('a', 11) >= 2) return '<b class="layer-a' + getdark(this, "clickable") + 'Increase Total Atoms';
+				return '<b class="layer-a' + getdark(this, "clickable") + 'Reset Atom Upgrades';
+			},
+			display() {
+				if (getClickableState('a', 11) >= 2) {
+					let text = 'Click to increase your total atoms by +' + formatWhole(this.effect()) + ' (based on your atoms and <b class="layer-a' + getdark(this, "clickable") + 'Atomic Reactor</b>s)';
+					if (player.nerdMode) text += '<br>Formula: x^0.5 * 2.5^y';
+					return text;
+				};
+				return 'Click to reset your atom upgrades. You need to have completed <b class="layer-ds' + getdark(this, "clickable") + 'Dreaded Science</b> to use this. Get 2 <b class="layer-a' + getdark(this, "clickable") + 'Atomic Reactor</b>s to improve this.';
+			},
+			effect() { return player.a.points.pow(0.5).mul(2.5 ** getClickableState('a', 11)).floor() },
+			canClick() { return player.a.upgrades.length > 0 && player.ds.challenges[22] > 0 },
+			onClick() {
+				if (getClickableState('a', 11) >= 2) {
+					player.a.total = player.a.total.add(this.effect());
+				} else {
+					player.a.upgrades = []
+				};
+			},
+			style: {'min-height': '80px', width: '200px'},
 		},
 	},
 });
@@ -3226,8 +3290,8 @@ addLayer('p', {
 		};
 	},
 	effect() {
-		effBoost = new Decimal(0.01);
-		effEx = new Decimal(1);
+		let effBoost = new Decimal(0.01);
+		let effEx = new Decimal(1);
 		if (hasMilestone('p', 1)) effBoost = effBoost.mul(2);
 		if (hasUpgrade('p', 13)) effBoost = effBoost.mul(upgradeEffect('p', 13));
 		if (hasUpgrade('p', 32)) effBoost = effBoost.mul(upgradeEffect('p', 32));
@@ -3235,8 +3299,8 @@ addLayer('p', {
 		if (hasUpgrade('p', 42)) effBoost = effBoost.mul(upgradeEffect('p', 42));
 		if (hasMilestone('p', 2)) effEx = new Decimal(1.5);
 		if (hasMilestone('p', 3)) effEx = new Decimal(1.6);
-		eff = effBoost.mul(player.p.points).pow(effEx);
-		sc_start = softcaps.p_d[0];
+		let eff = effBoost.mul(player.p.points).pow(effEx);
+		let sc_start = softcaps.p_d[0];
 		if (eff.gt(sc_start)) eff = eff.div(sc_start).pow(softcaps.p_d[1]).mul(sc_start);
 		if (hasUpgrade('p', 71)) eff = eff.mul(upgradeEffect('p', 71));
 		return eff;
@@ -4615,16 +4679,15 @@ addLayer('r', {
 				return player.r.light.gte(player.r.lightreq) && challengeCompletions('r', this.id) < tmp.r.challenges[this.id].completionLimit;
 			},
 			completionLimit() {
-				return player.r.points;
+				return player.r.points.toNumber();
 			},
 			style() {
 				const num = player.r.light.add(1).log(2).div(player.r.lightreq.add(1).log(2)).mul(100).floor();
-				let color = 'rgb(' + num + ',' + num + ',' + (num + 50) + ')';
-				if (maxedChallenge('r', this.id)) color = 'rgb(0,0,50)';
-				if (num > 205) color = 'rgb(205,205,255)';
+				let bgcolor = 'rgb(' + num + ',' + num + ',' + (num + 50) + ')';
+				if (num.gt(205)) bgcolor = 'rgb(205,205,255)';
 				let textcolor = '#B9A975';
 				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
-				return {'background-color':color, 'color':textcolor, 'border-radius':'70px', 'height':'425px', 'width':'425px'};
+				return {'background-color':bgcolor, 'color':textcolor, 'border-radius':'70px', 'height':'425px', 'width':'425px'};
 			},
 		},
 	},
@@ -7128,6 +7191,7 @@ addLayer('ch', {
 				["infobox", "story3"],
 				["infobox", "story4"],
 				["infobox", "story5"],
+				["infobox", "story6"],
 				["display-text", function() {
 					if (player.ch.best.toNumber() < storyLength(Infinity)) return "<br><br>next story discovery at " + formatWhole(player.ch.best.add(1)) + " chaos";
 					else return "<br><br>all story discoveries found; wait for updates for more";
@@ -7405,13 +7469,13 @@ addLayer('mo', {
 	},
 	clickables: {
 		11: {
-			title() { return '<b class="layer-mo' + getdark(this, "title-clickable") + 'Assimilation' },
+			title() { return '<b class="layer-mo' + getdark(this, "clickable") + 'Assimilation' },
 			display() {
 				if (player.mo.assimilating !== null) return '<br>Currently Assimilating: ' + tmp[player.mo.assimilating].name + '.<br><br>Click to exit the run.';
 				else if (getClickableState('mo', 11)) return '<br>You are in an Assimilation Search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click here to exit the search.';
 				else return '<br>Begin an Assimilation search.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
 			},
-			req() { return [1, 2, 3, 4, 7, 12, Infinity][player.mo.assimilated.length] },
+			req() { return [1, 2, 3, 4, 7, 12, 16, Infinity][player.mo.assimilated.length] },
 			canClick() { return getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req) },
 			onClick() {
 				if (player.mo.assimilating !== null) {
