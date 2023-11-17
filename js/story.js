@@ -379,3 +379,20 @@ function getChaosInfoBoxes() {
 	};
 	return infoBoxes;
 };
+
+function getChaosStoryTab() {
+	let tab = {content: []};
+	tab.content.push("main-display");
+	tab.content.push(["row", ["prestige-button", "assimilate-button"]]);
+	tab.content.push("resource-display");
+	tab.content.push("blank");
+	for (let index = 0; index < story.length; index++) {
+		tab.content.push(["infobox", "story" + index]);
+	};
+	tab.content.push(["display-text", function() {
+		if (player.ch.best.toNumber() < storyLength(Infinity)) return "<br><br>next story discovery at " + formatWhole(player.ch.best.add(1)) + " chaos";
+		else return "<br><br>all story discoveries found; wait for updates for more";
+	}]);
+	tab.content.push("blank");
+	return tab;
+};

@@ -141,8 +141,8 @@ function getAssimilationRewards() {
 	};
 	if (isAssimilated('a')) {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-a">Atoms</h2><br><br>';
-		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Unlocks the <b class="layer-a">Atomic Reactor</b>, a new tab<br>Removes all <b class="layer-a">Atomic Tree</b> limitations<br>Unlocks <b class="layer-mo">Synergism</b>, a new tab (coming soon)<br>Unlocks the first <b class="layer-mo">Synergy</b> (coming soon)';
-		else text += 'Unlocks the <b>Atomic Reactor</b>, a new tab<br>Removes all <b>Atomic Tree</b> limitations<br>Unlocks <b>Synergism</b>, a new tab (coming soon)<br>Unlocks the first <b>Synergy</b> (coming soon)';
+		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Unlocks the <b class="layer-a">Atomic Reactor</b>, a new tab<br>Removes all <b class="layer-a">Atomic Tree</b> limitations<br>Unlocks <b class="layer-mo">Synergism</b>, a new tab<br>Unlocks the first <b class="layer-mo">Synergy</b>';
+		else text += 'Unlocks the <b>Atomic Reactor</b>, a new tab<br>Removes all <b>Atomic Tree</b> limitations<br>Unlocks <b>Synergism</b>, a new tab<br>Unlocks the first <b>Synergy</b>';
 	};
 	return text.replace("<br><br>", "");
 };

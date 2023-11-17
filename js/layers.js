@@ -1348,10 +1348,16 @@ addLayer('q', {
 	},
 	buyables: {
 		11: {
-			cost() { return new Decimal('e2.5e9').pow(getBuyableAmount(this.layer, this.id)).mul('e1e10') },
+			cost() {
+				if (player.h.limitsBroken >= 3) return new Decimal(2).pow(new Decimal(1.3).pow(getBuyableAmount(this.layer, this.id)));
+				return new Decimal('e2.5e9').pow(getBuyableAmount(this.layer, this.id)).mul('e1e10');
+			},
 			title() { return '<b class="layer-q' + getdark(this, "title-buyable") + 'Sample Quarks' },
-			canAfford() { return player.q.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
-			purchaseLimit: 99,
+			canAfford() { return player.q.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			purchaseLimit() {
+				if (player.h.limitsBroken >= 3) return 1e9;
+				return 99;
+			},
 			buy() {
 				player.q.points = player.q.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -1364,7 +1370,7 @@ addLayer('q', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text += '<br>formula: (100^x)/???';
-				return 'increases deciphering based on the amount of this upgrade bought. Becomes less effective based on your ' + randomStr(9) + '.<br>Currently: +' + formatSmall(buyableEffect(this.layer, this.id)) + '%' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' quarks<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + this.purchaseLimit;
+				return 'increases deciphering based on the amount of this upgrade bought. Becomes less effective based on your ' + randomStr(9) + '.<br>Currently: +' + formatSmall(buyableEffect(this.layer, this.id)) + '%' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' quarks<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + formatWhole(this.purchaseLimit());
 			},
 			unlocked() { return hasUpgrade('q', 61) },
 		},
@@ -1387,7 +1393,7 @@ addLayer('q', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text += '<br>formula: ((x+1)^0.1)(10^y)';
-				return 'multiplies atom gain based on your insight and the amount of this upgrade bought.<br>Currently: ' + formatSmall(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' insight<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + this.purchaseLimit;
+				return 'multiplies atom gain based on your insight and the amount of this upgrade bought.<br>Currently: ' + formatSmall(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' insight<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			unlocked() { return hasUpgrade('q', 61) },
 		},
@@ -1406,7 +1412,7 @@ addLayer('q', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text += '<br>formula: 10^x';
-				return 'multiplies deciphering based on the amount of this upgrade bought.<br>Currently: ' + formatSmall(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + this.purchaseLimit;
+				return 'multiplies deciphering based on the amount of this upgrade bought.<br>Currently: ' + formatSmall(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			unlocked() { return hasUpgrade('q', 61) },
 		},
@@ -1424,7 +1430,7 @@ addLayer('q', {
 			display() {
 				let text = '';
 				if (player.nerdMode) text += '<br>formula: (1.25^x)+(x^2.15)';
-				return 'multiplies insight gain based on the amount of this upgrade bought.<br>Currently: ' + formatSmall(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' insight<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + this.purchaseLimit;
+				return 'multiplies insight gain based on the amount of this upgrade bought.<br>Currently: ' + formatSmall(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' insight<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			unlocked() { return hasMilestone('ch', 11) && hasUpgrade('q', 61) },
 		},
@@ -2182,19 +2188,23 @@ addLayer('h', {
 				const nextNerf = format(this.nerfLayers[player.h.limitsBroken]);
 				let text = 'Use to break a new limit. Using this will reset your evil influence, evil power, and evil influence upgrades. Additionally, it will divide evil influence gain.<br><br>';
 				if (player.h.limitsBroken === 0) {
-					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: break the limit of <b class="layer-w-dark">Power of Good</b> and improve its effect formula, but its cost scales much faster. Also divide evil influence gain by ' + nextNerf + '.<br><br>Limits broken:<br>none so far';
-					else text += 'Next effect: break the limit of <b>Power of Good</b> and improve its effect formula, but its cost scales much faster. Also divide evil influence gain by ' + nextNerf + '.<br><br>Limits broken:<br>none so far';
+					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: break the limit of <b class="layer-w-dark">Power of Good</b> and improve its effect formula, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br>none so far';
+					else text += 'Next effect: break the limit of <b>Power of Good</b> and improve its effect formula, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br>none so far';
 				} else if (player.h.limitsBroken === 1) {
-					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: break the limit of <b class="layer-cl-dark">Deeper Comprehension</b>, but its cost scales much faster. Also divide evil influence gain by ' + nextNerf + '.<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b>';
-					else text += 'Next effect: break the limit of <b>Deeper Comprehension</b>, but its cost scales much faster. Also divide evil influence gain by ' + nextNerf + '.<br><br>Limits broken:<br><b>Power of Good</b>';
+					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: break the limit of <b class="layer-cl-dark">Deeper Comprehension</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b>';
+					else text += 'Next effect: break the limit of <b>Deeper Comprehension</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b>Power of Good</b>';
+				} else if (player.h.limitsBroken === 2) {
+					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: break the limit of <b class="layer-q-dark">Sample Quarks</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b><br><b class="layer-cl-dark">Deeper Comprehension</b>';
+					else text += 'Next effect: break the limit of <b>Sample Quarks</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b>Power of Good</b><br><b>Deeper Comprehension</b>';
 				} else {
-					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: you have broken all the limits!<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b><br><b class="layer-cl-dark">Deeper Comprehension</b>';
-					else text += 'Next effect: you have broken all the limits!<br><br>Limits broken:<br><b>Power of Good</b><br><b>Deeper Comprehension</b>';
+					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: you have broken all the limits!<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b><br><b class="layer-cl-dark">Deeper Comprehension</b><br><b class="layer-q-dark">Sample Quarks</b>';
+					else text += 'Next effect: you have broken all the limits!<br><br>Limits broken:<br><b>Power of Good</b><br><b>Deeper Comprehension</b><br><b>Sample Quarks</b>';
 				};
 				return text + '<br><br>Effect on evil influence gain: /' + format(tmp.h.clickables[11].nerf) + '<br><br>Req: ' + formatWhole(tmp.h.clickables[11].req[0]) + ' achievements and ' + formatWhole(tmp.h.clickables[11].req[1]) + ' evil influence';
 			},
-			req() { return [90 + player.h.limitsBroken * 2, 33133] },
-			nerfLayers: [100, 10],
+			reqLayers: [79900, 33133, 20900],
+			req() { return [92 + player.h.limitsBroken, this.reqLayers[player.h.limitsBroken] || Infinity] },
+			nerfLayers: [100, 10, 2],
 			nerf() {
 				let nerf = new Decimal(1);
 				for (let index = 0; index < this.nerfLayers.length && index < player.h.limitsBroken; index++) {
@@ -2202,7 +2212,7 @@ addLayer('h', {
 				};
 				return nerf;
 			},
-			canClick() { return player.A.points.gte(tmp.h.clickables[11].req[0]) && player.ei.points.gte(tmp.h.clickables[11].req[1]) && player.h.limitsBroken < this.nerfLayers.length },
+			canClick() { return player.A.points.gte(tmp.h.clickables[11].req[0]) && player.ei.points.gte(tmp.h.clickables[11].req[1]) && player.h.limitsBroken < this.reqLayers.length && player.h.limitsBroken < this.nerfLayers.length },
 			onClick() {
 				player.ei.points = new Decimal(0);
 				player.ei.best = new Decimal(0);
@@ -2601,7 +2611,7 @@ addLayer('ds', {
 				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ds">Reversed Hexes';
 				return '<h3>Reversed Hexes';
 			},
-			challengeDescription: " - Forces a Demon Soul reset<br> - Hex gain multiplier is divides hex gain instead of multipling it<br>",
+			challengeDescription: " - Forces a Demon Soul reset<br> - Hex gain multiplier divides hex gain instead of multipling it<br>",
 			goalDescription() { return format('e3.88e13') + ' hexes<br>' },
 			canComplete() { return player.h.points.gte('e3.88e13') },
 			unlocked() { return hasUpgrade('ds', 32) && hasChallenge('ds', 22) },
@@ -2660,6 +2670,7 @@ addLayer('a', {
 		if (hasBuyable('cl', 11)) gain = gain.mul(buyableEffect('cl', 11)[1]);
 		if (hasBuyable('cl', 33)) gain = gain.mul(buyableEffect('cl', 33));
 		if (hasBuyable('cl', 52)) gain = gain.mul(buyableEffect('cl', 52));
+		if (hasBuyable('mo', 11)) gain = gain.mul(buyableEffect('mo', 11));
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('a', 15) },
@@ -3167,7 +3178,7 @@ addLayer('a', {
 			display() {
 				if (getClickableState('a', 11) >= 2) {
 					let text = 'Click to increase your total atoms by +' + formatWhole(this.effect()) + ' (based on your atoms and <b class="layer-a' + getdark(this, "clickable") + 'Atomic Reactor</b>s)';
-					if (player.nerdMode) text += '<br>Formula: x^0.5 * 2.5^y';
+					if (player.nerdMode) text += '<br>formula: x^0.5 * 2.5^y';
 					return text;
 				};
 				return 'Click to reset your atom upgrades. You need to have completed <b class="layer-ds' + getdark(this, "clickable") + 'Dreaded Science</b> to use this. Get 2 <b class="layer-a' + getdark(this, "clickable") + 'Atomic Reactor</b>s to improve this.';
@@ -5495,6 +5506,7 @@ addLayer('ei', {
 		if (hasBuyable('w', 12)) gain = gain.mul(buyableEffect('w', 12));
 		if (hasBuyable('cl', 53)) gain = gain.mul(buyableEffect('cl', 53));
 		if (inChallenge('ch', 11)) gain = gain.mul(1.1);
+		if (hasMilestone('ch', 17)) gain = gain.mul(milestoneEffect('ch', 16));
 		if (player.h.limitsBroken > 0) gain = gain.div(tmp.h.clickables[11].nerf);
 		return gain;
 	},
@@ -7107,12 +7119,14 @@ addLayer('ch', {
 	getResetGain() {
 		if (tmp.ch.baseAmount.lt(tmp.ch.requires)) return new Decimal(0);
 		let gain = tmp.ch.baseAmount.sub(tmp.ch.requires).div(5).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
-		if (player.ch.points.gte(20)) gain = tmp.ch.baseAmount.sub(tmp.ch.requires).add(230).div(20).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
+		if (player.ch.points.gte(49)) gain = tmp.ch.baseAmount.sub(tmp.ch.requires).add(1190).div(40).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
+		else if (player.ch.points.gte(20)) gain = tmp.ch.baseAmount.sub(tmp.ch.requires).add(230).div(20).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
 		else if (player.ch.points.gte(9)) gain = tmp.ch.baseAmount.sub(tmp.ch.requires).add(40).div(10).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
 		return gain.max(0).min(1);
 	},
 	getNextAt() {
-		if (player.ch.points.gte(20)) return player.ch.points.div(this.gainExp()).mul(20).add(tmp.ch.requires).sub(230);
+		if (player.ch.points.gte(49)) return player.ch.points.div(this.gainExp()).mul(40).add(tmp.ch.requires).sub(1190);
+		else if (player.ch.points.gte(20)) return player.ch.points.div(this.gainExp()).mul(20).add(tmp.ch.requires).sub(230);
 		else if (player.ch.points.gte(9)) return player.ch.points.div(this.gainExp()).mul(10).add(tmp.ch.requires).sub(40);
 		else return player.ch.points.div(this.gainExp()).mul(5).add(tmp.ch.requires);
 	},
@@ -7179,26 +7193,7 @@ addLayer('ch', {
 			},
 			unlocked() { return hasMilestone('ch', 1) },
 		},
-		"Story": {
-			content: [
-				"main-display",
-				["row", ["prestige-button", "assimilate-button"]],
-				"resource-display",
-				"blank",
-				["infobox", "story0"],
-				["infobox", "story1"],
-				["infobox", "story2"],
-				["infobox", "story3"],
-				["infobox", "story4"],
-				["infobox", "story5"],
-				["infobox", "story6"],
-				["display-text", function() {
-					if (player.ch.best.toNumber() < storyLength(Infinity)) return "<br><br>next story discovery at " + formatWhole(player.ch.best.add(1)) + " chaos";
-					else return "<br><br>all story discoveries found; wait for updates for more";
-				}],
-				"blank",
-			],
-		},
+		"Story": getChaosStoryTab(),
 	},
 	milestones: {
 		0: {
@@ -7317,13 +7312,28 @@ addLayer('ch', {
 		},
 		16: {
 			requirementDescription: '42 chaos',
-			effect() { return ((player.ch.challenges[11] + player.ch.challenges[12]) / 250 + 1) ** 1.35 },
+			effect() {
+				if (hasMilestone('ch', 18)) return ((player.ch.challenges[11] + player.ch.challenges[12]) / 250 + 1) ** 1.8;
+				return ((player.ch.challenges[11] + player.ch.challenges[12]) / 250 + 1) ** 1.35;
+			},
 			effectDescription() {
 				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'you can autobuy the first quark rebuyable, the good influence rebuyable autobuyer is 2x faster, and divide the multicellular organism cost based on <b class="layer-ch">Tide</b> completions (currently /' + format(milestoneEffect('ch', 16)) + ')';
 				return 'you can autobuy the first quark rebuyable, the good influence rebuyable autobuyer is 2x faster, and divide the multicellular organism cost based on <b>Tide</b> completions (currently /' + format(milestoneEffect('ch', 16)) + ')';
 			},
 			done() { return player.ch.points.gte(42) },
 			toggles: [['q', 'auto_buyable_11']],
+			unlocked() { return player.mo.unlocked },
+		},
+		17: {
+			requirementDescription: '48 chaos',
+			effectDescription: 'make the previous milestone\'s effect also multiply evil influence gain',
+			done() { return player.ch.points.gte(48) },
+			unlocked() { return player.mo.unlocked },
+		},
+		18: {
+			requirementDescription: '50 chaos',
+			effectDescription: 'improve the effect formula of the 42 chaos milestone',
+			done() { return player.ch.points.gte(50) },
 			unlocked() { return player.mo.unlocked },
 		},
 	},
@@ -7334,21 +7344,8 @@ addLayer('ch', {
 				return '<h3>Tide of Evil';
 			},
 			challengeDescription: "- Forces a chaos reset<br>- Disables good influence<br>- Multiplies demon soul gain by 1e3200<br>- Multiplies evil influence gain by 1.1",
-			goal() {
-				if (challengeCompletions('ch', this.id) === 0) return 17;
-				if (challengeCompletions('ch', this.id) === 1) return 18;
-				if (challengeCompletions('ch', this.id) === 2) return 60;
-				if (challengeCompletions('ch', this.id) === 3) return 70;
-				if (challengeCompletions('ch', this.id) === 4) return 80;
-				if (challengeCompletions('ch', this.id) === 5) return 100;
-				if (challengeCompletions('ch', this.id) === 6) return 120;
-				if (challengeCompletions('ch', this.id) === 7) return 140;
-				if (challengeCompletions('ch', this.id) === 8) return 64175;
-				if (challengeCompletions('ch', this.id) === 9) return 64500;
-				if (challengeCompletions('ch', this.id) === 10) return 64888;
-				if (challengeCompletions('ch', this.id) === 11) return 65250;
-				return Infinity;
-			},
+			goalLayers: [17, 18, 60, 70, 80, 100, 120, 140, 64175, 64500, 64888, 65250, 70750, 71250, 71750],
+			goal() { return this.goalLayers[challengeCompletions('ch', this.id)] || Infinity },
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' evil influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit },
 			canComplete() { return player.ei.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
 			completionLimit() { return player.ch.points.div(2).floor().max(1).toNumber() },
@@ -7466,6 +7463,30 @@ addLayer('mo', {
 				"blank",
 			],
 		},
+		"Synergism": {
+			content: () => {
+				if (tmp.mo.tabFormat["Synergism"].unlocked) return [
+					"main-display",
+					"prestige-button",
+					"resource-display",
+					"blank",
+					"buyables",
+				];
+				return [
+					"main-display",
+					"prestige-button",
+					"resource-display",
+					"blank",
+					["display-text", 'Multicellular organism resets do not reset anything.'],
+					"blank",
+					"clickables",
+					"blank",
+				];
+			},
+			unlocked() {
+				return isAssimilated('a') || player.mo.assimilating === 'a';
+			},
+		},
 	},
 	clickables: {
 		11: {
@@ -7497,6 +7518,24 @@ addLayer('mo', {
 				};
 			},
 			style: {height: '200px', width: '200px'},
+		},
+	},
+	buyables: {
+		11: {
+			cost() { return getBuyableAmount('mo', this.id).div(2).add(1).mul(18) },
+			effect() { return new Decimal(1000).pow(getBuyableAmount('mo', this.id)) },
+			title() { return '<b class="layer-a">Atom</b> <b class="layer-mo' + getdark(this, "title-buyable") + 'Synergy' },
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formula: 1000^x';
+				return 'multiplies atom gain based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('mo', this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' multicellular organisms<br><br>Bought: ' + formatWhole(getBuyableAmount('mo', this.id));
+			},
+			canAfford() { return player.mo.points.gte(this.cost()) },
+			buy() {
+				player.mo.points = player.mo.points.sub(this.cost());
+				addBuyables('mo', this.id, 1);
+			},
+			unlocked() { return isAssimilated('a') || player.mo.assimilating === 'a' },
 		},
 	},
 });
