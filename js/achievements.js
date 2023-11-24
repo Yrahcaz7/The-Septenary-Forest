@@ -730,6 +730,13 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 153) },
 			color: '#A0A0A0',
 		},
+		155: {
+			name: 'Ultimate War',
+			done() {return player.w.points.gte(10000)},
+			tooltip: 'obtain 10,000 wars.',
+			unlocked() { return hasAchievement('A', 154) },
+			color: '#A0A0A0',
+		},
 		156: {
 			name: 'Fantasy War',
 			done() {return player.w.points.gte(10) && player.m.total.eq(0) && player.ch.total.eq(0)},

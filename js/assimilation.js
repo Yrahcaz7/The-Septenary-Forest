@@ -38,7 +38,7 @@ const assimilationReq = {
 	h: new Decimal('1e1060'),
 	ds: new Decimal(1e122),
 	a: new Decimal(75000),
-	p: new Decimal(Infinity),
+	p: new Decimal('1e2000'),
 	s: new Decimal(Infinity),
 	r: new Decimal(Infinity),
 	m: new Decimal(Infinity),
@@ -131,8 +131,8 @@ function getAssimilationRewards() {
 	};
 	if (isAssimilated('h')) {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-h">Hexes</h2><br><br>';
-		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Unlocks unlocking the <b class="layer-h">Breaker</b>, a new tab<br>Makes all previous hex upgrades always unlockable<br>Unlocks five new hex upgrades: <b class="layer-h">Hex the Hex</b>, <b class="layer-h">Hex the Core</b>, <b class="layer-h">Hexes are the Point</b>, <b class="layer-h">Hex of the Flow</b>, and <b class="layer-h">True Hexes</b><br>Makes the hex softcap start sooner (1e1000 --> 1e100)<br>Makes the hex softcap weaker (^0.5 --> ^0.51)';
-		else text += 'Unlocks unlocking the <b>Breaker</b>, a new tab<br>Makes all previous hex upgrades always unlockable<br>Unlocks five new hex upgrades: <b>Hex the Hex</b>, <b>Hex the Core</b>, <b>Hexes are the Point</b>, <b>Hex of the Flow</b>, and <b>True Hexes</b><br>Makes the hex softcap start sooner (1e1000 --> 1e100)<br>Makes the hex softcap weaker (^0.5 --> ^0.51)';
+		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Unlocks unlocking the <b class="layer-h">Breaker</b>, a new tab<br>Makes all previous hex upgrades always unlockable<br>Unlocks five new hex upgrades: <b class="layer-h">Hex the Hex</b>, <b class="layer-h">Hex the Core</b>, <b class="layer-h">Hexes are the Point</b>, <b class="layer-h">Hex of the Flow</b>, and <b class="layer-h">True Hexes</b><br>Makes the hex gain softcap start sooner (1e1000 --> 1e100)<br>Makes the hex gain softcap weaker (^0.5 --> ^0.51)';
+		else text += 'Unlocks unlocking the <b>Breaker</b>, a new tab<br>Makes all previous hex upgrades always unlockable<br>Unlocks five new hex upgrades: <b>Hex the Hex</b>, <b>Hex the Core</b>, <b>Hexes are the Point</b>, <b>Hex of the Flow</b>, and <b>True Hexes</b><br>Makes the hex gain softcap start sooner (1e1000 --> 1e100)<br>Makes the hex gain softcap weaker (^0.5 --> ^0.51)';
 	};
 	if (isAssimilated('ds')) {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-ds">Demon Souls</h2><br><br>';
@@ -143,6 +143,11 @@ function getAssimilationRewards() {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-a">Atoms</h2><br><br>';
 		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Unlocks the <b class="layer-a">Atomic Reactor</b>, a new tab<br>Removes all <b class="layer-a">Atomic Tree</b> limitations<br>Unlocks <b class="layer-mo">Synergism</b>, a new tab<br>Unlocks the first <b class="layer-mo">Synergy</b>';
 		else text += 'Unlocks the <b>Atomic Reactor</b>, a new tab<br>Removes all <b>Atomic Tree</b> limitations<br>Unlocks <b>Synergism</b>, a new tab<br>Unlocks the first <b>Synergy</b>';
+	};
+	if (isAssimilated('p')) {
+		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-p">Prayers</h2><br><br>';
+		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Makes all previous prayer upgrades always unlockable<br>Unlocks four new prayer upgrades: <b class="layer-p">Sanctum Prayers+</b>, <b class="layer-p">The Point of Prayers</b>, <b class="layer-p">Prayer Influence+</b>, and <b class="layer-p">Prismatic Sanctums</b><br>Makes the prayer effect softcap start sooner (1e150 --> 1e15)<br>Makes the prayer effect softcap weaker (^0.95 --> ^0.96)';
+		else text += 'Makes all previous prayer upgrades always unlockable<br>Unlocks four new prayer upgrades: <b>Sanctum Prayers+</b>, <b>The Point of Prayers</b>, <b>Prayer Influence+</b>, and <b>Prismatic Sanctums</b><br>Makes the prayer effect softcap start sooner (1e150 --> 1e15)<br>Makes the prayer effect softcap weaker (^0.95 --> ^0.96)';
 	};
 	return text.replace("<br><br>", "");
 };

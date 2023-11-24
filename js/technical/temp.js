@@ -25,7 +25,6 @@ function setupTemp() {
 	tmp.scrolled = 0;
 	tmp.gameEnded = false;
 	funcs = {};
-
 	setupTempData(layers, tmp, funcs);
 	for (layer in layers) {
 		tmp[layer].resetGain = {};
@@ -38,16 +37,13 @@ function setupTemp() {
 		setupBuyables(layer);
 		tmp[layer].trueGlowColor = [];
 	};
-
 	tmp.other = {
 		lastPoints: player.points || decimalZero,
 		oomps: decimalZero,
 		screenWidth: 0,
 		screenHeight: 0,
     };
-
 	updateWidth();
-
 	temp = tmp;
 };
 
@@ -80,12 +76,9 @@ function setupTempData(layerData, tmpData, funcsData) {
 	};
 };
 
-
 function updateTemp() {
 	if (tmp === undefined) setupTemp();
-
 	updateTempData(layers, tmp, funcs);
-
 	for (layer in layers) {
 		tmp[layer].resetGain = getResetGain(layer);
 		tmp[layer].nextAt = getNextAt(layer);
@@ -96,10 +89,8 @@ function updateTemp() {
 		tmp[layer].prestigeNotify = prestigeNotify(layer);
 		if (tmp[layer].passiveGeneration === true) tmp[layer].passiveGeneration = 1; // new Decimal(true) = decimalZero
 	};
-
 	tmp.pointGen = getPointGen();
 	tmp.backgroundStyle = readData(backgroundStyle);
-
 	tmp.displayThings = [];
 	for (thing in displayThings) {
 		let text = displayThings[thing];

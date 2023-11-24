@@ -166,28 +166,28 @@ function setupLayer(layer) {
 		if (data.best !== undefined && data.showBest === undefined) layers[layer].showBest = true;
 		if (data.total !== undefined && data.showTotal === undefined) layers[layer].showTotal = true;
 	};
-	if(!layers[layer].componentStyles) layers[layer].componentStyles = {};
-	if(layers[layer].symbol === undefined) layers[layer].symbol = layer.charAt(0).toUpperCase() + layer.slice(1);
-	if(layers[layer].unlockOrder === undefined) layers[layer].unlockOrder = [];
-	if(layers[layer].gainMult === undefined) layers[layer].gainMult = decimalOne;
-	if(layers[layer].gainExp === undefined) layers[layer].gainExp = decimalOne;
-	if(layers[layer].directMult === undefined) layers[layer].directMult = decimalOne;
-	if(layers[layer].type === undefined) layers[layer].type = "none";
-	if(layers[layer].base === undefined || layers[layer].base <= 1) layers[layer].base = 2;
-	if(layers[layer].softcap === undefined) layers[layer].softcap = new Decimal("e1e7");
-	if(layers[layer].softcapPower === undefined) layers[layer].softcapPower = new Decimal("0.5");
-	if(layers[layer].displayRow === undefined) layers[layer].displayRow = layers[layer].row;
-	if(layers[layer].name === undefined) layers[layer].name = layer;
-	if(layers[layer].layerShown === undefined) layers[layer].layerShown = true;
-	if(layers[layer].glowColor === undefined) layers[layer].glowColor = defaultGlow;
+	if (!layers[layer].componentStyles) layers[layer].componentStyles = {};
+	if (layers[layer].symbol === undefined) layers[layer].symbol = layer.charAt(0).toUpperCase() + layer.slice(1);
+	if (layers[layer].unlockOrder === undefined) layers[layer].unlockOrder = [];
+	if (layers[layer].gainMult === undefined) layers[layer].gainMult = decimalOne;
+	if (layers[layer].gainExp === undefined) layers[layer].gainExp = decimalOne;
+	if (layers[layer].directMult === undefined) layers[layer].directMult = decimalOne;
+	if (layers[layer].type === undefined) layers[layer].type = "none";
+	if (layers[layer].base === undefined || layers[layer].base <= 1) layers[layer].base = 2;
+	if (layers[layer].softcap === undefined) layers[layer].softcap = new Decimal("e1e7");
+	if (layers[layer].softcapPower === undefined) layers[layer].softcapPower = new Decimal("0.5");
+	if (layers[layer].displayRow === undefined) layers[layer].displayRow = layers[layer].row;
+	if (layers[layer].name === undefined) layers[layer].name = layer;
+	if (layers[layer].layerShown === undefined) layers[layer].layerShown = true;
+	if (layers[layer].glowColor === undefined) layers[layer].glowColor = defaultGlow;
 
 	let row = layers[layer].row;
 
 	let displayRow = layers[layer].displayRow;
 
-	if(!ROW_LAYERS[row]) ROW_LAYERS[row] = {};
-	if(!TREE_LAYERS[displayRow] && !isNaN(displayRow)) TREE_LAYERS[displayRow] = [];
-	if(!OTHER_LAYERS[displayRow] && isNaN(displayRow)) OTHER_LAYERS[displayRow] = [];
+	if (!ROW_LAYERS[row]) ROW_LAYERS[row] = {};
+	if (!TREE_LAYERS[displayRow] && !isNaN(displayRow)) TREE_LAYERS[displayRow] = [];
+	if (!OTHER_LAYERS[displayRow] && isNaN(displayRow)) OTHER_LAYERS[displayRow] = [];
 
 	ROW_LAYERS[row][layer]=layer;
 	let position = (layers[layer].position !== undefined ? layers[layer].position : layer);

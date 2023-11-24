@@ -9,8 +9,8 @@ const modInfo = {
 };
 
 const VERSION = {
-	num: '3.4.1',
-	name: 'Organisms Emerge - Bugfix Sub-Update',
+	num: '3.5',
+	name: 'More Assimilation',
 };
 
 const winText = () => {
@@ -148,6 +148,7 @@ function getPointGen(forced = false) {
 	if (hasBuyable('sp', 21)) gain = gain.mul(buyableEffect('sp', 21)[0]);
 	if (hasBuyable('sp', 12)) gain = gain.mul(buyableEffect('sp', 12)[1]);
 	if (player.p.unlocked && !tmp.p.deactivated) gain = gain.mul(player.p.divinity.add(1).pow(0.1));
+	if (hasUpgrade('p', 82)) gain = gain.mul(upgradeEffect('p', 82));
 	if (challengeCompletions('r', 11) >= 2) gain = gain.mul(tmp.r.effect[2]);
 	if (hasUpgrade('ds', 21) && hasUpgrade('ds', 24)) gain = gain.mul(player.A.points.mul(0.2));
 	else gain = gain.mul(player.A.points.mul(0.1).add(1));
@@ -184,7 +185,7 @@ const displayThings = [
 ];
 
 // determines when the game "ends"
-const endPoints = new Decimal('e1.503e14');
+const endPoints = new Decimal('e6.5e14');
 
 // style for the background, can be a function
 const backgroundStyle = {};
@@ -200,14 +201,13 @@ function fixOldSave(oldVersion) {
 	if (oldVersion == '2.2' && player.A.achievements.includes('123')) removeAchievement('123');
 	if (oldVersion == '3.2' && player.A.achievements.includes('163')) removeAchievement('163');
 	// endgame fixes
-	if (oldVersion == '3.4' && player.points.gte('e1e14')) {
-		if (isAssimilated('h')) player.mo.assimilated = ['e', 'c', 'q', 'sp'];
+	if ((oldVersion == '3.4' || oldVersion == '3.4.1') && (player.points.gte('e1.51e14') || player.ch.points.gt(50))) {
 		setTimeout(() => {
 			doReset('ch', true);
-			if (player.ch.points.gt(33) || player.ch.best.gt(33) || player.ch.total.gt(33)) {
-				player.ch.points = new Decimal(33);
-				player.ch.best = new Decimal(33);
-				player.ch.total = new Decimal(33);
+			if (player.ch.points.gt(50) || player.ch.best.gt(50) || player.ch.total.gt(50)) {
+				player.ch.points = new Decimal(50);
+				player.ch.best = new Decimal(50);
+				player.ch.total = new Decimal(50);
 			};
 		});
 	};
@@ -224,7 +224,7 @@ function randomChar() {
 };
 
 function randomStr(length = 1, sameChar = false) {
-	if (length > 1000) length = 1000;
+	if (length > 10000) length = 10000;
 	if (length <= 0) return "";
 	if (sameChar) return randomChar().repeat(length);
 	let result = "";

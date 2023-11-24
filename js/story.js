@@ -302,6 +302,47 @@ const story = [
 	I'm sure that child will lead the people brilliantly.
 	May the Spectrum's blessing be with you, children of the future.
 `], [`
+	The Being created something new, unearthed from its memories.
+	A great structure consisting of innumerable Prayers.
+	This structure radiated bright green light throughout the void.
+	The Being recalled this feeling of basking in this light...
+	This spring green light, representing warmpth.
+`, `
+	The Being decided to name this new structure a Sanctum.
+	Then, the Being set off to create more.
+	The process went smoothly once it knew how to do it,
+	And many more Sanctums began filling the void.
+`, `
+	The Being took pride in its new creation.
+	However, it was not done creating things just yet.
+	It dug through every scrap of knowledge it had...
+	Searching, searching, and searching even more...
+	Until the Being found all the components it needed.
+`, `
+	The Being began combining all of its Sanctums and Prayers.
+	It fueled the process with many different types of resources.
+	Blinding light filled the void as something emerged...
+	Within the light was a Relic of times long gone,
+	infused with the very essence of the void.
+`, `
+	The Being quickly started creating more Sanctums to make another...
+	And everything cycled on, once again.
+	Discovering more Relics, then empowering them...
+	As this process continued, more and more light blossomed.
+	The light reached further and further, expanding outwards.
+`, `
+	The Being was filled with warmpth like never before.
+	It continued on, working harder and harder.
+	However, things began to slow.
+	The new Relics started needing to much light to empower.
+	So the Being set out in search of more light.
+`, `
+	The Being searched and searched, but it couldn't find enough.
+	The Being started to become disheartened.
+	However, when it barely managed to activate one more Relic...
+	The Being saw that the Relic was filled with glowing words.
+	As the Being read the text, it realised what it was missing...
+`], [`
 	More story coming soon!
 `]];
 
@@ -312,6 +353,7 @@ const storyNames = [
 	["Negative Emotions Given Form", () => randomStr(8) + " " + randomStr(8) + " " + randomStr(5) + " " + randomStr(4)],
 	["Hope and Faith", () => randomStr(4) + " " + randomStr(3) + " " + randomStr(5)],
 	["Records of the Founder", () => randomStr(7) + " " + randomStr(2) + " " + randomStr(3) + " " + randomStr(7)],
+	["Magnificent Structures", () => randomStr(11) + " " + randomStr(10)],
 	["Coming Soon", () => "Coming Soon"],
 ];
 
@@ -322,6 +364,7 @@ const storyColors = [
 	["#E36409", "#BA0035"],
 	["#4D2FE0", "#FDBBFF"],
 	[],
+	["#AAFF00", "#B9A975"],
 ];
 
 for (let index = 0; index < story.length; index++) {
@@ -347,6 +390,7 @@ function filterStory(string) {
 	if (player.ch.best.toNumber() < storyLength(3)) string = string.replace(/[Aa]nger/g, randomStr(5)).replace(/[Hh]atred/g, randomStr(6)).replace(/[Cc]urses/g, randomStr(6)).replace(/[Hh]ate/g, randomStr(4));
 	if (player.ch.best.toNumber() < storyLength(4)) string = string.replace(/[Ww]arm/g, randomStr(4)).replace(/[Ff]uzzy/g, randomStr(5)).replace(/[Ff]eeling/g, randomStr(7)).replace(/[Hh]appiness/g, randomStr(9));
 	// if (player.ch.best.toNumber() < storyLength(5)) nothing to filter here!
+	if (player.ch.best.toNumber() < storyLength(6)) string = string.replace(/[Ss]tructure/g, randomStr(9)).replace(/[Ww]armpth/g, randomStr(7));
 	return string;
 };
 
