@@ -55,6 +55,7 @@ function getDevotionBulk() {
 	if (hasMilestone('cl', 2)) bulk *= 2;
 	if (hasMilestone('ch', 9)) bulk *= 5;
 	if (hasMilestone('ch', 10)) bulk *= 2;
+	if (isAssimilated('s') || player.mo.assimilating === 's') bulk *= 10;
 	return bulk;
 };
 
@@ -84,6 +85,8 @@ function getLightGain() {
 		if (hasMilestone('s', 52)) gain = gain.mul(3);
 		if (gain.gt(1e25)) gain = new Decimal(1e25);
 	};
+	if (player.s.glow_effect.gt(1)) gain = gain.mul(player.s.glow_effect);
+	if (hasBuyable('g', 21)) gain = gain.mul(buyableEffect('g', 21)[2]);
 	if (new Decimal(tmp.w.effect[2]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[2]);
 	gain = gain.add(getLightBoost());
 	return gain;
@@ -185,7 +188,7 @@ const displayThings = [
 ];
 
 // determines when the game "ends"
-const endPoints = new Decimal('e6.5e14');
+const endPoints = new Decimal('e9e16');
 
 // style for the background, can be a function
 const backgroundStyle = {};

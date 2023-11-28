@@ -820,6 +820,8 @@ addLayer('q', {
 		auto_upgrades: false,
 		auto_buyable_11: false,
 		auto_buyable_12: false,
+		auto_buyable_13: false,
+		auto_buyable_21: false,
 	}},
 	color: "#DB5196",
 	branches: ['sp'],
@@ -884,11 +886,13 @@ addLayer('q', {
 	automate() {
 		if (hasMilestone('s', 4) && player[this.layer].auto_upgrades) {
 			for (const id in tmp[this.layer].upgrades) {
-				if (tmp[this.layer].upgrades[id].unlocked && id < 60) buyUpgrade(this.layer, id);
+				if (tmp[this.layer].upgrades[id].unlocked && (id < 60 || hasMilestone('ch', 20))) buyUpgrade(this.layer, id);
 			};
 		};
 		if (hasMilestone('ch', 16) && player.q.auto_buyable_11 && tmp.q.buyables[11].unlocked && layers.q.buyables[11].canAfford()) layers.q.buyables[11].buy();
 		if (hasMilestone('ch', 20) && player.q.auto_buyable_12 && tmp.q.buyables[12].unlocked && layers.q.buyables[12].canAfford()) layers.q.buyables[12].buy();
+		if (hasMilestone('ch', 22) && player.q.auto_buyable_13 && tmp.q.buyables[13].unlocked && layers.q.buyables[13].canAfford()) layers.q.buyables[13].buy();
+		if (hasMilestone('ch', 22) && player.q.auto_buyable_21 && tmp.q.buyables[21].unlocked && layers.q.buyables[21].canAfford()) layers.q.buyables[21].buy();
 	},
 	doReset(resettingLayer) {
 		if (challengeCompletions('r', 11) >= 30 && resettingLayer == 'r') return;
@@ -897,7 +901,7 @@ addLayer('q', {
 		if (hasMilestone('ei', 2) && resettingLayer == 'ei') return;
 		if (hasMilestone('w', 9) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 5) && resettingLayer == 'cl') return;
-		let keep = ['auto_upgrades', 'auto_buyable_11', 'auto_buyable_12'];
+		let keep = ['auto_upgrades', 'auto_buyable_11', 'auto_buyable_12', 'auto_buyable_13', 'auto_buyable_21'];
 			if (hasMilestone('sp', 3) && resettingLayer == 'sp') keep.push("milestones");
 			if (hasMilestone('sp', 5) && resettingLayer == 'sp') keep.push("upgrades");
 			if (hasMilestone('h', 5) && resettingLayer == 'h') keep.push("milestones");
@@ -2852,13 +2856,13 @@ addLayer('a', {
 			requirementDescription: '10,000 atoms and 1e600 prayers',
 			effectDescription: 'atoms reset nothing',
 			done() { return player.a.points.gte(10000) && player.p.points.gte('1e600') },
-			unlocked() { return hasMilestone('a', 13) && player.r.unlocked }
+			unlocked() { return (hasMilestone('a', 13) && player.r.unlocked) || hasMilestone('a', 14) }
 		},
 		15: {
 			requirementDescription: '18,000 atoms and 40 sanctums',
 			effectDescription: 'perform atom resets automatically',
 			done() { return player.a.points.gte(18000) && player.s.points.gte(40) && hasMilestone('a', 14) },
-			unlocked() { return hasMilestone('a', 14) && player.r.unlocked }
+			unlocked() { return (hasMilestone('a', 14) && player.r.unlocked) || hasMilestone('a', 15) }
 		},
 	},
 	upgrades: {
@@ -3425,13 +3429,13 @@ addLayer('p', {
 			requirementDescription: '2,500 prayers & 250 hymns',
 			effectDescription: 'divinity gain is raised to the power of 1.5',
 			done() { return player.p.points.gte(2500) && player.p.hymn.gte(250)},
-			unlocked() { return hasUpgrade('p', 41) },
+			unlocked() { return hasUpgrade('p', 41) || player.s.unlocked },
 		},
 		3: {
 			requirementDescription: '1.00e55 prayers',
 			effectDescription: 'divinity gain is raised to the power<br>of 1.6 instead of 1.5',
 			done() { return player.p.points.gte(1e55)},
-			unlocked() { return player.p.points.gte(1e50) || (hasMilestone('p', 2) && player.s.points.gt(3)) },
+			unlocked() { return hasMilestone('p', 2) || player.s.unlocked },
 		},
 	},
 	upgrades: {
@@ -3817,6 +3821,10 @@ addLayer('s', {
 		total: new Decimal(0),
 		devotion: new Decimal(0),
 		devotion_effect: new Decimal(1),
+		glow: new Decimal(0),
+		glow_gain: new Decimal(0),
+		glow_max: new Decimal(1000),
+		glow_effect: new Decimal(1),
 		auto_worship: false,
 		auto_sacrifice: false,
 		auto_sacrificial_ceremony: false,
@@ -3841,9 +3849,11 @@ addLayer('s', {
 	canBuyMax() { return hasMilestone('s', 0) || player.r.total.gt(0) || player.w.unlocked },
 	gainExp() {
 		let gain = new Decimal(1);
-		if (new Decimal(tmp.r.effect[1]).gt(1) && !tmp.r.deactivated) gain = gain.mul(tmp.r.effect[1]);
 		if (player.s.devotion_effect.gt(1)) gain = gain.mul(player.s.devotion_effect);
+		if (player.s.glow_effect.gt(1)) gain = gain.mul(player.s.glow_effect);
+		if (new Decimal(tmp.r.effect[1]).gt(1) && !tmp.r.deactivated) gain = gain.mul(tmp.r.effect[1]);
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
+		if (hasBuyable('mo', 12)) gain = gain.mul(buyableEffect('mo', 12));
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('s', 48) },
@@ -3868,6 +3878,7 @@ addLayer('s', {
 			if (layers[resettingLayer].row > this.row) {
 				layerDataReset('s', keep);
 				layerDataReset('d', keep);
+				layerDataReset('g', keep);
 				if (hasMilestone('m', 9) && resettingLayer == 'm') player.s.milestones = ['0'];
 				if (hasMilestone('m', 10) && resettingLayer == 'm') {
 					if (hasMilestone('m', 19)) set = 215;
@@ -3925,6 +3936,32 @@ addLayer('s', {
 			},
 			unlocked() {
 				return hasMilestone('s', 13);
+			},
+		},
+		"Glow": {
+			content: () => {
+				if (tmp.s.tabFormat["Glow"].unlocked) return [
+					"main-display",
+					["row", ["prestige-button", "assimilate-button"]],
+					"resource-display",
+					"blank",
+					["display-text", 'you are generating <h2 class="layer-s">' + format(player.s.glow_gain) + '</h2> glow/sec, with a maximum of <h2 class="layer-s">' + format(player.s.glow_max) + '</h2> glow'],
+					["display-text", 'you have <h2 class="layer-s">' + format(player.s.glow) + '</h2> glow, which multiplies sanctum gain and light gain after hardcap by <h2 class="layer-s">' + format(player.s.glow_effect) + '</h2>x'],
+					"blank",
+					["layer-proxy", ['g', ["buyables"]]],
+					"blank",
+					"blank"
+				];
+				return [
+					"main-display",
+					["row", ["prestige-button", "assimilate-button"]],
+					"resource-display",
+					"blank",
+					"milestones",
+				];
+			},
+			unlocked() {
+				return isAssimilated('s') || player.mo.assimilating === 's';
 			},
 		},
 	},
@@ -3991,7 +4028,7 @@ addLayer('s', {
 		},
 		11: {
 			requirementDescription: '16 sanctums',
-			effectDescription: 'subatomic particles reset nothing,<br>and perform subatomic particle<br>resets automatically',
+			effectDescription: 'subatomic particles reset nothing and<br>perform subatomic particle resets automatically',
 			done() { return player.s.points.gte(16) },
 		},
 		12: {
@@ -4116,19 +4153,19 @@ addLayer('s', {
 		},
 		32: {
 			requirementDescription: '69 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b><br>cost by 1e100' },
+			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> cost by 1e100' },
 			done() { return player.s.points.gte(69) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		33: {
 			requirementDescription: '70 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b><br>cost scaling by 1.6' },
+			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> cost scaling by 1.6' },
 			done() { return player.s.points.gte(70) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		34: {
 			requirementDescription: '71 sanctums',
-			effectDescription() { return 'change <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b>\'s cost<br>to a requirement' },
+			effectDescription() { return 'change <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b>\'s cost to a requirement' },
 			done() { return player.s.points.gte(71) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -4146,7 +4183,7 @@ addLayer('s', {
 		},
 		37: {
 			requirementDescription: '80 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b><br>cost scaling by 2' },
+			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> cost scaling by 2' },
 			done() { return player.s.points.gte(80) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -4159,13 +4196,13 @@ addLayer('s', {
 		},
 		39: {
 			requirementDescription: '87 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b><br>cost scaling by 2' },
+			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> cost scaling by 2' },
 			done() { return player.s.points.gte(87) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		40: {
 			requirementDescription: '96 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b><br>cost scaling by 1.5' },
+			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> cost scaling by 1.5' },
 			done() { return player.s.points.gte(96) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -4189,7 +4226,7 @@ addLayer('s', {
 		},
 		44: {
 			requirementDescription: '120 sanctums',
-			effectDescription() { return 'auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b><br>works twice as fast' },
+			effectDescription() { return 'auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> works twice as fast' },
 			done() { return player.s.points.gte(120) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -4201,7 +4238,7 @@ addLayer('s', {
 		},
 		46: {
 			requirementDescription: '140 sanctums',
-			effectDescription() { return 'auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> works<br>twice as fast (4x total)' },
+			effectDescription() { return 'auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> works twice as fast (4x total)' },
 			done() { return player.s.points.gte(140) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -4231,7 +4268,7 @@ addLayer('s', {
 		},
 		51: {
 			requirementDescription: '200 sanctums',
-			effectDescription() { return 'auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> works<br>thrice as fast (12x total)' },
+			effectDescription() { return 'auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> works thrice as fast (12x total)' },
 			done() { return player.s.points.gte(200) && hasMilestone('m', 8) },
 			unlocked() { return hasMilestone('s', 13) && hasMilestone('m', 8) },
 		},
@@ -4254,6 +4291,7 @@ addLayer('d', {
 	name: 'Devotion',
 	symbol: 'D',
 	position: 3,
+	color: "#AAFF00",
 	row: 2,
 	layerShown() { return false },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate('s')},
@@ -4303,6 +4341,9 @@ addLayer('d', {
 	},
 	doReset(resettingLayer) {},
 	update(diff) {
+		if (player.d.buyables[11].gt(tmp.d.buyables[11].purchaseLimit)) player.d.buyables[11] = new Decimal(tmp.d.buyables[11].purchaseLimit);
+		if (player.d.buyables[12].gt(tmp.d.buyables[12].purchaseLimit)) player.d.buyables[12] = new Decimal(tmp.d.buyables[12].purchaseLimit);
+		if (player.d.buyables[21].gt(tmp.d.buyables[21].purchaseLimit)) player.d.buyables[21] = new Decimal(tmp.d.buyables[21].purchaseLimit);
 		player.s.devotion = tmp.d.buyables[11].devotion.add(tmp.d.buyables[12].devotion).add(tmp.d.buyables[21].devotion);
 		if (hasMilestone('s', 53)) player.s.devotion_effect = player.s.devotion.add(1).pow(0.666);
 		else if (hasMilestone('s', 49)) player.s.devotion_effect = player.s.devotion.add(1).pow(0.625);
@@ -4312,9 +4353,6 @@ addLayer('d', {
 		else if (hasMilestone('s', 21)) player.s.devotion_effect = player.s.devotion.add(1).pow(0.45);
 		else if (hasMilestone('s', 18)) player.s.devotion_effect = player.s.devotion.add(1).pow(0.375);
 		else player.s.devotion_effect = player.s.devotion.add(1).pow(0.3);
-		if (player.d.buyables[11].gt(tmp.d.buyables[11].purchaseLimit)) player.d.buyables[11] = new Decimal(tmp.d.buyables[11].purchaseLimit);
-		if (player.d.buyables[12].gt(tmp.d.buyables[12].purchaseLimit)) player.d.buyables[12] = new Decimal(tmp.d.buyables[12].purchaseLimit);
-		if (player.d.buyables[21].gt(tmp.d.buyables[21].purchaseLimit)) player.d.buyables[21] = new Decimal(tmp.d.buyables[21].purchaseLimit);
 	},
 	buyables: {
 		11: {
@@ -4335,20 +4373,14 @@ addLayer('d', {
 				player.p.points = player.p.points.sub(this.cost());
 				addBuyables(this.layer, this.id, getDevotionBulk());
 			},
-			devotion() {
-				return getBuyableAmount('d', this.id).mul(0.1);
-			},
-			display() {
-				let cost = formatWhole(this.cost());
-				if (cost == "0.000") cost = formatSmall(this.cost());
-				return 'use prayers to worship the gods. you will gain 0.1 devotion per worship.<br><br>Devotion Reward: ' + format(this.devotion()) + '<br><br>Cost: ' + cost + ' prayers<br><br>Times Worshipped:<br>' + formatWhole(getBuyableAmount('d', 11)) + '/' + formatWhole(this.purchaseLimit);
-			},
+			devotion() { return getBuyableAmount('d', this.id).mul(0.1) },
+			display() { return 'use prayers to worship the gods. you will gain 0.1 devotion per worship.<br><br>Devotion Reward: ' + format(this.devotion()) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' prayers<br><br>Times Worshipped:<br>' + formatWhole(getBuyableAmount('d', 11)) + '/' + formatWhole(this.purchaseLimit) },
 			style() {
 				let backcolors = '#224400, #336600';
 				if (this.canAfford()) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
 				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
-				return {'background-image':'radial-gradient('+backcolors+')','color':textcolor,'border-radius':'50%'};
+				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
 			},
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -4368,22 +4400,18 @@ addLayer('d', {
 				if (!hasMilestone('s', 34)) player.s.points = player.s.points.sub(this.cost());
 				addBuyables(this.layer, this.id, getDevotionBulk());
 			},
-			effect() {
-				return new Decimal(2).pow(getBuyableAmount('d', this.id));
-			},
+			effect() { return new Decimal(2).pow(getBuyableAmount('d', this.id)) },
 			devotion() {
 				if (hasMilestone('s', 24)) return getBuyableAmount('d', this.id);
 				else return getBuyableAmount('d', this.id).mul(0.5);
 			},
-			display() {
-				return 'use sanctums as a sacrifice to worship the gods. you will gain<br>' + (hasMilestone('s', 24) ? '1' : '0.5') + ' devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by ' + (hasMilestone('s', 24) ? '2' : '1.5') + '<br>Currently: ' + format(buyableEffect('d', this.id)) + 'x<br><br>Devotion Reward: ' + format(this.devotion()) + '<br><br>' + (hasMilestone('s',34) ? 'Req' : 'Cost') + ': '  + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed:' + (formatWhole(getBuyableAmount('d',this.id)).length >= 8 ? '<br>' : ' ') + formatWhole(getBuyableAmount('d', this.id)) + '<br>/' + formatWhole(this.purchaseLimit);
-			},
+			display() { return 'use sanctums as a sacrifice to worship the gods. you will gain<br>' + (hasMilestone('s', 24) ? '1' : '0.5') + ' devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by ' + (hasMilestone('s', 24) ? '2' : '1.5') + '<br>Currently: ' + format(buyableEffect('d', this.id)) + 'x<br><br>Devotion Reward: ' + format(this.devotion()) + '<br><br>' + (hasMilestone('s',34) ? 'Req' : 'Cost') + ': '  + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed:' + (formatWhole(getBuyableAmount('d',this.id)).length >= 8 ? '<br>' : ' ') + formatWhole(getBuyableAmount('d', this.id)) + '<br>/' + formatWhole(this.purchaseLimit) },
 			style() {
 				let backcolors = '#224400, #336600';
 				if (this.canAfford()) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
 				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
-				return {'background-image':'radial-gradient('+backcolors+')','color':textcolor,'border-radius':'50%'};
+				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
 			},
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -4418,20 +4446,101 @@ addLayer('d', {
 				if (challengeCompletions('r', 11) >= 5) return [undefined, getBuyableAmount('d', this.id), new Decimal(1e25).mul(player.r.relic_effects[2]).pow(getBuyableAmount('d', this.id))];
 				else return [undefined, getBuyableAmount('d', this.id), new Decimal(1e25).pow(getBuyableAmount('d', this.id))];
 			},
-			devotion() {
-				return getBuyableAmount('d', this.id).mul(0.75);
-			},
-			display() {
-				return 'use hexes and subatomic particles in a sacrificial ceremony to worship the gods. you will gain 0.75 devotion per sacrificial ceremony. each sacrificial ceremony also multiplies subatomic particle gain by 1 (additive), light gain by 1 (additive), and divides worship cost by 1e25 (multiplicative, like normal)<br>Currently: ' + format(buyableEffect('d', this.id)[1]) + 'x,<br>' + format(buyableEffect('d', this.id)[1]) + 'x,<br>and /' + format(buyableEffect('d', this.id)[2]) + '<br><br>Devotion Reward: ' + format(this.devotion()) + '<br><br>Cost: ' + formatWhole(this.cost_h()) + ' hexes,<br>' + formatWhole(this.cost_sp()) + ' subatomic particles<br><br>Ceremonies Performed: ' + formatWhole(getBuyableAmount('d', this.id)) + '/' + formatWhole(this.purchaseLimit);
-			},
+			devotion() { return getBuyableAmount('d', this.id).mul(0.75) },
+			display() { return 'use hexes and subatomic particles in a sacrificial ceremony to worship the gods. you will gain 0.75 devotion per sacrificial ceremony. each sacrificial ceremony also multiplies subatomic particle gain by 1 (additive), light gain by 1 (additive), and divides worship cost by 1e25 (multiplicative, like normal)<br>Currently: ' + format(buyableEffect('d', this.id)[1]) + 'x,<br>' + format(buyableEffect('d', this.id)[1]) + 'x,<br>and /' + format(buyableEffect('d', this.id)[2]) + '<br><br>Devotion Reward: ' + format(this.devotion()) + '<br><br>Cost: ' + formatWhole(this.cost_h()) + ' hexes,<br>' + formatWhole(this.cost_sp()) + ' subatomic particles<br><br>Ceremonies Performed: ' + formatWhole(getBuyableAmount('d', this.id)) + '/' + formatWhole(this.purchaseLimit) },
 			style() {
 				let backcolors = '#224400, #336600';
 				if (this.canAfford()) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
 				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
-				return {'background-image':'radial-gradient('+backcolors+')','color':textcolor,'border-radius':'50%','height':'300px','width':'300px'};
+				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%', 'height': '300px', 'width': '300px'};
 			},
 			unlocked() { return hasMilestone('s', 14) },
+		},
+	},
+});
+
+addLayer('g', {
+	name: 'Glow',
+	symbol: 'G',
+	position: 4,
+	color: "#AAFF00",
+	row: 2,
+	layerShown() { return false },
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate('s')},
+	doReset(resettingLayer) {},
+	update(diff) {
+		player.s.glow_max = new Decimal(1000).mul(buyableEffect('g', 21)[1]);
+		player.s.glow_gain = buyableEffect('g', 11).mul(buyableEffect('g', 12)).mul(buyableEffect('g', 21)[0]);
+		if (hasMilestone('ch', 21)) player.s.glow_gain = player.s.glow_gain.mul(10);
+		player.s.glow = player.s.glow.add(player.s.glow_gain.mul(diff));
+		if (player.s.glow.gt(player.s.glow_max)) player.s.glow = player.s.glow_max;
+		player.s.glow_effect = player.s.glow.mul(1000).add(1).pow(0.1);
+	},
+	buyables: {
+		11: {
+			cost() { return new Decimal(10).pow(new Decimal(10).pow(getBuyableAmount('g', this.id).div(3).add(3))) },
+			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Glowing<br>Worship<br>' },
+			canAfford() { return player.p.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 99,
+			buy() {
+				player.p.points = player.p.points.sub(this.cost());
+				addBuyables(this.layer, this.id, 1);
+			},
+			effect() { return getBuyableAmount('g', this.id) },
+			display() { return 'use prayers to worship the gods. you will gain 1 glow per second per worship.<br><br>Currently: ' + format(this.effect()) + '/sec<br><br>Cost: ' + formatWhole(this.cost()) + ' prayers<br><br>Times Worshipped: ' + formatWhole(getBuyableAmount('g', this.id)) + '/' + formatWhole(this.purchaseLimit) },
+			style() {
+				let backcolors = '#224400, #336600';
+				if (this.canAfford()) backcolors = '#112200, #448800';
+				let textcolor = '#AAFF00';
+				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
+				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
+			},
+			unlocked() { return isAssimilated('s') || player.mo.assimilating === 's' },
+		},
+		12: {
+			cost() { return new Decimal(5).pow(getBuyableAmount('g', this.id).add(3)) },
+			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Glowing<br>Sacrifice<br>' },
+			canAfford() { return player.s.glow.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 99,
+			buy() {
+				player.s.glow = player.s.glow.sub(this.cost());
+				addBuyables(this.layer, this.id, 1);
+			},
+			effect() { return new Decimal(2).pow(getBuyableAmount('g', this.id)) },
+			display() { return 'use glow as a sacrifice to worship the gods. each sacrifice multiplies your glow gain by 2.<br>Currently: ' + format(buyableEffect('g', this.id)) + 'x<br><br>Cost: '  + formatWhole(this.cost()) + ' glow<br><br>Times Sacrificed: ' + formatWhole(getBuyableAmount('g', this.id)) + '/' + formatWhole(this.purchaseLimit) },
+			style() {
+				let backcolors = '#224400, #336600';
+				if (this.canAfford()) backcolors = '#112200, #448800';
+				let textcolor = '#AAFF00';
+				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
+				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
+			},
+			unlocked() { return isAssimilated('s') || player.mo.assimilating === 's' },
+		},
+		21: {
+			cost() {
+				if (getBuyableAmount('g', this.id).gte(14)) return new Decimal(10).pow(new Decimal(10).pow(getBuyableAmount('g', this.id).div(2).add(10)));
+				if (getBuyableAmount('g', this.id).gte(12)) return new Decimal('e1e11').pow(getBuyableAmount('g', this.id).add(1).pow(5));
+				return new Decimal('e1e14').pow(getBuyableAmount('g', this.id).add(1).pow(2));
+			},
+			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Glowing Sacrificial Ceremony<br>' },
+			canAfford() { return player.e.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 99,
+			buy() {
+				player.e.points = player.e.points.sub(this.cost());
+				addBuyables(this.layer, this.id, 1);
+			},
+			effect() { return [new Decimal(2.5).pow(getBuyableAmount('g', this.id)), new Decimal(10).pow(getBuyableAmount('g', this.id)), getBuyableAmount('g', 11).add(1).pow(getBuyableAmount('g', this.id))] },
+			display() { return 'use essence in a sacrificial ceremony to worship the gods. each sacrifice multiplies your glow gain by 2.5, your maximum glow by 10, and your light gain after hardcap by the amount of your glowing worships plus 1.<br>Currently: ' + format(buyableEffect('g', this.id)[0]) + 'x,<br>' + format(buyableEffect('g', this.id)[1]) + 'x,<br>and ' + format(buyableEffect('g', this.id)[2]) + 'x<br><br>Cost: '  + formatWhole(this.cost()) + ' essence<br><br>Ceremonies Performed: ' + formatWhole(getBuyableAmount('g', this.id)) + '/' + formatWhole(this.purchaseLimit) },
+			style() {
+				let backcolors = '#224400, #336600';
+				if (this.canAfford()) backcolors = '#112200, #448800';
+				let textcolor = '#AAFF00';
+				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
+				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%', 'height': '300px', 'width': '300px'};
+			},
+			unlocked() { return isAssimilated('s') || player.mo.assimilating === 's' },
 		},
 	},
 });
@@ -5243,7 +5352,7 @@ addLayer('gi', {
 	effect() {
 		let effBase = new Decimal(2);
 		if (hasBuyable('gi', 11)) effBase = effBase.add(buyableEffect('gi', 11));
-		if (hasMilestone('gi', 18)) {
+		if (hasMilestone('gi', 18) && player.h.limitsBroken >= 4) {
 			return effBase.pow(player.gi.total.pow(1.454));
 		};
 		let eff = effBase.pow(player.gi.total);
@@ -5254,7 +5363,7 @@ addLayer('gi', {
 	},
 	effectDescription() {
 		let text = 'which multiplies prayer gain by <h2 class="layer-gi">' + format(tmp.gi.effect) + '</h2>x (based on total)';
-		if (this.effect().gte(softcaps.gi_eff[0]) && !hasMilestone('gi', 18)) text += ' (softcapped)';
+		if (this.effect().gte(softcaps.gi_eff[0]) && !(hasMilestone('gi', 18) && player.h.limitsBroken >= 4)) text += ' (softcapped)';
 		return text;
 	},
 	doReset(resettingLayer) {
@@ -5287,7 +5396,7 @@ addLayer('gi', {
 	milestones: {
 		0: {
 			requirementDescription: '1 good influence',
-			effectDescription: 'unlock relic upgrades, and good<br>influence resets don\'t reset relics',
+			effectDescription: 'unlock relic upgrades and<br>good influence resets don\'t reset relics',
 			done() { return player.gi.points.gte(1) },
 		},
 		1: {
@@ -5351,7 +5460,7 @@ addLayer('gi', {
 		},
 		11: {
 			requirementDescription: '21 good influence',
-			effectDescription: 'you can explore 3 further molecule upgrades,<br>and you can autobuy atom upgrades',
+			effectDescription: 'you can explore 3 further molecule upgrades<br>and you can autobuy atom upgrades',
 			done() { return player.gi.points.gte(21) },
 			toggles: [['a', 'auto_upgrades']],
 			unlocked() { return hasMilestone('gi', 9) },
@@ -5394,7 +5503,7 @@ addLayer('gi', {
 		},
 		18: {
 			requirementDescription: '16,100 good influence and<br>4 limits broken',
-			effectDescription() { return 'remove the good influence effect softcap and improve the good influence effect formula' },
+			effectDescription() { return 'remove the good influence effect softcap and<br>improve the good influence effect formula<br>if you have at least 4 limits broken' },
 			done() { return player.gi.points.gte(16100) && player.h.limitsBroken >= 4 },
 			unlocked() { return hasMilestone('gi', 17) && player.h.limitsBroken >= 4 },
 		},
@@ -6632,7 +6741,10 @@ addLayer('cl', {
 		};
 		if (hasMilestone('ch', 1)) {
 			if (player.cl.auto_buyable_31 && layers.cl.buyables[31].canAfford()) layers.cl.buyables[31].buy();
-			if (player.cl.auto_buyable_32 && layers.cl.buyables[32].canAfford()) layers.cl.buyables[32].buy();
+			if (player.cl.auto_buyable_32 && layers.cl.buyables[32].canAfford()) {
+				layers.cl.buyables[32].buy();
+				if (hasMilestone('ch', 22) && layers.cl.buyables[32].canAfford()) layers.cl.buyables[32].buy();
+			};
 			if (player.cl.auto_buyable_33 && layers.cl.buyables[33].canAfford()) layers.cl.buyables[33].buy();
 		};
 		if (hasMilestone('ch', 6)) {
@@ -7307,6 +7419,7 @@ addLayer('ch', {
 		16: {
 			requirementDescription: '42 chaos',
 			effect() {
+				if (hasMilestone('ch', 21)) return ((player.ch.challenges[11] + player.ch.challenges[12]) / 250 + 1) ** 6;
 				if (hasMilestone('ch', 20)) return ((player.ch.challenges[11] + player.ch.challenges[12]) / 250 + 1) ** 3.5;
 				if (hasMilestone('ch', 19)) return ((player.ch.challenges[11] + player.ch.challenges[12]) / 250 + 1) ** 3.325;
 				if (hasMilestone('ch', 18)) return ((player.ch.challenges[11] + player.ch.challenges[12]) / 250 + 1) ** 1.8;
@@ -7340,9 +7453,22 @@ addLayer('ch', {
 		},
 		20: {
 			requirementDescription: '55 chaos',
-			effectDescription: 'you can autobuy the second quark rebuyable and improve the effect formula of the 42 chaos milestone',
+			effectDescription: 'you can autobuy the second quark rebuyable, the quark upgrade autobuyer can buy the last row, and improve the effect formula of the 42 chaos milestone',
 			done() { return player.ch.points.gte(55) },
 			toggles: [['q', 'auto_buyable_12']],
+			unlocked() { return player.mo.unlocked },
+		},
+		21: {
+			requirementDescription: '57 chaos',
+			effectDescription: 'you gain 10x glow, improve the effect formula of the 42 chaos milestone, and you can bulk buy multicellular organisms',
+			done() { return player.ch.points.gte(57) },
+			unlocked() { return player.mo.unlocked },
+		},
+		22: {
+			requirementDescription: '59 chaos',
+			effectDescription() { return 'you can autobuy the third and fourth quark rebuyables and the <b class="layer-cl' + getdark(this, "ref", true, true) + 'Result Analyzing</b> autobuyer is 2x faster' },
+			done() { return player.ch.points.gte(59) },
+			toggles: [['q', 'auto_buyable_13'], ['q', 'auto_buyable_21']],
 			unlocked() { return player.mo.unlocked },
 		},
 	},
@@ -7353,7 +7479,7 @@ addLayer('ch', {
 				return '<h3>Tide of Evil';
 			},
 			challengeDescription: "- Forces a chaos reset<br>- Disables good influence<br>- Multiplies demon soul gain by 1e3200<br>- Multiplies evil influence gain by 1.1",
-			goalLayers: [17, 18, 60, 70, 80, 100, 120, 140, 64175, 64500, 64888, 65250, 70750, 71250, 71750],
+			goalLayers: [17, 18, 60, 70, 80, 100, 120, 140, 64175, 64500, 64888, 65250, 70750, 71250, 71750, 94250, 95250, 96750, 98000, 99500],
 			goal() { return this.goalLayers[challengeCompletions('ch', this.id)] || Infinity },
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' evil influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit },
 			canComplete() { return player.ei.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
@@ -7378,7 +7504,8 @@ addLayer('ch', {
 			goal() {
 				if (challengeCompletions('ch', this.id) < 3) return challengeCompletions('ch', this.id) * 25 + 85;
 				if (challengeCompletions('ch', this.id) < 14) return challengeCompletions('ch', this.id) * 50 + 600;
-				return challengeCompletions('ch', this.id) * 400 + 400;
+				if (challengeCompletions('ch', this.id) < 27) return challengeCompletions('ch', this.id) * 400 + 400;
+				return challengeCompletions('ch', this.id) * 500;
 			},
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' good influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit + '<br>' },
 			canComplete() { return player.gi.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
@@ -7430,7 +7557,7 @@ addLayer('mo', {
 		return 1.2;
 	},
 	exponent: 1,
-	canBuyMax() { return false },
+	canBuyMax() { return hasMilestone('ch', 21) },
 	gainExp() {
 		let gain = new Decimal(1);
 		if (hasMilestone('ch', 16)) gain = gain.mul(milestoneEffect('ch', 16));
@@ -7505,7 +7632,7 @@ addLayer('mo', {
 				else if (getClickableState('mo', 11)) return '<br>You are in an Assimilation Search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click here to exit the search.';
 				else return '<br>Begin an Assimilation search.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
 			},
-			req() { return [1, 2, 3, 4, 7, 12, 16, 21, Infinity][player.mo.assimilated.length] },
+			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, Infinity][player.mo.assimilated.length] },
 			canClick() { return getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req) },
 			onClick() {
 				if (player.mo.assimilating !== null) {
@@ -7545,6 +7672,22 @@ addLayer('mo', {
 				addBuyables('mo', this.id, 1);
 			},
 			unlocked() { return isAssimilated('a') || player.mo.assimilating === 'a' },
+		},
+		12: {
+			cost() { return getBuyableAmount('mo', this.id).add(1).pow(2).add(50) },
+			effect() { return new Decimal(2).pow(getBuyableAmount('mo', this.id)) },
+			title() { return '<b class="layer-s">Sanctum</b> <b class="layer-mo' + getdark(this, "title-buyable") + 'Synergy' },
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formula: 2^x';
+				return 'multiplies sanctum gain based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('mo', this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' multicellular organisms<br><br>Bought: ' + formatWhole(getBuyableAmount('mo', this.id));
+			},
+			canAfford() { return player.mo.points.gte(this.cost()) },
+			buy() {
+				player.mo.points = player.mo.points.sub(this.cost());
+				addBuyables('mo', this.id, 1);
+			},
+			unlocked() { return isAssimilated('s') || player.mo.assimilating === 's' },
 		},
 	},
 });

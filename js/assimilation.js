@@ -39,7 +39,7 @@ const assimilationReq = {
 	ds: new Decimal(1e122),
 	a: new Decimal(75000),
 	p: new Decimal('1e2000'),
-	s: new Decimal(Infinity),
+	s: new Decimal(52),
 	r: new Decimal(Infinity),
 	m: new Decimal(Infinity),
 	gi: new Decimal(Infinity),
@@ -148,6 +148,11 @@ function getAssimilationRewards() {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-p">Prayers</h2><br><br>';
 		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Makes all previous prayer upgrades always unlockable<br>Unlocks four new prayer upgrades: <b class="layer-p">Sanctum Prayers+</b>, <b class="layer-p">The Point of Prayers</b>, <b class="layer-p">Prayer Influence+</b>, and <b class="layer-p">Prismatic Sanctums</b><br>Makes the prayer effect softcap start sooner (1e150 --> 1e15)<br>Makes the prayer effect softcap weaker (^0.95 --> ^0.96)';
 		else text += 'Makes all previous prayer upgrades always unlockable<br>Unlocks four new prayer upgrades: <b>Sanctum Prayers+</b>, <b>The Point of Prayers</b>, <b>Prayer Influence+</b>, and <b>Prismatic Sanctums</b><br>Makes the prayer effect softcap start sooner (1e150 --> 1e15)<br>Makes the prayer effect softcap weaker (^0.95 --> ^0.96)';
+	};
+	if (isAssimilated('s')) {
+		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-s">Sanctums</h2><br><br>';
+		if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Unlocks <b class="layer-s">Glow</b>, a new tab<br>Unlocks three new sanctum rebuyables: <b class="layer-s">Glowing Worship</b>, <b class="layer-s">Glowing Sacrifice</b>, and <b class="layer-s">Glowing Sacrificial Ceremony</b><br>all <b class="layer-s">Devotion</b> autobuyers can bulk buy 10x<br>Unlocks the second <b class="layer-mo">Synergy</b>';
+		else text += 'Unlocks <b>Glow</b>, a new tab<br>Unlocks three new sanctum rebuyables: <b>Glowing Worship</b>, <b>Glowing Sacrifice</b>, and <b>Glowing Sacrificial Ceremony</b><br>all <b>Devotion</b> autobuyers can bulk buy 10x<br>Unlocks the second <b>Synergy</b>';
 	};
 	return text.replace("<br><br>", "");
 };
