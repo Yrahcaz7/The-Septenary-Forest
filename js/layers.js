@@ -3256,7 +3256,7 @@ addLayer('p', {
 		};
 		if (hasUpgrade('p', 73)) mult = mult.mul(upgradeEffect('p', 73));
 		if (hasUpgrade('p', 81)) mult = mult.mul(upgradeEffect('p', 81));
-		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated) mult = mult.mul(tmp.gi.effect);
+		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated && !(hasMilestone('gi', 19) && player.h.limitsBroken >= 4)) mult = mult.mul(tmp.gi.effect);
 		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
 		// pow
 		if (challengeCompletions('ch', 12) > 0) mult = mult.pow(challengeEffect('ch', 12));
@@ -3852,6 +3852,7 @@ addLayer('s', {
 		if (player.s.devotion_effect.gt(1)) gain = gain.mul(player.s.devotion_effect);
 		if (player.s.glow_effect.gt(1)) gain = gain.mul(player.s.glow_effect);
 		if (new Decimal(tmp.r.effect[1]).gt(1) && !tmp.r.deactivated) gain = gain.mul(tmp.r.effect[1]);
+		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated && hasMilestone('gi', 19) && player.h.limitsBroken >= 4 && tmp.gi.effect.lte(1e100)) gain = gain.mul(tmp.gi.effect);
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
 		if (hasBuyable('mo', 12)) gain = gain.mul(buyableEffect('mo', 12));
 		return gain;
@@ -4473,6 +4474,10 @@ addLayer('g', {
 		player.s.glow_max = new Decimal(1000).mul(buyableEffect('g', 21)[1]);
 		player.s.glow_gain = buyableEffect('g', 11).mul(buyableEffect('g', 12)).mul(buyableEffect('g', 21)[0]);
 		if (hasMilestone('ch', 21)) player.s.glow_gain = player.s.glow_gain.mul(10);
+		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated && hasMilestone('gi', 19) && player.h.limitsBroken >= 4 && tmp.gi.effect.lte(1e100)) {
+			player.s.glow_max = player.s.glow_max.mul(tmp.gi.effect);
+			player.s.glow_gain = player.s.glow_gain.mul(tmp.gi.effect);
+		};
 		player.s.glow = player.s.glow.add(player.s.glow_gain.mul(diff));
 		if (player.s.glow.gt(player.s.glow_max)) player.s.glow = player.s.glow_max;
 		player.s.glow_effect = player.s.glow.mul(1000).add(1).pow(0.1);
@@ -5352,6 +5357,9 @@ addLayer('gi', {
 	effect() {
 		let effBase = new Decimal(2);
 		if (hasBuyable('gi', 11)) effBase = effBase.add(buyableEffect('gi', 11));
+		if (hasMilestone('gi', 19) && player.h.limitsBroken >= 4) {
+			return player.gi.points.div(100).add(effBase).pow(0.25).min(1e100);
+		};
 		if (hasMilestone('gi', 18) && player.h.limitsBroken >= 4) {
 			return effBase.pow(player.gi.total.pow(1.454));
 		};
@@ -5362,6 +5370,9 @@ addLayer('gi', {
 		return eff;
 	},
 	effectDescription() {
+		if (hasMilestone('gi', 19) && player.h.limitsBroken >= 4) {
+			return 'which multiplies sanctum gain, glow gain, and glow maximum by <h2 class="layer-gi">' + format(tmp.gi.effect) + '</h2>x';
+		};
 		let text = 'which multiplies prayer gain by <h2 class="layer-gi">' + format(tmp.gi.effect) + '</h2>x (based on total)';
 		if (this.effect().gte(softcaps.gi_eff[0]) && !(hasMilestone('gi', 18) && player.h.limitsBroken >= 4)) text += ' (softcapped)';
 		return text;
@@ -5506,6 +5517,12 @@ addLayer('gi', {
 			effectDescription() { return 'remove the good influence effect softcap and<br>improve the good influence effect formula<br>if you have at least 4 limits broken' },
 			done() { return player.gi.points.gte(16100) && player.h.limitsBroken >= 4 },
 			unlocked() { return hasMilestone('gi', 17) && player.h.limitsBroken >= 4 },
+		},
+		19: {
+			requirementDescription: '20,640 good influence<br>and 2.5e17 glow',
+			effectDescription() { return 'change the good influence effect<br>if you have at least 4 limits broken' },
+			done() { return player.gi.points.gte(20640) && player.h.limitsBroken >= 4 && player.s.glow.gte(2.5e17) },
+			unlocked() { return hasMilestone('gi', 18) && player.h.limitsBroken >= 4 },
 		},
 	},
 	buyables: {

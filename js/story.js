@@ -343,6 +343,49 @@ const story = [
 	The Being saw that the Relic was filled with glowing words.
 	As the Being read the text, it realised what it was missing...
 `], [`
+	The Atoms that the Being previously disregarded,
+	Could build many different important things.
+	Specific combinations of Atoms could create Molecules.
+	Molecules were hard to construct, but they could do many things.
+	As the Being created more, the whole process became smoother.
+`, `
+	Molecules could generate light while the Being worked on other tasks.
+	They also increased the Being's understanding of Atoms,
+	Which in turn increased their generation.
+	Soon enough, the Being began creating new types of Molecules.
+	Beyond the simple Molecules that just combine multiple of the same Atom.
+`, `
+	The Being was filled with ever-expanding knowledge.
+	Carbon monoxide. Water. Salt. Calcium Hydroxide.
+	The Being gradually increased the complexity of the Molecules.
+	Glucose. Cholesterol. Arborol. Insulin.
+	Each new molecule granted unique benefits to the cycle.
+`, `
+	As the Being accumulated more Relics and Molecules,
+	Things began to slow down again.
+	However, the Being was calm, and kept going.
+	It had experienced this so many times that it knew what to do.
+	The Being began to condense all of their resources.
+`, `
+	Prayers, Sanctums, Relics, light... all being condensed...
+	Into the very core of their concepts.
+	The Being had created a new force, and it was named Good Influence.
+	Good Influence was the core of the path of good laid bare.
+	It was so simplistic, yet so powerful.
+`, `
+	With this newfound power, the Being discovered even more Relics.
+	The Being then empowered even more of them with the new aid.
+	The cycle continued. More Molecules. More Relics. More of everything.
+	With so much Good Influence, the Being decided it was time again.
+	To try to combine the darkness and light yet again.
+`, `
+	The Being tried and tried, yet it couldn't succeed.
+	The goodness was too powerful now, drowning out the darkness.
+	Thus, the Being searched through the darkness...
+	Searching through itself and the endless void...
+	Peering into the demon realm time and time again...
+	Until...
+`], [`
 	More story coming soon!
 `]];
 
@@ -354,6 +397,7 @@ const storyNames = [
 	["Hope and Faith", () => randomStr(4) + " " + randomStr(3) + " " + randomStr(5)],
 	["Records of the Founder", () => randomStr(7) + " " + randomStr(2) + " " + randomStr(3) + " " + randomStr(7)],
 	["Magnificent Structures", () => randomStr(11) + " " + randomStr(10)],
+	["Influence of Knowledge", () => randomStr(9) + " " + randomStr(2) + " " + randomStr(9)],
 	["Coming Soon", () => "Coming Soon"],
 ];
 
@@ -365,6 +409,7 @@ const storyColors = [
 	["#4D2FE0", "#FDBBFF"],
 	[],
 	["#AAFF00", "#B9A975"],
+	["#00CCCC", "#08FF87"],
 ];
 
 for (let index = 0; index < story.length; index++) {
