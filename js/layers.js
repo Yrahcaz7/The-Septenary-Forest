@@ -4475,7 +4475,6 @@ addLayer('g', {
 		player.s.glow_gain = buyableEffect('g', 11).mul(buyableEffect('g', 12)).mul(buyableEffect('g', 21)[0]);
 		if (hasMilestone('ch', 21)) player.s.glow_gain = player.s.glow_gain.mul(10);
 		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated && hasMilestone('gi', 19) && player.h.limitsBroken >= 4 && tmp.gi.effect.lte(1e100)) {
-			player.s.glow_max = player.s.glow_max.mul(tmp.gi.effect);
 			player.s.glow_gain = player.s.glow_gain.mul(tmp.gi.effect);
 		};
 		player.s.glow = player.s.glow.add(player.s.glow_gain.mul(diff));
@@ -4493,7 +4492,7 @@ addLayer('g', {
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() { return getBuyableAmount('g', this.id) },
-			display() { return 'use prayers to worship the gods. you will gain 1 glow per second per worship.<br><br>Currently: ' + format(this.effect()) + '/sec<br><br>Cost: ' + formatWhole(this.cost()) + ' prayers<br><br>Times Worshipped: ' + formatWhole(getBuyableAmount('g', this.id)) + '/' + formatWhole(this.purchaseLimit) },
+			display() { return 'use prayers to worship the gods. each worship increases your glow gain by 1.<br><br>Currently: ' + format(this.effect()) + '/sec<br><br>Cost: ' + formatWhole(this.cost()) + ' prayers<br><br>Times Worshipped: ' + formatWhole(getBuyableAmount('g', this.id)) + '/' + formatWhole(this.purchaseLimit) },
 			style() {
 				let backcolors = '#224400, #336600';
 				if (this.canAfford()) backcolors = '#112200, #448800';
@@ -4513,7 +4512,7 @@ addLayer('g', {
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() { return new Decimal(2).pow(getBuyableAmount('g', this.id)) },
-			display() { return 'use glow as a sacrifice to worship the gods. each sacrifice multiplies your glow gain by 2.<br>Currently: ' + format(buyableEffect('g', this.id)) + 'x<br><br>Cost: '  + formatWhole(this.cost()) + ' glow<br><br>Times Sacrificed: ' + formatWhole(getBuyableAmount('g', this.id)) + '/' + formatWhole(this.purchaseLimit) },
+			display() { return 'use glow as a sacrifice to worship the gods. each sacrifice multiplies your glow gain by 2.<br><br>Currently: ' + format(buyableEffect('g', this.id)) + 'x<br><br>Cost: '  + formatWhole(this.cost()) + ' glow<br><br>Times Sacrificed: ' + formatWhole(getBuyableAmount('g', this.id)) + '/' + formatWhole(this.purchaseLimit) },
 			style() {
 				let backcolors = '#224400, #336600';
 				if (this.canAfford()) backcolors = '#112200, #448800';
@@ -4537,7 +4536,7 @@ addLayer('g', {
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() { return [new Decimal(2.5).pow(getBuyableAmount('g', this.id)), new Decimal(10).pow(getBuyableAmount('g', this.id)), getBuyableAmount('g', 11).add(1).pow(getBuyableAmount('g', this.id))] },
-			display() { return 'use essence in a sacrificial ceremony to worship the gods. each sacrifice multiplies your glow gain by 2.5, your maximum glow by 10, and your light gain after hardcap by the amount of your glowing worships plus 1.<br>Currently: ' + format(buyableEffect('g', this.id)[0]) + 'x,<br>' + format(buyableEffect('g', this.id)[1]) + 'x,<br>and ' + format(buyableEffect('g', this.id)[2]) + 'x<br><br>Cost: '  + formatWhole(this.cost()) + ' essence<br><br>Ceremonies Performed: ' + formatWhole(getBuyableAmount('g', this.id)) + '/' + formatWhole(this.purchaseLimit) },
+			display() { return 'use essence in a sacrificial ceremony to worship the gods. each sacrifice multiplies your glow gain by 2.5, your maximum glow by 10, and your light gain after hardcap by the amount of your glowing worships plus 1.<br><br>Currently: ' + format(buyableEffect('g', this.id)[0]) + 'x,<br>' + format(buyableEffect('g', this.id)[1]) + 'x,<br>and ' + format(buyableEffect('g', this.id)[2]) + 'x<br><br>Cost: '  + formatWhole(this.cost()) + ' essence<br><br>Ceremonies Performed: ' + formatWhole(getBuyableAmount('g', this.id)) + '/' + formatWhole(this.purchaseLimit) },
 			style() {
 				let backcolors = '#224400, #336600';
 				if (this.canAfford()) backcolors = '#112200, #448800';
@@ -5371,7 +5370,7 @@ addLayer('gi', {
 	},
 	effectDescription() {
 		if (hasMilestone('gi', 19) && player.h.limitsBroken >= 4) {
-			return 'which multiplies sanctum gain, glow gain, and glow maximum by <h2 class="layer-gi">' + format(tmp.gi.effect) + '</h2>x';
+			return 'which multiplies sanctum gain and glow gain by <h2 class="layer-gi">' + format(tmp.gi.effect) + '</h2>x';
 		};
 		let text = 'which multiplies prayer gain by <h2 class="layer-gi">' + format(tmp.gi.effect) + '</h2>x (based on total)';
 		if (this.effect().gte(softcaps.gi_eff[0]) && !(hasMilestone('gi', 18) && player.h.limitsBroken >= 4)) text += ' (softcapped)';
