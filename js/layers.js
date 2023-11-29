@@ -132,16 +132,12 @@ addLayer('e', {
 	],
 	upgrades: {
 		11: {
-			title() {
-				return '<b class="layer-e' + getdark(this, "title") + 'Faster Points';
-			},
+			title() { return '<b class="layer-e' + getdark(this, "title") + 'Faster Points' },
 			description: 'multiplies point gain by 1.5',
 			cost: 1,
 		},
 		12: {
-			title() {
-				return '<b class="layer-e' + getdark(this, "title") + 'Essence Influence';
-			},
+			title() { return '<b class="layer-e' + getdark(this, "title") + 'Essence Influence' },
 			description: 'multiplies point gain based on your essence',
 			cost: 2,
 			hardcap() {
@@ -164,14 +160,10 @@ addLayer('e', {
 			unlocked() { return hasUpgrade('e', 11) },
 		},
 		13: {
-			title() {
-				return '<b class="layer-e' + getdark(this, "title") + 'Influenced Essence';
-			},
+			title() { return '<b class="layer-e' + getdark(this, "title") + 'Influenced Essence' },
 			description: 'multiplies essence gain based on your points',
 			cost: 5,
-			effect() {
-				return player.points.add(1).pow(0.15);
-			},
+			effect() { return player.points.add(1).pow(0.15) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.15';
@@ -180,14 +172,10 @@ addLayer('e', {
 			unlocked() { return hasUpgrade('e', 12) },
 		},
 		21: {
-			title() {
-				return '<b class="layer-e' + getdark(this, "title") + 'Point Recursion';
-			},
+			title() { return '<b class="layer-e' + getdark(this, "title") + 'Point Recursion' },
 			description: 'multiplies point gain based on your points',
 			cost: 500,
-			effect() {
-				return player.points.add(1).pow(0.075);
-			},
+			effect() { return player.points.add(1).pow(0.075) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.075';
@@ -196,14 +184,10 @@ addLayer('e', {
 			unlocked() { return hasUpgrade('e', 13) },
 		},
 		22: {
-			title() {
-				return '<b class="layer-e' + getdark(this, "title") + 'Essence of Essence';
-			},
+			title() { return '<b class="layer-e' + getdark(this, "title") + 'Essence of Essence' },
 			description: 'multiplies essence gain based on your essence',
 			cost: 1250,
-			effect() {
-				return player.e.points.add(1).pow(0.11111111111);
-			},
+			effect() { return player.e.points.add(1).pow(0.11111111111) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.11111111111';
@@ -212,16 +196,10 @@ addLayer('e', {
 			unlocked() { return hasUpgrade('e', 21) },
 		},
 		23: {
-			title() {
-				return '<b class="layer-e' + getdark(this, "title") + 'Recurring Recursion';
-			},
-			description() {
-				return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Point Recursion</b> based on your points';
-			},
+			title() { return '<b class="layer-e' + getdark(this, "title") + 'Recurring Recursion' },
+			description() { return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Point Recursion</b> based on your points' },
 			cost: 3500,
-			effect() {
-				return player.points.add(1).pow(0.25);
-			},
+			effect() { return player.points.add(1).pow(0.25) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.25';
@@ -230,16 +208,10 @@ addLayer('e', {
 			unlocked() { return hasUpgrade('e', 22) },
 		},
 		31: {
-			title() {
-				return '<b class="layer-e' + getdark(this, "title") + 'Infinite Recursion';
-			},
-			description() {
-				return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Recurring Recursion</b> based on your points';
-			},
+			title() { return '<b class="layer-e' + getdark(this, "title") + 'Infinite Recursion' },
+			description() { return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Recurring Recursion</b> based on your points' },
 			cost: 1e11,
-			effect() {
-				return player.points.add(1).pow(0.01);
-			},
+			effect() { return player.points.add(1).pow(0.01) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
@@ -248,16 +220,10 @@ addLayer('e', {
 			unlocked() { return (hasMilestone('q', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 23) },
 		},
 		32: {
-			title() {
-				return '<b class="layer-e' + getdark(this, "title") + 'Brilliance';
-			},
-			description() {
-				return 'some of the effect of <b class="layer-e' + getdark(this, "ref") + 'Radiant Essence</b> is applied to point gain (based on essence)';
-			},
+			title() { return '<b class="layer-e' + getdark(this, "title") + 'Brilliance' },
+			description() { return 'some of the effect of <b class="layer-e' + getdark(this, "ref") + 'Radiant Essence</b> is applied to point gain (based on essence)' },
 			cost: 3e33,
-			effect() {
-				return (buyableEffect('e', 12)[0] || new Decimal(1)).pow(0.1).mul(player.e.points).add(1).pow(0.001);
-			},
+			effect() { return (buyableEffect('e', 12)[0] || new Decimal(1)).pow(0.1).mul(player.e.points).add(1).pow(0.001) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: ((x^0.1)y+1)^0.001';
@@ -266,16 +232,10 @@ addLayer('e', {
 			unlocked() { return (hasMilestone('q', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 31) },
 		},
 		33: {
-			title() {
-				return '<b class="layer-e' + getdark(this, "title") + 'Essence Network';
-			},
-			description() {
-				return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Essence Influence</b> based on your essence';
-			},
+			title() { return '<b class="layer-e' + getdark(this, "title") + 'Essence Network' },
+			description() { return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Essence Influence</b> based on your essence' },
 			cost: 5e55,
-			effect() {
-				return player.e.points.add(1).pow(0.025);
-			},
+			effect() { return player.e.points.add(1).pow(0.025) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.025';
@@ -284,16 +244,10 @@ addLayer('e', {
 			unlocked() { return (hasMilestone('q', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 32) },
 		},
 		41: {
-			title() {
-				return '<b class="layer-e' + getdark(this, "title") + 'Essence Recursion';
-			},
-			description() {
-				return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Essence of Essence</b> based on your essence';
-			},
+			title() { return '<b class="layer-e' + getdark(this, "title") + 'Essence Recursion' },
+			description() { return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Essence of Essence</b> based on your essence' },
 			cost: 7e77,
-			effect() {
-				return player.e.points.add(1).pow(0.001);
-			},
+			effect() { return player.e.points.add(1).pow(0.001) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.001';
@@ -302,16 +256,10 @@ addLayer('e', {
 			unlocked() { return (hasMilestone('q', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 33) },
 		},
 		42: {
-			title() {
-				return '<b class="layer-e' + getdark(this, "title") + 'Essences to Infinity';
-			},
-			description() {
-				return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Essence Recursion</b> based on your essence';
-			},
+			title() { return '<b class="layer-e' + getdark(this, "title") + 'Essences to Infinity' },
+			description() { return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Essence Recursion</b> based on your essence' },
 			cost: 9e99,
-			effect() {
-				return player.e.points.add(1).pow(0.01);
-			},
+			effect() { return player.e.points.add(1).pow(0.01) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
@@ -320,9 +268,7 @@ addLayer('e', {
 			unlocked() { return (hasMilestone('q', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 41) },
 		},
 		43: {
-			title() {
-				return '<b class="layer-e' + getdark(this, "title") + 'Essence of the Flow';
-			},
+			title() { return '<b class="layer-e' + getdark(this, "title") + 'Essence of the Flow' },
 			description: 'gain +2e22% of your essence gain per second',
 			cost: '1e1111',
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 42) },
@@ -341,9 +287,7 @@ addLayer('e', {
 				player.e.points = player.e.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() {
-				return getBuyableAmount('e', this.id).mul(2.5).add(1);
-			},
+			effect() { return getBuyableAmount('e', this.id).mul(2.5).add(1) },
 			display() {
 				let text = '';
 				if (player.nerdMode) text += '<br>formula: x*2.5+1';
@@ -563,9 +507,7 @@ addLayer('c', {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Heat Emission' },
 			description: 'multiplies essence gain based on your cores',
 			cost: 25,
-			effect() {
-				return player.c.points.add(1).pow(0.2);
-			},
+			effect() { return  player.c.points.add(1).pow(0.2) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.2';
@@ -577,9 +519,7 @@ addLayer('c', {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Core Countdown' },
 			description: 'multiplies core gain based on your points',
 			cost: 100,
-			effect() {
-				return player.points.add(1).pow(0.01);
-			},
+			effect() { return  player.points.add(1).pow(0.01) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
@@ -591,9 +531,7 @@ addLayer('c', {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'The Quarks\' Core' },
 			description: 'multiplies quark gain based on your cores',
 			cost: 750,
-			effect() {
-				return player.c.points.add(1).pow(0.1);
-			},
+			effect() { return  player.c.points.add(1).pow(0.1) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.1';
@@ -603,13 +541,9 @@ addLayer('c', {
 		},
 		21: {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Quarky Core' },
-			description() {
-				return 'multiplies the effect of <b class="layer-c' + getdark(this, "ref") + 'The Quarks\' Core</b> based on your cores';
-			},
+			description() { return  'multiplies the effect of <b class="layer-c' + getdark(this, "ref") + 'The Quarks\' Core</b> based on your cores' },
 			cost: 1e69,
-			effect() {
-				return player.c.points.add(1).pow(0.005);
-			},
+			effect() { return  player.c.points.add(1).pow(0.005) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.005';
@@ -619,13 +553,9 @@ addLayer('c', {
 		},
 		22: {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Quirky Core' },
-			description() {
-				return 'multiplies the effect of <b class="layer-c' + getdark(this, "ref") + 'Quarky Core</b> based on your cores';
-			},
+			description() { return  'multiplies the effect of <b class="layer-c' + getdark(this, "ref") + 'Quarky Core</b> based on your cores' },
 			cost: 1e71,
-			effect() {
-				return player.c.points.add(1).pow(0.002);
-			},
+			effect() { return  player.c.points.add(1).pow(0.002) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.002';
@@ -637,9 +567,7 @@ addLayer('c', {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Super Core' },
 			description: 'multiplies core gain based on your cores',
 			cost: 1e73,
-			effect() {
-				return player.c.points.add(1).pow(0.01);
-			},
+			effect() { return  player.c.points.add(1).pow(0.01) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
@@ -649,13 +577,9 @@ addLayer('c', {
 		},
 		31: {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Ultra Core' },
-			description() {
-				return 'multiplies the effect of <b class="layer-c' + getdark(this, "ref") + 'Super Core</b> based on your cores';
-			},
+			description() { return  'multiplies the effect of <b class="layer-c' + getdark(this, "ref") + 'Super Core</b> based on your cores' },
 			cost: 1e75,
-			effect() {
-				return player.c.points.add(1).pow(0.0025);
-			},
+			effect() { return  player.c.points.add(1).pow(0.0025) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.0025';
@@ -665,13 +589,9 @@ addLayer('c', {
 		},
 		32: {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Core of Cores' },
-			description() {
-				return 'multiplies the effect of <b class="layer-c' + getdark(this, "ref") + 'Ultra Core</b> based on your cores';
-			},
+			description() { return  'multiplies the effect of <b class="layer-c' + getdark(this, "ref") + 'Ultra Core</b> based on your cores' },
 			cost: 1e77,
-			effect() {
-				return player.c.points.add(1).pow(0.001);
-			},
+			effect() { return  player.c.points.add(1).pow(0.001) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.001';
@@ -681,9 +601,7 @@ addLayer('c', {
 		},
 		33: {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Core Liberation' },
-			description() {
-				return 'if you own <b class="layer-h' + getdark(this, "ref") + 'Core Production Line</b> and all subsequent upgrades, gain +25% of your core gain per second';
-			},
+			description() { return  'if you own <b class="layer-h' + getdark(this, "ref") + 'Core Production Line</b> and all subsequent upgrades, gain +25% of your core gain per second' },
 			cost: 1e80,
 			unlocked() { return (hasUpgrade('h', 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 32) },
 		},
@@ -707,9 +625,7 @@ addLayer('c', {
 		42: {
 			title() { return '<b class="layer-c' + getdark(this, "title") + 'Core of Recursion' },
 			description: 'multiplies core gain based on your cores',
-			effect() {
-				return player.c.points.add(1).log10().add(1).pow(80);
-			},
+			effect() { return  player.c.points.add(1).log10().add(1).pow(80) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^80';
@@ -792,9 +708,7 @@ addLayer('c', {
 				player.c.points = player.c.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() {
-				return getBuyableAmount('c', this.id).mul(0.05);
-			},
+			effect() { return  getBuyableAmount('c', this.id).mul(0.05) },
 			display() {
 				let text = '';
 				if (player.nerdMode) text += '<br>formula: x*0.05';
@@ -820,6 +734,8 @@ addLayer('q', {
 		auto_upgrades: false,
 		auto_buyable_11: false,
 		auto_buyable_12: false,
+		auto_buyable_13: false,
+		auto_buyable_21: false,
 	}},
 	color: "#DB5196",
 	branches: ['sp'],
@@ -884,11 +800,13 @@ addLayer('q', {
 	automate() {
 		if (hasMilestone('s', 4) && player[this.layer].auto_upgrades) {
 			for (const id in tmp[this.layer].upgrades) {
-				if (tmp[this.layer].upgrades[id].unlocked && id < 60) buyUpgrade(this.layer, id);
+				if (tmp[this.layer].upgrades[id].unlocked && (id < 60 || hasMilestone('ch', 20))) buyUpgrade(this.layer, id);
 			};
 		};
 		if (hasMilestone('ch', 16) && player.q.auto_buyable_11 && tmp.q.buyables[11].unlocked && layers.q.buyables[11].canAfford()) layers.q.buyables[11].buy();
 		if (hasMilestone('ch', 20) && player.q.auto_buyable_12 && tmp.q.buyables[12].unlocked && layers.q.buyables[12].canAfford()) layers.q.buyables[12].buy();
+		if (hasMilestone('ch', 22) && player.q.auto_buyable_13 && tmp.q.buyables[13].unlocked && layers.q.buyables[13].canAfford()) layers.q.buyables[13].buy();
+		if (hasMilestone('ch', 22) && player.q.auto_buyable_21 && tmp.q.buyables[21].unlocked && layers.q.buyables[21].canAfford()) layers.q.buyables[21].buy();
 	},
 	doReset(resettingLayer) {
 		if (challengeCompletions('r', 11) >= 30 && resettingLayer == 'r') return;
@@ -897,7 +815,7 @@ addLayer('q', {
 		if (hasMilestone('ei', 2) && resettingLayer == 'ei') return;
 		if (hasMilestone('w', 9) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 5) && resettingLayer == 'cl') return;
-		let keep = ['auto_upgrades', 'auto_buyable_11', 'auto_buyable_12'];
+		let keep = ['auto_upgrades', 'auto_buyable_11', 'auto_buyable_12', 'auto_buyable_13', 'auto_buyable_21'];
 			if (hasMilestone('sp', 3) && resettingLayer == 'sp') keep.push("milestones");
 			if (hasMilestone('sp', 5) && resettingLayer == 'sp') keep.push("upgrades");
 			if (hasMilestone('h', 5) && resettingLayer == 'h') keep.push("milestones");
@@ -965,9 +883,7 @@ addLayer('q', {
 					"upgrades",
 				];
 			},
-			unlocked() {
-				return hasUpgrade('q', 61);
-			},
+			unlocked() { return hasUpgrade('q', 61) },
 		},
 	},
 	milestones: {
@@ -992,9 +908,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'The Point of Quarks' },
 			description: 'multiplies quark gain based on your points',
 			cost: 1,
-			effect() {
-				return player.points.add(1).pow(0.01);
-			},
+			effect() { return  player.points.add(1).pow(0.01) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
@@ -1005,9 +919,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quark Power' },
 			description: 'multiplies point gain based on your quarks',
 			cost: 2,
-			effect() {
-				return player.q.points.add(1).pow(0.09);
-			},
+			effect() { return  player.q.points.add(1).pow(0.09) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.09';
@@ -1019,9 +931,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Super Quarks' },
 			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Quark Power</b> based on your points' },
 			cost: 25,
-			effect() {
-				return player.points.add(1).pow(0.0025);
-			},
+			effect() { return  player.points.add(1).pow(0.0025) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.0025';
@@ -1033,9 +943,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Essence of Quarks' },
 			description() { return '<b class="layer-q' + getdark(this, "ref") + 'Quark Power</b> also affects essence gain at a reduced rate (<b class="layer-q' + getdark(this, "ref") + 'Super Quarks</b> does not affect this)' },
 			cost: 100,
-			effect() {
-				return player.q.points.add(1).pow(0.2);
-			},
+			effect() { return  player.q.points.add(1).pow(0.2) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.2';
@@ -1047,9 +955,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quark Fusion' },
 			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Essence of Quarks</b> based on your cores' },
 			cost: 750,
-			effect() {
-				return player.c.points.add(1).pow(0.02);
-			},
+			effect() { return  player.c.points.add(1).pow(0.02) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.02';
@@ -1061,9 +967,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quirky Quarks' },
 			description: 'multiplies core gain and quark gain based on your quarks',
 			cost: 2500,
-			effect() {
-				return player.q.points.add(1).pow(0.05);
-			},
+			effect() { return  player.q.points.add(1).pow(0.05) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.05';
@@ -1075,9 +979,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Very Quirky' },
 			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Quirky Quarks</b> based on your points' },
 			cost: 7500,
-			effect() {
-				return player.points.add(1).pow(0.02);
-			},
+			effect() { return  player.points.add(1).pow(0.02) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.02';
@@ -1089,9 +991,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quark Extreme' },
 			description() { return '<b class="layer-q' + getdark(this, "ref") + 'Quark Power</b> also affects quark gain at a reduced rate (<b class="layer-q' + getdark(this, "ref") + 'Super Quarks</b> does not affect this)' },
 			cost: 25000,
-			effect() {
-				return player.q.points.add(1).pow(0.1);
-			},
+			effect() { return  player.q.points.add(1).pow(0.1) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.1';
@@ -1103,9 +1003,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Recurring Quarks' },
 			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Quark Extreme</b> based on your quarks' },
 			cost: 100000,
-			effect() {
-				return player.q.points.add(1).pow(0.2);
-			},
+			effect() { return  player.q.points.add(1).pow(0.2) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.2';
@@ -1117,9 +1015,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Recurring More' },
 			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Recurring Quarks</b> based on your quarks' },
 			cost: 1500000,
-			effect() {
-				return player.q.points.add(1).pow(0.05);
-			},
+			effect() { return  player.q.points.add(1).pow(0.05) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.05';
@@ -1131,9 +1027,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Infinite Recur' },
 			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Recurring More</b> based on your quarks' },
 			cost: 50000000,
-			effect() {
-				return player.q.points.add(1).pow(0.01);
-			},
+			effect() { return  player.q.points.add(1).pow(0.01) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
@@ -1145,9 +1039,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Compact Quarks' },
 			description: 'multiplies essence gain based on your quarks',
 			cost: 1e9,
-			effect() {
-				return player.q.points.add(1).pow(0.15);
-			},
+			effect() { return  player.q.points.add(1).pow(0.15) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.15';
@@ -1159,9 +1051,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quark Fission' },
 			description: 'multiplies core gain based on your quarks',
 			cost: 1e10,
-			effect() {
-				return player.q.points.add(1).pow(0.075);
-			},
+			effect() { return  player.q.points.add(1).pow(0.075) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.075';
@@ -1173,9 +1063,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'The Quark Count' },
 			description: 'multiplies point gain based on your quarks',
 			cost: 2.5e11,
-			effect() {
-				return player.q.points.add(1).pow(0.01);
-			},
+			effect() { return  player.q.points.add(1).pow(0.01) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
@@ -1187,9 +1075,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quark Counting' },
 			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'The Quark Count</b> based on your quarks' },
 			cost: 1e13,
-			effect() {
-				return player.q.points.add(1).pow(0.015);
-			},
+			effect() { return  player.q.points.add(1).pow(0.015) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.015';
@@ -1201,9 +1087,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Ticking Quarks' },
 			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Quark Counting</b> based on your quarks' },
 			cost: 1e14,
-			effect() {
-				return player.q.points.add(1).pow(0.005);
-			},
+			effect() { return  player.q.points.add(1).pow(0.005) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.005';
@@ -1230,9 +1114,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quirky Particles' },
 			description: 'multiplies subatomic particle gain based on your quarks',
 			cost: 1e18,
-			effect() {
-				return player.q.points.add(1).pow(0.01);
-			},
+			effect() { return  player.q.points.add(1).pow(0.01) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
@@ -1244,9 +1126,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Particle Quarks' },
 			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Subatomic Quarks</b> based on your quarks' },
 			cost: 1e20,
-			effect() {
-				return player.q.points.add(1).pow(0.005);
-			},
+			effect() { return  player.q.points.add(1).pow(0.005) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.005';
@@ -1258,9 +1138,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'The Ultra Quark' },
 			description: 'multiplies quark gain based on your quarks',
 			cost: 1e22,
-			effect() {
-				return player.q.points.add(1).pow(0.125);
-			},
+			effect() { return  player.q.points.add(1).pow(0.125) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.125';
@@ -1305,9 +1183,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'What\'s the Point?' },
 			description() { return 'multiplies point gain based on your ' + randomStr(9) },
 			cost: '1e1295',
-			effect() {
-				return getGlitch().pow(21);
-			},
+			effect() { return  getGlitch().pow(21) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += '<br>formula: ???';
@@ -1331,9 +1207,7 @@ addLayer('q', {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Estimation on Point' },
 			description() { return 'exponentiates point gain multiplier based on your ' + randomStr(9) },
 			cost: 'e8.34e10',
-			effect() {
-				return getGlitch().log10().add(1).pow(0.05);
-			},
+			effect() { return  getGlitch().log10().add(1).pow(0.05) },
 			effectDisplay() {
 				let text = '^' + format(this.effect());
 				if (player.nerdMode) text += '<br>formula: ???';
@@ -1414,9 +1288,7 @@ addLayer('q', {
 				player.e.points = player.e.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() {
-				return new Decimal(10).pow(getBuyableAmount(this.layer, this.id));
-			},
+			effect() { return  new Decimal(10).pow(getBuyableAmount(this.layer, this.id)) },
 			display() {
 				let text = '';
 				if (player.nerdMode) text += '<br>formula: 10^x';
@@ -1432,9 +1304,7 @@ addLayer('q', {
 			buy() {
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() {
-				return new Decimal(1.25).pow(getBuyableAmount(this.layer, this.id)).add(getBuyableAmount(this.layer, this.id).pow(2.15));
-			},
+			effect() { return  new Decimal(1.25).pow(getBuyableAmount(this.layer, this.id)).add(getBuyableAmount(this.layer, this.id).pow(2.15)) },
 			display() {
 				let text = '';
 				if (player.nerdMode) text += '<br>formula: (1.25^x)+(x^2.15)';
@@ -1827,9 +1697,7 @@ addLayer('h', {
 					"upgrades",
 				];
 			},
-			unlocked() {
-				return hasUpgrade('h', 81);
-			},
+			unlocked() { return hasUpgrade('h', 81) },
 		},
 	},
 	milestones: {
@@ -1887,9 +1755,7 @@ addLayer('h', {
 				return 'multiplies point gain based on your hexes';            
 			},
 			cost: 1,
-			effect() {
-				return player.h.points.add(1).pow(0.005);
-			},
+			effect() { return  player.h.points.add(1).pow(0.005) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (hasUpgrade('ds', 11)) text += '<br>and ' + format(this.effect()) + 'x';
@@ -1921,9 +1787,7 @@ addLayer('h', {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hex Fusion' },
 			description: 'multiplies core gain based on your hexes',
 			cost: 10,
-			effect() {
-				return player.h.points.add(1).pow(0.09);
-			},
+			effect() { return  player.h.points.add(1).pow(0.09) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.09';
@@ -1942,9 +1806,7 @@ addLayer('h', {
 				return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Hex Leak</b> based on your hexes';
 			},
 			cost: 1000,
-			effect() {
-				return player.h.points.add(1).pow(0.025);
-			},
+			effect() { return  player.h.points.add(1).pow(0.025) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.025';
@@ -1956,9 +1818,7 @@ addLayer('h', {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Super Strong Hexes' },
 			description() { return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Stronger Hexes</b> based on your hexes' },
 			cost: 5000,
-			effect() {
-				return player.h.points.add(1).pow(0.05);
-			},
+			effect() { return  player.h.points.add(1).pow(0.05) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.05';
@@ -1970,9 +1830,7 @@ addLayer('h', {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hex Fission' },
 			description() { return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Hex Fusion</b> based on your hexes' },
 			cost: 10000,
-			effect() {
-				return player.h.points.add(1).pow(0.15);
-			},
+			effect() { return  player.h.points.add(1).pow(0.15) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.15';
@@ -1990,9 +1848,7 @@ addLayer('h', {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hex Numerals' },
 			description() { return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Numerical Hexes</b> based on your points' },
 			cost: 100000,
-			effect() {
-				return player.points.add(1).pow(0.002);
-			},
+			effect() { return  player.points.add(1).pow(0.002) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.002';
@@ -2004,9 +1860,7 @@ addLayer('h', {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Extreme Hexes' },
 			description() { return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Super Strong Hexes</b> based on your hexes' },
 			cost: 500000,
-			effect() {
-				return player.h.points.add(1).pow(0.01);
-			},
+			effect() { return  player.h.points.add(1).pow(0.01) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.01';
@@ -2018,9 +1872,7 @@ addLayer('h', {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Core of Hexes' },
 			description() { return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Hex Fission</b> based on your cores' },
 			cost: 1000000,
-			effect() {
-				return player.h.points.add(1).pow(0.025);
-			},
+			effect() { return  player.h.points.add(1).pow(0.025) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.025';
@@ -2038,9 +1890,7 @@ addLayer('h', {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Numero Hex' },
 			description() { return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Hex Numerals</b> based on your hexes' },
 			cost: 7500000,
-			effect() {
-				return player.points.add(1).pow(0.0001);
-			},
+			effect() { return  player.points.add(1).pow(0.0001) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.0001';
@@ -2052,9 +1902,7 @@ addLayer('h', {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Ultra Hexes' },
 			description() { return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Extreme Hexes</b> based on your hexes' },
 			cost: 15000000,
-			effect() {
-				return player.h.points.add(1).pow(0.001);
-			},
+			effect() { return  player.h.points.add(1).pow(0.001) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.001';
@@ -2108,9 +1956,7 @@ addLayer('h', {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Sub Hex Particle' },
 			description: 'multiplies hex gain based on your subatomic particles',
 			cost: 1e50,
-			effect() {
-				return player.sp.points.add(1).pow(2.5);
-			},
+			effect() { return  player.sp.points.add(1).pow(2.5) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^2.5';
@@ -2122,9 +1968,7 @@ addLayer('h', {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hexed Subatomic Particle' },
 			description: 'multiplies subatomic particle gain based on your hexes',
 			cost: 6.66e66,
-			effect() {
-				return player.h.points.add(1).pow(0.02);
-			},
+			effect() { return  player.h.points.add(1).pow(0.02) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.02';
@@ -2142,9 +1986,7 @@ addLayer('h', {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hex the Hex' },
 			description: 'multiplies hex gain based on your hexes',
 			cost: '1e570',
-			effect() {
-				return player.h.points.add(1).log10().add(1).pow(75);
-			},
+			effect() { return  player.h.points.add(1).log10().add(1).pow(75) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^75';
@@ -2156,9 +1998,7 @@ addLayer('h', {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hex the Core' },
 			description: 'multiplies core gain based on your hexes',
 			cost: '1e696',
-			effect() {
-				return player.h.points.add(1).log10().add(1).pow(250);
-			},
+			effect() { return  player.h.points.add(1).log10().add(1).pow(250) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^250';
@@ -2170,9 +2010,7 @@ addLayer('h', {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hexes are the Point' },
 			description: 'multiplies point gain based on your hexes',
 			cost: '1e870',
-			effect() {
-				return player.h.points.add(1).log10().add(1).pow(336);
-			},
+			effect() { return  player.h.points.add(1).log10().add(1).pow(336) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^336';
@@ -2372,9 +2210,7 @@ addLayer('ds', {
 					"upgrades",
 				];
 			},
-			unlocked() {
-				return hasUpgrade('ds', 22);
-			},
+			unlocked() { return hasUpgrade('ds', 22) },
 		},
 	},
 	milestones: {
@@ -2501,9 +2337,7 @@ addLayer('ds', {
 				player.ds.points = player.ds.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() {
-				return [new Decimal(2).pow(getBuyableAmount('ds', this.id)), getBuyableAmount('ds', this.id).mul(5).add(1)];
-			},
+			effect() { return  [new Decimal(2).pow(getBuyableAmount('ds', this.id)), getBuyableAmount('ds', this.id).mul(5).add(1)] },
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formulas: 2^x<br>and x*5+1';
@@ -2514,7 +2348,7 @@ addLayer('ds', {
 	challenges: {
 		11: {
 			name() {
-				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ds">Blazing Curse';
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ds">Blazing Curse';
 				return '<h3>Blazing Curse';
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Quark gain is divided by 100,000<br> - Point gain is divided by 10,000<br> - Hex gain is divided by 1,000<br> - Core gain is divided by 100<br> - Quark gain is divided by 10",
@@ -2543,7 +2377,7 @@ addLayer('ds', {
 		},
 		12: {
 			name() {
-				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ds">Hellfire';
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ds">Hellfire';
 				return '<h3>Hellfire';
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1,000,000<br> - Hex gain is divided by 1e10<br> - Subatomic Particle gain is divided by the number of Quarks",
@@ -2573,7 +2407,7 @@ addLayer('ds', {
 		},
 		21: {
 			name() {
-				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ds">Opposite Polarity';
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ds">Opposite Polarity';
 				return '<h3>Opposite Polarity';
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Hex gain is divided by 100,000<br> - Point gain is divided by 1e10<br> - Core gain is divided by 1e15<br> - Essence gain is divided by 1e20",
@@ -2603,7 +2437,7 @@ addLayer('ds', {
 		},
 		22: {
 			name() {
-				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ds">Dreaded Science';
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ds">Dreaded Science';
 				return '<h3>Dreaded Science';
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1e10<br> - Quark and Subatomic Particle gain is divided by 1e40<br>",
@@ -2625,7 +2459,7 @@ addLayer('ds', {
 		},
 		31: {
 			name() {
-				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ds">Reversed Hexes';
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ds">Reversed Hexes';
 				return '<h3>Reversed Hexes';
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Hex gain multiplier divides hex gain instead of multipling it<br>",
@@ -2637,7 +2471,7 @@ addLayer('ds', {
 		},
 		32: {
 			name() {
-				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ds">Point Deficiency';
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ds">Point Deficiency';
 				return '<h3>Point Deficiency';
 			},
 			challengeDescription: "- Applies all previous demon soul challenge effects at once<br> - Point gain is log10(log10(gain+1)+1)<br>",
@@ -2772,9 +2606,7 @@ addLayer('a', {
 					"milestones",
 				];
 			},
-			unlocked() {
-				return isAssimilated('a') || player.mo.assimilating === 'a';
-			},
+			unlocked() { return isAssimilated('a') || player.mo.assimilating === 'a' },
 		},
 	},
 	milestones: {
@@ -2852,13 +2684,13 @@ addLayer('a', {
 			requirementDescription: '10,000 atoms and 1e600 prayers',
 			effectDescription: 'atoms reset nothing',
 			done() { return player.a.points.gte(10000) && player.p.points.gte('1e600') },
-			unlocked() { return hasMilestone('a', 13) && player.r.unlocked }
+			unlocked() { return (hasMilestone('a', 13) && player.r.unlocked) || hasMilestone('a', 14) }
 		},
 		15: {
 			requirementDescription: '18,000 atoms and 40 sanctums',
 			effectDescription: 'perform atom resets automatically',
 			done() { return player.a.points.gte(18000) && player.s.points.gte(40) && hasMilestone('a', 14) },
-			unlocked() { return hasMilestone('a', 14) && player.r.unlocked }
+			unlocked() { return (hasMilestone('a', 14) && player.r.unlocked) || hasMilestone('a', 15) }
 		},
 	},
 	upgrades: {
@@ -3252,7 +3084,7 @@ addLayer('p', {
 		};
 		if (hasUpgrade('p', 73)) mult = mult.mul(upgradeEffect('p', 73));
 		if (hasUpgrade('p', 81)) mult = mult.mul(upgradeEffect('p', 81));
-		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated) mult = mult.mul(tmp.gi.effect);
+		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated && !(hasMilestone('gi', 19) && player.h.limitsBroken >= 4)) mult = mult.mul(tmp.gi.effect);
 		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
 		// pow
 		if (challengeCompletions('ch', 12) > 0) mult = mult.pow(challengeEffect('ch', 12));
@@ -3425,13 +3257,13 @@ addLayer('p', {
 			requirementDescription: '2,500 prayers & 250 hymns',
 			effectDescription: 'divinity gain is raised to the power of 1.5',
 			done() { return player.p.points.gte(2500) && player.p.hymn.gte(250)},
-			unlocked() { return hasUpgrade('p', 41) },
+			unlocked() { return hasUpgrade('p', 41) || player.s.unlocked },
 		},
 		3: {
 			requirementDescription: '1.00e55 prayers',
 			effectDescription: 'divinity gain is raised to the power<br>of 1.6 instead of 1.5',
 			done() { return player.p.points.gte(1e55)},
-			unlocked() { return player.p.points.gte(1e50) || (hasMilestone('p', 2) && player.s.points.gt(3)) },
+			unlocked() { return hasMilestone('p', 2) || player.s.unlocked },
 		},
 	},
 	upgrades: {
@@ -3817,6 +3649,10 @@ addLayer('s', {
 		total: new Decimal(0),
 		devotion: new Decimal(0),
 		devotion_effect: new Decimal(1),
+		glow: new Decimal(0),
+		glow_gain: new Decimal(0),
+		glow_max: new Decimal(1000),
+		glow_effect: new Decimal(1),
 		auto_worship: false,
 		auto_sacrifice: false,
 		auto_sacrificial_ceremony: false,
@@ -3841,9 +3677,12 @@ addLayer('s', {
 	canBuyMax() { return hasMilestone('s', 0) || player.r.total.gt(0) || player.w.unlocked },
 	gainExp() {
 		let gain = new Decimal(1);
-		if (new Decimal(tmp.r.effect[1]).gt(1) && !tmp.r.deactivated) gain = gain.mul(tmp.r.effect[1]);
 		if (player.s.devotion_effect.gt(1)) gain = gain.mul(player.s.devotion_effect);
+		if (player.s.glow_effect.gt(1)) gain = gain.mul(player.s.glow_effect);
+		if (new Decimal(tmp.r.effect[1]).gt(1) && !tmp.r.deactivated) gain = gain.mul(tmp.r.effect[1]);
+		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated && hasMilestone('gi', 19) && player.h.limitsBroken >= 4 && tmp.gi.effect.lte(1e100)) gain = gain.mul(tmp.gi.effect);
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
+		if (hasBuyable('mo', 12)) gain = gain.mul(buyableEffect('mo', 12));
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('s', 48) },
@@ -3853,12 +3692,8 @@ addLayer('s', {
 	],
 	layerShown() { return player.p.unlocked || player.s.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
-	effect() {
-		return new Decimal(2).pow(player.s.points);
-	},
-	effectDescription() {
-		return 'which multiplies essence gain by <h2 class="layer-s">' + format(tmp.s.effect) + '</h2>x';
-	},
+	effect() { return new Decimal(2).pow(player.s.points) },
+	effectDescription() { return 'which multiplies essence gain by <h2 class="layer-s">' + format(tmp.s.effect) + '</h2>x' },
 	doReset(resettingLayer) {
 		if (hasMilestone('s', 12) && resettingLayer == 'a') return;
 		if (hasMilestone('w', 11) && resettingLayer == 'w') return;
@@ -3868,6 +3703,7 @@ addLayer('s', {
 			if (layers[resettingLayer].row > this.row) {
 				layerDataReset('s', keep);
 				layerDataReset('d', keep);
+				layerDataReset('g', keep);
 				if (hasMilestone('m', 9) && resettingLayer == 'm') player.s.milestones = ['0'];
 				if (hasMilestone('m', 10) && resettingLayer == 'm') {
 					if (hasMilestone('m', 19)) set = 215;
@@ -3923,9 +3759,31 @@ addLayer('s', {
 					"milestones",
 				];
 			},
-			unlocked() {
-				return hasMilestone('s', 13);
+			unlocked() { return hasMilestone('s', 13) },
+		},
+		"Glow": {
+			content: () => {
+				if (tmp.s.tabFormat["Glow"].unlocked) return [
+					"main-display",
+					["row", ["prestige-button", "assimilate-button"]],
+					"resource-display",
+					"blank",
+					["display-text", 'you are generating <h2 class="layer-s">' + format(player.s.glow_gain) + '</h2> glow/sec, with a maximum of <h2 class="layer-s">' + format(player.s.glow_max) + '</h2> glow'],
+					["display-text", 'you have <h2 class="layer-s">' + format(player.s.glow) + '</h2> glow, which multiplies sanctum gain and light gain after hardcap by <h2 class="layer-s">' + format(player.s.glow_effect) + '</h2>x'],
+					"blank",
+					["layer-proxy", ['g', ["buyables"]]],
+					"blank",
+					"blank"
+				];
+				return [
+					"main-display",
+					["row", ["prestige-button", "assimilate-button"]],
+					"resource-display",
+					"blank",
+					"milestones",
+				];
 			},
+			unlocked() { return isAssimilated('s') || player.mo.assimilating === 's' },
 		},
 	},
 	milestones: {
@@ -3991,7 +3849,7 @@ addLayer('s', {
 		},
 		11: {
 			requirementDescription: '16 sanctums',
-			effectDescription: 'subatomic particles reset nothing,<br>and perform subatomic particle<br>resets automatically',
+			effectDescription: 'subatomic particles reset nothing and<br>perform subatomic particle resets automatically',
 			done() { return player.s.points.gte(16) },
 		},
 		12: {
@@ -4116,19 +3974,19 @@ addLayer('s', {
 		},
 		32: {
 			requirementDescription: '69 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b><br>cost by 1e100' },
+			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> cost by 1e100' },
 			done() { return player.s.points.gte(69) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		33: {
 			requirementDescription: '70 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b><br>cost scaling by 1.6' },
+			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> cost scaling by 1.6' },
 			done() { return player.s.points.gte(70) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		34: {
 			requirementDescription: '71 sanctums',
-			effectDescription() { return 'change <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b>\'s cost<br>to a requirement' },
+			effectDescription() { return 'change <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b>\'s cost to a requirement' },
 			done() { return player.s.points.gte(71) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -4146,7 +4004,7 @@ addLayer('s', {
 		},
 		37: {
 			requirementDescription: '80 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b><br>cost scaling by 2' },
+			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> cost scaling by 2' },
 			done() { return player.s.points.gte(80) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -4159,13 +4017,13 @@ addLayer('s', {
 		},
 		39: {
 			requirementDescription: '87 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b><br>cost scaling by 2' },
+			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> cost scaling by 2' },
 			done() { return player.s.points.gte(87) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		40: {
 			requirementDescription: '96 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b><br>cost scaling by 1.5' },
+			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> cost scaling by 1.5' },
 			done() { return player.s.points.gte(96) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -4189,7 +4047,7 @@ addLayer('s', {
 		},
 		44: {
 			requirementDescription: '120 sanctums',
-			effectDescription() { return 'auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b><br>works twice as fast' },
+			effectDescription() { return 'auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> works twice as fast' },
 			done() { return player.s.points.gte(120) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -4201,7 +4059,7 @@ addLayer('s', {
 		},
 		46: {
 			requirementDescription: '140 sanctums',
-			effectDescription() { return 'auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> works<br>twice as fast (4x total)' },
+			effectDescription() { return 'auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> works twice as fast (4x total)' },
 			done() { return player.s.points.gte(140) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -4231,7 +4089,7 @@ addLayer('s', {
 		},
 		51: {
 			requirementDescription: '200 sanctums',
-			effectDescription() { return 'auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> works<br>thrice as fast (12x total)' },
+			effectDescription() { return 'auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> works thrice as fast (12x total)' },
 			done() { return player.s.points.gte(200) && hasMilestone('m', 8) },
 			unlocked() { return hasMilestone('s', 13) && hasMilestone('m', 8) },
 		},
@@ -4254,6 +4112,7 @@ addLayer('d', {
 	name: 'Devotion',
 	symbol: 'D',
 	position: 3,
+	color: "#AAFF00",
 	row: 2,
 	layerShown() { return false },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate('s')},
@@ -4303,6 +4162,9 @@ addLayer('d', {
 	},
 	doReset(resettingLayer) {},
 	update(diff) {
+		if (player.d.buyables[11].gt(tmp.d.buyables[11].purchaseLimit)) player.d.buyables[11] = new Decimal(tmp.d.buyables[11].purchaseLimit);
+		if (player.d.buyables[12].gt(tmp.d.buyables[12].purchaseLimit)) player.d.buyables[12] = new Decimal(tmp.d.buyables[12].purchaseLimit);
+		if (player.d.buyables[21].gt(tmp.d.buyables[21].purchaseLimit)) player.d.buyables[21] = new Decimal(tmp.d.buyables[21].purchaseLimit);
 		player.s.devotion = tmp.d.buyables[11].devotion.add(tmp.d.buyables[12].devotion).add(tmp.d.buyables[21].devotion);
 		if (hasMilestone('s', 53)) player.s.devotion_effect = player.s.devotion.add(1).pow(0.666);
 		else if (hasMilestone('s', 49)) player.s.devotion_effect = player.s.devotion.add(1).pow(0.625);
@@ -4312,9 +4174,6 @@ addLayer('d', {
 		else if (hasMilestone('s', 21)) player.s.devotion_effect = player.s.devotion.add(1).pow(0.45);
 		else if (hasMilestone('s', 18)) player.s.devotion_effect = player.s.devotion.add(1).pow(0.375);
 		else player.s.devotion_effect = player.s.devotion.add(1).pow(0.3);
-		if (player.d.buyables[11].gt(tmp.d.buyables[11].purchaseLimit)) player.d.buyables[11] = new Decimal(tmp.d.buyables[11].purchaseLimit);
-		if (player.d.buyables[12].gt(tmp.d.buyables[12].purchaseLimit)) player.d.buyables[12] = new Decimal(tmp.d.buyables[12].purchaseLimit);
-		if (player.d.buyables[21].gt(tmp.d.buyables[21].purchaseLimit)) player.d.buyables[21] = new Decimal(tmp.d.buyables[21].purchaseLimit);
 	},
 	buyables: {
 		11: {
@@ -4335,20 +4194,14 @@ addLayer('d', {
 				player.p.points = player.p.points.sub(this.cost());
 				addBuyables(this.layer, this.id, getDevotionBulk());
 			},
-			devotion() {
-				return getBuyableAmount('d', this.id).mul(0.1);
-			},
-			display() {
-				let cost = formatWhole(this.cost());
-				if (cost == "0.000") cost = formatSmall(this.cost());
-				return 'use prayers to worship the gods. you will gain 0.1 devotion per worship.<br><br>Devotion Reward: ' + format(this.devotion()) + '<br><br>Cost: ' + cost + ' prayers<br><br>Times Worshipped:<br>' + formatWhole(getBuyableAmount('d', 11)) + '/' + formatWhole(this.purchaseLimit);
-			},
+			devotion() { return getBuyableAmount('d', this.id).mul(0.1) },
+			display() { return 'use prayers to worship the gods. you will gain 0.1 devotion per worship.<br><br>Devotion Reward: ' + format(this.devotion()) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' prayers<br><br>Times Worshipped:<br>' + formatWhole(getBuyableAmount('d', 11)) + '/' + formatWhole(this.purchaseLimit) },
 			style() {
 				let backcolors = '#224400, #336600';
 				if (this.canAfford()) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
 				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
-				return {'background-image':'radial-gradient('+backcolors+')','color':textcolor,'border-radius':'50%'};
+				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
 			},
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -4368,22 +4221,18 @@ addLayer('d', {
 				if (!hasMilestone('s', 34)) player.s.points = player.s.points.sub(this.cost());
 				addBuyables(this.layer, this.id, getDevotionBulk());
 			},
-			effect() {
-				return new Decimal(2).pow(getBuyableAmount('d', this.id));
-			},
+			effect() { return new Decimal(2).pow(getBuyableAmount('d', this.id)) },
 			devotion() {
 				if (hasMilestone('s', 24)) return getBuyableAmount('d', this.id);
 				else return getBuyableAmount('d', this.id).mul(0.5);
 			},
-			display() {
-				return 'use sanctums as a sacrifice to worship the gods. you will gain<br>' + (hasMilestone('s', 24) ? '1' : '0.5') + ' devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by ' + (hasMilestone('s', 24) ? '2' : '1.5') + '<br>Currently: ' + format(buyableEffect('d', this.id)) + 'x<br><br>Devotion Reward: ' + format(this.devotion()) + '<br><br>' + (hasMilestone('s',34) ? 'Req' : 'Cost') + ': '  + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed:' + (formatWhole(getBuyableAmount('d',this.id)).length >= 8 ? '<br>' : ' ') + formatWhole(getBuyableAmount('d', this.id)) + '<br>/' + formatWhole(this.purchaseLimit);
-			},
+			display() { return 'use sanctums as a sacrifice to worship the gods. you will gain<br>' + (hasMilestone('s', 24) ? '1' : '0.5') + ' devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by ' + (hasMilestone('s', 24) ? '2' : '1.5') + '<br>Currently: ' + format(buyableEffect('d', this.id)) + 'x<br><br>Devotion Reward: ' + format(this.devotion()) + '<br><br>' + (hasMilestone('s',34) ? 'Req' : 'Cost') + ': '  + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed:' + (formatWhole(getBuyableAmount('d',this.id)).length >= 8 ? '<br>' : ' ') + formatWhole(getBuyableAmount('d', this.id)) + '<br>/' + formatWhole(this.purchaseLimit) },
 			style() {
 				let backcolors = '#224400, #336600';
 				if (this.canAfford()) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
 				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
-				return {'background-image':'radial-gradient('+backcolors+')','color':textcolor,'border-radius':'50%'};
+				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
 			},
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -4418,20 +4267,104 @@ addLayer('d', {
 				if (challengeCompletions('r', 11) >= 5) return [undefined, getBuyableAmount('d', this.id), new Decimal(1e25).mul(player.r.relic_effects[2]).pow(getBuyableAmount('d', this.id))];
 				else return [undefined, getBuyableAmount('d', this.id), new Decimal(1e25).pow(getBuyableAmount('d', this.id))];
 			},
-			devotion() {
-				return getBuyableAmount('d', this.id).mul(0.75);
-			},
-			display() {
-				return 'use hexes and subatomic particles in a sacrificial ceremony to worship the gods. you will gain 0.75 devotion per sacrificial ceremony. each sacrificial ceremony also multiplies subatomic particle gain by 1 (additive), light gain by 1 (additive), and divides worship cost by 1e25 (multiplicative, like normal)<br>Currently: ' + format(buyableEffect('d', this.id)[1]) + 'x,<br>' + format(buyableEffect('d', this.id)[1]) + 'x,<br>and /' + format(buyableEffect('d', this.id)[2]) + '<br><br>Devotion Reward: ' + format(this.devotion()) + '<br><br>Cost: ' + formatWhole(this.cost_h()) + ' hexes,<br>' + formatWhole(this.cost_sp()) + ' subatomic particles<br><br>Ceremonies Performed: ' + formatWhole(getBuyableAmount('d', this.id)) + '/' + formatWhole(this.purchaseLimit);
-			},
+			devotion() { return getBuyableAmount('d', this.id).mul(0.75) },
+			display() { return 'use hexes and subatomic particles in a sacrificial ceremony to worship the gods. you will gain 0.75 devotion per sacrificial ceremony. each sacrificial ceremony also multiplies subatomic particle gain by 1 (additive), light gain by 1 (additive), and divides worship cost by 1e25 (multiplicative, like normal)<br>Currently: ' + format(buyableEffect('d', this.id)[1]) + 'x,<br>' + format(buyableEffect('d', this.id)[1]) + 'x,<br>and /' + format(buyableEffect('d', this.id)[2]) + '<br><br>Devotion Reward: ' + format(this.devotion()) + '<br><br>Cost: ' + formatWhole(this.cost_h()) + ' hexes,<br>' + formatWhole(this.cost_sp()) + ' subatomic particles<br><br>Ceremonies Performed: ' + formatWhole(getBuyableAmount('d', this.id)) + '/' + formatWhole(this.purchaseLimit) },
 			style() {
 				let backcolors = '#224400, #336600';
 				if (this.canAfford()) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
 				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
-				return {'background-image':'radial-gradient('+backcolors+')','color':textcolor,'border-radius':'50%','height':'300px','width':'300px'};
+				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%', 'height': '300px', 'width': '300px'};
 			},
 			unlocked() { return hasMilestone('s', 14) },
+		},
+	},
+});
+
+addLayer('g', {
+	name: 'Glow',
+	symbol: 'G',
+	position: 4,
+	color: "#AAFF00",
+	row: 2,
+	layerShown() { return false },
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate('s')},
+	doReset(resettingLayer) {},
+	update(diff) {
+		player.s.glow_max = new Decimal(1000).mul(buyableEffect('g', 21)[1]);
+		player.s.glow_gain = buyableEffect('g', 11).mul(buyableEffect('g', 12)).mul(buyableEffect('g', 21)[0]);
+		if (hasMilestone('ch', 21)) player.s.glow_gain = player.s.glow_gain.mul(10);
+		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated && hasMilestone('gi', 19) && player.h.limitsBroken >= 4 && tmp.gi.effect.lte(1e100)) {
+			player.s.glow_gain = player.s.glow_gain.mul(tmp.gi.effect);
+		};
+		player.s.glow = player.s.glow.add(player.s.glow_gain.mul(diff));
+		if (player.s.glow.gt(player.s.glow_max)) player.s.glow = player.s.glow_max;
+		player.s.glow_effect = player.s.glow.mul(1000).add(1).pow(0.1);
+	},
+	buyables: {
+		11: {
+			cost() { return new Decimal(10).pow(new Decimal(10).pow(getBuyableAmount('g', this.id).div(3).add(3))) },
+			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Glowing<br>Worship<br>' },
+			canAfford() { return player.p.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 99,
+			buy() {
+				player.p.points = player.p.points.sub(this.cost());
+				addBuyables(this.layer, this.id, 1);
+			},
+			effect() { return getBuyableAmount('g', this.id) },
+			display() { return 'use prayers to worship the gods. each worship increases your glow gain by 1.<br><br>Currently: ' + format(this.effect()) + '/sec<br><br>Cost: ' + formatWhole(this.cost()) + ' prayers<br><br>Times Worshipped: ' + formatWhole(getBuyableAmount('g', this.id)) + '/' + formatWhole(this.purchaseLimit) },
+			style() {
+				let backcolors = '#224400, #336600';
+				if (this.canAfford()) backcolors = '#112200, #448800';
+				let textcolor = '#AAFF00';
+				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
+				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
+			},
+			unlocked() { return isAssimilated('s') || player.mo.assimilating === 's' },
+		},
+		12: {
+			cost() { return new Decimal(5).pow(getBuyableAmount('g', this.id).add(3)) },
+			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Glowing<br>Sacrifice<br>' },
+			canAfford() { return player.s.glow.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 99,
+			buy() {
+				player.s.glow = player.s.glow.sub(this.cost());
+				addBuyables(this.layer, this.id, 1);
+			},
+			effect() { return new Decimal(2).pow(getBuyableAmount('g', this.id)) },
+			display() { return 'use glow as a sacrifice to worship the gods. each sacrifice multiplies your glow gain by 2.<br><br>Currently: ' + format(buyableEffect('g', this.id)) + 'x<br><br>Cost: '  + formatWhole(this.cost()) + ' glow<br><br>Times Sacrificed: ' + formatWhole(getBuyableAmount('g', this.id)) + '/' + formatWhole(this.purchaseLimit) },
+			style() {
+				let backcolors = '#224400, #336600';
+				if (this.canAfford()) backcolors = '#112200, #448800';
+				let textcolor = '#AAFF00';
+				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
+				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
+			},
+			unlocked() { return isAssimilated('s') || player.mo.assimilating === 's' },
+		},
+		21: {
+			cost() {
+				if (getBuyableAmount('g', this.id).gte(14)) return new Decimal(10).pow(new Decimal(10).pow(getBuyableAmount('g', this.id).div(2).add(10)));
+				if (getBuyableAmount('g', this.id).gte(12)) return new Decimal('e1e11').pow(getBuyableAmount('g', this.id).add(1).pow(5));
+				return new Decimal('e1e14').pow(getBuyableAmount('g', this.id).add(1).pow(2));
+			},
+			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Glowing Sacrificial Ceremony<br>' },
+			canAfford() { return player.e.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 99,
+			buy() {
+				player.e.points = player.e.points.sub(this.cost());
+				addBuyables(this.layer, this.id, 1);
+			},
+			effect() { return [new Decimal(2.5).pow(getBuyableAmount('g', this.id)), new Decimal(10).pow(getBuyableAmount('g', this.id)), getBuyableAmount('g', 11).add(1).pow(getBuyableAmount('g', this.id))] },
+			display() { return 'use essence in a sacrificial ceremony to worship the gods. each sacrifice multiplies your glow gain by 2.5, your maximum glow by 10, and your light gain after hardcap by the amount of your glowing worships plus 1.<br><br>Currently: ' + format(buyableEffect('g', this.id)[0]) + 'x,<br>' + format(buyableEffect('g', this.id)[1]) + 'x,<br>and ' + format(buyableEffect('g', this.id)[2]) + 'x<br><br>Cost: '  + formatWhole(this.cost()) + ' essence<br><br>Ceremonies Performed: ' + formatWhole(getBuyableAmount('g', this.id)) + '/' + formatWhole(this.purchaseLimit) },
+			style() {
+				let backcolors = '#224400, #336600';
+				if (this.canAfford()) backcolors = '#112200, #448800';
+				let textcolor = '#AAFF00';
+				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
+				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%', 'height': '300px', 'width': '300px'};
+			},
+			unlocked() { return isAssimilated('s') || player.mo.assimilating === 's' },
 		},
 	},
 });
@@ -4585,7 +4518,7 @@ addLayer('r', {
 	challenges: {
 		11: {
 			name() {
-				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-r">Activate Relics';
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-r">Activate Relics';
 				return '<h3>Activate Relics';
 			},
 			buttonText: ["Activate", "Cannot activate", "Enter activation", "Enter activation"],
@@ -4653,12 +4586,8 @@ addLayer('r', {
 				else text += '<br>Next reward: you have gotten all the rewards!';
 				return text;
 			},
-			canComplete() {
-				return player.r.light.gte(player.r.lightreq) && challengeCompletions('r', this.id) < tmp.r.challenges[this.id].completionLimit;
-			},
-			completionLimit() {
-				return player.r.points.toNumber();
-			},
+			canComplete() { return player.r.light.gte(player.r.lightreq) && challengeCompletions('r', this.id) < tmp.r.challenges[this.id].completionLimit },
+			completionLimit() { return player.r.points.toNumber() },
 			style() {
 				const num = player.r.light.add(1).log(2).div(player.r.lightreq.add(1).log(2)).mul(100).floor();
 				let bgcolor = 'rgb(' + num + ',' + num + ',' + (num + 50) + ')';
@@ -4680,9 +4609,7 @@ addLayer('r', {
 			pay() {
 				player.r.light = player.r.light.sub(1e12);
 			},
-			effect() {
-				return player.s.points.add(1).pow(0.3);
-			},
+			effect() { return  player.s.points.add(1).pow(0.3) },
 			unlocked() { return hasMilestone('gi', 0) },
 		},
 		12: {
@@ -4695,9 +4622,7 @@ addLayer('r', {
 			pay() {
 				player.r.light = player.r.light.sub(1e13);
 			},
-			effect() {
-				return player.r.light.add(1).pow(0.1);
-			},
+			effect() { return  player.r.light.add(1).pow(0.1) },
 			unlocked() { return hasMilestone('gi', 0) },
 		},
 		13: {
@@ -4707,9 +4632,7 @@ addLayer('r', {
 				return '<h3 class="layer-r' + getdark(this, "title-hasend") + 'Good Light</h3><br>makes base light gain based on your good influence (ignoring hardcap) to: ' + format(this.effect()) + '/sec' + text + '<br><br>Cost: free<br>WARNING: may decrease light gain';
 			},
 			canAfford() { return true },
-			effect() {
-				return player.gi.points.mul(36).add(1).pow(10);
-			},
+			effect() { return  player.gi.points.mul(36).add(1).pow(10) },
 			unlocked() { return hasMilestone('gi', 0) && player.r.lightbest.gte(1e20) },
 		},
 	},
@@ -4948,14 +4871,10 @@ addLayer('m', {
 	},
 	upgrades: {
 		11: {
-			title() {
-				return '<b class="layer-m' + getdark(this, "title-light") + 'Oxygen Gas';
-			},
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Oxygen Gas' },
 			description: 'multiplies essence gain based on your best molecules',
 			cost: 1,
-			effect() {
-				return player.m.best.mul(100).add(1).pow(0.5);
-			},
+			effect() { return player.m.best.mul(100).add(1).pow(0.5) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x*100+1)^0.5';
@@ -4963,14 +4882,10 @@ addLayer('m', {
 			},
 		},
 		12: {
-			title() {
-				return '<b class="layer-m' + getdark(this, "title-light") + 'Carbon Monoxide';
-			},
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Carbon Monoxide' },
 			description: 'multiplies demon soul gain based on your best molecules',
 			cost: 5,
-			effect() {
-				return player.m.best.mul(10).add(1).pow(0.2);
-			},
+			effect() { return player.m.best.mul(10).add(1).pow(0.2) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x*10+1)^0.2';
@@ -4978,14 +4893,10 @@ addLayer('m', {
 			},
 		},
 		13: {
-			title() {
-				return '<b class="layer-m' + getdark(this, "title-light") + 'Carbon Dioxide';
-			},
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Carbon Dioxide' },
 			description: 'multiplies quark gain based on your best molecules',
 			cost: 10,
-			effect() {
-				return player.m.best.mul(50).add(1).pow(0.4);
-			},
+			effect() { return player.m.best.mul(50).add(1).pow(0.4) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x*50+1)^0.4';
@@ -4999,22 +4910,14 @@ addLayer('m', {
 				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'Hydrogen Gas</h3><br>multiplies core gain based on your best molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: 360,000 atoms';
 			},
 			canAfford() { return player.a.points.gte(360000) },
-			pay() {
-				player.a.points = player.a.points.sub(360000);
-			},
-			effect() {
-				return player.m.best.mul(25).add(1).pow(0.3);
-			},
+			pay() { player.a.points = player.a.points.sub(360000) },
+			effect() { return player.m.best.mul(25).add(1).pow(0.3) },
 		},
 		22: {
-			title() {
-				return '<b class="layer-m' + getdark(this, "title-light") + 'H<tag style="font-size:10px">2</tag>O, aka Water';
-			},
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'H<span style="font-size:0.8em">2</span>O, aka Water' },
 			description: 'multiplies essence gain based on your total unique molecules',
 			cost: 125,
-			effect() {
-				return player.m.unique_total.add(1).mul(5);
-			},
+			effect() { return player.m.unique_total.add(1).mul(5) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)*5';
@@ -5028,22 +4931,14 @@ addLayer('m', {
 				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'Ammonia</h3><br>multiplies hex gain based on your best molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: 4,600,000 atoms';
 			},
 			canAfford() { return player.a.points.gte(4600000) },
-			pay() {
-				player.a.points = player.a.points.sub(4600000);
-			},
-			effect() {
-				return player.m.best.mul(250).add(1).pow(0.1);
-			},
+			pay() { player.a.points = player.a.points.sub(4600000) },
+			effect() { return player.m.best.mul(250).add(1).pow(0.1) },
 		},
 		31: {
-			title() {
-				return '<b class="layer-m' + getdark(this, "title-light") + 'Nitrogen Gas';
-			},
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Nitrogen Gas' },
 			description: 'gives extra unique molecules based on your non-extra ones\' amount and worth',
 			cost: 250,
-			effect() {
-				return player.m.unique_nonextra.div(2).add(1).floor();
-			},
+			effect() { return player.m.unique_nonextra.div(2).add(1).floor() },
 			effectDisplay() {
 				let text = '+' + formatWhole(this.effect());
 				if (player.nerdMode) text += ' <br>formula: (x*y)/2+1';
@@ -5058,38 +4953,26 @@ addLayer('m', {
 				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'NaCl, aka Salt</h3><br>gives extra unique molecules based on your atoms<br>Currently: +' + formatWhole(this.effect()) + text + '<br><br>Cost: 7,777,777 atoms';
 			},
 			canAfford() { return player.a.points.gte(7777777) },
-			pay() {
-				player.a.points = player.a.points.sub(7777777);
-			},
-			effect() {
-				return player.a.points.add(1).pow(0.2).floor();
-			},
+			pay() { player.a.points = player.a.points.sub(7777777) },
+			effect() { return player.a.points.add(1).pow(0.2).floor() },
 			unlocked() { return hasUpgrade('m', 21) && hasUpgrade('m', 22) && hasUpgrade('m', 23) },
 		},
 		33: {
 			fullDisplay() {
 				let text = '';
 				if (player.nerdMode) text += ' <br>formula: x*1000';
-				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'O<tag style="font-size:10px">3</tag>, aka Ozone</h3><br>multiplies demon soul gain based on your total unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e10) + ' atoms';
+				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'O<span style="font-size:0.8em">3</span>, aka Ozone</h3><br>multiplies demon soul gain based on your total unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e10) + ' atoms';
 			},
 			canAfford() { return player.a.points.gte(1e10) },
-			pay() {
-				player.a.points = player.a.points.sub(1e10);
-			},
-			effect() {
-				return player.m.unique_total.mul(1000);
-			},
+			pay() { player.a.points = player.a.points.sub(1e10) },
+			effect() { return player.m.unique_total.mul(1000) },
 			unlocked() { return hasUpgrade('m', 21) && hasUpgrade('m', 22) && hasUpgrade('m', 23) },
 		},
 		41: {
-			title() {
-				return '<b class="layer-m' + getdark(this, "title-light") + 'Methane Gas';
-			},
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Methane Gas' },
 			description: 'gives extra unique molecules based on your demon souls',
 			cost: 25000000,
-			effect() {
-				return player.ds.points.pow(10).log(10).add(1).floor();
-			},
+			effect() { return player.ds.points.pow(10).log(10).add(1).floor() },
 			effectDisplay() {
 				let text = '+' + formatWhole(this.effect());
 				if (player.nerdMode) text += ' <br>formula: log(x^10)+1';
@@ -5098,14 +4981,10 @@ addLayer('m', {
 			unlocked() { return hasUpgrade('m', 31) && hasUpgrade('m', 32) && hasUpgrade('m', 33) },
 		},
 		42: {
-			title() {
-				return '<b class="layer-m' + getdark(this, "title-light") + 'Calcium Oxide';
-			},
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Calcium Oxide' },
 			description: 'non-extra unique molecules are worth more based on your relics',
 			cost: 50000000,
-			effect() {
-				return player.r.points.mul(5).add(1).pow(2);
-			},
+			effect() { return player.r.points.mul(5).add(1).pow(2) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x*5+1)^2';
@@ -5120,23 +4999,15 @@ addLayer('m', {
 				return'<h3 class="layer-m' + getdark(this, "title-light", true) + 'Calcium Hydroxide</h3><br>multiplies relic gain based on your extra unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1.61e10) + ' atoms';
 			},
 			canAfford() { return player.a.points.gte(1.61e10) },
-			pay() {
-				player.a.points = player.a.points.sub(1.61e10);
-			},
-			effect() {
-				return player.m.unique_extra.add(1).pow(0.01);
-			},
+			pay() { player.a.points = player.a.points.sub(1.61e10) },
+			effect() { return player.m.unique_extra.add(1).pow(0.01) },
 			unlocked() { return hasUpgrade('m', 31) && hasUpgrade('m', 32) && hasUpgrade('m', 33) },
 		},
 		51: {
-			title() {
-				return '<b class="layer-m' + getdark(this, "title-light") + 'Neon Gas';
-			},
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Neon Gas' },
 			description: 'gives extra unique molecules based on your total good influence',
 			cost: 1e13,
-			effect() {
-				return player.gi.total.add(1).pow(2.5).floor();
-			},
+			effect() { return player.gi.total.add(1).pow(2.5).floor() },
 			effectDisplay() {
 				let text = '+' + formatWhole(this.effect());
 				if (player.nerdMode) text += ' <br>formula: (x+1)^2.5';
@@ -5145,14 +5016,10 @@ addLayer('m', {
 			unlocked() { return hasMilestone('gi', 11) },
 		},
 		52: {
-			title() {
-				return '<b class="layer-m' + getdark(this, "title-light") + 'Sodium Oxide';
-			},
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Sodium Oxide' },
 			description: 'multiplies point gain based on your total unique molecules',
 			cost: 1e14,
-			effect() {
-				return player.m.unique_total.add(1).pow(25);
-			},
+			effect() { return player.m.unique_total.add(1).pow(25) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^25';
@@ -5161,14 +5028,10 @@ addLayer('m', {
 			unlocked() { return hasMilestone('gi', 11) },
 		},
 		53: {
-			title() {
-				return '<b class="layer-m' + getdark(this, "title-light") + 'F<tag style="font-size:10px">2</tag>, Fluorine';
-			},
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'F<span style="font-size:0.8em">2</span>, Fluorine' },
 			description: 'gives extra unique molecules based on your atoms',
 			cost: 1e13,
-			effect() {
-				return player.a.points.add(1).pow(0.45).floor();
-			},
+			effect() { return player.a.points.add(1).pow(0.45).floor() },
 			effectDisplay() {
 				let text = '+' + formatWhole(this.effect());
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.45';
@@ -5243,7 +5106,10 @@ addLayer('gi', {
 	effect() {
 		let effBase = new Decimal(2);
 		if (hasBuyable('gi', 11)) effBase = effBase.add(buyableEffect('gi', 11));
-		if (hasMilestone('gi', 18)) {
+		if (hasMilestone('gi', 19) && player.h.limitsBroken >= 4) {
+			return player.gi.points.div(100).add(effBase).pow(0.25).min(1e100);
+		};
+		if (hasMilestone('gi', 18) && player.h.limitsBroken >= 4) {
 			return effBase.pow(player.gi.total.pow(1.454));
 		};
 		let eff = effBase.pow(player.gi.total);
@@ -5253,8 +5119,11 @@ addLayer('gi', {
 		return eff;
 	},
 	effectDescription() {
+		if (hasMilestone('gi', 19) && player.h.limitsBroken >= 4) {
+			return 'which multiplies sanctum gain and glow gain by <h2 class="layer-gi">' + format(tmp.gi.effect) + '</h2>x';
+		};
 		let text = 'which multiplies prayer gain by <h2 class="layer-gi">' + format(tmp.gi.effect) + '</h2>x (based on total)';
-		if (this.effect().gte(softcaps.gi_eff[0]) && !hasMilestone('gi', 18)) text += ' (softcapped)';
+		if (this.effect().gte(softcaps.gi_eff[0]) && !(hasMilestone('gi', 18) && player.h.limitsBroken >= 4)) text += ' (softcapped)';
 		return text;
 	},
 	doReset(resettingLayer) {
@@ -5287,7 +5156,7 @@ addLayer('gi', {
 	milestones: {
 		0: {
 			requirementDescription: '1 good influence',
-			effectDescription: 'unlock relic upgrades, and good<br>influence resets don\'t reset relics',
+			effectDescription: 'unlock relic upgrades and<br>good influence resets don\'t reset relics',
 			done() { return player.gi.points.gte(1) },
 		},
 		1: {
@@ -5351,7 +5220,7 @@ addLayer('gi', {
 		},
 		11: {
 			requirementDescription: '21 good influence',
-			effectDescription: 'you can explore 3 further molecule upgrades,<br>and you can autobuy atom upgrades',
+			effectDescription: 'you can explore 3 further molecule upgrades<br>and you can autobuy atom upgrades',
 			done() { return player.gi.points.gte(21) },
 			toggles: [['a', 'auto_upgrades']],
 			unlocked() { return hasMilestone('gi', 9) },
@@ -5394,9 +5263,15 @@ addLayer('gi', {
 		},
 		18: {
 			requirementDescription: '16,100 good influence and<br>4 limits broken',
-			effectDescription() { return 'remove the good influence effect softcap and improve the good influence effect formula' },
+			effectDescription() { return 'remove the good influence effect softcap and<br>improve the good influence effect formula<br>if you have at least 4 limits broken' },
 			done() { return player.gi.points.gte(16100) && player.h.limitsBroken >= 4 },
 			unlocked() { return hasMilestone('gi', 17) && player.h.limitsBroken >= 4 },
+		},
+		19: {
+			requirementDescription: '20,640 good influence<br>and 2.5e17 glow',
+			effectDescription() { return 'change the good influence effect<br>if you have at least 4 limits broken' },
+			done() { return player.gi.points.gte(20640) && player.h.limitsBroken >= 4 && player.s.glow.gte(2.5e17) },
+			unlocked() { return hasMilestone('gi', 18) && player.h.limitsBroken >= 4 },
 		},
 	},
 	buyables: {
@@ -5417,9 +5292,7 @@ addLayer('gi', {
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() { return getBuyableAmount('gi', this.id) },
-			display() {
-				return 'increases the good influence effect base by 1 per this upgrade bought.<br>Currently: +' + format(buyableEffect('gi', this.id)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', this.id)) + '/' + formatWhole(this.purchaseLimit());
-			},
+			display() { return 'increases the good influence effect base by 1 per this upgrade bought.<br>Currently: +' + format(buyableEffect('gi', this.id)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', this.id)) + '/' + formatWhole(this.purchaseLimit()) },
 		},
 		12: {
 			cost() { return getBuyableAmount('gi', this.id).div(5).add(1).floor() },
@@ -5535,9 +5408,7 @@ addLayer('ei', {
 		if (hasChallenge('ei', 12)) eff = eff.pow(1.075);
 		return eff;
 	},
-	effectDescription() {
-		return 'which generates <h2 class="layer-ei">' + formatSmall(tmp.ei.effect) + '</h2> evil power per second';
-	},
+	effectDescription() { return 'which generates <h2 class="layer-ei">' + formatSmall(tmp.ei.effect) + '</h2> evil power per second' },
 	doReset(resettingLayer) {
 		if (hasMilestone('cl', 3) && resettingLayer == 'cl') return;
 		let keep = ['auto_upgrades', 'auto_prestige'];
@@ -5589,9 +5460,7 @@ addLayer('ei', {
 					"upgrades",
 				];
 			},
-			unlocked() {
-				return hasMilestone('ei', 5) || player.ei.activeChallenge;
-			},
+			unlocked() { return hasMilestone('ei', 5) || player.ei.activeChallenge },
 		},
 	},
 	milestones: {
@@ -5633,14 +5502,10 @@ addLayer('ei', {
 	},
 	upgrades: {
 		11: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Cycle of Evil';
-			},
+			title() { return '<b class="layer-ei' + getdark(this, "title") + 'Cycle of Evil' },
 			description: 'multiplies evil influence gain based on your evil power',
 			cost: 2,
-			effect() {
-				return player.ei.power.add(1).log10().add(1);
-			},
+			effect() { return player.ei.power.add(1).log10().add(1) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: log10(x+1)+1';
@@ -5648,14 +5513,10 @@ addLayer('ei', {
 			},
 		},
 		12: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Power Up';
-			},
+			title() { return '<b class="layer-ei' + getdark(this, "title") + 'Evil Power Up' },
 			description: 'multiplies evil power gain based on your evil power',
 			cost: 3,
-			effect() {
-				return player.ei.power.add(1).pow(0.1);
-			},
+			effect() { return player.ei.power.add(1).pow(0.1) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.1';
@@ -5664,22 +5525,16 @@ addLayer('ei', {
 			unlocked() { return hasUpgrade('ei', 11) },
 		},
 		13: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'More Evil';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'More Evil' },
 			description: 'reduces evil influence cost scaling<br>12 --> 7.75',
 			cost: 3,
 			unlocked() { return hasUpgrade('ei', 12) },
 		},
 		14: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Rising Conflict';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Rising Conflict' },
 			description: 'multiplies evil power gain based on your good influence',
 			cost: 4,
-			effect() {
-				return player.gi.points.add(1).pow(0.75);
-			},
+			effect() { return  player.gi.points.add(1).pow(0.75) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.75';
@@ -5688,24 +5543,16 @@ addLayer('ei', {
 			unlocked() { return hasUpgrade('ei', 13) },
 		},
 		15: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Laughter';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Evil Laughter' },
 			description: 'increases evil power\'s base gain<br>2 --> 4',
 			cost: 4,
 			unlocked() { return hasUpgrade('ei', 14) },
 		},
 		21: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'The Cycle Continues';
-			},
-			description() {
-				return 'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Cycle of Evil</b> based on your evil power';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'The Cycle Continues' },
+			description() { return  'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Cycle of Evil</b> based on your evil power' },
 			cost: 4,
-			effect() {
-				return player.ei.power.add(1).log10().add(1);
-			},
+			effect() { return  player.ei.power.add(1).log10().add(1) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: log10(x+1)+1';
@@ -5714,16 +5561,10 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		22: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Stronger Evil';
-			},
-			description() {
-				return 'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Evil Power Up</b> based on your evil power';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Stronger Evil' },
+			description() { return  'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Evil Power Up</b> based on your evil power' },
 			cost: 5,
-			effect() {
-				return player.ei.power.add(1).pow(0.2);
-			},
+			effect() { return  player.ei.power.add(1).pow(0.2) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.2';
@@ -5732,22 +5573,16 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		23: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Even More Evil';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Even More Evil' },
 			description: 'reduces evil influence cost scaling<br>7.75 --> 7.25',
 			cost: 5,
 			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		24: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Daredevil';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Daredevil' },
 			description: 'multiplies good influence gain based on your evil power',
 			cost: 6,
-			effect() {
-				return player.ei.power.add(1).log10().add(1).pow(0.0175);
-			},
+			effect() { return  player.ei.power.add(1).log10().add(1).pow(0.0175) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^0.0175';
@@ -5756,24 +5591,16 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		25: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'The Evil Eye';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'The Evil Eye' },
 			description: 'increases evil power\'s base gain<br>4 --> 6',
 			cost: 6,
 			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		31: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Demonic Cycle';
-			},
-			description() {
-				return 'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'The Cycle Continues</b> based on your demon souls';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Demonic Cycle' },
+			description() { return  'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'The Cycle Continues</b> based on your demon souls' },
 			cost: 6,
-			effect() {
-				return player.ds.points.add(1).log10().add(1).pow(0.02);
-			},
+			effect() { return  player.ds.points.add(1).log10().add(1).pow(0.02) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^0.02';
@@ -5782,16 +5609,10 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 10 },
 		},
 		32: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Demonic Evil';
-			},
-			description() {
-				return 'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Stronger Evil</b> based on your demon souls';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Demonic Evil' },
+			description() { return  'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Stronger Evil</b> based on your demon souls' },
 			cost: 7,
-			effect() {
-				return player.ds.points.add(1).log10().add(1).pow(0.9);
-			},
+			effect() { return  player.ds.points.add(1).log10().add(1).pow(0.9) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^0.9';
@@ -5800,22 +5621,16 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 10 },
 		},
 		33: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Gathering';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Evil Gathering' },
 			description: 'reduces evil influence cost scaling<br>7.25 --> 7',
 			cost: 7,
 			unlocked() { return player.ei.upgrades.length >= 10 },
 		},
 		34: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Greedy Evil';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Greedy Evil' },
 			description: 'multiplies relic gain based on your evil power',
 			cost: 8,
-			effect() {
-				return player.ei.power.add(1).log10().add(1).pow(0.01);
-			},
+			effect() { return  player.ei.power.add(1).log10().add(1).pow(0.01) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^0.01';
@@ -5824,24 +5639,16 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 10 },
 		},
 		35: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Innate Evil';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Innate Evil' },
 			description: 'increases evil power\'s base gain<br>6 --> 8',
 			cost: 8,
 			unlocked() { return player.ei.upgrades.length >= 10 },
 		},
 		41: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Longer Cycle';
-			},
-			description() {
-				return 'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Demonic Cycle</b> based on your evil power';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Longer Cycle' },
+			description() { return  'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Demonic Cycle</b> based on your evil power' },
 			cost: 8,
-			effect() {
-				return player.ei.power.add(1).log10().add(1).pow(0.06);
-			},
+			effect() { return  player.ei.power.add(1).log10().add(1).pow(0.06) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^0.06';
@@ -5850,16 +5657,10 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 15 },
 		},
 		42: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Crimson Evil';
-			},
-			description() {
-				return 'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Demonic Evil</b> based on your demon souls';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Crimson Evil' },
+			description() { return  'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Demonic Evil</b> based on your demon souls' },
 			cost: 9,
-			effect() {
-				return player.ds.points.add(1).log10().add(1).pow(0.5);
-			},
+			effect() { return  player.ds.points.add(1).log10().add(1).pow(0.5) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^0.5';
@@ -5868,22 +5669,16 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 15 },
 		},
 		43: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Condensing';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Evil Condensing' },
 			description: 'reduces evil influence cost scaling<br>7 --> 6.75',
 			cost: 9,
 			unlocked() { return player.ei.upgrades.length >= 15 },
 		},
 		44: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Infiltration';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Evil Infiltration' },
 			description: 'multiplies evil power gain based on your sanctums',
 			cost: 10,
-			effect() {
-				return player.s.points.add(1).log10().add(1).pow(4);
-			},
+			effect() { return  player.s.points.add(1).log10().add(1).pow(4) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^4';
@@ -5892,24 +5687,16 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 15 },
 		},
 		45: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Schemes';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Evil Schemes' },
 			description: 'increases evil power\'s base gain<br>8 --> 10',
 			cost: 10,
 			unlocked() { return player.ei.upgrades.length >= 15 },
 		},
 		52: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Bloody Evil';
-			},
-			description() {
-				return 'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Crimson Evil</b> based on your evil power';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Bloody Evil' },
+			description() { return  'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Crimson Evil</b> based on your evil power' },
 			cost: 11,
-			effect() {
-				return player.ei.power.add(1).pow(0.15);
-			},
+			effect() { return  player.ei.power.add(1).pow(0.15) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.15';
@@ -5918,22 +5705,16 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 20 },
 		},
 		53: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Amassing Evil';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Amassing Evil' },
 			description: 'reduces evil influence cost scaling<br>6.75 --> 6.55',
 			cost: 12,
 			unlocked() { return player.ei.upgrades.length >= 20 },
 		},
 		54: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Determination';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Determination' },
 			description: 'multiplies evil influence gain based on your good influence',
 			cost: 13,
-			effect() {
-				return player.gi.points.add(1).log10().add(1).pow(0.8);
-			},
+			effect() { return  player.gi.points.add(1).log10().add(1).pow(0.8) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^0.8';
@@ -5942,16 +5723,10 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 20 },
 		},
 		62: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Empower Evil';
-			},
-			description() {
-				return 'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Bloody Evil</b> based on your evil power';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Empower Evil' },
+			description() { return  'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Bloody Evil</b> based on your evil power' },
 			cost: 15,
-			effect() {
-				return player.ei.power.add(1).pow(0.1);
-			},
+			effect() { return  player.ei.power.add(1).pow(0.1) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.1';
@@ -5960,22 +5735,16 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 23 },
 		},
 		63: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Army of Evil';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Army of Evil' },
 			description: 'reduces evil influence cost scaling<br>6.55 --> 6.45',
 			cost: 16,
 			unlocked() { return player.ei.upgrades.length >= 23 },
 		},
 		64: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Rituals';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Evil Rituals' },
 			description: 'multiplies evil influence gain based on your sanctums',
 			cost: 17,
-			effect() {
-				return player.gi.points.add(1).log10().add(1).pow(0.55);
-			},
+			effect() { return  player.gi.points.add(1).log10().add(1).pow(0.55) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^0.55';
@@ -5984,16 +5753,10 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 23 },
 		},
 		72: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Powerful Evil';
-			},
-			description() {
-				return 'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Empower Evil</b> based on your evil power';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Powerful Evil' },
+			description() { return  'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Empower Evil</b> based on your evil power' },
 			cost: 19,
-			effect() {
-				return player.ei.power.add(1).pow(0.145);
-			},
+			effect() { return  player.ei.power.add(1).pow(0.145) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (x+1)^0.145';
@@ -6002,22 +5765,16 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 26 },
 		},
 		73: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Kingdom';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Evil Kingdom' },
 			description: 'reduces evil influence cost scaling<br>6.45 --> 6.25',
 			cost: 22,
 			unlocked() { return player.ei.upgrades.length >= 26 },
 		},
 		74: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Evil Prayers';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Evil Prayers' },
 			description: 'multiplies evil power gain based on your prayers',
 			cost: 25,
-			effect() {
-				return player.p.points.add(1).log10().add(1).pow(3.6);
-			},
+			effect() { return  player.p.points.add(1).log10().add(1).pow(3.6) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: (log10(x+1)+1)^3.6';
@@ -6026,9 +5783,7 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 26 },
 		},
 		83: {
-			title() {
-				return '<b class="layer-ei' + getdark(this, "title") + 'Infinite Evil';
-			},
+			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Infinite Evil' },
 			description: 'reduces evil influence cost scaling<br>6.25 --> 5.75',
 			cost: 30,
 			unlocked() { return player.ei.upgrades.length >= 29 },
@@ -6037,7 +5792,7 @@ addLayer('ei', {
 	challenges: {
 		11: {
 			name() {
-				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ei">Build the Gate';
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ei">Build the Gate';
 				return '<h3>Build the Gate';
 			},
 			challengeDescription: ' - Resets evil influence milestones<br> - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Forces an evil influence reset<br> - Divides evil power gain by 1,000<br>',
@@ -6054,7 +5809,7 @@ addLayer('ei', {
 		},
 		12: {
 			name() {
-				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ei">Power the Gate';
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ei">Power the Gate';
 				return '<h3>Power the Gate';
 			},
 			challengeDescription: " - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Forces an evil influence reset<br> - Divides evil power gain by 100,000,000<br>",
@@ -6074,7 +5829,7 @@ addLayer('ei', {
 		},
 		21: {
 			name() {
-				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ei">Enter the Gate';
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ei">Enter the Gate';
 				return '<h3>Enter the Gate';
 			},
 			challengeDescription: " - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Resets your relics to 0<br> - Divides evil power gain by 1e15<br>",
@@ -6094,12 +5849,10 @@ addLayer('ei', {
 		},
 		22: {
 			name() {
-				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ei">And Repeat';
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ei">And Repeat';
 				return '<h3>And Repeat';
 			},
-			challengeDescription() {
-				return 'Endure the negative effects of all the other <b class="layer-ei' + getdark(this, "ref", true, true) + 'Gate of Evil</b> challenges. It is recommended to turn the evil influence upgrade autobuyer off.<br>';
-			},
+			challengeDescription() { return 'Endure the negative effects of all the other <b class="layer-ei' + getdark(this, "ref", true, true) + 'Gate of Evil</b> challenges. It is recommended to turn the evil influence upgrade autobuyer off.<br>' },
 			goalDescription: '1e500 evil power and 144 relics<br>',
 			canComplete() { return player.ei.power.gte('1e500') && player.r.points.gte(144) },
 			unlocked() { return hasChallenge('ei', 21) && hasMilestone('w', 1) },
@@ -6151,9 +5904,7 @@ addLayer('w', {
 	},
 	canReset() { return this.getResetGain().gt(0) },
 	prestigeNotify() { return this.getResetGain().gt(0) },
-	prestigeButtonText() {
-		return 'Reset for +<b>' + formatWhole(this.getResetGain()) + '</b> wars<br><br>' + (player.w.points.lt(30) ? (this.canBuyMax() ? 'Next:' : 'Req:') : '') + ' ' + formatWhole(player.gi.points) + ' / ' + format(this.getNextAt()) + ' GI<br>' + (player.w.points.lt(30) ? 'and ' : '') + formatWhole(player.ei.points) + ' / ' + format(this.getNextAt()) + ' EI';
-	},
+	prestigeButtonText() { return 'Reset for +<b>' + formatWhole(this.getResetGain()) + '</b> wars<br><br>' + (player.w.points.lt(30) ? (this.canBuyMax() ? 'Next:' : 'Req:') : '') + ' ' + formatWhole(player.gi.points) + ' / ' + format(this.getNextAt()) + ' GI<br>' + (player.w.points.lt(30) ? 'and ' : '') + formatWhole(player.ei.points) + ' / ' + format(this.getNextAt()) + ' EI' },
 	canBuyMax() { return hasMilestone('ch', 0) },
 	onPrestige() {
 		if (hasMilestone('w', 5)) return;
@@ -6178,9 +5929,7 @@ addLayer('w', {
 	},
 	autoPrestige() { return hasMilestone('w', 17) },
 	row: 5,
-	tooltipLocked() {
-		return 'Reach ' + this.requires + ' GI and ' + this.requires + ' EI to unlock (You have ' + formatWhole(player.gi.points) + ' GI and ' + formatWhole(player.ei.points) + ' EI)';
-	},
+	tooltipLocked() { return 'Reach ' + this.requires + ' GI and ' + this.requires + ' EI to unlock (You have ' + formatWhole(player.gi.points) + ' GI and ' + formatWhole(player.ei.points) + ' EI)' },
 	hotkeys: [
 		{key: 'w', description: 'W: Reset for wars', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
@@ -6195,12 +5944,8 @@ addLayer('w', {
 			};
 		};
 	},
-	effect() {
-		return [new Decimal(1e10).pow(player.w.points), player.w.points.add(1).log10().add(1).pow(0.333), player.w.points.add(1).pow(1.5)];
-	},
-	effectDescription() {
-		return 'which multiplies point, essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x, atom, sanctum, relic, molecule, good influence, and evil influence by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x, and also light gain after hardcap by <h2 class="layer-w">' + format(tmp.w.effect[2]) + '</h2>x';
-	},
+	effect() { return [new Decimal(1e10).pow(player.w.points), player.w.points.add(1).log10().add(1).pow(0.333), player.w.points.add(1).pow(1.5)] },
+	effectDescription() { return 'which multiplies point, essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x, atom, sanctum, relic, molecule, good influence, and evil influence by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x, and also light gain after hardcap by <h2 class="layer-w">' + format(tmp.w.effect[2]) + '</h2>x' },
 	doReset(resettingLayer) {
 		if (hasMilestone('ch', 12) && resettingLayer == 'ch') return;
 		let keep = ['auto_influence'], save;
@@ -6434,7 +6179,7 @@ addLayer('w', {
 				return getBuyableAmount('w', this.id).mul(5).add(163);
 			},
 			title() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return '<h3 class="layer-w-dark">Rivalry';
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-w-dark">Rivalry';
 				return '<h3>Rivalry';
 			},
 			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) },
@@ -6449,9 +6194,7 @@ addLayer('w', {
 				};
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() {
-				return [getBuyableAmount('w', this.id).add(1).pow(0.09), getBuyableAmount('w', this.id).add(1).pow(0.21)];
-			},
+			effect() { return  [getBuyableAmount('w', this.id).add(1).pow(0.09), getBuyableAmount('w', this.id).add(1).pow(0.21)] },
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formulas: (x+1)^0.09<br>and (x+1)^0.21';
@@ -6470,7 +6213,7 @@ addLayer('w', {
 				return getBuyableAmount('w', this.id).mul(8).add(170);
 			},
 			title() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return '<h3 class="layer-w-dark">Relic Hoarding';
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-w-dark">Relic Hoarding';
 				return '<h3>Relic Hoarding';
 			},
 			canAfford() { return player.r.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
@@ -6480,9 +6223,7 @@ addLayer('w', {
 				else player.r.points = player.r.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() {
-				return player.r.points.add(1).pow(0.1).mul(getBuyableAmount('w', this.id)).add(1).pow(0.25);
-			},
+			effect() { return  player.r.points.add(1).pow(0.1).mul(getBuyableAmount('w', this.id)).add(1).pow(0.25) },
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: (((x+1)^0.1)*y+1)^0.25';
@@ -6497,7 +6238,7 @@ addLayer('w', {
 				return getBuyableAmount('w', this.id).mul(70000).add(320000);
 			},
 			title() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return '<h3 class="layer-w-dark">Power of Good';
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-w-dark">Power of Good';
 				return '<h3>Power of Good';
 			},
 			canAfford() { return player.s.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
@@ -6534,7 +6275,7 @@ addLayer('w', {
 		21: {
 			cost() { return getBuyableAmount('w', this.id).mul(5).add(235) },
 			title() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return '<h3 class="layer-w-dark">Race for Knowledge';
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-w-dark">Race for Knowledge';
 				return '<h3>Race for Knowledge';
 			},
 			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
@@ -6632,7 +6373,10 @@ addLayer('cl', {
 		};
 		if (hasMilestone('ch', 1)) {
 			if (player.cl.auto_buyable_31 && layers.cl.buyables[31].canAfford()) layers.cl.buyables[31].buy();
-			if (player.cl.auto_buyable_32 && layers.cl.buyables[32].canAfford()) layers.cl.buyables[32].buy();
+			if (player.cl.auto_buyable_32 && layers.cl.buyables[32].canAfford()) {
+				layers.cl.buyables[32].buy();
+				if (hasMilestone('ch', 22) && layers.cl.buyables[32].canAfford()) layers.cl.buyables[32].buy();
+			};
 			if (player.cl.auto_buyable_33 && layers.cl.buyables[33].canAfford()) layers.cl.buyables[33].buy();
 		};
 		if (hasMilestone('ch', 6)) {
@@ -6813,9 +6557,7 @@ addLayer('cl', {
 				player.cl.points = player.cl.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() {
-				return [getBuyableAmount('cl', this.id).add(1).pow(0.05), getBuyableAmount('cl', this.id).add(1).pow(1.5)];
-			},
+			effect() { return  [getBuyableAmount('cl', this.id).add(1).pow(0.05), getBuyableAmount('cl', this.id).add(1).pow(1.5)] },
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formulas: (x+1)^0.05<br>and (x+1)^1.5';
@@ -6834,9 +6576,7 @@ addLayer('cl', {
 				player.cl.points = player.cl.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() {
-				return [getBuyableAmount('cl', this.id).add(1).pow(0.0175), getBuyableAmount('cl', this.id).add(1).pow(0.5)];
-			},
+			effect() { return  [getBuyableAmount('cl', this.id).add(1).pow(0.0175), getBuyableAmount('cl', this.id).add(1).pow(0.5)] },
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formulas: (x+1)^0.0175<br>and (x+1)^0.5';
@@ -6856,9 +6596,7 @@ addLayer('cl', {
 				player.cl.points = player.cl.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() {
-				return [getBuyableAmount('cl', this.id).add(1).pow(0.025), getBuyableAmount('cl', this.id).add(1).pow(0.75)];
-			},
+			effect() { return  [getBuyableAmount('cl', this.id).add(1).pow(0.025), getBuyableAmount('cl', this.id).add(1).pow(0.75)] },
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formulas: (x+1)^0.025<br>and (x+1)^0.75';
@@ -6875,9 +6613,7 @@ addLayer('cl', {
 				player.cl.points = player.cl.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() {
-				return [getBuyableAmount('cl', this.id).add(1).pow(0.075), getBuyableAmount('cl', this.id).add(1).pow(0.36)];
-			},
+			effect() { return  [getBuyableAmount('cl', this.id).add(1).pow(0.075), getBuyableAmount('cl', this.id).add(1).pow(0.36)] },
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formulas: (x+1)^0.075<br>and (x+1)^0.36';
@@ -6894,9 +6630,7 @@ addLayer('cl', {
 				player.cl.points = player.cl.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() {
-				return player.cl.best.mul(getBuyableAmount('cl', this.id).pow(2)).add(1).pow(0.25);
-			},
+			effect() { return  player.cl.best.mul(getBuyableAmount('cl', this.id).pow(2)).add(1).pow(0.25) },
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: (x(y^2)+1)^0.25';
@@ -6912,9 +6646,7 @@ addLayer('cl', {
 				player.cl.protein = player.cl.protein.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() {
-				return player.w.points.mul(getBuyableAmount('cl', this.id)).add(1).pow(1.5);
-			},
+			effect() { return  player.w.points.mul(getBuyableAmount('cl', this.id)).add(1).pow(1.5) },
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: (xy+1)^1.5';
@@ -6930,9 +6662,7 @@ addLayer('cl', {
 				player.cl.protein = player.cl.protein.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() {
-				return new Decimal(6).pow(getBuyableAmount('cl', this.id));
-			},
+			effect() { return  new Decimal(6).pow(getBuyableAmount('cl', this.id)) },
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: 6^x';
@@ -6954,9 +6684,7 @@ addLayer('cl', {
 				player.m.points = player.m.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() {
-				return new Decimal(3).pow(getBuyableAmount('cl', this.id));
-			},
+			effect() { return  new Decimal(3).pow(getBuyableAmount('cl', this.id)) },
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: 3^x';
@@ -6972,9 +6700,7 @@ addLayer('cl', {
 				player.cl.protein = player.cl.protein.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() {
-				return new Decimal(5).pow(getBuyableAmount('cl', this.id));
-			},
+			effect() { return  new Decimal(5).pow(getBuyableAmount('cl', this.id)) },
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: 5^x';
@@ -7014,9 +6740,7 @@ addLayer('cl', {
 				player.cl.points = player.cl.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() {
-				return getBuyableAmount('cl', this.id).add(1).pow(10);
-			},
+			effect() { return  getBuyableAmount('cl', this.id).add(1).pow(10) },
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: (x+1)^10';
@@ -7033,9 +6757,7 @@ addLayer('cl', {
 				player.cl.protein = player.cl.protein.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() {
-				return new Decimal(10).pow(getBuyableAmount('cl', this.id));
-			},
+			effect() { return  new Decimal(10).pow(getBuyableAmount('cl', this.id)) },
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: 10^x';
@@ -7122,36 +6844,26 @@ addLayer('ch', {
 	},
 	canReset() { return this.getResetGain().gt(0) },
 	prestigeNotify() { return this.getResetGain().gt(0) },
-	prestigeButtonText() {
-		return randomStr(5) + ' ' + randomStr(3) + ' +<b>' + formatWhole(this.getResetGain()) + '</b> ' + randomStr(5) + '<br><br>' + (player.ch.points.lt(30) ? ( /* this.canBuyMax() ? randomStr(4) + ':' : */ randomStr(3) + ':') : '') + ' ' + formatWhole(tmp.ch.baseAmount) + ' / ' + formatWhole(this.getNextAt()) + ' ' + randomStr(4);
-	},
+	prestigeButtonText() { return randomStr(5) + ' ' + randomStr(3) + ' +<b>' + formatWhole(this.getResetGain()) + '</b> ' + randomStr(5) + '<br><br>' + (player.ch.points.lt(30) ? randomStr(3) + ':' : '') + ' ' + formatWhole(tmp.ch.baseAmount) + ' / ' + formatWhole(this.getNextAt()) + ' ' + randomStr(4) },
 	canBuyMax() { return false },
 	gainExp() {
 		let gain = new Decimal(1);
 		return gain;
 	},
 	row: 6,
-	tooltip() {
-		return formatWhole(player.ch.points) + ' ' + randomStr(5);
-	},
-	tooltipLocked() {
-		return randomStr(5) + ' ' + this.requires + ' ' + randomStr(4) + ' ' + randomStr(2) + ' ' + randomStr(6) + ' (' + randomStr(3) + ' ' + randomStr(4) + ' ' + formatWhole(player.w.points) + ' ' + randomStr(4) + ')';
-	},
+	tooltip() { return formatWhole(player.ch.points) + ' ' + randomStr(5) },
+	tooltipLocked() { return randomStr(5) + ' ' + this.requires + ' ' + randomStr(4) + ' ' + randomStr(2) + ' ' + randomStr(6) + ' (' + randomStr(3) + ' ' + randomStr(4) + ' ' + formatWhole(player.w.points) + ' ' + randomStr(4) + ')' },
 	hotkeys: [
 		{key: 'C', description: 'Shift-C: Reset for chaos', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() { return player.cl.unlocked || player.ch.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
-	effect() {
-		return [
-			(hasMilestone('ch', 15) ? new Decimal('e1e11').pow(player.ch.points) : new Decimal('1e1000').pow(player.ch.points)),
-			(hasMilestone('ch', 19) ? player.ch.points.add(1).pow(0.0575) : player.ch.points.add(1).pow(0.0485)),
-			(hasMilestone('ch', 3) ? new Decimal(75).pow(player.ch.points) : new Decimal(25).pow(player.ch.points)),
-		];
-	},
-	effectDescription() {
-		return 'which multiplies essence gain by <h2 class="layer-ch">' + format(tmp.ch.effect[0]) + '</h2>x, multiplies war gain by <h2 class="layer-ch">' + format(tmp.ch.effect[1]) + '</h2>x, and multiplies protein found from cellular life by <h2 class="layer-ch">' + format(tmp.ch.effect[2]) + '</h2>x';
-	},
+	effect() { return [
+		(hasMilestone('ch', 15) ? new Decimal('e1e11').pow(player.ch.points) : new Decimal('1e1000').pow(player.ch.points)),
+		(hasMilestone('ch', 19) ? player.ch.points.add(1).pow(0.0575) : player.ch.points.add(1).pow(0.0485)),
+		(hasMilestone('ch', 3) ? new Decimal(75).pow(player.ch.points) : new Decimal(25).pow(player.ch.points)),
+	]},
+	effectDescription() { return 'which multiplies essence gain by <h2 class="layer-ch">' + format(tmp.ch.effect[0]) + '</h2>x, multiplies war gain by <h2 class="layer-ch">' + format(tmp.ch.effect[1]) + '</h2>x, and multiplies protein found from cellular life by <h2 class="layer-ch">' + format(tmp.ch.effect[2]) + '</h2>x' },
 	doReset(resettingLayer) {
 		let keep = [];
 			if (layers[resettingLayer].row > this.row) layerDataReset('ch', keep);
@@ -7307,6 +7019,7 @@ addLayer('ch', {
 		16: {
 			requirementDescription: '42 chaos',
 			effect() {
+				if (hasMilestone('ch', 21)) return ((player.ch.challenges[11] + player.ch.challenges[12]) / 250 + 1) ** 6;
 				if (hasMilestone('ch', 20)) return ((player.ch.challenges[11] + player.ch.challenges[12]) / 250 + 1) ** 3.5;
 				if (hasMilestone('ch', 19)) return ((player.ch.challenges[11] + player.ch.challenges[12]) / 250 + 1) ** 3.325;
 				if (hasMilestone('ch', 18)) return ((player.ch.challenges[11] + player.ch.challenges[12]) / 250 + 1) ** 1.8;
@@ -7340,20 +7053,33 @@ addLayer('ch', {
 		},
 		20: {
 			requirementDescription: '55 chaos',
-			effectDescription: 'you can autobuy the second quark rebuyable and improve the effect formula of the 42 chaos milestone',
+			effectDescription: 'you can autobuy the second quark rebuyable, the quark upgrade autobuyer can buy the last row, and improve the effect formula of the 42 chaos milestone',
 			done() { return player.ch.points.gte(55) },
 			toggles: [['q', 'auto_buyable_12']],
+			unlocked() { return player.mo.unlocked },
+		},
+		21: {
+			requirementDescription: '57 chaos',
+			effectDescription: 'you gain 10x glow, improve the effect formula of the 42 chaos milestone, and you can bulk buy multicellular organisms',
+			done() { return player.ch.points.gte(57) },
+			unlocked() { return player.mo.unlocked },
+		},
+		22: {
+			requirementDescription: '59 chaos',
+			effectDescription() { return 'you can autobuy the third and fourth quark rebuyables and the <b class="layer-cl' + getdark(this, "ref", true, true) + 'Result Analyzing</b> autobuyer is 2x faster' },
+			done() { return player.ch.points.gte(59) },
+			toggles: [['q', 'auto_buyable_13'], ['q', 'auto_buyable_21']],
 			unlocked() { return player.mo.unlocked },
 		},
 	},
 	challenges: {
 		11: {
 			name() {
-				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ch">Tide of Evil';
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ch">Tide of Evil';
 				return '<h3>Tide of Evil';
 			},
 			challengeDescription: "- Forces a chaos reset<br>- Disables good influence<br>- Multiplies demon soul gain by 1e3200<br>- Multiplies evil influence gain by 1.1",
-			goalLayers: [17, 18, 60, 70, 80, 100, 120, 140, 64175, 64500, 64888, 65250, 70750, 71250, 71750],
+			goalLayers: [17, 18, 60, 70, 80, 100, 120, 140, 64175, 64500, 64888, 65250, 70750, 71250, 71750, 94250, 95250, 96750, 98000, 99500],
 			goal() { return this.goalLayers[challengeCompletions('ch', this.id)] || Infinity },
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' evil influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit },
 			canComplete() { return player.ei.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
@@ -7371,14 +7097,15 @@ addLayer('ch', {
 		},
 		12: {
 			name() {
-				if (colorvalue[0][1] && colorvalue[1] != 'none') return '<h3 class="layer-ch">Tide of Good';
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ch">Tide of Good';
 				return '<h3>Tide of Good';
 			},
 			challengeDescription: "- Forces a chaos reset<br>- Disables evil influence<br>",
 			goal() {
 				if (challengeCompletions('ch', this.id) < 3) return challengeCompletions('ch', this.id) * 25 + 85;
 				if (challengeCompletions('ch', this.id) < 14) return challengeCompletions('ch', this.id) * 50 + 600;
-				return challengeCompletions('ch', this.id) * 400 + 400;
+				if (challengeCompletions('ch', this.id) < 27) return challengeCompletions('ch', this.id) * 400 + 400;
+				return challengeCompletions('ch', this.id) * 500;
 			},
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' good influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit + '<br>' },
 			canComplete() { return player.gi.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
@@ -7430,7 +7157,7 @@ addLayer('mo', {
 		return 1.2;
 	},
 	exponent: 1,
-	canBuyMax() { return false },
+	canBuyMax() { return hasMilestone('ch', 21) },
 	gainExp() {
 		let gain = new Decimal(1);
 		if (hasMilestone('ch', 16)) gain = gain.mul(milestoneEffect('ch', 16));
@@ -7492,9 +7219,7 @@ addLayer('mo', {
 					"blank",
 				];
 			},
-			unlocked() {
-				return isAssimilated('a') || player.mo.assimilating === 'a';
-			},
+			unlocked() { return isAssimilated('a') || player.mo.assimilating === 'a' },
 		},
 	},
 	clickables: {
@@ -7505,7 +7230,7 @@ addLayer('mo', {
 				else if (getClickableState('mo', 11)) return '<br>You are in an Assimilation Search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click here to exit the search.';
 				else return '<br>Begin an Assimilation search.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
 			},
-			req() { return [1, 2, 3, 4, 7, 12, 16, 21, Infinity][player.mo.assimilated.length] },
+			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, Infinity][player.mo.assimilated.length] },
 			canClick() { return getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req) },
 			onClick() {
 				if (player.mo.assimilating !== null) {
@@ -7533,7 +7258,10 @@ addLayer('mo', {
 		11: {
 			cost() { return getBuyableAmount('mo', this.id).div(2).add(1).mul(18) },
 			effect() { return new Decimal(1000).pow(getBuyableAmount('mo', this.id)) },
-			title() { return '<b class="layer-a">Atom</b> <b class="layer-mo' + getdark(this, "title-buyable") + 'Synergy' },
+			title() {
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<b class="layer-a">Atom</b> <b class="layer-mo' + getdark(this, "title-buyable") + 'Synergy';
+				else return '<b>Atom</b> <b>Synergy';
+			},
 			display() {
 				let text = '';
 				if (player.nerdMode) text = '<br>formula: 1000^x';
@@ -7545,6 +7273,25 @@ addLayer('mo', {
 				addBuyables('mo', this.id, 1);
 			},
 			unlocked() { return isAssimilated('a') || player.mo.assimilating === 'a' },
+		},
+		12: {
+			cost() { return getBuyableAmount('mo', this.id).add(1).pow(2).add(50) },
+			effect() { return new Decimal(2).pow(getBuyableAmount('mo', this.id)) },
+			title() {
+				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<b class="layer-s">Sanctum</b> <b class="layer-mo' + getdark(this, "title-buyable") + 'Synergy';
+				else return '<b>Sanctum</b> <b>Synergy';
+			},
+			display() {
+				let text = '';
+				if (player.nerdMode) text = '<br>formula: 2^x';
+				return 'multiplies sanctum gain based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('mo', this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' multicellular organisms<br><br>Bought: ' + formatWhole(getBuyableAmount('mo', this.id));
+			},
+			canAfford() { return player.mo.points.gte(this.cost()) },
+			buy() {
+				player.mo.points = player.mo.points.sub(this.cost());
+				addBuyables('mo', this.id, 1);
+			},
+			unlocked() { return isAssimilated('s') || player.mo.assimilating === 's' },
 		},
 	},
 });

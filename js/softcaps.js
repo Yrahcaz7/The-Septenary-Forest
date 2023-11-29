@@ -45,7 +45,9 @@ addLayer('SC', {
 		if (tmp.p.effect.gte(softcaps.p_eff[0]()) && !tmp.p.deactivated) player.SC.softcaps.push("p-eff");
 		if (tmp.r.effect[0].gte(softcaps.r_eff1[0]) && !tmp.r.deactivated) player.SC.softcaps.push("r-eff1");
 		if (tmp.m.effect.gte(softcaps.m_eff[0]) && !tmp.m.deactivated) player.SC.softcaps.push("m-eff");
-		if (tmp.gi.effect.gte(softcaps.gi_eff[0]) && !tmp.gi.deactivated && !hasMilestone('gi', 18)) player.SC.softcaps.push("gi-eff");
+		if (tmp.gi.effect.gte(softcaps.gi_eff[0]) && !tmp.gi.deactivated && !(hasMilestone('gi', 18) && player.h.limitsBroken >= 4)) {
+			player.SC.softcaps.push("gi-eff");
+		};
 		player.SC.points = new Decimal(player.SC.softcaps.length);
 	},
 	tabFormat: [
