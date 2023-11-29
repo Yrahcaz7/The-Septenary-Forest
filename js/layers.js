@@ -63,9 +63,7 @@ addLayer('e', {
 		return mult;
 	},
 	row: 0,
-	hotkeys: [
-		{key: 'e', description: 'E: Reset for essence', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-	],
+	hotkeys: [{key: 'e', description: 'E: Reset for essence', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return true },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
@@ -120,16 +118,7 @@ addLayer('e', {
 			if (hasMilestone('ds', 4)) keep.push("buyables");
 			if (layers[resettingLayer].row > this.row) layerDataReset('e', keep);
 		},
-	tabFormat: [
-		"main-display",
-		["row", ["prestige-button", "assimilate-button"]],
-		"resource-display",
-		"blank",
-		"blank",
-		"buyables",
-		"blank",
-		"upgrades",
-	],
+	tabFormat: getTab('e'),
 	upgrades: {
 		11: {
 			title() { return '<b class="layer-e' + getdark(this, "title") + 'Faster Points' },
@@ -406,9 +395,7 @@ addLayer('c', {
 	softcap: new Decimal("1e1250"),
 	softcapPower: 0.7,
 	row: 1,
-	hotkeys: [
-		{key: 'c', description: 'C: Reset for cores', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-	],
+	hotkeys: [{key: 'c', description: 'C: Reset for cores', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return true },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
@@ -469,16 +456,7 @@ addLayer('c', {
 			if (hasMilestone('s', 25) && resettingLayer == 's') keep.push("milestones");
 			if (layers[resettingLayer].row > this.row) layerDataReset('c', keep);
 		},
-	tabFormat: [
-		"main-display",
-		["row", ["prestige-button", "assimilate-button"]],
-		"resource-display",
-		"blank",
-		"milestones",
-		"buyables",
-		"blank",
-		"upgrades",
-	],
+	tabFormat: getTab('c'),
 	milestones: {
 		0: {
 			requirementDescription: '10 cores',
@@ -782,9 +760,7 @@ addLayer('q', {
 	softcap: new Decimal("1e1250"),
 	softcapPower: 0.6,
 	row: 1,
-	hotkeys: [
-		{key: 'q', description: 'Q: Reset for quarks', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-	],
+	hotkeys: [{key: 'q', description: 'Q: Reset for quarks', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.c.unlocked || player.q.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
@@ -853,36 +829,10 @@ addLayer('q', {
 	},
 	tabFormat: {
 		"Quark Central": {
-			content: [
-				"main-display",
-				["row", ["prestige-button", "assimilate-button"]],
-				"resource-display",
-				"blank",
-				"milestones",
-				"upgrades",
-			],
+			content: getTab('q'),
 		},
 		"The Decipherer": {
-			content: () => {
-				if (tmp.q.tabFormat["The Decipherer"].unlocked) return [
-					"main-display",
-					["row", ["prestige-button", "assimilate-button"]],
-					"resource-display",
-					"blank",
-					["display-text", 'Your ' + randomStr(9) + ' is currently <h2 class="layer-q">' + formatSmall(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + '</h2> insight<br><br>Deciphered rate decays over time with a decay factor of ' + (hasUpgrade('q', 65) ? 0.1 : 0.001)],
-					"blank",
-					"buyables",
-					"blank",
-				];
-				return [
-					"main-display",
-					["row", ["prestige-button", "assimilate-button"]],
-					"resource-display",
-					"blank",
-					"milestones",
-					"upgrades",
-				];
-			},
+			content: getUnlockableTab('q', "The Decipherer"),
 			unlocked() { return hasUpgrade('q', 61) },
 		},
 	},
@@ -1363,9 +1313,7 @@ addLayer('sp', {
 	},
 	autoPrestige() { return hasMilestone('s', 11) },
 	row: 2,
-	hotkeys: [
-		{key: 'S', description: 'Shift-S: Reset for subatomic particles', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-	],
+	hotkeys: [{key: 'S', description: 'Shift-S: Reset for subatomic particles', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.q.unlocked || player.sp.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	automate() {
@@ -1397,16 +1345,7 @@ addLayer('sp', {
 			if (layers[resettingLayer].row > this.row) layerDataReset('sp', keep);
 		},
 	resetsNothing() { return hasMilestone('s', 11) || hasUpgrade('sp', 31) },
-	tabFormat: [
-		"main-display",
-		["row", ["prestige-button", "assimilate-button"]],
-		"resource-display",
-		"blank",
-		"milestones",
-		"buyables",
-		"blank",
-		"upgrades",
-	],
+	tabFormat: getTab('sp'),
 	milestones: {
 		0: {
 			requirementDescription: '1 subatomic particle',
@@ -1635,9 +1574,7 @@ addLayer('h', {
 		return 0.5;
 	},
 	row: 2,
-	hotkeys: [
-		{key: 'h', description: 'H: Reset for hexes', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-	],
+	hotkeys: [{key: 'h', description: 'H: Reset for hexes', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.sp.unlocked || player.h.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
@@ -1667,36 +1604,10 @@ addLayer('h', {
 		},
 	tabFormat: {
 		"Classic Hexes": {
-			content: [
-				"main-display",
-				["row", ["prestige-button", "assimilate-button"]],
-				"resource-display",
-				"blank",
-				"milestones",
-				"upgrades",
-			],
+			content: getTab('h'),
 		},
 		"The Breaker": {
-			content: () => {
-				if (tmp.h.tabFormat["The Breaker"].unlocked) return [
-					"main-display",
-					["row", ["prestige-button", "assimilate-button"]],
-					"resource-display",
-					"blank",
-					["clickable", "11"],
-					"blank",
-					["clickable", "21"],
-					"blank",
-				];
-				return [
-					"main-display",
-					["row", ["prestige-button", "assimilate-button"]],
-					"resource-display",
-					"blank",
-					"milestones",
-					"upgrades",
-				];
-			},
+			content: getUnlockableTab('h', "The Breaker"),
 			unlocked() { return hasUpgrade('h', 81) },
 		},
 	},
@@ -2137,9 +2048,7 @@ addLayer('ds', {
 	softcap: new Decimal('e10000000'),
 	softcapPower: 0.8,
 	row: 3,
-	hotkeys: [
-		{key: 'd', description: 'D: Reset for demon souls', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-	],
+	hotkeys: [{key: 'd', description: 'D: Reset for demon souls', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.h.unlocked || player.ds.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
@@ -2178,38 +2087,10 @@ addLayer('ds', {
 		},
 	tabFormat: {
 		"Demonic Curses": {
-			content: [
-				"main-display",
-				["row", ["prestige-button", "assimilate-button"]],
-				"resource-display",
-				"blank",
-				"milestones",
-				"buyables",
-				"blank",
-				"upgrades",
-			],
+			content: getTab('ds'),
 		},
 		"Demon Gateway": {
-			content: () => {
-				if (tmp.ds.tabFormat["Demon Gateway"].unlocked) return [
-					"main-display",
-					["row", ["prestige-button", "assimilate-button"]],
-					"resource-display",
-					"blank",
-					"challenges",
-					"blank",
-				];
-				return [
-					"main-display",
-					["row", ["prestige-button", "assimilate-button"]],
-					"resource-display",
-					"blank",
-					"milestones",
-					"buyables",
-					"blank",
-					"upgrades",
-				];
-			},
+			content: getUnlockableTab('ds', "Demon Gateway"),
 			unlocked() { return hasUpgrade('ds', 22) },
 		},
 	},
@@ -2528,9 +2409,7 @@ addLayer('a', {
 	},
 	autoPrestige() { return hasMilestone('a', 15) },
 	row: 3,
-	hotkeys: [
-		{key: 'a', description: 'A: Reset for atoms', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-	],
+	hotkeys: [{key: 'a', description: 'A: Reset for atoms', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.ds.unlocked || player.a.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	automate() {
@@ -2554,58 +2433,13 @@ addLayer('a', {
 	resetsNothing() { return hasMilestone('a', 14) },
 	tabFormat: {
 		"Atomic Progress": {
-			content: [
-				"main-display",
-				["row", ["prestige-button", "assimilate-button"]],
-				"resource-display",
-				"blank",
-				"milestones",
-			],
+			content: getTab('a'),
 		},
 		"Atomic Tree": {
-			content: [
-				"main-display",
-				["row", ["prestige-button", "assimilate-button"]],
-				"resource-display",
-				"blank",
-				["display-text",
-					function() {
-						if ((hasMilestone('a', 10) && hasMilestone('a', 12)) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 'All limitations have been removed.';
-						else if (hasMilestone('a', 10)) return 'When you do a row 4 reset, all atom upgrades will be reset.';
-						else if (hasMilestone('a', 12)) return 'When you buy one of these upgrades, you cannot buy<br>any upgrades that are not on its path.';
-						else return 'When you buy one of these upgrades, you cannot buy<br>any upgrades that are not on its path. When you<br>do a row 4 reset, all atom upgrades will be reset.';
-					}],
-				"blank",
-				["upgrade-tree", [
-					[11],
-					[21, 22],
-					[31, 32, 33],
-					[41, 42],
-					[51],
-					[61, 62],
-					[71, 72, 73],
-				]],
-			],
+			content: getTab('a', "Atomic Tree"),
 		},
 		"Atomic Reactor": {
-			content: () => {
-				if (tmp.a.tabFormat["Atomic Reactor"].unlocked) return [
-					"main-display",
-					["row", ["prestige-button", "assimilate-button"]],
-					"resource-display",
-					"blank",
-					["clickables", "1"],
-					"blank",
-					["clickables", "2"],
-				];
-				return [
-					"main-display",
-					["row", ["prestige-button", "assimilate-button"]],
-					"resource-display",
-					"blank",
-					"milestones",
-				];
-			},
+			content: getUnlockableTab('a', "Atomic Reactor"),
 			unlocked() { return isAssimilated('a') || player.mo.assimilating === 'a' },
 		},
 	},
@@ -3035,7 +2869,7 @@ addLayer('a', {
 				if (getClickableState('a', 11) >= 2) {
 					player.a.total = player.a.total.add(this.effect());
 				} else {
-					player.a.upgrades = []
+					player.a.upgrades = [];
 				};
 			},
 			style: {'min-height': '80px', width: '200px'},
@@ -3092,9 +2926,7 @@ addLayer('p', {
 		return mult;
 	},
 	row: 1,
-	hotkeys: [
-		{key: 'p', description: 'P: Reset for prayers', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-	],
+	hotkeys: [{key: 'p', description: 'P: Reset for prayers', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.a.unlocked || player.p.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
@@ -3224,24 +3056,7 @@ addLayer('p', {
 			else player.p.hymnEff = player.p.hymn.add(1).pow(0.15);
 		};
 	},
-	tabFormat: [
-		"main-display",
-		["row", ["prestige-button", "assimilate-button"]],
-		"resource-display",
-		"blank",
-		["display-text",
-			function() {
-				let text = 'You have <h2 class="layer-p">' + format(player.p.divinity) + '</h2> divinity, which boosts point generation by <h2 class="layer-p">' + format(player.p.divinity.add(1).pow(0.1)) + '</h2>x';
-				if (hasUpgrade('p', 22)) text += '<br>You have <h2 class="layer-p">' + format(player.p.holiness) + '</h2> holiness, which boosts essence gain by <h2 class="layer-p">' + format(player.p.holiness.add(1).pow(0.055)) + '</h2>x';
-				if (hasUpgrade('p', 41)) text += '<br>You have <h2 class="layer-p">' + formatWhole(player.p.hymn) + '</h2> hymns, which boosts prayer gain by <h2 class="layer-p">' + format(player.p.hymnEff) + '</h2>x';
-				return text;
-			}],
-		"blank",
-		"milestones",
-		"upgrades",
-		"clickables",
-		() => {return tmp.p.clickables[11].unlocked ? "blank" : ""},
-	],
+	tabFormat: getTab('p'),
 	milestones: {
 		0: {
 			requirementDescription: '1 prayer',
@@ -3687,9 +3502,7 @@ addLayer('s', {
 	},
 	autoPrestige() { return hasMilestone('s', 48) },
 	row: 2,
-	hotkeys: [
-		{key: 's', description: 'S: Reset for sanctums', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-	],
+	hotkeys: [{key: 's', description: 'S: Reset for sanctums', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.p.unlocked || player.s.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	effect() { return new Decimal(2).pow(player.s.points) },
@@ -3730,59 +3543,14 @@ addLayer('s', {
 	resetsNothing() { return hasMilestone('s', 47) },
 	tabFormat: {
 		"Landmarks": {
-			content: [
-				"main-display",
-				["row", ["prestige-button", "assimilate-button"]],
-				"resource-display",
-				"blank",
-				"milestones",
-			],
+			content: getTab('s'),
 		},
 		"Devotion": {
-			content: () => {
-				if (tmp.s.tabFormat["Devotion"].unlocked) return [
-					"main-display",
-					["row", ["prestige-button", "assimilate-button"]],
-					"resource-display",
-					"blank",
-					["display-text", 'you have <h2 class="layer-s">' + format(player.s.devotion) + '</h2> devotion, which multiplies sanctum gain by <h2 class="layer-s">' + format(player.s.devotion_effect) + '</h2>x'],
-					"blank",
-					["layer-proxy", ['d', ["buyables"]]],
-					"blank",
-					"blank"
-				];
-				return [
-					"main-display",
-					["row", ["prestige-button", "assimilate-button"]],
-					"resource-display",
-					"blank",
-					"milestones",
-				];
-			},
+			content: getUnlockableTab('s', "Devotion"),
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		"Glow": {
-			content: () => {
-				if (tmp.s.tabFormat["Glow"].unlocked) return [
-					"main-display",
-					["row", ["prestige-button", "assimilate-button"]],
-					"resource-display",
-					"blank",
-					["display-text", 'you are generating <h2 class="layer-s">' + format(player.s.glow_gain) + '</h2> glow/sec, with a maximum of <h2 class="layer-s">' + format(player.s.glow_max) + '</h2> glow'],
-					["display-text", 'you have <h2 class="layer-s">' + format(player.s.glow) + '</h2> glow, which multiplies sanctum gain and light gain after hardcap by <h2 class="layer-s">' + format(player.s.glow_effect) + '</h2>x'],
-					"blank",
-					["layer-proxy", ['g', ["buyables"]]],
-					"blank",
-					"blank"
-				];
-				return [
-					"main-display",
-					["row", ["prestige-button", "assimilate-button"]],
-					"resource-display",
-					"blank",
-					"milestones",
-				];
-			},
+			content: getUnlockableTab('s', "Glow"),
 			unlocked() { return isAssimilated('s') || player.mo.assimilating === 's' },
 		},
 	},
@@ -4415,9 +4183,7 @@ addLayer('r', {
 	},
 	autoPrestige() { return hasMilestone('w', 4) },
 	row: 3,
-	hotkeys: [
-		{key: 'r', description: 'R: Reset for relics', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-	],
+	hotkeys: [{key: 'r', description: 'R: Reset for relics', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.s.unlocked || player.r.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	automate() {
@@ -4504,17 +4270,7 @@ addLayer('r', {
 		if (player.r.light.gt(player.r.lightbest)) player.r.lightbest = player.r.light;
 		if (player.r.lightgain.gt(player.r.lightgainbest)) player.r.lightgainbest = player.r.lightgain;
 	},
-	tabFormat: [
-		"main-display",
-		["row", ["prestige-button", "assimilate-button"]],
-		"resource-display",
-		"blank",
-		["display-text", () => { return 'you have <h2 class="layer-r">' + formatWhole(player.r.points.sub(challengeCompletions('r', 11)).max(0)) + '</h2> unactivated relics and <h2 class="layer-r">' + formatWhole(challengeCompletions('r', 11)) + '</h2> activated relics' }],
-		"blank",
-		"challenges",
-		"blank",
-		"upgrades",
-	],
+	tabFormat: getTab('r'),
 	challenges: {
 		11: {
 			name() {
@@ -4671,9 +4427,7 @@ addLayer('m', {
 		return mult;
 	},
 	row: 4,
-	hotkeys: [
-		{key: 'm', description: 'M: Reset for molecules', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-	],
+	hotkeys: [{key: 'm', description: 'M: Reset for molecules', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return challengeCompletions('r', 11) >= 10 || player.m.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
@@ -4727,28 +4481,10 @@ addLayer('m', {
 	},
 	tabFormat: {
 		"Microscope": {
-			content: [
-				"main-display",
-				["row", ["prestige-button", "assimilate-button"]],
-				"resource-display",
-				"blank",
-				"milestones",
-			],
+			content: getTab('m'),
 		},
 		"Constructor": {
-			content: [
-				"main-display",
-				["row", ["prestige-button", "assimilate-button"]],
-				"resource-display",
-				"blank",
-				["display-text",
-					function() {
-						if (player.m.unique_extra.gt(0)) return 'You have <h2 class="layer-m">' + formatWhole(player.m.unique_nonextra) + '</h2><h3 class="layer-m-light">+' + formatWhole(player.m.unique_extra) + '</h3> total unique molecules';
-						return 'You have <h2 class="layer-m">' + formatWhole(player.m.unique_nonextra) + '</h2> total unique molecules';
-					}],
-				"blank",
-				"upgrades",
-			],
+			content: getTab('m', "Constructor"),
 		},
 	},
 	milestones: {
@@ -5078,9 +4814,7 @@ addLayer('gi', {
 	},
 	autoPrestige() { return hasMilestone('w', 1) && (!hasMilestone('cl', 0) || player.gi.auto_prestige) },
 	row: 4,
-	hotkeys: [
-		{key: 'G', description: 'Shift-G: Reset for good influence', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-	],
+	hotkeys: [{key: 'G', description: 'Shift-G: Reset for good influence', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.m.unlocked || player.gi.unlocked },
 	deactivated() { return inChallenge('ch', 11) || (getClickableState('mo', 11) && !canAssimilate(this.layer))},
 	automate() {
@@ -5142,17 +4876,7 @@ addLayer('gi', {
 		let eff = player.s.devotion.mul(1.05).add(1).pow(ex);
 		player.gi.req_devotion = eff;
 	},
-	tabFormat: [
-		"main-display",
-		["row", ["prestige-button", "assimilate-button"]],
-		"resource-display",
-		"blank",
-		["display-text", () => { return 'you have <h2 class="layer-s">' + format(player.s.devotion) + '</h2> devotion, which multiplies good influence gain by <h2 class="layer-gi">' + format(player.gi.req_devotion) + '</h2>x' }],
-		"blank",
-		"milestones",
-		"buyables",
-		"blank",
-	],
+	tabFormat: getTab('gi'),
 	milestones: {
 		0: {
 			requirementDescription: '1 good influence',
@@ -5369,9 +5093,7 @@ addLayer('ei', {
 	},
 	autoPrestige() { return hasMilestone('w', 3) && (!hasMilestone('cl', 0) || player.ei.auto_prestige) },
 	row: 4,
-	hotkeys: [
-		{key: 'E', description: 'Shift-E: Reset for evil influence', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-	],
+	hotkeys: [{key: 'E', description: 'Shift-E: Reset for evil influence', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.gi.unlocked || player.ei.unlocked },
 	deactivated() { return inChallenge('ch', 12) || (getClickableState('mo', 11) && !canAssimilate(this.layer)) },
 	automate() {
@@ -5426,40 +5148,10 @@ addLayer('ei', {
 	},
 	tabFormat: {
 		"Cycle of Evil": {
-			content: [
-				"main-display",
-				["row", ["prestige-button", "assimilate-button"]],
-				"resource-display",
-				"blank",
-				["display-text", () => { return 'You have <h2 class="layer-ei">' + formatSmall(player.ei.power) + '</h2> evil power' }],
-				"blank",
-				"milestones",
-				"upgrades",
-			],
+			content: getTab('ei'),
 		},
 		"Gate of Evil": {
-			content: () => {
-				if (tmp.ei.tabFormat["Gate of Evil"].unlocked) return [
-					"main-display",
-					["row", ["prestige-button", "assimilate-button"]],
-					"resource-display",
-					"blank",
-					["display-text", 'You have <h2 class="layer-ei">' + formatSmall(player.ei.power) + '</h2> evil power'],
-					"blank",
-					"challenges",
-					"blank",
-				];
-				return [
-					"main-display",
-					["row", ["prestige-button", "assimilate-button"]],
-					"resource-display",
-					"blank",
-					["display-text", 'You have <h2 class="layer-ei">' + formatSmall(player.ei.power) + '</h2> evil power'],
-					"blank",
-					"milestones",
-					"upgrades",
-				];
-			},
+			content: getUnlockableTab('ei', "Gate of Evil"),
 			unlocked() { return hasMilestone('ei', 5) || player.ei.activeChallenge },
 		},
 	},
@@ -5930,9 +5622,7 @@ addLayer('w', {
 	autoPrestige() { return hasMilestone('w', 17) },
 	row: 5,
 	tooltipLocked() { return 'Reach ' + this.requires + ' GI and ' + this.requires + ' EI to unlock (You have ' + formatWhole(player.gi.points) + ' GI and ' + formatWhole(player.ei.points) + ' EI)' },
-	hotkeys: [
-		{key: 'w', description: 'W: Reset for wars', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-	],
+	hotkeys: [{key: 'w', description: 'W: Reset for wars', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return hasChallenge('ei', 21) || player.w.unlocked},
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	automate() {
@@ -5972,31 +5662,10 @@ addLayer('w', {
 	resetsNothing() { return hasMilestone('w', 17) },
 	tabFormat: {
 		"Progress": {
-			content: [
-				"main-display",
-				["row", ["prestige-button", "assimilate-button"]],
-				["custom-resource-display", () => { return 'You have ' + formatWhole(player.gi.points) + ' good influence<br>You have ' + formatWhole(player.ei.points) + ' evil influence<br><br>Your best wars is ' + formatWhole(player.w.best) + '<br>You have made a total of ' + formatWhole(player.w.total) + ' wars' }],
-				"blank",
-				["display-text", 'After unlocking War, you can always buy max on all resources before this row.'],
-				"blank",
-				["bar", "tide"],
-				"blank",
-				"milestones",
-			],
+			content: getTab('w'),
 		},
 		"Influences": {
-			content: [
-				"main-display",
-				["row", ["prestige-button", "assimilate-button"]],
-				["custom-resource-display", () => { return 'You have ' + formatWhole(player.gi.points) + ' good influence<br>You have ' + formatWhole(player.ei.points) + ' evil influence<br><br>Your best wars is ' + formatWhole(player.w.best) + '<br>You have made a total of ' + formatWhole(player.w.total) + ' wars' }],
-				"blank",
-				["display-text", 'After unlocking War, you can always buy max on all resources before this row.'],
-				"blank",
-				["bar", "tide"],
-				"blank",
-				"buyables",
-				"blank",
-			],
+			content: getTab('w', "Influences"),
 		},
 	},
 	milestones: {
@@ -6359,9 +6028,7 @@ addLayer('cl', {
 	},
 	autoPrestige() { return hasMilestone('cl', 12) },
 	row: 5,
-	hotkeys: [
-		{key: 'l', description: 'L: Reset for cellular life', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-	],
+	hotkeys: [{key: 'l', description: 'L: Reset for cellular life', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return hasMilestone('w', 9) || player.cl.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	automate() {
@@ -6429,49 +6096,13 @@ addLayer('cl', {
 	},
 	tabFormat: {
 		"Life Tracker": {
-			content: [
-				"main-display",
-				["row", ["prestige-button", "assimilate-button"]],
-				"resource-display",
-				"blank",
-				"milestones",
-			],
+			content: getTab('cl'),
 		},
 		"Tissues": {
-			content: [
-				"main-display",
-				["row", ["prestige-button", "assimilate-button"]],
-				"resource-display",
-				"blank",
-				["buyables", "1"],
-				["buyables", "2"],
-				"blank",
-			],
+			content: getTab('cl', "Tissues"),
 		},
 		"Protein": {
-			content: () => {
-				if (tmp.cl.tabFormat["Protein"].unlocked) return [
-					"main-display",
-					["row", ["prestige-button", "assimilate-button"]],
-					"resource-display",
-					"blank",
-					["display-text", 'You are currently finding <h2 class="layer-cl">' + format(player.cl.protein_conv) + '</h2> protein per cellular life<br>' + (player.cl.protein_gain.gt(0) ? 'You are currently gaining <h2 class="layer-cl">' + format(player.cl.protein_gain) + '</h2> protein per second<br>' : '') + 'You currently have <h2 class="layer-cl">' + format(player.cl.protein) + '</h2> protein'],
-					"blank",
-					["buyables", "3"],
-					["buyables", "4"],
-					["buyables", "5"],
-					"blank",
-					"clickables",
-					(tmp.cl.clickables[11].unlocked ? "blank" : ""),
-				];
-				return [
-					"main-display",
-					["row", ["prestige-button", "assimilate-button"]],
-					"resource-display",
-					"blank",
-					"milestones",
-				];
-			},
+			content: getUnlockableTab('cl', "Protein"),
 			unlocked() { return hasMilestone('w', 16)},
 		},
 	},
@@ -6853,9 +6484,7 @@ addLayer('ch', {
 	row: 6,
 	tooltip() { return formatWhole(player.ch.points) + ' ' + randomStr(5) },
 	tooltipLocked() { return randomStr(5) + ' ' + this.requires + ' ' + randomStr(4) + ' ' + randomStr(2) + ' ' + randomStr(6) + ' (' + randomStr(3) + ' ' + randomStr(4) + ' ' + formatWhole(player.w.points) + ' ' + randomStr(4) + ')' },
-	hotkeys: [
-		{key: 'C', description: 'Shift-C: Reset for chaos', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-	],
+	hotkeys: [{key: 'C', description: 'Shift-C: Reset for chaos', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.cl.unlocked || player.ch.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	effect() { return [
@@ -6870,36 +6499,15 @@ addLayer('ch', {
 		},
 	tabFormat: {
 		"Accumulation": {
-			content: [
-				"main-display",
-				["row", ["prestige-button", "assimilate-button"]],
-				"resource-display",
-				"blank",
-				"milestones",
-			],
+			content: getTab('ch'),
 		},
 		"The Tides": {
-			content: () => {
-				if (tmp.ch.tabFormat["The Tides"].unlocked) return [
-					"main-display",
-					["row", ["prestige-button", "assimilate-button"]],
-					"resource-display",
-					"blank",
-					["display-text", "All completion limits start at 1. Starting at the fourth chaos, every even-numbered chaos increases all completion limits by 1."],
-					"blank",
-					"challenges",
-				];
-				return [
-					"main-display",
-					["row", ["prestige-button", "assimilate-button"]],
-					"resource-display",
-					"blank",
-					"milestones",
-				];
-			},
+			content: getUnlockableTab('ch', "The Tides"),
 			unlocked() { return hasMilestone('ch', 1) },
 		},
-		"Story": getChaosStoryTab(),
+		"Story": {
+			content: getTab('ch', "Story"),
+		},
 	},
 	milestones: {
 		0: {
@@ -7164,9 +6772,7 @@ addLayer('mo', {
 		return gain;
 	},
 	row: 6,
-	hotkeys: [
-		{key: 'o', description: 'O: Reset for multicellular organisms', onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-	],
+	hotkeys: [{key: 'o', description: 'O: Reset for multicellular organisms', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.ch.unlocked || player.mo.unlocked },
 	doReset(resettingLayer) {
 		let keep = [];
@@ -7175,50 +6781,13 @@ addLayer('mo', {
 	resetsNothing() { return true },
 	tabFormat: {
 		"Assimilation": {
-			content: [
-				"main-display",
-				"prestige-button",
-				"resource-display",
-				"blank",
-				["display-text", 'Multicellular organism resets do not reset anything.'],
-				"blank",
-				"clickables",
-				"blank",
-			],
+			content: getTab('mo'),
 		},
 		"Rewards": {
-			content: [
-				"main-display",
-				"prestige-button",
-				"resource-display",
-				"blank",
-				["display-text", () => {
-					if (player.mo.assimilated.length === 0) return 'Assimilation rewards will be shown here.';
-					return getAssimilationRewards();
-				}],
-				"blank",
-			],
+			content: getTab('mo', "Rewards"),
 		},
 		"Synergism": {
-			content: () => {
-				if (tmp.mo.tabFormat["Synergism"].unlocked) return [
-					"main-display",
-					"prestige-button",
-					"resource-display",
-					"blank",
-					"buyables",
-				];
-				return [
-					"main-display",
-					"prestige-button",
-					"resource-display",
-					"blank",
-					["display-text", 'Multicellular organism resets do not reset anything.'],
-					"blank",
-					"clickables",
-					"blank",
-				];
-			},
+			content: getUnlockableTab('mo', "Synergism"),
 			unlocked() { return isAssimilated('a') || player.mo.assimilating === 'a' },
 		},
 	},

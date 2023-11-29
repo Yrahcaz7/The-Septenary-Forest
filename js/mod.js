@@ -3,7 +3,7 @@ const modInfo = {
 	id: 'Yrahcaz7-ModTree-ThePrimordialTree',
 	author: 'Yrahcaz7',
 	pointsName: 'points',
-	modFiles: ['assimilation.js', 'achievements.js', 'softcaps.js', 'story.js', 'layers.js', 'technical/tree.js'],
+	modFiles: ['assimilation.js', 'achievements.js', 'softcaps.js', 'story.js', 'tabs.js', 'layers.js', 'technical/tree.js'],
 	initialStartPoints: new Decimal(0),
 	offlineLimit: 1, // in hours
 };
