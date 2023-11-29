@@ -38,7 +38,7 @@ function getdark(darkthis, type, special = false, research = false) {
 			if (darkthis.canAfford() && getBuyableAmount(darkthis.layer, darkthis.id)) return '-dark">';
 		} else if (type == 'clickable' && colorvalue[0][1]) {
 			if (darkthis.canClick()) return '-dark">';
-		} else return '-OFF">'
+		} else return '-OFF">';
 	};
 	return '">';
 };
