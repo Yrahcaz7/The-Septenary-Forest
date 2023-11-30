@@ -581,6 +581,7 @@ addLayer('A', {
 			done() {return player.m.points.gte(1)},
 			tooltip: 'obtain 1 molecule.',
 			unlocked() { return hasAchievement('A', 121) },
+			image() { if (hasAchievement('A', 121)) return "images/achievements/121.png" },
 			color: '#00CCCC',
 		},
 		122: {
@@ -588,6 +589,7 @@ addLayer('A', {
 			done() {return player.m.points.gte(1000000)},
 			tooltip: 'obtain 1,000,000 molecules.',
 			unlocked() { return hasAchievement('A', 121) },
+			image() { if (hasAchievement('A', 122)) return "images/achievements/122.png" },
 			color: '#00CCCC',
 		},
 		123: {
@@ -595,6 +597,7 @@ addLayer('A', {
 			done() {return player.m.points.gte(1e12)},
 			tooltip: 'obtain 1e12 molecules.',
 			unlocked() { return hasAchievement('A', 122) },
+			image() { if (hasAchievement('A', 123)) return "images/achievements/123.png" },
 			color: '#00CCCC',
 		},
 		124: {
@@ -602,6 +605,7 @@ addLayer('A', {
 			done() {return player.m.points.gte(1e25)},
 			tooltip: 'obtain 1e25 molecules.',
 			unlocked() { return hasAchievement('A', 123) },
+			image() { if (hasAchievement('A', 124)) return "images/achievements/124.png" },
 			color: '#00CCCC',
 		},
 		125: {
@@ -609,6 +613,7 @@ addLayer('A', {
 			done() {return player.m.points.gte(1e75)},
 			tooltip: 'obtain 1e75 molecules.',
 			unlocked() { return hasAchievement('A', 124) },
+			image() { if (hasAchievement('A', 125)) return "images/achievements/125.png" },
 			color: '#00CCCC',
 		},
 		126: {
@@ -616,6 +621,7 @@ addLayer('A', {
 			done() {return player.m.points.gte(1000000) && player.r.total.eq(0)},
 			tooltip: 'obtain 1,000,000 molecules with no relics.',
 			unlocked() { return hasAchievement('A', 122) && hasAchievement('A', 131) },
+			image() { if (hasAchievement('A', 126)) return "images/achievements/126.png" },
 			color: '#00CCCC',
 		},
 		131: {
@@ -798,6 +804,13 @@ addLayer('A', {
 			done() {return player.ch.points.gte(64)},
 			tooltip: 'obtain 64 chaos.',
 			unlocked() { return hasAchievement('A', 172) },
+			color: '#FFFFFF',
+		},
+		174: {
+			name() {return 'Chaos of ' + randomStr(7)},
+			done() {return player.ch.points.gte(512)},
+			tooltip: 'obtain 512 chaos.',
+			unlocked() { return hasAchievement('A', 173) },
 			color: '#FFFFFF',
 		},
 		181: {
