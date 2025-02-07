@@ -13,7 +13,6 @@ function getStartOptions() { return {
 	colorDisplayMode: 0,
 	colorDisplay: 0,
 	extendplaces: false,
-	css: '',
 }};
 
 function toggleOpt(name) {
@@ -71,17 +70,17 @@ const COLOR_DISPLAYS = ['ON - NORMAL (recommended)', 'ON - ALWAYS DARK', 'OFF (r
 
 var colorvalue = [[true, true, true], 'normal'];
 
-function display_mode() {
+function displayMode() {
 	options.colorDisplayMode += 1;
 	if (options.colorDisplayMode >= 4) options.colorDisplayMode = 0;
 };
 
-function color_display() {
+function colorDisplay() {
 	options.colorDisplay += 1;
 	if (options.colorDisplay >= 3) options.colorDisplay = 0;
 };
 
-function fullcolordisplay() {
+function fullColorDisplay() {
 	switch (options.colorDisplayMode) {
 		case 0:
 			colorvalue[0] = [true, true, true];
@@ -107,14 +106,4 @@ function fullcolordisplay() {
 			colorvalue[1] = 'none';
 			break;
 	};
-};
-
-const CSS_SETTINGS = ['', '-webkit-', '-moz-', '-ms-', '-o-'];
-
-const CSS_DISPLAYS = ['no specific browser', 'Chrome, Safari, and Android', 'Firefox', 'Internet Explorer and Edge', 'Opera and Opera Mini'];
-
-function shiftCSS() {
-	options.css = CSS_SETTINGS[(CSS_SETTINGS.indexOf(options.css) + 1) % CSS_SETTINGS.length];
-	document.body.style.setProperty('--chaos-gradient', options.css + 'radial-gradient(#4CED13, #D2D237, #DB5196, #710CC4, #E36409, #BA0035, #4D2FE0, #FDBBFF, #AAFF00, #B9A975, #00CCCC, #08FF87, #FF4400, #A0A0A0, #008800, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF)');
-	needsCanvasUpdate = true;
 };

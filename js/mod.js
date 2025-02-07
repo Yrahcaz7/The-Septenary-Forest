@@ -9,8 +9,9 @@ const modInfo = {
 };
 
 const VERSION = {
-	num: '3.5',
-	name: 'More Assimilation',
+	num: '3.6',
+	beta: '1',
+	name: 'UNIFICATION',
 };
 
 const winText = () => {
@@ -38,7 +39,9 @@ function getdark(darkthis, type, special = false, research = false) {
 			if (darkthis.canAfford() && getBuyableAmount(darkthis.layer, darkthis.id)) return '-dark">';
 		} else if (type == 'clickable' && colorvalue[0][1]) {
 			if (darkthis.canClick()) return '-dark">';
-		} else return '-OFF">';
+		} else {
+			return '-OFF">';
+		};
 	};
 	return '">';
 };
@@ -217,6 +220,7 @@ function fixOldSave(oldVersion) {
 	// remove unused vars
 	delete player.r.sanctummult;
 	delete player.r.essencemult;
+	delete options.css;
 };
 
 // glitch text

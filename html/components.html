@@ -484,13 +484,13 @@ options_tab: `<table>
 		<td><button class="opt" onclick="save()">Save</td>
 		<td><button class="opt" onclick="toggleOpt('autosave')">Autosave: {{options.autosave ? "ON" : "OFF"}}</td>
 		<td><button class="opt" onclick="hardReset()">HARD RESET</td>
-		<td><button class="opt" onclick="display_mode(); fullcolordisplay()">Color Text Mode: {{DISPLAY_MODES[options.colorDisplayMode]}}</td>
+		<td><button class="opt" onclick="displayMode(); fullColorDisplay()">Color Text Mode: {{DISPLAY_MODES[options.colorDisplayMode]}}</td>
 	</tr>
 	<tr>
 		<td><button class="opt" onclick="exportSave()">Export to clipboard</td>
 		<td><button class="opt" onclick="importSave()">Import</td>
 		<td><button class="opt" onclick="toggleOpt('offlineProd')">Offline Progress: {{options.offlineProd ? "ON" : "OFF"}}</td>
-		<td><button class="opt" onclick="color_display(); fullcolordisplay()">Colored Text: {{COLOR_DISPLAYS[options.colorDisplay]}}</td>
+		<td><button class="opt" onclick="colorDisplay(); fullColorDisplay()">Colored Text: {{COLOR_DISPLAYS[options.colorDisplay]}}</td>
 	</tr>
 	<tr>
 		<td><button class="opt" onclick="switchTheme()">Theme: {{getThemeName()}}</td>
@@ -503,9 +503,6 @@ options_tab: `<table>
 		<td><button class="opt" onclick="toggleOpt('forceOneTab')">Single-Tab Mode: {{options.forceOneTab ? "ALWAYS" : "AUTO"}}</td>
 		<td><button class="opt" onclick="toggleOpt('forceTooltips')">Shift-Click to Toggle Tooltips: {{options.forceTooltips ? "ON" : "OFF"}}</td>
 		<td><button class="opt" onclick="toggleOpt('extendplaces')">Extended Decimal Places: {{options.extendplaces ? "ON" : "OFF"}}</td>
-	</tr>
-	<tr>
-		<td><button class="opt" onclick="shiftCSS()">CSS gradient support: {{CSS_DISPLAYS[CSS_SETTINGS.indexOf(options.css)]}}</td>
 	</tr>
 </table>`,
 

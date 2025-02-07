@@ -25,7 +25,7 @@
 	<script src="js/technical/loader.js"></script>
 	<script src="js/technical/temp.js"></script>
 	<script src="js/technical/displays.js"></script>
-	<script src="js/game.js"></script>
+	<script src="js/technical/game.js"></script>
 	<script src="js/utils/general.js"></script>
 	<script src="js/utils/easyAccess.js"></script>
 	<script src="js/technical/canvas.js"></script>
@@ -36,7 +36,7 @@
 	<script src="js/utils/themes.js"></script>
 </head>
 
-<body onload="load();fullcolordisplay()" onmousemove="updateMouse(event)">
+<body onload="load(); fullColorDisplay()" onmousemove="updateMouse(event)">
 	<div id="app">
 		<!-- canvas -->
 		<canvas id="treeCanvas" class="canvas" v-if="!(tmp.gameEnded && !player.keepGoing)"></canvas>
