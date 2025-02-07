@@ -70,7 +70,9 @@ Additional features:
 
 - `noAutoExit`: **optional**. A boolean to determine if the challenge should stay active on resets. Default is to not.
 
-- `buttonText`: **optional**. An array that replaces the default button text. It has the following syntax: [`replace "Finish"`, `replace "Exit Early"`, `replace "Completed"`, `replace "Start"`]. [Falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) values will be taken as you  want the default for that value.
+- `enterable()`: **optional**. A function returning a boolean to determine if the challenge is enterable. Default behavior is to be always enterable.
+
+- `buttonText`: **optional**. An array that replaces the default button text. It has the following syntax: [`replace "Finish"`, `replace "Exit Early"`, `replace "Completed"`, `replace "Start"`, `replace "Locked"`]. [Falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) values will be taken as you want the default for that value.
 
 The old goal system uses these features:
 

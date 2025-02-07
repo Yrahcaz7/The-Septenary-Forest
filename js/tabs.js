@@ -406,7 +406,9 @@ function getTab(layer, name) {
 };
 
 // gets the content function of an unlockable tab.
-function getUnlockableTab(layer, name) { return () => {
-	if (tmp[layer]?.tabFormat[name]?.unlocked) return getTab(layer, name);
-	return getTab(layer);
-}};
+function getUnlockableTab(layer, name) {
+	return () => {
+		if (tmp[layer]?.tabFormat[name]?.unlocked) return getTab(layer, name);
+		return getTab(layer);
+	};
+};

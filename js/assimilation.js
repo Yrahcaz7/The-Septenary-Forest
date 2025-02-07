@@ -25,7 +25,7 @@ function startAssimilation(layer) {
 	return true;
 };
 
-// completes an assimilation run
+// resource requirements to complete assimilation runs
 const assimilationReq = {
 	e: new Decimal('1e3555'),
 	c: new Decimal('5e555'),
@@ -45,6 +45,7 @@ const assimilationReq = {
 	ch: new Decimal(Infinity),
 };
 
+// completes an assimilation run
 function completeAssimilation(layer) {
 	// exit assimilation
 	if (player[layer].points.lt(assimilationReq[layer]) || !assimilationReq[layer]) return false;

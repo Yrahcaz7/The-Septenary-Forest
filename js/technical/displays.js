@@ -22,20 +22,23 @@ function challengeStyle(layer, id) {
 };
 
 function challengeButtonText(layer, id) {
-	let text = ["Finish", "Exit Early", "Completed", "Start"];
+	let text = ["Finish", "Exit Early", "Completed", "Start", "Locked"];
 	if (tmp[layer].challenges[id].buttonText) {
 		if (typeof tmp[layer].challenges[id].buttonText == "function" && typeof tmp[layer].challenges[id].buttonText() == "object") {
 			if (tmp[layer].challenges[id].buttonText()[0]) text[0] = tmp[layer].challenges[id].buttonText()[0];
 			if (tmp[layer].challenges[id].buttonText()[1]) text[1] = tmp[layer].challenges[id].buttonText()[1];
-			if (tmp[layer].challenges[id].buttonText()[1]) text[2] = tmp[layer].challenges[id].buttonText()[2];
-			if (tmp[layer].challenges[id].buttonText()[3]) text[1] = tmp[layer].challenges[id].buttonText()[3];
+			if (tmp[layer].challenges[id].buttonText()[2]) text[2] = tmp[layer].challenges[id].buttonText()[2];
+			if (tmp[layer].challenges[id].buttonText()[3]) text[3] = tmp[layer].challenges[id].buttonText()[3];
+			if (tmp[layer].challenges[id].buttonText()[4]) text[4] = tmp[layer].challenges[id].buttonText()[4];
 		} else if (typeof tmp[layer].challenges[id].buttonText == "object") {
 			if (tmp[layer].challenges[id].buttonText[0]) text[0] = tmp[layer].challenges[id].buttonText[0];
 			if (tmp[layer].challenges[id].buttonText[1]) text[1] = tmp[layer].challenges[id].buttonText[1];
 			if (tmp[layer].challenges[id].buttonText[2]) text[2] = tmp[layer].challenges[id].buttonText[2];
 			if (tmp[layer].challenges[id].buttonText[3]) text[3] = tmp[layer].challenges[id].buttonText[3];
+			if (tmp[layer].challenges[id].buttonText[4]) text[4] = tmp[layer].challenges[id].buttonText[4];
 		};
 	};
+	if (layers[layer].challenges[id].enterable && !tmp[layer].challenges[id].enterable) return text[4];
 	return (player[layer].activeChallenge == id ? (canCompleteChallenge(layer, id) ? text[0] : text[1]) : (hasChallenge(layer, id) ? text[2] : text[3]));
 };
 

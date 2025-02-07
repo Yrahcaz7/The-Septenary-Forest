@@ -101,7 +101,7 @@ addLayer('e', {
 		};
 	},
 	doReset(resettingLayer) {
-		if (challengeCompletions('r', 11) >= 21) return;
+		if (challengeCompletions('r', 11) >= 21 && resettingLayer != 'mo') return;
 		if (hasMilestone('s', 20) && resettingLayer == 's') return;
 		if (hasMilestone('m', 2) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 1) && resettingLayer == 'gi') return;
@@ -2789,6 +2789,7 @@ addLayer('a', {
 				return eff;
 			},
 			effectDisplay() {
+				let text = '';
 				if (hasMilestone('m', 11)) return 'max effect';
 				if (this.effect().gte(5)) text = format(this.effect()) + 'x<br>(hardcapped)';
 				else text = format(this.effect()) + 'x';
@@ -4293,9 +4294,11 @@ addLayer('r', {
 			rewardDescription() {
 				const completions = challengeCompletions('r', this.id);
 				let text = '';
-				if (completions >= 1 && completions < 4) text += 'multiply relic\'s second and third effects based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x<br>';
-				else if (completions >= 5 && completions < 12) text += 'multiply relic\'s second and third effects, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '') + ',<br>and ' + format(player.r.relic_effects[2]) + 'x<br>';
-				else if (completions >= 13) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, multiply Sacrificial Ceremony\'s last effect, and also multiply relic gain (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '') + ',<br>' + format(player.r.relic_effects[2]) + 'x,<br>and ' + format(player.r.relic_effects[3]) + 'x<br>';
+				// current rewards
+				if (completions >= 13) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, multiply Sacrificial Ceremony\'s last effect, and also multiply relic gain (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '') + ',<br>' + format(player.r.relic_effects[2]) + 'x,<br>and ' + format(player.r.relic_effects[3]) + 'x<br>';
+				else if (completions >= 5) text += 'multiply relic\'s second and third effects, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '') + ',<br>and ' + format(player.r.relic_effects[2]) + 'x<br>';
+				else if (completions >= 1) text += 'multiply relic\'s second and third effects based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x<br>';
+				// next reward
 				if (completions == 0) text += 'nothing currently<br><br>Next reward: multiply relic\'s second and third effects based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x';
 				else if (completions == 1) text += '<br>Next reward: relic\'s third effect also effects point gain';
 				else if (completions == 2) text += '<br>Next reward: multiply relic\'s first effect by 10,000 and raise it to ^3.5';
@@ -4350,7 +4353,7 @@ addLayer('r', {
 				if (num.gt(205)) bgcolor = 'rgb(205,205,255)';
 				let textcolor = '#B9A975';
 				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
-				return {'background-color':bgcolor, 'color':textcolor, 'border-radius':'70px', 'height':'425px', 'width':'425px'};
+				return {'background-color':bgcolor, 'color':textcolor, 'border-radius':'70px', 'height':'450px', 'width':'450px'};
 			},
 		},
 	},
@@ -4362,9 +4365,7 @@ addLayer('r', {
 				return '<h3 class="layer-r' + getdark(this, "title-hasend") + 'Brighter Light</h3><br>multiplies light gain based on your sanctums<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e12) + ' light';
 			},
 			canAfford() { return player.r.light.gte(1e12) },
-			pay() {
-				player.r.light = player.r.light.sub(1e12);
-			},
+			pay() { player.r.light = player.r.light.sub(1e12) },
 			effect() { return  player.s.points.add(1).pow(0.3) },
 			unlocked() { return hasMilestone('gi', 0) },
 		},
@@ -4375,9 +4376,7 @@ addLayer('r', {
 				return '<h3 class="layer-r' + getdark(this, "title-hasend") + 'Light of Light</h3><br>multiplies light gain based on your light<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e13) + ' light';
 			},
 			canAfford() { return player.r.light.gte(1e13) },
-			pay() {
-				player.r.light = player.r.light.sub(1e13);
-			},
+			pay() { player.r.light = player.r.light.sub(1e13) },
 			effect() { return  player.r.light.add(1).pow(0.1) },
 			unlocked() { return hasMilestone('gi', 0) },
 		},
@@ -5851,8 +5850,8 @@ addLayer('w', {
 				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-w-dark">Rivalry';
 				return '<h3>Rivalry';
 			},
-			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) },
-			purchaseLimit: 1e9,
+			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			purchaseLimit: 5000,
 			buy() {
 				if (hasMilestone('ch', 10)) {
 					player.gi.total = player.gi.total.add(this.cost());
@@ -6634,8 +6633,8 @@ addLayer('ch', {
 				return ((player.ch.challenges[11] + player.ch.challenges[12]) / 250 + 1) ** 1.35;
 			},
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'you can autobuy the first quark rebuyable, the good influence rebuyable autobuyer is 2x faster, and divide the multicellular organism cost based on <b class="layer-ch">Tide</b> completions (currently /' + format(milestoneEffect('ch', 16)) + ')';
-				return 'you can autobuy the first quark rebuyable, the good influence rebuyable autobuyer is 2x faster, and divide the multicellular organism cost based on <b>Tide</b> completions (currently /' + format(milestoneEffect('ch', 16)) + ')';
+				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'you can autobuy the first quark rebuyable, the good influence rebuyable autobuyer is 2x faster, and multiply multicellular organism gain based on <b class="layer-ch">Tide</b> completions (currently ' + format(milestoneEffect('ch', 16)) + 'x)';
+				return 'you can autobuy the first quark rebuyable, the good influence rebuyable autobuyer is 2x faster, and multiply multicellular organism gain based on <b>Tide</b> completions (currently ' + format(milestoneEffect('ch', 16)) + 'x)';
 			},
 			done() { return player.ch.points.gte(42) },
 			toggles: [['q', 'auto_buyable_11']],
@@ -6799,7 +6798,7 @@ addLayer('mo', {
 				else if (getClickableState('mo', 11)) return '<br>You are in an Assimilation Search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click here to exit the search.';
 				else return '<br>Begin an Assimilation search.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
 			},
-			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, Infinity][player.mo.assimilated.length] },
+			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, Infinity][player.mo.assimilated.length] }, // Next: relics at 57
 			canClick() { return getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req) },
 			onClick() {
 				if (player.mo.assimilating !== null) {

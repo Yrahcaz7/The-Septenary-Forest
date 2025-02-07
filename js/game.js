@@ -11,11 +11,11 @@ function getResetGain(layer, useType = null) {
 	let type = useType;
 	if (!useType) {
 		type = tmp[layer].type;
-		if (layers[layer].getResetGain !== undefined)
+		if (layers[layer].getResetGain !== undefined) {
 			return layers[layer].getResetGain();
+		};
 	};
-	if (tmp[layer].type == "none")
-		return new Decimal(0);
+	if (tmp[layer].type == "none") return new Decimal(0);
 	if (tmp[layer].gainExp.eq(0)) return decimalZero;
 	if (type == "static") {
 		if ((!tmp[layer].canBuyMax) || tmp[layer].baseAmount.lt(tmp[layer].requires)) return decimalOne;
@@ -39,11 +39,11 @@ function getNextAt(layer, canMax = false, useType = null) {
 	let type = useType;
 	if (!useType) {
 		type = tmp[layer].type;
-		if (layers[layer].getNextAt !== undefined)
+		if (layers[layer].getNextAt !== undefined) {
 			return layers[layer].getNextAt(canMax);
 		};
-	if (tmp[layer].type == "none")
-		return new Decimal(Infinity);
+	};
+	if (tmp[layer].type == "none") return new Decimal(Infinity);
 	if (tmp[layer].gainMult.lte(0)) return new Decimal(Infinity);
 	if (tmp[layer].gainExp.lte(0)) return new Decimal(Infinity);
 	if (type == "static") {
@@ -109,10 +109,11 @@ function canReset(layer) {
 function rowReset(row, layer) {
 	for (lr in ROW_LAYERS[row]) {
 		if (layers[lr].doReset) {
-			if (!isNaN(row)) Vue.set(player[lr], "activeChallenge", null) // Exit challenges on any row reset on an equal or higher row
-				run(layers[lr].doReset, layers[lr], layer);
-		} else
-			if (tmp[layer].row > tmp[lr].row && !isNaN(row)) layerDataReset(lr);
+			if (!isNaN(row)) Vue.set(player[lr], "activeChallenge", null); // Exit challenges on any row reset on an equal or higher row
+			run(layers[lr].doReset, layers[lr], layer);
+		} else if (tmp[layer].row > tmp[lr].row && !isNaN(row)) {
+			layerDataReset(lr);
+		};
 	};
 };
 
@@ -165,8 +166,9 @@ function doReset(layer, force = false) {
 			needCanvasUpdate = true;
 			if (tmp[layer].increaseUnlockOrder) {
 				lrs = tmp[layer].increaseUnlockOrder;
-				for (lr in lrs)
+				for (lr in lrs) {
 					if (!player[lrs[lr]].unlocked) player[lrs[lr]].unlockOrder++;
+				};
 			};
 		};
 	};
@@ -176,7 +178,9 @@ function doReset(layer, force = false) {
 		if (row >= layers[layerResetting].row && (!force || layerResetting != layer)) completeChallenge(layerResetting);
 	};
 	player.points = (row == 0 ? decimalZero : modInfo.initialStartPoints);
-	for (let x = row; x >= 0; x--) rowReset(x, layer);
+	for (let x = row; x >= 0; x--) {
+		rowReset(x, layer);
+	};
 	for (r in OTHER_LAYERS) {
 		rowReset(r, layer);
 	};
@@ -220,7 +224,9 @@ function startChallenge(layer, x) {
 			Vue.set(player[layer], "activeChallenge", x);
 			run(layers[layer].challenges[x].onEnter, layers[layer].challenges[x]);
 		};
-	} else if (tmp[layer].challenges[x].doReset) doReset(layer, true);
+	} else if (tmp[layer].challenges[x].doReset) {
+		doReset(layer, true);
+	};
 	updateChallengeTemp(layer);
 };
 
@@ -231,15 +237,15 @@ function canCompleteChallenge(layer, x) {
 	if (challenge.currencyInternalName) {
 		let name = challenge.currencyInternalName;
 		if (challenge.currencyLocation) {
-			return !(challenge.currencyLocation[name].lt(challenge.goal));
+			return !challenge.currencyLocation[name].lt(challenge.goal);
 		} else if (challenge.currencyLayer) {
 			let lr = challenge.currencyLayer;
-			return !(player[lr][name].lt(challenge.goal));
+			return !player[lr][name].lt(challenge.goal);
 		} else {
-			return !(player[name].lt(challenge.goal));
+			return !player[name].lt(challenge.goal);
 		};
 	} else {
-		return !(player.points.lt(challenge.goal));
+		return !player.points.lt(challenge.goal);
 	};
 };
 
@@ -263,13 +269,14 @@ function completeChallenge(layer, x) {
 	updateChallengeTemp(layer);
 };
 
-VERSION.withoutName = "v" + VERSION.num + (VERSION.pre ? " Pre-Release " + VERSION.pre : VERSION.pre ? " Beta " + VERSION.beta : "");
+VERSION.withoutName = "v" + VERSION.num + (VERSION.pre ? " Pre-Release " + VERSION.pre : (VERSION.beta ? " Beta " + VERSION.beta : ""));
 VERSION.withName = VERSION.withoutName + (VERSION.name ? ": " + VERSION.name : "");
 
 function autobuyUpgrades(layer) {
 	if (!tmp[layer].upgrades) return;
-	for (id in tmp[layer].upgrades)
+	for (id in tmp[layer].upgrades) {
 		if (isPlainObject(tmp[layer].upgrades[id]) && (layers[layer].upgrades[id].canAfford === undefined || layers[layer].upgrades[id].canAfford() === true)) buyUpg(layer, id);
+	};
 };
 
 function gameLoop(diff) {
@@ -340,7 +347,7 @@ var ticking = false;
 var interval = setInterval(function() {
 	if (player === undefined || tmp === undefined) return;
 	if (ticking) return;
-	if (tmp.gameEnded&&!player.keepGoing) return;
+	if (tmp.gameEnded && !player.keepGoing) return;
 	ticking = true;
 	let now = Date.now();
 	let diff = (now - player.time) / 1e3;
@@ -356,7 +363,8 @@ var interval = setInterval(function() {
 	};
 	if (player.devSpeed) diff *= player.devSpeed;
 	player.time = now;
-	if (needCanvasUpdate) { resizeCanvas();
+	if (needCanvasUpdate) {
+		resizeCanvas();
 		needCanvasUpdate = false;
 	};
 	tmp.scrolled = document.getElementById('treeTab') && document.getElementById('treeTab').scrollTop > 30;
@@ -371,4 +379,4 @@ var interval = setInterval(function() {
 	ticking = false;
 }, 50);
 
-setInterval(function() {needCanvasUpdate = true}, 500);
+setInterval(() => needCanvasUpdate = true, 500);
