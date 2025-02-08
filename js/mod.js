@@ -221,6 +221,11 @@ function fixOldSave(oldVersion) {
 	delete player.r.sanctummult;
 	delete player.r.essencemult;
 	delete options.css;
+	// rename vars
+	if (options.tooltipForcing !== undefined) {
+		options.forceTooltips = options.tooltipForcing;
+		delete options.tooltipForcing;
+	};
 };
 
 // glitch text

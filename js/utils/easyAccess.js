@@ -33,6 +33,14 @@ function hasBuyable(layer, id) {
 	return (player[layer].buyables[id].gt(0));
 };
 
+function canEnterChallenge(layer, id){
+	return tmp[layer].challenges[id].canEnter ?? true
+}
+
+function canExitChallenge(layer, id){
+	return tmp[layer].challenges[id].canExit ?? true
+}
+
 function getBuyableAmount(layer, id) {
 	if (!player[layer] || !tmp[layer] || tmp[layer].deactivated) return new Decimal(0);
 	return (player[layer].buyables[id]);

@@ -1,9 +1,11 @@
 // ************ Save stuff ************
+let getModID = () => modInfo.id ?? `${modInfo.name.replace(/\s+/g, '-')}-${modInfo.author.replace(/\s+/g, '-')}`;
+
 function save(force) {
 	NaNcheck(player);
 	if (NaNalert && !force) return;
-	localStorage.setItem(modInfo.id, btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
-	localStorage.setItem(modInfo.id + "_options", btoa(unescape(encodeURIComponent(JSON.stringify(options)))));
+	localStorage.setItem(getModID(), btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
+	localStorage.setItem(getModID() + "_options", btoa(unescape(encodeURIComponent(JSON.stringify(options)))));
 };
 
 function startPlayerBase() {
@@ -12,7 +14,7 @@ function startPlayerBase() {
 		navTab: (layoutInfo.showTree ? layoutInfo.startNavTab : "none"),
 		time: Date.now(),
 		notify: {},
-		versionType: modInfo.id,
+		versionType: getModID(),
 		version: VERSION.num,
 		beta: VERSION.beta,
 		timePlayed: 0,
@@ -121,11 +123,16 @@ function fixSave() {
 		if (player[layer].best !== undefined) player[layer].best = new Decimal(player[layer].best);
 		if (player[layer].total !== undefined) player[layer].total = new Decimal(player[layer].total);
 		if (layers[layer].tabFormat && !Array.isArray(layers[layer].tabFormat)) {
-			if (!Object.keys(layers[layer].tabFormat).includes(player.subtabs[layer].mainTabs)) player.subtabs[layer].mainTabs = Object.keys(layers[layer].tabFormat)[0];
+			if (!Object.keys(layers[layer].tabFormat).includes(player.subtabs[layer].mainTabs)) {
+				player.subtabs[layer].mainTabs = Object.keys(layers[layer].tabFormat)[0];
+			};
 		};
 		if (layers[layer].microtabs) {
-			for (item in layers[layer].microtabs)
-				if (!Object.keys(layers[layer].microtabs[item]).includes(player.subtabs[layer][item])) player.subtabs[layer][item] = Object.keys(layers[layer].microtabs[item])[0];
+			for (item in layers[layer].microtabs) {
+				if (!Object.keys(layers[layer].microtabs[item]).includes(player.subtabs[layer][item])) {
+					player.subtabs[layer][item] = Object.keys(layers[layer].microtabs[item])[0];
+				};
+			};
 		};
 	};
 };
@@ -150,7 +157,7 @@ function fixData(defaultData, newData) {
 };
 
 function load() {
-	let get = localStorage.getItem(modInfo.id);
+	let get = localStorage.getItem(getModID());
 	if (get === null || get === undefined) {
 		player = getStartPlayer();
 		options = getStartOptions();
@@ -160,8 +167,9 @@ function load() {
 		loadOptions();
 	};
 	if (options.offlineProd) {
-		if (player.offTime === undefined)
+		if (player.offTime === undefined) {
 			player.offTime = {remain: 0};
+		};
 		player.offTime.remain += (Date.now() - player.time) / 1000;
 	};
 	player.time = Date.now();
@@ -178,8 +186,8 @@ function load() {
 };
 
 function loadOptions() {
-	let get2 = localStorage.getItem(modInfo.id + "_options");
-	if (get2) options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(escape(atob(get2)))));
+	let get = localStorage.getItem(getModID() + "_options");
+	if (get) options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(escape(atob(get)))));
 	else options = getStartOptions();
 	if (themes.indexOf(options.theme) < 0) theme = "default";
 	fixData(options, getStartOptions());
@@ -204,6 +212,7 @@ function NaNcheck(data) {
 				return;
 			};
 		} else if (data[item] instanceof Decimal) {
+			continue;
 		} else if ((!!data[item]) && (data[item].constructor === Object)) {
 			NaNcheck(data[item]);
 		};
@@ -224,10 +233,11 @@ function importSave(imported = undefined, forced = false) {
 	if (imported === undefined) imported = prompt("Paste your save here");
 	try {
 		let tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(imported)));
-		if (tempPlr.versionType != modInfo.id && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")) // Wrong save (use "Forced" to force it to accept.)
-			return;
+		if (tempPlr.versionType != getModID() && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")) {
+			return; // Wrong save. Use "Forced" to force it to accept.
+		};
 		player = tempPlr;
-		player.versionType = modInfo.id;
+		player.versionType = getModID();
 		fixSave();
 		versionCheck();
 		NaNcheck(save);
@@ -241,11 +251,11 @@ function importSave(imported = undefined, forced = false) {
 function versionCheck() {
 	let setVersion = true;
 	if (player.versionType === undefined || player.version === undefined) {
-		player.versionType = modInfo.id;
+		player.versionType = getModID();
 		player.version = 0;
 	};
 	if (setVersion) {
-		if (player.versionType == modInfo.id && VERSION.num >= player.version) {
+		if (player.versionType == getModID()) {
 			player.keepGoing = false;
 			if (fixOldSave) fixOldSave(player.version);
 		};
@@ -255,13 +265,10 @@ function versionCheck() {
 	};
 };
 
-var saveInterval = setInterval(function () {
-	if (player === undefined)
-		return;
-	if (tmp.gameEnded && !player.keepGoing)
-		return;
-	if (options.autosave)
-		save();
+var saveInterval = setInterval(() => {
+	if (player === undefined) return;
+	if (tmp.gameEnded && !player.keepGoing) return;
+	if (options.autosave) save();
 }, 5000);
 
 window.onbeforeunload = () => {
