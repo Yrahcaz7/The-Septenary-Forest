@@ -187,7 +187,7 @@ function load() {
 	setupTemp();
 	updateTemp();
 	updateTemp();
-	updateTabFormats()
+	updateTabFormats();
 	loadVue();
 };
 
