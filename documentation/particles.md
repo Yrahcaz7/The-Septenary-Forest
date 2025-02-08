@@ -18,7 +18,7 @@ const myParticle = {
 }
 ```
 
-Features can be functions or constant. These features will be called when each particle is made, with an `id` argument, which is assigned based on which of the `amount` particles being spawned this is. **All of these are optional**, with a default value.
+Features can be functions or constant. These features will be called when each particle is made, with an `id` argument, which is assigned based on which of the `amount` particles being spawned this is. **All of these are optional**, and all have a default value.
 
 All distances are in pixels and angles are in degrees, with 0 being up and going clockwise.
 
@@ -69,8 +69,13 @@ Function features: These stay as functions and are for more advanced things. The
 Other useful things that are not features of the particle object:
 
 - `setDir(particle, dir)`, `setSpeed(particle, speed)`: Set the direction/speed on a particle.
+
 - `clearParticles(check)`: Function to delete particles. With no check, it deletes all particles. Check is a function that takes a particle, and returns true if that particle should be deleted.
+
 - You can use `Vue.delete(particles, this.id)` to make a particle delete itself.
+
 - `mouseX` and `mouseY` are variables that track the mouse position.
-- `sin(x)`, `cos(x)`, `tan(x)`: functions that do these operations, with x in degrees. (Instead of radians).
-- `asin(x)`, `acos(x)`, `atan(x)`: functions that do these operations, with the returned value in degrees. (Instead of radians).
+
+- `sin(x)`, `cos(x)`, `tan(x)`: Functions that do these operations, with x in degrees (instead of radians).
+
+- `asin(x)`, `acos(x)`, `atan(x)`: Functions that do these operations, with the returned value in degrees (instead of radians).

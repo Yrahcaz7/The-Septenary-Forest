@@ -25,13 +25,11 @@ It is a list of components, which can be either just a name, or an array with ar
 
 These are the existing components, but you can create more in [components.js](/js/technical/components.js):
 
-- `display-text`: Displays some text (can use basic HTML). The argument is the text to display. It can also be a function that returns updating text.
+- `display-text`, `raw-html`: Displays some text (can use basic HTML). The argument is the text to display. It can also be a function that returns updating text.
 
 - `display-image`: Displays an image. The argument is the url of the image.
 
 - `h-line`, `v-line`: Display a horizontal or vertical divider line, respectively.
-
-- `raw-html`: Displays some basic HTML, can also be a function. Functionally the same as `display-text`.
 
 - `blank`: Adds empty space. The default dimensions are 8px by 17px. The argument changes the dimensions. If it's a single value (e.g. `"20px"`), that determines the height. If you have a pair of arguments, the first is width and the second is height.
 
@@ -78,6 +76,8 @@ These are the existing components, but you can create more in [components.js](/j
 Additional components:
 
 - `custom-resource-display`: The same as `display-text`, but uses the formatting of `resource-display`.
+
+- `contained-grid`: Displays the gridable grid for the layer in a contained div. The argument is required. The argument can either be the max width of the containing div or an array: `[max width, list of rows]`. If the argument only indicates the component's max width, the component includes all of the layer's grid rows.
 
 The rest of the components are sub-components. They can be used just like other components, but are typically part of another component.
 

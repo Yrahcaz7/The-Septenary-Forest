@@ -15,7 +15,7 @@ You can make almost any value dynamic by using a function in its place, includin
     Standard values:
 
     - Required:
-        - unlocked: a bool determining if this layer is unlocked or not
+        - unlocked: a boolean determining if this layer is unlocked or not
         - points: a Decimal, the main currency for the layer
     - Optional:
         - total: A Decimal, tracks total amount of main prestige currency. Always tracked, but only shown if you add it here.
@@ -29,7 +29,7 @@ You can make almost any value dynamic by using a function in its place, includin
 
     Using "side" instead of a number will cause the layer to appear off to the side as a smaller node (useful for achievements and statistics). Side layers are not affected by resets unless you add a doReset to them.
 
-- `displayRow`: **OVERRIDE** Changes where the layer node appears without changing where it is in the reset order.
+- `displayRow`: **OVERRIDE**. Changes where the layer node appears without changing where it is in the reset order.
 
 - `resource`: Name of the main currency you gain by resetting on this layer.
 
@@ -37,7 +37,7 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `effectDescription`: **optional**. A function that returns a description of this effect. If the text stays constant, it can just be a string.
 
-- `layerShown()`: **optional**, A function returning a bool which determines if this layer's node should be visible on the tree. It can also return "ghost", which will hide the layer, but its node will still take up space in the tree.
+- `layerShown()`: **optional**. A function returning a boolean which determines if this layer's node should be visible on the tree. It can also return "ghost", which will hide the layer, but its node will still take up space in the tree.
     Defaults to true.
 
 - `hotkeys`: **optional**. An array containing information on any hotkeys associated with this layer:
@@ -53,11 +53,11 @@ You can make almost any value dynamic by using a function in its place, includin
     ]
     ```
 
-- `style`: **optional**. a "CSS object" where the keys are CSS attributes, containing any CSS that should affect this layer's entire tab.
+- `style`: **optional**. A "CSS object" where the keys are CSS attributes, containing any CSS that should affect this layer's entire tab.
 
-- `tabFormat`: **optional**. use this if you want to add extra things to your tab or change the layout. [See here for more info.](custom-tab-layouts.md)
+- `tabFormat`: **optional**. Use this if you want to add extra things to your tab or change the layout. [See here for more info.](custom-tab-layouts.md)
 
-- `midsection`: **optional**, an alternative to `tabFormat`, which is inserted in between Milestones and Buyables in the standard tab layout. (cannot do subtabs)
+- `midsection`: **optional**. An alternative to `tabFormat`, which is inserted in between Milestones and Buyables in the standard tab layout. (cannot do subtabs)
 
 ## Big features (all optional)
 
@@ -77,7 +77,7 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `achievements`: Kind of like milestones, but with a different display style and some other differences. Extra features are on the way at a later date! [See here for more info.](achievements.md)
 
-- `achievementPopups`, `milestonePopups`: **optional**, If false, disables popup message when you get the achievement/milestone. True by default.
+- `achievementPopups`, `milestonePopups`: **optional**. If false, disables the popup message when you get an achievement/milestone in this layer. True by default.
 
 - `infoboxes`: Displays some text in a box that can be shown or hidden. [See here for more info.](infoboxes.md)
 
@@ -100,9 +100,9 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `exponent`: Used as described above.
 
-- `base`: **sometimes required**. required for "static" layers, used as described above. If absent, defaults to 2. Must be greater than 1.
+- `base`: **sometimes required**. Required for "static" layers, used as described above. If absent, defaults to 2. Must be greater than 1.
 
-- `roundUpCost`: **optional**. a bool, which is true if the resource cost needs to be rounded up. (use if the base resource is a "static" currency.)
+- `roundUpCost`: **optional**. A boolean, which is true if the resource cost needs to be rounded up. (Use if the base resource is a "static" currency.)
 
 - `gainMult()`, `gainExp()`: **optional**. For normal layers, these functions calculate the multiplier and exponent on resource gain from upgrades and boosts and such. Plug in most bonuses here.
     For static layers, they instead multiply and roots the cost of the resource. (So to make a boost you want to make gainMult smaller and gainExp larger.)
@@ -114,7 +114,7 @@ You can make almost any value dynamic by using a function in its place, includin
 
 ## Other prestige-related features
 
-- `canBuyMax()`: **sometimes required**. required for static layers, function used to determine if buying max is permitted.
+- `canBuyMax()`: **sometimes required**. Required for static layers. Function used to determine if buying max is permitted.
 
 - `onPrestige(gain)`: **optional**. A function that triggers when this layer prestiges, just before you gain the currency.  Can be used to have secondary resource gain on prestige, or to recalculate things or whatnot.
 
@@ -122,15 +122,17 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `prestigeButtonText()`: **sometimes required**. Use this to make the entirety of the text a Prestige button contains. Only required for custom layers, but usable by all types.
 
-- `passiveGeneration()`: **optional**, returns a regular number. You automatically generate your gain times this number every second (does nothing if absent)
-    This is good for automating Normal layers.
+- `passiveGeneration()`: **optional**. Returns a regular number. You automatically generate your gain times this number every second (does nothing if absent)
+    This is good for automating normal layers.
 
-- `autoPrestige()`: **optional**, returns a boolean, if true, the layer will always automatically do a prestige if it can.
-    This is good for automating Static layers.
+- `autoPrestige()`: **optional**. Returns a boolean. If it is true, the layer will always automatically do a prestige if it can.
+    This is good for automating static layers.
 
-Additional prestige-related features:
+Additional features:
 
 - `onPrestigeIsAfterGain`: **optional**. A boolean indicating whether this layer's `onPrestige()` function triggers after prestige resource gain but before resetting anything. By default is false, which makes `onPrestige()` trigger before both.
+
+- `logged`: **optional**. For normal layers, if this is a truthy value, the resource gain becomes the log of the previous gain plus one. If it is exactly `true`, the log base is `10`, otherwise the log base is `new Decimal(logged)`. Can also be a function. Has no effect on static layers.
 
 ## Tree/node features
 
@@ -147,7 +149,7 @@ Additional prestige-related features:
 - `tooltip()` / `tooltipLocked()`: **optional**. Functions that return text, which is the tooltip for the node when the layer is unlocked or locked, respectively. By default the tooltips behave the same as in the original Prestige Tree.
     If the value is "", the tooltip will be disabled.
 
-- `marked`: **optional** Adds a mark to the corner of the node. If it's "true" it will be a star, but it can also be an image URL.
+- `marked`: **optional**. Adds a mark to the corner of the node. If it's "true" it will be a star, but it can also be an image URL.
 
 ## Other features
 
@@ -157,7 +159,7 @@ Additional prestige-related features:
 
 - `update(diff)`: **optional**. This function is called every game tick. Use it for any passive resource production or time-based things. `diff` is the time since the last tick.
 
-- `autoUpgrade`: **optional**, a boolean value, if true, the game will attempt to buy this layer's upgrades every tick. Defaults to false.
+- `autoUpgrade`: **optional**. A boolean value. If true, the game will attempt to buy this layer's upgrades every tick. Defaults to false.
 
 - `automate()`: **optional**. This function is called every game tick, after production. Use it to activate automation things that aren't otherwise supported.
 
@@ -178,11 +180,11 @@ componentStyles: {
 }
 ```
 
-- `leftTab`: **optional**, if true, this layer will use the left tab instead of the right tab.
+- `leftTab`: **optional**. A boolean value. If true, this layer will use the left tab instead of the right tab.
 
-- `previousTab`: **optional**, a layer's id. If a layer has a previousTab, the layer will always have a back arrow and pressing the back arrow on this layer will take you to the layer with this id.
+- `previousTab`: **optional**. A layer's id. If a layer has a previousTab, the layer will always have a back arrow and pressing the back arrow on this layer will take you to the layer with this id.
 
-- `deactivated`: **optional**, if this is true, hasUpgrade, hasChallenge, hasAchievement, and hasMilestone will return false for things in the layer, and you will be unable to buy or click things, or gain achievements/milestones on the layer. You will have to disable effects of buyables, the innate layer effect, and possibly other things yourself.
+- `deactivated`: **optional**. A boolean value. If true, `hasUpgrade`, `hasMilestone`, `hasAchievement`, `hasChallenge`, and `hasBuyable` will return false for things in the layer, and you will be unable to buy or click things, or gain achievements/milestones on the layer. You will have to disable clickable effects, the innate layer effect, and possibly other things yourself.
 
 ## Custom Prestige type
 
@@ -192,6 +194,6 @@ componentStyles: {
 
 - `getNextAt(canMax = false)`: **mostly for custom prestige type**. Returns how many of the base currency you need to get to the next point. `canMax` is an optional variable used with Static-ish layers to differentiate between if it's looking for the first point you can reset at, or the requirement for any gain at all (Supporting both is good). You can also call `getNextAt(this.layer, canMax=false, useType = "static")` or similar to calculate what your next at would be under another prestige type (provided you have all of the required features in the layer).
 
-- `canReset()`: **mostly for custom prestige type**. Return true only if you have the resources required to do a prestige here.
+- `canReset()`: **mostly for custom prestige type**. Returns true only if you have the resources required to do a prestige here.
 
-- `prestigeNotify()`: **mostly for custom prestige types**, returns true if this layer should be subtly highlighted to indicate you can prestige for a meaningful gain.
+- `prestigeNotify()`: **mostly for custom prestige types**. Returns true if this layer should be subtly highlighted to indicate you can prestige for a meaningful gain.

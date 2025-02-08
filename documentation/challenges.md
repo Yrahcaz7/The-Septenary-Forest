@@ -54,7 +54,7 @@ Individual Challenges can have these features:
 
 - `countsAs`: **optional**. If a challenge combines the effects of other challenges in this layer, you can use this. An array of challenge ids. The player is effectively in all of those challenges when in the current one.
 
-- `completionLimit`: **optional**. the amount of times you can complete this challenge. Default is 1 completion.
+- `completionLimit`: **optional**. The amount of times you can complete this challenge. Default is 1 completion.
 
 - `style`: **optional**. Applies CSS to this challenge, in the form of an object where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
 
@@ -78,12 +78,12 @@ Additional features:
 
 The old goal system uses these features:
 
-- `goal`: **deprecated**, A Decimal for the amount of currency required to beat the challenge. By default, the goal is in basic Points. The goal can also be a function if its value changes.
+- `goal`: **deprecated**. A Decimal for the amount of currency required to beat the challenge. By default, the goal is in basic Points. The goal can also be a function if its value changes.
 
-- `currencyDisplayName`: **deprecated**. the name to display for the currency for the goal
+- `currencyDisplayName`: **deprecated**. The name to display for the currency for the goal
 
-- `currencyInternalName`: **deprecated**. the internal name for that currency
+- `currencyInternalName`: **deprecated**. The internal name for that currency
 
-- `currencyLayer`: **deprecated**. the internal name of the layer that currency is stored in. If it's not in a layer, omit. If it's not stored directly in a layer, instead use the next feature.
+- `currencyLayer`: **deprecated**. The internal name of the layer that currency is stored in. If it's not in a layer, omit. If it's not stored directly in a layer, instead use the next feature.
 
-- `currencyLocation()`: **deprecated**. if your currency is stored in something inside a layer (e.g. a buyable's amount), you can access it this way. This is a function returning the object in "player" that contains the value (like `player[this.layer].buyables`)
+- `currencyLocation()`: **deprecated**. If your currency is stored in something inside a layer (e.g. a buyable's amount), you can access it this way. This is a function returning the object in "player" that contains the value (like `player[this.layer].buyables`)

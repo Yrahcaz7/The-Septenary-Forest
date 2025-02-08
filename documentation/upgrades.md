@@ -2,9 +2,9 @@
 
 Useful functions for dealing with Upgrades and implementing their effects:
 
-- `hasUpgrade(layer, id)`: determine if the player has the upgrade
-- `upgradeEffect(layer, id)`: Returns the current effects of the upgrade, if any
-- `buyUpgrade(layer, id)`: Buys an upgrade directly (if affordable)
+- `hasUpgrade(layer, id)`: determine if the player has the upgrade.
+- `upgradeEffect(layer, id)`: Returns the current effects of the upgrade, if any.
+- `buyUpgrade(layer, id)`: Buys an upgrade directly (if affordable).
 
 Hint: Basic point gain is calculated in [mod.js](/js/mod.js)'s `getPointGen()` function.
 
@@ -49,7 +49,7 @@ Individual upgrades can have these features:
 
 - `id`: **assigned automagically**. It's the "key" which the upgrade was stored under, for convenient access. The upgrade in the example's id is 11.
 
-- `branches`: **optional**, This is primarially useful for upgrade trees. An array of upgrade ids. A line will appear from this upgrade to all of the upgrades in the list. Alternatively, an entry in the array can be a 2-element array consisting of the upgrade id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). A third element in the array optionally specifies line width.
+- `branches`: **optional**. This is primarially useful for upgrade trees. An array of upgrade ids. A line will appear from this upgrade to all of the upgrades in the list. Alternatively, an entry in the array can be a 2-element array consisting of the upgrade id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). A third element in the array optionally specifies line width.
 
 By default, upgrades use the main prestige currency for the layer. You can include these to change them (but it needs to be a Decimal):
 
@@ -59,10 +59,10 @@ By default, upgrades use the main prestige currency for the layer. You can inclu
 
 - `currencyLayer`: **optional**. The internal name of the layer that currency is stored in. If it's not in a layer (like Points), omit. If it's not stored directly in a layer, instead use the next feature.
 
-- `currencyLocation`: **optional**. If your currency is stored in something inside a layer (e.g. a buyable's amount), you can access it this way. This is a function returning the object in "player" that contains the value (like `player[this.layer].buyables`)
+- `currencyLocation`: **optional**. If your currency is stored in something inside a layer (e.g. a buyable's amount), you can access it this way. This is a function returning the object in "player" that contains the value (like `player[this.layer].buyables`).
 
-If you want to do something more complicated like upgrades that cost two currencies, or have extra requirements, you can override the purchase system with these. (and you need to use fullDisplay if you don't use "cost")
+If you want to do something more complicated like upgrades that cost two currencies, or have extra requirements, you can override the purchase system with these (and you need to use fullDisplay if you don't use "cost").
 
-- `canAfford()`: **OVERRIDE**, a function determining if you are able to buy the upgrade. (If you also have a cost, it will check both the cost and this function)
+- `canAfford()`: **OVERRIDE**. A function determining if you are able to buy the upgrade. (If you also have a cost, it will check both the cost and this function.)
 
-- `pay()`: **OVERRIDE**, a function that reduces your currencies when you buy the upgrade
+- `pay()`: **OVERRIDE**. A function that reduces your currencies when you buy the upgrade.

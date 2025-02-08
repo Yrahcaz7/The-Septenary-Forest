@@ -6,10 +6,10 @@ The amount of a buyable owned is a `Decimal`.
 
 Useful functions for dealing with buyables and implementing their effects:
 
-- `getBuyableAmount(layer, id)`: get the amount of the buyable the player has
-- `addBuyables(layer, id, amount)`: add to the amount of the buyable
-- `setBuyableAmount(layer, id, amount)`: set the amount of the buyable the player has
-- `hasBuyable(layer, id)`: returns true if the player has more than one of the buyable
+- `getBuyableAmount(layer, id)`: get the amount of the buyable the player has.
+- `addBuyables(layer, id, amount)`: add to the amount of the buyable.
+- `setBuyableAmount(layer, id, amount)`: set the amount of the buyable the player has.
+- `hasBuyable(layer, id)`: returns true if the player has more than one of the buyable.
 - `buyableEffect(layer, id)`: returns the current effects of the buyable, if any.
 
 Buyables should be formatted like this:
@@ -32,9 +32,9 @@ buyables: {
 
 Features:
 
-- `title`: **optional**. displayed at the top in a larger font. It can also be a function that returns updating text.
+- `title`: **optional**. Displayed at the top in a larger font. It can also be a function that returns updating text.
 
-- `cost()`: cost for buying the next buyable. Can have an optional argument "x" to calculate the cost of the x+1th purchase. (x is a `Decimal`).
+- `cost()`: Cost for buying the next buyable. Can have an optional argument "x" to calculate the cost of the x+1th purchase. (x is a `Decimal`).
     Can return an object if there are multiple currencies.
 
 - `effect()`: **optional**. A function that calculates and returns the current values of bonuses of this buyable.  Can have an optional argument "x" to calculate the effect of having x of the buyable.
@@ -62,7 +62,7 @@ Features:
 
 - `id`: **assigned automagically**. It's the "key" which the buyable was stored under, for convenient access. The buyable in the example's id is 11.
 
-- `branches`: **optional**, This is primarially useful for buyable trees. An array of buyable ids. A line will appear from this buyable to all of the buyables in the list. Alternatively, an entry in the array can be a 2-element array consisting of the buyable id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). A third element in the array optionally specifies line width.
+- `branches`: **optional**. This is primarially useful for buyable trees. An array of buyable ids. A line will appear from this buyable to all of the buyables in the list. Alternatively, an entry in the array can be a 2-element array consisting of the buyable id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). A third element in the array optionally specifies line width.
 
 Sell One/Sell All:
 
@@ -70,7 +70,7 @@ Including a `sellOne` or `sellAll` function will cause an additional button to a
 
 - `sellOne()`, `sellAll()`: **optional**. Called when the button is pressed. The standard use would be to decrease/reset the amount of the buyable, and possibly return some currency to the player.
 
-- `canSellOne()`, `canSellAll()`: **optional**. booleans determining whether or not to show the buttons. If "canSellOne/All" is absent but "sellOne/All" is present, the appropriate button will always show.
+- `canSellOne()`, `canSellAll()`: **optional**. Booleans determining whether or not to show the buttons. If "canSellOne/All" is absent but "sellOne/All" is present, the appropriate button will always show.
 
 To add a respec button, or something similar, add the respecBuyables function to the main buyables object (not individual buyables).
 You can use these features along with it:
