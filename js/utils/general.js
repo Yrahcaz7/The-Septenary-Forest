@@ -241,7 +241,7 @@ function updateMilestones(layer) {
 			if (layers[layer].milestones[id].onComplete) layers[layer].milestones[id].onComplete();
 			let color = tmp[layer].color;
 			if (layers[layer].milestones[id].color) color = layers[layer].milestones[id].color;
-			if ((tmp[layer].milestonePopups || tmp[layer].milestonePopups === undefined) && !options.hideMilestonePopups) doPopup('milestone', tmp[layer].milestones[id].requirementDescription, 'Milestone Gotten!', 3, color);
+			if ((tmp[layer].milestonePopups || tmp[layer].milestonePopups === undefined) && !options.hideMilestonePopups) doPopup('milestone', tmp[layer].milestones[id].requirementDescription, '', 3, color);
 			player[layer].lastMilestone = id;
 		};
 	};
@@ -255,7 +255,7 @@ function updateAchievements(layer) {
 			if (layers[layer].achievements[id].onComplete) layers[layer].achievements[id].onComplete();
 			let color = tmp[layer].color;
 			if (layers[layer].achievements[id].color) color = layers[layer].achievements[id].color;
-			if (tmp[layer].achievementPopups || tmp[layer].achievementPopups === undefined) doPopup('achievement', tmp[layer].achievements[id].name, 'Achievement Gotten!', 3, color);
+			if (tmp[layer].achievementPopups || tmp[layer].achievementPopups === undefined) doPopup('achievement', tmp[layer].achievements[id].name, '', 3, color);
 		};
 	};
 };
@@ -346,9 +346,9 @@ function doPopup(type = 'none', text = 'This is a test popup.', title = '', time
 			popupTitle = 'Achievement Unlocked!';
 			popupType = 'achievement-popup';
 			break;
-		case 'challenge':
-			popupTitle = 'Challenge Complete';
-			popupType = 'challenge-popup';
+		case 'milestone':
+			popupTitle = 'Milestone Achieved!';
+			popupType = 'milestone-popup';
 			break;
 		default:
 			popupTitle = 'Something Happened?';
