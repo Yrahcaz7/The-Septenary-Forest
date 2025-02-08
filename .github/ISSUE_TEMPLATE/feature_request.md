@@ -7,14 +7,18 @@ assignees: ''
 
 ---
 
-**Any Problems?**
-If this feature request is due to a problem, add a clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+### Any Problems?
 
-**Solution**
+If this feature request is due to a problem, add a clear and concise description of what the problem is (e.g. I'm always frustrated when [...]).
+
+### Solution
+
 A clear and concise description of what you want to be added or changed.
 
-**Alternatives**
+### Alternatives
+
 If applicable, add a clear and concise description of any alternative solutions or features you've considered.
 
-**Additional Notes**
+### Additional Notes
+
 Add any important notes or screenshots about the feature request here.
