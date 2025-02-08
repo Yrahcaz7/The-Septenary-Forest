@@ -20,15 +20,11 @@ function commaFormat(num, precision) {
 	return portions[0] + "." + portions[1];
 };
 
-function regularFormat(num, precision) {
+function regularFormat(num, precision, small = true) {
 	if (num === null || num === undefined) return "NaN";
 	if (num.mag < 0.0001) return (0).toFixed(precision);
-	if (num.mag < 0.1 && precision !==0) precision = Math.max(precision, 4);
+	if (num.mag < 0.1 && precision !== 0 && small) precision = Math.max(precision, 4);
 	return num.toStringWithDecimalPlaces(precision);
-};
-
-function fixValue(x, y = 0) {
-	return x || new Decimal(y);
 };
 
 function sumValues(x) {
@@ -37,18 +33,17 @@ function sumValues(x) {
 	return x.reduce((a, b) => Decimal.add(a, b));
 };
 
-function format(decimal, precision = 2, small) {
-	small = small || modInfo.allowSmall;
-	if (options.extendplaces && precision == 2) precision = 3;
-	decimal = new Decimal(decimal)
-	if (isNaN(decimal.sign) || isNaN(decimal.layer) || isNaN(decimal.mag)) {
+function format(decimal, precision = 2, small = true) {
+	if (options.extendplaces && precision > 0) precision++;
+	decimal = new Decimal(decimal);
+	if (Decimal.isNaN(decimal)) {
 		player.hasNaN = true;
 		return "NaN";
 	};
 	if (decimal.sign < 0) return "-" + format(decimal.neg(), precision, small);
-	if (decimal.mag == Number.POSITIVE_INFINITY) return "Infinity";
+	if (decimal.mag == Infinity) return "Infinity";
 	if (decimal.gte("eeee1000")) {
-		var slog = decimal.slog();
+		let slog = decimal.slog();
 		if (slog.gte(1e6)) return "F" + format(slog.floor());
 		return decimal.pow(10, slog.sub(slog.floor())).toStringWithDecimalPlaces(3) + "F" + commaFormat(slog.floor(), 0);
 	};
@@ -56,21 +51,17 @@ function format(decimal, precision = 2, small) {
 	if (decimal.gte("1e10000")) return exponentialFormat(decimal, 0);
 	if (decimal.gte(1e9)) return exponentialFormat(decimal, precision);
 	if (decimal.gte(1e3)) return commaFormat(decimal, 0);
-	if (decimal.gte(0.0001) || !small) return regularFormat(decimal, precision);
+	if (decimal.gte(0.0001) || !small) return regularFormat(decimal, precision, small);
 	if (decimal.eq(0)) return (0).toFixed(precision);
 	decimal = invertOOM(decimal);
-	let val = "";
-	if (decimal.lt("1e10000")) {
-		val = exponentialFormat(decimal, precision);
-		return val.replace(/([^(?:e|F)]*)$/, '-$1');
-	};
-	return format(decimal, precision) + "⁻¹";
+	if (decimal.lt("1e1000")) return exponentialFormat(decimal, precision).replace(/([^(?:e|F)]*)$/, "-$1");
+	return format(decimal, precision) + "&#8315;&#185;";
 };
 
 function formatWhole(decimal) {
 	decimal = new Decimal(decimal);
 	if (decimal.gte(1e9)) return format(decimal, 2);
-	if (decimal.lte(0.99) && !decimal.eq(0)) return format(decimal, 2);
+	if (decimal.lte(options.extendplaces ? 0.999 : 0.99) && !decimal.eq(0)) return format(decimal, 2);
 	return format(decimal, 0);
 };
 
@@ -83,8 +74,7 @@ function formatTime(s) {
 };
 
 function toPlaces(x, precision, maxAccepted) {
-	x = new Decimal(x);
-	let result = x.toStringWithDecimalPlaces(precision);
+	let result = new Decimal(x).toStringWithDecimalPlaces(precision);
 	if (new Decimal(result).gte(maxAccepted)) result = new Decimal(maxAccepted - Math.pow(0.1, precision)).toStringWithDecimalPlaces(precision);
 	return result;
 };

@@ -1,11 +1,10 @@
-// ************ Themes ************
-var themes = ["default", "aqua"]
+let themes = ["default", "aqua"];
 
-var colors = {
+let colors = {
 	default: {
-		1: "#ffffff", //Branch color 1
-		2: "#bfbfbf", //Branch color 2
-		3: "#7f7f7f", //Branch color 3
+		1: "#ffffff", // Branch color 1
+		2: "#bfbfbf", // Branch color 2
+		3: "#7f7f7f", // Branch color 3
 		color: "#dfdfdf",
 		points: "#ffffff",
 		locked: "#bf8f8f",
@@ -26,11 +25,11 @@ var colors = {
 
 function changeTheme() {
 	colors_theme = colors[options.theme || "default"];
-	document.body.style.setProperty('--background', colors_theme["background"]);
-	document.body.style.setProperty('--background_tooltip', colors_theme["background_tooltip"]);
-	document.body.style.setProperty('--color', colors_theme["color"]);
-	document.body.style.setProperty('--points', colors_theme["points"]);
-	document.body.style.setProperty("--locked", colors_theme["locked"]);
+	document.body.style.setProperty("--background", colors_theme.background);
+	document.body.style.setProperty("--background_tooltip", colors_theme.background_tooltip);
+	document.body.style.setProperty("--color", colors_theme.color);
+	document.body.style.setProperty("--points", colors_theme.points);
+	document.body.style.setProperty("--locked", colors_theme.locked);
 };
 
 function getThemeName() {

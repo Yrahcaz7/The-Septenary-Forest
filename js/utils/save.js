@@ -30,8 +30,9 @@ function getStartPlayer() {
 	playerdata = startPlayerBase();
 	if (addedPlayerData) {
 		extradata = addedPlayerData();
-		for (thing in extradata)
+		for (thing in extradata) {
 			playerdata[thing] = extradata[thing];
+		};
 	};
 	playerdata.infoboxes = {};
 	for (layer in layers) {
@@ -42,13 +43,15 @@ function getStartPlayer() {
 		};
 		if (layers[layer].microtabs) {
 			if (playerdata.subtabs[layer] == undefined) playerdata.subtabs[layer] = {};
-			for (item in layers[layer].microtabs)
+			for (item in layers[layer].microtabs) {
 				playerdata.subtabs[layer][item] = Object.keys(layers[layer].microtabs[item])[0];
+			};
 		};
 		if (layers[layer].infoboxes) {
 			if (playerdata.infoboxes[layer] == undefined) playerdata.infoboxes[layer] = {};
-			for (item in layers[layer].infoboxes)
+			for (item in layers[layer].infoboxes) {
 				playerdata.infoboxes[layer][item] = false;
+			};
 		};
 	};
 	return playerdata;
@@ -79,8 +82,9 @@ function getStartLayerData(layer) {
 function getStartBuyables(layer) {
 	let data = {};
 	if (layers[layer].buyables) {
-		for (id in layers[layer].buyables)
+		for (id in layers[layer].buyables) {
 			if (isPlainObject(layers[layer].buyables[id])) data[id] = decimalZero;
+		};
 	};
 	return data;
 };
@@ -88,8 +92,9 @@ function getStartBuyables(layer) {
 function getStartClickables(layer) {
 	let data = {};
 	if (layers[layer].clickables) {
-		for (id in layers[layer].clickables)
+		for (id in layers[layer].clickables) {
 			if (isPlainObject(layers[layer].clickables[id])) data[id] = "";
+		};
 	};
 	return data;
 };
@@ -97,8 +102,9 @@ function getStartClickables(layer) {
 function getStartChallenges(layer) {
 	let data = {};
 	if (layers[layer].challenges) {
-		for (id in layers[layer].challenges)
+		for (id in layers[layer].challenges) {
 			if (isPlainObject(layers[layer].challenges[id])) data[id] = 0;
+		};
 	};
 	return data;
 };
@@ -147,8 +153,8 @@ function fixData(defaultData, newData) {
 		} else if (defaultData[item] instanceof Decimal) { // Convert to Decimal
 			if (newData[item] === undefined) newData[item] = defaultData[item];
 			else newData[item] = new Decimal(newData[item]);
-		} else if ((!!defaultData[item]) && (typeof defaultData[item] === "object")) {
-			if (newData[item] === undefined || (typeof defaultData[item] !== "object")) newData[item] = defaultData[item];
+		} else if (!!defaultData[item] && typeof defaultData[item] === "object") {
+			if (newData[item] === undefined || typeof defaultData[item] !== "object") newData[item] = defaultData[item];
 			else fixData(defaultData[item], newData[item]);
 		} else {
 			if (newData[item] === undefined) newData[item] = defaultData[item];

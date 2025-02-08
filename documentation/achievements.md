@@ -35,9 +35,9 @@ Individual achievement can have these features:
 
 - `unlocked()`: **optional**. A function returning a bool to determine if the achievement is visible or not. Default is unlocked.
 
-- `onComplete()`: **optional**. this function will be called when the achievement is completed.
+- `onComplete()`: **optional**. This function will be called when the achievement is completed.
 
-- `image`: **optional**, puts the image from the given URL (relative or absolute) in the achievement
+- `image`: **optional**. Puts the image from the given URL (relative or absolute) in the achievement.
 
 - `style`: **optional**. Applies CSS to this achievement, in the form of an object where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
 
@@ -55,4 +55,6 @@ Disable achievement popups by adding `achievementsPopups: false` to the layer.
 
 Additional features:
 
-- `color`: **optional**. Overrides the default color of the achievement.
+- `popupTitle`: **optional**. The title of the popup generated when the achievement is gotten. If not present, the popup's title is "Achievement Unlocked!"
+
+- `popupColor`: **optional**. The color of the popup generated when the achievement is gotten. If not present, the popup's color is the layer's color.

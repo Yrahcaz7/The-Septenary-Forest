@@ -23,7 +23,7 @@ Milestone features:
 
 - `done()`: A function returning a boolean to determine if the milestone should be awarded.
 
-- `onComplete()`: **optional**. this function will be called when the milestone is completed.
+- `onComplete()`: **optional**. This function will be called when the milestone is completed.
 
 - `toggles`: **optional**. Creates toggle buttons that appear on the milestone when it is unlocked. The toggles can toggle a given boolean value in a layer. It is defined as an array of paired items, one pair per toggle. The first is the internal name of the layer the value being toggled is stored in, and the second is the internal name of the variable to toggle. (e.g. `[["b", "auto"], ["g", "auto"]]`)
 
@@ -43,4 +43,6 @@ Disable milestone popups by adding `milestonePopups: false` to the layer.
 
 Additional features:
 
-- `color`: **optional**. Overrides the default color of the milestone.
+- `popupTitle`: **optional**. The title of the popup generated when the milestone is gotten. If not present, the popup's title is "Milestone Achieved!"
+
+- `popupColor`: **optional**. The color of the popup generated when the milestone is gotten. If not present, the popup's color is the layer's color.
