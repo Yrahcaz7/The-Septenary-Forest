@@ -70,7 +70,9 @@ Additional features:
 
 - `noAutoExit`: **optional**. A boolean to determine if the challenge should stay active on resets. Default is to not.
 
-- `enterable()`: **optional**. A function returning a boolean to determine if the challenge is enterable. Default behavior is to be always enterable.
+- `canEnter()`: **optional**. A function returning a boolean to determine if the challenge is enterable. Default behavior is to always allow entering.
+
+- `canExit()`: **optional**. A function returning a boolean to determine if the challenge is exitable. Default behavior is to always allow exiting.
 
 - `buttonText`: **optional**. An array that replaces the default button text. It has the following syntax: [`replace "Finish"`, `replace "Exit Early"`, `replace "Completed"`, `replace "Start"`, `replace "Locked"`]. [Falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) values will be taken as you want the default for that value.
 

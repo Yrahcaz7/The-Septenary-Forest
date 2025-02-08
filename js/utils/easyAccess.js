@@ -30,16 +30,21 @@ function challengeCompletions(layer, id) {
 
 function hasBuyable(layer, id) {
 	if (!player[layer] || !player[layer].buyables[id] || !tmp[layer] || tmp[layer].deactivated) return false;
-	return (player[layer].buyables[id].gt(0));
+	return player[layer].buyables[id].gt(0);
+};
+
+function canUseChallenge(layer, id) {
+	if (inChallenge(layer, id)) return canExitChallenge(layer, id);
+	return canEnterChallenge(layer, id);
 };
 
 function canEnterChallenge(layer, id) {
 	return tmp[layer].challenges[id].canEnter ?? true;
-}
+};
 
 function canExitChallenge(layer, id) {
 	return tmp[layer].challenges[id].canExit ?? true;
-}
+};
 
 function getBuyableAmount(layer, id) {
 	if (!player[layer] || !tmp[layer] || tmp[layer].deactivated) return new Decimal(0);

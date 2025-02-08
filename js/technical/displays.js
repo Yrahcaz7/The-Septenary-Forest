@@ -16,8 +16,9 @@ function constructNodeStyle(layer) {
 };
 
 function challengeStyle(layer, id) {
+	if (!canUseChallenge(layer, id)) return "locked";
 	if (player[layer].activeChallenge == id && canCompleteChallenge(layer, id)) return "canComplete";
-	else if (maxedChallenge(layer, id)) return "done";
+	if (maxedChallenge(layer, id)) return "done";
 	return "locked";
 };
 
@@ -38,7 +39,7 @@ function challengeButtonText(layer, id) {
 			if (tmp[layer].challenges[id].buttonText[4]) text[4] = tmp[layer].challenges[id].buttonText[4];
 		};
 	};
-	if (layers[layer].challenges[id].enterable && !tmp[layer].challenges[id].enterable) return text[4];
+	if (!canUseChallenge(layer, id)) return text[4];
 	return (player[layer].activeChallenge == id ? (canCompleteChallenge(layer, id) ? text[0] : text[1]) : (maxedChallenge(layer, id) ? text[2] : text[3]));
 };
 
