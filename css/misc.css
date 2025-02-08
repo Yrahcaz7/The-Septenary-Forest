@@ -1,8 +1,3 @@
-/* custom */
-body {
-	--chaos-gradient: radial-gradient(#4CED13, #D2D237, #DB5196, #710CC4, #E36409, #BA0035, #4D2FE0, #FDBBFF, #AAFF00, #B9A975, #00CCCC, #08FF87, #FF4400, #A0A0A0, #008800, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF);
-}
-
 /* Prestige button */
 .reset {
 	height: 120px;
@@ -22,7 +17,6 @@ body {
 	border-radius: 10px;
 	border: 2px solid;
 	color: var(--color);
-
 }
 
 .tabButton:hover {

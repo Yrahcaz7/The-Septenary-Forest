@@ -6447,8 +6447,8 @@ addLayer('ch', {
 	}},
 	color: '#FFFFFF',
 	nodeStyle() {
-		if (this.getResetGain().gt(0) || player.ch.unlocked) return {width: '150px', height: '150px', 'background-image': 'var(--chaos-gradient)', 'border-width': '0px'};
-		else return {width: '150px', height: '150px'};
+		if (this.getResetGain().gt(0) || player.ch.unlocked) return {width: '150px', height: '150px', 'background-image': 'radial-gradient(#4CED13, #D2D237, #DB5196, #710CC4, #E36409, #BA0035, #4D2FE0, #FDBBFF, #AAFF00, #B9A975, #00CCCC, #08FF87, #FF4400, #A0A0A0, #008800, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF)', 'border-width': '0px'};
+		return {width: '150px', height: '150px'};
 	},
 	requires: 70,
 	marked() { return isAssimilated(this.layer) },

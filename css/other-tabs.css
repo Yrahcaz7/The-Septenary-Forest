@@ -76,24 +76,21 @@ a {
 	-webkit-text-decoration-line: none;
 	-moz-text-decoration-line: none;
 	text-decoration-line: none;
+	text-decoration: none;
 	cursor: pointer;
 }
 
 .link {
-	display: block;
+	display: inline-block;
 	font-size: 20px;
 	color: #41f5f5;
 	cursor: pointer;
 	font-family: "Lucida Console", "Courier New", monospace;
-	-webkit-text-stroke-width: 1px;
-	-webkit-text-stroke-color: #02f2f2;
-	text-decoration: none;
 }
 
 .link:hover {
 	transform: scale(1.2, 1.2);
-	text-shadow: 5px 0 10px #02f2f2,
-				-3px 0 12px #02f2f2;
+	text-shadow: 5px 0 10px #02f2f2, -3px 0 12px #02f2f2;
 }
 
 .opt {

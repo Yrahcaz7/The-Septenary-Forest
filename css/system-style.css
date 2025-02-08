@@ -1,7 +1,7 @@
 * {
 	transition-duration: 0.5s;
 	text-align: center;
-	font-family: "Inconsolata", monospace;
+	font-family: Inconsolata, monospace;
 	font-weight: bold;
 	margin: auto;
 	-webkit-text-size-adjust: none;
@@ -39,6 +39,10 @@ td {
 	align-items: center;
 	max-width: 100%;
 	margin: 0 auto;
+}
+
+.upgCol {
+	width: 100%;
 }
 
 .upgAlign {
@@ -113,7 +117,7 @@ td {
 }
 
 .remove:hover {
-	transform: scale(1.1, 1.1);
+	transform: scale(1.1);
 }
 
 .col {
@@ -126,6 +130,7 @@ td {
 	position: absolute;
 	overflow-y: auto;
 	overflow-x: auto;
+	overscroll-behavior: none;
 	transition-duration: 0s;
 }
 
@@ -167,10 +172,10 @@ ul {
 	transition-duration: 0s;
 }
 
-.tooltipBox { 
+.tooltipBox {
 	position: relative;
 }
-  
+
 .tooltipBox:hover .tooltip {
 	opacity: 1;
 }
@@ -179,9 +184,10 @@ ul {
 	opacity: 1;
 	z-index: 999;
 }
-  
+
 .respecCheckbox {
 	display: inline-block;
+	margin-left: 5px;
 }
 
 .treeOverlay {
@@ -216,7 +222,7 @@ button > * {
 }
 
 .treeTab td button {
-    margin: 0 10px;
+	margin: 0 10px;
 }
 
 .bg {
