@@ -213,7 +213,7 @@ function nodeShown(layer) {
 };
 
 function layerunlocked(layer) {
-	if (tmp[layer] && tmp[layer].type == 'none') return (player[layer].unlocked);
+	if (tmp[layer] && tmp[layer].type == 'none') return player[layer].unlocked;
 	return LAYERS.includes(layer) && (player[layer].unlocked || (tmp[layer].canReset && tmp[layer].layerShown));
 };
 
@@ -239,9 +239,9 @@ function updateMilestones(layer) {
 		if (!(hasMilestone(layer, id)) && layers[layer].milestones[id].done()) {
 			player[layer].milestones.push(id);
 			if (layers[layer].milestones[id].onComplete) layers[layer].milestones[id].onComplete();
+			let color = tmp[layer].color;
 			if (layers[layer].milestones[id].color) color = layers[layer].milestones[id].color;
-			else color = tmp[layer].color;
-			if (tmp[layer].milestonePopups || tmp[layer].milestonePopups === undefined) doPopup('milestone', tmp[layer].milestones[id].requirementDescription, 'Milestone Gotten!', 3, color);
+			if ((tmp[layer].milestonePopups || tmp[layer].milestonePopups === undefined) && !options.hideMilestonePopups) doPopup('milestone', tmp[layer].milestones[id].requirementDescription, 'Milestone Gotten!', 3, color);
 			player[layer].lastMilestone = id;
 		};
 	};
@@ -253,9 +253,9 @@ function updateAchievements(layer) {
 		if (isPlainObject(layers[layer].achievements[id]) && !(hasAchievement(layer, id)) && layers[layer].achievements[id].done()) {
 			player[layer].achievements.push(id);
 			if (layers[layer].achievements[id].onComplete) layers[layer].achievements[id].onComplete();
+			let color = tmp[layer].color;
 			if (layers[layer].achievements[id].color) color = layers[layer].achievements[id].color;
-			else color = tmp[layer].color;
-			if (tmp[layer].achievementPopups || tmp[layer].achievementPopups === undefined) doPopup('achievement',tmp[layer].achievements[id].name,'Achievement Gotten!',3,color);
+			if (tmp[layer].achievementPopups || tmp[layer].achievementPopups === undefined) doPopup('achievement', tmp[layer].achievements[id].name, 'Achievement Gotten!', 3, color);
 		};
 	};
 };
@@ -267,12 +267,12 @@ function addTime(diff, layer) {
 		data = data[layer];
 		time = data.time;
 	};
-	//I am not that good to perfectly fix that leak. ~ DB Aarex
+	// I am not that good to perfectly fix that leak. ~ DB Aarex
 	if (time + 0 !== time) {
 		console.log('Memory leak detected. Trying to fix...');
 		time = toNumber(time);
 		if (isNaN(time) || time == 0) {
-			console.log('Couldn\'t fix! Resetting...');
+			console.log("Couldn't fix! Resetting...");
 			time = layer ? player.timePlayed : 0;
 			if (!layer) player.timePlayedReset = true;
 		};
@@ -290,7 +290,7 @@ document.onkeydown = function(e) {
 	shiftDown = e.shiftKey;
 	ctrlDown = e.ctrlKey;
 	if (tmp.gameEnded && !player.keepGoing) return;
-	player.nerdMode = ctrlDown ? !player.nerdMode : player.nerdMode;
+	if (ctrlDown) player.nerdMode = !player.nerdMode;
 	let key = e.key;
 	if (ctrlDown) key = 'ctrl+' + key;
 	if (onFocused) return;
@@ -302,7 +302,6 @@ document.onkeydown = function(e) {
 };
 
 document.onkeyup = function(e) {
-	if (!ctrlDown && player.nerdMode) tmp.nerdMode = false;
 	shiftDown = e.shiftKey;
 	ctrlDown = e.ctrlKey;
 };
@@ -326,12 +325,13 @@ document.title = modInfo.name;
 // Converts a string value to whatever it's supposed to be
 function toValue(value, oldValue) {
 	if (oldValue instanceof Decimal) {
-		value = new Decimal (value);
+		value = new Decimal(value);
 		if (checkDecimalNaN(value)) return decimalZero;
 		return value;
 	};
-	if (!isNaN(oldValue)) 
+	if (!isNaN(oldValue)) {
 		return parseFloat(value) || 0;
+	};
 	return value;
 };
 
@@ -358,7 +358,7 @@ function doPopup(type = 'none', text = 'This is a test popup.', title = '', time
 	if (title != '') popupTitle = title;
 	popupMessage = text;
 	popupTimer = timer;
-	activePopups.push({'time':popupTimer, 'type':popupType, 'title':popupTitle, 'message':(popupMessage+'<br>'), 'id':popupID, 'color':color});
+	activePopups.push({'time': popupTimer, 'type': popupType, 'title': popupTitle, 'message': (popupMessage + '<br>'), 'id': popupID, 'color': color});
 	popupID++;
 };
 
@@ -376,14 +376,14 @@ function run(func, target, args = null) {
 	if (isFunction(func)) {
 		let bound = func.bind(target);
 		return bound(args);
-	} else
-		return func;
+	};
+	return func;
 };
 
 function gridRun(layer, func, data, id) {
 	if (isFunction(layers[layer].grid[func])) {
 		let bound = layers[layer].grid[func].bind(layers[layer].grid);
 		return bound(data, id);
-	} else
-		return layers[layer].grid[func];
+	};
+	return layers[layer].grid[func];
 };

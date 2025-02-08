@@ -22,8 +22,6 @@ While reading this documentation, the following key will be used when describing
 - **assigned automagically**: This value will be set automatically and override any value you set.
 - **deprecated**: This feature is not recommended to be used, because newer features are able to achieve the same thing in a better, easier way.
 
-Also, things labeled with **additional** are unique to `The Primordial Tree`, and are not availible in `The Modding Tree`.
-
 ## Table of Contents
 
 ### General

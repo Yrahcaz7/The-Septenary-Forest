@@ -3,8 +3,8 @@ var needCanvasUpdate = true;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.6.6.2",
-	tmtName: "Fixed Reality"
+	tmtNum: "2.7",
+	tmtName: "Δ",
 };
 
 function getResetGain(layer, useType = null) {
@@ -63,7 +63,8 @@ function getNextAt(layer, canMax = false, useType = null) {
 		return layers[layer].getNextAt(canMax);
 	} else {
 		return decimalZero;
-	}};
+	};
+};
 
 function softcap(value, cap, power = 0.5) {
 	if (value.lte(cap)) return value;
@@ -177,7 +178,7 @@ function doReset(layer, force = false) {
 	for (layerResetting in layers) {
 		if (row >= layers[layerResetting].row && (!force || layerResetting != layer)) completeChallenge(layerResetting);
 	};
-	player.points = (row == 0 ? decimalZero : modInfo.initialStartPoints);
+	player.points = (row == 0 ? decimalZero : (typeof getStartPoints == "function" ? getStartPoints() : decimalZero));
 	for (let x = row; x >= 0; x--) {
 		rowReset(x, layer);
 	};
@@ -201,31 +202,22 @@ function resetRow(row) {
 		player[layer].unlocked = false;
 		if (player[layer].unlockOrder) player[layer].unlockOrder = 0;
 	};
-	player.points = modInfo.initialStartPoints;
+	player.points = (typeof getStartPoints == "function" ? getStartPoints() : decimalZero);
 	updateTemp();
 	resizeCanvas();
 };
 
 function startChallenge(layer, x) {
-	let enter = false;
 	if (!player[layer].unlocked || !tmp[layer].challenges[x].unlocked) return;
-	if (player[layer].activeChallenge == x) {
+	if (player[layer].activeChallenge == x && canExitChallenge(layer, x)) {
 		completeChallenge(layer, x);
-		Vue.set(player[layer], "activeChallenge", null);
-	} else {
-		enter = true;
-	};
-	if (enter) {
-		if (tmp[layer].challenges[x].doReset) {
-			run(layers[layer].challenges[x].onEnter, layers[layer].challenges[x]);
-			doReset(layer, true);
-			Vue.set(player[layer], "activeChallenge", x);
-		} else {
-			Vue.set(player[layer], "activeChallenge", x);
-			run(layers[layer].challenges[x].onEnter, layers[layer].challenges[x]);
-		};
-	} else if (tmp[layer].challenges[x].doReset) {
 		doReset(layer, true);
+		Vue.set(player[layer], "activeChallenge", null);
+	} else if (canEnterChallenge(layer, x)) {
+		Vue.set(player[layer], "activeChallenge", x);
+		run(layers[layer].challenges[x].onEnter, layers[layer].challenges[x]);
+		if (tmp[layer].challenges[x].doReset) doReset(layer, true);
+		Vue.set(player[layer], "activeChallenge", x);
 	};
 	updateChallengeTemp(layer);
 };
@@ -250,7 +242,6 @@ function canCompleteChallenge(layer, x) {
 };
 
 function completeChallenge(layer, x) {
-	var x = player[layer].activeChallenge;
 	if (!x) return;
 	let completions = canCompleteChallenge(layer, x);
 	if (!completions) {
@@ -275,12 +266,14 @@ VERSION.withName = VERSION.withoutName + (VERSION.name ? ": " + VERSION.name : "
 function autobuyUpgrades(layer) {
 	if (!tmp[layer].upgrades) return;
 	for (id in tmp[layer].upgrades) {
-		if (isPlainObject(tmp[layer].upgrades[id]) && (layers[layer].upgrades[id].canAfford === undefined || layers[layer].upgrades[id].canAfford() === true)) buyUpg(layer, id);
+		if (isPlainObject(tmp[layer].upgrades[id]) && (layers[layer].upgrades[id].canAfford === undefined || layers[layer].upgrades[id].canAfford() === true)) {
+			buyUpg(layer, id);
+		};
 	};
 };
 
 function gameLoop(diff) {
-	if ((typeof endPoints != 'undefined' ? player.points.gte(endPoints) : (typeof isEndgame == "function" ? isEndgame() : isEndgame)) || tmp.gameEnded) {
+	if ((endPoints !== undefined ? player.points.gte(endPoints) : (typeof isEndgame == "function" ? isEndgame() : isEndgame)) || tmp.gameEnded) {
 		tmp.gameEnded = true;
 		clearParticles();
 	};
@@ -299,7 +292,7 @@ function gameLoop(diff) {
 		for (item in TREE_LAYERS[x]) {
 			let layer = TREE_LAYERS[x][item];
 			player[layer].resetTime += diff;
-			if (tmp[layer].passiveGeneration) generatePoints(layer, diff*tmp[layer].passiveGeneration);
+			if (tmp[layer].passiveGeneration) generatePoints(layer, diff * tmp[layer].passiveGeneration);
 			if (layers[layer].update) layers[layer].update(diff);
 		};
 	};
@@ -307,7 +300,7 @@ function gameLoop(diff) {
 		for (item in OTHER_LAYERS[row]) {
 			let layer = OTHER_LAYERS[row][item];
 			player[layer].resetTime += diff;
-			if (tmp[layer].passiveGeneration) generatePoints(layer, diff*tmp[layer].passiveGeneration);
+			if (tmp[layer].passiveGeneration) generatePoints(layer, diff * tmp[layer].passiveGeneration);
 			if (layers[layer].update) layers[layer].update(diff);
 		};
 	};
@@ -334,7 +327,7 @@ function gameLoop(diff) {
 	};
 };
 
-function hardReset(resetOptions) {
+function hardReset(resetOptions = false) {
 	if (!confirm("Are you sure you want to do this? You will lose all your progress!")) return;
 	player = null;
 	if (resetOptions) options = null;

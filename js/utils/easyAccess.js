@@ -33,12 +33,12 @@ function hasBuyable(layer, id) {
 	return (player[layer].buyables[id].gt(0));
 };
 
-function canEnterChallenge(layer, id){
-	return tmp[layer].challenges[id].canEnter ?? true
+function canEnterChallenge(layer, id) {
+	return tmp[layer].challenges[id].canEnter ?? true;
 }
 
-function canExitChallenge(layer, id){
-	return tmp[layer].challenges[id].canExit ?? true
+function canExitChallenge(layer, id) {
+	return tmp[layer].challenges[id].canExit ?? true;
 }
 
 function getBuyableAmount(layer, id) {
