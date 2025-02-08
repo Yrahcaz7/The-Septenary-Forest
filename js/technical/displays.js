@@ -17,7 +17,7 @@ function constructNodeStyle(layer) {
 
 function challengeStyle(layer, id) {
 	if (player[layer].activeChallenge == id && canCompleteChallenge(layer, id)) return "canComplete";
-	else if (hasChallenge(layer, id)) return "done";
+	else if (maxedChallenge(layer, id)) return "done";
 	return "locked";
 };
 
@@ -39,7 +39,7 @@ function challengeButtonText(layer, id) {
 		};
 	};
 	if (layers[layer].challenges[id].enterable && !tmp[layer].challenges[id].enterable) return text[4];
-	return (player[layer].activeChallenge == id ? (canCompleteChallenge(layer, id) ? text[0] : text[1]) : (hasChallenge(layer, id) ? text[2] : text[3]));
+	return (player[layer].activeChallenge == id ? (canCompleteChallenge(layer, id) ? text[0] : text[1]) : (maxedChallenge(layer, id) ? text[2] : text[3]));
 };
 
 function achievementStyle(layer, id) {
@@ -87,24 +87,28 @@ function updateOomps(diff) {
 function constructBarStyle(layer, id) {
 	let bar = tmp[layer].bars[id];
 	let style = {};
-	if (bar.progress instanceof Decimal) bar.progress = bar.progress.toNumber();
-	bar.progress = (1 - Math.min(Math.max(bar.progress, 0), 1)) * 100;
-	style.dims = {'width': bar.width + "px", 'height': bar.height + "px"};
-	style.fillDims = {'width': (bar.width + 0.5) + "px", 'height': (bar.height + 0.5) + "px"};
+	let tempProgress;
+	if (bar.progress instanceof Decimal) {
+		tempProgress = (1 - Math.min(Math.max(bar.progress.toNumber(), 0), 1)) * 100;
+	} else {
+		tempProgress = (1 - Math.min(Math.max(bar.progress, 0), 1)) * 100;
+	};
+	style.dims = {'width': bar.width + 'px', 'height': bar.height + 'px'};
+	style.fillDims = {'width': (bar.width + 0.5) + 'px', 'height': (bar.height + 0.5) + 'px'};
 	switch (bar.direction) {
 		case UP:
-			style.fillDims['clip-path'] = 'inset(' + bar.progress + '% 0% 0% 0%)';
+			style.fillDims['clip-path'] = 'inset(' + tempProgress + '% 0% 0% 0%)';
 			style.fillDims.width = (bar.width + 1) + 'px';
 			break;
 		case DOWN:
-			style.fillDims['clip-path'] = 'inset(0% 0% ' + bar.progress + '% 0%)';
+			style.fillDims['clip-path'] = 'inset(0% 0% ' + tempProgress + '% 0%)';
 			style.fillDims.width = (bar.width + 1) + 'px';
 			break;
 		case RIGHT:
-			style.fillDims['clip-path'] = 'inset(0% ' + bar.progress + '% 0% 0%)';
+			style.fillDims['clip-path'] = 'inset(0% ' + tempProgress + '% 0% 0%)';
 			break;
 		case LEFT:
-			style.fillDims['clip-path'] = 'inset(0% 0% 0% ' + bar.progress + '%)';
+			style.fillDims['clip-path'] = 'inset(0% 0% 0% ' + tempProgress + '%)';
 			break;
 		case DEFAULT:
 			style.fillDims['clip-path'] = 'inset(0% 50% 0% 0%)';

@@ -1,19 +1,26 @@
 let options = {};
 
-function getStartOptions() { return {
-	autosave: true,
-	msDisplay: 'always',
-	theme: 'default',
-	hqTree: false,
-	offlineProd: true,
-	hideChallenges: false,
-	showStory: true,
-	forceOneTab: false,
-	tooltipForcing: true,
-	colorDisplayMode: 0,
-	colorDisplay: 0,
-	extendplaces: false,
-}};
+function getStartOptions() {
+	return {
+		autosave: true,
+		msDisplay: 'always',
+		theme: 'default',
+		hqTree: false,
+		offlineProd: true,
+		hideChallenges: false,
+		showStory: true,
+		forceOneTab: false,
+		forceTooltips: true,
+		colorDisplayMode: 0,
+		colorDisplay: 0,
+		extendplaces: false,
+		hideMilestonePopups: false,
+	};
+};
+
+function formatOption(opt) {
+	return opt ? 'ON' : 'OFF';
+};
 
 function toggleOpt(name) {
 	// toggle option
