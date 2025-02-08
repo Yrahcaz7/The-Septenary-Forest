@@ -1,7 +1,7 @@
-var canvas;
-var ctx;
+let canvas;
+let ctx;
 
-window.addEventListener("resize", (_ => resizeCanvas()));
+window.addEventListener("resize", resizeCanvas);
 
 function retrieveCanvasData() {
 	let treeCanv = document.getElementById("treeCanvas");
@@ -20,20 +20,31 @@ function resizeCanvas() {
 	drawTree();
 };
 
-var colors_theme;
+let colors_theme;
 
 function drawTree() {
 	if (!retrieveCanvasData()) return;
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	let queuedBranches = [[], [], [], []];
 	for (layer in layers) {
-		if (tmp[layer].layerShown == true && tmp[layer].branches) {
+		if (tmp[layer].layerShown && tmp[layer].branches) {
 			for (branch in tmp[layer].branches) {
-				drawTreeBranch(layer, tmp[layer].branches[branch])
+				if (layoutInfo.orderBranches) {
+					let data = tmp[layer].branches[branch];
+					queuedBranches[Array.isArray(data) ? (data[1] === 1 || data[1] === 2 || data[1] === 3 ? data[1] - 1 : 3) : 0].push([layer, data]);
+				} else {
+					drawTreeBranch(layer, tmp[layer].branches[branch]);
+				};
 			};
 		};
 		drawComponentBranches(layer, tmp[layer].upgrades, "upgrade-");
 		drawComponentBranches(layer, tmp[layer].buyables, "buyable-");
 		drawComponentBranches(layer, tmp[layer].clickables, "clickable-");
+	};
+	for (let priority = 0; priority < queuedBranches.length; priority++) {
+		for (let index = 0; index < queuedBranches[priority].length; index++) {
+			drawTreeBranch(...queuedBranches[priority][index]);
+		};
 	};
 };
 
@@ -56,14 +67,16 @@ function drawTreeBranch(num1, data, prefix) { // taken from Antimatter Dimension
 		color_id = data[1];
 		width = data[2] || width;
 	};
-	if (typeof color_id == "number")
+	if (typeof color_id == "number") {
 		color_id = colors_theme[color_id];
+	};
 	if (prefix) {
 		num1 = prefix + num1;
 		num2 = prefix + num2;
 	};
-	if (document.getElementById(num1) == null || document.getElementById(num2) == null)
+	if (document.getElementById(num1) == null || document.getElementById(num2) == null) {
 		return;
+	};
 	let start = document.getElementById(num1).getBoundingClientRect();
 	let end = document.getElementById(num2).getBoundingClientRect();
 	let x1 = start.left + (start.width / 2) + document.body.scrollLeft;
@@ -71,8 +84,8 @@ function drawTreeBranch(num1, data, prefix) { // taken from Antimatter Dimension
 	let x2 = end.left + (end.width / 2) + document.body.scrollLeft;
 	let y2 = end.top + (end.height / 2) + document.body.scrollTop;
 	ctx.lineWidth = width;
-	ctx.beginPath();
 	ctx.strokeStyle = color_id;
+	ctx.beginPath();
 	ctx.moveTo(x1, y1);
 	ctx.lineTo(x2, y2);
 	ctx.stroke();

@@ -230,6 +230,13 @@ function loadVue() {
 		template: components.grid,
 	});
 
+	// data = the max width of the grid or [max width, array of rows]
+	Vue.component('contained-grid', {
+		props: ['layer', 'data'],
+		data() {return {tmp, run, layers}},
+		template: components.contained_grid,
+	});
+
 	Vue.component('gridable', {
 		props: ['layer', 'data'],
 		data() {return {tmp, player, run, layers, gridRun, clickGrid, interval: false, time: 0}},

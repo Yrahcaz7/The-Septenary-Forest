@@ -1575,12 +1575,22 @@
         return this.cmp(value);
       }
       /**
-       * Returns true if the Decimal is an NaN value.
+       * Returns true if the Decimal is a NaN value.
        */
     }, {
       key: "isNan",
       value: function isNan() {
         return isNaN(this.sign) || isNaN(this.layer) || isNaN(this.mag);
+      }
+      /**
+       * Returns true if the Decimal is a NaN value.
+       * 
+       * This is an alias for isNan that does not exist in the original library.
+       */
+    }, {
+      key: "isNaN",
+      value: function isNaN() {
+        return this.isNan();
       }
       /**
        * Returns true if the Decimal is finite (by Decimal standards, not by floating point standards - a humongous Decimal like 10^^10^100 is still finite!)

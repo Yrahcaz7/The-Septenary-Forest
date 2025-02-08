@@ -201,26 +201,20 @@ function loadOptions() {
 
 function setupModInfo() {
 	modInfo.changelog = changelog;
-	modInfo.winText = winText ? (typeof winText == "function" ? winText() : winText) : `Congratulations! You have reached the end and beaten this game, but for now...`;
+	modInfo.winText = winText ? (typeof winText == "function" ? winText() : winText) : "Congratulations! You have reached the end and beaten this game, but for now...";
 };
 
 function NaNcheck(data) {
 	for (item in data) {
-		if (data[item] == null) {
-			continue;
-		} else if (Array.isArray(data[item])) {
+		if (Array.isArray(data[item]) || isPlainObject(data[item])) {
 			NaNcheck(data[item]);
-		} else if (data[item] !== data[item] || checkDecimalNaN(data[item])) {
+		} else if (data[item] !== data[item] || (data[item] instanceof Decimal && data[item].isNaN())) {
 			if (!NaNalert) {
 				clearInterval(interval);
 				NaNalert = true;
-				alert("Invalid value found in player, named '" + item + "'. Please let the creator of this mod know! You can refresh the page, and you will be un-NaNed.");
+				alert("Invalid value found in player, named '" + item + "'. Please let the creator of this mod know! You can refresh the page, and you should be un-NaNed.");
 				return;
 			};
-		} else if (data[item] instanceof Decimal) {
-			continue;
-		} else if ((!!data[item]) && (data[item].constructor === Object)) {
-			NaNcheck(data[item]);
 		};
 	};
 };

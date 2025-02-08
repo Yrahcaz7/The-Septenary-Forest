@@ -1,5 +1,5 @@
-var player;
-var needCanvasUpdate = true;
+let player;
+let needCanvasUpdate = true;
 
 // Don't change this
 const TMT_VERSION = {
@@ -19,14 +19,15 @@ function getResetGain(layer, useType = null) {
 	if (tmp[layer].gainExp.eq(0)) return decimalZero;
 	if (type == "static") {
 		if ((!tmp[layer].canBuyMax) || tmp[layer].baseAmount.lt(tmp[layer].requires)) return decimalOne;
-		let gain = tmp[layer].baseAmount.div(tmp[layer].requires).div(tmp[layer].gainMult).max(1).log(tmp[layer].base).times(tmp[layer].gainExp).pow(Decimal.pow(tmp[layer].exponent, -1));
-		gain = gain.times(tmp[layer].directMult);
+		let gain = tmp[layer].baseAmount.div(tmp[layer].requires).div(tmp[layer].gainMult).max(1).log(tmp[layer].base).mul(tmp[layer].gainExp).pow(Decimal.pow(tmp[layer].exponent, -1));
+		gain = gain.mul(tmp[layer].directMult);
 		return gain.floor().sub(player[layer].points).add(1).max(1);
 	} else if (type == "normal") {
 		if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return decimalZero;
-		let gain = tmp[layer].baseAmount.div(tmp[layer].requires).pow(tmp[layer].exponent).times(tmp[layer].gainMult).pow(tmp[layer].gainExp);
-		if (gain.gte(tmp[layer].softcap)) gain = gain.pow(tmp[layer].softcapPower).times(tmp[layer].softcap.pow(decimalOne.sub(tmp[layer].softcapPower)))
-		gain = gain.times(tmp[layer].directMult);
+		let gain = tmp[layer].baseAmount.div(tmp[layer].requires).pow(tmp[layer].exponent).mul(tmp[layer].gainMult).pow(tmp[layer].gainExp);
+		if (gain.gte(tmp[layer].softcap)) gain = gain.pow(tmp[layer].softcapPower).mul(tmp[layer].softcap.pow(decimalOne.sub(tmp[layer].softcapPower)));
+		if (tmp[layer].logged) gain = gain.add(1).log(tmp[layer].logged === true ? 10 : tmp[layer].logged);
+		gain = gain.mul(tmp[layer].directMult);
 		return gain.floor().max(0);
 	} else if (type == "custom") {
 		return layers[layer].getResetGain();
@@ -43,20 +44,20 @@ function getNextAt(layer, canMax = false, useType = null) {
 			return layers[layer].getNextAt(canMax);
 		};
 	};
-	if (tmp[layer].type == "none") return new Decimal(Infinity);
-	if (tmp[layer].gainMult.lte(0)) return new Decimal(Infinity);
-	if (tmp[layer].gainExp.lte(0)) return new Decimal(Infinity);
-	if (type == "static") {
+	if (tmp[layer].type == "none" || tmp[layer].gainMult.lte(0) || tmp[layer].gainExp.lte(0)) {
+		return new Decimal(Infinity);
+	} else if (type == "static") {
 		if (!tmp[layer].canBuyMax) canMax = false;
-		let amt = player[layer].points.plus((canMax && tmp[layer].baseAmount.gte(tmp[layer].nextAt)) ? tmp[layer].resetGain : 0).div(tmp[layer].directMult);
-		let extraCost = Decimal.pow(tmp[layer].base, amt.pow(tmp[layer].exponent).div(tmp[layer].gainExp)).times(tmp[layer].gainMult);
-		let cost = extraCost.times(tmp[layer].requires).max(tmp[layer].requires);
+		let amt = player[layer].points.add(canMax && tmp[layer].baseAmount.gte(tmp[layer].nextAt) ? tmp[layer].resetGain : 0).div(tmp[layer].directMult);
+		let extraCost = Decimal.pow(tmp[layer].base, amt.pow(tmp[layer].exponent).div(tmp[layer].gainExp)).mul(tmp[layer].gainMult);
+		let cost = extraCost.mul(tmp[layer].requires).max(tmp[layer].requires);
 		if (tmp[layer].roundUpCost) cost = cost.ceil();
 		return cost;
 	} else if (type == "normal") {
 		let next = tmp[layer].resetGain.add(1).div(tmp[layer].directMult);
+		if (tmp[layer].logged) next = next.pow_base(tmp[layer].logged === true ? 10 : tmp[layer].logged).sub(1);
 		if (next.gte(tmp[layer].softcap)) next = next.div(tmp[layer].softcap.pow(decimalOne.sub(tmp[layer].softcapPower))).pow(decimalOne.div(tmp[layer].softcapPower));
-		next = next.root(tmp[layer].gainExp).div(tmp[layer].gainMult).root(tmp[layer].exponent).times(tmp[layer].requires).max(tmp[layer].requires);
+		next = next.root(tmp[layer].gainExp).div(tmp[layer].gainMult).root(tmp[layer].exponent).mul(tmp[layer].requires).max(tmp[layer].requires);
 		if (tmp[layer].roundUpCost) next = next.ceil();
 		return next;
 	} else if (type == "custom") {
@@ -68,7 +69,7 @@ function getNextAt(layer, canMax = false, useType = null) {
 
 function softcap(value, cap, power = 0.5) {
 	if (value.lte(cap)) return value;
-	else return value.pow(power).times(cap.pow(decimalOne.sub(power)));
+	return value.pow(power).mul(cap.pow(decimalOne.sub(power)));
 };
 
 // Return true if the layer should be highlighted. By default checks for upgrades only.
@@ -82,7 +83,7 @@ function shouldNotify(layer) {
 	if (tmp[layer].shouldNotify) return true;
 	if (isPlainObject(tmp[layer].tabFormat)) {
 		for (subtab in tmp[layer].tabFormat) {
-			if (subtabShouldNotify(layer, 'mainTabs', subtab)) {
+			if (subtabShouldNotify(layer, "mainTabs", subtab)) {
 				tmp[layer].trueGlowColor = tmp[layer].tabFormat[subtab].glowColor || defaultGlow;
 				return true;
 			};
@@ -143,10 +144,10 @@ function addPoints(layer, gain) {
 };
 
 function generatePoints(layer, diff) {
-	addPoints(layer, tmp[layer].resetGain.times(diff));
+	addPoints(layer, tmp[layer].resetGain.mul(diff));
 };
 
-function doReset(layer, force = false) {
+function doReset(layer, force = false, overrideResetsNothing = false) {
 	if (tmp[layer].type == "none") return;
 	let row = tmp[layer].row, challenge = player[layer].activeChallenge;
 	if (!force) {
@@ -173,7 +174,7 @@ function doReset(layer, force = false) {
 			};
 		};
 	};
-	if (run(layers[layer].resetsNothing, layers[layer])) return;
+	if (!overrideResetsNothing && run(layers[layer].resetsNothing, layers[layer])) return;
 	tmp[layer].baseAmount = decimalZero; // quick fix
 	for (layerResetting in layers) {
 		if (row >= layers[layerResetting].row && (!force || layerResetting != layer)) completeChallenge(layerResetting);
@@ -231,8 +232,7 @@ function canCompleteChallenge(layer, x) {
 		if (challenge.currencyLocation) {
 			return !challenge.currencyLocation[name].lt(challenge.goal);
 		} else if (challenge.currencyLayer) {
-			let lr = challenge.currencyLayer;
-			return !player[lr][name].lt(challenge.goal);
+			return !player[challenge.currencyLayer][name].lt(challenge.goal);
 		} else {
 			return !player[name].lt(challenge.goal);
 		};
@@ -241,7 +241,7 @@ function canCompleteChallenge(layer, x) {
 	};
 };
 
-function completeChallenge(layer, x) {
+function completeChallenge(layer, x = player[layer].activeChallenge) {
 	if (!x) return;
 	let completions = canCompleteChallenge(layer, x);
 	if (!completions) {
@@ -287,7 +287,7 @@ function gameLoop(diff) {
 		if (diff > limit) diff = limit;
 	};
 	addTime(diff);
-	player.points = player.points.add(tmp.pointGen.times(diff)).max(0);
+	player.points = player.points.add(tmp.pointGen.mul(diff)).max(0);
 	for (let x = 0; x <= maxRow; x++) {
 		for (item in TREE_LAYERS[x]) {
 			let layer = TREE_LAYERS[x][item];
@@ -335,12 +335,10 @@ function hardReset(resetOptions = false) {
 	window.location.reload();
 };
 
-var ticking = false;
+let ticking = false;
 
-var interval = setInterval(function() {
-	if (player === undefined || tmp === undefined) return;
-	if (ticking) return;
-	if (tmp.gameEnded && !player.keepGoing) return;
+let interval = setInterval(() => {
+	if (player === undefined || tmp === undefined || ticking || (tmp.gameEnded && !player.keepGoing)) return;
 	ticking = true;
 	let now = Date.now();
 	let diff = (now - player.time) / 1e3;
@@ -360,7 +358,7 @@ var interval = setInterval(function() {
 		resizeCanvas();
 		needCanvasUpdate = false;
 	};
-	tmp.scrolled = document.getElementById('treeTab') && document.getElementById('treeTab').scrollTop > 30;
+	tmp.scrolled = document.getElementById("treeTab") && document.getElementById("treeTab").scrollTop > 30;
 	updateTemp();
 	updateOomps(diff);
 	updateWidth();

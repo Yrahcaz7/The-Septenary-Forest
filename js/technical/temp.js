@@ -1,21 +1,21 @@
-var tmp = {};
-var temp = tmp; // Proxy for tmp
-var funcs = {};
-var NaNalert = false;
+let tmp = {};
+let temp = tmp; // Proxy for tmp
+let funcs = {};
+let NaNalert = false;
 
 // Tmp will not call these
-var activeFunctions = [
+let activeFunctions = [
 	"startData", "onPrestige", "doReset", "update", "automate",
 	"buy", "buyMax", "respec", "onPress", "onClick", "onHold", "masterButtonPress",
 	"sellOne", "sellAll", "pay", "actualCostFunction", "actualEffectFunction",
 	"effectDescription", "display", "fullDisplay", "effectDisplay", "rewardDisplay",
 	"tabFormat", "content",
 	"onComplete", "onPurchase", "onEnter", "onExit", "done",
-	"getUnlocked", "getStyle", "getCanClick", "getTitle", "getDisplay"
+	"getUnlocked", "getStyle", "getCanClick", "getTitle", "getDisplay", "getEffect",
 ];
 
 // Add the names of classes to traverse
-var traversableClasses = [];
+let traversableClasses = [];
 
 function setupTemp() {
 	tmp = {};
@@ -53,17 +53,17 @@ function setupTempData(layerData, tmpData, funcsData) {
 	for (item in layerData) {
 		if (layerData[item] == null) {
 			tmpData[item] = null;
-		} else if (layerData[item] instanceof Decimal)
+		} else if (layerData[item] instanceof Decimal) {
 			tmpData[item] = layerData[item];
-		else if (Array.isArray(layerData[item])) {
+		} else if (Array.isArray(layerData[item])) {
 			tmpData[item] = [];
 			funcsData[item] = [];
 			setupTempData(layerData[item], tmpData[item], funcsData[item]);
-		} else if ((!!layerData[item]) && (layerData[item].constructor === Object)) {
+		} else if (isPlainObject(layerData[item])) {
 			tmpData[item] = {};
 			funcsData[item] = [];
 			setupTempData(layerData[item], tmpData[item], funcsData[item]);
-		} else if ((!!layerData[item]) && (typeof layerData[item] === "object") && traversableClasses.includes(layerData[item].constructor.name)) {
+		} else if (!!layerData[item] && typeof layerData[item] == "object" && traversableClasses.includes(layerData[item].constructor.name)) {
 			tmpData[item] = new layerData[item].constructor();
 			funcsData[item] = new layerData[item].constructor();
 		} else if (typeof layerData[item] == "function" && !activeFunctions.includes(item)) {
@@ -87,7 +87,7 @@ function updateTemp() {
 		tmp[layer].trueGlowColor = tmp[layer].glowColor;
 		tmp[layer].notify = shouldNotify(layer);
 		tmp[layer].prestigeNotify = prestigeNotify(layer);
-		if (tmp[layer].passiveGeneration === true) tmp[layer].passiveGeneration = 1; // new Decimal(true) = decimalZero
+		if (tmp[layer].passiveGeneration === true) tmp[layer].passiveGeneration = 1; // This is needed because `new Decimal(true) = decimalZero`
 	};
 	tmp.pointGen = getPointGen();
 	tmp.backgroundStyle = readData(backgroundStyle);
@@ -105,7 +105,7 @@ function updateTempData(layerData, tmpData, funcsData, useThis) {
 			if (item !== "tabFormat" && item !== "content") { // These are only updated when needed
 				updateTempData(layerData[item], tmpData[item], funcsData[item], useThis);
 			};
-		} else if ((!!layerData[item]) && (layerData[item].constructor === Object) || (typeof layerData[item] === "object") && traversableClasses.includes(layerData[item].constructor.name)) {
+		} else if (isPlainObject(layerData[item]) || (typeof layerData[item] === "object" && traversableClasses.includes(layerData[item].constructor.name))) {
 			updateTempData(layerData[item], tmpData[item], funcsData[item], useThis);
 		} else if (typeof layerData[item] == "function" && typeof tmpData[item] != "function") {
 			let value;
@@ -144,8 +144,4 @@ function setupBuyables(layer) {
 			};
 		};
 	};
-};
-
-function checkDecimalNaN(x) {
-	return (x instanceof Decimal) && !x.eq(x);
 };
