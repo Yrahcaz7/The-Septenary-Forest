@@ -4,7 +4,7 @@ const modInfo = {
 	author: 'Yrahcaz7',
 	pointsName: 'points',
 	modFiles: ['assimilation.js', 'achievements.js', 'softcaps.js', 'story.js', 'tabs.js', 'layers.js', 'technical/tree.js'],
-	initialStartPoints: new Decimal(0),
+	initialStartPoints: newDecimalZero(),
 	offlineLimit: 1, // in hours
 };
 
@@ -64,7 +64,7 @@ function getDevotionBulk() {
 
 // gets the light boost
 function getLightBoost() {
-	let lightboost = new Decimal(0);
+	let lightboost = newDecimalZero();
 	if (hasMilestone('m', 17)) lightboost = player.r.lightgainbest.mul(0.1);
 	else if (hasMilestone('m', 16)) lightboost = player.r.lightgainbest.mul(0.05);
 	else if (hasMilestone('m', 15)) lightboost = player.r.lightgainbest.mul(0.025);
@@ -114,7 +114,7 @@ function canGenPoints() {
 // calculates points/sec
 function getPointGen(forced = false) {
 	// init
-	let gain = new Decimal(1);
+	let gain = newDecimalOne();
 	// mul
 	if (hasUpgrade('e', 11)) gain = gain.mul(1.5);
 	if (hasUpgrade('e', 12)) {
@@ -169,7 +169,7 @@ function getPointGen(forced = false) {
 	if (challengeCompletions('ch', 12) > 0) gain = gain.pow(challengeEffect('ch', 12));
 	// special nerf
 	if (inChallenge('ds', 32)) gain = gain.add(1).log10().add(1).log10();
-	if (inChallenge('r', 11) && !forced) gain = new Decimal(0);
+	if (inChallenge('r', 11) && !forced) gain = newDecimalZero();
 	// softcap
 	if (gain.gt(softcaps.points[0])) {
 		let excessGain = gain.div(softcaps.points[0]);

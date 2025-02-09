@@ -4,7 +4,7 @@ addLayer('A', {
 	position: 0,
 	startData() { return {
 		unlocked: true,
-		points: new Decimal(0),
+		points: newDecimalZero(),
 	}},
 	popupColor: '#A5BCC2',
 	resource: 'achievements',

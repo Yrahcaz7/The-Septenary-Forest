@@ -38,8 +38,8 @@ function setupTemp() {
 		tmp[layer].trueGlowColor = [];
 	};
 	tmp.other = {
-		lastPoints: player.points || decimalZero,
-		oomps: decimalZero,
+		lastPoints: player.points || newDecimalZero(),
+		oomps: newDecimalZero(),
 		screenWidth: 0,
 		screenHeight: 0,
     };
@@ -69,7 +69,7 @@ function setupTempData(layerData, tmpData, funcsData) {
 		} else if (typeof layerData[item] == "function" && !activeFunctions.includes(item)) {
 			funcsData[item] = layerData[item];
 			if (boolNames.includes(item)) tmpData[item] = false;
-			else tmpData[item] = decimalOne; // The safest thing to put probably?
+			else tmpData[item] = newDecimalOne(); // The safest thing to put probably?
 		} else {
 			tmpData[item] = layerData[item];
 		};
@@ -87,7 +87,7 @@ function updateTemp() {
 		tmp[layer].trueGlowColor = tmp[layer].glowColor;
 		tmp[layer].notify = shouldNotify(layer);
 		tmp[layer].prestigeNotify = prestigeNotify(layer);
-		if (tmp[layer].passiveGeneration === true) tmp[layer].passiveGeneration = 1; // This is needed because `new Decimal(true) = decimalZero`
+		if (tmp[layer].passiveGeneration === true) tmp[layer].passiveGeneration = 1; // This is needed because `new Decimal(true) = new Decimal(0)`
 	};
 	tmp.pointGen = getPointGen();
 	tmp.backgroundStyle = readData(backgroundStyle);

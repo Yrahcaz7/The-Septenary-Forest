@@ -27,7 +27,7 @@ addLayer('SC', {
 	position: 2,
 	startData() { return {
 		unlocked: true,
-		points: new Decimal(0),
+		points: newDecimalZero(),
 		softcaps: [],
 	}},
 	color: '#DFDFDF',

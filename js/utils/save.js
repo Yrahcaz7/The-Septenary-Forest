@@ -61,14 +61,14 @@ function getStartLayerData(layer) {
 	layerdata = {};
 	if (layers[layer].startData) layerdata = layers[layer].startData();
 	if (layerdata.unlocked === undefined) layerdata.unlocked = true;
-	if (layerdata.total === undefined) layerdata.total = decimalZero;
-	if (layerdata.best === undefined) layerdata.best = decimalZero;
+	if (layerdata.total === undefined) layerdata.total = newDecimalZero();
+	if (layerdata.best === undefined) layerdata.best = newDecimalZero();
 	if (layerdata.resetTime === undefined) layerdata.resetTime = 0;
 	if (layerdata.forceTooltip === undefined) layerdata.forceTooltip = false;
 	layerdata.buyables = getStartBuyables(layer);
 	if (layerdata.noRespecConfirm === undefined) layerdata.noRespecConfirm = false;
 	if (layerdata.clickables == undefined) layerdata.clickables = getStartClickables(layer);
-	layerdata.spentOnBuyables = decimalZero;
+	layerdata.spentOnBuyables = newDecimalZero();
 	layerdata.upgrades = [];
 	layerdata.milestones = [];
 	layerdata.lastMilestone = null;
@@ -83,7 +83,7 @@ function getStartBuyables(layer) {
 	let data = {};
 	if (layers[layer].buyables) {
 		for (id in layers[layer].buyables) {
-			if (isPlainObject(layers[layer].buyables[id])) data[id] = decimalZero;
+			if (isPlainObject(layers[layer].buyables[id])) data[id] = newDecimalZero();
 		};
 	};
 	return data;

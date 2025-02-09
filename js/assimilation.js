@@ -17,7 +17,7 @@ function startAssimilation(layer) {
 	// enter assimilation
 	player.mo.assimilating = layer;
 	// reset things
-	player.points = new Decimal(0);
+	player.points = newDecimalZero();
 	for (let index = 0; index < player.mo.assimilated.length; index++) {
 		tmp[player.mo.assimilated[index]].doReset('mo');
 	};
@@ -53,7 +53,7 @@ function completeAssimilation(layer) {
 	setClickableState('mo', 11, false);
 	player.mo.assimilating = null;
 	// reset things
-	player.points = new Decimal(0);
+	player.points = newDecimalZero();
 	for (let index = 0; index < player.mo.assimilated.length; index++) {
 		tmp[player.mo.assimilated[index]].doReset('mo');
 	};

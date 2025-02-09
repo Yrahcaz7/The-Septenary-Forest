@@ -4,9 +4,9 @@ addLayer('e', {
 	position: 0,
 	startData() { return {
 		unlocked: true,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		total: new Decimal(0),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
 		auto_upgrades: false,
 		auto_buyables: false,
 	}},
@@ -23,7 +23,7 @@ addLayer('e', {
 	exponent: 0.5,
 	gainMult() {
 		// init
-		let mult = new Decimal(1);
+		let mult = newDecimalOne();
 		// mul
 		if (hasUpgrade('e', 13)) mult = mult.mul(upgradeEffect('e', 13));
 		if (hasUpgrade('e', 22)) {
@@ -212,7 +212,7 @@ addLayer('e', {
 			title() { return '<b class="layer-e' + getdark(this, "title") + 'Brilliance' },
 			description() { return 'some of the effect of <b class="layer-e' + getdark(this, "ref") + 'Radiant Essence</b> is applied to point gain (based on essence)' },
 			cost: 3e33,
-			effect() { return (buyableEffect('e', 12)[0] || new Decimal(1)).pow(0.1).mul(player.e.points).add(1).pow(0.001) },
+			effect() { return (buyableEffect('e', 12)[0] || newDecimalOne()).pow(0.1).mul(player.e.points).add(1).pow(0.001) },
 			effectDisplay() {
 				let text = format(this.effect()) + 'x';
 				if (player.nerdMode) text += ' <br>formula: ((x^0.1)y+1)^0.001';
@@ -341,9 +341,9 @@ addLayer('c', {
 	position: 0,
 	startData() { return {
 		unlocked: false,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		total: new Decimal(0),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
 		auto_upgrades: false,
 		auto_buyables: false,
 	}},
@@ -360,7 +360,7 @@ addLayer('c', {
 	exponent: 0.3,
 	gainMult() {
 		// init
-		let mult = new Decimal(1);
+		let mult = newDecimalOne();
 		// mul
 		if (hasUpgrade('e', 32)) mult = mult.mul(upgradeEffect('e', 32));
 		if (hasUpgrade('c', 12)) mult = mult.mul(upgradeEffect('c', 12));
@@ -703,12 +703,12 @@ addLayer('q', {
 	position: 2,
 	startData() { return {
 		unlocked: false,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		total: new Decimal(0),
-		basePointTotal: new Decimal(0),
-		decipher: new Decimal(0),
-		insight: new Decimal(0),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
+		basePointTotal: newDecimalZero(),
+		decipher: newDecimalZero(),
+		insight: newDecimalZero(),
 		auto_upgrades: false,
 		auto_buyable_11: false,
 		auto_buyable_12: false,
@@ -727,7 +727,7 @@ addLayer('q', {
 	type: 'normal',
 	exponent: 0.1,
 	gainMult() {
-		let mult = new Decimal(1);
+		let mult = newDecimalOne();
 		if (hasUpgrade('c', 13)) mult = mult.mul(upgradeEffect('c', 13));
 		if (hasUpgrade('q', 11)) mult = mult.mul(upgradeEffect('q', 11));
 		if (hasUpgrade('q', 21)) mult = mult.mul(upgradeEffect('q', 21));
@@ -808,7 +808,7 @@ addLayer('q', {
 	update(diff) {
 		if (tmp.q.tabFormat["The Decipherer"].unlocked) {
 			// calculate gain
-			let gain = new Decimal(0);
+			let gain = newDecimalZero();
 			if (hasBuyable('q', 11)) gain = gain.add(buyableEffect('q', 11));
 			if (hasBuyable('q', 13)) gain = gain.mul(buyableEffect('q', 13));
 			// update deciphered rate
@@ -818,12 +818,12 @@ addLayer('q', {
 			};
 			if (player.q.decipher.gt(100)) player.q.decipher = new Decimal(100);
 			// calculate insight
-			let mul = new Decimal(1);
+			let mul = newDecimalOne();
 			if (hasBuyable('q', 21)) mul = mul.mul(buyableEffect('q', 21));
 			player.q.insight = player.q.decipher.mul('1e1000').add(1).pow(0.1).sub(1).mul(mul).floor();
 		} else {
-			player.q.decipher = new Decimal(0);
-			player.q.insight = new Decimal(0);
+			player.q.decipher = newDecimalZero();
+			player.q.insight = newDecimalZero();
 		};
 		if (player.points.gt(player.q.basePointTotal)) player.q.basePointTotal = player.points;
 	},
@@ -1050,7 +1050,7 @@ addLayer('q', {
 			description: 'multiplies quark gain based on your subatomic particles',
 			cost: 1e16,
 			effect() {
-				if (player.mo.assimilating === this.layer) return new Decimal(1);
+				if (player.mo.assimilating === this.layer) return newDecimalOne();
 				return player.sp.points.add(1).pow(0.5);
 			},
 			effectDisplay() {
@@ -1208,7 +1208,7 @@ addLayer('q', {
 		},
 		12: {
 			cost() {
-				let div = new Decimal(1);
+				let div = newDecimalOne();
 				if (getBuyableAmount(this.layer, this.id).eq(29)) div = div.mul(1.8);
 				return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)).div(div);
 			},
@@ -1219,7 +1219,7 @@ addLayer('q', {
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
-				if (getBuyableAmount(this.layer, this.id).eq(0)) return new Decimal(1);
+				if (getBuyableAmount(this.layer, this.id).eq(0)) return newDecimalOne();
 				else return player.q.insight.add(1).pow(0.1).mul(new Decimal(10).pow(getBuyableAmount(this.layer, this.id)));
 			},
 			display() {
@@ -1271,9 +1271,9 @@ addLayer('sp', {
 	position: 2,
 	startData() { return {
 		unlocked: false,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		total: new Decimal(0),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
 		auto_upgrades: false,
 		auto_buyables: false,
 	}},
@@ -1291,7 +1291,7 @@ addLayer('sp', {
 	canBuyMax() { return hasMilestone('sp', 0) || player.w.unlocked || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 	gainExp() {
 		// init
-		let gain = new Decimal(1);
+		let gain = newDecimalOne();
 		// mul
 		if (hasUpgrade('q', 43)) gain = gain.mul(upgradeEffect('q', 43));
 		if (hasUpgrade('sp', 31)) gain = gain.mul(2.5);
@@ -1442,9 +1442,9 @@ addLayer('sp', {
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
-				if (hasUpgrade('sp', 21)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(4), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
-				else if (hasUpgrade('sp', 11)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(2), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
-				else return [new Decimal(5).pow(getBuyableAmount('sp', this.id)), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
+				if (hasUpgrade('sp', 21)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(4), newDecimalOne().div(getBuyableAmount('sp', this.id).add(1))];
+				else if (hasUpgrade('sp', 11)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(2), newDecimalOne().div(getBuyableAmount('sp', this.id).add(1))];
+				else return [new Decimal(5).pow(getBuyableAmount('sp', this.id)), newDecimalOne().div(getBuyableAmount('sp', this.id).add(1))];
 			},
 			display() {
 				let text = '';
@@ -1468,9 +1468,9 @@ addLayer('sp', {
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
-				if (hasUpgrade('sp', 22)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(4), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
-				else if (hasUpgrade('sp', 12)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(2), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
-				else return [new Decimal(5).pow(getBuyableAmount('sp', this.id)), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
+				if (hasUpgrade('sp', 22)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(4), newDecimalOne().div(getBuyableAmount('sp', this.id).add(1))];
+				else if (hasUpgrade('sp', 12)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(2), newDecimalOne().div(getBuyableAmount('sp', this.id).add(1))];
+				else return [new Decimal(5).pow(getBuyableAmount('sp', this.id)), newDecimalOne().div(getBuyableAmount('sp', this.id).add(1))];
 			},
 			display() {
 				let text = '';
@@ -1494,9 +1494,9 @@ addLayer('sp', {
 				addBuyables(this.layer, this.id, 1);
 			},
 			effect() {
-				if (hasUpgrade('sp', 23)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(4), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
-				else if (hasUpgrade('sp', 13)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(2), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
-				else return [new Decimal(5).pow(getBuyableAmount('sp', this.id)), new Decimal(1).div(getBuyableAmount('sp', this.id).add(1))];
+				if (hasUpgrade('sp', 23)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(4), newDecimalOne().div(getBuyableAmount('sp', this.id).add(1))];
+				else if (hasUpgrade('sp', 13)) return [new Decimal(5).pow(getBuyableAmount('sp', this.id)).pow(2), newDecimalOne().div(getBuyableAmount('sp', this.id).add(1))];
+				else return [new Decimal(5).pow(getBuyableAmount('sp', this.id)), newDecimalOne().div(getBuyableAmount('sp', this.id).add(1))];
 			},
 			display() {
 				let text = '';
@@ -1516,9 +1516,9 @@ addLayer('h', {
 	position: 0,
 	startData() { return {
 		unlocked: false,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		total: new Decimal(0),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
 		limitsBroken: 0,
 		auto_upgrades: false,
 		keep_breaking: false,
@@ -1536,7 +1536,7 @@ addLayer('h', {
 	exponent: 0.5,
 	gainMult() {
 		// setup
-		let mult = new Decimal(1);
+		let mult = newDecimalOne();
 		// buff
 		if (hasUpgrade('h', 12)) {
 			mult = mult.mul(upgradeEffect('h', 12));
@@ -1970,7 +1970,7 @@ addLayer('h', {
 			req() { return [92 + player.h.limitsBroken, this.reqLayers[player.h.limitsBroken] || Infinity] },
 			nerfLayers: [100, 10, 2, 2],
 			nerf() {
-				let nerf = new Decimal(1);
+				let nerf = newDecimalOne();
 				for (let index = 0; index < this.nerfLayers.length && index < player.h.limitsBroken; index++) {
 					nerf = nerf.mul(this.nerfLayers[index]);
 				};
@@ -1978,10 +1978,10 @@ addLayer('h', {
 			},
 			canClick() { return player.A.points.gte(tmp.h.clickables[11].req[0]) && player.ei.points.gte(tmp.h.clickables[11].req[1]) && player.h.limitsBroken < this.reqLayers.length && player.h.limitsBroken < this.nerfLayers.length },
 			onClick() {
-				player.ei.points = new Decimal(0);
-				player.ei.best = new Decimal(0);
-				player.ei.total = new Decimal(0);
-				player.ei.power = new Decimal(0);
+				player.ei.points = newDecimalZero();
+				player.ei.best = newDecimalZero();
+				player.ei.total = newDecimalZero();
+				player.ei.power = newDecimalZero();
 				player.ei.upgrades = [];
 				player.h.limitsBroken++;
 			},
@@ -2008,9 +2008,9 @@ addLayer('ds', {
 	position: 0,
 	startData() { return {
 		unlocked: false,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		total: new Decimal(0),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
 		auto_upgrades: false,
 		auto_buyables: false,
 	}},
@@ -2027,7 +2027,7 @@ addLayer('ds', {
 	exponent: 0.05,
 	gainMult() {
 		// init
-		let mult = new Decimal(1);
+		let mult = newDecimalOne();
 		// mul
 		if (hasUpgrade('ds', 31)) mult = mult.mul(upgradeEffect('ds', 31));
 		if (hasUpgrade('a', 11)) mult = mult.mul(upgradeEffect('a', 11));
@@ -2372,9 +2372,9 @@ addLayer('a', {
 	position: 2,
 	startData() { return {
 		unlocked: false,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		total: new Decimal(0),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
 		auto_upgrades: false,
 	}},
 	color: "#4D2FE0",
@@ -2390,7 +2390,7 @@ addLayer('a', {
 	exponent: 1,
 	canBuyMax() { return true },
 	gainExp() {
-		let gain = new Decimal(1);
+		let gain = newDecimalOne();
 		if (hasBuyable('q', 12)) gain = gain.mul(buyableEffect('q', 12));
 		if (hasUpgrade('a', 22)) gain = gain.mul(upgradeEffect('a', 22));
 		if (hasUpgrade('a', 32)) gain = gain.mul(upgradeEffect('a', 32));
@@ -2884,13 +2884,13 @@ addLayer('p', {
 	position: 1,
 	startData() { return {
 		unlocked: false,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		total: new Decimal(0),
-		divinity: new Decimal(0),
-		holiness: new Decimal(0),
-		hymn: new Decimal(0),
-		hymnEff: new Decimal(0),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
+		divinity: newDecimalZero(),
+		holiness: newDecimalZero(),
+		hymn: newDecimalZero(),
+		hymnEff: newDecimalZero(),
 		auto_upgrades: false,
 		smart_auto_upgrades: false,
 	}},
@@ -2907,7 +2907,7 @@ addLayer('p', {
 	exponent: 0.012,
 	gainMult() {
 		// init
-		let mult = new Decimal(1);
+		let mult = newDecimalOne();
 		// mult
 		if (hasUpgrade('p', 15)) mult = mult.mul(upgradeEffect('p', 15));
 		if (hasUpgrade('p', 21)) mult = mult.mul(upgradeEffect('p', 21));
@@ -2984,7 +2984,7 @@ addLayer('p', {
 	},
 	effect() {
 		let effBoost = new Decimal(0.01);
-		let effEx = new Decimal(1);
+		let effEx = newDecimalOne();
 		if (hasMilestone('p', 1)) effBoost = effBoost.mul(2);
 		if (hasUpgrade('p', 13)) effBoost = effBoost.mul(upgradeEffect('p', 13));
 		if (hasUpgrade('p', 32)) effBoost = effBoost.mul(upgradeEffect('p', 32));
@@ -3012,7 +3012,7 @@ addLayer('p', {
 			if (resettingLayer == 'r') keep.push("milestones");
 			if (hasMilestone('s', 25) && resettingLayer == 's') keep.push("milestones");
 			if (hasUpgrade('p', 22) && resettingLayer == 'p') {
-				let mult = new Decimal(1);
+				let mult = newDecimalOne();
 				if (hasUpgrade('p', 61)) mult = mult.mul(upgradeEffect('p', 61));
 				if (hasUpgrade('p', 23) && hasUpgrade('p', 25)) player.p.holiness = player.p.holiness.add(player.p.divinity.mul(0.08).mul(mult));
 				else if (hasUpgrade('p', 23)) player.p.holiness = player.p.holiness.add(player.p.divinity.mul(0.06).mul(mult));
@@ -3023,11 +3023,11 @@ addLayer('p', {
 				else if (hasUpgrade('p', 51)) player.p.hymn = player.p.hymn.add(player.p.holiness.div(200).floor());
 				else player.p.hymn = player.p.hymn.add(player.p.holiness.div(250).floor());
 			};
-			if (layers[resettingLayer].row >= this.row) player.p.divinity = new Decimal(0);
+			if (layers[resettingLayer].row >= this.row) player.p.divinity = newDecimalZero();
 			if (layers[resettingLayer].row > this.row) {
 				layerDataReset('p', keep);
-				if (!keep.includes("holiness")) player.p.holiness = new Decimal(0);
-				if (!keep.includes("hymn")) player.p.hymn = new Decimal(0);
+				if (!keep.includes("holiness")) player.p.holiness = newDecimalZero();
+				if (!keep.includes("hymn")) player.p.hymn = newDecimalZero();
 			};
 		},
 	update(diff) {
@@ -3038,7 +3038,7 @@ addLayer('p', {
 			let gen = 0.002;
 			if (hasMilestone('s', 16)) gen += 0.023;
 			if (hasUpgrade('p', 22)) {
-				let mult = new Decimal(1);
+				let mult = newDecimalOne();
 				if (hasUpgrade('p', 61)) mult = mult.mul(upgradeEffect('p', 61));
 				if (hasUpgrade('p', 23) && hasUpgrade('p', 25)) player.p.holiness = player.p.holiness.add(player.p.divinity.mul(0.08).mul(mult).mul(diff).mul(0.002));
 				if (hasUpgrade('p', 23)) player.p.holiness = player.p.holiness.add(player.p.divinity.mul(0.06).mul(mult).mul(diff).mul(0.002));
@@ -3444,9 +3444,9 @@ addLayer('p', {
 			onClick() {
 				if (confirm('Are you really sure you want to reset your prayer upgrades, divinity, holiness, and hymns?')) {
 					player.p.upgrades = [];
-					player.p.divinity = new Decimal(0);
-					player.p.holiness = new Decimal(0);
-					player.p.hymn = new Decimal(0);
+					player.p.divinity = newDecimalZero();
+					player.p.holiness = newDecimalZero();
+					player.p.hymn = newDecimalZero();
 				};
 			},
 			unlocked() { return hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
@@ -3460,15 +3460,15 @@ addLayer('s', {
 	position: 1,
 	startData() { return {
 		unlocked: false,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		total: new Decimal(0),
-		devotion: new Decimal(0),
-		devotion_effect: new Decimal(1),
-		glow: new Decimal(0),
-		glow_gain: new Decimal(0),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
+		devotion: newDecimalZero(),
+		devotion_effect: newDecimalOne(),
+		glow: newDecimalZero(),
+		glow_gain: newDecimalZero(),
 		glow_max: new Decimal(1000),
-		glow_effect: new Decimal(1),
+		glow_effect: newDecimalOne(),
 		auto_worship: false,
 		auto_sacrifice: false,
 		auto_sacrificial_ceremony: false,
@@ -3492,7 +3492,7 @@ addLayer('s', {
 	},
 	canBuyMax() { return hasMilestone('s', 0) || player.r.total.gt(0) || player.w.unlocked },
 	gainExp() {
-		let gain = new Decimal(1);
+		let gain = newDecimalOne();
 		if (player.s.devotion_effect.gt(1)) gain = gain.mul(player.s.devotion_effect);
 		if (player.s.glow_effect.gt(1)) gain = gain.mul(player.s.glow_effect);
 		if (new Decimal(tmp.r.effect[1]).gt(1) && !tmp.r.deactivated) gain = gain.mul(tmp.r.effect[1]);
@@ -3948,7 +3948,7 @@ addLayer('d', {
 		11: {
 			cost() {
 				let div = buyableEffect('d', 21)[2];
-				if (div === undefined) div = new Decimal(1);
+				if (div === undefined) div = newDecimalOne();
 				if (hasMilestone('s', 32)) div = div.mul(1e100);
 				let scale = new Decimal(50);
 				if (hasMilestone('s', 17)) scale = scale.div(15);
@@ -3976,7 +3976,7 @@ addLayer('d', {
 		},
 		12: {
 			cost() {
-				let scale = new Decimal(1);
+				let scale = newDecimalOne();
 				if (hasMilestone('s', 26)) scale = scale.div(2);
 				if (hasMilestone('s', 33)) scale = scale.div(1.6);
 				if (hasMilestone('s', 37)) scale = scale.div(2);
@@ -4017,7 +4017,7 @@ addLayer('d', {
 				return new Decimal(10).pow(getBuyableAmount('d', this.id).mul(scale)).mul(1e50);
 			},
 			cost_sp() {
-				let scale = new Decimal(1);
+				let scale = newDecimalOne();
 				if (hasMilestone('s', 27)) scale = scale.div(2);
 				if (hasMilestone('s', 29)) scale = scale.div(1.5);
 				if (hasMilestone('s', 31)) scale = scale.div(1.2);
@@ -4144,15 +4144,15 @@ addLayer('r', {
 	position: 1,
 	startData() { return {
 		unlocked: false,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		total: new Decimal(0),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
 		lightreq: new Decimal(20000),
-		light: new Decimal(0),
-		lightbest: new Decimal(0),
-		lightgain: new Decimal(0),
-		lightgainbest: new Decimal(0),
-		relic_effects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
+		light: newDecimalZero(),
+		lightbest: newDecimalZero(),
+		lightgain: newDecimalZero(),
+		lightgainbest: newDecimalZero(),
+		relic_effects: [newDecimalOne(), newDecimalOne(), newDecimalOne(), newDecimalOne()],
 		auto_activate: false,
 		auto_upgrade_1: false,
 		auto_upgrade_2: false,
@@ -4175,7 +4175,7 @@ addLayer('r', {
 	exponent: 0.66,
 	canBuyMax() { return true },
 	gainExp() {
-		let gain = new Decimal(1);
+		let gain = newDecimalOne();
 		if (hasUpgrade('m', 43)) gain = gain.mul(upgradeEffect('m', 43));
 		if (challengeCompletions('r', 11) >= 13) gain = gain.mul(player.r.relic_effects[3]);
 		if (hasUpgrade('ei', 34)) gain = gain.mul(upgradeEffect('ei', 34));
@@ -4197,10 +4197,10 @@ addLayer('r', {
 		if (hasMilestone('w', 4) && player.r.auto_upgrade_3 && layers.r.upgrades[13].unlocked) buyUpgrade('r', 13);
 	},
 	effect() {
-		let effBoost1 = new Decimal(1);
-		let effex1 = new Decimal(1);
-		let effBoost2 = new Decimal(1);
-		let effBoost3 = new Decimal(1);
+		let effBoost1 = newDecimalOne();
+		let effex1 = newDecimalOne();
+		let effBoost2 = newDecimalOne();
+		let effBoost3 = newDecimalOne();
 		if (hasBuyable('d', 12)) effBoost1 = effBoost1.mul(buyableEffect('d', 12));
 		if (challengeCompletions('r', 11) >= 3) {
 			effBoost1 = effBoost1.mul(10000);
@@ -4247,7 +4247,7 @@ addLayer('r', {
 	resetsNothing() { return hasMilestone('w', 4) },
 	update(diff) {
 		player.r.lightreq = new Decimal(20000).mul(new Decimal(5).pow(challengeCompletions('r', 11)));
-		let mult0 = new Decimal(1);
+		let mult0 = newDecimalOne();
 		if (challengeCompletions('r', 11) >= 11) mult0 = mult0.mul(2);
 		if (challengeCompletions('r', 11) >= 14) mult0 = mult0.mul(2);
 		if (challengeCompletions('r', 11) >= 15) mult0 = mult0.mul(1.2);
@@ -4260,7 +4260,7 @@ addLayer('r', {
 		let eff1 = player.r.light.mul(1000).add(1).pow(0.05);
 		if (eff1.gte(100)) eff1 = new Decimal(100);
 		player.r.relic_effects[1] = eff1;
-		let mult2 = new Decimal(1);
+		let mult2 = newDecimalOne();
 		if (challengeCompletions('r', 11) >= 7) mult2 = mult2.mul(4);
 		if (challengeCompletions('r', 11) >= 8) mult2 = mult2.mul(2);
 		player.r.relic_effects[2] = player.r.light.div(1000).add(1).pow(0.25).mul(mult2);
@@ -4399,12 +4399,12 @@ addLayer('m', {
 	position: 2,
 	startData() { return {
 		unlocked: false,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		total: new Decimal(0),
-		unique_nonextra: new Decimal(0),
-		unique_extra: new Decimal(0),
-		unique_total: new Decimal(0),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
+		unique_nonextra: newDecimalZero(),
+		unique_extra: newDecimalZero(),
+		unique_total: newDecimalZero(),
 		auto_upgrades: false,
 	}},
 	color: "#00CCCC",
@@ -4419,7 +4419,7 @@ addLayer('m', {
 	type: 'normal',
 	exponent: 0.9,
 	gainMult() {
-		let mult = new Decimal(1);
+		let mult = newDecimalOne();
 		if (challengeCompletions('r', 11) >= 12) mult = mult.mul(player.r.relic_effects[0]);
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[1]);
 		if (hasBuyable('w', 21)) mult = mult.mul(buyableEffect('w', 21));
@@ -4469,7 +4469,7 @@ addLayer('m', {
 		let effnon = new Decimal(player.m.upgrades.length);
 		if (hasUpgrade('m', 42)) effnon = effnon.mul(upgradeEffect('m', 42));
 		player.m.unique_nonextra = effnon;
-		let effex = new Decimal(0);
+		let effex = newDecimalZero();
 		if (hasUpgrade('m', 31) && upgradeEffect('m', 31).gt(0)) effex = effex.add(upgradeEffect('m', 31));
 		if (hasUpgrade('m', 32) && upgradeEffect('m', 32).gt(0)) effex = effex.add(upgradeEffect('m', 32));
 		if (hasUpgrade('m', 41) && upgradeEffect('m', 41).gt(0)) effex = effex.add(upgradeEffect('m', 41));
@@ -4783,10 +4783,10 @@ addLayer('gi', {
 	position: 1,
 	startData() { return {
 		unlocked: false,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		total: new Decimal(0),
-		req_devotion: new Decimal(1),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
+		req_devotion: newDecimalOne(),
 		auto_buyables: false,
 		auto_prestige: false,
 	}},
@@ -4803,7 +4803,7 @@ addLayer('gi', {
 	exponent: 1,
 	canBuyMax() { return true },
 	gainExp() {
-		let gain = new Decimal(1);
+		let gain = newDecimalOne();
 		if (player.gi.req_devotion.gt(1)) gain = gain.mul(player.gi.req_devotion);
 		if (hasUpgrade('ei', 24)) gain = gain.mul(upgradeEffect('ei', 24));
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
@@ -5043,10 +5043,10 @@ addLayer('ei', {
 	position: 0,
 	startData() { return {
 		unlocked: false,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		total: new Decimal(0),
-		power: new Decimal(0),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
+		power: newDecimalZero(),
 		auto_upgrades: false,
 		auto_prestige: false,
 	}},
@@ -5073,7 +5073,7 @@ addLayer('ei', {
 	},
 	canBuyMax() { return true },
 	gainExp() {
-		let gain = new Decimal(1);
+		let gain = newDecimalOne();
 		if (hasUpgrade('ei', 11)) gain = gain.mul(upgradeEffect('ei', 11));
 		if (hasUpgrade('ei', 21)) gain = gain.mul(upgradeEffect('ei', 21));
 		if (hasUpgrade('ei', 31)) gain = gain.mul(upgradeEffect('ei', 31));
@@ -5492,7 +5492,7 @@ addLayer('ei', {
 			onEnter() {
 				player.ei.milestones = [];
 				player.ei.upgrades = [];
-				player.ei.power = new Decimal(0);
+				player.ei.power = newDecimalZero();
 			},
 			rewardDescription: 'exponentiate evil power<br>gain by ^1.075',
 			doReset: true,
@@ -5509,7 +5509,7 @@ addLayer('ei', {
 			unlocked() { return hasChallenge('ei', 11) },
 			onEnter() {
 				player.ei.upgrades = [];
-				player.ei.power = new Decimal(0);
+				player.ei.power = newDecimalZero();
 			},
 			rewardDescription() {
 				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'evil influence resets nothing, all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>power gain by ^1.075'
@@ -5529,10 +5529,10 @@ addLayer('ei', {
 			unlocked() { return hasChallenge('ei', 12) },
 			onEnter() {
 				player.ei.upgrades = [];
-				player.ei.power = new Decimal(0);
-				player.r.points = new Decimal(0);
-				player.r.best = new Decimal(0);
-				player.r.total = new Decimal(0);
+				player.ei.power = newDecimalZero();
+				player.r.points = newDecimalZero();
+				player.r.best = newDecimalZero();
+				player.r.total = newDecimalZero();
 				player.r.challenges[11] = 0;
 			},
 			rewardDescription: 'unlock Wars',
@@ -5550,10 +5550,10 @@ addLayer('ei', {
 			onEnter() {
 				player.ei.milestones = [];
 				player.ei.upgrades = [];
-				player.ei.power = new Decimal(0);
-				player.r.points = new Decimal(0);
-				player.r.best = new Decimal(0);
-				player.r.total = new Decimal(0);
+				player.ei.power = newDecimalZero();
+				player.r.points = newDecimalZero();
+				player.r.best = newDecimalZero();
+				player.r.total = newDecimalZero();
 				player.r.challenges[11] = 0;
 			},
 			rewardDescription: 'multiply evil influence gain<br>by 1.75x',
@@ -5569,9 +5569,9 @@ addLayer('w', {
 	position: 0,
 	startData() { return {
 		unlocked: false,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		total: new Decimal(0),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
 		auto_influence: false,
 	}},
 	color: '#A0A0A0',
@@ -5584,7 +5584,7 @@ addLayer('w', {
 	baseAmount() { return player.gi.points.min(player.ei.points) },
 	type: 'custom',
 	getResetGain() {
-		if (tmp.w.baseAmount.lt(tmp.w.requires)) return new Decimal(0);
+		if (tmp.w.baseAmount.lt(tmp.w.requires)) return newDecimalZero();
 		let gain = tmp.w.baseAmount.sub(tmp.w.requires).div(20).mul(this.gainExp()).floor().sub(player.w.points).add(1);
 		if (this.canBuyMax()) return gain.max(0);
 		return gain.max(0).min(1);
@@ -5614,7 +5614,7 @@ addLayer('w', {
 	},
 	onPrestigeIsAfterGain: true,
 	gainExp() {
-		let gain = new Decimal(1);
+		let gain = newDecimalOne();
 		if (new Decimal(tmp.ch.effect[1]).gt(1) && !tmp.ch.deactivated) gain = gain.mul(tmp.ch.effect[1]);
 		return gain;
 	},
@@ -5985,12 +5985,12 @@ addLayer('cl', {
 	position: 2,
 	startData() { return {
 		unlocked: false,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		total: new Decimal(0),
-		protein_conv: new Decimal(0),
-		protein: new Decimal(0),
-		protein_gain: new Decimal(0),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
+		protein_conv: newDecimalZero(),
+		protein: newDecimalZero(),
+		protein_gain: newDecimalZero(),
 		auto_tissues: false,
 		auto_buyable_31: false,
 		auto_buyable_32: false,
@@ -6020,7 +6020,7 @@ addLayer('cl', {
 	},
 	canBuyMax() { return hasMilestone('cl', 0) },
 	gainExp() {
-		let gain = new Decimal(1);
+		let gain = newDecimalOne();
 		if (hasBuyable('cl', 12)) gain = gain.mul(buyableEffect('cl', 12)[1]);
 		if (hasBuyable('cl', 13)) gain = gain.mul(buyableEffect('cl', 13)[1]);
 		return gain;
@@ -6064,7 +6064,7 @@ addLayer('cl', {
 	resetsNothing() { return hasMilestone('cl', 12) },
 	update(diff) {
 		// init
-		let conv = new Decimal(0);
+		let conv = newDecimalZero();
 		// add
 		if (hasBuyable('cl', 31)) conv = conv.add(buyableEffect('cl', 31));
 		else if (!tmp.cl.deactivated) conv = conv.add(1);
@@ -6078,7 +6078,7 @@ addLayer('cl', {
 		// set
 		player.cl.protein_conv = conv;
 		// init
-		let mult = new Decimal(0);
+		let mult = newDecimalZero();
 		// add
 		if (hasBuyable('cl', 43)) mult = mult.add(buyableEffect('cl', 43)[0]);
 		if (hasMilestone('w', 19)) mult = mult.add(0.1);
@@ -6090,7 +6090,7 @@ addLayer('cl', {
 			player.cl.protein_gain = gain;
 			player.cl.protein = player.cl.protein.add(gain);
 		} else {
-			player.cl.protein_gain = new Decimal(0);
+			player.cl.protein_gain = newDecimalZero();
 		};
 	},
 	tabFormat: {
@@ -6428,7 +6428,7 @@ addLayer('cl', {
 			canClick: true,
 			onClick() {
 				player.cl.protein = player.cl.protein.add(player.cl.points.mul(player.cl.protein_conv));
-				player.cl.points = new Decimal(0);
+				player.cl.points = newDecimalZero();
 			},
 			unlocked() { return !hasMilestone('w', 19) },
 		},
@@ -6441,9 +6441,9 @@ addLayer('ch', {
 	position: 0,
 	startData() { return {
 		unlocked: false,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		total: new Decimal(0),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
 	}},
 	color: '#FFFFFF',
 	nodeStyle() {
@@ -6459,7 +6459,7 @@ addLayer('ch', {
 	baseAmount() { return player.w.points },
 	type: 'custom',
 	getResetGain() {
-		if (tmp.ch.baseAmount.lt(tmp.ch.requires)) return new Decimal(0);
+		if (tmp.ch.baseAmount.lt(tmp.ch.requires)) return newDecimalZero();
 		let gain = tmp.ch.baseAmount.sub(tmp.ch.requires).div(5).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
 		if (player.ch.points.gte(49)) gain = tmp.ch.baseAmount.sub(tmp.ch.requires).add(1190).div(40).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
 		else if (player.ch.points.gte(20)) gain = tmp.ch.baseAmount.sub(tmp.ch.requires).add(230).div(20).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
@@ -6477,7 +6477,7 @@ addLayer('ch', {
 	prestigeButtonText() { return randomStr(5) + ' ' + randomStr(3) + ' +<b>' + formatWhole(this.getResetGain()) + '</b> ' + randomStr(5) + '<br><br>' + (player.ch.points.lt(30) ? randomStr(3) + ':' : '') + ' ' + formatWhole(tmp.ch.baseAmount) + ' / ' + formatWhole(this.getNextAt()) + ' ' + randomStr(4) },
 	canBuyMax() { return false },
 	gainExp() {
-		let gain = new Decimal(1);
+		let gain = newDecimalOne();
 		return gain;
 	},
 	row: 6,
@@ -6745,9 +6745,9 @@ addLayer('mo', {
 	position: 1,
 	startData() { return {
 		unlocked: false,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		total: new Decimal(0),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
 		assimilating: null,
 		assimilated: [],
 		hadLayers: [],
@@ -6766,7 +6766,7 @@ addLayer('mo', {
 	exponent: 1,
 	canBuyMax() { return hasMilestone('ch', 21) },
 	gainExp() {
-		let gain = new Decimal(1);
+		let gain = newDecimalOne();
 		if (hasMilestone('ch', 16)) gain = gain.mul(milestoneEffect('ch', 16));
 		return gain;
 	},
@@ -6804,7 +6804,7 @@ addLayer('mo', {
 				if (player.mo.assimilating !== null) {
 					if (!confirm('Are you sure you want to exit this Assimilation run? This will reset all Assimilated layers content, all ' + tmp[player.mo.assimilating].name + ' content, and put you back into a normal run.')) return;
 					setClickableState('mo', 11, false);
-					player.points = new Decimal(0);
+					player.points = newDecimalZero();
 					for (let index = 0; index < player.mo.assimilated.length; index++) {
 						tmp[player.mo.assimilated[index]].doReset('mo');
 					};

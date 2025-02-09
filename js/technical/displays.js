@@ -66,7 +66,7 @@ function updateOomps(diff) {
 	tmp.other.oompsMag = 0;
 	if (player.points.lte(1e100) || diff == 0) return;
 	let pp = new Decimal(player.points);
-	let lp = tmp.other.lastPoints || new Decimal(0);
+	let lp = tmp.other.lastPoints || newDecimalZero();
 	if (pp.gt(lp)) {
 		if (pp.gte("10^^8")) {
 			pp = pp.slog(1e10);

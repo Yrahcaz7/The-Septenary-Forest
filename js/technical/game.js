@@ -15,24 +15,24 @@ function getResetGain(layer, useType = null) {
 			return layers[layer].getResetGain();
 		};
 	};
-	if (tmp[layer].type == "none") return new Decimal(0);
-	if (tmp[layer].gainExp.eq(0)) return decimalZero;
+	if (tmp[layer].type == "none") return newDecimalZero();
+	if (tmp[layer].gainExp.eq(0)) return newDecimalZero();
 	if (type == "static") {
-		if ((!tmp[layer].canBuyMax) || tmp[layer].baseAmount.lt(tmp[layer].requires)) return decimalOne;
+		if ((!tmp[layer].canBuyMax) || tmp[layer].baseAmount.lt(tmp[layer].requires)) return newDecimalOne();
 		let gain = tmp[layer].baseAmount.div(tmp[layer].requires).div(tmp[layer].gainMult).max(1).log(tmp[layer].base).mul(tmp[layer].gainExp).pow(Decimal.pow(tmp[layer].exponent, -1));
 		gain = gain.mul(tmp[layer].directMult);
 		return gain.floor().sub(player[layer].points).add(1).max(1);
 	} else if (type == "normal") {
-		if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return decimalZero;
+		if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return newDecimalZero();
 		let gain = tmp[layer].baseAmount.div(tmp[layer].requires).pow(tmp[layer].exponent).mul(tmp[layer].gainMult).pow(tmp[layer].gainExp);
-		if (gain.gte(tmp[layer].softcap)) gain = gain.pow(tmp[layer].softcapPower).mul(tmp[layer].softcap.pow(decimalOne.sub(tmp[layer].softcapPower)));
+		if (gain.gte(tmp[layer].softcap)) gain = gain.pow(tmp[layer].softcapPower).mul(tmp[layer].softcap.pow(newDecimalOne().sub(tmp[layer].softcapPower)));
 		if (tmp[layer].logged) gain = gain.add(1).log(tmp[layer].logged === true ? 10 : tmp[layer].logged);
 		gain = gain.mul(tmp[layer].directMult);
 		return gain.floor().max(0);
 	} else if (type == "custom") {
 		return layers[layer].getResetGain();
 	} else {
-		return decimalZero;
+		return newDecimalZero();
 	};
 };
 
@@ -56,20 +56,20 @@ function getNextAt(layer, canMax = false, useType = null) {
 	} else if (type == "normal") {
 		let next = tmp[layer].resetGain.add(1).div(tmp[layer].directMult);
 		if (tmp[layer].logged) next = next.pow_base(tmp[layer].logged === true ? 10 : tmp[layer].logged).sub(1);
-		if (next.gte(tmp[layer].softcap)) next = next.div(tmp[layer].softcap.pow(decimalOne.sub(tmp[layer].softcapPower))).pow(decimalOne.div(tmp[layer].softcapPower));
+		if (next.gte(tmp[layer].softcap)) next = next.div(tmp[layer].softcap.pow(newDecimalOne().sub(tmp[layer].softcapPower))).pow(newDecimalOne().div(tmp[layer].softcapPower));
 		next = next.root(tmp[layer].gainExp).div(tmp[layer].gainMult).root(tmp[layer].exponent).mul(tmp[layer].requires).max(tmp[layer].requires);
 		if (tmp[layer].roundUpCost) next = next.ceil();
 		return next;
 	} else if (type == "custom") {
 		return layers[layer].getNextAt(canMax);
 	} else {
-		return decimalZero;
+		return newDecimalZero();
 	};
 };
 
 function softcap(value, cap, power = 0.5) {
 	if (value.lte(cap)) return value;
-	return value.pow(power).mul(cap.pow(decimalOne.sub(power)));
+	return value.pow(power).mul(cap.pow(newDecimalOne().sub(power)));
 };
 
 // Return true if the layer should be highlighted. By default checks for upgrades only.
@@ -175,11 +175,11 @@ function doReset(layer, force = false, overrideResetsNothing = false) {
 		};
 	};
 	if (!overrideResetsNothing && run(layers[layer].resetsNothing, layers[layer])) return;
-	tmp[layer].baseAmount = decimalZero; // quick fix
+	tmp[layer].baseAmount = newDecimalZero(); // quick fix
 	for (layerResetting in layers) {
 		if (row >= layers[layerResetting].row && (!force || layerResetting != layer)) completeChallenge(layerResetting);
 	};
-	player.points = (row == 0 ? decimalZero : (typeof getStartPoints == "function" ? getStartPoints() : decimalZero));
+	player.points = (row == 0 ? newDecimalZero() : (typeof getStartPoints == "function" ? getStartPoints() : newDecimalZero()));
 	for (let x = row; x >= 0; x--) {
 		rowReset(x, layer);
 	};
@@ -203,7 +203,7 @@ function resetRow(row) {
 		player[layer].unlocked = false;
 		if (player[layer].unlockOrder) player[layer].unlockOrder = 0;
 	};
-	player.points = (typeof getStartPoints == "function" ? getStartPoints() : decimalZero);
+	player.points = (typeof getStartPoints == "function" ? getStartPoints() : newDecimalZero());
 	updateTemp();
 	resizeCanvas();
 };

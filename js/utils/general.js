@@ -304,7 +304,7 @@ document.title = modInfo.name;
 function toValue(value, oldValue) {
 	if (oldValue instanceof Decimal) {
 		value = new Decimal(value);
-		if (value.isNaN()) return decimalZero;
+		if (value.isNaN()) return newDecimalZero();
 		return value;
 	};
 	if (!isNaN(oldValue)) return parseFloat(value) || 0;
