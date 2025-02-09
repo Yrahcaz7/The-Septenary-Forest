@@ -16,12 +16,10 @@
 	<link rel="stylesheet" type="text/css" href="css/tree-node.css"/>
 	<!-- setup stuff -->
 	<script src="js/technical/vue.js"></script>
-	<script src="html/components.html"></script>
 	<script src="js/technical/components.js"></script>
 	<script src="js/technical/break_eternity.js"></script>
 	<script src="js/technical/layerSupport.js"></script>
 	<!-- game stuff -->
-	<script src="html/changelog.html"></script>
 	<script src="js/mod.js"></script>
 	<script src="js/technical/loader.js"></script>
 	<script src="js/technical/temp.js"></script>
@@ -41,7 +39,7 @@
 	<div id="app">
 		<!-- canvas -->
 		<canvas id="treeCanvas" class="canvas" v-if="!(tmp.gameEnded && !player.keepGoing)"></canvas>
-		<div class="vl" v-if="player.navTab !== 'none' && tmp.other.splitScreen && player.tab != 'none' && !(tmp.gameEnded && !player.keepGoing)"></div>
+		<div class="main-vl" v-if="player.navTab !== 'none' && tmp.other.splitScreen && player.tab != 'none' && !(tmp.gameEnded && !player.keepGoing)"></div>
 		<!-- loading screen -->
 		<div v-if="false" class="fullWidth" style="display: flex; flex-direction: column; justify-content: center; background-color: #0f0f0f; z-index: 999999999999999">
 			<div><h1>Loading...</h1><br><h2>If this takes too long it means there was a serious error!</h2></div>

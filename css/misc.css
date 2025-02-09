@@ -63,12 +63,8 @@
 
 /* Horizontal/vertical lines */
 .vl {
-	border-left: 6px solid var(--color);
+	border-left: 3px solid var(--color);
 	height: 100%;
-	position: absolute;
-	left: 50%;
-	margin-left: -3px;
-	top: 0;
 }
 
 .hl {

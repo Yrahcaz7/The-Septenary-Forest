@@ -14,6 +14,169 @@ const VERSION = {
 	name: 'UNIFICATION',
 };
 
+const changelog = `<h1>Changelog:</h1><br>
+	<br><h3>v3.5: More Assimilation</h3><br>
+		- Added more to assimilation.<br>
+		- Added more to stories.<br>
+		- Added six milestones to chaos.<br>
+		- Added two achievements.<br>
+		- Added six achievement images.<br>
+		- Improved story infobox style.<br>
+	<br><h3>v3.4: Organisms Emerge</h3><br>
+		- Added multicellular organisms.<br>
+		- Added assimilation.<br>
+		- Added more to stories.<br>
+		- Added ten milestones to chaos.<br>
+		- Added three achievements.<br>
+	<br><h3>v3.3: Chaos Rises</h3><br>
+		- Added chaos.<br>
+		- Added seven milestones to chaos.<br>
+		- Added two challenges to chaos.<br>
+		- Added stories.<br>
+		- Added seven achievements.<br>
+		- Added six achievement images.<br>
+		- Added one option.<br>
+	<br><h3>v3.2: Back and Forth</h3><br>
+		- Added protein.<br>
+		- Added nine rebuyables to cellular life.<br>
+		- Added five milestones to war.<br>
+		- Added two achievements.<br>
+		- Added six achievement images.<br>
+		- Major rebalancing.<br>
+	<br><h3>v3.1: Finally, Life</h3><br>
+		- Added cellular life.<br>
+		- Added thirteen milestones to cellular life.<br>
+		- Added four rebuyables to cellular life.<br>
+		- Added six milestones to war.<br>
+		- Added five achievements.<br>
+		- Added six achievement images.<br>
+	<br><h3>v3.0: War, War, and more War</h3><br>
+		- Added war.<br>
+		- Added ten milestones to war.<br>
+		- Added four rebuyables to war.<br>
+		- Added one challenge to evil influence.<br>
+		- Added eight achievements.<br>
+		- Renamed buyables to rebuyables.<br>
+		- Lots of technical changes and fixes.<br>
+	<br><h3>v2.4: Power of Evil</h3><br>
+		- Added evil influence.<br>
+		- Added five milestones to evil influence.<br>
+		- Added thirty upgrades to evil influence.<br>
+		- Added three challenges to evil influence.<br>
+		- Added one milestone to good influence.<br>
+		- Added three achievements.<br>
+		- Added three achievement images.<br>
+	<br><h3>v2.3: Influence of Good</h3><br>
+		- Added good influence.<br>
+		- Added seventeen milestones to good influence.<br>
+		- Added two rebuyables to good influence.<br>
+		- Added four milestones to molecules.<br>
+		- Added three upgrades to molecules.<br>
+		- Added three upgrades to relics.<br>
+		- Added eight achievements.<br>
+		- Added five achievement images.<br>
+	<br><h3>v2.2: Advances in Science</h3><br>
+		- Added molecules.<br>
+		- Added seventeen milestones to molecules.<br>
+		- Added twelve upgrades to molecules.<br>
+		- Added three milestones to sanctums.<br>
+		- Added achievement colors.<br>
+		- Added eight achievements.<br>
+		- Added five achievement images.<br>
+		- Added another option.<br>
+		- Lots of technical changes and fixes.<br>
+	<br><h3>v2.1: Relics of Light</h3><br>
+		- Added relics.<br>
+		- Added one custom challenge to relics.<br>
+		- Added so, so many milestones to sanctums.<br>
+		- Added three custom rebuyables to sanctums.<br>
+		- Added two milestones to atoms.<br>
+		- Added four achievements.<br>
+		- Added eight achievement images.<br>
+		- Added nerd mode.<br>
+	<br><h3>v2.0: Sanctums of Color</h3><br>
+		- Added sanctums.<br>
+		- Added ten milestones to sanctums.<br>
+		- Added four upgrades to prayers.<br>
+		- Added six researchable upgrades to prayers.<br>
+		- Added four achievements.<br>
+		- Added custom colored text. Vibing!<br>
+		- Added two options.<br>
+	<br><h3>v1.5: Creativity Rules</h3><br>
+		- Added one milestone to atoms.<br>
+		- Added six upgrades to prayers.<br>
+		- Added two achievements.<br>
+		- Added twenty-seven achievement images.<br>
+		- Changed 'best' and 'total' format.<br>
+		- Finally fixed the rebuyable format bug.<br>
+	<br><h3>v1.4: Praise the Sky</h3><br>
+		- Added prayers.<br>
+		- Added three milestones to prayers.<br>
+		- Added twelve upgrades to prayers.<br>
+		- Added one milestone to atoms.<br>
+		- Added four achievements.<br>
+	<br><h3>v1.3: Atomic Measure</h3><br>
+		- Added atoms.<br>
+		- Added twelve milestones to atoms.<br>
+		- Added fourteen upgrades to atoms.<br>
+		- Added one challenge to demon souls.<br>
+		- Added six achievements.<br>
+	<br><h3>v1.2: Demon Gateway</h3><br>
+		- Added demonic gateway.<br>
+		- Added two milestones to demon souls.<br>
+		- Added one upgrade to demon souls.<br>
+		- Added three challenges to demon souls.<br>
+		- Added twelve achievements.<br>
+		- Reformatted all tabs.<br>
+	<br><h3>v1.1: Demonic Faith</h3><br>
+		- Added demon souls.<br>
+		- Added seven milestones to demon souls.<br>
+		- Added two upgrades to demon souls.<br>
+		- Added one rebuyable to demon souls.<br>
+		- Added four upgrades to hexes.<br>
+		- Added seven achievements.<br>
+		- Renamed most achievements.<br>
+		- Achievements now boost point gain.<br>
+	<br><h3>v1.0: Variety Rules</h3><br>
+		- Added one milestone to hexes.<br>
+		- Added eight upgrades to hexes.<br>
+		- Added one milestone to subatomic particles.<br>
+		- Added three upgrades to subatomic particles.<br>
+		- Added one milestone to cores.<br>
+		- Added six upgrades to cores.<br>
+		- Added three achievements.<br>
+	<br><h3>v0.7: The Hex Game</h3><br>
+		- Added hexes.<br>
+		- Added eight milestones to hexes.<br>
+		- Added twelve upgrades to hexes.<br>
+		- Added one achievement.<br>
+	<br><h3>v0.6: Subatomic Layer</h3><br>
+		- Added subatomic particles.<br>
+		- Added five milestones to subatomic particles.<br>
+		- Added three rebuyables to subatomic particles.<br>
+		- Added five upgrades to quarks.<br>
+		- Added two achievements.<br>
+	<br><h3>v0.5: How Many Miles</h3><br>
+		- Added three milestones to cores.<br>
+		- Added three milestones to quarks.<br>
+		- Added eight achievements.<br>
+	<br><h3>v0.4: To Infinity</h3><br>
+		- Added five more upgrades to essence.<br>
+		- Added another rebuyable to essence.<br>
+		- Added twelve more upgrades to quarks.<br>
+	<br><h3>v0.3: Quark Addition</h3><br>
+		- Added quarks.<br>
+		- Added three upgrades to cores.<br>
+		- Added three upgrades to quarks.<br>
+	<br><h3>v0.2: Core Update</h3><br>
+		- Added cores.<br>
+		- Added two rebuyables to cores.<br>
+	<br><h3>v0.1: Game Launch</h3><br>
+		- Game Launch.<br>
+		- Added six upgrades.<br>
+		- Added a rebuyable.<br>
+	<br>`;
+
 const winText = () => {
 	return 'You reached ' + format(endPoints) + ' ' + modInfo.pointsName + ' and won the game!<br>However, it isn\'t the end yet...<br>Wait for more updates for further content.';
 };
@@ -228,13 +391,15 @@ function fixOldSave(oldVersion) {
 	};
 };
 
-// glitch text
-const validChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ";
+// valid random characters
+const validChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ';
 
+// gets random valid character
 function randomChar() {
 	return validChars[Math.floor(Math.random() * validChars.length)];
 };
 
+// gets random string
 function randomStr(length = 1, sameChar = false) {
 	if (length > 10000) length = 10000;
 	if (length <= 0) return "";
