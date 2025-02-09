@@ -149,11 +149,11 @@ function updateTabFormat(layer) {
 	if (layers[layer]?.tabFormat === undefined) return;
 	let tab = player.subtabs[layer]?.mainTabs;
 	if (typeof layers[layer].tabFormat == "function") {
-		Vue.set(temp[layer], "tabFormat", layers[layer].tabFormat());
+		temp[layer].tabFormat = layers[layer].tabFormat();
 	} else if (Array.isArray(layers[layer].tabFormat)) {
-		Vue.set(temp[layer], "tabFormat", constructTabFormat(layer));
+		temp[layer].tabFormat = constructTabFormat(layer);
 	} else if (isPlainObject(layers[layer].tabFormat) && layers[layer].tabFormat[tab].embedLayer === undefined) {
-		Vue.set(temp[layer].tabFormat[tab], "content", constructTabFormat(layer, tab));
+		temp[layer].tabFormat[tab].content = constructTabFormat(layer, tab);
 	};
 	// Check for embedded layer
 	if (isPlainObject(tmp[layer].tabFormat) && tmp[layer].tabFormat[tab].embedLayer !== undefined) {
@@ -164,7 +164,7 @@ function updateTabFormat(layer) {
 		tab = player.subtabs[layer][family];
 		if (tmp[layer].microtabs[family][tab]) {
 			if (tmp[layer].microtabs[family][tab].embedLayer) updateTabFormat(tmp[layer].microtabs[family][tab].embedLayer);
-			else Vue.set(temp[layer].microtabs[family][tab], "content", constructTabFormat(layer, tab, family));
+			else temp[layer].microtabs[family][tab].content = constructTabFormat(layer, tab, family);
 		};
 	};
 };

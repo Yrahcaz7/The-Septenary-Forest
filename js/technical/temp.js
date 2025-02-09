@@ -18,7 +18,7 @@ let activeFunctions = [
 let traversableClasses = [];
 
 function setupTemp() {
-	tmp = {};
+	tmp = Vue.reactive({});
 	tmp.pointGen = {};
 	tmp.backgroundStyle = {};
 	tmp.displayThings = [];
@@ -111,7 +111,7 @@ function updateTempData(layerData, tmpData, funcsData, useThis) {
 			let value;
 			if (useThis !== undefined) value = layerData[item].bind(useThis)();
 			else value = layerData[item]();
-			Vue.set(tmpData, item, value);
+			tmpData[item] = value;
 		};
 	};
 };

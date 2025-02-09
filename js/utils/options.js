@@ -42,7 +42,7 @@ function changeTreeQuality() {
 };
 
 function toggleAuto(toggle) {
-	Vue.set(player[toggle[0]], [toggle[1]], !player[toggle[0]][toggle[1]]);
+	player[toggle[0]][[toggle[1]]] = !player[toggle[0]][toggle[1]];
 	needCanvasUpdate = true;
 };
 

@@ -9,7 +9,7 @@ function save(force) {
 };
 
 function startPlayerBase() {
-	return {
+	return Vue.reactive({
 		tab: layoutInfo.startTab,
 		navTab: (layoutInfo.showTree ? layoutInfo.startNavTab : "none"),
 		time: Date.now(),
@@ -23,13 +23,13 @@ function startPlayerBase() {
 		points: modInfo.initialStartPoints,
 		subtabs: {},
 		lastSafeTab: (readData(layoutInfo.showTree) ? "none" : layoutInfo.startTab)
-	};
+	});
 };
 
 function getStartPlayer() {
-	playerdata = startPlayerBase();
+	let playerdata = startPlayerBase();
 	if (addedPlayerData) {
-		extradata = addedPlayerData();
+		let extradata = addedPlayerData();
 		for (thing in extradata) {
 			playerdata[thing] = extradata[thing];
 		};
@@ -58,7 +58,7 @@ function getStartPlayer() {
 };
 
 function getStartLayerData(layer) {
-	layerdata = {};
+	let layerdata = {};
 	if (layers[layer].startData) layerdata = layers[layer].startData();
 	if (layerdata.unlocked === undefined) layerdata.unlocked = true;
 	if (layerdata.total === undefined) layerdata.total = newDecimalZero();
@@ -123,7 +123,7 @@ function getStartGrid(layer) {
 };
 
 function fixSave() {
-	defaultData = getStartPlayer();
+	let defaultData = getStartPlayer();
 	fixData(defaultData, player);
 	for (layer in layers) {
 		if (player[layer].best !== undefined) player[layer].best = new Decimal(player[layer].best);

@@ -111,7 +111,7 @@ function canReset(layer) {
 function rowReset(row, layer) {
 	for (lr in ROW_LAYERS[row]) {
 		if (layers[lr].doReset) {
-			if (!isNaN(row)) Vue.set(player[lr], "activeChallenge", null); // Exit challenges on any row reset on an equal or higher row
+			if (!isNaN(row)) player[lr].activeChallenge = null; // Exit challenges on any row reset on an equal or higher row
 			run(layers[lr].doReset, layers[lr], layer);
 		} else if (tmp[layer].row > tmp[lr].row && !isNaN(row)) {
 			layerDataReset(lr);
@@ -124,10 +124,10 @@ function layerDataReset(layer, keep = []) {
 	for (thing in keep) {
 		if (player[layer][keep[thing]] !== undefined) storedData[keep[thing]] = player[layer][keep[thing]];
 	};
-	Vue.set(player[layer], "buyables", getStartBuyables(layer));
-	Vue.set(player[layer], "clickables", getStartClickables(layer));
-	Vue.set(player[layer], "challenges", getStartChallenges(layer));
-	Vue.set(player[layer], "grid", getStartGrid(layer));
+	player[layer].buyables = getStartBuyables(layer);
+	player[layer].clickables = getStartClickables(layer);
+	player[layer].challenges = getStartChallenges(layer);
+	player[layer].grid = getStartGrid(layer);
 	layOver(player[layer], getStartLayerData(layer));
 	player[layer].upgrades = [];
 	player[layer].milestones = [];
@@ -187,7 +187,7 @@ function doReset(layer, force = false, overrideResetsNothing = false) {
 		rowReset(r, layer);
 	};
 	player[layer].resetTime = 0;
-	if (challenge && tmp[layer].challenges[challenge].noAutoExit) Vue.set(player[layer], "activeChallenge", challenge);
+	if (challenge && tmp[layer].challenges[challenge].noAutoExit) player[layer].activeChallenge = challenge;
 	updateTemp();
 	updateTemp();
 };
@@ -213,12 +213,12 @@ function startChallenge(layer, x) {
 	if (player[layer].activeChallenge == x && canExitChallenge(layer, x)) {
 		completeChallenge(layer, x);
 		doReset(layer, true);
-		Vue.set(player[layer], "activeChallenge", null);
+		player[layer].activeChallenge = null;
 	} else if (canEnterChallenge(layer, x)) {
-		Vue.set(player[layer], "activeChallenge", x);
+		player[layer].activeChallenge = x;
 		run(layers[layer].challenges[x].onEnter, layers[layer].challenges[x]);
 		if (tmp[layer].challenges[x].doReset) doReset(layer, true);
-		Vue.set(player[layer], "activeChallenge", x);
+		player[layer].activeChallenge = x;
 	};
 	updateChallengeTemp(layer);
 };
@@ -245,7 +245,7 @@ function completeChallenge(layer, x = player[layer].activeChallenge) {
 	if (!x) return;
 	let completions = canCompleteChallenge(layer, x);
 	if (!completions) {
-		Vue.set(player[layer], "activeChallenge", null);
+		player[layer].activeChallenge = null;
 		run(layers[layer].challenges[x].onExit, layers[layer].challenges[x]);
 		return;
 	};
@@ -255,7 +255,7 @@ function completeChallenge(layer, x = player[layer].activeChallenge) {
 		player[layer].challenges[x] = Math.min(player[layer].challenges[x], tmp[layer].challenges[x].completionLimit);
 		if (layers[layer].challenges[x].onComplete) run(layers[layer].challenges[x].onComplete, layers[layer].challenges[x]);
 	};
-	Vue.set(player[layer], "activeChallenge", null);
+	player[layer].activeChallenge = null;
 	run(layers[layer].challenges[x].onExit, layers[layer].challenges[x]);
 	updateChallengeTemp(layer);
 };

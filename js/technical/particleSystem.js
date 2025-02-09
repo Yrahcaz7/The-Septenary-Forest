@@ -1,4 +1,4 @@
-let particles = {};
+let particles = Vue.reactive({});
 let particleID = 0;
 let mouseX = 0;
 let mouseY = 0;
@@ -27,7 +27,7 @@ function makeParticles(data, amount = 1, type = "normal") {
 		particle.xVel = particle.speed * sin(particle.dir);
 		particle.yVel = particle.speed * cos(particle.dir) * -1;
 		particle.fadeInTimer = particle.fadeInTime;
-		Vue.set(particles, particle.id, particle);
+		particles[particle.id] = particle;
 	};
 };
 
@@ -42,7 +42,7 @@ function updateParticles(diff) {
 		particle.time -= diff;
 		particle.fadeInTimer -= diff;
 		if (particle.time < 0) {
-			Vue.delete(particles, p);
+			delete particles[p];
 		} else {
 			if (particle.update) run(particle.update, particle);
 			particle.angle += particle.rotation;
@@ -151,11 +151,10 @@ function constructParticleStyle(particle) {
 	return style;
 };
 
-function clearParticles(check) {
-	if (!check) check = true;
+function clearParticles(check = true) {
 	for (p in particles) {
 		if (run(check, particles[p], particles[p])) {
-			Vue.delete(particles, p);
+			delete particles[p];
 		};
 	};
 };

@@ -72,7 +72,7 @@ Other useful things that are not features of the particle object:
 
 - `clearParticles(check)`: Function to delete particles. With no check, it deletes all particles. Check is a function that takes a particle, and returns true if that particle should be deleted.
 
-- You can use `Vue.delete(particles, this.id)` to make a particle delete itself.
+- You can use `delete particles[this.id]` to make a particle delete itself.
 
 - `mouseX` and `mouseY` are variables that track the mouse position.
 
