@@ -15,11 +15,13 @@ function getStartOptions() {
 		colorDisplay: 0,
 		extendplaces: false,
 		hideMilestonePopups: false,
+		disableGlitchText: false,
 	};
 };
 
 function formatOption(opt) {
-	return opt ? 'ON' : 'OFF';
+	if (opt) return 'ON'
+	return 'OFF';
 };
 
 function toggleOpt(name) {
@@ -44,7 +46,7 @@ function toggleAuto(toggle) {
 	needCanvasUpdate = true;
 };
 
-const MS_DISPLAYS = ['ALL', 'LAST, AUTO, INCOMPLETE', 'AUTOMATION, INCOMPLETE (recommended)', 'INCOMPLETE', 'NONE'];
+const MS_DISPLAYS = ['ALL', 'LAST, AUTO, INCOMPLETE (recommended)', 'AUTOMATION, INCOMPLETE (recommended)', 'INCOMPLETE', 'NONE'];
 
 const MS_SETTINGS = ['always', 'last', 'automation', 'incomplete', 'never'];
 

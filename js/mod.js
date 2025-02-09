@@ -15,6 +15,10 @@ const VERSION = {
 };
 
 const changelog = `<h1>Changelog:</h1><br>
+	<br><h3>v3.6 Beta: UNIFICATION</h3><br>
+		- Removed one option.<br>
+		- Added two options.<br>
+		- Improved option style.<br>
 	<br><h3>v3.5: More Assimilation</h3><br>
 		- Added more to assimilation.<br>
 		- Added more to stories.<br>
@@ -42,7 +46,7 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added five milestones to war.<br>
 		- Added two achievements.<br>
 		- Added six achievement images.<br>
-		- Major rebalancing.<br>
+		- MAJOR REBALANCING!<br>
 	<br><h3>v3.1: Finally, Life</h3><br>
 		- Added cellular life.<br>
 		- Added thirteen milestones to cellular life.<br>
@@ -391,18 +395,16 @@ function fixOldSave(oldVersion) {
 	};
 };
 
-// valid random characters
-const validChars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿ';
-
 // gets random valid character
 function randomChar() {
-	return validChars[Math.floor(Math.random() * validChars.length)];
+	return "&#" + Math.floor((Math.random() * (126 - 33 + 1)) + 33) + ";";
 };
 
 // gets random string
 function randomStr(length = 1, sameChar = false) {
 	if (length > 10000) length = 10000;
 	if (length <= 0) return "";
+	if (options.disableGlitchText) return "?".repeat(length);
 	if (sameChar) return randomChar().repeat(length);
 	let result = "";
 	for (let index = 0; index < length; index++) {

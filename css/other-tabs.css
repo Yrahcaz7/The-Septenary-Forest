@@ -94,13 +94,13 @@ a {
 }
 
 .opt {
-	height: 100px;
-	width: 100px;
+	height: 110px;
+	width: 110px;
 	border-radius: 25%;
 	border: 4px solid;
 	background-color: var(--color);
 	border-color: rgba(0, 0, 0, 0.125);
-	color: rgba(0, 0, 0, 0.5);
+	color: rgba(0, 0, 0, 0.75);
 	cursor: pointer;
 }
 

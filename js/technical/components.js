@@ -982,6 +982,7 @@ function loadVue() {
 			</tr>
 			<tr>
 				<td><button class="opt" onclick="toggleOpt('hideMilestonePopups')">Show Milestone Popups: {{formatOption(!options.hideMilestonePopups)}}</button></td>
+				<td><button class="opt" onclick="toggleOpt('disableGlitchText')">Glitch Text: {{formatOption(!options.disableGlitchText)}} (when off, qestion marks are displayed instead)</button></td>
 			</tr>
 		</table>`),
 	});
