@@ -51,17 +51,17 @@
 			<h3 v-html="modInfo.winText"></h3><br><br>
 			<div v-if="!player.timePlayedReset">It took you {{formatTime(player.timePlayed)}} to beat the game.</div><br>
 			<button class="longUpg can" style="margin-right: 18px" onclick="hardReset(true)">Play Again</button><button class="longUpg can" onclick="keepGoing()">Keep Going</button><br><br>
-			<span v-if="modInfo.discordLink"><a class="link" v-bind:href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></span>
-			<a class="link" href="https://discord.gg/F3xveHV" target="_blank" v-bind:style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br><br>
+			<span v-if="modInfo.discordLink"><a class="link" :href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></span>
+			<a class="link" href="https://discord.gg/F3xveHV" target="_blank" :style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br><br>
 			<a class="link" href="https://discord.gg/wwQfgPa" target="_blank" style="font-size: 16px">Main Prestige Tree server</a><br><br>
 		</div>
 		<!-- miscellaneous buttons -->
-		<div id="treeOverlay" v-if="!(tmp.gameEnded && !player.keepGoing) && (player.tab === 'none' || tmp.other.splitScreen || !readData(layoutInfo.showTree))" onscroll="resizeCanvas()" v-bind:class="{
+		<div id="treeOverlay" v-if="!(tmp.gameEnded && !player.keepGoing) && (player.tab === 'none' || tmp.other.splitScreen || !readData(layoutInfo.showTree))" onscroll="resizeCanvas()" :class="{
 			treeOverlay: true,
 			fullWidth: player.tab === 'none' || player.navTab === 'none',
 			col: player.tab !== 'none' && player.navTab !== 'none',
 			left: player.tab !== 'none' && player.navTab !== 'none',
-		}" v-bind:style="{'margin-top': !readData(layoutInfo.showTree) && player.tab == 'info-tab' ? '50px' : ''}">
+		}" :style="{'margin-top': !readData(layoutInfo.showTree) && player.tab == 'info-tab' ? '50px' : ''}">
 			<div id="version" onclick="showTab('changelog-tab')" class="overlayThing" style="margin-right: 13px">{{VERSION.withoutName}}</div>
 			<button v-if="((player.navTab == 'none' && (tmp[player.tab].row == 'side' || tmp[player.tab].row == 'otherside' || player[player.tab].prevTab)) || player[player.navTab]?.prevTab)" class="other-back overlayThing" onclick="goBack(player.navTab === 'none' ? player.tab : player.navTab)">&#8592;</button>
 			<img id="optionWheel" class="overlayThing" v-if="player.tab != 'options-tab'" src="images/options_wheel.png" onclick="showTab('options-tab')">
@@ -69,8 +69,8 @@
 			<div id="discord" class="overlayThing">
 				<img src="images/discord.png">
 				<ul id="discord-links">
-					<li v-if="modInfo.discordLink"><a class="link" v-bind:href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></li>
-					<li><a class="link" href="https://discord.gg/F3xveHV" target="_blank" v-bind:style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br></li>
+					<li v-if="modInfo.discordLink"><a class="link" :href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></li>
+					<li><a class="link" href="https://discord.gg/F3xveHV" target="_blank" :style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br></li>
 					<li><a class="link" href="https://discord.gg/wwQfgPa" target="_blank" style="font-size: 16px">Main Prestige Tree server</a></li>
 				</ul>
 			</div>
@@ -82,7 +82,7 @@
 			</div>
 		</div>
 		<!-- tree tab -->
-		<div v-if="!(tmp.gameEnded && !player.keepGoing) && (player.tab === 'none' || tmp.other.splitScreen)" id="treeTab" onscroll="resizeCanvas()" v-bind:class="{
+		<div v-if="!(tmp.gameEnded && !player.keepGoing) && (player.tab === 'none' || tmp.other.splitScreen)" id="treeTab" onscroll="resizeCanvas()" :class="{
 			fullWidth: player.tab === 'none' || player.navTab === 'none',
 			col: player.tab !== 'none' && player.navTab !== 'none',
 			left: player.tab !== 'none' && player.navTab !== 'none',
@@ -95,7 +95,7 @@
 		<!-- popups -->
 		<div class="popup-container">
 			<transition-group name="fade">
-				<div v-for="popup, index in activePopups" class="popup" v-bind:class="popup.type" v-bind:key="'p' + popup.id" v-on:click="() => {activePopups.splice(index, 1)}" v-bind:style="popup.color ? {'background-color': popup.color} : {}">
+				<div v-for="popup, index in activePopups" class="popup" :class="popup.type" :key="'p' + popup.id" v-on:click="() => {activePopups.splice(index, 1)}" :style="popup.color ? {'background-color': popup.color} : {}">
 					<h3>{{popup.title}}</h3><br>
 					<h2 v-html="popup.message"></h2>
 				</div>
@@ -104,11 +104,11 @@
 		<!-- particles -->
 		<div class="particle-container">
 			<div v-for="particle, index in particles">
-				<particle :data="particle" :index="index" v-bind:key="'b' + particle.id"></particle>
+				<particle :data="particle" :index="index" :key="'b' + particle.id"></particle>
 			</div>
 		</div>
 		<!-- layer tab -->
-		<div v-if="player.navTab !== 'none' && player.tab !== 'none' && !(tmp.gameEnded && !player.keepGoing)" onscroll="resizeCanvas()" v-bind:class="{
+		<div v-if="player.navTab !== 'none' && player.tab !== 'none' && !(tmp.gameEnded && !player.keepGoing)" onscroll="resizeCanvas()" :class="{
 			fullWidth: player.navTab === 'none' || !tmp.other.splitScreen || !readData(layoutInfo.showTree),
 			col: player.navTab !== 'none',
 			right: player.navTab !== 'none',
@@ -123,7 +123,7 @@
 			<bg :layer="player.tab"></bg>
 		</div>
 		<!-- background -->
-		<div class="bg2" v-bind:style="tmp.backgroundStyle"></div>
+		<div class="bg2" :style="tmp.backgroundStyle"></div>
 	</div>
 </body>
 
