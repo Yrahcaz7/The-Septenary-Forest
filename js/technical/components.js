@@ -582,6 +582,19 @@ function loadVue() {
 	Vue.component('achievement', {
 		props: ['layer', 'data'],
 		data() {return {tmp, hasAchievement, achievementStyle}},
+		computed: {
+			tooltipText() {
+				if (tmp[this.layer].achievements[this.data].tooltip == '') return false;
+				if (hasAchievement(this.layer, this.data)) {
+					if (tmp[this.layer].achievements[this.data].doneTooltip) return tmp[this.layer].achievements[this.data].doneTooltip;
+					if (tmp[this.layer].achievements[this.data].tooltip) return tmp[this.layer].achievements[this.data].tooltip;
+					return 'You did it!';
+				};
+				if (tmp[this.layer].achievements[this.data].goalTooltip) return tmp[this.layer].achievements[this.data].goalTooltip;
+				if (tmp[this.layer].achievements[this.data].tooltip) return tmp[this.layer].achievements[this.data].tooltip;
+				return 'LOCKED';
+			},
+		},
 		template: template(`<div v-if="tmp[layer].achievements && tmp[layer].achievements[data] !== undefined && tmp[layer].achievements[data].unlocked" v-bind:class="{
 			[layer]: true,
 			achievement: true,
@@ -589,21 +602,7 @@ function loadVue() {
 			locked: !hasAchievement(layer, data),
 			bought: hasAchievement(layer, data),
 		}" v-bind:style="achievementStyle(layer, data)">
-			<tooltip :text="
-				tmp[layer].achievements[data].tooltip == '' ?
-					false
-					: (hasAchievement(layer, data) ?
-						(tmp[layer].achievements[data].doneTooltip ?
-							tmp[layer].achievements[data].doneTooltip
-							: (tmp[layer].achievements[data].tooltip ?
-								tmp[layer].achievements[data].tooltip
-								: 'You did it!'))
-						: (tmp[layer].achievements[data].goalTooltip ?
-							tmp[layer].achievements[data].goalTooltip
-							: (tmp[layer].achievements[data].tooltip ?
-								tmp[layer].achievements[data].tooltip
-								: 'LOCKED')))
-			"></tooltip>
+			<tooltip :text="tooltipText"></tooltip>
 			<span v-if="tmp[layer].achievements[data].name">
 				<br><h3 v-bind:style="tmp[layer].achievements[data].textStyle" v-html="tmp[layer].achievements[data].name"></h3><br>
 			</span>
@@ -780,17 +779,43 @@ function loadVue() {
 	Vue.component('tree-node', {
 		props: ['layer', 'abb', 'size', 'prev'],
 		data() {return {nodeShown, shiftDown, options, player, overrideTreeNodeClick, tmp, showNavTab, showTab, constructNodeStyle, overrideTooltip, formatWhole}},
-		template: template(`<button v-if="nodeShown(layer)" v-bind:id="layer" v-on:click="() => {
-			shiftDown && options.forceTooltips ?
-				player[layer].forceTooltip = !player[layer].forceTooltip
-				: (typeof overrideTreeNodeClick == 'function' && typeof overrideTreeNodeClick(layer) == 'function' ?
-					overrideTreeNodeClick(layer)()
-					: (tmp[layer].isLayer ?
-						(tmp[layer].leftTab ?
-							showNavTab(layer, prev)
-							: showTab(layer, prev))
-						: run(layers[layer].onClick, layers[layer])))
-		}" v-bind:class="{
+		computed: {
+			tooltipText() {
+				if (typeof overrideTooltip == 'function' && overrideTooltip(this.layer)) {
+					return overrideTooltip(this.layer);
+				};
+				if (tmp[this.layer].isLayer) {
+					if (player[this.layer].unlocked) {
+						if (tmp[this.layer].tooltip) return tmp[this.layer].tooltip;
+						return formatWhole(player[this.layer].points) + ' ' + tmp[this.layer].resource;
+					};
+					if (tmp[this.layer].tooltipLocked) return tmp[this.layer].tooltipLocked;
+					if (tmp[this.layer].deactivated) return '' + (tmp[this.layer].name ? tmp[this.layer].name : tmp[this.layer].resource) + ' is deactivated';
+					return 'Reach ' + formatWhole(tmp[this.layer].requires) + ' ' + tmp[this.layer].baseResource + ' to unlock (You have ' + formatWhole(tmp[this.layer].baseAmount) + ' ' + tmp[this.layer].baseResource + ')';
+				};
+				if (tmp[this.layer].canClick) {
+					if (tmp[this.layer].tooltip) return tmp[this.layer].tooltip;
+					return 'I am a button!';
+				};
+				if (tmp[this.layer].tooltipLocked) return tmp[this.layer].tooltipLocked;
+				return 'I am a button!';
+			},
+		},
+		methods: {
+			onClick() {
+				if (shiftDown && options.forceTooltips) {
+					player[this.layer].forceTooltip = !player[this.layer].forceTooltip;
+				} else if (typeof overrideTreeNodeClick == 'function' && typeof overrideTreeNodeClick(this.layer) == 'function') {
+					overrideTreeNodeClick(this.layer)();
+				} else if (tmp[this.layer].isLayer) {
+					if (tmp[this.layer].leftTab) showNavTab(this.layer, this.prev);
+					else showTab(this.layer, this.prev);
+				} else {
+					run(layers[this.layer].onClick, layers[this.layer]);
+				};
+			},
+		},
+		template: template(`<button v-if="nodeShown(layer)" v-bind:id="layer" v-on:click="onClick" v-bind:class="{
 			treeNode: tmp[layer].isLayer,
 			treeButton: !tmp[layer].isLayer,
 			smallNode: size == 'small',
@@ -806,27 +831,7 @@ function loadVue() {
 			front: !tmp.scrolled
 		}" v-bind:style="constructNodeStyle(layer)">
 			<span class="nodeLabel" v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : ''"></span>
-			<tooltip v-if="tmp[layer].tooltip != ''" :text="
-				typeof overrideTooltip == 'function' && overrideTooltip(layer) ?
-					overrideTooltip(layer)
-					: (tmp[layer].isLayer ?
-						(player[layer].unlocked ?
-							(tmp[layer].tooltip ?
-								tmp[layer].tooltip
-								: formatWhole(player[layer].points) + ' ' + tmp[layer].resource)
-							: (tmp[layer].tooltipLocked ?
-								tmp[layer].tooltipLocked
-								: (tmp[layer].deactivated ?
-									'' + (tmp[layer].name ? tmp[layer].name : tmp[layer].resource) + ' is deactivated'
-									: 'Reach ' + formatWhole(tmp[layer].requires) + ' ' + tmp[layer].baseResource + ' to unlock (You have ' + formatWhole(tmp[layer].baseAmount) + ' ' + tmp[layer].baseResource + ')')))
-						: (tmp[layer].canClick ?
-							(tmp[layer].tooltip ?
-								tmp[layer].tooltip
-								: 'I am a button!')
-							: (tmp[layer].tooltipLocked ?
-								tmp[layer].tooltipLocked
-								: 'I am a button!')))
-			"></tooltip>
+			<tooltip v-if="tmp[layer].tooltip != ''" :text="tooltipText"></tooltip>
 			<node-mark :layer='layer' :data='tmp[layer].marked'></node-mark>
 		</button>`),
 	});
@@ -834,6 +839,9 @@ function loadVue() {
 	Vue.component('layer-tab', {
 		props: ['layer', 'back', 'spacing', 'embedded'],
 		data() {return {tmp, player, goBack}},
+		computed: {
+			key() {return this.$vnode.key},
+		},
 		template: template(`<div v-bind:style="[
 			(tmp[layer].style ?
 				tmp[layer].style
@@ -846,8 +854,8 @@ function loadVue() {
 				<button v-bind:class="back == 'big' ? 'other-back' : 'back'" v-on:click="goBack(layer)">&#8592;</button>
 			</div>
 			<div v-if="!tmp[layer].tabFormat">
-				<div v-if="spacing" v-bind:style="{height: spacing}" :key="this.$vnode.key + '-spacing'"></div>
-				<infobox v-if="tmp[layer].infoboxes" :layer="layer" :data="Object.keys(tmp[layer].infoboxes)[0]" :key="this.$vnode.key + '-info'"></infobox>
+				<div v-if="spacing" v-bind:style="{height: spacing}" :key="key + '-spacing'"></div>
+				<infobox v-if="tmp[layer].infoboxes" :layer="layer" :data="Object.keys(tmp[layer].infoboxes)[0]" :key="key + '-info'"></infobox>
 				<main-display v-bind:style="tmp[layer].componentStyles['main-display']" :layer="layer"></main-display>
 				<div v-if="tmp[layer].type !== 'none'">
 					<prestige-button v-bind:style="tmp[layer].componentStyles['prestige-button']" :layer="layer"></prestige-button>
@@ -856,7 +864,7 @@ function loadVue() {
 				</resource-display>
 				<milestones v-bind:style="tmp[layer].componentStyles.milestones" :layer="layer"></milestones>
 				<div v-if="Array.isArray(tmp[layer].midsection)">
-					<column :layer="layer" :data="tmp[layer].midsection" :key="this.$vnode.key + '-mid'"></column>
+					<column :layer="layer" :data="tmp[layer].midsection" :key="key + '-mid'"></column>
 				</div>
 				<clickables v-bind:style="tmp[layer].componentStyles.clickables" :layer="layer"></clickables>
 				<buyables v-bind:style="tmp[layer].componentStyles.buyables" :layer="layer"></buyables>
@@ -868,7 +876,7 @@ function loadVue() {
 			<div v-if="tmp[layer].tabFormat">
 				<div v-if="Array.isArray(tmp[layer].tabFormat)">
 					<div v-if="spacing" v-bind:style="{height: spacing}"></div>
-					<column :layer="layer" :data="tmp[layer].tabFormat" :key="this.$vnode.key + '-col'"></column>
+					<column :layer="layer" :data="tmp[layer].tabFormat" :key="key + '-col'"></column>
 				</div>
 				<div v-else>
 					<div class="upgTable" v-bind:style="{
@@ -878,8 +886,8 @@ function loadVue() {
 					}">
 						<tab-buttons v-bind:style="tmp[layer].componentStyles['tab-buttons']" :layer="layer" :data="tmp[layer].tabFormat" :name="'mainTabs'"></tab-buttons>
 					</div>
-					<layer-tab v-if="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].embedLayer" :layer="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].embedLayer" :embedded="true" :key="this.$vnode.key + '-' + layer"></layer-tab>
-					<column v-else :layer="layer" :data="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].content" :key="this.$vnode.key + '-col'"></column>
+					<layer-tab v-if="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].embedLayer" :layer="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].embedLayer" :embedded="true" :key="key + '-' + layer"></layer-tab>
+					<column v-else :layer="layer" :data="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].content" :key="key + '-col'"></column>
 				</div>
 			</div>
 		</div>`),
