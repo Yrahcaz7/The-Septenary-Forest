@@ -15,12 +15,6 @@ const softcaps = {
 	gi_eff: ['1e2500', 0.6666666666666666],
 };
 
-addLayer('ghost0', {
-	position: 1,
-	row: 'side',
-	layerShown() { return 'ghost' },
-});
-
 addLayer('SC', {
 	name: 'Softcaps',
 	symbol: 'SC',

@@ -3,7 +3,7 @@ const modInfo = {
 	id: 'Yrahcaz7-ModTree-ThePrimordialTree',
 	author: 'Yrahcaz7',
 	pointsName: 'points',
-	modFiles: ['assimilation.js', 'achievements.js', 'softcaps.js', 'story.js', 'tabs.js', 'layers.js', 'technical/tree.js'],
+	modFiles: ['assimilation.js', 'achievements.js', 'softcaps.js', 'story.js', 'tabs.js', 'layers.js', 'tree.js'],
 	initialStartPoints: newDecimalZero(),
 	offlineLimit: 1, // in hours
 };
@@ -385,6 +385,7 @@ function fixOldSave(oldVersion) {
 		});
 	};
 	// remove unused vars
+	delete player.ghost0;
 	delete player.r.sanctummult;
 	delete player.r.essencemult;
 	delete options.css;

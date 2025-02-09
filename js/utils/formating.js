@@ -36,7 +36,7 @@ function sumValues(x) {
 function format(decimal, precision = 2, small = true) {
 	if (options.extendplaces && precision > 0) precision++;
 	decimal = new Decimal(decimal);
-	if (Decimal.isNaN(decimal)) {
+	if (decimal.isNaN()) {
 		player.hasNaN = true;
 		return "NaN";
 	};
