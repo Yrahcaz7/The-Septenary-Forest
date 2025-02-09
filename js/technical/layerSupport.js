@@ -1,7 +1,13 @@
 let layers = {};
 
-const newDecimalZero = () => new Decimal(Decimal.dZero);
-const newDecimalOne = () => new Decimal(Decimal.dOne);
+function newDecimalZero() {
+	return new Decimal(Decimal.dZero);
+};
+
+function newDecimalOne() {
+	return new Decimal(Decimal.dOne);
+};
+
 const defaultGlow = "#ff0000";
 
 function layerShown(layer) {
@@ -203,7 +209,8 @@ function setupLayer(layer) {
 	if (maxRow < layers[layer].displayRow) maxRow = layers[layer].displayRow;
 };
 
-function addLayer(layerName, layerData, tabLayers = null) { // Call this to add layers from a different file!
+// Call this to add layers from a different file!
+function addLayer(layerName, layerData, tabLayers = null) {
 	layers[layerName] = layerData;
 	layers[layerName].isLayer = true;
 	if (tabLayers !== null) {
@@ -230,7 +237,8 @@ function addLayer(layerName, layerData, tabLayers = null) { // Call this to add 
 	};
 };
 
-function addNode(layerName, layerData) { // Does the same thing, but for non-layer nodes
+// Does the same thing, but for non-layer nodes
+function addNode(layerName, layerData) {
 	layers[layerName] = layerData;
 	layers[layerName].isLayer = false;
 };
