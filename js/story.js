@@ -133,7 +133,7 @@ const story = [
 	Quarks were made of Essence.
 	Essence was the root of everything, the source.
 	The Being began constructing Quarks with Essence in its mind.
-	However, the Being could not construct real Quarks.
+	However, the Quarks the Being constructed were warped and strange.
 	It was like the world was broken.
 `, `
 	The Being did not give up, and instead went further.
@@ -250,10 +250,10 @@ const story = [
 	I can't find any corpses here, though, which is odd.
 `, `
 	<b>--- 61st sunset ---</b>
-	Today, I found a cave suitable to construct a home.
+	Today, I found a cave suitable to construct a home in.
 	Lots of trees good for building and edible plants for food nearby.
 	I just have to be careful of the bear territory towards the west.
-	I still haven't enoutered a creature I can communicate with.
+	I still haven't encountered a creature I can communicate with.
 	You know, I wonder where all the rivers lead...
 `, `
 	<b>--- 80th sunset ---</b>
@@ -334,7 +334,7 @@ const story = [
 	The Being was filled with warmpth like never before.
 	It continued on, working harder and harder.
 	However, things began to slow.
-	The new Relics started needing to much light to empower.
+	The new Relics started needing too much light to empower.
 	So the Being set out in search of more light.
 `, `
 	The Being searched and searched, but it couldn't find enough.
@@ -365,7 +365,7 @@ const story = [
 	Things began to slow down again.
 	However, the Being was calm, and kept going.
 	It had experienced this so many times that it knew what to do.
-	The Being began to condense all of their resources.
+	The Being began to condense all of its resources.
 `, `
 	Prayers, Sanctums, Relics, light... all being condensed...
 	Into the very core of their concepts.
@@ -429,13 +429,14 @@ function storyLength(number) {
 };
 
 function filterStory(string) {
-	if (player.ch.best.toNumber() < storyLength(0)) string = string.replace(/[Vv]oid/g, randomStr(4));
-	if (player.ch.best.toNumber() < storyLength(1)) string = string.replace(/[Pp]itch/g, randomStr(5)).replace(/[Bb]lack/g, randomStr(5)).replace(/[Ll]ight/g, randomStr(5));
-	if (player.ch.best.toNumber() < storyLength(2)) string = string.replace(/[Kk]nowledge/g, randomStr(9)).replace(/[Mm]emories/g, randomStr(8));
-	if (player.ch.best.toNumber() < storyLength(3)) string = string.replace(/[Aa]nger/g, randomStr(5)).replace(/[Hh]atred/g, randomStr(6)).replace(/[Cc]urses/g, randomStr(6)).replace(/[Hh]ate/g, randomStr(4));
-	if (player.ch.best.toNumber() < storyLength(4)) string = string.replace(/[Ww]arm/g, randomStr(4)).replace(/[Ff]uzzy/g, randomStr(5)).replace(/[Ff]eeling/g, randomStr(7)).replace(/[Hh]appiness/g, randomStr(9));
-	// if (player.ch.best.toNumber() < storyLength(5)) nothing to filter here!
-	if (player.ch.best.toNumber() < storyLength(6)) string = string.replace(/[Ss]tructure/g, randomStr(9)).replace(/[Ww]armpth/g, randomStr(7));
+	if (player.ch.best.toNumber() < storyLength(0)) string = string.replace(/void|spark|cycle/gi, match => randomStr(match.length));
+	if (player.ch.best.toNumber() < storyLength(1)) string = string.replace(/pitch|black|light/gi, match => randomStr(match.length));
+	if (player.ch.best.toNumber() < storyLength(2)) string = string.replace(/knowledge|memories/gi, match => randomStr(match.length));
+	if (player.ch.best.toNumber() < storyLength(3)) string = string.replace(/anger|hatred|curses|hate/gi, match => randomStr(match.length));
+	if (player.ch.best.toNumber() < storyLength(4)) string = string.replace(/warm|fuzzy|feeling|happiness/gi, match => randomStr(match.length));
+	if (player.ch.best.toNumber() < storyLength(5)) string = string.replace(/human|home|lead|chief/gi, match => randomStr(match.length));
+	if (player.ch.best.toNumber() < storyLength(6)) string = string.replace(/structure|warmpth/gi, match => randomStr(match.length));
+	if (player.ch.best.toNumber() < storyLength(7)) string = string.replace(/combination|construct|force/gi, match => randomStr(match.length));
 	return string;
 };
 
