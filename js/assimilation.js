@@ -105,6 +105,9 @@ function overrideTreeNodeClick(layer) {
 
 // gets the assimilation rewards
 function getAssimilationRewards() {
+	if (player.mo.assimilated.length === 0) {
+		return 'Assimilation rewards will be shown here.';
+	};
 	let text = '';
 	if (isAssimilated('e')) {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-e">Essence</h2><br><br>';

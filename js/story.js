@@ -469,3 +469,8 @@ function getChaosInfoBoxes() {
 	};
 	return infoBoxes;
 };
+
+function getNextStoryAt() {
+	if (player.ch.best.toNumber() < storyLength(Infinity)) return "<br><br>Next story discovery is at " + formatWhole(player.ch.best.add(1)) + " chaos.";
+	return "<br><br>All story discoveries found; wait for updates for more!";
+};
