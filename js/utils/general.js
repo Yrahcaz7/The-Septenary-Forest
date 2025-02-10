@@ -312,7 +312,7 @@ function toValue(value, oldValue) {
 };
 
 // Variables that must be defined to display popups
-let activePopups = [];
+let activePopups = Vue.reactive([]);
 let popupID = 0;
 
 // Function to show popups

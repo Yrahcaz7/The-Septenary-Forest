@@ -620,7 +620,7 @@ function loadVue() {
 		template: template(`<div>
 			<span class="upgRow" v-for="row in data">
 				<table>
-					<span v-for="(node, id) in row" style="width: 0px">
+					<span v-for="node in row" style="width: 0px">
 						<tree-node :layer='node' :prev='layer' :abb='tmp[node].symbol'></tree-node>
 					</span>
 					<tbody>
@@ -661,9 +661,7 @@ function loadVue() {
 			<span class="upgRow" v-for="row in data">
 				<table>
 					<span v-for="id in row" style="width: 0; height: 0" class="upgAlign">
-						<span v-if="tmp[layer][type + 's'][id] !== undefined && tmp[layer][type + 's'][id].unlocked">
-							<component :is="type" :layer="layer" :data="id" :style="tmp[layer].componentStyles[type]" class="treeThing"></component>
-						</span>
+						<component v-if="tmp[layer][type + 's'][id] !== undefined && tmp[layer][type + 's'][id].unlocked" :is="type" :layer="layer" :data="id" :style="tmp[layer].componentStyles[type]" class="treeThing"></component>
 					</span>
 					<tbody>
 						<tr>
@@ -845,7 +843,24 @@ function loadVue() {
 			<div v-if="back">
 				<button :class="back == 'big' ? 'other-back' : 'back'" v-on:click="goBack(layer)">&#8592;</button>
 			</div>
-			<div v-if="!tmp[layer].tabFormat">
+			<template v-if="tmp[layer].tabFormat">
+				<div v-if="Array.isArray(tmp[layer].tabFormat)">
+					<div v-if="spacing" :style="{height: spacing}"></div>
+					<column :layer="layer" :data="tmp[layer].tabFormat"></column>
+				</div>
+				<div v-else>
+					<div class="upgTable" :style="{
+						'padding-top': (embedded ? '0' : '25px'),
+						'margin-top': (embedded ? '-10px' : '0'),
+						'margin-bottom': '24px',
+					}">
+						<tab-buttons :style="tmp[layer].componentStyles['tab-buttons']" :layer="layer" :data="tmp[layer].tabFormat" :name="'mainTabs'"></tab-buttons>
+					</div>
+					<layer-tab v-if="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].embedLayer" :layer="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].embedLayer" :embedded="true"></layer-tab>
+					<column v-else :layer="layer" :data="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].content"></column>
+				</div>
+			</template>
+			<div v-else>
 				<div v-if="spacing" :style="{height: spacing}"></div>
 				<infobox v-if="tmp[layer].infoboxes" :layer="layer" :data="Object.keys(tmp[layer].infoboxes)[0]"></infobox>
 				<main-display :style="tmp[layer].componentStyles['main-display']" :layer="layer"></main-display>
@@ -864,23 +879,6 @@ function loadVue() {
 				<challenges :style="tmp[layer].componentStyles.challenges" :layer="layer"></challenges>
 				<achievements :style="tmp[layer].componentStyles.achievements" :layer="layer"></achievements>
 				<br><br>
-			</div>
-			<div v-if="tmp[layer].tabFormat">
-				<div v-if="Array.isArray(tmp[layer].tabFormat)">
-					<div v-if="spacing" :style="{height: spacing}"></div>
-					<column :layer="layer" :data="tmp[layer].tabFormat"></column>
-				</div>
-				<div v-else>
-					<div class="upgTable" :style="{
-						'padding-top': (embedded ? '0' : '25px'),
-						'margin-top': (embedded ? '-10px' : '0'),
-						'margin-bottom': '24px',
-					}">
-						<tab-buttons :style="tmp[layer].componentStyles['tab-buttons']" :layer="layer" :data="tmp[layer].tabFormat" :name="'mainTabs'"></tab-buttons>
-					</div>
-					<layer-tab v-if="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].embedLayer" :layer="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].embedLayer" :embedded="true"></layer-tab>
-					<column v-else :layer="layer" :data="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].content"></column>
-				</div>
 			</div>
 		</div>`),
 	});
@@ -950,34 +948,36 @@ function loadVue() {
 	app.component('options-tab', {
 		data() {return {save, toggleOpt, formatOption, options, hardReset, displayMode, fullColorDisplay, DISPLAY_MODES, exportSave, importSave, COLOR_DISPLAYS, switchTheme, getThemeName, adjustMSDisp, MS_DISPLAYS, MS_SETTINGS, player}},
 		template: template(`<table>
-			<tr>
-				<td><button class="opt" onclick="save()">Save</button></td>
-				<td><button class="opt" onclick="toggleOpt('autosave')">Autosave: {{formatOption(options.autosave)}}</button></td>
-				<td><button class="opt" onclick="hardReset()">HARD RESET</button></td>
-				<td><button class="opt" onclick="displayMode(); fullColorDisplay()">Color Text Mode: {{DISPLAY_MODES[options.colorDisplayMode]}}</button></td>
-			</tr>
-			<tr>
-				<td><button class="opt" onclick="exportSave()">Export to clipboard</button></td>
-				<td><button class="opt" onclick="importSave()">Import</button></td>
-				<td><button class="opt" onclick="toggleOpt('offlineProd')">Offline Progress: {{formatOption(options.offlineProd)}}</button></td>
-				<td><button class="opt" onclick="colorDisplay(); fullColorDisplay()">Colored Text: {{COLOR_DISPLAYS[options.colorDisplay]}}</button></td>
-			</tr>
-			<tr>
-				<td><button class="opt" onclick="switchTheme()">Theme: {{getThemeName()}}</button></td>
-				<td><button class="opt" onclick="adjustMSDisp()">Show Milestones: {{MS_DISPLAYS[MS_SETTINGS.indexOf(options.msDisplay)]}}</button></td>
-				<td><button class="opt" onclick="toggleOpt('hqTree')">High-Quality Tree: {{formatOption(options.hqTree)}}</button></td>
-				<td><button class="opt" onclick="player.nerdMode = !player.nerdMode">Nerd Mode: {{formatOption(player.nerdMode)}} (you can also use the control key to toggle)</button></td>
-			</tr>
-			<tr>
-				<td><button class="opt" onclick="toggleOpt('hideChallenges')">Show Completed Challenges: {{formatOption(!options.hideChallenges)}}</button></td>
-				<td><button class="opt" onclick="toggleOpt('forceOneTab')">Single-Tab Mode: {{options.forceOneTab ? "ALWAYS" : "AUTO"}}</button></td>
-				<td><button class="opt" onclick="toggleOpt('forceTooltips')">Shift-Click to Toggle Tooltips: {{formatOption(options.forceTooltips)}}</button></td>
-				<td><button class="opt" onclick="toggleOpt('extendplaces')">Extended Decimal Places: {{formatOption(options.extendplaces)}}</button></td>
-			</tr>
-			<tr>
-				<td><button class="opt" onclick="toggleOpt('hideMilestonePopups')">Show Milestone Popups: {{formatOption(!options.hideMilestonePopups)}}</button></td>
-				<td><button class="opt" onclick="toggleOpt('disableGlitchText')">Glitch Text: {{formatOption(!options.disableGlitchText)}} (when off, qestion marks are displayed instead)</button></td>
-			</tr>
+			<tbody>
+				<tr>
+					<td><button class="opt" onclick="save()">Save</button></td>
+					<td><button class="opt" onclick="toggleOpt('autosave')">Autosave: {{formatOption(options.autosave)}}</button></td>
+					<td><button class="opt" onclick="hardReset()">HARD RESET</button></td>
+					<td><button class="opt" onclick="displayMode(); fullColorDisplay()">Color Text Mode: {{DISPLAY_MODES[options.colorDisplayMode]}}</button></td>
+				</tr>
+				<tr>
+					<td><button class="opt" onclick="exportSave()">Export to clipboard</button></td>
+					<td><button class="opt" onclick="importSave()">Import</button></td>
+					<td><button class="opt" onclick="toggleOpt('offlineProd')">Offline Progress: {{formatOption(options.offlineProd)}}</button></td>
+					<td><button class="opt" onclick="colorDisplay(); fullColorDisplay()">Colored Text: {{COLOR_DISPLAYS[options.colorDisplay]}}</button></td>
+				</tr>
+				<tr>
+					<td><button class="opt" onclick="switchTheme()">Theme: {{getThemeName()}}</button></td>
+					<td><button class="opt" onclick="adjustMSDisp()">Show Milestones: {{MS_DISPLAYS[MS_SETTINGS.indexOf(options.msDisplay)]}}</button></td>
+					<td><button class="opt" onclick="toggleOpt('hqTree')">High-Quality Tree: {{formatOption(options.hqTree)}}</button></td>
+					<td><button class="opt" onclick="player.nerdMode = !player.nerdMode">Nerd Mode: {{formatOption(player.nerdMode)}} (you can also use the control key to toggle)</button></td>
+				</tr>
+				<tr>
+					<td><button class="opt" onclick="toggleOpt('hideChallenges')">Show Completed Challenges: {{formatOption(!options.hideChallenges)}}</button></td>
+					<td><button class="opt" onclick="toggleOpt('forceOneTab')">Single-Tab Mode: {{options.forceOneTab ? "ALWAYS" : "AUTO"}}</button></td>
+					<td><button class="opt" onclick="toggleOpt('forceTooltips')">Shift-Click to Toggle Tooltips: {{formatOption(options.forceTooltips)}}</button></td>
+					<td><button class="opt" onclick="toggleOpt('extendplaces')">Extended Decimal Places: {{formatOption(options.extendplaces)}}</button></td>
+				</tr>
+				<tr>
+					<td><button class="opt" onclick="toggleOpt('hideMilestonePopups')">Show Milestone Popups: {{formatOption(!options.hideMilestonePopups)}}</button></td>
+					<td><button class="opt" onclick="toggleOpt('disableGlitchText')">Glitch Text: {{formatOption(!options.disableGlitchText)}} (when off, qestion marks are displayed instead)</button></td>
+				</tr>
+			</tbody>
 		</table>`),
 	});
 
@@ -998,7 +998,7 @@ function loadVue() {
 			</div>
 			<svg version="2" v-if="data.color">
 				<mask :id="'pmask' + data.id">
-					<image id="img" :href="data.image" x="0" y="0" :height="data.width" :width="data.height">
+					<image id="img" :href="data.image" x="0" y="0" :height="data.width" :width="data.height"></image>
 				</mask>
 			</svg>
 		</div>`),
