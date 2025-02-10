@@ -192,21 +192,21 @@ function getdark(darkthis, type, special = false, research = false) {
 	if (darkthis.layer !== undefined) {
 		if (colorValue[1] == 'dark') return '-dark">';
 		if (colorValue[1] == 'none') return '-OFF">';
-		if (((type == 'title' || type == 'title-hasend') && colorValue[0][1]) || (type == 'ref' && colorValue[0][2])) {
+		if (((type == 'title' || type == 'title-hasend') && colorValue[0][0]) || (type == 'ref' && colorValue[0][1])) {
 			if (research) return '">';
 			else {
 				if (special) darkcanafford = darkthis.canAfford();
 				else darkcanafford = player[darkthis.layer].points.gte(darkthis.cost);
 				if ((darkcanafford && !hasUpgrade(darkthis.layer, darkthis.id)) || (type == 'title-hasend' && hasUpgrade(darkthis.layer, darkthis.id))) return '-dark">';
 			};
-		} else if (type == 'title-light' && colorValue[0][1]) {
+		} else if (type == 'title-light' && colorValue[0][0]) {
 			if (special) darkcanafford = darkthis.canAfford();
 			else darkcanafford = player[darkthis.layer].points.gte(darkthis.cost);
 			if (darkcanafford && !hasUpgrade(darkthis.layer, darkthis.id)) return '-dark">';
 			return '-light">';
-		} else if (type == 'title-buyable' && colorValue[0][1]) {
+		} else if (type == 'title-buyable' && colorValue[0][0]) {
 			if (darkthis.canAfford() && getBuyableAmount(darkthis.layer, darkthis.id)) return '-dark">';
-		} else if (type == 'clickable' && colorValue[0][1]) {
+		} else if (type == 'clickable' && colorValue[0][0]) {
 			if (darkthis.canClick()) return '-dark">';
 		} else {
 			return '-OFF">';

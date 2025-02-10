@@ -21,7 +21,7 @@ const DISPLAY_MODES = ['ALL (recommended)', 'ONLY SPECIAL', 'SPECIAL AND TITLES'
 
 const COLOR_DISPLAYS = ['ON - NORMAL (recommended)', 'ON - ALWAYS DARK', 'OFF (recommended for colorblind)'];
 
-let colorValue = [[true, true, true], 'normal'];
+let colorValue = [[true, true], 'normal'];
 
 function displayMode() {
 	options.colorDisplayMode++;
@@ -38,16 +38,16 @@ function colorDisplay() {
 function calculateColorValue() {
 	switch (options.colorDisplayMode) {
 		case 0:
-			colorValue[0] = [true, true, true];
+			colorValue[0] = [true, true];
 			break;
 		case 1:
-			colorValue[0] = [true, false, false];
+			colorValue[0] = [false, false];
 			break;
 		case 2:
-			colorValue[0] = [true, true, false];
+			colorValue[0] = [true, false];
 			break;
 		case 3:
-			colorValue[0] = [true, false, true];
+			colorValue[0] = [false, true];
 			break;
 	};
 	switch (options.colorDisplay) {
