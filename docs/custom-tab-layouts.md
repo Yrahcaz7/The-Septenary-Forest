@@ -21,9 +21,9 @@ tabFormat: [
 ]
 ```
 
-It is a list of components, which can be either just a name, or an array with arguments. If it's an array, the first item is the name of the component, the second is the data passed into it, and the third (optional) applies a CSS style to it with a "CSS object", where the keys are CSS attributes.
+It is a list of components, which can be either just a name or an array with arguments. If it's an array, the first item is the name of the component, the second is the data passed into it, and the third (optional) applies a CSS style to it with a "CSS object", where the keys are CSS attributes.
 
-These are the existing components, but you can create more in [components.js](/js/technical/components.js):
+These are the existing components, but you can [create more with `customComponents`](custom-components.md):
 
 - `display-text`, `raw-html`: Displays some text (can use basic HTML). The argument is the text to display. It can also be a function that returns updating text.
 
@@ -43,7 +43,7 @@ These are the existing components, but you can create more in [components.js](/j
 
 - `prestige-button`: The button to reset for a currency in this layer.
 
-- `text-input`: A text input box. The argument is the name of the variable in `player[layer]` that the input is for, `player[layer][argument]`
+- `text-input`: A text input box. The argument is the name of the variable in `player[layer]` that the input is for.
     (Works with strings, numbers, and Decimals!)
 
 - `slider`: Lets the user input a value with a slider. The argument a 3-element array: `[name, min, max]`.

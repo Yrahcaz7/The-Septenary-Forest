@@ -2,7 +2,7 @@ let app;
 
 // removes newlines and tabs from a string to allow formatting templates
 function template(str) {
-	return str.replace(/[\n\t]/g, "");
+	return ("" + str).replace(/[\n\t]/g, "");
 };
 
 function loadVue() {
@@ -28,7 +28,7 @@ function loadVue() {
 		template: template(`<div class="instant" style="margin-top: -13px" v-html="'<br>' + (typeof data === 'function' ? data() : data)"></div>`),
 	});
 
-	// Blank space, data = optional height in px or [width in px, height in px]
+	// data = optional height in px or [width in px, height in px]
 	app.component('blank', {
 		props: ['layer', 'data'],
 		template: template(`<div class="instant">
@@ -38,7 +38,7 @@ function loadVue() {
 		</div>`),
 	});
 
-	// Displays an image, data is the URL
+	// data = the URL of the image
 	app.component('display-image', {
 		props: ['layer', 'data'],
 		template: template(`<img class="instant" :src="data" :alt="data">`),
@@ -79,12 +79,13 @@ function loadVue() {
 		</div>`),
 	});
 
-	// data [other layer, tabformat for within proxy]
+	// data = [other layer, tabformat for within proxy]
 	app.component('layer-proxy', {
 		props: ['layer', 'data'],
 		template: template(`<div><column :layer="data[0]" :data="data[1]"></column></div>`),
 	});
 
+	// data = the id of the infobox
 	app.component('infobox', {
 		props: ['layer', 'data'],
 		data() {return {tmp, player}},
@@ -103,18 +104,19 @@ function loadVue() {
 		</div>`),
 	});
 
-	// Data = width in px, by default fills the full area
+	// data = width in px, by default fills the full area
 	app.component('h-line', {
 		props: ['layer', 'data'],
 		template: template(`<hr class="instant" :style="data ? {'width': data} : {}" class="hl">`),
 	});
 
-	// Data = height in px, by default is bad
+	// data = height in px, by default is bad
 	app.component('v-line', {
 		props: ['layer', 'data'],
 		template: template(`<div class="instant" :style="data ? {'height': data} : {}" class="vl"></div>`),
 	});
 
+	// data = array of rows to include, by default is all
 	app.component('challenges', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
@@ -127,7 +129,7 @@ function loadVue() {
 		</div>`),
 	});
 
-	// data = id
+	// data = the id of the challenge
 	app.component('challenge', {
 		props: ['layer', 'data'],
 		data() {return {tmp, options, maxedChallenge, inChallenge, challengeStyle, player, canUseChallenge, startChallenge, challengeButtonText, layers, run, format, modInfo}},
@@ -151,6 +153,7 @@ function loadVue() {
 		</div>`),
 	});
 
+	// data = array of rows to include, by default is all
 	app.component('upgrades', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
@@ -165,7 +168,7 @@ function loadVue() {
 		</div>`),
 	});
 
-	// data = id
+	// data = the id of the upgrade
 	app.component('upgrade', {
 		props: ['layer', 'data'],
 		data() {return {tmp, buyUpg, hasUpgrade, canAffordUpgrade, layers, run, formatWhole}},
@@ -191,6 +194,7 @@ function loadVue() {
 		</button>`),
 	});
 
+	// data = array of rows to include, by default is all
 	app.component('milestones', {
 		props: ['layer', 'data'],
 		data() {return {tmp, milestoneShown}},
@@ -207,7 +211,7 @@ function loadVue() {
 		</div>`),
 	});
 
-	// data = id
+	// data = the id of the milestone
 	app.component('milestone', {
 		props: ['layer', 'data'],
 		data() {return {tmp, milestoneShown, hasMilestone, run, layers}},
@@ -225,10 +229,11 @@ function loadVue() {
 		</td>`),
 	});
 
+	// Toggles the boolean value in player[data[0]][data[1]]
 	app.component('toggle', {
 		props: ['layer', 'data'],
-		data() {return {tmp, toggleAuto, player}},
-		template: template(`<button class="smallUpg can" :style="{'background-color': tmp[data[0]].color}" v-on:click="toggleAuto(data)">{{player[data[0]][data[1]] ? "ON" : "OFF"}}</button>`),
+		data() {return {tmp, toggleAuto, formatOpt, player}},
+		template: template(`<button class="smallUpg can" :style="{'background-color': tmp[data[0]].color}" v-on:click="toggleAuto(data)">{{formatOpt(player[data[0]][data[1]])</button>`),
 	});
 
 	app.component('prestige-button', {
@@ -243,21 +248,6 @@ function loadVue() {
 			(tmp[layer].canReset ? {'background-color': tmp[layer].color} : {}),
 			tmp[layer].componentStyles['prestige-button'],
 		]" v-html="prestigeButtonText(layer)" v-on:click="doReset(layer)"></button>`),
-	});
-
-	app.component('assimilate-button', {
-		props: ['layer'],
-		data() {return {canAssimilate, player, assimilationReq, tmp, completeAssimilation}},
-		template: template(`<button v-if="canAssimilate(layer) && player.mo.assimilating === layer" :class="{
-			mo: true,
-			reset: true,
-			locked: player[layer].points.lt(assimilationReq[layer]),
-			can: player[layer].points.gte(assimilationReq[layer]),
-		}" :style="[
-			{'margin-left': '16px'},
-			(player[layer].points.gte(assimilationReq[layer]) ? {'background-color': tmp.mo.color} : {}),
-			tmp[layer].componentStyles['prestige-button'],
-		]" v-html="(player[layer].points.gte(assimilationReq[layer]) ? 'Assimilate this layer!' : 'Reach ' + format(assimilationReq[layer]) + ' ' + tmp[layer].resource + ' to fully Assimilate this layer.')" v-on:click="completeAssimilation(layer)"></button>`),
 	});
 
 	// Displays the main resource for the layer
@@ -289,6 +279,7 @@ function loadVue() {
 		</div>`),
 	});
 
+	// data = array of rows to include, by default is all
 	app.component('buyables', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
@@ -311,6 +302,7 @@ function loadVue() {
 		</div>`),
 	});
 
+	// data = the id of the buyable
 	app.component('buyable', {
 		props: ['layer', 'data'],
 		data() {return {tmp, player, interval: false, buyBuyable, run, layers, time: 0}},
@@ -365,7 +357,8 @@ function loadVue() {
 			<button v-on:click="respecBuyables(layer)" :class="{longUpg: true, can: player[layer].unlocked, locked: !player[layer].unlocked}" style="margin-right: 18px">{{tmp[layer].buyables.respecText ? tmp[layer].buyables.respecText : "Respec"}}</button>
 		</div>`),
 	});
-	
+
+	// data = array of rows to include, by default is all
 	app.component('clickables', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
@@ -389,7 +382,7 @@ function loadVue() {
 		</div>`),
 	});
 
-	// data = id of clickable
+	// data = the id of the clickable
 	app.component('clickable', {
 		props: ['layer', 'data'],
 		data() {return {tmp, interval: false, clickClickable, run, layers, time: 0}},
@@ -437,7 +430,7 @@ function loadVue() {
 		}">{{tmp[layer].clickables.masterButtonText ? tmp[layer].clickables.masterButtonText : "Click me!"}}</button>`),
 	});
 
-	// data = optionally, array of rows for the grid to show
+	// data = array of rows to include, by default is all
 	app.component('grid', {
 		props: ['layer', 'data'],
 		data() {return {tmp, run, layers}},
@@ -472,6 +465,7 @@ function loadVue() {
 		</div>`),
 	});
 
+	// data = the id of the gridable
 	app.component('gridable', {
 		props: ['layer', 'data'],
 		data() {return {tmp, player, run, layers, gridRun, clickGrid, interval: false, time: 0}},
@@ -568,6 +562,7 @@ function loadVue() {
 		</div>`),
 	});
 
+	// data = array of rows to include, by default is all
 	app.component('achievements', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
@@ -582,7 +577,7 @@ function loadVue() {
 		</div>`),
 	});
 
-	// data = id
+	// data = the id of the achievement
 	app.component('achievement', {
 		props: ['layer', 'data'],
 		data() {return {tmp, hasAchievement, achievementStyle}},
@@ -613,7 +608,7 @@ function loadVue() {
 		</div>`),
 	});
 
-	// Data is an array with the structure of the tree
+	// data = an array with the structure of the tree
 	app.component('tree', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
@@ -635,25 +630,25 @@ function loadVue() {
 		</div>`),
 	});
 
-	// Data is an array with the structure of the tree
+	// data = an array with the structure of the tree
 	app.component('upgrade-tree', {
 		props: ['layer', 'data'],
 		template: template(`<thing-tree :layer="layer" :data="data" :type="'upgrade'"></thing-tree>`),
 	})
 
-	// Data is an array with the structure of the tree
+	// data = an array with the structure of the tree
 	app.component('buyable-tree', {
 		props: ['layer', 'data'],
 		template: template(`<thing-tree :layer="layer" :data="data" :type="'buyable'"></thing-tree>`),
 	})
 
-	// Data is an array with the structure of the tree
+	// data = an array with the structure of the tree
 	app.component('clickable-tree', {
 		props: ['layer', 'data'],
 		template: template(`<thing-tree :layer="layer" :data="data" :type="'clickable'"></thing-tree>`),
 	})
 
-	// Data is an array with the structure of the tree
+	// data = an array with the structure of the tree
 	app.component('thing-tree', {
 		props: ['layer', 'data', 'type'],
 		data() {return {tmp}},
@@ -692,7 +687,7 @@ function loadVue() {
 		</div>`),
 	});
 
-	// Updates the value in player[layer][data[0]], options are an array in data[1]
+	// Updates the value in player[layer][data[0]], the options are an array in data[1]
 	app.component('drop-down', {
 		props: ['layer', 'data'],
 		data() {return {player}},
@@ -701,7 +696,7 @@ function loadVue() {
 		</select>`),
 	});
 
-	// These are for buyables, data is the id of the corresponding buyable
+	// data = the id of the corresponding buyable
 	app.component('sell-one', {
 		props: ['layer', 'data'],
 		data() {return {tmp, run, player}},
@@ -711,7 +706,8 @@ function loadVue() {
 			locked: !player[layer].unlocked,
 		}">{{tmp[layer].buyables.sellOneText ? tmp[layer].buyables.sellOneText : "Sell One"}}</button>`),
 	});
-	
+
+	// data = the id of the corresponding buyable
 	app.component('sell-all', {
 		props: ['layer', 'data'],
 		data() {return {tmp, run, player}},
@@ -722,7 +718,7 @@ function loadVue() {
 		}">{{tmp[layer].buyables.sellAllText ? tmp[layer].buyables.sellAllText : "Sell All"}}</button>`),
 	});
 
-	// system components
+	// system components below
 
 	app.component('node-mark', {
 		props: {layer: {}, data: {}, offset: {default: 0}, scale: {default: 1}},
@@ -1002,5 +998,15 @@ function loadVue() {
 		]"></div>`),
 	});
 
+	// add custom components
+	if (typeof customComponents === "object" && !Array.isArray(customComponents)) {
+		for (const name in customComponents) {
+			if (customComponents.hasOwnProperty(name)) {
+				app.component(name, customComponents[name]);
+			};
+		};
+	};
+
+	// mount the vue app
 	app.mount("#app");
 };
