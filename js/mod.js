@@ -339,9 +339,7 @@ function getPointGen() {
 };
 
 // added player[data]
-function addedPlayerData() { return {
-	nerdMode: false,
-}};
+function addedPlayerData() {return {}};
 
 // display extra things at the top of the page
 const displayThings = [
@@ -401,6 +399,14 @@ function fixOldSave(oldVersion) {
 		options.forceTooltips = options.tooltipForcing;
 		delete options.tooltipForcing;
 	};
+	if (player.nerdMode !== undefined) {
+		options.nerdMode = player.nerdMode;
+		delete player.nerdMode;
+	};
+	if (options.extendplaces !== undefined) {
+		options.extendPlaces = options.extendplaces;
+		delete options.extendplaces;
+	}
 };
 
 // gets random valid character

@@ -946,39 +946,24 @@ function loadVue() {
 	});
 
 	app.component('options-tab', {
-		data() {return {save, toggleOpt, formatOpt, options, hardReset, displayMode, fullColorDisplay: calculateColorValue, DISPLAY_MODES, exportSave, importSave, COLOR_DISPLAYS, switchTheme, getThemeName, adjustMSDisp, MS_DISPLAYS, MS_SETTINGS, player}},
-		template: template(`<table>
-			<tbody>
-				<tr>
-					<td><button class="opt" onclick="save()">Save</button></td>
-					<td><button class="opt" onclick="toggleOpt('autosave')">Autosave: {{formatOpt(options.autosave)}}</button></td>
-					<td><button class="opt" onclick="hardReset()">HARD RESET</button></td>
-					<td><button class="opt" onclick="displayMode()">Color Text Mode: {{DISPLAY_MODES[options.colorDisplayMode]}}</button></td>
-				</tr>
-				<tr>
-					<td><button class="opt" onclick="exportSave()">Export to clipboard</button></td>
-					<td><button class="opt" onclick="importSave()">Import</button></td>
-					<td><button class="opt" onclick="toggleOpt('offlineProd')">Offline Progress: {{formatOpt(options.offlineProd)}}</button></td>
-					<td><button class="opt" onclick="colorDisplay()">Colored Text: {{COLOR_DISPLAYS[options.colorDisplay]}}</button></td>
-				</tr>
-				<tr>
-					<td><button class="opt" onclick="switchTheme()">Theme: {{getThemeName()}}</button></td>
-					<td><button class="opt" onclick="adjustMSDisp()">Show Milestones: {{MS_DISPLAYS[MS_SETTINGS.indexOf(options.msDisplay)]}}</button></td>
-					<td><button class="opt" onclick="toggleOpt('hqTree')">High-Quality Tree: {{formatOpt(options.hqTree)}}</button></td>
-					<td><button class="opt" onclick="player.nerdMode = !player.nerdMode">Nerd Mode: {{formatOpt(player.nerdMode)}} (you can also use the control key to toggle)</button></td>
-				</tr>
-				<tr>
-					<td><button class="opt" onclick="toggleOpt('hideChallenges')">Show Completed Challenges: {{formatOpt(!options.hideChallenges)}}</button></td>
-					<td><button class="opt" onclick="toggleOpt('forceOneTab')">Single-Tab Mode: {{options.forceOneTab ? "ALWAYS" : "AUTO"}}</button></td>
-					<td><button class="opt" onclick="toggleOpt('forceTooltips')">Shift-Click to Toggle Tooltips: {{formatOpt(options.forceTooltips)}}</button></td>
-					<td><button class="opt" onclick="toggleOpt('extendplaces')">Extended Decimal Places: {{formatOpt(options.extendplaces)}}</button></td>
-				</tr>
-				<tr>
-					<td><button class="opt" onclick="toggleOpt('hideMilestonePopups')">Show Milestone Popups: {{formatOpt(!options.hideMilestonePopups)}}</button></td>
-					<td><button class="opt" onclick="toggleOpt('disableGlitchText')">Glitch Text: {{formatOpt(!options.disableGlitchText)}} (when off, qestion marks are displayed instead)</button></td>
-				</tr>
-			</tbody>
-		</table>`),
+		data() {return {optionGrid, toggleOpt}},
+		template: (() => {
+			let template = `<table><tbody>`;
+			for (let row = 0; row < optionGrid.length; row++) {
+				template += `<tr>`;
+				for (let index = 0; index < optionGrid[row].length; index++) {
+					template += `<td><button class="opt" onclick="`;
+					if (optionGrid[row][index].onClick === toggleOpt) template += `toggleOpt('` + optionGrid[row][index].opt + `')`;
+					else template += `optionGrid[` + row + `][` + index + `].onClick()`;
+					template += `">`;
+					if (typeof optionGrid[row][index].text === "function") template += `{{optionGrid[` + row + `][` + index + `].text()}}`;
+					else template += optionGrid[row][index].text;
+					template += `</button></td>`;
+				};
+				template += `</tr>`;
+			};
+			return template + `</tbody></table>`;
+		})(),
 	});
 
 	app.component('tooltip', {

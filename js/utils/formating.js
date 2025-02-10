@@ -34,7 +34,7 @@ function sumValues(x) {
 };
 
 function format(decimal, precision = 2, small = true) {
-	if (options.extendplaces && precision > 0) precision++;
+	if (options.extendPlaces && precision > 0) precision++;
 	decimal = new Decimal(decimal);
 	if (decimal.isNaN()) {
 		player.hasNaN = true;
@@ -61,7 +61,7 @@ function format(decimal, precision = 2, small = true) {
 function formatWhole(decimal) {
 	decimal = new Decimal(decimal);
 	if (decimal.gte(1e9)) return format(decimal, 2);
-	if (decimal.lte(options.extendplaces ? 0.999 : 0.99) && !decimal.eq(0)) return format(decimal, 2);
+	if (decimal.lte(options.extendPlaces ? 0.999 : 0.99) && !decimal.eq(0)) return format(decimal, 2);
 	return format(decimal, 0);
 };
 

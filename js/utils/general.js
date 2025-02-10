@@ -278,7 +278,7 @@ document.onkeydown = e => {
 	shiftDown = e.shiftKey;
 	ctrlDown = e.ctrlKey;
 	if (tmp.gameEnded && !player.keepGoing) return;
-	if (ctrlDown) player.nerdMode = !player.nerdMode;
+	if (ctrlDown) options.nerdMode = !options.nerdMode;
 	let key = e.key;
 	if (ctrlDown) key = 'ctrl+' + key;
 	if (focused) return;

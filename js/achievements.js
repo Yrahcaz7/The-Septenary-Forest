@@ -23,7 +23,7 @@ addLayer('A', {
 			if (hasUpgrade('ds', 23) && hasUpgrade('ds', 24) && hasUpgrade('p', 31)) text[1] += 'core, prayer, and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + '</h2>x';
 		} else text[0] += 'gain by <h2 class="layer-A">' + format(player.A.points.mul(0.1).add(1)) + '</h2>x';
 		if (hasUpgrade('a', 51)) text[3] += 'subatomic particle gain by <h2 class="layer-A">' + format(player.A.points.pow(1.25)) + '</h2>x';
-		if (player.nerdMode) {
+		if (options.nerdMode) {
 			if (hasUpgrade('ds', 21)) {
 				if (hasUpgrade('ds', 24)) text[0] += ' (formula: x*0.2)';
 				else {
