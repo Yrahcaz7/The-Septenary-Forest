@@ -343,11 +343,17 @@ function loadVue() {
 	// Displays the main resource for the layer
 	app.component('main-display', {
 		props: ['layer', 'data'],
-		data() {return {player, tmp, format, formatWhole, extraMainDisplay, layers, run}},
+		data() {return {player, tmp, format, formatWhole, layers, run}},
+		computed: {
+			extraMainDisplay() {
+				if (typeof extraMainDisplay == 'function') return extraMainDisplay(this.layer) || "";
+				return "";
+			},
+		},
 		template: template(`<div>
 			<span v-if="player[layer].points.lt('1e1000')">You have&nbsp;</span>
 			<h2 :style="{'color': tmp[layer].color, 'text-shadow': '0px 0px 10px' + tmp[layer].color}">{{data ? format(player[layer].points, data) : formatWhole(player[layer].points)}}</h2>&nbsp;
-			<span v-if="typeof extraMainDisplay === 'function' && extraMainDisplay(layer)" v-html="extraMainDisplay(layer)"></span>
+			<span v-if="extraMainDisplay" v-html="extraMainDisplay"></span>
 			{{tmp[layer].resource}}
 			<span v-if="layers[layer].effectDescription">
 				,&nbsp;
@@ -857,7 +863,7 @@ function loadVue() {
 
 	app.component('tree-node', {
 		props: ['layer', 'abb', 'size', 'prev'],
-		data() {return {nodeShown, shiftDown, options, player, overrideTreeNodeClick, tmp, showNavTab, showTab, constructNodeStyle, overrideTooltip, formatWhole}},
+		data() {return {nodeShown, tmp, player, constructNodeStyle}},
 		computed: {
 			tooltipText() {
 				if (typeof overrideTooltip == 'function' && overrideTooltip(this.layer)) {
@@ -970,7 +976,13 @@ function loadVue() {
 	});
 
 	app.component('overlay-head', {
-		data() {return {player, format, formatTime, overridePointDisplay, modInfo, canGenPoints, tmp, formatSmall, getPointGen}},
+		data() {return {player, format, formatTime, modInfo, canGenPoints, tmp, formatSmall, getPointGen}},
+		computed: {
+			overridePointDisplay() {
+				if (typeof overridePointDisplay == 'function') return overridePointDisplay() || "";
+				return "";
+			},
+		},
 		template: template(`<div class="overlayThing" style="
 			padding-bottom: 10px;
 			background-image: linear-gradient(#000, #000C, #0009, #0006, #0000);
@@ -984,7 +996,7 @@ function loadVue() {
 				<br>Offline Time: {{formatTime(player.offTime.remain)}}<br>
 			</span>
 			<br>
-			<span v-if="typeof overridePointDisplay == 'function' && overridePointDisplay()" v-html="overridePointDisplay()" class="overlayThing"></span>
+			<span v-if="overridePointDisplay" v-html="overridePointDisplay" class="overlayThing"></span>
 			<span v-else>
 				<span v-if="player.points.lt('1e1000')" class="overlayThing">You have&nbsp;</span>
 				<h2 class="overlayThing" id="points">{{format(player.points)}}</h2>
