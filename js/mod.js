@@ -179,11 +179,13 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Game Launch.<br>
 		- Added six upgrades.<br>
 		- Added a rebuyable.<br>
-	<br>`;
+<br>`;
 
 const winText = () => {
 	return 'You reached ' + format(endPoints) + ' ' + modInfo.pointsName + ' and won the game!<br>However, it isn\'t the end yet...<br>Wait for more updates for further content.';
 };
+
+let doNotCallTheseFunctionsEveryTick = [];
 
 // gets the end of a color tag (no color, dark, or light)
 function getdark(darkthis, type, special = false, research = false) {
@@ -242,7 +244,7 @@ function getLightBoost() {
 
 // gets the light gain
 function getLightGain() {
-	let gain = getPointGen(true).pow(0.001).div(10);
+	let gain = getPointGen().pow(0.001).div(10);
 	if (hasUpgrade('r', 13)) {
 		gain = upgradeEffect('r', 13);
 	} else {
@@ -262,24 +264,14 @@ function getLightGain() {
 	return gain;
 };
 
-// removes an achievment
-function removeAchievement(id = NaN) {
-	for (var i = 0; i < player.A.achievements.length; i++) {
-		if (player.A.achievements[i] == id) {
-			player.A.achievements.splice(i, 1);
-			return true;
-		};
-	};
-	return false;
-};
-
-// determines if it should show points/sec
+// determines if points can be generated
 function canGenPoints() {
+	if (inChallenge('r', 11)) return false;
 	return true;
 };
 
 // calculates points/sec
-function getPointGen(forced = false) {
+function getPointGen() {
 	// init
 	let gain = newDecimalOne();
 	// mul
@@ -336,7 +328,6 @@ function getPointGen(forced = false) {
 	if (challengeCompletions('ch', 12) > 0) gain = gain.pow(challengeEffect('ch', 12));
 	// special nerf
 	if (inChallenge('ds', 32)) gain = gain.add(1).log10().add(1).log10();
-	if (inChallenge('r', 11) && !forced) gain = newDecimalZero();
 	// softcap
 	if (gain.gt(softcaps.points[0])) {
 		let excessGain = gain.div(softcaps.points[0]);
@@ -371,6 +362,17 @@ function maxTickLength() {
 // runs after things are loaded
 function onLoad() {
 	calculateColorValue();
+};
+
+// removes an achievment
+function removeAchievement(id = NaN) {
+	for (var i = 0; i < player.A.achievements.length; i++) {
+		if (player.A.achievements[i] == id) {
+			player.A.achievements.splice(i, 1);
+			return true;
+		};
+	};
+	return false;
 };
 
 // fixes for old saves

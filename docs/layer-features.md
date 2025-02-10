@@ -132,7 +132,7 @@ Additional features:
 
 - `onPrestigeIsAfterGain`: **optional**. A boolean indicating whether this layer's `onPrestige()` function triggers after prestige resource gain but before resetting anything. By default is false, which makes `onPrestige()` trigger before both.
 
-- `logged`: **optional**. For normal layers, if this is a truthy value, the resource gain becomes the log of the previous gain plus one. If it is exactly `true`, the log base is `10`, otherwise the log base is `new Decimal(logged)`. Can also be a function. Has no effect on static layers.
+- `logged`: **optional**. For normal layers, if this is a [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) value, the resource gain becomes the log of the previous gain plus one. If it is exactly `true`, the log base is `10`, otherwise the log base is `new Decimal(logged)`. Can also be a function. Has no effect on static layers.
 
 ## Tree/node features
 

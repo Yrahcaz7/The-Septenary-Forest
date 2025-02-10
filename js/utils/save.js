@@ -28,10 +28,10 @@ function startPlayerBase() {
 
 function getStartPlayer() {
 	let playerdata = startPlayerBase();
-	if (addedPlayerData) {
-		let extradata = addedPlayerData();
-		for (thing in extradata) {
-			playerdata[thing] = extradata[thing];
+	if (typeof addedPlayerData === "function") {
+		let extraData = addedPlayerData();
+		for (thing in extraData) {
+			playerdata[thing] = extraData[thing];
 		};
 	};
 	playerdata.infoboxes = {};
@@ -202,7 +202,7 @@ function loadOptions() {
 
 function setupModInfo() {
 	modInfo.changelog = changelog;
-	modInfo.winText = winText ? (typeof winText == "function" ? winText() : winText) : "Congratulations! You have reached the end and beaten this game, but for now...";
+	modInfo.winText = (winText ? (typeof winText == "function" ? winText() : winText) : "Congratulations! You have reached the end and beaten this game, but for now...");
 };
 
 function NaNcheck(data) {

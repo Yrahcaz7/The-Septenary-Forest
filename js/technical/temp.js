@@ -89,7 +89,8 @@ function updateTemp() {
 		tmp[layer].prestigeNotify = prestigeNotify(layer);
 		if (tmp[layer].passiveGeneration === true) tmp[layer].passiveGeneration = 1; // This is needed because `new Decimal(true) = new Decimal(0)`
 	};
-	tmp.pointGen = getPointGen();
+	if (canGenPoints()) tmp.pointGen = getPointGen();
+	else tmp.pointGen = newDecimalZero();
 	tmp.backgroundStyle = readData(backgroundStyle);
 	tmp.displayThings = [];
 	for (thing in displayThings) {
