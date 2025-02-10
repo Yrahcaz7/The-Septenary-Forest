@@ -1949,19 +1949,19 @@ addLayer('h', {
 				const nextNerf = format(this.nerfLayers[player.h.limitsBroken]);
 				let text = 'Use to break a new limit. Using this will reset your evil influence, evil power, and evil influence upgrades. Additionally, it will divide evil influence gain.<br><br>';
 				if (player.h.limitsBroken === 0) {
-					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: break the limit of <b class="layer-w-dark">Power of Good</b> and improve its effect formula, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br>none so far';
+					if (colorValue[1] != 'none' && colorValue[0][2]) text += 'Next effect: break the limit of <b class="layer-w-dark">Power of Good</b> and improve its effect formula, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br>none so far';
 					else text += 'Next effect: break the limit of <b>Power of Good</b> and improve its effect formula, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br>none so far';
 				} else if (player.h.limitsBroken === 1) {
-					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: break the limit of <b class="layer-cl-dark">Deeper Comprehension</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b>';
+					if (colorValue[1] != 'none' && colorValue[0][2]) text += 'Next effect: break the limit of <b class="layer-cl-dark">Deeper Comprehension</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b>';
 					else text += 'Next effect: break the limit of <b>Deeper Comprehension</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b>Power of Good</b>';
 				} else if (player.h.limitsBroken === 2) {
-					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: break the limit of <b class="layer-q-dark">Sample Quarks</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b><br><b class="layer-cl-dark">Deeper Comprehension</b>';
+					if (colorValue[1] != 'none' && colorValue[0][2]) text += 'Next effect: break the limit of <b class="layer-q-dark">Sample Quarks</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b><br><b class="layer-cl-dark">Deeper Comprehension</b>';
 					else text += 'Next effect: break the limit of <b>Sample Quarks</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b>Power of Good</b><br><b>Deeper Comprehension</b>';
 				} else if (player.h.limitsBroken === 3) {
-					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: break the limit of <b class="layer-gi">Better Good</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b><br><b class="layer-cl-dark">Deeper Comprehension</b><br><b class="layer-q-dark">Sample Quarks</b>';
+					if (colorValue[1] != 'none' && colorValue[0][2]) text += 'Next effect: break the limit of <b class="layer-gi">Better Good</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b><br><b class="layer-cl-dark">Deeper Comprehension</b><br><b class="layer-q-dark">Sample Quarks</b>';
 					else text += 'Next effect: break the limit of <b>Better Good</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b>Power of Good</b><br><b>Deeper Comprehension</b><br><b>Sample Quarks</b>';
 				} else {
-					if (colorvalue[1] != 'none' && colorvalue[0][2]) text += 'Next effect: you have broken all the limits!<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b><br><b class="layer-cl-dark">Deeper Comprehension</b><br><b class="layer-q-dark">Sample Quarks</b><br><b class="layer-gi">Better Good</b>';
+					if (colorValue[1] != 'none' && colorValue[0][2]) text += 'Next effect: you have broken all the limits!<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b><br><b class="layer-cl-dark">Deeper Comprehension</b><br><b class="layer-q-dark">Sample Quarks</b><br><b class="layer-gi">Better Good</b>';
 					else text += 'Next effect: you have broken all the limits!<br><br>Limits broken:<br><b>Power of Good</b><br><b>Deeper Comprehension</b><br><b>Sample Quarks</b><br><b>Better Good</b>';
 				};
 				return text + '<br><br>Effect on evil influence gain: /' + format(tmp.h.clickables[11].nerf) + '<br><br>Req: ' + formatWhole(tmp.h.clickables[11].req[0]) + ' achievements and ' + formatWhole(tmp.h.clickables[11].req[1]) + ' evil influence';
@@ -2229,7 +2229,7 @@ addLayer('ds', {
 	challenges: {
 		11: {
 			name() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ds">Blazing Curse';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<h3 class="layer-ds">Blazing Curse';
 				return '<h3>Blazing Curse';
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Quark gain is divided by 100,000<br> - Point gain is divided by 10,000<br> - Hex gain is divided by 1,000<br> - Core gain is divided by 100<br> - Quark gain is divided by 10",
@@ -2237,7 +2237,7 @@ addLayer('ds', {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) {
 					return format('1e1133') + ' hexes';
 				} else {
-					if (colorvalue[1] != 'none' && colorvalue[0][2]) {
+					if (colorValue[1] != 'none' && colorValue[0][2]) {
 						if (hasChallenge('ds', this.id)) return '<b class="layer-h">Potential Essence Potential';
 						return '<b class="layer-h-dark">Potential Essence Potential';
 					};
@@ -2258,7 +2258,7 @@ addLayer('ds', {
 		},
 		12: {
 			name() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ds">Hellfire';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<h3 class="layer-ds">Hellfire';
 				return '<h3>Hellfire';
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1,000,000<br> - Hex gain is divided by 1e10<br> - Subatomic Particle gain is divided by the number of Quarks",
@@ -2266,7 +2266,7 @@ addLayer('ds', {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) {
 					return format('1e1127') + ' hexes';
 				} else {
-					if (colorvalue[1] != 'none' && colorvalue[0][2]) {
+					if (colorValue[1] != 'none' && colorValue[0][2]) {
 						if (hasChallenge('ds', this.id)) return '<b class="layer-h">Sub Core Particle Fusion';
 						return '<b class="layer-h-dark">Sub Core Particle Fusion';
 					};
@@ -2288,7 +2288,7 @@ addLayer('ds', {
 		},
 		21: {
 			name() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ds">Opposite Polarity';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<h3 class="layer-ds">Opposite Polarity';
 				return '<h3>Opposite Polarity';
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Hex gain is divided by 100,000<br> - Point gain is divided by 1e10<br> - Core gain is divided by 1e15<br> - Essence gain is divided by 1e20",
@@ -2296,7 +2296,7 @@ addLayer('ds', {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) {
 					return format('1e1155') + ' hexes';
 				} else {
-					if (colorvalue[1] != 'none' && colorvalue[0][2]) {
+					if (colorValue[1] != 'none' && colorValue[0][2]) {
 						if (hasChallenge('ds', this.id)) return '<b class="layer-h">Sub Core Particle Fusion';
 						return '<b class="layer-h-dark">Sub Core Particle Fusion';
 					};
@@ -2318,7 +2318,7 @@ addLayer('ds', {
 		},
 		22: {
 			name() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ds">Dreaded Science';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<h3 class="layer-ds">Dreaded Science';
 				return '<h3>Dreaded Science';
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1e10<br> - Quark and Subatomic Particle gain is divided by 1e40<br>",
@@ -2326,7 +2326,7 @@ addLayer('ds', {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) {
 					return format('1e1195') + ' hexes<br>';
 				} else {
-					if (colorvalue[1] != 'none' && colorvalue[0][2]) return '<b class="layer-a">Famed Atom\'s Donations</b><br>';
+					if (colorValue[1] != 'none' && colorValue[0][2]) return '<b class="layer-a">Famed Atom\'s Donations</b><br>';
 					return '<b>Famed Atom\'s Donations</b><br>';
 				};
 			},
@@ -2340,7 +2340,7 @@ addLayer('ds', {
 		},
 		31: {
 			name() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ds">Reversed Hexes';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<h3 class="layer-ds">Reversed Hexes';
 				return '<h3>Reversed Hexes';
 			},
 			challengeDescription: " - Forces a Demon Soul reset<br> - Hex gain multiplier divides hex gain instead of multipling it<br>",
@@ -2352,7 +2352,7 @@ addLayer('ds', {
 		},
 		32: {
 			name() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ds">Point Deficiency';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<h3 class="layer-ds">Point Deficiency';
 				return '<h3>Point Deficiency';
 			},
 			challengeDescription: "- Applies all previous demon soul challenge effects at once<br> - Point gain is log10(log10(gain+1)+1)<br>",
@@ -3969,7 +3969,7 @@ addLayer('d', {
 				let backcolors = '#224400, #336600';
 				if (this.canAfford()) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
-				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
+				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
 			},
 			unlocked() { return hasMilestone('s', 13) },
@@ -4000,7 +4000,7 @@ addLayer('d', {
 				let backcolors = '#224400, #336600';
 				if (this.canAfford()) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
-				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
+				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
 			},
 			unlocked() { return hasMilestone('s', 13) },
@@ -4042,7 +4042,7 @@ addLayer('d', {
 				let backcolors = '#224400, #336600';
 				if (this.canAfford()) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
-				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
+				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%', 'height': '300px', 'width': '300px'};
 			},
 			unlocked() { return hasMilestone('s', 14) },
@@ -4086,7 +4086,7 @@ addLayer('g', {
 				let backcolors = '#224400, #336600';
 				if (this.canAfford()) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
-				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
+				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
 			},
 			unlocked() { return isAssimilated('s') || player.mo.assimilating === 's' },
@@ -4106,7 +4106,7 @@ addLayer('g', {
 				let backcolors = '#224400, #336600';
 				if (this.canAfford()) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
-				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
+				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
 			},
 			unlocked() { return isAssimilated('s') || player.mo.assimilating === 's' },
@@ -4130,7 +4130,7 @@ addLayer('g', {
 				let backcolors = '#224400, #336600';
 				if (this.canAfford()) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
-				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
+				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%', 'height': '300px', 'width': '300px'};
 			},
 			unlocked() { return isAssimilated('s') || player.mo.assimilating === 's' },
@@ -4220,8 +4220,8 @@ addLayer('r', {
 		let text = ['', ''];
 		if (tmp.r.effect[0].gte(softcaps.r_eff1[0])) text[0] = ' (softcapped)';
 		if (challengeCompletions('r', 11) >= 2) text[1] = 'point and ';
-		if (colorvalue[1] == 'none') return 'which makes Essence Influence\'s hardcap start ' + format(tmp.r.effect[0]) + 'x later' + text[0] + ', multiplies sanctum gain by ' + format(tmp.r.effect[1]) + 'x, and also multiplies ' + text[1] + 'essence gain by ' + format(tmp.r.effect[2]) + 'x';
-		if (!colorvalue[0][2]) return 'which makes <h3>Essence Influence\'s</h3> hardcap start <h2 class="layer-r">' + format(tmp.r.effect[0]) + '</h2>x later' + text[0] + ', multiplies sanctum gain by <h2 class="layer-r">' + format(tmp.r.effect[1]) + '</h2>x, and also multiplies ' + text[1] + 'essence gain by <h2 class="layer-r">' + format(tmp.r.effect[2]) + '</h2>x';
+		if (colorValue[1] == 'none') return 'which makes Essence Influence\'s hardcap start ' + format(tmp.r.effect[0]) + 'x later' + text[0] + ', multiplies sanctum gain by ' + format(tmp.r.effect[1]) + 'x, and also multiplies ' + text[1] + 'essence gain by ' + format(tmp.r.effect[2]) + 'x';
+		if (!colorValue[0][2]) return 'which makes <h3>Essence Influence\'s</h3> hardcap start <h2 class="layer-r">' + format(tmp.r.effect[0]) + '</h2>x later' + text[0] + ', multiplies sanctum gain by <h2 class="layer-r">' + format(tmp.r.effect[1]) + '</h2>x, and also multiplies ' + text[1] + 'essence gain by <h2 class="layer-r">' + format(tmp.r.effect[2]) + '</h2>x';
 		return 'which makes <h3 class="layer-e">Essence Influence\'s</h3> hardcap start <h2 class="layer-r">' + format(tmp.r.effect[0]) + '</h2>x later' + text[0] + ', multiplies sanctum gain by <h2 class="layer-r">' + format(tmp.r.effect[1]) + '</h2>x, and also multiplies ' + text[1] + 'essence gain by <h2 class="layer-r">' + format(tmp.r.effect[2]) + '</h2>x';
 	},
 	doReset(resettingLayer) {
@@ -4275,7 +4275,7 @@ addLayer('r', {
 	challenges: {
 		11: {
 			name() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-r">Activate Relics';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<h3 class="layer-r">Activate Relics';
 				return '<h3>Activate Relics';
 			},
 			buttonText: ["Activate", "Cannot activate", "Enter activation", "Enter activation"],
@@ -4352,7 +4352,7 @@ addLayer('r', {
 				let bgcolor = 'rgb(' + num + ',' + num + ',' + (num + 50) + ')';
 				if (num.gt(205)) bgcolor = 'rgb(205,205,255)';
 				let textcolor = '#B9A975';
-				if (colorvalue[1] == 'none') textcolor = '#DFDFDF';
+				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-color':bgcolor, 'color':textcolor, 'border-radius':'70px', 'height':'450px', 'width':'450px'};
 			},
 		},
@@ -5483,7 +5483,7 @@ addLayer('ei', {
 	challenges: {
 		11: {
 			name() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ei">Build the Gate';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<h3 class="layer-ei">Build the Gate';
 				return '<h3>Build the Gate';
 			},
 			challengeDescription: ' - Resets evil influence milestones<br> - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Forces an evil influence reset<br> - Divides evil power gain by 1,000<br>',
@@ -5500,7 +5500,7 @@ addLayer('ei', {
 		},
 		12: {
 			name() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ei">Power the Gate';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<h3 class="layer-ei">Power the Gate';
 				return '<h3>Power the Gate';
 			},
 			challengeDescription: " - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Forces an evil influence reset<br> - Divides evil power gain by 100,000,000<br>",
@@ -5512,7 +5512,7 @@ addLayer('ei', {
 				player.ei.power = newDecimalZero();
 			},
 			rewardDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'evil influence resets nothing, all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>power gain by ^1.075'
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'evil influence resets nothing, all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>power gain by ^1.075'
 				return 'evil influence resets nothing, all <b>Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>power gain by ^1.075'
 			},
 			doReset: true,
@@ -5520,7 +5520,7 @@ addLayer('ei', {
 		},
 		21: {
 			name() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ei">Enter the Gate';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<h3 class="layer-ei">Enter the Gate';
 				return '<h3>Enter the Gate';
 			},
 			challengeDescription: " - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Resets your relics to 0<br> - Divides evil power gain by 1e15<br>",
@@ -5540,7 +5540,7 @@ addLayer('ei', {
 		},
 		22: {
 			name() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ei">And Repeat';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<h3 class="layer-ei">And Repeat';
 				return '<h3>And Repeat';
 			},
 			challengeDescription() { return 'Endure the negative effects of all the other <b class="layer-ei' + getdark(this, "ref", true, true) + 'Gate of Evil</b> challenges. It is recommended to turn the evil influence upgrade autobuyer off.<br>' },
@@ -5634,7 +5634,7 @@ addLayer('w', {
 		};
 	},
 	effect() { return [new Decimal(1e10).pow(player.w.points), player.w.points.add(1).log10().add(1).pow(0.333), player.w.points.add(1).pow(1.5)] },
-	effectDescription() { return 'which multiplies point, essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x, atom, sanctum, relic, molecule, good influence, and evil influence by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x, and also light gain after hardcap by <h2 class="layer-w">' + format(tmp.w.effect[2]) + '</h2>x' },
+	effectDescription() { return 'which multiplies point, essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x; atom, sanctum, relic, molecule, good influence, and evil influence by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x; and light gain after hardcap by <h2 class="layer-w">' + format(tmp.w.effect[2]) + '</h2>x' },
 	doReset(resettingLayer) {
 		if (hasMilestone('ch', 12) && resettingLayer == 'ch') return;
 		let keep = ['auto_influence'], save;
@@ -5689,7 +5689,7 @@ addLayer('w', {
 		3: {
 			requirementDescription: '4 wars',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'keep evil influence challenge completions on war resets, you can automatically activate relics, perform evil influence resets automatically, and unlock another <b class="layer-w-dark">Influence</b>';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'keep evil influence challenge completions on war resets, you can automatically activate relics, perform evil influence resets automatically, and unlock another <b class="layer-w-dark">Influence</b>';
 				return 'keep evil influence challenge completions on war resets, you can automatically activate relics, perform evil influence resets automatically, and unlock another <b>Influence</b>';
 			},
 			done() { return player.w.points.gte(4) },
@@ -5698,7 +5698,7 @@ addLayer('w', {
 		4: {
 			requirementDescription: '5 wars',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'keep demon soul challenge completions on war resets, you can autobuy individual relic upgrades, relics reset nothing, perform relic resets automatically, and unlock another <b class="layer-w-dark">Influence</b>';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'keep demon soul challenge completions on war resets, you can autobuy individual relic upgrades, relics reset nothing, perform relic resets automatically, and unlock another <b class="layer-w-dark">Influence</b>';
 				return 'keep demon soul challenge completions on war resets, you can autobuy individual relic upgrades, relics reset nothing, perform relic resets automatically, and unlock another <b>Influence</b>';
 			},
 			done() { return player.w.points.gte(5) },
@@ -5722,7 +5722,7 @@ addLayer('w', {
 		8: {
 			requirementDescription: '9 wars',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'war resets don\'t reset good influence, and unlock another <b class="layer-w-dark">Influence</b>';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'war resets don\'t reset good influence, and unlock another <b class="layer-w-dark">Influence</b>';
 				return 'war resets don\'t reset good influence, and unlock another <b>Influence</b>';
 			},
 			done() { return player.w.points.gte(9) },
@@ -5735,7 +5735,7 @@ addLayer('w', {
 		10: {
 			requirementDescription: '11 wars',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'war resets don\'t reset prayers, and reduce <b class="layer-w-dark">Relic Hoarding</b> cost scaling past 6 of them';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'war resets don\'t reset prayers, and reduce <b class="layer-w-dark">Relic Hoarding</b> cost scaling past 6 of them';
 				return 'war resets don\'t reset prayers, and reduce <b>Relic Hoarding</b> cost scaling past 6 of them';
 			},
 			done() { return player.w.points.gte(11) },
@@ -5743,7 +5743,7 @@ addLayer('w', {
 		11: {
 			requirementDescription: '12 wars',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'war resets don\'t reset sanctums, and increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 1';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'war resets don\'t reset sanctums, and increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 1';
 				return 'war resets don\'t reset sanctums, and increase the maximum bought of <b>Power of Good</b> by 1'
 			},
 			done() { return player.w.points.gte(12) },
@@ -5751,7 +5751,7 @@ addLayer('w', {
 		12: {
 			requirementDescription: '13 wars',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 1';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 1';
 				return 'increase the maximum bought of <b>Power of Good</b> by 1';
 			},
 			done() { return player.w.points.gte(13) },
@@ -5759,7 +5759,7 @@ addLayer('w', {
 		13: {
 			requirementDescription: '15 wars',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 2';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 2';
 				return 'increase the maximum bought of <b>Power of Good</b> by 2';
 			},
 			done() { return player.w.points.gte(15) },
@@ -5767,7 +5767,7 @@ addLayer('w', {
 		14: {
 			requirementDescription: '18 wars',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 3 and you can autobuy <b class="layer-cl' + getdark(this, "ref", true, true) + 'Tissues</b>';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 3 and you can autobuy <b class="layer-cl' + getdark(this, "ref", true, true) + 'Tissues</b>';
 				return 'increase the maximum bought of <b>Power of Good</b> by 3, and you can autobuy <b>Tissues</b>';
 			},
 			done() { return player.w.points.gte(18) },
@@ -5776,7 +5776,7 @@ addLayer('w', {
 		15: {
 			requirementDescription: '22 wars',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 12, and all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk buy 5x';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 12, and all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk buy 5x';
 				return 'increase the maximum bought of <b>Power of Good</b> by 12, and all <b>Devotion</b> autobuyers can bulk buy 5x';
 			},
 			done() { return player.w.points.gte(22) },
@@ -5784,7 +5784,7 @@ addLayer('w', {
 		16: {
 			requirementDescription: '24 wars',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 28, reduce <b class="layer-w-dark">Power of Good</b> scaling, and unlock <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b>';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 28, reduce <b class="layer-w-dark">Power of Good</b> scaling, and unlock <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b>';
 				return 'increase the maximum bought of <b>Power of Good</b> by 28, reduce <b>Power of Good</b> scaling, and unlock <b>Protein</b>';
 			},
 			done() { return player.w.points.gte(24) },
@@ -5797,7 +5797,7 @@ addLayer('w', {
 		18: {
 			requirementDescription: '60 wars',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'unlock 3 more protein buyables, and you can autobuy <b class="layer-w-dark">Influences</b>';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'unlock 3 more protein buyables, and you can autobuy <b class="layer-w-dark">Influences</b>';
 				return 'unlock 3 more protein buyables, and you can autobuy <b>Influences</b>';
 			},
 			done() { return player.w.points.gte(60) },
@@ -5847,7 +5847,7 @@ addLayer('w', {
 				return getBuyableAmount('w', this.id).mul(5).add(163);
 			},
 			title() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-w-dark">Rivalry';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<h3 class="layer-w-dark">Rivalry';
 				return '<h3>Rivalry';
 			},
 			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
@@ -5881,7 +5881,7 @@ addLayer('w', {
 				return getBuyableAmount('w', this.id).mul(8).add(170);
 			},
 			title() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-w-dark">Relic Hoarding';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<h3 class="layer-w-dark">Relic Hoarding';
 				return '<h3>Relic Hoarding';
 			},
 			canAfford() { return player.r.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
@@ -5906,7 +5906,7 @@ addLayer('w', {
 				return getBuyableAmount('w', this.id).mul(70000).add(320000);
 			},
 			title() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-w-dark">Power of Good';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<h3 class="layer-w-dark">Power of Good';
 				return '<h3>Power of Good';
 			},
 			canAfford() { return player.s.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
@@ -5943,7 +5943,7 @@ addLayer('w', {
 		21: {
 			cost() { return getBuyableAmount('w', this.id).mul(5).add(235) },
 			title() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-w-dark">Race for Knowledge';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<h3 class="layer-w-dark">Race for Knowledge';
 				return '<h3>Race for Knowledge';
 			},
 			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
@@ -6517,7 +6517,7 @@ addLayer('ch', {
 		1: {
 			requirementDescription: '2 chaos',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'keep war milestones on chaos resets, unlock <b class="layer-ch">The Tides</b>, and you can autobuy the first three <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b> rebuyables individually';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'keep war milestones on chaos resets, unlock <b class="layer-ch">The Tides</b>, and you can autobuy the first three <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b> rebuyables individually';
 				return 'keep war milestones on chaos resets, unlock <b>The Tides</b>, and you can autobuy the first three <b>Protein</b> rebuyables individually';
 			},
 			done() { return player.ch.points.gte(2) },
@@ -6526,7 +6526,7 @@ addLayer('ch', {
 		2: {
 			requirementDescription: '3 chaos',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'the good influence rebuyable autobuyer is 2x faster, and when you buy a good influence rebuyable, you do not spend any good influence, instead you gain total good influence equal to its cost; also unlock another <b class="layer-ch">Tide</b>';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'the good influence rebuyable autobuyer is 2x faster, and when you buy a good influence rebuyable, you do not spend any good influence, instead you gain total good influence equal to its cost; also unlock another <b class="layer-ch">Tide</b>';
 				return 'the good influence rebuyable autobuyer is 2x faster, and when you buy a good influence rebuyable, you do not spend any good influence, instead you gain total good influence equal to its cost; also unlock another <b>Tide</b>';
 			},
 			done() { return player.ch.points.gte(3) },
@@ -6556,7 +6556,7 @@ addLayer('ch', {
 			requirementDescription: '13 chaos',
 			effect() { return player.ch.points.sub(10).max(0).mul(2.25).floor() },
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'you can autobuy the seventh to ninth <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b class="layer-w-dark">Race for Knowledge</b> by 2.25, rounded down (currently +' + formatWhole(milestoneEffect('ch', 7)) + ')';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'you can autobuy the seventh to ninth <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b class="layer-w-dark">Race for Knowledge</b> by 2.25, rounded down (currently +' + formatWhole(milestoneEffect('ch', 7)) + ')';
 				else return 'you can autobuy the seventh to ninth <b>Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b>Race for Knowledge</b> by 2.25, rounded down (currently +' + formatWhole(milestoneEffect('ch', 7)) + ')';
 			},
 			done() { return player.ch.points.gte(13) },
@@ -6565,7 +6565,7 @@ addLayer('ch', {
 		8: {
 			requirementDescription: '16 chaos',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'keep good influence milestones on chaos resets, and improve <b class="layer-w-dark">Race for Knowledge</b>\'s effect formula';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'keep good influence milestones on chaos resets, and improve <b class="layer-w-dark">Race for Knowledge</b>\'s effect formula';
 				else return 'keep good influence milestones on chaos resets, and improve <b>Race for Knowledge</b>\'s effect formula';
 			},
 			done() { return player.ch.points.gte(16) },
@@ -6578,7 +6578,7 @@ addLayer('ch', {
 		10: {
 			requirementDescription: '24 chaos',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'keep wars equal to ten times your chaos on chaos resets, all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk buy 2x, and when you buy an <b class="layer-w-dark">Influence</b>, you do not spend any currency, instead you gain total amount(s) of the kind(s) of currency spent equal to its cost';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'keep wars equal to ten times your chaos on chaos resets, all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk buy 2x, and when you buy an <b class="layer-w-dark">Influence</b>, you do not spend any currency, instead you gain total amount(s) of the kind(s) of currency spent equal to its cost';
 				else return 'keep wars equal to ten times your chaos on chaos resets, all <b>Devotion</b> autobuyers can bulk buy 2x, and when you buy an <b>Influence</b>, you do not spend any currency, instead you gain total amount(s) of the kind(s) of currency spent equal to its cost';
 			},
 			done() { return player.ch.points.gte(24) },
@@ -6586,7 +6586,7 @@ addLayer('ch', {
 		11: {
 			requirementDescription: '26 chaos',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'if you have <b class="layer-mo-dark">Assimilated</b> quarks, unlock four new quark upgrades and another quark rebuyable';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'if you have <b class="layer-mo-dark">Assimilated</b> quarks, unlock four new quark upgrades and another quark rebuyable';
 				else return 'if you have <b>Assimilated</b> quarks, unlock four new quark upgrades and another quark rebuyable';
 			},
 			done() { return player.ch.points.gte(26) },
@@ -6601,7 +6601,7 @@ addLayer('ch', {
 		13: {
 			requirementDescription: '30 chaos',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'improve <b class="layer-ch">Tide of Good</b>\'s effect formula, and do something with ' + randomStr(9);
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'improve <b class="layer-ch">Tide of Good</b>\'s effect formula, and do something with ' + randomStr(9);
 				else return 'improve <b>Tide of Good</b>\'s effect formula, and do something with ' + randomStr(9);
 			},
 			done() { return player.ch.points.gte(30) },
@@ -6616,7 +6616,7 @@ addLayer('ch', {
 		15: {
 			requirementDescription: '38 chaos',
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'unlock the option to keep Breaking on chaos resets (<b class="layer-h-dark">Reset Breaking</b> will still work), improve the formula of chaos\'s first effect, and reduce the multicellular organism cost base (1.1 --> 1.067)';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'unlock the option to keep Breaking on chaos resets (<b class="layer-h-dark">Reset Breaking</b> will still work), improve the formula of chaos\'s first effect, and reduce the multicellular organism cost base (1.1 --> 1.067)';
 				return 'unlock the option to keep Breaking on chaos resets (<b>Reset Breaking</b> will still work), improve the formula of chaos\'s first effect, and reduce the multicellular organism cost base (1.1 --> 1.067)';
 			},
 			done() { return player.ch.points.gte(38) },
@@ -6633,7 +6633,7 @@ addLayer('ch', {
 				return ((player.ch.challenges[11] + player.ch.challenges[12]) / 250 + 1) ** 1.35;
 			},
 			effectDescription() {
-				if (colorvalue[1] != 'none' && colorvalue[0][2]) return 'you can autobuy the first quark rebuyable, the good influence rebuyable autobuyer is 2x faster, and multiply multicellular organism gain based on <b class="layer-ch">Tide</b> completions (currently ' + format(milestoneEffect('ch', 16)) + 'x)';
+				if (colorValue[1] != 'none' && colorValue[0][2]) return 'you can autobuy the first quark rebuyable, the good influence rebuyable autobuyer is 2x faster, and multiply multicellular organism gain based on <b class="layer-ch">Tide</b> completions (currently ' + format(milestoneEffect('ch', 16)) + 'x)';
 				return 'you can autobuy the first quark rebuyable, the good influence rebuyable autobuyer is 2x faster, and multiply multicellular organism gain based on <b>Tide</b> completions (currently ' + format(milestoneEffect('ch', 16)) + 'x)';
 			},
 			done() { return player.ch.points.gte(42) },
@@ -6682,7 +6682,7 @@ addLayer('ch', {
 	challenges: {
 		11: {
 			name() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ch">Tide of Evil';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<h3 class="layer-ch">Tide of Evil';
 				return '<h3>Tide of Evil';
 			},
 			challengeDescription: "- Forces a chaos reset<br>- Disables good influence<br>- Multiplies demon soul gain by 1e3200<br>- Multiplies evil influence gain by 1.1",
@@ -6704,7 +6704,7 @@ addLayer('ch', {
 		},
 		12: {
 			name() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<h3 class="layer-ch">Tide of Good';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<h3 class="layer-ch">Tide of Good';
 				return '<h3>Tide of Good';
 			},
 			challengeDescription: "- Forces a chaos reset<br>- Disables evil influence<br>",
@@ -6827,7 +6827,7 @@ addLayer('mo', {
 			cost() { return getBuyableAmount('mo', this.id).div(2).add(1).mul(18) },
 			effect() { return new Decimal(1000).pow(getBuyableAmount('mo', this.id)) },
 			title() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<b class="layer-a">Atom</b> <b class="layer-mo' + getdark(this, "title-buyable") + 'Synergy';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<b class="layer-a">Atom</b> <b class="layer-mo' + getdark(this, "title-buyable") + 'Synergy';
 				else return '<b>Atom</b> <b>Synergy';
 			},
 			display() {
@@ -6846,7 +6846,7 @@ addLayer('mo', {
 			cost() { return getBuyableAmount('mo', this.id).add(1).pow(2).add(50) },
 			effect() { return new Decimal(2).pow(getBuyableAmount('mo', this.id)) },
 			title() {
-				if (colorvalue[1] != 'none' && colorvalue[0][1]) return '<b class="layer-s">Sanctum</b> <b class="layer-mo' + getdark(this, "title-buyable") + 'Synergy';
+				if (colorValue[1] != 'none' && colorValue[0][1]) return '<b class="layer-s">Sanctum</b> <b class="layer-mo' + getdark(this, "title-buyable") + 'Synergy';
 				else return '<b>Sanctum</b> <b>Synergy';
 			},
 			display() {

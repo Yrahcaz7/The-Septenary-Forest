@@ -1,25 +1,6 @@
-let options = {};
+let options;
 
-function getStartOptions() {
-	return {
-		autosave: true,
-		msDisplay: 'always',
-		theme: 'default',
-		hqTree: false,
-		offlineProd: true,
-		hideChallenges: false,
-		showStory: true,
-		forceOneTab: false,
-		forceTooltips: true,
-		colorDisplayMode: 0,
-		colorDisplay: 0,
-		extendplaces: false,
-		hideMilestonePopups: false,
-		disableGlitchText: false,
-	};
-};
-
-function formatOption(opt) {
+function formatOpt(opt) {
 	if (opt) return 'ON'
 	return 'OFF';
 };
@@ -29,12 +10,11 @@ function toggleOpt(name) {
 	options[name] = !options[name];
 	// special
 	if (name == 'hqTree') changeTreeQuality();
-	// update canvas
-	if (name == 'forceOneTab' || name == 'forceTooltips') needsCanvasUpdate = true;
+	else if (name == 'forceOneTab') needsCanvasUpdate = true;
 };
 
 function changeTreeQuality() {
-	var on = options.hqTree;
+	let on = options.hqTree;
 	document.body.style.setProperty('--hqProperty1', on ? '2px solid' : '4px solid');
 	document.body.style.setProperty('--hqProperty2a', on ? '-4px -4px 4px #00000040 inset' : '-4px -4px 4px #00000000 inset');
 	document.body.style.setProperty('--hqProperty2b', on ? '0px 0px 20px var(--background)' : '');
@@ -71,48 +51,4 @@ function milestoneShown(layer, id) {
 			return false;
 	};
 	return false;
-};
-
-const DISPLAY_MODES = ['ALL (recommended)', 'ONLY SPECIAL', 'SPECIAL AND TITLES', 'SPECIAL AND REFRENCES'];
-
-const COLOR_DISPLAYS = ['ON - NORMAL (recommended)', 'ON - ALWAYS DARK', 'OFF (recommended for colorblind)'];
-
-var colorvalue = [[true, true, true], 'normal'];
-
-function displayMode() {
-	options.colorDisplayMode += 1;
-	if (options.colorDisplayMode >= 4) options.colorDisplayMode = 0;
-};
-
-function colorDisplay() {
-	options.colorDisplay += 1;
-	if (options.colorDisplay >= 3) options.colorDisplay = 0;
-};
-
-function fullColorDisplay() {
-	switch (options.colorDisplayMode) {
-		case 0:
-			colorvalue[0] = [true, true, true];
-			break;
-		case 1:
-			colorvalue[0] = [true, false, false];
-			break;
-		case 2:
-			colorvalue[0] = [true, true, false];
-			break;
-		case 3:
-			colorvalue[0] = [true, false, true];
-			break;
-	};
-	switch (options.colorDisplay) {
-		case 0:
-			colorvalue[1] = 'normal';
-			break;
-		case 1:
-			colorvalue[1] = 'dark';
-			break;
-		case 2:
-			colorvalue[1] = 'none';
-			break;
-	};
 };

@@ -3,7 +3,7 @@ const modInfo = {
 	id: 'Yrahcaz7-ModTree-ThePrimordialTree',
 	author: 'Yrahcaz7',
 	pointsName: 'points',
-	modFiles: ['assimilation.js', 'achievements.js', 'softcaps.js', 'story.js', 'tabs.js', 'layers.js', 'tree.js'],
+	modFiles: ['tree.js', 'options.js', 'assimilation.js', 'achievements.js', 'softcaps.js', 'story.js', 'tabs.js', 'layers.js'],
 	initialStartPoints: newDecimalZero(),
 	offlineLimit: 1, // in hours
 };
@@ -188,23 +188,23 @@ const winText = () => {
 // gets the end of a color tag (no color, dark, or light)
 function getdark(darkthis, type, special = false, research = false) {
 	if (darkthis.layer !== undefined) {
-		if (colorvalue[1] == 'dark') return '-dark">';
-		if (colorvalue[1] == 'none') return '-OFF">';
-		if (((type == 'title' || type == 'title-hasend') && colorvalue[0][1]) || (type == 'ref' && colorvalue[0][2])) {
+		if (colorValue[1] == 'dark') return '-dark">';
+		if (colorValue[1] == 'none') return '-OFF">';
+		if (((type == 'title' || type == 'title-hasend') && colorValue[0][1]) || (type == 'ref' && colorValue[0][2])) {
 			if (research) return '">';
 			else {
 				if (special) darkcanafford = darkthis.canAfford();
 				else darkcanafford = player[darkthis.layer].points.gte(darkthis.cost);
 				if ((darkcanafford && !hasUpgrade(darkthis.layer, darkthis.id)) || (type == 'title-hasend' && hasUpgrade(darkthis.layer, darkthis.id))) return '-dark">';
 			};
-		} else if (type == 'title-light' && colorvalue[0][1]) {
+		} else if (type == 'title-light' && colorValue[0][1]) {
 			if (special) darkcanafford = darkthis.canAfford();
 			else darkcanafford = player[darkthis.layer].points.gte(darkthis.cost);
 			if (darkcanafford && !hasUpgrade(darkthis.layer, darkthis.id)) return '-dark">';
 			return '-light">';
-		} else if (type == 'title-buyable' && colorvalue[0][1]) {
+		} else if (type == 'title-buyable' && colorValue[0][1]) {
 			if (darkthis.canAfford() && getBuyableAmount(darkthis.layer, darkthis.id)) return '-dark">';
-		} else if (type == 'clickable' && colorvalue[0][1]) {
+		} else if (type == 'clickable' && colorValue[0][1]) {
 			if (darkthis.canClick()) return '-dark">';
 		} else {
 			return '-OFF">';
@@ -366,6 +366,11 @@ const backgroundStyle = {};
 // max tick length in seconds
 function maxTickLength() {
 	return 1;
+};
+
+// runs after things are loaded
+function onLoad() {
+	calculateColorValue();
 };
 
 // fixes for old saves

@@ -946,36 +946,36 @@ function loadVue() {
 	});
 
 	app.component('options-tab', {
-		data() {return {save, toggleOpt, formatOption, options, hardReset, displayMode, fullColorDisplay, DISPLAY_MODES, exportSave, importSave, COLOR_DISPLAYS, switchTheme, getThemeName, adjustMSDisp, MS_DISPLAYS, MS_SETTINGS, player}},
+		data() {return {save, toggleOpt, formatOpt, options, hardReset, displayMode, fullColorDisplay: calculateColorValue, DISPLAY_MODES, exportSave, importSave, COLOR_DISPLAYS, switchTheme, getThemeName, adjustMSDisp, MS_DISPLAYS, MS_SETTINGS, player}},
 		template: template(`<table>
 			<tbody>
 				<tr>
 					<td><button class="opt" onclick="save()">Save</button></td>
-					<td><button class="opt" onclick="toggleOpt('autosave')">Autosave: {{formatOption(options.autosave)}}</button></td>
+					<td><button class="opt" onclick="toggleOpt('autosave')">Autosave: {{formatOpt(options.autosave)}}</button></td>
 					<td><button class="opt" onclick="hardReset()">HARD RESET</button></td>
-					<td><button class="opt" onclick="displayMode(); fullColorDisplay()">Color Text Mode: {{DISPLAY_MODES[options.colorDisplayMode]}}</button></td>
+					<td><button class="opt" onclick="displayMode()">Color Text Mode: {{DISPLAY_MODES[options.colorDisplayMode]}}</button></td>
 				</tr>
 				<tr>
 					<td><button class="opt" onclick="exportSave()">Export to clipboard</button></td>
 					<td><button class="opt" onclick="importSave()">Import</button></td>
-					<td><button class="opt" onclick="toggleOpt('offlineProd')">Offline Progress: {{formatOption(options.offlineProd)}}</button></td>
-					<td><button class="opt" onclick="colorDisplay(); fullColorDisplay()">Colored Text: {{COLOR_DISPLAYS[options.colorDisplay]}}</button></td>
+					<td><button class="opt" onclick="toggleOpt('offlineProd')">Offline Progress: {{formatOpt(options.offlineProd)}}</button></td>
+					<td><button class="opt" onclick="colorDisplay()">Colored Text: {{COLOR_DISPLAYS[options.colorDisplay]}}</button></td>
 				</tr>
 				<tr>
 					<td><button class="opt" onclick="switchTheme()">Theme: {{getThemeName()}}</button></td>
 					<td><button class="opt" onclick="adjustMSDisp()">Show Milestones: {{MS_DISPLAYS[MS_SETTINGS.indexOf(options.msDisplay)]}}</button></td>
-					<td><button class="opt" onclick="toggleOpt('hqTree')">High-Quality Tree: {{formatOption(options.hqTree)}}</button></td>
-					<td><button class="opt" onclick="player.nerdMode = !player.nerdMode">Nerd Mode: {{formatOption(player.nerdMode)}} (you can also use the control key to toggle)</button></td>
+					<td><button class="opt" onclick="toggleOpt('hqTree')">High-Quality Tree: {{formatOpt(options.hqTree)}}</button></td>
+					<td><button class="opt" onclick="player.nerdMode = !player.nerdMode">Nerd Mode: {{formatOpt(player.nerdMode)}} (you can also use the control key to toggle)</button></td>
 				</tr>
 				<tr>
-					<td><button class="opt" onclick="toggleOpt('hideChallenges')">Show Completed Challenges: {{formatOption(!options.hideChallenges)}}</button></td>
+					<td><button class="opt" onclick="toggleOpt('hideChallenges')">Show Completed Challenges: {{formatOpt(!options.hideChallenges)}}</button></td>
 					<td><button class="opt" onclick="toggleOpt('forceOneTab')">Single-Tab Mode: {{options.forceOneTab ? "ALWAYS" : "AUTO"}}</button></td>
-					<td><button class="opt" onclick="toggleOpt('forceTooltips')">Shift-Click to Toggle Tooltips: {{formatOption(options.forceTooltips)}}</button></td>
-					<td><button class="opt" onclick="toggleOpt('extendplaces')">Extended Decimal Places: {{formatOption(options.extendplaces)}}</button></td>
+					<td><button class="opt" onclick="toggleOpt('forceTooltips')">Shift-Click to Toggle Tooltips: {{formatOpt(options.forceTooltips)}}</button></td>
+					<td><button class="opt" onclick="toggleOpt('extendplaces')">Extended Decimal Places: {{formatOpt(options.extendplaces)}}</button></td>
 				</tr>
 				<tr>
-					<td><button class="opt" onclick="toggleOpt('hideMilestonePopups')">Show Milestone Popups: {{formatOption(!options.hideMilestonePopups)}}</button></td>
-					<td><button class="opt" onclick="toggleOpt('disableGlitchText')">Glitch Text: {{formatOption(!options.disableGlitchText)}} (when off, qestion marks are displayed instead)</button></td>
+					<td><button class="opt" onclick="toggleOpt('hideMilestonePopups')">Show Milestone Popups: {{formatOpt(!options.hideMilestonePopups)}}</button></td>
+					<td><button class="opt" onclick="toggleOpt('disableGlitchText')">Glitch Text: {{formatOpt(!options.disableGlitchText)}} (when off, qestion marks are displayed instead)</button></td>
 				</tr>
 			</tbody>
 		</table>`),

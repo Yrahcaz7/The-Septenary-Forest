@@ -189,6 +189,7 @@ function load() {
 	updateTemp();
 	updateTabFormats();
 	loadVue();
+	if (typeof onLoad === "function") onLoad();
 };
 
 function loadOptions() {
