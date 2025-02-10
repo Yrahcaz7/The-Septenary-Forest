@@ -349,17 +349,17 @@ const displayThings = [
 // determines when the game "ends"
 const endPoints = new Decimal('e6e17');
 
+// runs after things are loaded
+function onLoad() {
+	calculateColorValue();
+};
+
 // style for the background, can be a function
 const backgroundStyle = {};
 
 // max tick length in seconds
 function maxTickLength() {
 	return 1;
-};
-
-// runs after things are loaded
-function onLoad() {
-	calculateColorValue();
 };
 
 // removes an achievment
