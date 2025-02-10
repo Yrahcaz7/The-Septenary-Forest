@@ -225,7 +225,7 @@ function updateMilestones(layer) {
 			player[layer].milestones.push(id);
 			if (layers[layer].milestones[id].onComplete) layers[layer].milestones[id].onComplete();
 			let color = tmp[layer].color;
-			if (layers[layer].milestones[id].color) color = layers[layer].milestones[id].color;
+			if (layers[layer].milestones[id].popupColor) color = layers[layer].milestones[id].popupColor;
 			let popupTitle = (tmp[layer].milestones[id].popupTitle !== undefined ? tmp[layer].milestones[id].popupTitle : '');
 			if ((tmp[layer].milestonePopups || tmp[layer].milestonePopups === undefined) && !options.hideMilestonePopups) doPopup('milestone', tmp[layer].milestones[id].requirementDescription, popupTitle, 3, color);
 			player[layer].lastMilestone = id;
@@ -240,7 +240,7 @@ function updateAchievements(layer) {
 			player[layer].achievements.push(id);
 			if (layers[layer].achievements[id].onComplete) layers[layer].achievements[id].onComplete();
 			let color = tmp[layer].color;
-			if (layers[layer].achievements[id].color) color = layers[layer].achievements[id].color;
+			if (layers[layer].achievements[id].popupColor) color = layers[layer].achievements[id].popupColor;
 			let popupTitle = (tmp[layer].achievements[id].popupTitle !== undefined ? tmp[layer].achievements[id].popupTitle : '');
 			if (tmp[layer].achievementPopups || tmp[layer].achievementPopups === undefined) doPopup('achievement', tmp[layer].achievements[id].name, popupTitle, 3, color);
 		};

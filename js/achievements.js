@@ -6,7 +6,7 @@ addLayer('A', {
 		unlocked: true,
 		points: newDecimalZero(),
 	}},
-	popupColor: '#A5BCC2',
+	color: '#A5BCC2',
 	resource: 'achievements',
 	row: 'side',
 	layerShown() { return true },
