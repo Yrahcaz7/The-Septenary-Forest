@@ -250,20 +250,20 @@ function importSave(imported = undefined, forced = false) {
 };
 
 function versionCheck() {
-	let setVersion = true;
 	if (player.versionType === undefined || player.version === undefined) {
 		player.versionType = getModID();
 		player.version = 0;
 	};
-	if (setVersion) {
-		if (player.versionType == getModID()) {
-			player.keepGoing = false;
-			if (fixOldSave) fixOldSave(player.version);
-		};
-		player.versionType = getStartPlayer().versionType;
-		player.version = VERSION.num;
-		player.beta = VERSION.beta;
+	if (player.versionType == getModID()) {
+		player.keepGoing = false;
+		if (typeof fixOldSave === "function") fixOldSave(player.version);
 	};
+	player.versionType = getStartPlayer().versionType;
+	player.version = VERSION.num;
+	if (VERSION.pre) player.pre = VERSION.pre;
+	else delete player.pre;
+	if (VERSION.beta) player.beta = VERSION.beta;
+	else delete player.beta;
 };
 
 var saveInterval = setInterval(() => {
