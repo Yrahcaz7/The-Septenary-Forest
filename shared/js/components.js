@@ -323,7 +323,7 @@ function loadVue(mainPage = false) {
 	app.component('toggle', {
 		props: ['layer', 'data'],
 		data() {return {tmp, toggleAuto, formatOpt, player}},
-		template: template(`<button class="smallUpg can" :style="{'background-color': tmp[data[0]].color}" v-on:click="toggleAuto(data)">{{formatOpt(player[data[0]][data[1]])</button>`),
+		template: template(`<button class="smallUpg can" :style="{'background-color': tmp[data[0]].color}" v-on:click="toggleAuto(data)">{{formatOpt(player[data[0]][data[1]])}}</button>`),
 	});
 
 	app.component('prestige-button', {
