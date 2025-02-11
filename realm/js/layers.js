@@ -584,43 +584,43 @@ addLayer("2", {
 			effect() { return player[2].mana.add(1).pow(0.25).mul(player[2].sideSpellBoost) },
 			canClick() {
 				if (getClickableState('2', this.id) == "ON") return false;
-				if (player[2].mana.gte(player[2].sideSpellCost) && (hasUpgrade('3', 11) || hasUpgrade('3', 21))) return true;
+				if (player[2].mana.gte(player[2].sideSpellCost) && hasChosenSide()) return true;
 				return false;
 			},
 			onClick() { sideSpellCast() },
 		},
 		101: {
-			title: "<span style='color: #000000'>Tax Collection Autocasting</span>",
+			title: "Autocasting",
 			display() { return 'LOCKED - need better autocasting' },
 			canClick() { return false },
+			style: {'min-height': '50px', 'border-radius': '25px'},
 			unlocked() { return hasUpgrade('2', 101) },
 		},
 		102: {
-			title: "<span style='color: #000000'>Call to Arms Autocasting</span>",
+			title: "Autocasting",
 			display() { return '<span style="color: #000000">' + getClickableState('2', this.id) },
 			canClick() { return true },
 			onClick() {
 				if (getClickableState('2', this.id) == "colorless - ON") setClickableState('2', this.id, "colorless - OFF");
 				else setClickableState('2', this.id, "colorless - ON");
 			},
+			style: {'min-height': '50px', 'border-radius': '25px'},
 			unlocked() { return hasUpgrade('2', 101) },
 		},
 		103: {
 			title() {
-				if (hasUpgrade('3', 11)) return "<span style='color: #0000FF'>Holy Light Autocasting</span>";
-				if (hasUpgrade('3', 21)) return "<span style='color: #FF0000'>Blood Frenzy Autocasting</span>";
+				if (hasChosenSide()) return "Autocasting";
 				return "CHOOSE A SIDE TO UNLOCK";
 			},
 			display() {
-				if (hasUpgrade('3', 11)) return '<span style="color: #0000FF">' + getClickableState('2', this.id);
-				if (hasUpgrade('3', 21)) return '<span style="color: #FF0000">' + getClickableState('2', this.id);
-				return "";
+				if (hasChosenSide()) return getClickableState('2', this.id);
 			},
-			canClick() { return hasUpgrade('3', 11) || hasUpgrade('3', 21) },
+			canClick() { return hasChosenSide() },
 			onClick() {
 				if (getClickableState('2', this.id) == "colorless - ON") setClickableState('2', this.id, "colorless - OFF");
 				else setClickableState('2', this.id, "colorless - ON");
 			},
+			style: {'min-height': '50px', 'border-radius': '25px'},
 			unlocked() { return hasUpgrade('2', 101) },
 		},
 	},
