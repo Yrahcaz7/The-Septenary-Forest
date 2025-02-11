@@ -1036,7 +1036,7 @@ const statNames = {G: "This Game", R: "This Reincarnation", T: "All Time"};
 const statTabs = {};
 
 ["G", "R", "T"].forEach(key => {
-	statTabs[key] = [
+	let arr = [
 		["display-text", () => "<h3>CURRENCY</h3><br>Your best coins is <b>" + format(player[key].best) + "</b><br>You have <b>" + format(player[key].total) + "</b> coins total<br>" + (key == "G" ? "You have <b>" + formatWhole(player[1].points) + "</b> gems<br>" : "") + (key == "R" ? "Your best gems is <b>" + formatWhole(player[1].best) + "</b><br>" : "") + (key == "T" ? "Your best gems is <b>" + formatWhole(player.bestGems) + "</b>" : "")],
 		"blank",
 		["display-text", () => "<h3>CLICKS</h3><br>Your best click production is <b>" + format(player[1][key].bestClickValue) + "</b><br>You have <b>" + format(player[1][key].bestTotalClickValue) + "</b> coins earned from clicking total<br>" + (key == "G" ? "You have clicked <b>" + formatWhole(player[1].clickTimes) + "</b> times<br>" : "Your best times clicked is <b>" + formatWhole(player[1][key].bestClickTimes) + "</b><br>You have clicked <b>" + formatWhole(player[1][key].totalClickTimes) + "</b> times total")],
@@ -1048,7 +1048,12 @@ const statTabs = {};
 		["display-text", () => "<h3>MANA</h3><br>Your best mana regen is <b>" + format(player[2][key].manaRegenBest) + "</b><br>Your best max mana is <b>" + format(player[2][key].maxManaBest) + "</b><br>You have generated a total of <b>" + format(player[2][key].manaTotal) + "</b> mana"],
 		"blank",
 		["display-text", () => "<h3>SPELLS</h3><br>You have cast 'tax collection' <b>" + formatWhole(player[2][key].taxCasts) + "</b> times<br>You have cast 'call to arms' <b>" + formatWhole(player[2][key].callCasts) + "</b> times<br>You have cast 'holy light' <b>" + formatWhole(player[2][key].holyCasts) + "</b> times<br>You have cast 'blood frenzy' <b>" + formatWhole(player[2][key].frenzyCasts) + "</b> times<br>"],
+		"blank",
 	];
+	if (key == "G") arr.push(["display-text", () => "<h3>OTHER</h3><br>You have spent <b>" + formatTime(player[1].resetTime) + "</b> in this game"]);
+	else if (key == "R") arr.push(["display-text", () => "<h3>OTHER</h3><br>You have spent <b>" + formatTime(player.timePlayed) + "</b> in this reincarnation"]);
+	else if (key == "T") arr.push(["display-text", () => "<h3>OTHER</h3><br>You have spent <b>" + formatTime(player.timePlayed) + "</b> playing total"]);
+	statTabs[key] = arr;
 });
 
 addLayer("S", {
