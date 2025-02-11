@@ -4,7 +4,7 @@ const modInfo = {
 	author: "Yrahcaz7",
 	pointsName: "coins",
 	modFiles: ["tree.js", "options.js", "layers.js"],
-	initialStartPoints: new Decimal(0),
+	initialStartPoints: newDecimalZero(),
 	offlineLimit: 1,
 }
 
@@ -49,13 +49,13 @@ const changelog = `<h1>Changelog:</h1><br>
 
 const winText = `Congratulations! You have reached the end and beaten this game, but for now...`;
 
-function randint(min, max) {
+function getRandInt(min, max) {
 	min = Math.ceil(min);
 	max = Math.floor(max);
 	return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
 };
 
-function callcast() {
+function callCast() {
 	player['2'].callTime = new Decimal(30);
 	player['2'].mana = player['2'].mana.sub(player['2'].callCost);
 	player["2"].G.callCasts = player["2"].G.callCasts.add(1);
@@ -64,7 +64,7 @@ function callcast() {
 	setClickableState('2', 12, "ON");
 };
 
-function sidespellcast() {
+function sideSpellCast() {
 	player['2'].sideSpellTime = new Decimal(15);
 	player['2'].mana = player['2'].mana.sub(player['2'].sideSpellCost);
 		if (hasUpgrade('1', 11)) {
@@ -85,7 +85,7 @@ function canGenPoints() {
 };
 
 function getPointGen() {
-	let gain = new Decimal(0);
+	let gain = newDecimalZero();
 	// addtitive
 	if (getBuyableAmount('1', 12).gt(0)) gain = gain.add(getBuyableAmount('1', 12) * buyableEffect('1', 12));
 	if (getBuyableAmount('1', 13).gt(0) && !hasUpgrade('1', 1143)) gain = gain.add(getBuyableAmount('1', 13) * buyableEffect('1', 13));
@@ -103,33 +103,33 @@ function getPointGen() {
 };
 
 const playerStartingStats = {
-	best: new Decimal(0),
-	total: new Decimal(0),
+	best: newDecimalZero(),
+	total: newDecimalZero(),
 	FCchancebest: new Decimal(2.5),
-	FCbest: new Decimal(0),
-	FCtotal: new Decimal(0),
+	FCbest: newDecimalZero(),
+	FCtotal: newDecimalZero(),
 };
 
 function addedPlayerData() { return {
-	fairyCoins: new Decimal(0),
-	elfCoins: new Decimal(0),
-	angelCoins: new Decimal(0),
-	goblinCoins: new Decimal(0),
-	undeadCoins: new Decimal(0),
-	demonCoins: new Decimal(0),
+	best: newDecimalZero(),
+	total: newDecimalZero(),
+	fairyCoins: newDecimalZero(),
+	elfCoins: newDecimalZero(),
+	angelCoins: newDecimalZero(),
+	goblinCoins: newDecimalZero(),
+	undeadCoins: newDecimalZero(),
+	demonCoins: newDecimalZero(),
 	FCchance: new Decimal(2.5),
-	FC: new Decimal(0),
-	bestGems: new Decimal(0),
+	FC: newDecimalZero(),
+	bestGems: newDecimalZero(),
 	G: Object.create(playerStartingStats),
 	R: Object.create(playerStartingStats),
 	T: Object.create(playerStartingStats),
 }};
 
-let displayThings = [];
+const displayThings = [];
 
-function isEndgame() {
-	return player.points.gte(new Decimal("e1000000"));
-};
+const endPoints = new Decimal(Infinity);
 
 let backgroundStyle = {};
 

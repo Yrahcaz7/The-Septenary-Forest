@@ -1,9 +1,9 @@
 const mainTabStartingStats = {
-	bestClickValue: new Decimal(1),
-	bestTotalClickValue: new Decimal(0),
-	bestClickTimes: new Decimal(0),
-	totalClickTimes: new Decimal(0),
-	bestCreations: new Decimal(0),
+	bestClickValue: newDecimalOne(),
+	bestTotalClickValue: newDecimalZero(),
+	bestClickTimes: newDecimalZero(),
+	totalClickTimes: newDecimalZero(),
+	bestCreations: newDecimalZero(),
 };
 
 const creationNames = [
@@ -38,7 +38,7 @@ function getCreationCost(amount, mult = 1) {
 };
 
 function getCreationBulkCost(amount, mult = 1) {
-	let total = new Decimal(0);
+	let total = newDecimalZero();
 	for (let index = 0; index < getClickableState("1", 21); index++) {
 		total = total.add(getCreationCost(amount.add(index), mult));
 	};
@@ -48,18 +48,19 @@ function getCreationBulkCost(amount, mult = 1) {
 addLayer("1", {
 	name: "Main Tab",
 	symbol: "M",
+	row: 0,
 	position: 0,
 	startData() { return {
 		unlocked: true,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		clickValue: new Decimal(1),
-		clickTimes: new Decimal(0),
-		gemMult: new Decimal(1),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		clickValue: newDecimalOne(),
+		clickTimes: newDecimalZero(),
+		gemMult: newDecimalOne(),
 		G: {
-			bestClickValue: new Decimal(1),
-			bestTotalClickValue: new Decimal(0),
-			bestCreations: new Decimal(0),
+			bestClickValue: newDecimalOne(),
+			bestTotalClickValue: newDecimalZero(),
+			bestCreations: newDecimalZero(),
 		},
 		R: Object.create(mainTabStartingStats),
 		T: Object.create(mainTabStartingStats),
@@ -67,19 +68,18 @@ addLayer("1", {
 	color: "#CCCCCC",
 	requires: new Decimal(100000),
 	resource: "gems",
-	baseResource: "coins",
-	baseAmount() {return player.points},
+	baseResource: "total coins this game",
+	baseAmount() {return player.total},
 	type: "normal",
 	exponent: 0.5,
 	gainMult() {
-		mult = new Decimal(1);
+		let mult = newDecimalOne();
 		return mult;
 	},
 	gainExp() {
-		return new Decimal(1);
+		return newDecimalOne();
 	},
 	resetDescription: "Abdicate for ",
-	row: 0,
 	effect() {return player['1'].points.mul(player['1'].gemMult).mul(0.01).add(1)},
 	effectDescription() {return "which are increasing all production by " + player['1'].gemMult + "% each, for a total of " + format(tmp['1'].effect) + 'x'},
 	hotkeys: [
@@ -88,14 +88,14 @@ addLayer("1", {
 	layerShown() {return true},
 	tooltip() {return "Main Tab"},
 	doReset(resettingLayer) {
-		player.fairyCoins = new Decimal(0);
-		player.elfCoins = new Decimal(0);
-		player.angelCoins = new Decimal(0);
-		player.goblinCoins = new Decimal(0);
-		player.undeadCoins = new Decimal(0);
-		player.demonCoins = new Decimal(0);
+		player.fairyCoins = newDecimalZero();
+		player.elfCoins = newDecimalZero();
+		player.angelCoins = newDecimalZero();
+		player.goblinCoins = newDecimalZero();
+		player.undeadCoins = newDecimalZero();
+		player.demonCoins = newDecimalZero();
 		player.FCchance = new Decimal(2.5);
-		player.FC = new Decimal(0);
+		player.FC = newDecimalZero();
 		player.G = Object.create(playerStartingStats);
 		if (resettingLayer == '1') {
 			layerDataReset('1', ["points", "best", "R", "T"], true);
@@ -105,7 +105,7 @@ addLayer("1", {
 	update(diff) {
 		const pointGain = getPointGen().mul(diff);
 		// clicks
-		let clickGain = new Decimal(1);
+		let clickGain = newDecimalOne();
 		if (getBuyableAmount('1', 11).gt(0)) clickGain = clickGain.add(getBuyableAmount('1', 11).mul(buyableEffect('1', 11)));
 		if (getBuyableAmount('1', 13).gt(0) && hasUpgrade('1', 1143)) clickGain = clickGain.add(getBuyableAmount('1', 13) * buyableEffect('1', 13));
 		if (hasUpgrade('1', 1033)) clickGain = clickGain.mul(upgradeEffect('1', 1033));
@@ -218,12 +218,12 @@ addLayer("1", {
 			canClick() {return true},
 			onClick() {
 				// faction coin initialization
-				let factionCoinGainType = randint(0, 6);
-				let factionCoinsFound = new Decimal(0);
+				let factionCoinGainType = getRandInt(0, 6);
+				let factionCoinsFound = newDecimalZero();
 				let clickPower = player["1"].clickValue;
 				// faction coins gained calculation
 				if (player.FCchance.gte(new Decimal(100))) factionCoinsFound = player.FCchance.div(100);
-				else if (player.FCchance.div(100).gte(Math.random())) factionCoinsFound = new Decimal(1);
+				else if (player.FCchance.div(100).gte(Math.random())) factionCoinsFound = newDecimalOne();
 				if (hasUpgrade('1', 1053) && factionCoinGainType == 2) factionCoinsFound = factionCoinsFound.mul(5);
 				factionCoinsFound = factionCoinsFound.floor();
 				// earning the faction coins
@@ -288,7 +288,7 @@ addLayer("1", {
 				return eff;
 			},
 			display() {
-				if (this.cost() == new Decimal(1)) return "\nCost: 1 coin\n\nAmount: " + getBuyableAmount('1', this.id) + "\n\nEffect: +" + format(buyableEffect('1', this.id)) + " to click production\n\nTotal Effect: +" + format(getBuyableAmount('1', this.id) * buyableEffect('1', this.id));
+				if (this.cost() == newDecimalOne()) return "\nCost: 1 coin\n\nAmount: " + getBuyableAmount('1', this.id) + "\n\nEffect: +" + format(buyableEffect('1', this.id)) + " to click production\n\nTotal Effect: +" + format(getBuyableAmount('1', this.id) * buyableEffect('1', this.id));
 				else return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount('1', this.id) + "\n\nEffect: +" + format(buyableEffect('1', this.id)) + " to click production\n\nTotal Effect: +" + format(getBuyableAmount('1', this.id) * buyableEffect('1', this.id));
 			},
 			canAfford() { return player.points.gte(this.cost()) },
@@ -793,30 +793,31 @@ addLayer("1", {
 
 const castingStartingStats = {
 	manaRegenBest: new Decimal(2.5),
-	manaTotal: new Decimal(0),
+	manaTotal: newDecimalZero(),
 	maxManaBest: new Decimal(100),
-	taxCasts: new Decimal(0),
-	callCasts: new Decimal(0),
-	holyCasts: new Decimal(0),
-	frenzyCasts: new Decimal(0),
+	taxCasts: newDecimalZero(),
+	callCasts: newDecimalZero(),
+	holyCasts: newDecimalZero(),
+	frenzyCasts: newDecimalZero(),
 };
 
 addLayer("2", {
 	name: "Casting",
 	symbol: "C",
+	row: 0,
 	position: 1,
 	startData() { return {
 		unlocked: true,
-		mana: new Decimal(0),
+		mana: newDecimalZero(),
 		maxMana: new Decimal(100),
 		manaRegen: new Decimal(2.5),
 		taxEff: new Decimal(30),
 		taxCost: new Decimal(80),
-		callBoost: new Decimal(1),
-		callTime: new Decimal(0),
+		callBoost: newDecimalOne(),
+		callTime: newDecimalZero(),
 		callCost: new Decimal(160),
-		sideSpellBoost: new Decimal(1),
-		sideSpellTime: new Decimal(0),
+		sideSpellBoost: newDecimalOne(),
+		sideSpellTime: newDecimalZero(),
 		sideSpellCost: new Decimal(120),
 		G: Object.create(castingStartingStats),
 		R: Object.create(castingStartingStats),
@@ -824,7 +825,6 @@ addLayer("2", {
 	}},
 	color: "#AA55AA",
 	type: "none",
-	row: 0,
 	layerShown() {return true },
 	tooltip() {return "Casting"},
 	doReset(resettingLayer) {},
@@ -834,8 +834,8 @@ addLayer("2", {
 		let manaRegen = new Decimal(2.5);
 		let maxMana = new Decimal(100);
 		let taxEff = new Decimal(30);
-		let callBoost = new Decimal(1);
-		let sideSpellBoost = new Decimal(1);
+		let callBoost = newDecimalOne();
+		let sideSpellBoost = newDecimalOne();
 		let taxCost = new Decimal(80);
 		let callCost = new Decimal(160);
 		let sideSpellCost = new Decimal(120);
@@ -893,11 +893,11 @@ addLayer("2", {
 		if (getClickableState('2', 12) == "ON") player['2'].callTime = player['2'].callTime.sub(diff);
 		if (getClickableState('2', 13) == "ON") player['2'].sideSpellTime = player['2'].sideSpellTime.sub(diff);
 		// spell done time
-		if (player['2'].callTime.lte(0)) setClickableState('2', 12) == "OFF", player['2'].callTime = new Decimal(0);
-		if (player['2'].sideSpellTime.lte(0)) setClickableState('2', 13) == "OFF", player['2'].sideSpellTime = new Decimal(0);
+		if (player['2'].callTime.lte(0)) setClickableState('2', 12) == "OFF", player['2'].callTime = newDecimalZero();
+		if (player['2'].sideSpellTime.lte(0)) setClickableState('2', 13) == "OFF", player['2'].sideSpellTime = newDecimalZero();
 		// autocasting
-		if (getClickableState('2', 102) == "colorless - ON" && player['2'].callTime.lte(0) && player['2'].mana.gte(player['2'].callCost)) callcast();
-		if (getClickableState('2', 103) == "colorless - ON" && player['2'].sideSpellTime.lte(0) && player['2'].mana.gte(player['2'].sideSpellCost)) sidespellcast();
+		if (getClickableState('2', 102) == "colorless - ON" && player['2'].callTime.lte(0) && player['2'].mana.gte(player['2'].callCost)) callCast();
+		if (getClickableState('2', 103) == "colorless - ON" && player['2'].sideSpellTime.lte(0) && player['2'].mana.gte(player['2'].sideSpellCost)) sideSpellCast();
 
 	},
 	tabFormat: [
@@ -909,12 +909,10 @@ addLayer("2", {
 		"blank",
 		["bar", "manabar"],
 		"blank",
-		["display-text", "<h2>Mana Upgrades</h2>"],
-		["display-text", function() { return 'you have ' + format(player["2"].G.manaTotal) + ' mana generated' }],
+		["display-text", () => "<h2>Mana Upgrades</h2><br>You have " + format(player["2"].G.manaTotal) + " mana generated"],
 		"blank",
 		["upgrades", [2]],
-		["display-text", "<h2>Autocasting Upgrades</h2>"],
-		["display-text", function() { return 'you have ' + format(player["2"].R.manaTotal) + ' total mana generated' }],
+		["display-text", () => "<h2>Autocasting Upgrades</h2><br>You have " + format(player["2"].R.manaTotal) + " total mana generated"],
 		"blank",
 		["upgrades", [10]],
 	],
@@ -941,7 +939,7 @@ addLayer("2", {
 				else return false;
 			},
 			onClick() {
-				callcast();
+				callCast();
 			},
 		},
 		13: {
@@ -962,7 +960,7 @@ addLayer("2", {
 				else return false;
 			},
 			onClick() {
-				sidespellcast();
+				sideSpellCast();
 			},
 		},
 		101: {
@@ -1067,30 +1065,30 @@ const statTabs = {};
 
 ["G", "R", "T"].forEach(key => {
 	statTabs[key] = [
-		["display-text", function() {return "<h3>CURRENCY</h3><br>Your best coins is <b>" + format(player[key].best) + "</b><br>You have <b>" + format(player[key].total) + "</b> coins total<br>" + (key == "G" ? "You have <b>" + formatWhole(player["1"].points) + "</b> gems<br>" : "") + (key == "R" ? "Your best gems is <b>" + formatWhole(player["1"].best) + "</b><br>" : "") + (key == "T" ? "Your best gems is <b>" + formatWhole(player.bestGems) + "</b>" : "")}],
+		["display-text", () => "<h3>CURRENCY</h3><br>Your best coins is <b>" + format(player[key].best) + "</b><br>You have <b>" + format(player[key].total) + "</b> coins total<br>" + (key == "G" ? "You have <b>" + formatWhole(player["1"].points) + "</b> gems<br>" : "") + (key == "R" ? "Your best gems is <b>" + formatWhole(player["1"].best) + "</b><br>" : "") + (key == "T" ? "Your best gems is <b>" + formatWhole(player.bestGems) + "</b>" : "")],
 		"blank",
-		["display-text", function() {return "<h3>CLICKS</h3><br>Your best click production is <b>" + format(player["1"][key].bestClickValue) + "</b><br>You have <b>" + format(player["1"][key].bestTotalClickValue) + "</b> coins earned from clicking total<br>" + (key == "G" ? "You have clicked <b>" + formatWhole(player["1"].clickTimes) + "</b> times<br>" : "Your best times clicked is <b>" + formatWhole(player["1"][key].bestClickTimes) + "</b><br>You have clicked <b>" + formatWhole(player["1"][key].totalClickTimes) + "</b> times total")}],
+		["display-text", () => "<h3>CLICKS</h3><br>Your best click production is <b>" + format(player["1"][key].bestClickValue) + "</b><br>You have <b>" + format(player["1"][key].bestTotalClickValue) + "</b> coins earned from clicking total<br>" + (key == "G" ? "You have clicked <b>" + formatWhole(player["1"].clickTimes) + "</b> times<br>" : "Your best times clicked is <b>" + formatWhole(player["1"][key].bestClickTimes) + "</b><br>You have clicked <b>" + formatWhole(player["1"][key].totalClickTimes) + "</b> times total")],
 		"blank",
-		["display-text", function() {return "<h3>FACTION COINS</h3><br>" + (key == "G" ? "You have <b>" + formatWhole(player.FC) + "</b> faction coins<br>" : "") + "Your best faction coins is <b>" + formatWhole(player[key].FCbest) + "</b><br>You have <b>" + formatWhole(player[key].FCtotal) + "</b> faction coins total<br>You have <b>" + format(player[key].FCchancebest) + "%</b> best faction coin chance"}],
+		["display-text", () => "<h3>FACTION COINS</h3><br>" + (key == "G" ? "You have <b>" + formatWhole(player.FC) + "</b> faction coins<br>" : "") + "Your best faction coins is <b>" + formatWhole(player[key].FCbest) + "</b><br>You have <b>" + formatWhole(player[key].FCtotal) + "</b> faction coins total<br>You have <b>" + format(player[key].FCchancebest) + "%</b> best faction coin chance"],
 		"blank",
-		["display-text", function() {return "<h3>CREATIONS</h3><br>Your best creations is <b>" + formatWhole(player["1"][key].bestCreations) + "</b>"}],
+		["display-text", () => "<h3>CREATIONS</h3><br>Your best creations is <b>" + formatWhole(player["1"][key].bestCreations) + "</b>"],
 		"blank",
-		["display-text", function() {return "<h3>MANA</h3><br>Your best mana regen is <b>" + format(player["2"][key].manaRegenBest) + "</b><br>Your best max mana is <b>" + format(player["2"][key].maxManaBest) + "</b><br>You have generated a total of <b>" + format(player["2"][key].manaTotal) + "</b> mana"}],
+		["display-text", () => "<h3>MANA</h3><br>Your best mana regen is <b>" + format(player["2"][key].manaRegenBest) + "</b><br>Your best max mana is <b>" + format(player["2"][key].maxManaBest) + "</b><br>You have generated a total of <b>" + format(player["2"][key].manaTotal) + "</b> mana"],
 		"blank",
-		["display-text", function() {return "<h3>SPELLS</h3><br>You have cast 'tax collection' <b>" + formatWhole(player["2"][key].taxCasts) + "</b> times<br>You have cast 'call to arms' <b>" + formatWhole(player["2"][key].callCasts) + "</b> times<br>You have cast 'holy light' <b>" + formatWhole(player["2"][key].holyCasts) + "</b> times<br>You have cast 'blood frenzy' <b>" + formatWhole(player["2"][key].frenzyCasts) + "</b> times<br>"}],
+		["display-text", () => "<h3>SPELLS</h3><br>You have cast 'tax collection' <b>" + formatWhole(player["2"][key].taxCasts) + "</b> times<br>You have cast 'call to arms' <b>" + formatWhole(player["2"][key].callCasts) + "</b> times<br>You have cast 'holy light' <b>" + formatWhole(player["2"][key].holyCasts) + "</b> times<br>You have cast 'blood frenzy' <b>" + formatWhole(player["2"][key].frenzyCasts) + "</b> times<br>"],
 	];
 });
 
 addLayer("S", {
 	name: "Stats",
 	symbol: "S",
+	row: "side",
 	position: 0,
 	startData() { return {
 		unlocked: true,
 	}},
 	color: "#66DD66",
 	type: "none",
-	row: 1,
 	layerShown() {return true},
 	tooltip() {return "Stats"},
 	tabFormat: {
