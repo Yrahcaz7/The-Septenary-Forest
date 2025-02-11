@@ -78,12 +78,12 @@ function callCast() {
 function sideSpellCast() {
 	player[2].sideSpellTime = new Decimal(15);
 	player[2].mana = player[2].mana.sub(player[2].sideSpellCost);
-		if (hasUpgrade('1', 11)) {
+		if (hasUpgrade('3', 11)) {
 			player[2].G.holyCasts = player[2].G.holyCasts.add(1);
 			player[2].R.holyCasts = player[2].R.holyCasts.add(1);
 			player[2].T.holyCasts = player[2].T.holyCasts.add(1);
 		};
-		if (hasUpgrade('1', 21)) {
+		if (hasUpgrade('3', 21)) {
 			player[2].G.frenzyCasts = player[2].G.frenzyCasts.add(1);
 			player[2].R.frenzyCasts = player[2].R.frenzyCasts.add(1);
 			player[2].T.frenzyCasts = player[2].T.frenzyCasts.add(1);
@@ -99,17 +99,17 @@ function getPointGen() {
 	let gain = newDecimalZero();
 	// addtitive
 	if (getBuyableAmount('1', 12).gt(0)) gain = gain.add(getBuyableAmount('1', 12) * buyableEffect('1', 12));
-	if (getBuyableAmount('1', 13).gt(0) && !hasUpgrade('1', 1143)) gain = gain.add(getBuyableAmount('1', 13) * buyableEffect('1', 13));
+	if (getBuyableAmount('1', 13).gt(0) && !hasUpgrade('3', 1143)) gain = gain.add(getBuyableAmount('1', 13) * buyableEffect('1', 13));
 	// multiplicative
-	if (hasUpgrade('1', 1062)) gain = gain.mul(upgradeEffect('1', 1062));
-	if (hasUpgrade('1', 1161)) gain = gain.mul(upgradeEffect('1', 1161));
-	if (hasUpgrade('1', 1163)) gain = gain.mul(upgradeEffect('1', 1163));
-	if (hasUpgrade('1', 1071)) gain = gain.mul(upgradeEffect('1', 1071));
-	if (hasUpgrade('1', 1072)) gain = gain.mul(upgradeEffect('1', 1072));
-	if (hasUpgrade('1', 1073)) gain = gain.mul(upgradeEffect('1', 1073));
-	gain = gain.mul(tmp['1'].effect);
+	if (hasUpgrade('3', 1062)) gain = gain.mul(upgradeEffect('3', 1062));
+	if (hasUpgrade('3', 1161)) gain = gain.mul(upgradeEffect('3', 1161));
+	if (hasUpgrade('3', 1163)) gain = gain.mul(upgradeEffect('3', 1163));
+	if (hasUpgrade('3', 1071)) gain = gain.mul(upgradeEffect('3', 1071));
+	if (hasUpgrade('3', 1072)) gain = gain.mul(upgradeEffect('3', 1072));
+	if (hasUpgrade('3', 1073)) gain = gain.mul(upgradeEffect('3', 1073));
+	gain = gain.mul(tmp[1].effect);
 	if (getClickableState('2', 12) == "ON") gain = gain.mul(clickableEffect('2', 12));
-	if (hasUpgrade('1', 21) && getClickableState('2', 13) == "ON") gain = gain.mul(clickableEffect('2', 13));
+	if (hasUpgrade('3', 21) && getClickableState('2', 13) == "ON") gain = gain.mul(clickableEffect('2', 13));
 	return gain;
 };
 
