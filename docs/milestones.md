@@ -13,7 +13,7 @@ milestones: {
 }
 ```
 
-You can use `hasMilestone(layer, id)` to determine if the player has a given milestone
+You can use `hasMilestone(layer, id)` to determine if the player has a given milestone.
 
 Milestone features:
 
@@ -42,6 +42,8 @@ Milestone features:
 Disable milestone popups by adding `milestonePopups: false` to the layer.
 
 Additional features:
+
+- `effect()`: **optional**. A function that calculates and returns the current values of any bonuses from the milestone. Can return a value or an object containing multiple values. Use this along with `milestoneEffect(layer, id)`.
 
 - `popupTitle`: **optional**. The title of the popup generated when the milestone is gotten. If not present, the popup's title is "Milestone Achieved!"
 

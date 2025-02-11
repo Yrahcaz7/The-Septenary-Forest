@@ -77,6 +77,8 @@ function getColorSpeed(index) {
 	let speed = newDecimalOne();
 	speed = speed.div(COLORS[index].time);
 	const MULTNUM = 202 + index;
+	if (hasUpgrade("c", 11)) speed = speed.mul(upgradeEffect("c", 11));
+	if (hasUpgrade("c", 14)) speed = speed.mul(upgradeEffect("c", 14));
 	if (getGridData("m", MULTNUM)) speed = speed.mul(getGridData("m", MULTNUM));
 	return speed;
 };
@@ -188,6 +190,7 @@ function getColorBuyables() {
 			cost(x) {
 				let amt = new Decimal(COLORS[index].costBase).add(x);
 				let divnum = newDecimalOne();
+				if (hasUpgrade("c", 12)) divnum = divnum.mul(upgradeEffect("c", 12));
 				if (getGridData("m", DIVNUM)) divnum = divnum.mul(getGridData("m", DIVNUM));
 				return amt.div(2).pow(2).add(new Decimal(1.32).pow(amt.pow(0.9))).div(divnum);
 			},
@@ -266,6 +269,7 @@ addLayer("c", {
 			for (let msIndex = 0; msIndex < COLOR_MILESTONES.length; msIndex++) {
 				if (getBuyableAmount("c", BUYNUM).gte(COLOR_MILESTONES[msIndex])) earnings = earnings.mul(COLOR_MILESTONE_MULT[msIndex]);
 			};
+			if (hasUpgrade("c", 13)) earnings = earnings.mul(upgradeEffect("c", 13));
 			if (getGridData("m", MULTNUM)) earnings = earnings.mul(getGridData("m", MULTNUM));
 			player.c.earnings[NAME] = earnings;
 		};
@@ -296,6 +300,7 @@ addLayer("c", {
 				"blank",
 				"upgrades",
 			],
+			unlocked() { return hasMilestone("m", 1) },
 		},
 	},
 	componentStyles: {
@@ -321,15 +326,57 @@ addLayer("c", {
 					setClickableState("c", 11, "1x");
 				};
 			},
-			unlocked() { return hasUpgrade("c", 11) },
+			unlocked() { return hasMilestone("m", 0) },
 		},
 	},
 	upgrades: {
 		11: {
-			fullDisplay() { return "<h3>Quintuple Purchase</h3><br>unlocks the bulk buy 5x option<br><br>Cost: " + illionFormat(this.coinCost) + " coins" },
-			canAfford() { return player.points.gte(this.coinCost) },
 			coinCost: 1e6,
+			fullDisplay() { return "<h3>Smoother Production</h3><br>multiplies the speed of all colors by 1.1<br><br>Cost: " + illionFormat(this.coinCost) + " coins" },
+			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
+			effect: 1.1,
+			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return {
+				"background": "var(--rainbowline)",
+				"background-size": "200%",
+				"animation": "3s linear infinite rainbowline",
+			}},
+		},
+		12: {
+			coinCost: 1e9,
+			fullDisplay() { return "<h3>Corner Cutting</h3><br>divides color costs by 1.5<br><br>Cost: " + illionFormat(this.coinCost) + " coins" },
+			canAfford() { return player.points.gte(this.coinCost) },
+			pay() { player.points = player.points.sub(this.coinCost) },
+			effect: 1.5,
+			onPurchase() {
+				for (let index = 0; index < COLORS.length; index++) {
+					registerColorCost(index, getColorBulk());
+				};
+			},
+			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return {
+				"background": "var(--rainbowline)",
+				"background-size": "200%",
+				"animation": "3s linear infinite rainbowline",
+			}},
+		},
+		13: {
+			coinCost: 1e12,
+			fullDisplay() { return "<h3>Spectrum Synergy</h3><br>multiplies color powers based on your colors unlocked<br><br>Effect: " + illionFormat(upgradeEffect(this.layer, this.id)) + "x<br><br>Cost: " + illionFormat(this.coinCost) + " coins" },
+			canAfford() { return player.points.gte(this.coinCost) },
+			pay() { player.points = player.points.sub(this.coinCost) },
+			effect() { return (player.c.colors) ** 2 / 100 + 1 },
+			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return {
+				"background": "var(--rainbowline)",
+				"background-size": "200%",
+				"animation": "3s linear infinite rainbowline",
+			}},
+		},
+		14: {
+			coinCost: 1e15,
+			fullDisplay() { return "<h3>Multiplicative Speed</h3><br>multiplies color speeds based on your total multiplier<br><br>Effect: " + illionFormat(upgradeEffect(this.layer, this.id)) + "x<br><br>Cost: " + illionFormat(this.coinCost) + " coins" },
+			canAfford() { return player.points.gte(this.coinCost) },
+			pay() { player.points = player.points.sub(this.coinCost) },
+			effect() { return player.m.points.add(1).log10().div(5).add(1) },
 			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return {
 				"background": "var(--rainbowline)",
 				"background-size": "200%",
@@ -338,6 +385,14 @@ addLayer("c", {
 		},
 	},
 });
+
+function assignMultiplier(amount, selected = -1) {
+	let color = (selected >= 0 ? selected + 1 : getRandInt(1, player.c.colorBest));
+	let type = getRandInt(1, 3);
+	let id = type * 100 + color + 1;
+	setGridData("m", id, amount.add(getGridData("m", id)));
+	console.log("Assigned " + amount + " to " + COLORS[color - 1].name + " " + ["power", "speed", "cost"][type - 1]);
+};
 
 addLayer("m", {
 	name: "Multiplier",
@@ -353,18 +408,24 @@ addLayer("m", {
 	marked: "moon",
 	requires: 4,
 	resource: "total multiplier",
-	baseResource: "colors",
+	baseResource: "colors unlocked",
 	baseAmount() { return new Decimal(player.c.colors) },
 	type: "custom",
+	gainMult() {
+		let mult = newDecimalOne();
+		if (hasMilestone("m", 2)) mult = mult.mul(2);
+		return mult;
+	},
 	getResetGain(x = 0) {
 		let num = player.c.colors + x;
 		let earnings = [0, 0, 0, 0, 2, 4, 8, 16, 32, 64];
-		if (num >= earnings.length) return new Decimal(earnings[earnings.length - 1]);
-		else return new Decimal(earnings[num]);
+		let gain = new Decimal(earnings[Math.min(num, earnings.length - 1)]);
+		gain = gain.mul(tmp.m.gainMult);
+		return gain;
 	},
 	getNextAt() {
 		if (!tmp.m.canReset) return tmp.m.requires;
-		else return player.c.colors + 1;
+		return player.c.colors + 1;
 	},
 	canReset() { return player.c.colors >= tmp.m.requires },
 	prestigeNotify() { return tmp.m.canReset && (new Decimal(tmp.m.resetGain).gte(player.m.points.div(10))) },
@@ -372,14 +433,16 @@ addLayer("m", {
 		let text = "";
 		if (player.m.points.lt(1e3)) text += "Reset for ";
 		const TYPE = (player.m.type >= 0 ? COLORS[player.m.type].name : "random");
-		if (!tmp.m.canReset) return text + "+<b>0</b> " + TYPE + " multiplier<br><br>You will gain 2 more at 4 colors";
-		else return text + "+<b>" + illionFormat(tmp.m.resetGain, false, 0) + "</b> " + TYPE + " multiplier<br><br>You will gain " + illionFormat(this.getResetGain(1) - this.getResetGain(), true, 0) + " more at " + illionFormat(tmp.m.nextAt, true, 0) + " colors";
+		if (!tmp.m.canReset) return text + "+<b>0</b> " + TYPE + " multiplier<br><br>You will gain 2 more at 4 colors unlocked";
+		return text + "+<b>" + illionFormat(tmp.m.resetGain, false, 0) + "</b> " + TYPE + " multiplier<br><br>You will gain " + illionFormat(this.getResetGain(1) - this.getResetGain(), true, 0) + " more at " + illionFormat(tmp.m.nextAt, true, 0) + " colors unlocked";
 	},
 	onPrestige(gain) {
-		let color = (player.m.type >= 0 ? player.m.type + 1 : getRandInt(1, player.c.colorBest));
-		let type = getRandInt(1, 3);
-		let id = type * 100 + color + 1;
-		setGridData("m", id, gain.add(getGridData("m", id)));
+		if (hasMilestone("m", 2)) {
+			assignMultiplier(gain.div(2), player.m.type);
+			assignMultiplier(gain.div(2));
+		} else {
+			assignMultiplier(gain, player.m.type);
+		};
 	},
 	hotkeys: [{
 		key: "M",
@@ -390,13 +453,15 @@ addLayer("m", {
 	tabFormat: [
 		"main-display",
 		"prestige-button",
-		["custom-resource-display", () => "You have " + player.c.colors + " colors<br>Your best colors is " + player.c.colorBest],
+		["custom-resource-display", () => "You have " + player.c.colors + " colors unlocked<br>Your best colors unlocked is " + player.c.colorBest],
 		"blank",
 		["column", [
 			["display-text", "<h2>Multiplier Distribution</h2><br>Click one of the colored buttons at the bottom to select that multiplier color"],
 			["blank", ["5px", "5px"]],
 			"grid",
 		]],
+		"blank",
+		"milestones",
 	],
 	componentStyles: {
 		"column"() { return {"width": "fit-content", "border": "2px solid #ffffff", "border-radius": "20px", "padding": "5px"} },
@@ -444,6 +509,23 @@ addLayer("m", {
 			else if (id < 300) tooltip += "multiplies speed";
 			else if (id < 400) tooltip += "divides cost";
 			return tooltip + " of " + (COLORS[INDEX] ? COLORS[INDEX].name : "N/A");
+		},
+	},
+	milestones: {
+		0: {
+			done() { return player.m.points.gte(2) },
+			requirementDescription: "2 total multiplier",
+			effectDescription: "unlock the bulk buy 5x option for colors",
+		},
+		1: {
+			done() { return player.m.points.gte(10) },
+			requirementDescription: "10 total multiplier",
+			effectDescription: "unlock the upgrades tab",
+		},
+		2: {
+			done() { return player.m.points.gte(64) },
+			requirementDescription: "64 total multiplier",
+			effectDescription: "you gain 100% more multiplier on reset<br>this extra multiplier is assigned randomly",
 		},
 	},
 });
