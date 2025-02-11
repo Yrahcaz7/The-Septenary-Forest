@@ -628,8 +628,8 @@ addLayer("2", {
 		manabar: {
 			direction: RIGHT,
 			width: 500,
-			height: 20,
-			display() { return 'MANA REGEN: ' + format(player[2].manaRegen) + ' | MANA: ' + format(player[2].mana) + ' | MAX MANA: ' + format(player[2].maxMana) },
+			height: 50,
+			display() { return "You have " + format(player[2].mana) + "/" + format(player[2].maxMana) + " mana<br>(" + format(player[2].manaRegen) + "/s)" },
 			fillStyle() { return {"background-color": "#AA55AA" } },
 			borderStyle() { return {"border-color": "#AA55AA"} },
 			progress() { return player[2].mana.div(player[2].maxMana) },
