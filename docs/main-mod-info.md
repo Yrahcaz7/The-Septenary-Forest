@@ -38,7 +38,7 @@ let doNotCallTheseFunctionsEveryTick = ["doReset", "buy", "onPurchase", "blowUpE
 
 - `getStartPoints()`: **optional**. A function that returns a Decimal that is the amount of points the player starts with after a reset. If absent, the player does not start with any points after a reset.
 
-- `canGenPoints()`: **OVERRIDE**. A function returning a boolean for if points should be generated. Use this if you want an upgrade to unlock generating points.
+- `canGenPoints()`: A function returning a boolean for if points should be generated. Use this if you want an upgrade to unlock generating points.
 
 - `getPointGen()`: A function that calculates your points per second. Anything that affects your point gain should go into the calculation here.
 

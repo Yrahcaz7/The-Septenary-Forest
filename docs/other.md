@@ -8,4 +8,4 @@ CSS tip: Every component is automatically given a CSS class with the same name a
 
 ## Temp
 
-`temp`/`tmp` (either works) is a data structure that is a copy of layers (which contains all of the layer data you defined plus default things), but it replaces most functions with the result of calling those functions. e.g. if layer p's `baseAmount` is based on points, `layers.p.baseAmount` is a function that returns `player.points`. The player currently has 54 points, so `temp.p.baseAmount` is 54 (as a Decimal). You can use temp to improve performance.
+`temp`/`tmp` (either works) is a data structure that is a copy of layers (which contains all of the layer data you defined plus default things), but it replaces most functions with the result of calling those functions. E.g. if layer p's `baseAmount` is based on points, `layers.p.baseAmount` is a function that returns `player.points`. If the player currently has 54 points, `temp.p.baseAmount` would be 54 (as a Decimal). You can use temp to improve performance.

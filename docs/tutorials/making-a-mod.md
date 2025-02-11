@@ -12,14 +12,14 @@ One suggestion: When you're testing your mod, you should turn off offline progre
 
 ## Making a layer
 
-Now for the good stuff! Head into layers.js. There will be layers already there; let's delete all but the first one. Let's see what it's doing...
+Now for the good stuff! Head into [layers.js](/js/layers.js). There is a layer already there. Let's see what it's doing...
 
-The most important thing is on the first line, where it says `addLayer('e', {` . This is how you create a new layer. The `e` here becomes the layer id, which is used throughout TMT to refer to the layer. You can change the id, but you will have to replace instances of `e` in the code as well.
+The most important thing is on the first line, where it says `addLayer("t", {` . This is how you create a new layer. The `t` here becomes the layer id, which is used throughout TMT to refer to the layer. You can change the id, but you will have to replace instances of `t` in the code as well.
 
 A layer is basically a big object with lots of different properties that you can set to create features. For fun customization, you can change a few things:
 
 - `name`: Your layer's name!
-- `color`: Sets the color of a lot of things for this layer. (Can be a hex code or the name of a color)
+- `color`: Sets the color of a lot of things for this layer. (Can be a hex code or the name of a color.)
 - `symbol`: The text that appears on this layer's node.
 - `resource`: The name of this layer's main currency.
 
@@ -60,7 +60,7 @@ It's time to explain Decimals. Decimals are a special way of handling numbers ov
 With that knowledge in hand, what we need to do is check if the player has the upgrade, and then boost point gain if so. We can do that by inserting this line between gain being defined and returned:
 
 ```js
-if (hasUpgrade('e', 11)) gain = gain.times(2);
+if (hasUpgrade("t", 11)) gain = gain.times(2);
 ```
 
 Refresh the page again, and it should work! You are gaining 2 points per second!
@@ -83,7 +83,7 @@ Copying things is often the easiest way to do things, so copy upgrade 11 and pas
 Now, in mod.js, under the last line you added, you can apply the effect with:
 
 ```js
-    if (hasUpgrade('e', 12)) gain = gain.times(upgradeEffect('e', 12));
+    if (hasUpgrade("t", 12)) gain = gain.times(upgradeEffect("t", 12));
 ```
 
 Refresh it to see that it works! Now, for one last upgrade, let's make points boost prestige currency gain! Copy the last upgrade, and change the number to 13. Change the title and name, set the cost to 5. (This is balanced to be fast-paced and easy to test). We can reuse the `effectDisplay()`, so we just need to change the effect:
@@ -99,7 +99,7 @@ To implement this effect, we modify `gainMult()`, which returns the multiplier t
 ```js
     gainMult() {
         let mult = newDecimalOne();
-        if (hasUpgrade('e', 13)) mult = mult.times(upgradeEffect('e', 13));
+        if (hasUpgrade("t", 13)) mult = mult.times(upgradeEffect("t", 13));
         return mult;
     },
 ```

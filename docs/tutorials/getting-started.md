@@ -29,7 +29,7 @@ The benefits of using Github:
 
 ### Using your repository
 
-1. Click on "show in explorer/finder" to the right, and then open the index.html file in the folder. The page should open up on your browser. This will let you view and test your project locally!
+1. Click on "show in explorer/finder" to the right, and then open the [index.html file](/index.html) in the folder. The page should open up on your browser. This will let you view and test your project locally!
 
 2. To edit your project, click "open in VSCode" in Github Desktop.
 

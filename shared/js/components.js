@@ -1040,6 +1040,7 @@ function loadVue(mainPage = false) {
 					{{key.description}}<br>
 				</span>
 			</span>
+			` + (mainPage ? `` : `<br><a class="link" href="../index.html">Back to main page</a><br><br>`) + `
 		</div>`),
 	});
 

@@ -2,17 +2,17 @@
 
 Making a game in The Modding Tree mostly involves defining parameters or functions on objects. If you aren't following the [getting started guide](tutorials/getting-started.md), you should start by [setting up your basic mod info](main-mod-info.md) in [mod.js](/js/mod.js). It's important to set a mod id to ensure saving works properly.
 
-Beyond that, the main way to add content is through creating layers. You can add new layers by calling `addLayer(layername, layerdata)`. You can use the layers in [layers.js](/js/layers.js) as examples. You can also use them as references or as bases for your own layers.
+Beyond that, the main way to add content is through creating layers. You can add new layers by calling `addLayer(layername, layerdata)`. You can use the layers in any of the [layers.js](/js/layers.js) files as examples. You can also use them as references or as bases for your own layers.
 
 You can test your mod by opening the [index.html](/index.html) file in your browser.
 
-Most of the time, you won't need to dive deep into the code to create things, but you still can if you really want to, for example to add new Vue components in [components.js](/js/technical/components.js).
+Most of the time, you won't need to dive deep into the code to create things, but you still can if you really want to, for example to [add new Vue components](custom-components.md).
 
-The Modding Tree uses [break\_eternity.js](https://github.com/Patashu/break_eternity.js) to store large values. This means that many numbers are `Decimal` objects, and must be treated differently. For example, you have to use `new Decimal(x)` to create a `Decimal` value instead of a plain number (x can be a number or a string for larger values). You perform operations on them by calling functions. e.g, instead of `x = x + y`, use `x = x.add(y)`. Keep in mind this also applies to comparison operators, which should be replaced with calling the `.gt`, `.gte`, `.lt`, `.lte`, `.eq`, and `.neq` functions. See the [break\_eternity.js docs](https://github.com/Patashu/break_eternity.js/blob/master/README.md) for more details on working with `Decimal` values, or [this list of Decimal functions](https://github.com/Yrahcaz7/The-Primordial-Tree/wiki/Documentation) if you want to go deep.
+The Modding Tree uses [break_eternity.js](https://github.com/Patashu/break_eternity.js) to store large values. This means that many numbers are `Decimal` objects, and must be treated differently. For example, you have to use `new Decimal(x)` to create a `Decimal` value instead of a plain number (x can be a number or a string for larger values). You perform operations on them by calling functions. e.g, instead of `x = x + y`, use `x = x.add(y)`. Keep in mind this also applies to comparison operators, which should be replaced with calling the `.gt`, `.gte`, `.lt`, `.lte`, `.eq`, and `.neq` functions. See the [break_eternity.js docs](https://github.com/Patashu/break_eternity.js/blob/master/README.md) for more details on working with `Decimal` values, or [this list of Decimal functions](https://github.com/Yrahcaz7/The-Primordial-Tree/wiki/Documentation) if you want to go deep.
 
 Almost all values can be either a constant value, or a dynamic value. Dynamic values are defined by putting a function that returns what the value should be at any given time.
 
-All display text can use basic HTML elements (But you can't use most Vue features there).
+All display text can use basic HTML elements (but you can't use most Vue features there).
 
 While reading this documentation, the following key will be used when describing features:
 
