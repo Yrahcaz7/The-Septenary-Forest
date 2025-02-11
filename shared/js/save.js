@@ -162,7 +162,7 @@ function fixData(defaultData, newData) {
 	};
 };
 
-function load() {
+function load(mainPage = false) {
 	let get = localStorage.getItem(getModID());
 	if (get === null || get === undefined) {
 		player = getStartPlayer();
@@ -188,7 +188,7 @@ function load() {
 	updateTemp();
 	updateTemp();
 	updateTabFormats();
-	loadVue();
+	loadVue(mainPage);
 	if (typeof onLoad === "function") onLoad();
 };
 

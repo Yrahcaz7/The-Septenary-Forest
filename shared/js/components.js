@@ -5,7 +5,7 @@ function template(str) {
 	return ("" + str).replace(/[\n\t]/g, "");
 };
 
-function loadVue() {
+function loadVue(mainPage = false) {
 	app = Vue.createApp({
 		data() {return {player, tmp, modInfo, VERSION, formatTime, hardReset, keepGoing, readData, layoutInfo, resizeCanvas, showTab, goBack, OTHER_LAYERS, activePopups, particles, LAYERS}},
 		computed: {
@@ -39,10 +39,10 @@ function loadVue() {
 			}" :style="{'margin-top': !readData(layoutInfo.showTree) && player.tab == 'info-tab' ? '50px' : ''}">
 				<div id="version" onclick="showTab('changelog-tab')" class="overlayThing" style="margin-right: 13px">{{VERSION.withoutName}}</div>
 				<button v-if="((player.navTab == 'none' && (tmp[player.tab].row == 'side' || tmp[player.tab].row == 'otherside' || player[player.tab].prevTab)) || player[player.navTab]?.prevTab)" class="other-back overlayThing" onclick="goBack(player.navTab === 'none' ? player.tab : player.navTab)">&#8592;</button>
-				<img id="optionWheel" class="overlayThing" v-if="player.tab != 'options-tab'" src="../shared/images/options_wheel.png" onclick="showTab('options-tab')">
+				<img id="optionWheel" class="overlayThing" v-if="player.tab != 'options-tab'" src="` + (mainPage ? `` : `../`) + `shared/images/options_wheel.png" onclick="showTab('options-tab')">
 				<div id="info" v-if="player.tab != 'info-tab'" class="overlayThing" onclick="showTab('info-tab')"><br>i</div>
 				<div id="discord" class="overlayThing">
-					<img src="../shared/images/discord.png">
+					<img src="` + (mainPage ? `` : `../`) + `shared/images/discord.png">
 					<ul id="discord-links">
 						<li v-if="modInfo.discordLink"><a class="link" :href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></li>
 						<li><a class="link" href="https://discord.gg/F3xveHV" target="_blank" :style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br></li>
