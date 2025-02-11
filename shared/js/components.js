@@ -100,26 +100,31 @@ function loadVue(mainPage = false) {
 		</div>`),
 	});
 
+	const addNormalComponent = (name, component) => {
+		if (typeof customComponents === "object" && isPlainObject(customComponents) && customComponents[name]) return;
+		app.component(name, component);
+	};
+
 	// data = a function returning the content (actually HTML)
-	app.component('display-text', {
+	addNormalComponent('display-text', {
 		props: ['layer', 'data'],
 		template: template(`<span class="instant" v-html="data"></span>`),
 	});
 
 	// data = a function returning the content (actually HTML)
-	app.component('raw-html', {
+	addNormalComponent('raw-html', {
 		props: ['layer', 'data'],
 		template: template(`<span class="instant" v-html="data"></span>`),
 	});
 
 	// data = a function returning the content (actually HTML)
-	app.component('custom-resource-display', {
+	addNormalComponent('custom-resource-display', {
 		props: ['layer', 'data'],
 		template: template(`<div class="instant" style="margin-top: -13px" v-html="'<br>' + (typeof data === 'function' ? data() : data)"></div>`),
 	});
 
 	// data = optional height in px or [width in px, height in px]
-	app.component('blank', {
+	addNormalComponent('blank', {
 		props: ['layer', 'data'],
 		template: template(`<div class="instant">
 			<div class="instant" v-if="!data" :style="{'width': '8px', 'height': '17px'}"></div>
@@ -129,13 +134,13 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = the URL of the image
-	app.component('display-image', {
+	addNormalComponent('display-image', {
 		props: ['layer', 'data'],
 		template: template(`<img class="instant" :src="data" :alt="data">`),
 	});
 		
 	// data = an array of components to be displayed in a row
-	app.component('row', {
+	addNormalComponent('row', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
 		template: template(`<div class="upgTable instant">
@@ -150,7 +155,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = an array of components to be displayed in a column
-	app.component('column', {
+	addNormalComponent('column', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
 		template: template(`<div class="upgTable instant">
@@ -170,13 +175,13 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = [other layer, tabformat for within proxy]
-	app.component('layer-proxy', {
+	addNormalComponent('layer-proxy', {
 		props: ['layer', 'data'],
 		template: template(`<div><column :layer="data[0]" :data="data[1]"></column></div>`),
 	});
 
 	// data = the id of the infobox
-	app.component('infobox', {
+	addNormalComponent('infobox', {
 		props: ['layer', 'data'],
 		data() {return {tmp, player}},
 		template: template(`<div class="story instant" v-if="tmp[layer].infoboxes && tmp[layer].infoboxes[data] !== undefined && tmp[layer].infoboxes[data].unlocked" :style="[{
@@ -195,19 +200,19 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = width in px, by default fills the full area
-	app.component('h-line', {
+	addNormalComponent('h-line', {
 		props: ['layer', 'data'],
 		template: template(`<hr class="instant" :style="data ? {'width': data} : {}" class="hl">`),
 	});
 
 	// data = height in px, by default is bad
-	app.component('v-line', {
+	addNormalComponent('v-line', {
 		props: ['layer', 'data'],
 		template: template(`<div class="instant" :style="data ? {'height': data} : {}" class="vl"></div>`),
 	});
 
 	// data = array of rows to include, by default is all
-	app.component('challenges', {
+	addNormalComponent('challenges', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
 		template: template(`<div v-if="tmp[layer].challenges" class="upgTable">
@@ -220,7 +225,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = the id of the challenge
-	app.component('challenge', {
+	addNormalComponent('challenge', {
 		props: ['layer', 'data'],
 		data() {return {tmp, options, maxedChallenge, inChallenge, challengeStyle, player, canUseChallenge, startChallenge, challengeButtonText, layers, run, format, modInfo}},
 		template: template(`<div v-if="tmp[layer].challenges && tmp[layer].challenges[data] !== undefined && tmp[layer].challenges[data].unlocked && !(options.hideChallenges && maxedChallenge(layer, data) && !inChallenge(layer, data))" :class="[
@@ -244,7 +249,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = array of rows to include, by default is all
-	app.component('upgrades', {
+	addNormalComponent('upgrades', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
 		template: template(`<div v-if="tmp[layer].upgrades" class="upgTable">
@@ -259,7 +264,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = the id of the upgrade
-	app.component('upgrade', {
+	addNormalComponent('upgrade', {
 		props: ['layer', 'data'],
 		data() {return {tmp, buyUpg, hasUpgrade, canAffordUpgrade, layers, run, formatWhole}},
 		template: template(`<button v-if="tmp[layer].upgrades && tmp[layer].upgrades[data] !== undefined && tmp[layer].upgrades[data].unlocked" :id='"upgrade-" + layer + "-" + data' v-on:click="buyUpg(layer, data)" :class="{
@@ -285,7 +290,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = array of rows to include, by default is all
-	app.component('milestones', {
+	addNormalComponent('milestones', {
 		props: ['layer', 'data'],
 		data() {return {tmp, milestoneShown}},
 		template: template(`<div v-if="tmp[layer].milestones">
@@ -302,7 +307,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = the id of the milestone
-	app.component('milestone', {
+	addNormalComponent('milestone', {
 		props: ['layer', 'data'],
 		data() {return {tmp, milestoneShown, hasMilestone, run, layers}},
 		template: template(`<td v-if="tmp[layer].milestones && tmp[layer].milestones[data] !== undefined && tmp[layer].milestones[data].unlocked && milestoneShown(layer, data)" :style="[tmp[layer].milestones[data].style]" :class="{
@@ -320,13 +325,13 @@ function loadVue(mainPage = false) {
 	});
 
 	// Toggles the boolean value in player[data[0]][data[1]]
-	app.component('toggle', {
+	addNormalComponent('toggle', {
 		props: ['layer', 'data'],
 		data() {return {tmp, toggleAuto, formatOpt, player}},
 		template: template(`<button class="smallUpg can" :style="{'background-color': tmp[data[0]].color}" v-on:click="toggleAuto(data)">{{formatOpt(player[data[0]][data[1]])}}</button>`),
 	});
 
-	app.component('prestige-button', {
+	addNormalComponent('prestige-button', {
 		props: ['layer'],
 		data() {return {tmp, prestigeButtonText, doReset}},
 		template: template(`<button v-if="(tmp[layer].type !== 'none')" :class="{
@@ -341,7 +346,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// Displays the main resource for the layer
-	app.component('main-display', {
+	addNormalComponent('main-display', {
 		props: ['layer', 'data'],
 		data() {return {player, tmp, format, formatWhole, layers, run}},
 		computed: {
@@ -363,7 +368,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// Displays the base resource for the layer, as well as the best and total values for the layer's currency, if tracked
-	app.component('resource-display', {
+	addNormalComponent('resource-display', {
 		props: ['layer'],
 		data() {return {tmp, formatWhole, format, player}},
 		template: template(`<div style="margin-top: -13px">
@@ -376,7 +381,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = array of rows to include, by default is all
-	app.component('buyables', {
+	addNormalComponent('buyables', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
 		template: template(`<div v-if="tmp[layer].buyables" class="upgTable">
@@ -399,7 +404,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = the id of the buyable
-	app.component('buyable', {
+	addNormalComponent('buyable', {
 		props: ['layer', 'data'],
 		data() {return {tmp, player, interval: false, buyBuyable, run, layers, time: 0}},
 		methods: {
@@ -442,7 +447,7 @@ function loadVue(mainPage = false) {
 		</div>`),
 	});
 
-	app.component('respec-button', {
+	addNormalComponent('respec-button', {
 		props: ['layer'],
 		data() {return {tmp, player, respecBuyables}},
 		template: template(`<div v-if="tmp[layer].buyables && tmp[layer].buyables.respec && (tmp[layer].buyables.showRespec === undefined || tmp[layer].buyables.showRespec)">
@@ -455,7 +460,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = array of rows to include, by default is all
-	app.component('clickables', {
+	addNormalComponent('clickables', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
 		template: template(`<div v-if="tmp[layer].clickables" class="upgTable">
@@ -479,7 +484,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = the id of the clickable
-	app.component('clickable', {
+	addNormalComponent('clickable', {
 		props: ['layer', 'data'],
 		data() {return {tmp, interval: false, clickClickable, run, layers, time: 0}},
 		methods: {
@@ -516,7 +521,7 @@ function loadVue(mainPage = false) {
 		</button>`),
 	})
 
-	app.component('master-button', {
+	addNormalComponent('master-button', {
 		props: ['layer'],
 		data() {return {tmp, run, player}},
 		template: template(`<button v-if="tmp[layer].clickables && tmp[layer].clickables.masterButtonPress && (tmp[layer].clickables.showMasterButton === undefined || tmp[layer].clickables.showMasterButton)" v-on:click="run(tmp[layer].clickables.masterButtonPress, tmp[layer].clickables)" :class="{
@@ -527,7 +532,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = array of rows to include, by default is all
-	app.component('grid', {
+	addNormalComponent('grid', {
 		props: ['layer', 'data'],
 		data() {return {tmp, run, layers}},
 		template: template(`<div v-if="tmp[layer].grid" class="upgTable">
@@ -542,7 +547,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = the max width of the grid or [max width, array of rows]
-	app.component('contained-grid', {
+	addNormalComponent('contained-grid', {
 		props: ['layer', 'data'],
 		data() {return {tmp, run, layers}},
 		template: template(`<div v-if="tmp[layer].grid" class="upgTable" :style="{
@@ -562,7 +567,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = the id of the gridable
-	app.component('gridable', {
+	addNormalComponent('gridable', {
 		props: ['layer', 'data'],
 		data() {return {tmp, player, run, layers, gridRun, clickGrid, interval: false, time: 0}},
 		computed: {
@@ -605,7 +610,7 @@ function loadVue(mainPage = false) {
 	})
 
 	// data = id of microtab family
-	app.component('microtabs', {
+	addNormalComponent('microtabs', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
 		computed: {
@@ -621,7 +626,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = id of the bar
-	app.component('bar', {
+	addNormalComponent('bar', {
 		props: ['layer', 'data'],
 		data() {return {tmp, run, layers}},
 		computed: {
@@ -659,7 +664,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = array of rows to include, by default is all
-	app.component('achievements', {
+	addNormalComponent('achievements', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
 		template: template(`<div v-if="tmp[layer].achievements" class="upgTable">
@@ -674,7 +679,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = the id of the achievement
-	app.component('achievement', {
+	addNormalComponent('achievement', {
 		props: ['layer', 'data'],
 		data() {return {tmp, hasAchievement, achievementStyle}},
 		computed: {
@@ -705,7 +710,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = an array with the structure of the tree
-	app.component('tree', {
+	addNormalComponent('tree', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
 		template: template(`<div>
@@ -727,25 +732,25 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = an array with the structure of the tree
-	app.component('upgrade-tree', {
+	addNormalComponent('upgrade-tree', {
 		props: ['layer', 'data'],
 		template: template(`<thing-tree :layer="layer" :data="data" :type="'upgrade'"></thing-tree>`),
 	})
 
 	// data = an array with the structure of the tree
-	app.component('buyable-tree', {
+	addNormalComponent('buyable-tree', {
 		props: ['layer', 'data'],
 		template: template(`<thing-tree :layer="layer" :data="data" :type="'buyable'"></thing-tree>`),
 	})
 
 	// data = an array with the structure of the tree
-	app.component('clickable-tree', {
+	addNormalComponent('clickable-tree', {
 		props: ['layer', 'data'],
 		template: template(`<thing-tree :layer="layer" :data="data" :type="'clickable'"></thing-tree>`),
 	})
 
 	// data = an array with the structure of the tree
-	app.component('thing-tree', {
+	addNormalComponent('thing-tree', {
 		props: ['layer', 'data', 'type'],
 		data() {return {tmp}},
 		template: template(`<div>
@@ -767,14 +772,14 @@ function loadVue(mainPage = false) {
 	});
 
 	// Updates the value in player[layer][data]
-	app.component('text-input', {
+	addNormalComponent('text-input', {
 		props: ['layer', 'data'],
 		data() {return {player, focused, toValue}},
 		template: template(`<input class="instant" :id="'input-' + layer + '-' + data" :value="player[layer][data].toString()" v-on:focus="focused = true" v-on:blur="focused = false" v-on:change="player[layer][data] = toValue(document.getElementById('input-' + layer + '-' + data).value, player[layer][data])">`),
 	});
 
 	// Updates the value in player[layer][data][0]
-	app.component('slider', {
+	addNormalComponent('slider', {
 		props: ['layer', 'data'],
 		data() {return {player}},
 		template: template(`<div class="tooltipBox">
@@ -784,7 +789,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// Updates the value in player[layer][data[0]], the options are an array in data[1]
-	app.component('drop-down', {
+	addNormalComponent('drop-down', {
 		props: ['layer', 'data'],
 		data() {return {player}},
 		template: template(`<select v-model="player[layer][data[0]]">
@@ -793,7 +798,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = the id of the corresponding buyable
-	app.component('sell-one', {
+	addNormalComponent('sell-one', {
 		props: ['layer', 'data'],
 		data() {return {tmp, run, player}},
 		template: template(`<button v-if="tmp[layer].buyables && tmp[layer].buyables[data].sellOne && (tmp[layer].buyables[data].canSellOne === undefined || tmp[layer].buyables[data].canSellOne)" v-on:click="run(tmp[layer].buyables[data].sellOne, tmp[layer].buyables[data])" :class="{
@@ -804,7 +809,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// data = the id of the corresponding buyable
-	app.component('sell-all', {
+	addNormalComponent('sell-all', {
 		props: ['layer', 'data'],
 		data() {return {tmp, run, player}},
 		template: template(`<button v-if="tmp[layer].buyables && tmp[layer].buyables[data].sellAll && (tmp[layer].buyables[data].canSellAll === undefined || tmp[layer].buyables[data].canSellAll)" v-on:click="run(tmp[layer].buyables[data].sellAll, tmp[layer].buyables[data])" :class="{
@@ -816,7 +821,7 @@ function loadVue(mainPage = false) {
 
 	// system components below
 
-	app.component('node-mark', {
+	addNormalComponent('node-mark', {
 		props: {layer: {}, data: {}, offset: {default: 0}, scale: {default: 1}},
 		template: template(`<div v-if='data'>
 			<div v-if='data === true' class='star' :style='{
@@ -834,7 +839,7 @@ function loadVue(mainPage = false) {
 		</div>`),
 	});
 
-	app.component('tab-buttons', {
+	addNormalComponent('tab-buttons', {
 		props: ['layer', 'data', 'name'],
 		data() {return {subtabShouldNotify, subtabResetNotify, tmp, defaultGlow, player, updateTabFormats, needCanvasUpdate}},
 		template: template(`<div class="upgRow">
@@ -861,7 +866,7 @@ function loadVue(mainPage = false) {
 		</div>`),
 	});
 
-	app.component('tree-node', {
+	addNormalComponent('tree-node', {
 		props: ['layer', 'abb', 'size', 'prev'],
 		data() {return {nodeShown, tmp, player, constructNodeStyle}},
 		computed: {
@@ -921,7 +926,7 @@ function loadVue(mainPage = false) {
 		</button>`),
 	});
 
-	app.component('layer-tab', {
+	addNormalComponent('layer-tab', {
 		props: ['layer', 'back', 'spacing', 'embedded'],
 		data() {return {tmp, player, goBack}},
 		template: template(`<div :style="[
@@ -975,8 +980,8 @@ function loadVue(mainPage = false) {
 		</div>`),
 	});
 
-	app.component('overlay-head', {
-		data() {return {player, format, formatTime, modInfo, canGenPoints, tmp, formatSmall, getPointGen}},
+	addNormalComponent('overlay-head', {
+		data() {return {player, format, formatTime, modInfo, canGenPoints, tmp, getPointGen}},
 		computed: {
 			overridePointDisplay() {
 				if (typeof overridePointDisplay == 'function') return overridePointDisplay() || "";
@@ -1004,7 +1009,7 @@ function loadVue(mainPage = false) {
 				<span v-if="canGenPoints()" class="overlayThing">
 					{{tmp.other.oompsMag !== 0 ?
 						format(tmp.other.oomps) + " OOM" + (tmp.other.oompsMag < 0 ? "^OOM" : (tmp.other.oompsMag > 1 ? "^" + tmp.other.oompsMag : "")) + "s"
-						: formatSmall(getPointGen())
+						: format(getPointGen())
 					}}/sec
 				</span>
 			</span>
@@ -1014,7 +1019,7 @@ function loadVue(mainPage = false) {
 		</div>`),
 	});
 
-	app.component('info-tab', {
+	addNormalComponent('info-tab', {
 		data() {return {modInfo, VERSION, TMT_VERSION, showTab, format, formatTime, hotkeys, player, tmp}},
 		computed: {
 			endPoints() {if (typeof endPoints !== "undefined") return endPoints},
@@ -1047,7 +1052,7 @@ function loadVue(mainPage = false) {
 		</div>`),
 	});
 
-	app.component('options-tab', {
+	addNormalComponent('options-tab', {
 		data() {return {optionGrid, toggleOpt}},
 		template: (() => {
 			let template = `<table><tbody>`;
@@ -1068,12 +1073,12 @@ function loadVue(mainPage = false) {
 		})(),
 	});
 
-	app.component('tooltip', {
+	addNormalComponent('tooltip', {
 		props: ['text'],
 		template: template(`<div class="tooltip" v-html="text"></div>`),
 	});
 
-	app.component('particle', {
+	addNormalComponent('particle', {
 		props: ['data', 'index'],
 		data() {return {constructParticleStyle, run}},
 		template: template(`<div>
@@ -1091,7 +1096,7 @@ function loadVue(mainPage = false) {
 		</div>`),
 	});
 
-	app.component('bg', {
+	addNormalComponent('bg', {
 		props: ['layer'],
 		data() {return {tmp, player}},
 		template: template(`<div class="bg" :style="[
@@ -1105,7 +1110,7 @@ function loadVue(mainPage = false) {
 	});
 
 	// add custom components
-	if (typeof customComponents === "object" && !Array.isArray(customComponents)) {
+	if (typeof customComponents === "object" && isPlainObject(customComponents)) {
 		for (const name in customComponents) {
 			if (customComponents.hasOwnProperty(name)) {
 				app.component(name, customComponents[name]);

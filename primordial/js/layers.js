@@ -1202,7 +1202,7 @@ addLayer('q', {
 			display() {
 				let text = '';
 				if (options.nerdMode) text += '<br>formula: (100^x)/???';
-				return 'increases deciphering based on the amount of this upgrade bought. Becomes less effective based on your ' + randomStr(9) + '.<br>Currently: +' + formatSmall(buyableEffect(this.layer, this.id)) + '%' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' quarks<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + formatWhole(this.purchaseLimit());
+				return 'increases deciphering based on the amount of this upgrade bought. Becomes less effective based on your ' + randomStr(9) + '.<br>Currently: +' + format(buyableEffect(this.layer, this.id)) + '%' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' quarks<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + formatWhole(this.purchaseLimit());
 			},
 			unlocked() { return hasUpgrade('q', 61) },
 		},
@@ -1225,7 +1225,7 @@ addLayer('q', {
 			display() {
 				let text = '';
 				if (options.nerdMode) text += '<br>formula: ((x+1)^0.1)(10^y)';
-				return 'multiplies atom gain based on your insight and the amount of this upgrade bought.<br>Currently: ' + formatSmall(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' insight<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + formatWhole(this.purchaseLimit);
+				return 'multiplies atom gain based on your insight and the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' insight<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			unlocked() { return hasUpgrade('q', 61) },
 		},
@@ -1242,7 +1242,7 @@ addLayer('q', {
 			display() {
 				let text = '';
 				if (options.nerdMode) text += '<br>formula: 10^x';
-				return 'multiplies deciphering based on the amount of this upgrade bought.<br>Currently: ' + formatSmall(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + formatWhole(this.purchaseLimit);
+				return 'multiplies deciphering based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' essence<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			unlocked() { return hasUpgrade('q', 61) },
 		},
@@ -1258,7 +1258,7 @@ addLayer('q', {
 			display() {
 				let text = '';
 				if (options.nerdMode) text += '<br>formula: (1.25^x)+(x^2.15)';
-				return 'multiplies insight gain based on the amount of this upgrade bought.<br>Currently: ' + formatSmall(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' insight<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + formatWhole(this.purchaseLimit);
+				return 'multiplies insight gain based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' insight<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			unlocked() { return hasMilestone('ch', 11) && hasUpgrade('q', 61) },
 		},
@@ -5129,7 +5129,7 @@ addLayer('ei', {
 		if (hasChallenge('ei', 12)) eff = eff.pow(1.075);
 		return eff;
 	},
-	effectDescription() { return 'which generates <h2 class="layer-ei">' + formatSmall(tmp.ei.effect) + '</h2> evil power per second' },
+	effectDescription() { return 'which generates <h2 class="layer-ei">' + format(tmp.ei.effect) + '</h2> evil power per second' },
 	doReset(resettingLayer) {
 		if (hasMilestone('cl', 3) && resettingLayer == 'cl') return;
 		let keep = ['auto_upgrades', 'auto_prestige'];

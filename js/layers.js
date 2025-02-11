@@ -1,6 +1,7 @@
 const trees = [
 	["primordial", "The Primordial Tree"],
 	["realm", "Realm Creator"],
+	["color", "Color Factory"],
 ];
 
 addLayer("t", {

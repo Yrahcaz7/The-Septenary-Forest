@@ -35,7 +35,7 @@ const winText = () => {
 
 // The amount of points the player starts with after a reset.
 function getStartPoints() {
-    return new Decimal(modInfo.initialStartPoints)
+	return new Decimal(modInfo.initialStartPoints)
 };
 
 // determines if points can be generated

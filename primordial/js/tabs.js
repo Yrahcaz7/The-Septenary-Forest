@@ -24,7 +24,7 @@ function getRawTabContent(layer, name = "") {
 		content.push("upgrades");
 	} else if (layer == "q") {
 		if (name == "The Decipherer") {
-			content.push(["display-text", 'Your ' + randomStr(9) + ' is currently <h2 class="layer-q">' + formatSmall(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + '</h2> insight<br><br>Deciphered rate decays over time with a decay factor of ' + (hasUpgrade('q', 65) ? 0.1 : 0.001)]);
+			content.push(["display-text", 'Your ' + randomStr(9) + ' is currently <h2 class="layer-q">' + format(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + '</h2> insight<br><br>Deciphered rate decays over time with a decay factor of ' + (hasUpgrade('q', 65) ? 0.1 : 0.001)]);
 			content.push("blank");
 			content.push("buyables");
 			content.push("blank");
@@ -135,7 +135,7 @@ function getRawTabContent(layer, name = "") {
 		content.push("buyables");
 		content.push("blank");
 	} else if (layer == "ei") {
-		content.push(["display-text", 'You have <h2 class="layer-ei">' + formatSmall(player.ei.power) + '</h2> evil power']);
+		content.push(["display-text", 'You have <h2 class="layer-ei">' + format(player.ei.power) + '</h2> evil power']);
 		content.push("blank");
 		if (name == "Gate of Evil") {
 			content.push("challenges");
