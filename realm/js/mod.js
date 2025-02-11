@@ -142,7 +142,7 @@ function addedPlayerData() { return {
 
 const displayThings = [];
 
-const endPoints = new Decimal(Infinity);
+const endPoints = new Decimal(1e15);
 
 function update(diff) {
 	player.best = player.best.max(player.points);

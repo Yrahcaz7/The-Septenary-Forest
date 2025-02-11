@@ -155,8 +155,8 @@ addLayer("1", {
 		// fix bulk buy
 		if (getClickableState("1", 21) < 1 || typeof getClickableState("1", 21) != "number") {
 			setClickableState("1", 21, 1);
-		} else if (getClickableState("1", 21) > 10) {
-			setClickableState("1", 21, 10);
+		} else if (getClickableState("1", 21) > 100) {
+			setClickableState("1", 21, 100);
 		};
 	},
 	tabFormat: [
@@ -244,6 +244,8 @@ addLayer("1", {
 			onClick() {
 				if (getClickableState("1", 21) == 1) {
 					setClickableState("1", 21, 10);
+				} else if (getClickableState("1", 21) == 10) {
+					setClickableState("1", 21, 100);
 				} else {
 					setClickableState("1", 21, 1);
 				};
