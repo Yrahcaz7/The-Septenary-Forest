@@ -69,6 +69,14 @@ function getColorBulk() {
 	return 1;
 };
 
+function getColorSpeed(index) {
+	let speed = newDecimalOne();
+	speed = speed.div(COLORS[index].time);
+	const MULTNUM = 202 + index;
+	if (getGridData("m", MULTNUM)) speed = speed.mul(getGridData("m", MULTNUM));
+	return speed;
+};
+
 function getColorCost(index) {
 	const BUYNUM = (index + 1) * 10 + 1;
 	const AMOUNT = getBuyableAmount("c", BUYNUM);
@@ -124,7 +132,7 @@ function getColorBars() {
 			width: 300,
 			height: 50,
 			progress() { return player.c.time[NAME] || 0 },
-			display() { if (getBuyableAmount("c", BUYNUM).gt(0) && player.c.earnings[NAME]) return "coins/cycle: " + illionFormat(player.c.earnings[NAME]) },
+			display() { if (getBuyableAmount("c", BUYNUM).gt(0) && player.c.earnings[NAME]) return "coins/cycle: " + illionFormat(player.c.earnings[NAME]) + "<br>(" + illionFormat(player.c.earnings[NAME].mul(getColorSpeed(index))) + "/sec)" },
 			fillStyle: {"background-color": HEX},
 			borderStyle: {"border-color": HEX},
 			style: {"color": (COLORS[index].dark ? "#999999" : "#ffffff")},
@@ -137,12 +145,9 @@ function getColorBars() {
 			progress() {
 				const COST = getColorCost(index);
 				if (COST.eq(0)) return newDecimalOne();
-				else return player.points.div(COST);
+				return player.points.div(COST);
 			},
-			display() {
-				if (this.progress().gte(1)) return illionFormat(100) + "%";
-				else return illionFormat(this.progress().mul(100)) + "%";
-			},
+			display() { return illionFormat(this.progress().min(1).mul(100)) + "%" },
 			fillStyle: {"background-color": HEX},
 			borderStyle: {"border-color": HEX},
 			style: {"color": (COLORS[index].dark ? "#999999" : "#ffffff")},
@@ -163,9 +168,7 @@ function getColorBars() {
 				else goal = 250;
 				return AMOUNT.div(goal);
 			},
-			display() {
-				return "<h1 style='font-family: Flavors'>" + formatWhole(getBuyableAmount("c", BUYNUM));
-			},
+			display() { return "<h1 style='font-family: Flavors'>" + formatWhole(getBuyableAmount("c", BUYNUM)) },
 			fillStyle: {"background-color": HEX},
 			borderStyle: {"border-color": HEX},
 			style: {"color": (COLORS[index].dark ? "#999999" : "#ffffff"), "border-radius": "50%"},
@@ -207,6 +210,15 @@ function getColorBuyables() {
 		};
 	};
 	return buyables;
+};
+
+function getAverageCoinGain() {
+	let gain = newDecimalZero();
+	for (let index = 0; index < player.c.colors; index++) {
+		const NAME = COLORS[index].name;
+		if (player.c.earnings[NAME]) gain = gain.add(player.c.earnings[NAME].mul(getColorSpeed(index)));
+	};
+	return gain;
 };
 
 addLayer("c", {
@@ -274,10 +286,8 @@ addLayer("c", {
 		// add time
 		for (let index = 0; index < player.c.colors; index++) {
 			const NAME = COLORS[index].name;
-			const MULTNUM = 202 + index;
-			let speed = new Decimal(diff);
-			if (getGridData("m", MULTNUM)) speed = speed.mul(getGridData("m", MULTNUM));
-			player.c.time[NAME] = player.c.time[NAME].add(speed.div(COLORS[index].time));
+			let speed = getColorSpeed(index).mul(diff);
+			player.c.time[NAME] = player.c.time[NAME].add(speed);
 		};
 	},
 	tabFormat: {
