@@ -22,12 +22,6 @@
 	animation: 6s linear infinite rainbowfade, 6s linear infinite rainbowglow;
 }
 
-.rainbowfade-text {
-	background: transparent;
-	color: white;
-	animation: 6s linear infinite rainbowfade, 6s linear -3s infinite rainbowglow;
-}
-
 @keyframes rainbowline {
 	0% {background-position: 0%}
 	100% {background-position: 100%}

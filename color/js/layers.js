@@ -53,6 +53,10 @@ const COLORS = [{
 	time: 384,
 }]; // future colors: blue, violet, fuchsia, magenta
 
+const COLOR_MILESTONES = [10, 25, 50, 100, 150, 200, 250];
+
+const COLOR_MILESTONE_MULT = [2.5, 5, 10, 50, 200, 200, 200];
+
 function registerColorCost(index, bulk) {
 	const BUYNUM = (index + 1) * 10 + 1;
 	const AMOUNT = getBuyableAmount("c", BUYNUM);
@@ -159,14 +163,10 @@ function getColorBars() {
 			height: 60,
 			progress() {
 				const AMOUNT = getBuyableAmount("c", BUYNUM);
-				if (AMOUNT.lt(10)) goal = 10;
-				else if (AMOUNT.lt(25)) goal = 25;
-				else if (AMOUNT.lt(50)) goal = 50;
-				else if (AMOUNT.lt(100)) goal = 100;
-				else if (AMOUNT.lt(150)) goal = 150;
-				else if (AMOUNT.lt(200)) goal = 200;
-				else goal = 250;
-				return AMOUNT.div(goal);
+				for (let index = 0; index < COLOR_MILESTONES.length; index++) {
+					if (AMOUNT.lt(COLOR_MILESTONES[index])) return AMOUNT.div(COLOR_MILESTONES[index]);
+				};
+				return AMOUNT.div(COLOR_MILESTONES[COLOR_MILESTONES.length - 1]);
 			},
 			display() { return "<h1 style='font-family: Flavors'>" + formatWhole(getBuyableAmount("c", BUYNUM)) },
 			fillStyle: {"background-color": HEX},
@@ -263,13 +263,9 @@ addLayer("c", {
 			const BUYNUM = (index + 1) * 10 + 1;
 			const MULTNUM = 102 + index;
 			let earnings = getBuyableAmount("c", BUYNUM).mul(COLORS[index].earnings);
-			if (getBuyableAmount("c", BUYNUM).gte(10)) earnings = earnings.mul(2.5);
-			if (getBuyableAmount("c", BUYNUM).gte(25)) earnings = earnings.mul(5);
-			if (getBuyableAmount("c", BUYNUM).gte(50)) earnings = earnings.mul(10);
-			if (getBuyableAmount("c", BUYNUM).gte(100)) earnings = earnings.mul(50);
-			if (getBuyableAmount("c", BUYNUM).gte(150)) earnings = earnings.mul(200);
-			if (getBuyableAmount("c", BUYNUM).gte(200)) earnings = earnings.mul(200);
-			if (getBuyableAmount("c", BUYNUM).gte(250)) earnings = earnings.mul(200);
+			for (let msIndex = 0; msIndex < COLOR_MILESTONES.length; msIndex++) {
+				if (getBuyableAmount("c", BUYNUM).gte(COLOR_MILESTONES[msIndex])) earnings = earnings.mul(COLOR_MILESTONE_MULT[msIndex]);
+			};
 			if (getGridData("m", MULTNUM)) earnings = earnings.mul(getGridData("m", MULTNUM));
 			player.c.earnings[NAME] = earnings;
 		};
@@ -293,7 +289,6 @@ addLayer("c", {
 	tabFormat: {
 		"Colors": {
 			content: getColorTabContent,
-			buttonClass: "rainbowvalue-text",
 		},
 		"Upgrades": {
 			content: [
@@ -301,7 +296,6 @@ addLayer("c", {
 				"blank",
 				"upgrades",
 			],
-			buttonClass: 'rainbowvalue-text',
 		},
 	},
 	componentStyles: {
