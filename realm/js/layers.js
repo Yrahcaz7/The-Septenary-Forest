@@ -129,7 +129,7 @@ addLayer("1", {
 		player.G.total = new Decimal(player.G.total.add(pointGain));
 		player.R.total = new Decimal(player.R.total.add(pointGain));
 		player.T.total = new Decimal(player.T.total.add(pointGain));
-		// FC
+		// faction coins
 		let FCchance = new Decimal(2.5);
 		if (getBuyableAmount('1', 13).gt(0)) FCchance = FCchance.add(getBuyableAmount('1', 13).mul(buyableEffect('1', 13).div(10)));
 		if (hasUpgrade('3', 1033)) FCchance = FCchance.add(upgradeEffect('3', 1033).mul(3));
@@ -263,8 +263,9 @@ addLayer("1", {
 				if (hasUpgrade('1', 121)) eff = eff.add(0.4);
 				if (hasUpgrade('1', 131)) eff = eff.add(0.65);
 				if (hasUpgrade('1', 141)) eff = eff.add(1);
+				if (hasUpgrade('3', 1083)) eff = eff.add(upgradeEffect('3', 1083).mul(1));
 				if (hasUpgrade('3', 1031)) eff = eff.mul(upgradeEffect('3', 1031));
-				if (hasUpgrade('3', 1031)) eff = eff.mul(upgradeEffect('3', 1032));
+				if (hasUpgrade('3', 1032)) eff = eff.mul(upgradeEffect('3', 1032));
 				return eff;
 			},
 			display() {
@@ -286,8 +287,9 @@ addLayer("1", {
 				if (hasUpgrade('1', 102)) eff = eff.add(1.25);
 				if (hasUpgrade('1', 112)) eff = eff.add(2);
 				if (hasUpgrade('1', 122)) eff = eff.add(3.5);
+				if (hasUpgrade('3', 1083)) eff = eff.add(upgradeEffect('3', 1083).mul(2));
 				if (hasUpgrade('3', 1031)) eff = eff.mul(upgradeEffect('3', 1031));
-				if (hasUpgrade('3', 1031)) eff = eff.mul(upgradeEffect('3', 1032));
+				if (hasUpgrade('3', 1032)) eff = eff.mul(upgradeEffect('3', 1032));
 				return eff;
 			},
 			display() { return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount('1', this.id) + "\n\nEffect: +" + format(buyableEffect('1', this.id)) + " to passive production\n\nTotal Effect: +" + format(getBuyableAmount('1', this.id) * buyableEffect('1', this.id)) },
@@ -304,8 +306,9 @@ addLayer("1", {
 				let eff = new Decimal(2.5);
 				if (hasUpgrade('1', 93)) eff = eff.add(0.5);
 				if (hasUpgrade('1', 103)) eff = eff.add(2);
+				if (hasUpgrade('3', 1083)) eff = eff.add(upgradeEffect('3', 1083).mul(4));
 				if (hasUpgrade('3', 1031)) eff = eff.mul(upgradeEffect('3', 1031));
-				if (hasUpgrade('3', 1031)) eff = eff.mul(upgradeEffect('3', 1032));
+				if (hasUpgrade('3', 1032)) eff = eff.mul(upgradeEffect('3', 1032));
 				return eff;
 			},
 			display() {
@@ -409,19 +412,19 @@ addLayer("1", {
 		2011: {
 			fullDisplay() { return '<h3>Gem Influence</h3><br>increase faction coin find chance based on your gems<br><br>Effect: +' + format(upgradeEffect('1', this.id)) + '%<br><br>Req: 25 1st creations'},
 			effect() { return player[1].points.add(1).pow(0.5).sub(1) },
-			canAfford() {
-				if (getBuyableAmount('1', 11).gte(25)) return true;
-				else return false;
-			},
+			canAfford() { return getBuyableAmount('1', 11).gte(25) },
 			unlocked() { return player[1].points.gte(1) },
 		},
 		2012: {
 			fullDisplay() { return '<h3>Gem Displays</h3><br>increase the effect of <b>Gem Influence</b> based on your gems<br><br>Effect: x' + format(upgradeEffect('1', this.id)) + '<br><br>Req: 25 2nd creations'},
 			effect() { return player[1].points.add(1).pow(0.2) },
-			canAfford() {
-				if (getBuyableAmount('1', 12).gte(25)) return true;
-				else return false;
-			},
+			canAfford() { return getBuyableAmount('1', 12).gte(25) },
+			unlocked() { return player[1].points.gte(1) },
+		},
+		2013: {
+			fullDisplay() { return '<h3>Gem Displays</h3><br>increase max mana and mana regen based on your gems<br><br>Effect: x' + format(upgradeEffect('1', this.id)) + '<br><br>Req: 25 3rd creations'},
+			effect() { return player[1].points.add(1).log10().add(1).pow(0.5) },
+			canAfford() { return getBuyableAmount('1', 13).gte(25) },
 			unlocked() { return player[1].points.gte(1) },
 		},
 	},
@@ -480,6 +483,7 @@ addLayer("2", {
 		if (hasUpgrade('3', 1152)) taxEff = taxEff.mul(2);
 		if (hasUpgrade('3', 1152)) callBoost = callBoost.mul(2);
 		if (hasUpgrade('3', 1152)) sideSpellBoost = sideSpellBoost.mul(2);
+		if (hasUpgrade('3', 1082)) sideSpellBoost = sideSpellBoost.mul(upgradeEffect('3', 1082));
 		// return spell boost effects
 		player[2].taxEff = taxEff;
 		player[2].callBoost = callBoost;
@@ -494,7 +498,9 @@ addLayer("2", {
 		player[2].sideSpellCost = sideSpellCost;
 		// mana regen buffs
 		if (hasUpgrade('2', 22) && upgradeEffect('2', 22).gt(0)) manaRegen = manaRegen.add(upgradeEffect('2', 22));
+		if (hasUpgrade('2', 24) && upgradeEffect('2', 24).gt(0)) manaRegen = manaRegen.add(upgradeEffect('2', 24));
 		if (hasUpgrade('3', 1052)) manaRegen = manaRegen.mul(upgradeEffect('3', 1052));
+		if (hasUpgrade('1', 2013)) manaRegen = manaRegen.mul(upgradeEffect('1', 2013));
 		player[2].manaRegen = manaRegen;
 		const diffMana = player[2].manaRegen.mul(diff);
 		// max mana buffs
@@ -502,6 +508,7 @@ addLayer("2", {
 		if (hasUpgrade('3', 1151)) maxMana = maxMana.mul(upgradeEffect('3', 1151));
 		if (hasUpgrade('2', 21)) maxMana = maxMana.mul(upgradeEffect('2', 21));
 		if (hasUpgrade('2', 23)) maxMana = maxMana.mul(upgradeEffect('2', 23));
+		if (hasUpgrade('1', 2013)) maxMana = maxMana.mul(upgradeEffect('1', 2013));
 		player[2].maxMana = maxMana;
 		// increase mana
 		if (player[2].mana.add(diffMana).gte(player[2].maxMana))
@@ -532,9 +539,15 @@ addLayer("2", {
 		if (player[2].callTime.lte(0)) setClickableState('2', 12) == "OFF", player[2].callTime = newDecimalZero();
 		if (player[2].sideSpellTime.lte(0)) setClickableState('2', 13) == "OFF", player[2].sideSpellTime = newDecimalZero();
 		// autocasting
-		if (getClickableState('2', 102) == "colorless - ON" && player[2].callTime.lte(0) && player[2].mana.gte(player[2].callCost)) callCast();
-		if (getClickableState('2', 103) == "colorless - ON" && player[2].sideSpellTime.lte(0) && player[2].mana.gte(player[2].sideSpellCost)) sideSpellCast();
-
+		if (getClickableState('2', 101) == "secondary - ON" && player[2].callTime.gt(0) && player[2].sideSpellTime.gt(0) && player[2].mana.gte(player[2].taxCost)) {
+			taxCast();
+		};
+		if (getClickableState('2', 102) == "primary - ON" && player[2].callTime.lte(0) && player[2].mana.gte(player[2].callCost)) {
+			callCast();
+		};
+		if (getClickableState('2', 103) == "primary - ON" && player[2].sideSpellTime.lte(0) && player[2].mana.gte(player[2].sideSpellCost)) {
+			sideSpellCast();
+		};
 	},
 	tabFormat: [
 		["display-text", "<h2>Spell Casting</h2>"],
@@ -591,37 +604,42 @@ addLayer("2", {
 		},
 		101: {
 			title: "Autocasting",
-			display() { return 'LOCKED - need better autocasting' },
-			canClick() { return false },
+			display() {
+				if (hasUpgrade("2", 102)) return getClickableState(this.layer, this.id) || "OFF";
+				return "LOCKED - need better autocasting";
+			},
+			canClick() { return hasUpgrade("2", 102) },
+			onClick() {
+				if (getClickableState(this.layer, this.id) == "secondary - ON") setClickableState(this.layer, this.id, "OFF");
+				else setClickableState(this.layer, this.id, "secondary - ON");
+			},
 			style: {'min-height': '50px', 'border-radius': '25px'},
-			unlocked() { return hasUpgrade('2', 101) },
+			unlocked() { return hasUpgrade("2", 101) },
 		},
 		102: {
 			title: "Autocasting",
-			display() { return '<span style="color: #000000">' + getClickableState('2', this.id) },
+			display() { return getClickableState(this.layer, this.id) || "OFF" },
 			canClick() { return true },
 			onClick() {
-				if (getClickableState('2', this.id) == "colorless - ON") setClickableState('2', this.id, "colorless - OFF");
-				else setClickableState('2', this.id, "colorless - ON");
+				if (getClickableState(this.layer, this.id) == "primary - ON") setClickableState(this.layer, this.id, "OFF");
+				else setClickableState(this.layer, this.id, "primary - ON");
 			},
 			style: {'min-height': '50px', 'border-radius': '25px'},
-			unlocked() { return hasUpgrade('2', 101) },
+			unlocked() { return hasUpgrade("2", 101) },
 		},
 		103: {
 			title() {
 				if (hasChosenSide()) return "Autocasting";
 				return "CHOOSE A SIDE TO UNLOCK";
 			},
-			display() {
-				if (hasChosenSide()) return getClickableState('2', this.id);
-			},
+			display() { if (hasChosenSide()) return getClickableState(this.layer, this.id) || "OFF" },
 			canClick() { return hasChosenSide() },
 			onClick() {
-				if (getClickableState('2', this.id) == "colorless - ON") setClickableState('2', this.id, "colorless - OFF");
-				else setClickableState('2', this.id, "colorless - ON");
+				if (getClickableState(this.layer, this.id) == "primary - ON") setClickableState(this.layer, this.id, "OFF");
+				else setClickableState(this.layer, this.id, "primary - ON");
 			},
 			style: {'min-height': '50px', 'border-radius': '25px'},
-			unlocked() { return hasUpgrade('2', 101) },
+			unlocked() { return hasUpgrade("2", 101) },
 		},
 	},
 	bars: {
@@ -637,9 +655,7 @@ addLayer("2", {
 	},
 	upgrades: {
 		11: {
-			canAfford() {
-				return player[2].mana.gte(player[2].maxMana);
-			},
+			canAfford() { return player[2].mana.gte(player[2].maxMana) },
 		},
 		21: {
 			fullDisplay() { return '<h3>Mana Cup</h3><br>increase max mana based on your mana<br><br>Effect: x' + format(upgradeEffect('2', this.id)) + '<br><br>Req: 500 mana generated<br><br>Cost: 1,500 coins'},
@@ -647,9 +663,7 @@ addLayer("2", {
 			cost: 1500,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
-			canAfford() {
-				return player[2].G.manaTotal.gte(500);
-			},
+			canAfford() { return player[2].G.manaTotal.gte(500) },
 		},
 		22: {
 			fullDisplay() { return '<h3>Mana Sense</h3><br>increase mana regen based on your mana<br><br>Effect: +' + format(upgradeEffect('2', this.id)) + '<br><br>Req: 1,500 mana generated<br><br>Cost: 5,000 coins'},
@@ -657,9 +671,7 @@ addLayer("2", {
 			cost: 5000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
-			canAfford() {
-				return player[2].G.manaTotal.gte(1500);
-			},
+			canAfford() { return player[2].G.manaTotal.gte(1500) },
 			unlocked() { return hasUpgrade("2", 21) },
 		},
 		23: {
@@ -668,19 +680,28 @@ addLayer("2", {
 			cost: 25000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
-			canAfford() {
-				return player[2].G.manaTotal.gte(4500);
-			},
+			canAfford() { return player[2].G.manaTotal.gte(4500) },
 			unlocked() { return hasUpgrade("2", 22) },
 		},
+		24: {
+			fullDisplay() { return '<h3>Mana Sight</h3><br>increase mana regen based on your creations<br><br>Effect: +' + format(upgradeEffect('2', this.id)) + '<br><br>Req: 15,000 mana generated<br><br>Cost: 125,000 coins'},
+			effect() { return player[1].G.bestCreations.add(1).pow(0.225) },
+			cost: 125000,
+			currencyInternalName: "points",
+			currencyLocation() { return player },
+			canAfford() { return player[2].G.manaTotal.gte(15000) },
+			unlocked() { return hasUpgrade("2", 23) },
+		},
 		101: {
-			fullDisplay() { return '<h3>Colorless Autocasting</h3><br>unlock autocasting<br><br>Req: 10,000 total mana generated<br><br>Cost: 333 mana'},
-			canAfford() {
-				return player[2].mana.gte(333) && player[2].R.manaTotal.gte(10000);
-			},
-			pay() {
-				player[2].mana = player[2].mana.sub(333);
-			},
+			fullDisplay() { return '<h3>Primary Autocasting</h3><br>unlock autocasting<br><br>Req: 10,000 total mana generated<br><br>Cost: 333 mana'},
+			canAfford() { return player[2].mana.gte(333) && player[2].R.manaTotal.gte(10000) },
+			pay() { player[2].mana = player[2].mana.sub(333) },
+		},
+		102: {
+			fullDisplay() { return '<h3>Secondary Autocasting</h3><br>unlock tax collection autocasting<br><br>Req: 100,000 total mana generated<br><br>Cost: 3,333 mana'},
+			canAfford() { return player[2].mana.gte(3333) && player[2].R.manaTotal.gte(100000) },
+			pay() { player[2].mana = player[2].mana.sub(3333) },
+			unlocked() { return hasUpgrade("2", 101) },
 		},
 	},
 });
@@ -1027,6 +1048,39 @@ addLayer("3", {
 			currencyLocation() { return player },
 			style: {'color': '#8800FF'},
 			unlocked() { return hasUpgrade('3', 71) },
+		},
+		// demon faction
+		1081: {
+			fullDisplay() { return "<h3>Demonic Prestige</h3><br>increase passive production based on your creation tiers<br><br>Effect: x" + format(upgradeEffect(this.layer, this.id)) + "<br><br>Cost: 500 coins"},
+			effect() { return player[1].upgrades.length / 5 + 1 },
+			cost: 500,
+			currencyInternalName: "points",
+			currencyLocation() { return player },
+			style: {"color": "#880000"},
+			unlocked() { return hasUpgrade("3", 81) },
+		},
+		1082: {
+			fullDisplay() { return "<h3>Demonic Blood</h3><br>increase blood frenzy effect based on your creations (higher numbered ones count more)<br><br>Effect: x" + format(upgradeEffect(this.layer, this.id)) + "<br><br>Cost: 5,000 coins"},
+			effect() {
+				let amt = getBuyableAmount('1', 11);
+				amt = amt.add(getBuyableAmount('1', 12).mul(5));
+				amt = amt.add(getBuyableAmount('1', 13).mul(25));
+				return amt.div(10).add(1).pow(0.1);
+			},
+			cost: 5000,
+			currencyInternalName: "points",
+			currencyLocation() { return player },
+			style: {"color": "#880000"},
+			unlocked() { return hasUpgrade("3", 81) },
+		},
+		1083: {
+			fullDisplay() { return "<h3>Polished Rage</h3><br>increase all creation's first base effects based on their number and your gems<br><br>Effect: +(" + format(upgradeEffect(this.layer, this.id)) + " * 2^num)<br><br>Cost: 50,000 coins"},
+			effect() { return player[1].points.add(1).pow(0.1).sub(1) },
+			cost: 50000,
+			currencyInternalName: "points",
+			currencyLocation() { return player },
+			style: {"color": "#880000"},
+			unlocked() { return hasUpgrade("3", 81) },
 		},
 	},
 });

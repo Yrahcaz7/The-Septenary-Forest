@@ -11,19 +11,20 @@ const modInfo = {
 const VERSION = {
 	num: "0.4",
 	name: "Super Beta",
+	beta: "2",
 };
 
 const changelog = `<h1>Changelog:</h1><br>
 	<br><h3>v0.4 - Super Beta</h3><br>
 		- Added 2 new creation tiers.<br>	
-		- Added 2 gem power upgrades.<br>
-		- Added 1 autocating upgrade.<br>
-		- Added 2 autocasters.<br>
+		- Added 3 gem power upgrades.<br>
+		- Added 2 mana upgrades.<br>
+		- Added 2 autocating upgrades.<br>
 		- Added 6 elf upgrades.<br>
 		- Added 6 angel upgrades.<br>
 		- Added 3 demon upgrades.<br>
-		- Added relevant mana stats to casting menu.<br>
-		- Minor fixes.<br>
+		- Added even more stats to the stat menu.<br>
+		- Various fixes.<br>
 	<br><h3>v0.3 - Spells Beta</h3><br>
 		- Added 5 new creation tiers.<br>
 		- Added casting, mana, and spells.<br>
@@ -107,6 +108,7 @@ function getPointGen() {
 	if (hasUpgrade('3', 1071)) gain = gain.mul(upgradeEffect('3', 1071));
 	if (hasUpgrade('3', 1072)) gain = gain.mul(upgradeEffect('3', 1072));
 	if (hasUpgrade('3', 1073)) gain = gain.mul(upgradeEffect('3', 1073));
+	if (hasUpgrade('3', 1081)) gain = gain.mul(upgradeEffect('3', 1081));
 	gain = gain.mul(tmp[1].effect);
 	if (getClickableState('2', 12) == "ON") gain = gain.mul(clickableEffect('2', 12));
 	if (hasUpgrade('3', 21) && getClickableState('2', 13) == "ON") gain = gain.mul(clickableEffect('2', 13));
