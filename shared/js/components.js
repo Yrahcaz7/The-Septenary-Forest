@@ -1015,7 +1015,10 @@ function loadVue(mainPage = false) {
 	});
 
 	app.component('info-tab', {
-		data() {return {modInfo, VERSION, TMT_VERSION, showTab, endPoints, format, formatTime, hotkeys, player, tmp}},
+		data() {return {modInfo, VERSION, TMT_VERSION, showTab, format, formatTime, hotkeys, player, tmp}},
+		computed: {
+			endPoints() {if (typeof endPoints !== "undefined") return endPoints},
+		},
 		template: template(`<div>
 			<h2>{{modInfo.name}}</h2><br>
 			<h3>{{VERSION.withName}}</h3><br>
@@ -1029,9 +1032,9 @@ function loadVue(mainPage = false) {
 				<a class="link" :href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br><br>
 			</span>
 			<a class="link" href="https://discord.gg/F3xveHV" target="_blank" :style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br><br>
-			<a class="link" href="https://discord.gg/wwQfgPa" target="_blank" style="font-size: 16px">Main Prestige Tree server</a><br><br>
+			<a class="link" href="https://discord.gg/wwQfgPa" target="_blank" style="font-size: 16px">Main Prestige Tree server</a><br>
 			<div v-if="endPoints !== undefined">
-				Current Endgame: {{format(endPoints) + " " + (modInfo.pointsName ? modInfo.pointsName : "points")}}<br>
+				<br>Current Endgame: {{format(endPoints) + " " + (modInfo.pointsName ? modInfo.pointsName : "points")}}<br>
 			</div><br>
 			Time Played: {{formatTime(player.timePlayed)}}<br><br>
 			<h3>Hotkeys</h3><br><br>

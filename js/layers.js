@@ -1,5 +1,6 @@
 const trees = [
 	["primordial", "The Primordial Tree"],
+	["realm", "Realm Creator"],
 ];
 
 addLayer("t", {
@@ -19,7 +20,7 @@ addLayer("t", {
 	baseResource: "points",
 	baseAmount() {return player.points},
 	type: "static",
-	exponent: 2,
+	exponent: 1,
 	base: 10,
 	gainMult() {
 		let mult = newDecimalOne();

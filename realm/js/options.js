@@ -13,7 +13,6 @@ function getStartOptions() {
 		forceTooltips: true,
 		hideMilestonePopups: false,
 		extendplaces: false,
-		nerdMode: false,
 	});
 };
 
@@ -37,7 +36,6 @@ const optionGrid = [
 	], [
 		{opt: "hideMilestonePopups", text() {return "Show Milestone Popups: " + formatOpt(!options[this.opt])}, onClick: toggleOpt},
 		{opt: "extendPlaces", text() {return "Extended Decimal Places: " + formatOpt(options[this.opt])}, onClick: toggleOpt},
-		{opt: "nerdMode", text() {return "Nerd Mode: " + formatOpt(options[this.opt]) + " (you can also use the control key to toggle)"}, onClick: toggleOpt},
 	],
 ];
 

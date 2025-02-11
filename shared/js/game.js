@@ -273,7 +273,7 @@ function autobuyUpgrades(layer) {
 };
 
 function gameLoop(diff) {
-	if ((endPoints !== undefined ? player.points.gte(endPoints) : (typeof isEndgame == "function" ? isEndgame() : isEndgame)) || tmp.gameEnded) {
+	if ((typeof endPoints !== "undefined" ? player.points.gte(endPoints) : (typeof isEndgame == "function" ? isEndgame() : isEndgame)) || tmp.gameEnded) {
 		tmp.gameEnded = true;
 		clearParticles();
 	};
