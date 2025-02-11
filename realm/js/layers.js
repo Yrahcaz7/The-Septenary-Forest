@@ -80,8 +80,8 @@ addLayer("1", {
 		return newDecimalOne();
 	},
 	resetDescription: "Abdicate for ",
-	effect() {return player['1'].points.mul(player['1'].gemMult).mul(0.01).add(1)},
-	effectDescription() {return "which are increasing all production by " + player['1'].gemMult + "% each, for a total of " + format(tmp['1'].effect) + 'x'},
+	effect() {return player[1].points.mul(player[1].gemMult).mul(0.01).add(1)},
+	effectDescription() {return "which are increasing all production by " + player[1].gemMult + "% each, for a total of " + format(tmp['1'].effect) + 'x'},
 	hotkeys: [
 		{key: "a", description: "A: Abdicate for gems", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
@@ -115,10 +115,10 @@ addLayer("1", {
 		clickGain = clickGain.mul(tmp['1'].effect);
 		if (getClickableState('2', 12) == "ON") clickGain = clickGain.mul(clickableEffect('2', 12));
 		if (hasUpgrade('1', 11) && getClickableState('2', 13) == "ON") clickGain = clickGain.mul(clickableEffect('2', 13));
-		player["1"].clickValue = clickGain;
-		if (player["1"].clickValue.gt(player["1"].G.bestClickValue)) player["1"].G.bestClickValue = player["1"].clickValue;
-		if (player["1"].clickValue.gt(player["1"].R.bestClickValue)) player["1"].R.bestClickValue = player["1"].clickValue;
-		if (player["1"].clickValue.gt(player["1"].T.bestClickValue)) player["1"].T.bestClickValue = player["1"].clickValue;
+		player[1].clickValue = clickGain;
+		if (player[1].clickValue.gt(player[1].G.bestClickValue)) player[1].G.bestClickValue = player[1].clickValue;
+		if (player[1].clickValue.gt(player[1].R.bestClickValue)) player[1].R.bestClickValue = player[1].clickValue;
+		if (player[1].clickValue.gt(player[1].T.bestClickValue)) player[1].T.bestClickValue = player[1].clickValue;
 		// coins
 		if (player.points.gt(player.G.best)) player.G.best = player.points;
 		if (player.points.gt(player.R.best)) player.R.best = player.points;
@@ -144,11 +144,11 @@ addLayer("1", {
 		if (player.FC.gt(player.R.FCbest)) player.R.FCbest = player.FC;
 		if (player.FC.gt(player.T.FCbest)) player.T.FCbest = player.FC;
 		// creations
-		player["1"].G.bestCreations = getBuyableAmount('1', 11).add(getBuyableAmount('1', 12)).add(getBuyableAmount('1', 13));
-		if (player["1"].G.bestCreations.gt(player["1"].R.bestCreations)) player["1"].R.bestCreations = player["1"].G.bestCreations;
-		if (player["1"].G.bestCreations.gt(player["1"].T.bestCreations)) player["1"].T.bestCreations = player["1"].G.bestCreations;
+		player[1].G.bestCreations = getBuyableAmount('1', 11).add(getBuyableAmount('1', 12)).add(getBuyableAmount('1', 13));
+		if (player[1].G.bestCreations.gt(player[1].R.bestCreations)) player[1].R.bestCreations = player[1].G.bestCreations;
+		if (player[1].G.bestCreations.gt(player[1].T.bestCreations)) player[1].T.bestCreations = player[1].G.bestCreations;
 		// gems
-		if (player['1'].best.gt(player.bestGems)) player.bestGems = player['1'].best;
+		if (player[1].best.gt(player.bestGems)) player.bestGems = player[1].best;
 		// fix bulk buy
 		if (getClickableState("1", 21) < 1 || typeof getClickableState("1", 21) != "number") {
 			setClickableState("1", 21, 1);
@@ -162,26 +162,26 @@ addLayer("1", {
 				"main-display",
 				"prestige-button",
 				"blank",
-				["display-text", function() { return 'Your faction coin find chance is ' + format(player.FCchance) + '%' }],
+				["display-text", () => "Your faction coin find chance is " + format(player.FCchance) + "%"],
 				"blank",
 				["row", [
-					["display-text", function() { return '<font color = "#FF00FF">You have ' + formatWhole(player.fairyCoins) + ' fairy coins<br><font color = "#00FF00">You have ' + formatWhole(player.elfCoins) + ' elf coins<br><font color = "#00FFFF">You have ' + formatWhole(player.angelCoins) + ' angel coins' }],
+					["display-text", () => "<div style='color: #FF00FF'>You have " + formatWhole(player.fairyCoins) + " fairy coins</div><div style='color: #00FF00'>You have " + formatWhole(player.elfCoins) + " elf coins</div><div style='color: #00FFFF'>You have " + formatWhole(player.angelCoins) + " angel coins</div>"],
 					["blank", ["17px"]],
 					["clickables", [1]],
 					["blank", ["17px"]],
-					["display-text", function() { return '<font color = "#888800">You have ' + formatWhole(player.goblinCoins) + ' goblin coins<br><font color = "#8800FF">You have ' + formatWhole(player.undeadCoins) + ' undead coins<br><font color = "#880000">You have ' + formatWhole(player.demonCoins) + ' demon coins' }],
+					["display-text", () => "<div style='color: #888800'>You have " + formatWhole(player.goblinCoins) + " goblin coins</div><div style='color: #8800FF'>You have " + formatWhole(player.undeadCoins) + " undead coins</div><div style='color: #880000'>You have " + formatWhole(player.demonCoins) + " demon coins</div>"],
 				]],
 				"blank",
-				["display-text", "<h2>Creations"],
+				["display-text", "<h2>Creations</h2>"],
 				"blank",
 				["clickables", [2]],
 				"blank",
 				"buyables",
 				"blank",
-				["display-text", function() { if (getBuyableAmount('1', 11).gte(10) || getBuyableAmount('1', 12).gte(10) || getBuyableAmount('1', 13).gte(10)) return '<h2>Creation Tier Upgrades' }],
+				["display-text", () => { if (getBuyableAmount('1', 11).gte(10) || getBuyableAmount('1', 12).gte(10) || getBuyableAmount('1', 13).gte(10)) return '<h2>Creation Tier Upgrades</h2>' }],
 				"blank",
 				["upgrades", [9, 10, 11, 12, 13, 14]],
-				["display-text", function() { if (player['1'].points.gte(1)) return '<h2>Gem Power Upgrades' }],
+				["display-text", () => { if (player[1].points.gte(1)) return "<h2>Gem Power Upgrades</h2>" }],
 				"blank",
 				["upgrades", [201]],
 			],
@@ -191,14 +191,14 @@ addLayer("1", {
 				"main-display",
 				"prestige-button",
 				"blank",
-				["display-text", function() { return 'Your faction coin find chance is ' + format(player.FCchance) + '%' }],
+				["display-text", () => "Your faction coin find chance is " + format(player.FCchance) + "%"],
 				"blank",
 				["row", [
-					["display-text", function() { return '<font color = "#FF00FF">You have ' + formatWhole(player.fairyCoins) + ' fairy coins<br><font color = "#00FF00">You have ' + formatWhole(player.elfCoins) + ' elf coins<br><font color = "#00FFFF">You have ' + formatWhole(player.angelCoins) + ' angel coins' }],
+					["display-text", () => "<div style='color: #FF00FF'>You have " + formatWhole(player.fairyCoins) + " fairy coins</div><div style='color: #00FF00'>You have " + formatWhole(player.elfCoins) + " elf coins</div><div style='color: #00FFFF'>You have " + formatWhole(player.angelCoins) + " angel coins</div>"],
 					["blank", ["17px"]],
 					["clickables", [1]],
 					["blank", ["17px"]],
-					["display-text", function() { return '<font color = "#888800">You have ' + formatWhole(player.goblinCoins) + ' goblin coins<br><font color = "#8800FF">You have ' + formatWhole(player.undeadCoins) + ' undead coins<br><font color = "#880000">You have ' + formatWhole(player.demonCoins) + ' demon coins' }],
+					["display-text", () => "<div style='color: #888800'>You have " + formatWhole(player.goblinCoins) + " goblin coins</div><div style='color: #8800FF'>You have " + formatWhole(player.undeadCoins) + " undead coins</div><div style='color: #880000'>You have " + formatWhole(player.demonCoins) + " demon coins</div>"],
 				]],
 				"blank",
 				["row", [["upgrades", [1]], ["blank", ["17px"]], ["upgrades", [2]]]],
@@ -214,13 +214,13 @@ addLayer("1", {
 	clickables: {
 		11: {
 			title: "Click Button",
-			display() {return "\nyour clicks are worth " + format(player["1"].clickValue) + " coins"},
+			display() {return "\nyour clicks are worth " + format(player[1].clickValue) + " coins"},
 			canClick() {return true},
 			onClick() {
 				// faction coin initialization
 				let factionCoinGainType = getRandInt(0, 6);
 				let factionCoinsFound = newDecimalZero();
-				let clickPower = player["1"].clickValue;
+				let clickPower = player[1].clickValue;
 				// faction coins gained calculation
 				if (player.FCchance.gte(new Decimal(100))) factionCoinsFound = player.FCchance.div(100);
 				else if (player.FCchance.div(100).gte(Math.random())) factionCoinsFound = newDecimalOne();
@@ -238,24 +238,26 @@ addLayer("1", {
 				player.R.FCtotal = player.R.FCtotal.add(factionCoinsFound);
 				player.T.FCtotal = player.T.FCtotal.add(factionCoinsFound);
 				// times clicked
-				player["1"].clickTimes = player["1"].clickTimes.add(1);
+				player[1].clickTimes = player[1].clickTimes.add(1);
 				// best times clicked
-				if (player["1"].clickTimes.gt(player["1"].R.bestClickTimes)) player["1"].R.bestClickTimes = player["1"].clickTimes;
-				if (player["1"].clickTimes.gt(player["1"].T.bestClickTimes)) player["1"].T.bestClickTimes = player["1"].clickTimes;
+				if (player[1].clickTimes.gt(player[1].R.bestClickTimes)) player[1].R.bestClickTimes = player[1].clickTimes;
+				if (player[1].clickTimes.gt(player[1].T.bestClickTimes)) player[1].T.bestClickTimes = player[1].clickTimes;
 				// total times clicked
-				player["1"].R.totalClickTimes = player["1"].R.totalClickTimes.add(1);
-				player["1"].T.totalClickTimes = player["1"].T.totalClickTimes.add(1);
+				player[1].R.totalClickTimes = player[1].R.totalClickTimes.add(1);
+				player[1].T.totalClickTimes = player[1].T.totalClickTimes.add(1);
 				// coins gained
 				if (hasUpgrade('1', 11) && getClickableState('2', 13) == "ON") clickPower = clickPower.mul(clickableEffect('2', 13));
 				player.points = player.points.add(clickPower);
+				player.best = player.best.max(player.points);
+				player.total = player.total.add(clickPower);
 				// total coins gained
-				player["1"].G.bestTotalClickValue = player["1"].G.bestTotalClickValue.add(clickPower);
+				player[1].G.bestTotalClickValue = player[1].G.bestTotalClickValue.add(clickPower);
 				player.G.total = player.G.total.add(clickPower);
 				player.R.total = player.R.total.add(clickPower);
 				player.T.total = player.T.total.add(clickPower);
 				// best total click value
-				if (player["1"].G.bestTotalClickValue.gt(player["1"].R.bestTotalClickValue)) player["1"].R.bestTotalClickValue = player["1"].G.bestTotalClickValue;
-				if (player["1"].G.bestTotalClickValue.gt(player["1"].T.bestTotalClickValue)) player["1"].T.bestTotalClickValue = player["1"].G.bestTotalClickValue;
+				if (player[1].G.bestTotalClickValue.gt(player[1].R.bestTotalClickValue)) player[1].R.bestTotalClickValue = player[1].G.bestTotalClickValue;
+				if (player[1].G.bestTotalClickValue.gt(player[1].T.bestTotalClickValue)) player[1].T.bestTotalClickValue = player[1].G.bestTotalClickValue;
 			},
 		},
 		21: {
@@ -519,7 +521,7 @@ addLayer("1", {
 		// fairy faction
 		1031: {
 			fullDisplay() { return '<h3>Magic Dust</h3><br>increase the effect of basic creations based on your mana regen<br><br>Effect: x' + format(upgradeEffect('1', this.id)) + '<br><br>Cost: 500 coins'},
-			effect() { return player['2'].manaRegen.add(1).mul(2).pow(0.5) },
+			effect() { return player[2].manaRegen.add(1).mul(2).pow(0.5) },
 			cost: 500,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -528,7 +530,7 @@ addLayer("1", {
 		},
 		1032: {
 			fullDisplay() { return '<h3>Fairy Workers</h3><br>increase the effect of basic creations based on your creations<br><br>Effect: x' + format(upgradeEffect('1', this.id)) + '<br><br>Cost: 5,000 coins'},
-			effect() { return player["1"].G.bestCreations.add(1).pow(0.2) },
+			effect() { return player[1].G.bestCreations.add(1).pow(0.2) },
 			cost: 5000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -537,7 +539,7 @@ addLayer("1", {
 		},
 		1033: {
 			fullDisplay() { return '<h3>Fairy Traders</h3><br>increase click production and faction coin find chance based on your creations<br><br>Effect: x' + format(upgradeEffect('1', this.id)) + '<br>and +' + format(upgradeEffect('1', this.id).mul(3)) + '%<br><br>Cost: 50,000 coins'},
-			effect() { return player["1"].G.bestCreations.add(1).pow(0.1) },
+			effect() { return player[1].G.bestCreations.add(1).pow(0.1) },
 			cost: 50000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -547,7 +549,7 @@ addLayer("1", {
 		// elf faction
 		1041: {
 			fullDisplay() { return '<h3>Super Clicks</h3><br>increase click production based on your creations<br><br>Effect: x' + format(upgradeEffect('1', this.id)) + '<br><br>Cost: 500 coins'},
-			effect() { return player["1"].G.bestCreations.add(1).pow(0.25) },
+			effect() { return player[1].G.bestCreations.add(1).pow(0.25) },
 			cost: 500,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -556,7 +558,7 @@ addLayer("1", {
 		},
 		1042: {
 			fullDisplay() { return '<h3>Elven Luck</h3><br>increase faction coin find chance based on your click production<br><br>Effect: +' + format(upgradeEffect('1', this.id)) + '%<br><br>Cost: 5,000 coins'},
-			effect() { return player["1"].clickValue.add(1).pow(0.3) },
+			effect() { return player[1].clickValue.add(1).pow(0.3) },
 			cost: 5000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -595,7 +597,7 @@ addLayer("1", {
 		},
 		1142: {
 			fullDisplay() { return '<h3>Enchanted Clicks</h3><br>increase click production based on your mana regen<br><br>Effect: x' + format(upgradeEffect('1', this.id)) + '<br><br>Cost: 5,000,000 coins'},
-			effect() { return player['2'].manaRegen.add(1).pow(0.5) },
+			effect() { return player[2].manaRegen.add(1).pow(0.5) },
 			cost: 5000000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -613,7 +615,7 @@ addLayer("1", {
 		// angel faction
 		1051: {
 			fullDisplay() { return '<h3>Angelic Capacity</h3><br>increase max mana based on your mana generated<br><br>Effect: x' + format(upgradeEffect('1', this.id)) + '<br><br>Cost: 500 coins'},
-			effect() { return player["2"].G.manaTotal.add(1).pow(0.075) },
+			effect() { return player[2].G.manaTotal.add(1).pow(0.075) },
 			cost: 500,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -668,7 +670,7 @@ addLayer("1", {
 		},
 		1153: {
 			fullDisplay() { return '<h3>Angelic Clicks</h3><br>increase click production based on your max mana<br><br>Effect: x' + format(upgradeEffect('1', this.id)) + '<br><br>Cost: 50,000,000 coins'},
-			effect() { return player['2'].maxMana.add(1).pow(0.05) },
+			effect() { return player[2].maxMana.add(1).pow(0.05) },
 			cost: 50000000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -762,7 +764,7 @@ addLayer("1", {
 		},
 		1073: {
 			fullDisplay() { return '<h3>Stay no More</h3><br>increase passive production based on your click production<br><br>Effect: x' + format(upgradeEffect('1', this.id)) + '<br><br>Cost: 50,000 coins'},
-			effect() { return player["1"].clickValue.add(1).pow(0.2) },
+			effect() { return player[1].clickValue.add(1).pow(0.2) },
 			cost: 50000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -772,21 +774,21 @@ addLayer("1", {
 		// other upgrades
 		2011: {
 			fullDisplay() { return '<h3>Gem Influence</h3><br>increase faction coin find chance based on your gems<br><br>Effect: +' + format(upgradeEffect('1', this.id)) + '%<br><br>Req: 25 1st creations'},
-			effect() { return player['1'].points.add(1).pow(0.5).sub(1) },
+			effect() { return player[1].points.add(1).pow(0.5).sub(1) },
 			canAfford() {
 				if (getBuyableAmount('1', 11).gte(25)) return true;
 				else return false;
 			},
-			unlocked() { return player['1'].points.gte(1) },
+			unlocked() { return player[1].points.gte(1) },
 		},
 		2012: {
 			fullDisplay() { return '<h3>Gem Displays</h3><br>increase the effect of <b>Gem Influence</b> based on your gems<br><br>Effect: x' + format(upgradeEffect('1', this.id)) + '<br><br>Req: 25 2nd creations'},
-			effect() { return player['1'].points.add(1).pow(0.2) },
+			effect() { return player[1].points.add(1).pow(0.2) },
 			canAfford() {
 				if (getBuyableAmount('1', 12).gte(25)) return true;
 				else return false;
 			},
-			unlocked() { return player['1'].points.gte(1) },
+			unlocked() { return player[1].points.gte(1) },
 		},
 	},
 });
@@ -830,7 +832,7 @@ addLayer("2", {
 	doReset(resettingLayer) {},
 	update(diff) {
 		let manaCapped = false;
-		let prevMana = player['2'].mana;
+		let prevMana = player[2].mana;
 		let manaRegen = new Decimal(2.5);
 		let maxMana = new Decimal(100);
 		let taxEff = new Decimal(30);
@@ -845,59 +847,59 @@ addLayer("2", {
 		if (hasUpgrade('1', 1152)) callBoost = callBoost.mul(2);
 		if (hasUpgrade('1', 1152)) sideSpellBoost = sideSpellBoost.mul(2);
 		// return spell boost effects
-		player['2'].taxEff = taxEff;
-		player['2'].callBoost = callBoost;
-		player['2'].sideSpellBoost = sideSpellBoost;
+		player[2].taxEff = taxEff;
+		player[2].callBoost = callBoost;
+		player[2].sideSpellBoost = sideSpellBoost;
 		// spell costs
 		if (hasUpgrade('1', 1152)) taxCost = taxCost.mul(3);
 		if (hasUpgrade('1', 1152)) callCost = callCost.mul(3);
 		if (hasUpgrade('1', 1152)) sideSpellCost = sideSpellCost.mul(3);
 		// return spell cost
-		player['2'].taxCost = taxCost;
-		player['2'].callCost = callCost;
-		player['2'].sideSpellCost = sideSpellCost;
+		player[2].taxCost = taxCost;
+		player[2].callCost = callCost;
+		player[2].sideSpellCost = sideSpellCost;
 		// mana regen buffs
 		if (hasUpgrade('2', 22) && upgradeEffect('2', 22).gt(0)) manaRegen = manaRegen.add(upgradeEffect('2', 22));
 		if (hasUpgrade('1', 1052)) manaRegen = manaRegen.mul(upgradeEffect('1', 1052));
-		player['2'].manaRegen = manaRegen;
-		const diffMana = player['2'].manaRegen.mul(diff);
+		player[2].manaRegen = manaRegen;
+		const diffMana = player[2].manaRegen.mul(diff);
 		// max mana buffs
 		if (hasUpgrade('1', 1051)) maxMana = maxMana.mul(upgradeEffect('1', 1051));
 		if (hasUpgrade('1', 1151)) maxMana = maxMana.mul(upgradeEffect('1', 1151));
 		if (hasUpgrade('2', 21)) maxMana = maxMana.mul(upgradeEffect('2', 21));
 		if (hasUpgrade('2', 23)) maxMana = maxMana.mul(upgradeEffect('2', 23));
-		player['2'].maxMana = maxMana;
+		player[2].maxMana = maxMana;
 		// increase mana
-		if (player['2'].mana.add(diffMana).gte(player['2'].maxMana))
-			player['2'].mana = player['2'].maxMana,
+		if (player[2].mana.add(diffMana).gte(player[2].maxMana))
+			player[2].mana = player[2].maxMana,
 			manaCapped = true;
-		else player['2'].mana = player['2'].mana.add(diffMana);
+		else player[2].mana = player[2].mana.add(diffMana);
 		// total mana
 		if (manaCapped) {
-			player["2"].G.manaTotal = player["2"].G.manaTotal.add(player['2'].maxMana.sub(prevMana));
-			player["2"].R.manaTotal = player["2"].R.manaTotal.add(player['2'].maxMana.sub(prevMana));
-			player["2"].T.manaTotal = player["2"].T.manaTotal.add(player['2'].maxMana.sub(prevMana));
+			player[2].G.manaTotal = player[2].G.manaTotal.add(player[2].maxMana.sub(prevMana));
+			player[2].R.manaTotal = player[2].R.manaTotal.add(player[2].maxMana.sub(prevMana));
+			player[2].T.manaTotal = player[2].T.manaTotal.add(player[2].maxMana.sub(prevMana));
 		} else {
-			player["2"].G.manaTotal = player["2"].G.manaTotal.add(diffMana);
-			player["2"].R.manaTotal = player["2"].R.manaTotal.add(diffMana);
-			player["2"].T.manaTotal = player["2"].T.manaTotal.add(diffMana);
+			player[2].G.manaTotal = player[2].G.manaTotal.add(diffMana);
+			player[2].R.manaTotal = player[2].R.manaTotal.add(diffMana);
+			player[2].T.manaTotal = player[2].T.manaTotal.add(diffMana);
 		};
 		// best mana
-		if (player['2'].maxMana.gt(player["2"].G.maxManaBest)) player["2"].G.maxManaBest = player['2'].maxMana;
-		if (player['2'].maxMana.gt(player["2"].R.maxManaBest)) player["2"].R.maxManaBest = player['2'].maxMana;
-		if (player['2'].maxMana.gt(player["2"].T.maxManaBest)) player["2"].T.maxManaBest = player['2'].maxMana;
-		if (player['2'].manaRegen.gt(player["2"].G.manaRegenBest)) player["2"].G.manaRegenBest = player['2'].manaRegen;
-		if (player['2'].manaRegen.gt(player["2"].R.manaRegenBest)) player["2"].R.manaRegenBest = player['2'].manaRegen;
-		if (player['2'].manaRegen.gt(player["2"].T.manaRegenBest)) player["2"].T.manaRegenBest = player['2'].manaRegen;
+		if (player[2].maxMana.gt(player[2].G.maxManaBest)) player[2].G.maxManaBest = player[2].maxMana;
+		if (player[2].maxMana.gt(player[2].R.maxManaBest)) player[2].R.maxManaBest = player[2].maxMana;
+		if (player[2].maxMana.gt(player[2].T.maxManaBest)) player[2].T.maxManaBest = player[2].maxMana;
+		if (player[2].manaRegen.gt(player[2].G.manaRegenBest)) player[2].G.manaRegenBest = player[2].manaRegen;
+		if (player[2].manaRegen.gt(player[2].R.manaRegenBest)) player[2].R.manaRegenBest = player[2].manaRegen;
+		if (player[2].manaRegen.gt(player[2].T.manaRegenBest)) player[2].T.manaRegenBest = player[2].manaRegen;
 		// spell time
-		if (getClickableState('2', 12) == "ON") player['2'].callTime = player['2'].callTime.sub(diff);
-		if (getClickableState('2', 13) == "ON") player['2'].sideSpellTime = player['2'].sideSpellTime.sub(diff);
+		if (getClickableState('2', 12) == "ON") player[2].callTime = player[2].callTime.sub(diff);
+		if (getClickableState('2', 13) == "ON") player[2].sideSpellTime = player[2].sideSpellTime.sub(diff);
 		// spell done time
-		if (player['2'].callTime.lte(0)) setClickableState('2', 12) == "OFF", player['2'].callTime = newDecimalZero();
-		if (player['2'].sideSpellTime.lte(0)) setClickableState('2', 13) == "OFF", player['2'].sideSpellTime = newDecimalZero();
+		if (player[2].callTime.lte(0)) setClickableState('2', 12) == "OFF", player[2].callTime = newDecimalZero();
+		if (player[2].sideSpellTime.lte(0)) setClickableState('2', 13) == "OFF", player[2].sideSpellTime = newDecimalZero();
 		// autocasting
-		if (getClickableState('2', 102) == "colorless - ON" && player['2'].callTime.lte(0) && player['2'].mana.gte(player['2'].callCost)) callCast();
-		if (getClickableState('2', 103) == "colorless - ON" && player['2'].sideSpellTime.lte(0) && player['2'].mana.gte(player['2'].sideSpellCost)) sideSpellCast();
+		if (getClickableState('2', 102) == "colorless - ON" && player[2].callTime.lte(0) && player[2].mana.gte(player[2].callCost)) callCast();
+		if (getClickableState('2', 103) == "colorless - ON" && player[2].sideSpellTime.lte(0) && player[2].mana.gte(player[2].sideSpellCost)) sideSpellCast();
 
 	},
 	tabFormat: [
@@ -909,69 +911,59 @@ addLayer("2", {
 		"blank",
 		["bar", "manabar"],
 		"blank",
-		["display-text", () => "<h2>Mana Upgrades</h2><br>You have " + format(player["2"].G.manaTotal) + " mana generated"],
+		["display-text", () => "<h2>Mana Upgrades</h2><br>You have " + format(player[2].G.manaTotal) + " mana generated"],
 		"blank",
 		["upgrades", [2]],
-		["display-text", () => "<h2>Autocasting Upgrades</h2><br>You have " + format(player["2"].R.manaTotal) + " total mana generated"],
+		["display-text", () => "<h2>Autocasting Upgrades</h2><br>You have " + format(player[2].R.manaTotal) + " total mana generated"],
 		"blank",
 		["upgrades", [10]],
 	],
 	clickables: {
 		11: {
-			title: '<font color = "#000000">Tax Collection',
-			display() { return '<font color = "#000000">get coins equal to ' + formatWhole(player['2'].taxEff) + ' seconds of passive production<br><br>Effect: +' + format(getPointGen().mul(player['2'].taxEff)) + '<br><br>Cost: ' + formatWhole(player['2'].taxCost) + ' mana' },
-			canClick() { if (player['2'].mana.gte(player['2'].taxCost)) return true },
-			onClick() {
-				player['2'].mana = player['2'].mana.sub(player['2'].taxCost);
-				player["2"].G.taxCasts = player["2"].G.taxCasts.add(1);
-				player["2"].R.taxCasts = player["2"].R.taxCasts.add(1);
-				player["2"].T.taxCasts = player["2"].T.taxCasts.add(1);
-				player.points = player.points.add(getPointGen().mul(player['2'].taxEff));
-			},
+			title: "<span style='color: #000000'>Tax Collection</span>",
+			display() { return '<span style="color: #000000">get coins equal to ' + formatWhole(player[2].taxEff) + ' seconds of passive production<br><br>Effect: +' + format(getPointGen().mul(player[2].taxEff)) + '<br><br>Cost: ' + formatWhole(player[2].taxCost) + ' mana</span>' },
+			canClick() { if (player[2].mana.gte(player[2].taxCost)) return true },
+			onClick() { taxCast() },
 		},
 		12: {
-			title: '<font color = "#000000">Call to Arms',
-			display() { return '<font color = "#000000">boost all production based on your creations for 30 seconds<br>Time left: ' + format(player['2'].callTime) + 's<br><br>Effect: x' + format(clickableEffect('2', this.id)) + '<br><br>Cost: ' + formatWhole(player['2'].callCost) + ' mana' },
-			effect() { return player["1"].G.bestCreations.add(1).pow(0.15).mul(player['2'].callBoost)},
+			title: "<span style='color: #000000'>Call to Arms</span>",
+			display() { return '<span style="color: #000000">boost all production based on your creations for 30 seconds<br>Time left: ' + format(player[2].callTime) + 's<br><br>Effect: x' + format(clickableEffect('2', this.id)) + '<br><br>Cost: ' + formatWhole(player[2].callCost) + ' mana' },
+			effect() { return player[1].G.bestCreations.add(1).pow(0.15).mul(player[2].callBoost)},
 			canClick() {
 				if (getClickableState('2', this.id) == "ON") return false;
-				else if (player['2'].mana.gte(player['2'].callCost)) return true;
-				else return false;
+				if (player[2].mana.gte(player[2].callCost)) return true;
+				return false;
 			},
-			onClick() {
-				callCast();
-			},
+			onClick() { callCast() },
 		},
 		13: {
 			title() {
-				if (hasUpgrade('1', 11)) return '<font color = "#0000FF">Holy Light';
-				else if (hasUpgrade('1', 21)) return '<font color = "#FF0000">Blood Frenzy';
-				else return 'CHOOSE A SIDE TO UNLOCK';
+				if (hasUpgrade('1', 11)) return "<span style='color: #0000FF'>Holy Light</span>";
+				if (hasUpgrade('1', 21)) return "<span style='color: #FF0000'>Blood Frenzy</span>";
+				return "CHOOSE A SIDE TO UNLOCK";
 			},
 			display() {
-				if (hasUpgrade('1', 11)) return '<font color = "#0000FF">boost click production based on your mana for 15 seconds<br>Time left: ' + format(player['2'].sideSpellTime) + 's<br><br>Effect: x' + format(clickableEffect('2', this.id)) + '<br><br>Cost: ' + formatWhole(player['2'].sideSpellCost) + ' mana';
-				else if (hasUpgrade('1', 21)) return '<font color = "#FF0000">boost passive production based on your mana for 15 seconds<br>Time left: ' + format(player['2'].sideSpellTime) + 's<br><br>Effect: x' + format(clickableEffect('2', this.id)) + '<br><br>Cost: ' + formatWhole(player['2'].sideSpellCost) + ' mana';
-				else return "";
+				if (hasUpgrade('1', 11)) return '<span style="color: #0000FF">boost click production based on your mana for 15 seconds<br>Time left: ' + format(player[2].sideSpellTime) + 's<br><br>Effect: x' + format(clickableEffect('2', this.id)) + '<br><br>Cost: ' + formatWhole(player[2].sideSpellCost) + ' mana';
+				if (hasUpgrade('1', 21)) return '<span style="color: #FF0000">boost passive production based on your mana for 15 seconds<br>Time left: ' + format(player[2].sideSpellTime) + 's<br><br>Effect: x' + format(clickableEffect('2', this.id)) + '<br><br>Cost: ' + formatWhole(player[2].sideSpellCost) + ' mana';
+				return "";
 			},
-			effect() { return player['2'].mana.add(1).pow(0.25).mul(player['2'].sideSpellBoost) },
+			effect() { return player[2].mana.add(1).pow(0.25).mul(player[2].sideSpellBoost) },
 			canClick() {
 				if (getClickableState('2', this.id) == "ON") return false;
-				else if (player['2'].mana.gte(player['2'].sideSpellCost) && (hasUpgrade('1', 11) || hasUpgrade('1', 21))) return true;
-				else return false;
+				if (player[2].mana.gte(player[2].sideSpellCost) && (hasUpgrade('1', 11) || hasUpgrade('1', 21))) return true;
+				return false;
 			},
-			onClick() {
-				sideSpellCast();
-			},
+			onClick() { sideSpellCast() },
 		},
 		101: {
-			title: '<font color = "#000000">Tax Collection Autocasting',
+			title: "<span style='color: #000000'>Tax Collection Autocasting</span>",
 			display() { return 'LOCKED - need better autocasting' },
 			canClick() { return false },
 			unlocked() { return hasUpgrade('2', 101) },
 		},
 		102: {
-			title: '<font color = "#000000">Call to Arms Autocasting',
-			display() { return '<font color = "#000000">' + getClickableState('2', this.id) },
+			title: "<span style='color: #000000'>Call to Arms Autocasting</span>",
+			display() { return '<span style="color: #000000">' + getClickableState('2', this.id) },
 			canClick() { return true },
 			onClick() {
 				if (getClickableState('2', this.id) == "colorless - ON") setClickableState('2', this.id, "colorless - OFF");
@@ -981,14 +973,14 @@ addLayer("2", {
 		},
 		103: {
 			title() {
-				if (hasUpgrade('1', 11)) return '<font color = "#0000FF">Holy Light Autocasting';
-				else if (hasUpgrade('1', 21)) return '<font color = "#FF0000">Blood Frenzy Autocasting';
-				else return 'CHOOSE A SIDE TO UNLOCK';
+				if (hasUpgrade('1', 11)) return "<span style='color: #0000FF'>Holy Light Autocasting</span>";
+				if (hasUpgrade('1', 21)) return "<span style='color: #FF0000'>Blood Frenzy Autocasting</span>";
+				return "CHOOSE A SIDE TO UNLOCK";
 			},
 			display() {
-				if (hasUpgrade('1', 11)) return '<font color = "#0000FF">' + getClickableState('2', this.id);
-				else if (hasUpgrade('1', 21)) return '<font color = "#FF0000">' + getClickableState('2', this.id);
-				else return "";
+				if (hasUpgrade('1', 11)) return '<span style="color: #0000FF">' + getClickableState('2', this.id);
+				if (hasUpgrade('1', 21)) return '<span style="color: #FF0000">' + getClickableState('2', this.id);
+				return "";
 			},
 			canClick() { return hasUpgrade('1', 11) || hasUpgrade('1', 21) },
 			onClick() {
@@ -1003,57 +995,57 @@ addLayer("2", {
 			direction: RIGHT,
 			width: 500,
 			height: 20,
-			display() { return 'MANA REGEN: ' + format(player['2'].manaRegen) + ' | MANA: ' + format(player['2'].mana) + ' | MAX MANA: ' + format(player['2'].maxMana) },
+			display() { return 'MANA REGEN: ' + format(player[2].manaRegen) + ' | MANA: ' + format(player[2].mana) + ' | MAX MANA: ' + format(player[2].maxMana) },
 			fillStyle() { return {"background-color": "#AA55AA" } },
 			borderStyle() { return {"border-color": "#AA55AA"} },
-			progress() { return player['2'].mana.div(player['2'].maxMana) },
+			progress() { return player[2].mana.div(player[2].maxMana) },
 		},
 	},
 	upgrades: {
 		11: {
 			canAfford() {
-				return player['2'].mana.gte(player['2'].maxMana);
+				return player[2].mana.gte(player[2].maxMana);
 			},
 		},
 		21: {
 			fullDisplay() { return '<h3>Mana Cup</h3><br>increase max mana based on your mana<br><br>Effect: x' + format(upgradeEffect('2', this.id)) + '<br><br>Req: 500 mana generated<br><br>Cost: 1,500 coins'},
-			effect() { return player['2'].mana.add(1).pow(0.1) },
+			effect() { return player[2].mana.add(1).pow(0.1) },
 			cost: 1500,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
 			canAfford() {
-				return player["2"].G.manaTotal.gte(500);
+				return player[2].G.manaTotal.gte(500);
 			},
 		},
 		22: {
 			fullDisplay() { return '<h3>Mana Sense</h3><br>increase mana regen based on your mana<br><br>Effect: +' + format(upgradeEffect('2', this.id)) + '<br><br>Req: 1,500 mana generated<br><br>Cost: 5,000 coins'},
-			effect() { return player['2'].mana.add(1).pow(0.2) },
+			effect() { return player[2].mana.add(1).pow(0.2) },
 			cost: 5000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
 			canAfford() {
-				return player["2"].G.manaTotal.gte(1500);
+				return player[2].G.manaTotal.gte(1500);
 			},
 			unlocked() { return hasUpgrade("2", 21) },
 		},
 		23: {
 			fullDisplay() { return '<h3>Mana Jar</h3><br>increase max mana based on your creations<br><br>Effect: x' + format(upgradeEffect('2', this.id)) + '<br><br>Req: 4,500 mana generated<br><br>Cost: 25,000 coins'},
-			effect() { return player['1'].G.bestCreations.add(1).pow(0.125) },
+			effect() { return player[1].G.bestCreations.add(1).pow(0.125) },
 			cost: 25000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
 			canAfford() {
-				return player["2"].G.manaTotal.gte(4500);
+				return player[2].G.manaTotal.gte(4500);
 			},
 			unlocked() { return hasUpgrade("2", 22) },
 		},
 		101: {
 			fullDisplay() { return '<h3>Colorless Autocasting</h3><br>unlock autocasting<br><br>Req: 10,000 total mana generated<br><br>Cost: 333 mana'},
 			canAfford() {
-				return player['2'].mana.gte(333) && player["2"].R.manaTotal.gte(10000);
+				return player[2].mana.gte(333) && player[2].R.manaTotal.gte(10000);
 			},
 			pay() {
-				player['2'].mana = player['2'].mana.sub(333);
+				player[2].mana = player[2].mana.sub(333);
 			},
 		},
 	},
@@ -1065,17 +1057,17 @@ const statTabs = {};
 
 ["G", "R", "T"].forEach(key => {
 	statTabs[key] = [
-		["display-text", () => "<h3>CURRENCY</h3><br>Your best coins is <b>" + format(player[key].best) + "</b><br>You have <b>" + format(player[key].total) + "</b> coins total<br>" + (key == "G" ? "You have <b>" + formatWhole(player["1"].points) + "</b> gems<br>" : "") + (key == "R" ? "Your best gems is <b>" + formatWhole(player["1"].best) + "</b><br>" : "") + (key == "T" ? "Your best gems is <b>" + formatWhole(player.bestGems) + "</b>" : "")],
+		["display-text", () => "<h3>CURRENCY</h3><br>Your best coins is <b>" + format(player[key].best) + "</b><br>You have <b>" + format(player[key].total) + "</b> coins total<br>" + (key == "G" ? "You have <b>" + formatWhole(player[1].points) + "</b> gems<br>" : "") + (key == "R" ? "Your best gems is <b>" + formatWhole(player[1].best) + "</b><br>" : "") + (key == "T" ? "Your best gems is <b>" + formatWhole(player.bestGems) + "</b>" : "")],
 		"blank",
-		["display-text", () => "<h3>CLICKS</h3><br>Your best click production is <b>" + format(player["1"][key].bestClickValue) + "</b><br>You have <b>" + format(player["1"][key].bestTotalClickValue) + "</b> coins earned from clicking total<br>" + (key == "G" ? "You have clicked <b>" + formatWhole(player["1"].clickTimes) + "</b> times<br>" : "Your best times clicked is <b>" + formatWhole(player["1"][key].bestClickTimes) + "</b><br>You have clicked <b>" + formatWhole(player["1"][key].totalClickTimes) + "</b> times total")],
+		["display-text", () => "<h3>CLICKS</h3><br>Your best click production is <b>" + format(player[1][key].bestClickValue) + "</b><br>You have <b>" + format(player[1][key].bestTotalClickValue) + "</b> coins earned from clicking total<br>" + (key == "G" ? "You have clicked <b>" + formatWhole(player[1].clickTimes) + "</b> times<br>" : "Your best times clicked is <b>" + formatWhole(player[1][key].bestClickTimes) + "</b><br>You have clicked <b>" + formatWhole(player[1][key].totalClickTimes) + "</b> times total")],
 		"blank",
 		["display-text", () => "<h3>FACTION COINS</h3><br>" + (key == "G" ? "You have <b>" + formatWhole(player.FC) + "</b> faction coins<br>" : "") + "Your best faction coins is <b>" + formatWhole(player[key].FCbest) + "</b><br>You have <b>" + formatWhole(player[key].FCtotal) + "</b> faction coins total<br>You have <b>" + format(player[key].FCchancebest) + "%</b> best faction coin chance"],
 		"blank",
-		["display-text", () => "<h3>CREATIONS</h3><br>Your best creations is <b>" + formatWhole(player["1"][key].bestCreations) + "</b>"],
+		["display-text", () => "<h3>CREATIONS</h3><br>Your best creations is <b>" + formatWhole(player[1][key].bestCreations) + "</b>"],
 		"blank",
-		["display-text", () => "<h3>MANA</h3><br>Your best mana regen is <b>" + format(player["2"][key].manaRegenBest) + "</b><br>Your best max mana is <b>" + format(player["2"][key].maxManaBest) + "</b><br>You have generated a total of <b>" + format(player["2"][key].manaTotal) + "</b> mana"],
+		["display-text", () => "<h3>MANA</h3><br>Your best mana regen is <b>" + format(player[2][key].manaRegenBest) + "</b><br>Your best max mana is <b>" + format(player[2][key].maxManaBest) + "</b><br>You have generated a total of <b>" + format(player[2][key].manaTotal) + "</b> mana"],
 		"blank",
-		["display-text", () => "<h3>SPELLS</h3><br>You have cast 'tax collection' <b>" + formatWhole(player["2"][key].taxCasts) + "</b> times<br>You have cast 'call to arms' <b>" + formatWhole(player["2"][key].callCasts) + "</b> times<br>You have cast 'holy light' <b>" + formatWhole(player["2"][key].holyCasts) + "</b> times<br>You have cast 'blood frenzy' <b>" + formatWhole(player["2"][key].frenzyCasts) + "</b> times<br>"],
+		["display-text", () => "<h3>SPELLS</h3><br>You have cast 'tax collection' <b>" + formatWhole(player[2][key].taxCasts) + "</b> times<br>You have cast 'call to arms' <b>" + formatWhole(player[2][key].callCasts) + "</b> times<br>You have cast 'holy light' <b>" + formatWhole(player[2][key].holyCasts) + "</b> times<br>You have cast 'blood frenzy' <b>" + formatWhole(player[2][key].frenzyCasts) + "</b> times<br>"],
 	];
 });
 

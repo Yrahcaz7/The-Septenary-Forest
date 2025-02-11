@@ -288,8 +288,7 @@ function gameLoop(diff) {
 	};
 	addTime(diff);
 	player.points = player.points.add(tmp.pointGen.mul(diff)).max(0);
-	if (player.best instanceof Decimal) player.best = player.best.max(player.points);
-	if (player.total instanceof Decimal) player.total = player.total.add(tmp.pointGen.mul(diff));
+	if (typeof update === "function") update(diff);
 	for (let x = 0; x <= maxRow; x++) {
 		for (item in TREE_LAYERS[x]) {
 			let layer = TREE_LAYERS[x][item];

@@ -63,6 +63,8 @@ Additional features:
 
 - `onLoad()`: **optional**. A function that runs when the game is finished loading, if it exists. Use this if you have additional custom things that need loading or setup!
 
+- `update(diff)`: **optional**. This function is called every game tick. Use it for any passive resource production or time-based things. `diff` is the time since the last tick.
+
 ## Less important things
 
 - `backgroundStyle`: A CSS object containing the styling for the background of the full game. Can be a function!

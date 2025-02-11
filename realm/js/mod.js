@@ -14,37 +14,37 @@ const VERSION = {
 };
 
 const changelog = `<h1>Changelog:</h1><br>
-<br><h3>v0.4 - Super Beta</h3><br>
-	- Added 2 new creation tiers.<br>	
-	- Added 2 gem power upgrades.<br>
-	- Added 1 autocating upgrade.<br>
-	- Added 2 autocasters.<br>
-	- Added 6 elf upgrades.<br>
-	- Added 6 angel upgrades.<br>
-	- Added 3 demon upgrades.<br>
-	- Added relevant mana stats to casting menu.<br>
-	- Minor fixes.<br>
-<br><h3>v0.3 - Spells Beta</h3><br>
-	- Added 5 new creation tiers.<br>
-	- Added casting, mana, and spells.<br>
-	- Added 2 normal spells.<br>
-	- Added 2 side spells.<br>
-	- Added 2 mana upgrades.<br>
-	- Added 3 fairy upgrades.<br>
-	- Added 6 goblin upgrades.<br>
-	- Added more types of stats to the stat menu.<br>
-	- Minor fixes.<br>
-<br><h3>v0.2 - Factions Beta</h3><br>
-	- Added 5 new creation tiers.<br>
-	- Added faction coins.<br>
-	- Added choosing a faction.<br>
-	- Added a new tab for faction stuff.<br>
-	- Fixed various issues with the stats menu.<br>
-	- Added faction coin stats to the stat menu.<br>
-<br><h3>v0.1 - Beta Test</h3><br>
-	- Added the click button.<br>
-	- Added 3 creations.<br>
-	- Added a stats menu.<br>
+	<br><h3>v0.4 - Super Beta</h3><br>
+		- Added 2 new creation tiers.<br>	
+		- Added 2 gem power upgrades.<br>
+		- Added 1 autocating upgrade.<br>
+		- Added 2 autocasters.<br>
+		- Added 6 elf upgrades.<br>
+		- Added 6 angel upgrades.<br>
+		- Added 3 demon upgrades.<br>
+		- Added relevant mana stats to casting menu.<br>
+		- Minor fixes.<br>
+	<br><h3>v0.3 - Spells Beta</h3><br>
+		- Added 5 new creation tiers.<br>
+		- Added casting, mana, and spells.<br>
+		- Added 2 normal spells.<br>
+		- Added 2 side spells.<br>
+		- Added 2 mana upgrades.<br>
+		- Added 3 fairy upgrades.<br>
+		- Added 6 goblin upgrades.<br>
+		- Added more types of stats to the stat menu.<br>
+		- Minor fixes.<br>
+	<br><h3>v0.2 - Factions Beta</h3><br>
+		- Added 5 new creation tiers.<br>
+		- Added faction coins.<br>
+		- Added choosing a faction.<br>
+		- Added a new tab for faction stuff.<br>
+		- Fixed various issues with the stats menu.<br>
+		- Added faction coin stats to the stat menu.<br>
+	<br><h3>v0.1 - Beta Test</h3><br>
+		- Added the click button.<br>
+		- Added 3 creations.<br>
+		- Added a stats menu.<br>
 <br>`;
 
 const winText = `Congratulations! You have reached the end and beaten this game, but for now...`;
@@ -55,27 +55,38 @@ function getRandInt(min, max) {
 	return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
 };
 
+function taxCast() {
+	player[2].mana = player[2].mana.sub(player[2].taxCost);
+	player[2].G.taxCasts = player[2].G.taxCasts.add(1);
+	player[2].R.taxCasts = player[2].R.taxCasts.add(1);
+	player[2].T.taxCasts = player[2].T.taxCasts.add(1);
+	let gain = getPointGen().mul(player[2].taxEff);
+	player.points = player.points.add(gain);
+	player.best = player.best.max(player.points);
+	player.total = player.total.add(gain);
+};
+
 function callCast() {
-	player['2'].callTime = new Decimal(30);
-	player['2'].mana = player['2'].mana.sub(player['2'].callCost);
-	player["2"].G.callCasts = player["2"].G.callCasts.add(1);
-	player["2"].R.callCasts = player["2"].R.callCasts.add(1);
-	player["2"].T.callCasts = player["2"].T.callCasts.add(1);
+	player[2].callTime = new Decimal(30);
+	player[2].mana = player[2].mana.sub(player[2].callCost);
+	player[2].G.callCasts = player[2].G.callCasts.add(1);
+	player[2].R.callCasts = player[2].R.callCasts.add(1);
+	player[2].T.callCasts = player[2].T.callCasts.add(1);
 	setClickableState('2', 12, "ON");
 };
 
 function sideSpellCast() {
-	player['2'].sideSpellTime = new Decimal(15);
-	player['2'].mana = player['2'].mana.sub(player['2'].sideSpellCost);
+	player[2].sideSpellTime = new Decimal(15);
+	player[2].mana = player[2].mana.sub(player[2].sideSpellCost);
 		if (hasUpgrade('1', 11)) {
-			player["2"].G.holyCasts = player["2"].G.holyCasts.add(1);
-			player["2"].R.holyCasts = player["2"].R.holyCasts.add(1);
-			player["2"].T.holyCasts = player["2"].T.holyCasts.add(1);
+			player[2].G.holyCasts = player[2].G.holyCasts.add(1);
+			player[2].R.holyCasts = player[2].R.holyCasts.add(1);
+			player[2].T.holyCasts = player[2].T.holyCasts.add(1);
 		};
 		if (hasUpgrade('1', 21)) {
-			player["2"].G.frenzyCasts = player["2"].G.frenzyCasts.add(1);
-			player["2"].R.frenzyCasts = player["2"].R.frenzyCasts.add(1);
-			player["2"].T.frenzyCasts = player["2"].T.frenzyCasts.add(1);
+			player[2].G.frenzyCasts = player[2].G.frenzyCasts.add(1);
+			player[2].R.frenzyCasts = player[2].R.frenzyCasts.add(1);
+			player[2].T.frenzyCasts = player[2].T.frenzyCasts.add(1);
 		};
 	setClickableState('2', 13, "ON");
 };
@@ -130,6 +141,11 @@ function addedPlayerData() { return {
 const displayThings = [];
 
 const endPoints = new Decimal(Infinity);
+
+function update(diff) {
+	player.best = player.best.max(player.points);
+	player.total = player.total.add(tmp.pointGen.mul(diff));
+};
 
 let backgroundStyle = {};
 
