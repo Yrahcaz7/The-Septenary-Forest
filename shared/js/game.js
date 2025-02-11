@@ -119,10 +119,21 @@ function rowReset(row, layer) {
 	};
 };
 
-function layerDataReset(layer, keep = []) {
+function layerDataReset(layer, keep = [], copyObjs = false) {
 	let storedData = {unlocked: player[layer].unlocked, forceTooltip: player[layer].forceTooltip, noRespecConfirm: player[layer].noRespecConfirm, prevTab: player[layer].prevTab} // Always keep these
 	for (thing in keep) {
-		if (player[layer][keep[thing]] !== undefined) storedData[keep[thing]] = player[layer][keep[thing]];
+		if (typeof player[layer][keep[thing]] == "object" && !(player[layer][keep[thing]] instanceof Decimal) && copyObjs) {
+			storedData[keep[thing]] = {};
+			for (const key in player[layer][keep[thing]]) {
+				if (typeof player[layer][keep[thing]] == "object") {
+					storedData[keep[thing]][key] = Object.create(player[layer][keep[thing]][key]);
+				} else if (player[layer][keep[thing]][key] !== undefined) {
+					storedData[keep[thing]][key] = player[layer][keep[thing]][key];
+				};
+			};
+		} else if (player[layer][keep[thing]] !== undefined) {
+			storedData[keep[thing]] = player[layer][keep[thing]];
+		};
 	};
 	player[layer].buyables = getStartBuyables(layer);
 	player[layer].clickables = getStartClickables(layer);

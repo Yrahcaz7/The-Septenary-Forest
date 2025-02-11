@@ -88,6 +88,8 @@ addLayer("1", {
 	layerShown() {return true},
 	tooltip() {return "Main Tab"},
 	doReset(resettingLayer) {
+		player.best = newDecimalZero();
+		player.total = newDecimalZero();
 		player.fairyCoins = newDecimalZero();
 		player.elfCoins = newDecimalZero();
 		player.angelCoins = newDecimalZero();
@@ -903,7 +905,7 @@ addLayer("2", {
 
 	},
 	tabFormat: [
-		["display-text", "<h2>Casting</h2>"],
+		["display-text", "<h2>Spell Casting</h2>"],
 		"blank",
 		["clickables", [1]],
 		"blank",
