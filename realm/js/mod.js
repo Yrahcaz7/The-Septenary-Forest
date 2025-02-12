@@ -18,8 +18,8 @@ const changelog = `<h1>Changelog:</h1><br>
 	<br><h3>v0.4 - Super Beta</h3><br>
 		- Added 2 new creation tiers.<br>	
 		- Added 3 gem power upgrades.<br>
-		- Added 2 mana upgrades.<br>
-		- Added 2 autocating upgrades.<br>
+		- Added 4 mana upgrades.<br>
+		- Added 3 autocating upgrades.<br>
 		- Added 6 elf upgrades.<br>
 		- Added 6 angel upgrades.<br>
 		- Added 3 demon upgrades.<br>
@@ -56,15 +56,16 @@ function getRandInt(min, max) {
 	return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
 };
 
-function taxCast() {
-	player[2].mana = player[2].mana.sub(player[2].taxCost);
-	player[2].G.taxCasts = player[2].G.taxCasts.add(1);
-	player[2].R.taxCasts = player[2].R.taxCasts.add(1);
-	player[2].T.taxCasts = player[2].T.taxCasts.add(1);
-	let gain = getPointGen().mul(player[2].taxEff);
+function taxCast(amt = newDecimalOne()) {
+	player[2].mana = player[2].mana.sub(player[2].taxCost.mul(amt));
+	player[2].G.taxCasts = player[2].G.taxCasts.add(amt);
+	player[2].R.taxCasts = player[2].R.taxCasts.add(amt);
+	player[2].T.taxCasts = player[2].T.taxCasts.add(amt);
+	let gain = getPointGen().mul(player[2].taxEff.mul(amt));
 	player.points = player.points.add(gain);
-	player.best = player.best.max(player.points);
-	player.total = player.total.add(gain);
+	player.G.total = player.G.total.add(gain);
+	player.R.total = player.R.total.add(gain);
+	player.T.total = player.T.total.add(gain);
 };
 
 function callCast() {
@@ -145,8 +146,14 @@ const displayThings = [];
 const endPoints = new Decimal(1e15);
 
 function update(diff) {
-	player.best = player.best.max(player.points);
-	player.total = player.total.add(tmp.pointGen.mul(diff));
+	// best coins
+	player.G.best = player.G.best.max(player.points);
+	player.R.best = player.R.best.max(player.points);
+	player.T.best = player.T.best.max(player.points);
+	// total coins
+	player.G.total = player.G.total.add(tmp.pointGen.mul(diff));
+	player.R.total = player.R.total.add(tmp.pointGen.mul(diff));
+	player.T.total = player.T.total.add(tmp.pointGen.mul(diff));
 };
 
 let backgroundStyle = {};

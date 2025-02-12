@@ -54,6 +54,7 @@ addLayer("1", {
 		unlocked: true,
 		points: newDecimalZero(),
 		best: newDecimalZero(),
+		total: newDecimalZero(),
 		clickValue: newDecimalOne(),
 		clickTimes: newDecimalZero(),
 		gemMult: newDecimalOne(),
@@ -69,7 +70,7 @@ addLayer("1", {
 	requires: new Decimal(100000),
 	resource: "gems",
 	baseResource: "total coins this game",
-	baseAmount() {return player.total},
+	baseAmount() {return player.G.total},
 	type: "normal",
 	exponent: 0.5,
 	gainMult() {
@@ -88,8 +89,6 @@ addLayer("1", {
 	layerShown() {return true},
 	tooltip() {return "Gems"},
 	doReset(resettingLayer) {
-		player.best = newDecimalZero();
-		player.total = newDecimalZero();
 		player.fairyCoins = newDecimalZero();
 		player.elfCoins = newDecimalZero();
 		player.angelCoins = newDecimalZero();
@@ -106,7 +105,6 @@ addLayer("1", {
 		};
 	},
 	update(diff) {
-		const pointGain = getPointGen().mul(diff);
 		// clicks
 		let clickGain = newDecimalOne();
 		if (getBuyableAmount('1', 11).gt(0)) clickGain = clickGain.add(getBuyableAmount('1', 11).mul(buyableEffect('1', 11)));
@@ -122,13 +120,6 @@ addLayer("1", {
 		if (player[1].clickValue.gt(player[1].G.bestClickValue)) player[1].G.bestClickValue = player[1].clickValue;
 		if (player[1].clickValue.gt(player[1].R.bestClickValue)) player[1].R.bestClickValue = player[1].clickValue;
 		if (player[1].clickValue.gt(player[1].T.bestClickValue)) player[1].T.bestClickValue = player[1].clickValue;
-		// coins
-		if (player.points.gt(player.G.best)) player.G.best = player.points;
-		if (player.points.gt(player.R.best)) player.R.best = player.points;
-		if (player.points.gt(player.T.best)) player.T.best = player.points;
-		player.G.total = new Decimal(player.G.total.add(pointGain));
-		player.R.total = new Decimal(player.R.total.add(pointGain));
-		player.T.total = new Decimal(player.T.total.add(pointGain));
 		// faction coins
 		let FCchance = new Decimal(2.5);
 		if (getBuyableAmount('1', 13).gt(0)) FCchance = FCchance.add(getBuyableAmount('1', 13).mul(buyableEffect('1', 13).div(10)));
@@ -226,16 +217,14 @@ addLayer("1", {
 				// coins gained
 				if (hasUpgrade('3', 11) && getClickableState('2', 13) == "ON") clickPower = clickPower.mul(clickableEffect('2', 13));
 				player.points = player.points.add(clickPower);
-				player.best = player.best.max(player.points);
-				player.total = player.total.add(clickPower);
 				// total coins gained
-				player[1].G.bestTotalClickValue = player[1].G.bestTotalClickValue.add(clickPower);
 				player.G.total = player.G.total.add(clickPower);
 				player.R.total = player.R.total.add(clickPower);
 				player.T.total = player.T.total.add(clickPower);
 				// best total click value
-				if (player[1].G.bestTotalClickValue.gt(player[1].R.bestTotalClickValue)) player[1].R.bestTotalClickValue = player[1].G.bestTotalClickValue;
-				if (player[1].G.bestTotalClickValue.gt(player[1].T.bestTotalClickValue)) player[1].T.bestTotalClickValue = player[1].G.bestTotalClickValue;
+				player[1].G.bestTotalClickValue = player[1].G.bestTotalClickValue.add(clickPower);
+				player[1].R.bestTotalClickValue = player[1].R.bestTotalClickValue.max(player[1].G.bestTotalClickValue);
+				player[1].T.bestTotalClickValue = player[1].T.bestTotalClickValue.max(player[1].G.bestTotalClickValue);
 			},
 		},
 		21: {
@@ -513,10 +502,12 @@ addLayer("2", {
 		if (hasUpgrade('1', 2013)) maxMana = maxMana.mul(upgradeEffect('1', 2013));
 		player[2].maxMana = maxMana;
 		// increase mana
-		if (player[2].mana.add(diffMana).gte(player[2].maxMana))
-			player[2].mana = player[2].maxMana,
+		if (player[2].mana.add(diffMana).gte(player[2].maxMana)) {
+			player[2].mana = player[2].maxMana;
 			manaCapped = true;
-		else player[2].mana = player[2].mana.add(diffMana);
+		} else {
+			player[2].mana = player[2].mana.add(diffMana);
+		};
 		// total mana
 		if (manaCapped) {
 			player[2].G.manaTotal = player[2].G.manaTotal.add(player[2].maxMana.sub(prevMana));
@@ -540,15 +531,28 @@ addLayer("2", {
 		// spell done time
 		if (player[2].callTime.lte(0)) setClickableState('2', 12) == "OFF", player[2].callTime = newDecimalZero();
 		if (player[2].sideSpellTime.lte(0)) setClickableState('2', 13) == "OFF", player[2].sideSpellTime = newDecimalZero();
-		// autocasting
-		if (getClickableState('2', 101) == "secondary - ON" && player[2].callTime.gt(0) && player[2].sideSpellTime.gt(0) && player[2].mana.gte(player[2].taxCost)) {
-			taxCast();
+		// primary autocasting
+		if (player[2].callTime.lte(0) && player[2].mana.gte(player[2].callCost)) {
+			if (getClickableState('2', 102) == "primary - ON") {
+				callCast();
+			} else if (getClickableState('2', 102) == "ternary - ON" && player[2].mana.gte(player[2].maxMana.div(2))) {
+				callCast();
+			};
 		};
-		if (getClickableState('2', 102) == "primary - ON" && player[2].callTime.lte(0) && player[2].mana.gte(player[2].callCost)) {
-			callCast();
+		if (player[2].sideSpellTime.lte(0) && player[2].mana.gte(player[2].sideSpellCost)) {
+			if (getClickableState('2', 103) == "primary - ON") {
+				sideSpellCast();
+			} else if (getClickableState('2', 103) == "ternary - ON" && player[2].mana.gte(player[2].maxMana.div(2))) {
+				sideSpellCast();
+			};
 		};
-		if (getClickableState('2', 103) == "primary - ON" && player[2].sideSpellTime.lte(0) && player[2].mana.gte(player[2].sideSpellCost)) {
-			sideSpellCast();
+		// secondary autocasting
+		if (player[2].callTime.gt(0) && player[2].sideSpellTime.gt(0) && player[2].mana.gte(player[2].taxCost)) {
+			if (getClickableState('2', 101) == "secondary - ON") {
+				taxCast(player[2].mana.div(player[2].taxCost).floor());
+			} else if (getClickableState('2', 101) == "ternary - ON" && player[2].mana.gte(player[2].maxMana.div(2))) {
+				taxCast(player[2].mana.sub(player[2].maxMana.div(2)).div(player[2].taxCost).floor());
+			};
 		};
 	},
 	tabFormat: [
@@ -612,8 +616,14 @@ addLayer("2", {
 			},
 			canClick() { return hasUpgrade("2", 102) },
 			onClick() {
-				if (getClickableState(this.layer, this.id) == "secondary - ON") setClickableState(this.layer, this.id, "OFF");
-				else setClickableState(this.layer, this.id, "secondary - ON");
+				if (getClickableState(this.layer, this.id) == "ternary - ON") {
+					setClickableState(this.layer, this.id, "OFF");
+				} else if (getClickableState(this.layer, this.id) == "secondary - ON") {
+					if (hasUpgrade("2", 103)) setClickableState(this.layer, this.id, "ternary - ON");
+					else setClickableState(this.layer, this.id, "OFF");
+				} else {
+					setClickableState(this.layer, this.id, "secondary - ON");
+				};
 			},
 			style: {'min-height': '50px', 'border-radius': '25px'},
 			unlocked() { return hasUpgrade("2", 101) },
@@ -623,8 +633,14 @@ addLayer("2", {
 			display() { return getClickableState(this.layer, this.id) || "OFF" },
 			canClick() { return true },
 			onClick() {
-				if (getClickableState(this.layer, this.id) == "primary - ON") setClickableState(this.layer, this.id, "OFF");
-				else setClickableState(this.layer, this.id, "primary - ON");
+				if (getClickableState(this.layer, this.id) == "ternary - ON") {
+					setClickableState(this.layer, this.id, "OFF");
+				} else if (getClickableState(this.layer, this.id) == "primary - ON") {
+					if (hasUpgrade("2", 103)) setClickableState(this.layer, this.id, "ternary - ON");
+					else setClickableState(this.layer, this.id, "OFF");
+				} else {
+					setClickableState(this.layer, this.id, "primary - ON");
+				};
 			},
 			style: {'min-height': '50px', 'border-radius': '25px'},
 			unlocked() { return hasUpgrade("2", 101) },
@@ -637,8 +653,14 @@ addLayer("2", {
 			display() { if (hasChosenSide()) return getClickableState(this.layer, this.id) || "OFF" },
 			canClick() { return hasChosenSide() },
 			onClick() {
-				if (getClickableState(this.layer, this.id) == "primary - ON") setClickableState(this.layer, this.id, "OFF");
-				else setClickableState(this.layer, this.id, "primary - ON");
+				if (getClickableState(this.layer, this.id) == "ternary - ON") {
+					setClickableState(this.layer, this.id, "OFF");
+				} else if (getClickableState(this.layer, this.id) == "primary - ON") {
+					if (hasUpgrade("2", 103)) setClickableState(this.layer, this.id, "ternary - ON");
+					else setClickableState(this.layer, this.id, "OFF");
+				} else {
+					setClickableState(this.layer, this.id, "primary - ON");
+				};
 			},
 			style: {'min-height': '50px', 'border-radius': '25px'},
 			unlocked() { return hasUpgrade("2", 101) },
@@ -704,6 +726,12 @@ addLayer("2", {
 			canAfford() { return player[2].mana.gte(3333) && player[2].R.manaTotal.gte(100000) },
 			pay() { player[2].mana = player[2].mana.sub(3333) },
 			unlocked() { return hasUpgrade("2", 101) },
+		},
+		103: {
+			fullDisplay() { return '<h3>Ternary Autocasting</h3><br>unlock autocasting when over 50% mana<br><br>Req: 1,000,000 total mana generated<br><br>Cost: 33,333 mana'},
+			canAfford() { return player[2].mana.gte(33333) && player[2].R.manaTotal.gte(1000000) },
+			pay() { player[2].mana = player[2].mana.sub(33333) },
+			unlocked() { return hasUpgrade("2", 102) },
 		},
 	},
 });
