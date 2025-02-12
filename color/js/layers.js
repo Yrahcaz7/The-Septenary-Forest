@@ -51,11 +51,17 @@ const COLORS = [{
 	costBase: 250,
 	earnings: 500e12,
 	time: 384,
-}]; // future colors: blue, violet, fuchsia, magenta
+}, {
+	name: "ocean",
+	hex: "#0000ff",
+	costBase: 300,
+	earnings: 100e15,
+	time: 768,
+}]; // future colors: violet, fuchsia, magenta
 
-const COLOR_MILESTONES = [10, 25, 50, 100, 150, 200, 250];
+const COLOR_MILESTONES = [10, 25, 50, 100, 150, 200, 300, 400];
 
-const COLOR_MILESTONE_MULT = [2.5, 5, 10, 50, 200, 200, 200];
+const COLOR_MILESTONE_MULT = [2.5, 5, 10, 50, 200, 200, 200, 200];
 
 function registerColorCost(index, bulk) {
 	const BUYNUM = (index + 1) * 10 + 1;
@@ -137,8 +143,8 @@ function getColorBars() {
 			direction: RIGHT,
 			width: 300,
 			height: 50,
-			progress() { return player.c.time[NAME] || 0 },
-			display() { if (getBuyableAmount("c", BUYNUM).gt(0) && player.c.earnings[NAME]) return "coins/cycle: " + illionFormat(player.c.earnings[NAME]) + "<br>(" + illionFormat(player.c.earnings[NAME].mul(getColorSpeed(index))) + "/sec)" },
+			progress() { return player.c.time[index] || 0 },
+			display() { if (getBuyableAmount("c", BUYNUM).gt(0) && player.c.earnings[index]) return "coins/cycle: " + illionFormat(player.c.earnings[index]) + "<br>(" + illionFormat(player.c.earnings[index].mul(getColorSpeed(index))) + "/sec)" },
 			fillStyle: {"background-color": HEX},
 			borderStyle: {"border-color": HEX},
 			style: {"color": (COLORS[index].dark ? "#999999" : "#ffffff")},
@@ -153,7 +159,7 @@ function getColorBars() {
 				if (COST.eq(0)) return newDecimalOne();
 				return player.points.div(COST);
 			},
-			display() { return illionFormat(this.progress().min(1).mul(100)) + "%" },
+			display() { return format(this.progress().min(1).mul(100)) + "%" },
 			fillStyle: {"background-color": HEX},
 			borderStyle: {"border-color": HEX},
 			style: {"color": (COLORS[index].dark ? "#999999" : "#ffffff")},
@@ -219,7 +225,7 @@ function getAverageCoinGain() {
 	let gain = newDecimalZero();
 	for (let index = 0; index < player.c.colors; index++) {
 		const NAME = COLORS[index].name;
-		if (player.c.earnings[NAME]) gain = gain.add(player.c.earnings[NAME].mul(getColorSpeed(index)));
+		if (player.c.earnings[index]) gain = gain.add(player.c.earnings[index].mul(getColorSpeed(index)));
 	};
 	return gain;
 };
@@ -233,8 +239,8 @@ addLayer("c", {
 		unlocked: true,
 		colors: 0,
 		colorBest: 0,
-		earnings: [],
-		time: [],
+		earnings: Array.from({length: COLORS.length}, () => newDecimalZero()),
+		time: Array.from({length: COLORS.length}, () => newDecimalZero()),
 	}},
 	color: "#ffffff",
 	nodeStyle: {"border": "0px transparent"},
@@ -262,7 +268,6 @@ addLayer("c", {
 		if (player.c.colors > player.c.colorBest) player.c.colorBest = player.c.colors;
 		// calculate earnings
 		for (let index = 0; index < player.c.colors; index++) {
-			const NAME = COLORS[index].name;
 			const BUYNUM = (index + 1) * 10 + 1;
 			const MULTNUM = 102 + index;
 			let earnings = getBuyableAmount("c", BUYNUM).mul(COLORS[index].earnings);
@@ -271,23 +276,21 @@ addLayer("c", {
 			};
 			if (hasUpgrade("c", 13)) earnings = earnings.mul(upgradeEffect("c", 13));
 			if (getGridData("m", MULTNUM)) earnings = earnings.mul(getGridData("m", MULTNUM));
-			player.c.earnings[NAME] = earnings;
+			player.c.earnings[index] = earnings;
 		};
 		// earn
 		for (let index = 0; index < player.c.colors; index++) {
-			const NAME = COLORS[index].name;
-			if (!player.c.time[NAME]) {
-				player.c.time[NAME] = newDecimalZero();
-			} else if (player.c.time[NAME].gt(1)) {
-				player.points = player.points.add(player.c.earnings[NAME]);
-				player.c.time[NAME] = newDecimalZero();
+			if (!player.c.time[index]) {
+				player.c.time[index] = newDecimalZero();
+			} else if (player.c.time[index].gt(1)) {
+				let timesFilled = player.c.time[index].floor();
+				player.points = player.points.add(player.c.earnings[index].mul(timesFilled));
+				player.c.time[index] = player.c.time[index].sub(timesFilled);
 			};
 		};
 		// add time
 		for (let index = 0; index < player.c.colors; index++) {
-			const NAME = COLORS[index].name;
-			let speed = getColorSpeed(index).mul(diff);
-			player.c.time[NAME] = player.c.time[NAME].add(speed);
+			player.c.time[index] = player.c.time[index].add(getColorSpeed(index).mul(diff));
 		};
 	},
 	tabFormat: {
@@ -432,9 +435,9 @@ addLayer("m", {
 	prestigeButtonText() {
 		let text = "";
 		if (player.m.points.lt(1e3)) text += "Reset for ";
-		const TYPE = (player.m.type >= 0 ? COLORS[player.m.type].name : "random");
-		if (!tmp.m.canReset) return text + "+<b>0</b> " + TYPE + " multiplier<br><br>You will gain 2 more at 4 colors unlocked";
-		return text + "+<b>" + illionFormat(tmp.m.resetGain, false, 0) + "</b> " + TYPE + " multiplier<br><br>You will gain " + illionFormat(this.getResetGain(1) - this.getResetGain(), true, 0) + " more at " + illionFormat(tmp.m.nextAt, true, 0) + " colors unlocked";
+		const TYPE = (player.m.type >= 0 ? (hasMilestone("m", 2) ? "partially " : "") + COLORS[player.m.type].name : "random");
+		if (!tmp.m.canReset) return text + "+<b>0</b> " + TYPE + " multiplier<br><br>You will gain " + illionFormat(new Decimal(2).mul(tmp.m.gainMult), false, 0) + " more at 4 colors unlocked";
+		return text + "+<b>" + illionFormat(tmp.m.resetGain, false, 0) + "</b> " + TYPE + " multiplier<br><br>You will gain " + illionFormat(this.getResetGain(1) - tmp.m.resetGain, true, 0) + " more at " + illionFormat(tmp.m.nextAt, true, 0) + " colors unlocked";
 	},
 	onPrestige(gain) {
 		if (hasMilestone("m", 2)) {
@@ -518,8 +521,8 @@ addLayer("m", {
 			effectDescription: "unlock the bulk buy 5x option for colors",
 		},
 		1: {
-			done() { return player.m.points.gte(10) },
-			requirementDescription: "10 total multiplier",
+			done() { return player.m.points.gte(8) },
+			requirementDescription: "8 total multiplier",
 			effectDescription: "unlock the upgrades tab",
 		},
 		2: {

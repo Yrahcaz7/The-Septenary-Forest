@@ -9,11 +9,16 @@ const modInfo = {
 };
 
 const VERSION = {
-	num: "4.1",
-	name: "The Greatest QOL Update",
+	num: "4.2",
+	name: "Expansion",
 };
 
 const changelog = `<h1>Changelog:</h1><br>
+	<br><h3>v4.2: Expansion</h3><br>
+		- Added 3 multiplier milestones.<br>
+		- Added 3 color upgrades.<br>
+		- Added one new color.<br>
+		- Various bugfixes.<br>
 	<br><h3>v4.1: The Greatest QOL Update</h3><br>
 		- Added a hotkey for multiplier resets.<br>
 		- Added picking the multiplier color.<br>
