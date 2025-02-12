@@ -81,6 +81,12 @@ const COLOR_MILESTONES = [10, 25, 50, 100, 150, 200, 300, 400, 500];
 
 const COLOR_MILESTONE_MULT = [2.5, 5, 10, 50, 200, 200, 400, 400, 400];
 
+const COLOR_UPGRADE_STYLE = {
+	"background": "var(--rainbowline)",
+	"background-size": "200%",
+	"animation": "3s linear infinite rainbowline",
+};
+
 function registerColorCost(index, bulk) {
 	const BUYNUM = (index + 1) * 10 + 1;
 	const AMOUNT = getBuyableAmount("c", BUYNUM).toNumber();
@@ -306,6 +312,7 @@ addLayer("c", {
 			};
 			if (hasUpgrade("c", 13)) earnings = earnings.mul(upgradeEffect("c", 13));
 			if (hasUpgrade("c", 21)) earnings = earnings.mul(upgradeEffect("c", 21));
+			if (hasUpgrade("c", 24)) earnings = earnings.mul(upgradeEffect("c", 24));
 			if (getGridData("m", MULTNUM)) earnings = earnings.mul(getGridData("m", MULTNUM));
 			player.c.earnings[index] = earnings;
 		};
@@ -372,11 +379,7 @@ addLayer("c", {
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect: 1.1,
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return {
-				"background": "var(--rainbowline)",
-				"background-size": "200%",
-				"animation": "3s linear infinite rainbowline",
-			}},
+			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		12: {
 			coinCost: 1e9,
@@ -389,11 +392,7 @@ addLayer("c", {
 					registerColorCost(index, getColorBulk(index));
 				};
 			},
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return {
-				"background": "var(--rainbowline)",
-				"background-size": "200%",
-				"animation": "3s linear infinite rainbowline",
-			}},
+			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		13: {
 			coinCost: 1e12,
@@ -401,11 +400,7 @@ addLayer("c", {
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return (player.c.colors) ** 2 / 100 + 1 },
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return {
-				"background": "var(--rainbowline)",
-				"background-size": "200%",
-				"animation": "3s linear infinite rainbowline",
-			}},
+			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		14: {
 			coinCost: 1e15,
@@ -413,11 +408,7 @@ addLayer("c", {
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return player.m.points.add(1).log10().div(5).add(1) },
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return {
-				"background": "var(--rainbowline)",
-				"background-size": "200%",
-				"animation": "3s linear infinite rainbowline",
-			}},
+			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		15: {
 			coinCost: 1e18,
@@ -430,11 +421,7 @@ addLayer("c", {
 					registerColorCost(index, getColorBulk(index));
 				};
 			},
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return {
-				"background": "var(--rainbowline)",
-				"background-size": "200%",
-				"animation": "3s linear infinite rainbowline",
-			}},
+			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		21: {
 			coinCost: 1e21,
@@ -442,11 +429,7 @@ addLayer("c", {
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return player.m.points.add(1).log10().div(4).add(1) },
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return {
-				"background": "var(--rainbowline)",
-				"background-size": "200%",
-				"animation": "3s linear infinite rainbowline",
-			}},
+			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		22: {
 			coinCost: 1e24,
@@ -459,23 +442,23 @@ addLayer("c", {
 					registerColorCost(index, getColorBulk(index));
 				};
 			},
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return {
-				"background": "var(--rainbowline)",
-				"background-size": "200%",
-				"animation": "3s linear infinite rainbowline",
-			}},
+			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		23: {
 			coinCost: 1e27,
-			fullDisplay() { return "<h3>Fluid Production</h3><br>multiplies color powers based on your colors unlocked<br><br>Effect: " + illionFormat(upgradeEffect(this.layer, this.id)) + "x<br><br>Cost: " + illionFormat(this.coinCost) + " coins" },
+			fullDisplay() { return "<h3>Fluid Production</h3><br>multiplies color speeds based on your colors unlocked<br><br>Effect: " + illionFormat(upgradeEffect(this.layer, this.id)) + "x<br><br>Cost: " + illionFormat(this.coinCost) + " coins" },
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
-			effect() { return (player.c.colors) ** 1.5 / 100 + 1 },
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return {
-				"background": "var(--rainbowline)",
-				"background-size": "200%",
-				"animation": "3s linear infinite rainbowline",
-			}},
+			effect() { return (player.c.colors) ** 2 / 100 + 1 },
+			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+		},
+		24: {
+			coinCost: 1e30,
+			fullDisplay() { return "<h3>Upgraded Power</h3><br>multiplies color powers based on your color upgrades<br><br>Effect: " + illionFormat(upgradeEffect(this.layer, this.id)) + "x<br><br>Cost: " + illionFormat(this.coinCost) + " coins" },
+			canAfford() { return player.points.gte(this.coinCost) },
+			pay() { player.points = player.points.sub(this.coinCost) },
+			effect() { return player.c.upgrades.length / 10 + 1 },
+			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 	},
 });
@@ -580,11 +563,11 @@ addLayer("m", {
 		getStyle(data, id) {
 			const INDEX = id % 100 - 2;
 			return {
-				"width": "60px",
-				"height": (id >= 401 ? "30px" : "60px"),
+				"width": "70px",
+				"height": (id >= 401 ? "30px" : "70px"),
 				"border-color": (id >= 401 ? (INDEX >= 0 ? COLORS[INDEX].hex : "#999999") : "#00000020"),
 				"border-radius": "10px",
-				"background-color": (INDEX >= 0 ? (COLORS[INDEX].dark ? "#999999" : "#ffffff") : "#ffffff"),
+				"background-color": (INDEX >= 0 ? (COLORS[INDEX].dark ? "#999999" : "#f0f0f0") : "#f0f0f0"),
 				"color": (INDEX >= 0 ? COLORS[INDEX].hex : "#000000"),
 			};
 		},
@@ -636,6 +619,12 @@ addLayer("m", {
 			done() { return player.m.points.gte(1024) },
 			requirementDescription: "1024 total multiplier",
 			effectDescription: "you gain +100% extra multiplier on reset<br>this extra multiplier is assigned randomly",
+			unlocked() { return hasMilestone("m", this.id - 1) },
+		},
+		5: {
+			done() { return player.m.points.gte(4096) },
+			requirementDescription: "4096 total multiplier",
+			effectDescription: "coming soon...",
 			unlocked() { return hasMilestone("m", this.id - 1) },
 		},
 	},

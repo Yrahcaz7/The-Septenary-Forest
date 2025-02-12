@@ -15,9 +15,9 @@ const VERSION = {
 
 const changelog = `<h1>Changelog:</h1><br>
 	<br><h3>v4.2: Expansion</h3><br>
-		- Added five multiplier milestones.<br>
-		- Added eight color upgrades.<br>
-		- Added four new colors.<br>
+		- Added six multiplier milestones.<br>
+		- Added nine color upgrades.<br>
+		- Added the rest of the colors.<br>
 		- Various bugfixes.<br>
 	<br><h3>v4.1: The Greatest QOL Update</h3><br>
 		- Added a hotkey for multiplier resets.<br>

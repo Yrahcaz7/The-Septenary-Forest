@@ -155,7 +155,6 @@ function illionFormat(decimal, short, precision = 2) {
 			if (short) suffix += "~";
 		};
 		// add second part
-		decimal = decimal.layeradd10(1);
 		if ((exponent - 3) % 300 >= 30) {
 			if (decimal.div(new Decimal(1e300).pow(centillions)).gte(1e273)) { // 90th
 				divnum = divnum.mul(1e270);
@@ -194,8 +193,10 @@ function illionFormat(decimal, short, precision = 2) {
 				if (!short) suffix += "dec";
 				else suffix += "d";
 			};
-			if ((decimal.gte(1e303) && decimal.div(new Decimal(1e300).pow(centillions)).gte(1e60))
-			|| (decimal.lt(1e303) && decimal.gte(1e63))) { // add prefix part 2 ending
+			if (
+				(decimal.gte(1e303) && decimal.div(new Decimal(1e300).pow(centillions)).gte(1e60)) ||
+				(decimal.lt(1e303) && decimal.gte(1e63))
+			) { // add prefix part 2 ending
 				if (!short) suffix += "gint";
 			};
 		} else {
