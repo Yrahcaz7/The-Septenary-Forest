@@ -163,8 +163,18 @@ function maxTickLength() {
 };
 
 function fixOldSave(oldVersion) {
+	// remove unused vars
 	delete player.blank;
 	delete options.colorDisplayMode;
 	delete options.colorDisplay;
 	delete options.css;
+	// rename vars
+	if (options.tooltipForcing !== undefined) {
+		options.forceTooltips = options.tooltipForcing;
+		delete options.tooltipForcing;
+	};
+	if (options.extendplaces !== undefined) {
+		options.extendPlaces = options.extendplaces;
+		delete options.extendplaces;
+	};
 };

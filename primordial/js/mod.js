@@ -406,7 +406,7 @@ function fixOldSave(oldVersion) {
 	if (options.extendplaces !== undefined) {
 		options.extendPlaces = options.extendplaces;
 		delete options.extendplaces;
-	}
+	};
 };
 
 // gets random valid character

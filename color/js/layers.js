@@ -503,7 +503,7 @@ addLayer("m", {
 	},
 	getResetGain(x = 0) {
 		let num = player.c.colors + x;
-		if (num < tmp.m.requires) return new Decimal(0);
+		if (num < tmp.m.requires) return newDecimalZero();
 		let gain = new Decimal(2).pow(num + 1 - tmp.m.requires);
 		gain = gain.mul(tmp.m.gainMult);
 		return gain;

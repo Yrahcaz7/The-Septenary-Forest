@@ -67,14 +67,25 @@ function maxTickLength() {
 };
 
 function fixOldSave(oldVersion) {
+	// some kind of reset thing? don't know what this was about
 	if (player.r) {
 		player = null;
 		save(true);
 		window.location.reload();
 	};
+	// remove unused vars
 	delete player.spacer;
 	delete options.colorDisplayMode;
 	delete options.colorDisplay;
+	// rename vars
+	if (options.tooltipForcing !== undefined) {
+		options.forceTooltips = options.tooltipForcing;
+		delete options.tooltipForcing;
+	};
+	if (options.extendplaces !== undefined) {
+		options.extendPlaces = options.extendplaces;
+		delete options.extendplaces;
+	};
 };
 
 function overridePointDisplay() {
