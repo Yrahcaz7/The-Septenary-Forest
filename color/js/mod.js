@@ -16,7 +16,7 @@ const VERSION = {
 const changelog = `<h1>Changelog:</h1><br>
 	<br><h3>v4.2: Expansion</h3><br>
 		- Added six multiplier milestones.<br>
-		- Added nine color upgrades.<br>
+		- Added ten color upgrades.<br>
 		- Added the rest of the colors.<br>
 		- Various bugfixes.<br>
 	<br><h3>v4.1: The Greatest QOL Update</h3><br>
@@ -29,8 +29,9 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added one new color.<br>
 <br>`;
 
-let winText = "<h3>You won the game!</h3><br>However, it isn't the end yet...<br>Wait for more updates for further content.";
-
+function winText() {
+	return "You reached " + formatWhole(4096) + " " + layers.m.resource + " and won the game!<br>However, it isn't the end yet...<br>Wait for more updates for further content.";
+};
 function getStartPoints() {
 	return new Decimal(modInfo.initialStartPoints);
 };
@@ -51,13 +52,15 @@ function getPointGen() {
 
 function addedPlayerData() {return {}};
 
-let displayThings = [];
+const displayThings = [
+	() => { if (tmp.gameEnded) return "You beat the game!<br>For now..." },
+];
 
 function isEndgame() {
-	return false;
+	return player.m.points.gte(4096);
 };
 
-let backgroundStyle = {};
+const backgroundStyle = {};
 
 function maxTickLength() {
 	return 1;
@@ -79,6 +82,6 @@ function overridePointDisplay() {
 	if (player.points.lt("1e1000")) html += "<span class'overlayThing'>You have&nbsp;</span>";
 	html += "<h2 class='overlayThing' id='points'>" + illionFormat(player.points) + "</h2>";
 	if (player.points.lt("e1000000")) html += "<span class='overlayThing'>&nbsp;" + modInfo.pointsName + "</span><br>";
-	html += "average: " + illionFormat(getAverageCoinGain()) + "/sec";
+	html += "(average: " + illionFormat(getAverageCoinGain()) + "/sec)";
 	return html;
 };

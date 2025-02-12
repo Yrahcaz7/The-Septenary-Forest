@@ -186,7 +186,7 @@ function getColorBars() {
 			display() { if (getBuyableAmount("c", BUYNUM).gt(0) && player.c.earnings[index]) return "coins/cycle: " + illionFormat(player.c.earnings[index]) + "<br>(" + illionFormat(player.c.earnings[index].mul(getColorSpeed(index))) + "/sec)" },
 			fillStyle: {"background-color": HEX},
 			borderStyle: {"border-color": HEX},
-			style: {"color": (COLORS[index].dark ? "#999999" : "#ffffff")},
+			style: {"color": (COLORS[index].dark ? "#888888" : "#ffffff")},
 			unlocked() { return player.c.colors >= index },
 		};
 		bars[NAME + "Buy"] = {
@@ -201,7 +201,7 @@ function getColorBars() {
 			display() { return format(this.progress().min(1).mul(100)) + "%" },
 			fillStyle: {"background-color": HEX},
 			borderStyle: {"border-color": HEX},
-			style: {"color": (COLORS[index].dark ? "#999999" : "#ffffff")},
+			style: {"color": (COLORS[index].dark ? "#888888" : "#ffffff")},
 			unlocked() { return player.c.colors >= index },
 		};
 		bars[NAME + "Prog"] = {
@@ -218,7 +218,7 @@ function getColorBars() {
 			display() { return "<h1 style='font-family: Flavors'>" + formatWhole(getBuyableAmount("c", BUYNUM)) },
 			fillStyle: {"background-color": HEX},
 			borderStyle: {"border-color": HEX},
-			style: {"color": (COLORS[index].dark ? "#999999" : "#ffffff"), "border-radius": "50%"},
+			style: {"color": (COLORS[index].dark ? "#888888" : "#ffffff"), "border-radius": "50%"},
 			unlocked() { return player.c.colors >= index },
 		};
 	};
@@ -253,7 +253,7 @@ function getColorBuyables() {
 				return "<h3 style='color:" + HEX + "'>" + buyText + ": " + illionFormat(getColorCost(index), true) + " coins";
 			},
 			purchaseLimit: COLOR_MILESTONES[COLOR_MILESTONES.length - 1],
-			style: {"background-color": (COLORS[index].dark ? "#999999" : "#ffffff")},
+			style: {"background-color": (COLORS[index].dark ? "#888888" : "#ffffff")},
 			unlocked() { return player.c.colors >= index },
 		};
 	};
@@ -283,7 +283,7 @@ addLayer("c", {
 	}},
 	color: "#ffffff",
 	nodeStyle: {"border": "0px transparent"},
-	tooltip() { return formatWhole(player.c.colors) + " colors" },
+	tooltip() { return formatWhole(player.c.colors) + " colors unlocked" },
 	layerShown() { return true },
 	doReset(resettingLayer) {
 		let keep = [];
@@ -460,6 +460,13 @@ addLayer("c", {
 			effect() { return player.c.upgrades.length / 10 + 1 },
 			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
+		25: {
+			coinCost: 1e33,
+			fullDisplay() { return "<h3>???</h3><br>coming soon!<br><br>Cost: " + illionFormat(this.coinCost) + " coins" },
+			canAfford() { return player.points.gte(this.coinCost) },
+			pay() { player.points = player.points.sub(this.coinCost) },
+			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+		},
 	},
 });
 
@@ -481,7 +488,7 @@ addLayer("m", {
 		points: newDecimalZero(),
 		type: -1,
 	}},
-	color: "slategray",
+	color: "#708090",
 	marked: "moon",
 	requires: 4,
 	resource: "total multiplier",
@@ -536,15 +543,16 @@ addLayer("m", {
 		["custom-resource-display", () => "You have " + player.c.colors + " colors unlocked<br>Your best colors unlocked is " + player.c.colorBest],
 		"blank",
 		["column", [
-			["display-text", "<h2>Multiplier Distribution</h2><br>Click one of the colored buttons at the bottom to select that multiplier color"],
-			["blank", ["5px", "5px"]],
-			"grid",
+			["display-text", "<h2>Multiplier Distribution</h2>", {"padding": "0 5px 0 5px"}],
+			["contained-grid", "calc(100% - 10px)"],
+			["display-text", "Click one of the colored buttons at the bottom to select that multiplier color.", {"padding": "0 5px 0 5px"}],
 		]],
 		"blank",
 		"milestones",
 	],
 	componentStyles: {
-		"column"() { return {"width": "fit-content", "border": "2px solid #ffffff", "border-radius": "20px", "padding": "5px"} },
+		"column"() { return {"width": "fit-content", "max-width": "calc(100% - 14px)", "border": "2px solid #ffffff", "border-radius": "20px", "padding": "5px 0"} },
+		"contained-grid"() { return {"padding": "5px"} },
 	},
 	grid: {
 		rows: 4,
@@ -552,22 +560,22 @@ addLayer("m", {
 		maxCols: COLORS.length + 1,
 		getStartData(id) {},
 		getDisplay(data, id) {
-			if (id == 101) return "<h3>power";
-			if (id == 201) return "<h3>speed";
-			if (id == 301) return "<h3>cost";
+			if (id == 101) return "<h3>this row multiplies power";
+			if (id == 201) return "<h3>this row multiplies speed";
+			if (id == 301) return "<h3>this row divides cost";
 			if (id == 401) return "<h3>RANDOM";
 			if (id > 401) return "<h3>" + COLORS[id % 100 - 2].name.toUpperCase();
-			if (!data) return "<h3>N/A";
-			return "<h3>" + illionFormat(data, true, 0);
+			if (!data) return "<h2>N/A";
+			return "<h2>" + illionFormat(data, true, 0);
 		},
 		getStyle(data, id) {
 			const INDEX = id % 100 - 2;
 			return {
-				"width": "70px",
-				"height": (id >= 401 ? "30px" : "70px"),
-				"border-color": (id >= 401 ? (INDEX >= 0 ? COLORS[INDEX].hex : "#999999") : "#00000020"),
+				"width": "90px",
+				"height": (id >= 401 ? "30px" : "90px"),
+				"border-color": (id >= 401 ? (INDEX >= 0 ? COLORS[INDEX].hex : "#888888") : "#00000020"),
 				"border-radius": "10px",
-				"background-color": (INDEX >= 0 ? (COLORS[INDEX].dark ? "#999999" : "#f0f0f0") : "#f0f0f0"),
+				"background-color": (INDEX >= 0 ? (COLORS[INDEX].dark ? "#888888" : "#f0f0f0") : "#f0f0f0"),
 				"color": (INDEX >= 0 ? COLORS[INDEX].hex : "#000000"),
 			};
 		},
@@ -576,19 +584,6 @@ addLayer("m", {
 		onClick(data, id) {
 			const INDEX = id % 100 - 2;
 			player.m.type = INDEX;
-		},
-		getTooltip(data, id) {
-			if (id == 101) return "this row multiplies power";
-			if (id == 201) return "this row multiplies speed";
-			if (id == 301) return "this row divides cost";
-			if (id == 401) return "click to choose a random color";
-			const INDEX = id % 100 - 2;
-			if (id > 401) return "click to choose " + COLORS[INDEX].name;
-			let tooltip = "this ";
-			if (id < 200) tooltip += "multiplies power";
-			else if (id < 300) tooltip += "multiplies speed";
-			else if (id < 400) tooltip += "divides cost";
-			return tooltip + " of " + (COLORS[INDEX] ? COLORS[INDEX].name : "N/A");
 		},
 	},
 	milestones: {
@@ -617,14 +612,14 @@ addLayer("m", {
 		},
 		4: {
 			done() { return player.m.points.gte(1024) },
-			requirementDescription: "1024 total multiplier",
+			requirementDescription: "1,024 total multiplier",
 			effectDescription: "you gain +100% extra multiplier on reset<br>this extra multiplier is assigned randomly",
 			unlocked() { return hasMilestone("m", this.id - 1) },
 		},
 		5: {
 			done() { return player.m.points.gte(4096) },
-			requirementDescription: "4096 total multiplier",
-			effectDescription: "coming soon...",
+			requirementDescription: "4,096 total multiplier",
+			effectDescription: "coming soon!",
 			unlocked() { return hasMilestone("m", this.id - 1) },
 		},
 	},
