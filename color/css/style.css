@@ -87,4 +87,5 @@
 .sidetext {
 	writing-mode: vertical-rl;
 	text-orientation: mixed;
+	margin-bottom: -0.25ch;
 }

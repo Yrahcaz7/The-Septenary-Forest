@@ -57,11 +57,29 @@ const COLORS = [{
 	costBase: 300,
 	earnings: 100e15,
 	time: 768,
-}]; // future colors: violet, fuchsia, magenta
+}, {
+	name: "violet",
+	hex: "#8800ff",
+	costBase: 375,
+	earnings: 50e18,
+	time: 1536,
+}, {
+	name: "fuchsia",
+	hex: "#ff00ff",
+	costBase: 475,
+	earnings: 2.5e21,
+	time: 3072,
+}, {
+	name: "magenta",
+	hex: "#ff0088",
+	costBase: 600,
+	earnings: 2.5e24,
+	time: 6144,
+}];
 
-const COLOR_MILESTONES = [10, 25, 50, 100, 150, 200, 300, 400];
+const COLOR_MILESTONES = [10, 25, 50, 100, 150, 200, 300, 400, 500];
 
-const COLOR_MILESTONE_MULT = [2.5, 5, 10, 50, 200, 200, 400, 400];
+const COLOR_MILESTONE_MULT = [2.5, 5, 10, 50, 200, 200, 400, 400, 400];
 
 function registerColorCost(index, bulk) {
 	const BUYNUM = (index + 1) * 10 + 1;
@@ -99,6 +117,7 @@ function getColorSpeed(index) {
 	const MULTNUM = 202 + index;
 	if (hasUpgrade("c", 11)) speed = speed.mul(upgradeEffect("c", 11));
 	if (hasUpgrade("c", 14)) speed = speed.mul(upgradeEffect("c", 14));
+	if (hasUpgrade("c", 23)) speed = speed.mul(upgradeEffect("c", 23));
 	if (getGridData("m", MULTNUM)) speed = speed.mul(getGridData("m", MULTNUM));
 	return speed;
 };
@@ -212,23 +231,22 @@ function getColorBuyables() {
 				let divnum = newDecimalOne();
 				if (hasUpgrade("c", 12)) divnum = divnum.mul(upgradeEffect("c", 12));
 				if (hasUpgrade("c", 15)) divnum = divnum.mul(upgradeEffect("c", 15));
+				if (hasUpgrade("c", 22)) divnum = divnum.mul(upgradeEffect("c", 22));
 				if (getGridData("m", DIVNUM)) divnum = divnum.mul(getGridData("m", DIVNUM));
 				return amt.div(2).pow(2).add(new Decimal(1.32).pow(amt.pow(0.9))).div(divnum);
 			},
-			bulkBuy() {
-				if (getClickableState("c", 11) == "5x") return 5;
-				else return 1;
-			},
-			canAfford() { return player.points.gte(getColorCost(index)) },
+			canAfford() { return player.points.gte(getColorCost(index)) && getBuyableAmount("c", BUYNUM).lt(this.purchaseLimit) },
 			buy() {
 				player.points = player.points.sub(getColorCost(index));
 				addBuyables("c", BUYNUM, getColorBulk(index));
 			},
 			display() {
+				if (getBuyableAmount("c", BUYNUM).gte(this.purchaseLimit)) return "<h3 style='color:" + HEX + "'>MAXED";
 				let buyText = "Cost";
 				if (getBuyableAmount("c", BUYNUM).eq(0) && getColorBulk(index) === 1) buyText = "Unlock";
 				return "<h3 style='color:" + HEX + "'>" + buyText + ": " + illionFormat(getColorCost(index), true) + " coins";
 			},
+			purchaseLimit: COLOR_MILESTONES[COLOR_MILESTONES.length - 1],
 			style: {"background-color": (COLORS[index].dark ? "#999999" : "#ffffff")},
 			unlocked() { return player.c.colors >= index },
 		};
@@ -287,6 +305,7 @@ addLayer("c", {
 				if (getBuyableAmount("c", BUYNUM).gte(COLOR_MILESTONES[msIndex])) earnings = earnings.mul(COLOR_MILESTONE_MULT[msIndex]);
 			};
 			if (hasUpgrade("c", 13)) earnings = earnings.mul(upgradeEffect("c", 13));
+			if (hasUpgrade("c", 21)) earnings = earnings.mul(upgradeEffect("c", 21));
 			if (getGridData("m", MULTNUM)) earnings = earnings.mul(getGridData("m", MULTNUM));
 			player.c.earnings[index] = earnings;
 		};
@@ -417,12 +436,53 @@ addLayer("c", {
 				"animation": "3s linear infinite rainbowline",
 			}},
 		},
+		21: {
+			coinCost: 1e21,
+			fullDisplay() { return "<h3>Powered Colors</h3><br>multiplies color powers based on your total multiplier<br><br>Effect: " + illionFormat(upgradeEffect(this.layer, this.id)) + "x<br><br>Cost: " + illionFormat(this.coinCost) + " coins" },
+			canAfford() { return player.points.gte(this.coinCost) },
+			pay() { player.points = player.points.sub(this.coinCost) },
+			effect() { return player.m.points.add(1).log10().div(4).add(1) },
+			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return {
+				"background": "var(--rainbowline)",
+				"background-size": "200%",
+				"animation": "3s linear infinite rainbowline",
+			}},
+		},
+		22: {
+			coinCost: 1e24,
+			fullDisplay() { return "<h3>Investment</h3><br>divides color costs based on your colors unlocked<br><br>Effect: /" + illionFormat(upgradeEffect(this.layer, this.id)) + "<br><br>Cost: " + illionFormat(this.coinCost) + " coins" },
+			canAfford() { return player.points.gte(this.coinCost) },
+			pay() { player.points = player.points.sub(this.coinCost) },
+			effect() { return (player.c.colors) ** 2.5 / 1000 + 1 },
+			onPurchase() {
+				for (let index = 0; index < COLORS.length; index++) {
+					registerColorCost(index, getColorBulk(index));
+				};
+			},
+			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return {
+				"background": "var(--rainbowline)",
+				"background-size": "200%",
+				"animation": "3s linear infinite rainbowline",
+			}},
+		},
+		23: {
+			coinCost: 1e27,
+			fullDisplay() { return "<h3>Fluid Production</h3><br>multiplies color powers based on your colors unlocked<br><br>Effect: " + illionFormat(upgradeEffect(this.layer, this.id)) + "x<br><br>Cost: " + illionFormat(this.coinCost) + " coins" },
+			canAfford() { return player.points.gte(this.coinCost) },
+			pay() { player.points = player.points.sub(this.coinCost) },
+			effect() { return (player.c.colors) ** 1.5 / 100 + 1 },
+			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return {
+				"background": "var(--rainbowline)",
+				"background-size": "200%",
+				"animation": "3s linear infinite rainbowline",
+			}},
+		},
 	},
 });
 
 function assignMultiplier(amount, selected = -1) {
 	let color = (selected >= 0 ? selected + 1 : getRandInt(1, player.c.colorBest));
-	let type = getRandInt(1, 3);
+	let type = getRandInt(1, 4);
 	let id = type * 100 + color + 1;
 	setGridData("m", id, amount.add(getGridData("m", id)));
 	console.log("Assigned " + amount + " to " + COLORS[color - 1].name + " " + ["power", "speed", "cost"][type - 1]);
@@ -447,13 +507,14 @@ addLayer("m", {
 	type: "custom",
 	gainMult() {
 		let mult = newDecimalOne();
-		if (hasMilestone("m", 2)) mult = mult.mul(2);
+		if (hasMilestone("m", 2)) mult = mult.add(1);
+		if (hasMilestone("m", 4)) mult = mult.add(1);
 		return mult;
 	},
 	getResetGain(x = 0) {
 		let num = player.c.colors + x;
-		let earnings = [0, 0, 0, 0, 2, 4, 8, 16, 32, 64, 128];
-		let gain = new Decimal(earnings[Math.min(num, earnings.length - 1)]);
+		if (num < tmp.m.requires) return new Decimal(0);
+		let gain = new Decimal(2).pow(num + 1 - tmp.m.requires);
 		gain = gain.mul(tmp.m.gainMult);
 		return gain;
 	},
@@ -472,8 +533,10 @@ addLayer("m", {
 	},
 	onPrestige(gain) {
 		if (hasMilestone("m", 2)) {
-			assignMultiplier(gain.div(2), player.m.type);
-			assignMultiplier(gain.div(2));
+			let portion = gain.div(hasMilestone("m", 4) ? 3 : 2).round();
+			assignMultiplier(portion, player.m.type);
+			assignMultiplier(portion);
+			if (hasMilestone("m", 4)) assignMultiplier(portion);
 		} else {
 			assignMultiplier(gain, player.m.type);
 		};
@@ -560,13 +623,19 @@ addLayer("m", {
 		2: {
 			done() { return player.m.points.gte(64) },
 			requirementDescription: "64 total multiplier",
-			effectDescription: "you gain 100% more multiplier on reset<br>this extra multiplier is assigned randomly",
+			effectDescription: "you gain +100% extra multiplier on reset<br>this extra multiplier is assigned randomly",
 			unlocked() { return hasMilestone("m", this.id - 1) },
 		},
 		3: {
 			done() { return player.m.points.gte(256) },
 			requirementDescription: "256 total multiplier",
 			effectDescription: "unlock the bulk buy next option for colors",
+			unlocked() { return hasMilestone("m", this.id - 1) },
+		},
+		4: {
+			done() { return player.m.points.gte(1024) },
+			requirementDescription: "1024 total multiplier",
+			effectDescription: "you gain +100% extra multiplier on reset<br>this extra multiplier is assigned randomly",
 			unlocked() { return hasMilestone("m", this.id - 1) },
 		},
 	},
