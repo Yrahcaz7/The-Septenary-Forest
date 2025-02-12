@@ -61,21 +61,35 @@ const COLORS = [{
 
 const COLOR_MILESTONES = [10, 25, 50, 100, 150, 200, 300, 400];
 
-const COLOR_MILESTONE_MULT = [2.5, 5, 10, 50, 200, 200, 200, 200];
+const COLOR_MILESTONE_MULT = [2.5, 5, 10, 50, 200, 200, 400, 400];
 
 function registerColorCost(index, bulk) {
 	const BUYNUM = (index + 1) * 10 + 1;
-	const AMOUNT = getBuyableAmount("c", BUYNUM);
+	const AMOUNT = getBuyableAmount("c", BUYNUM).toNumber();
 	let bulkCost = new Decimal(tmp.c.buyables[BUYNUM].cost || layers.c.buyables[BUYNUM].cost());
 	for (let num = 1; num < bulk; num++) {
-		bulkCost = bulkCost.add(layers.c.buyables[BUYNUM].cost(AMOUNT.add(num)));
+		bulkCost = bulkCost.add(layers.c.buyables[BUYNUM].cost(AMOUNT + num));
 	};
 	COLORS[index].bulkLocation = AMOUNT;
+	if (!COLORS[index].bulkCost) COLORS[index].bulkCost = {};
 	COLORS[index].bulkCost[bulk] = bulkCost;
 };
 
-function getColorBulk() {
-	if (getClickableState("c", 11) == "5x") return 5;
+function getColorBulk(index) {
+	if (getClickableState("c", 11) == "next") {
+		const BUYNUM = (index + 1) * 10 + 1;
+		const AMOUNT = getBuyableAmount("c", BUYNUM).toNumber();
+		if (AMOUNT === 0) return 1;
+		for (let index = 0; index < COLOR_MILESTONES.length; index++) {
+			if (AMOUNT < COLOR_MILESTONES[index]) {
+				return COLOR_MILESTONES[index] - AMOUNT;
+			};
+		};
+		return 1;
+	};
+	if (getClickableState("c", 11) == "5x") {
+		return 5;
+	};
 	return 1;
 };
 
@@ -91,12 +105,12 @@ function getColorSpeed(index) {
 
 function getColorCost(index) {
 	const BUYNUM = (index + 1) * 10 + 1;
-	const AMOUNT = getBuyableAmount("c", BUYNUM);
-	const BULK = getColorBulk();
+	const AMOUNT = getBuyableAmount("c", BUYNUM).toNumber();
+	const BULK = getColorBulk(index);
 	if (BULK === 1) {
 		return tmp.c.buyables[BUYNUM].cost || layers.c.buyables[BUYNUM].cost();
 	} else {
-		if (COLORS[index].bulkLocation !== AMOUNT || !COLORS[index].bulkCost) {
+		if (COLORS[index].bulkLocation !== AMOUNT) {
 			COLORS[index].bulkCost = {};
 		};
 		if (!COLORS[index].bulkCost[BULK]) {
@@ -197,6 +211,7 @@ function getColorBuyables() {
 				let amt = new Decimal(COLORS[index].costBase).add(x);
 				let divnum = newDecimalOne();
 				if (hasUpgrade("c", 12)) divnum = divnum.mul(upgradeEffect("c", 12));
+				if (hasUpgrade("c", 15)) divnum = divnum.mul(upgradeEffect("c", 15));
 				if (getGridData("m", DIVNUM)) divnum = divnum.mul(getGridData("m", DIVNUM));
 				return amt.div(2).pow(2).add(new Decimal(1.32).pow(amt.pow(0.9))).div(divnum);
 			},
@@ -207,11 +222,11 @@ function getColorBuyables() {
 			canAfford() { return player.points.gte(getColorCost(index)) },
 			buy() {
 				player.points = player.points.sub(getColorCost(index));
-				addBuyables("c", BUYNUM, getColorBulk());
+				addBuyables("c", BUYNUM, getColorBulk(index));
 			},
 			display() {
 				let buyText = "Cost";
-				if (getBuyableAmount("c", BUYNUM).eq(0) && getColorBulk() === 1) buyText = "Unlock";
+				if (getBuyableAmount("c", BUYNUM).eq(0) && getColorBulk(index) === 1) buyText = "Unlock";
 				return "<h3 style='color:" + HEX + "'>" + buyText + ": " + illionFormat(getColorCost(index), true) + " coins";
 			},
 			style: {"background-color": (COLORS[index].dark ? "#999999" : "#ffffff")},
@@ -248,22 +263,19 @@ addLayer("c", {
 	layerShown() { return true },
 	doReset(resettingLayer) {
 		let keep = [];
-		if (resettingLayer == "m") keep.push("colorBest");
+		if (resettingLayer == "m") keep.push("colorBest", "clickables");
 		if (layers[resettingLayer].row > this.row) layerDataReset("c", keep);
-		player.c.earnings = [];
-		player.c.time = [];
 	},
 	update(diff) {
 		// update unlocks
-		if (getBuyableAmount("c", 81).gt(0)) player.c.colors = 8;
-		else if (getBuyableAmount("c", 71).gt(0)) player.c.colors = 7;
-		else if (getBuyableAmount("c", 61).gt(0)) player.c.colors = 6;
-		else if (getBuyableAmount("c", 51).gt(0)) player.c.colors = 5;
-		else if (getBuyableAmount("c", 41).gt(0)) player.c.colors = 4;
-		else if (getBuyableAmount("c", 31).gt(0)) player.c.colors = 3;
-		else if (getBuyableAmount("c", 21).gt(0)) player.c.colors = 2;
-		else if (getBuyableAmount("c", 11).gt(0)) player.c.colors = 1;
-		else player.c.colors = 0;
+		for (let index = player.c.colors; index < COLORS.length; index++) {
+			const BUYNUM = (index + 1) * 10 + 1;
+			if (getBuyableAmount("c", BUYNUM).gt(0)) {
+				player.c.colors = index + 1;
+			} else {
+				break;
+			};
+		};
 		// update best
 		if (player.c.colors > player.c.colorBest) player.c.colorBest = player.c.colors;
 		// calculate earnings
@@ -325,6 +337,8 @@ addLayer("c", {
 				};
 				if (getClickableState("c", 11) == "1x") {
 					setClickableState("c", 11, "5x");
+				} else if (getClickableState("c", 11) == "5x" && hasMilestone("m", 3)) {
+					setClickableState("c", 11, "next");
 				} else {
 					setClickableState("c", 11, "1x");
 				};
@@ -353,7 +367,7 @@ addLayer("c", {
 			effect: 1.5,
 			onPurchase() {
 				for (let index = 0; index < COLORS.length; index++) {
-					registerColorCost(index, getColorBulk());
+					registerColorCost(index, getColorBulk(index));
 				};
 			},
 			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return {
@@ -380,6 +394,23 @@ addLayer("c", {
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return player.m.points.add(1).log10().div(5).add(1) },
+			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return {
+				"background": "var(--rainbowline)",
+				"background-size": "200%",
+				"animation": "3s linear infinite rainbowline",
+			}},
+		},
+		15: {
+			coinCost: 1e18,
+			fullDisplay() { return "<h3>Upgraded Costs</h3><br>divides color costs based on your color upgrades<br><br>Effect: /" + illionFormat(upgradeEffect(this.layer, this.id)) + "<br><br>Cost: " + illionFormat(this.coinCost) + " coins" },
+			canAfford() { return player.points.gte(this.coinCost) },
+			pay() { player.points = player.points.sub(this.coinCost) },
+			effect() { return player.c.upgrades.length / 10 + 1 },
+			onPurchase() {
+				for (let index = 0; index < COLORS.length; index++) {
+					registerColorCost(index, getColorBulk(index));
+				};
+			},
 			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return {
 				"background": "var(--rainbowline)",
 				"background-size": "200%",
@@ -421,7 +452,7 @@ addLayer("m", {
 	},
 	getResetGain(x = 0) {
 		let num = player.c.colors + x;
-		let earnings = [0, 0, 0, 0, 2, 4, 8, 16, 32, 64];
+		let earnings = [0, 0, 0, 0, 2, 4, 8, 16, 32, 64, 128];
 		let gain = new Decimal(earnings[Math.min(num, earnings.length - 1)]);
 		gain = gain.mul(tmp.m.gainMult);
 		return gain;
@@ -524,11 +555,19 @@ addLayer("m", {
 			done() { return player.m.points.gte(8) },
 			requirementDescription: "8 total multiplier",
 			effectDescription: "unlock the upgrades tab",
+			unlocked() { return hasMilestone("m", this.id - 1) },
 		},
 		2: {
 			done() { return player.m.points.gte(64) },
 			requirementDescription: "64 total multiplier",
 			effectDescription: "you gain 100% more multiplier on reset<br>this extra multiplier is assigned randomly",
+			unlocked() { return hasMilestone("m", this.id - 1) },
+		},
+		3: {
+			done() { return player.m.points.gte(256) },
+			requirementDescription: "256 total multiplier",
+			effectDescription: "unlock the bulk buy next option for colors",
+			unlocked() { return hasMilestone("m", this.id - 1) },
 		},
 	},
 });
