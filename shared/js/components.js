@@ -354,15 +354,19 @@ function loadVue(mainPage = false) {
 				if (typeof extraMainDisplay == 'function') return extraMainDisplay(this.layer) || "";
 				return "";
 			},
+			effectDescription() {
+				if (layers[this.layer].effectDescription) return run(layers[this.layer].effectDescription, layers[this.layer]);
+				return "";
+			},
 		},
 		template: template(`<div>
 			<span v-if="player[layer].points.lt('1e1000')">You have&nbsp;</span>
 			<h2 :style="{'color': tmp[layer].color, 'text-shadow': '0px 0px 10px' + tmp[layer].color}">{{data ? format(player[layer].points, data) : formatWhole(player[layer].points)}}</h2>&nbsp;
 			<span v-if="extraMainDisplay" v-html="extraMainDisplay"></span>
 			{{tmp[layer].resource}}
-			<span v-if="layers[layer].effectDescription">
+			<span v-if="effectDescription">
 				,&nbsp;
-				<span v-html="run(layers[layer].effectDescription, layers[layer])"></span>
+				<span v-html="effectDescription"></span>
 			</span><br><br>
 		</div>`),
 	});
