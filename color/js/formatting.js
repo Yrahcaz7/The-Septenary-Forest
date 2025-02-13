@@ -246,7 +246,7 @@ function illionFormat(decimal, short, precision = 2) {
 			if (!short) suffix += "thousand";
 			else suffix += "k";
 		} else { // none
-			return format(decimal, Math.max(precision - 1, 0));
+			return format(decimal, options.extendPlaces ? Math.max(precision - 1, 0) : precision);
 		};
 	};
 	// add suffix

@@ -89,3 +89,10 @@
 	text-orientation: mixed;
 	margin-bottom: -0.25ch;
 }
+
+.scrollButton {
+	width: 25px;
+	height: 20px;
+	border: solid 2px #00000020;
+	border-radius: 10px;
+}
