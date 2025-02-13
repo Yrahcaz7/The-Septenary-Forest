@@ -77,9 +77,9 @@ const COLORS = [{
 	time: 6144,
 }];
 
-const COLOR_MILESTONES = [10, 25, 50, 100, 150, 200, 300, 400, 500];
+const COLOR_MILESTONES = [10, 25, 50, 100, 150, 200, 300, 400, 500, 600];
 
-const COLOR_MILESTONE_MULT = [2.5, 5, 10, 50, 200, 200, 400, 400, 400];
+const COLOR_MILESTONE_MULT = [2.5, 5, 10, 50, 200, 200, 400, 400, 800, 800];
 
 const COLOR_UPGRADE_STYLE = {
 	"background": "var(--rainbowline)",
