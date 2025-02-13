@@ -543,7 +543,7 @@ addLayer("m", {
 		["custom-resource-display", () => "You have " + player.c.colors + " colors unlocked<br>Your best colors unlocked is " + player.c.colorBest],
 		"blank",
 		["column", [
-			["raw-html", "<button class='scrollButton can' onclick='this.parentElement.nextElementSibling.scrollBy(-92, 0)'>\<</button><h2>Multiplier Distribution</h2><button class='scrollButton can' onclick='this.parentElement.nextElementSibling.scrollBy(92, 0)'>\></button>", {"display": "flex", "justify-content": "space-between", "padding": "0 5px 0 5px"}],
+			["raw-html", "<button class='scrollButton can' onclick='this.parentElement.nextElementSibling.scrollBy(-92, 0)'>\<</button><h2 style='padding: 0 5px 0 5px'>Multiplier Distribution</h2><button class='scrollButton can' onclick='this.parentElement.nextElementSibling.scrollBy(92, 0)'>\></button>", {"display": "flex", "justify-content": "space-between", "padding": "0 5px 0 5px"}],
 			["contained-grid", "calc(100% - 10px)"],
 			["display-text", "Click one of the colored buttons at the bottom to select that multiplier color.", {"padding": "0 5px 0 5px"}],
 		]],

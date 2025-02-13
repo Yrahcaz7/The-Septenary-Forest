@@ -232,7 +232,7 @@ function loadVue(mainPage = false) {
 			currentlyText() {
 				if (typeof currentlyText === "function") return currentlyText();
 				if (typeof currentlyText === "string") return currentlyText;
-				return "Currently:&nbsp;";
+				return "Currently: ";
 			},
 		},
 		template: template(`<div v-if="tmp[layer].challenges && tmp[layer].challenges[data] !== undefined && tmp[layer].challenges[data].unlocked && !(options.hideChallenges && maxedChallenge(layer, data) && !inChallenge(layer, data))" :class="[
@@ -248,8 +248,9 @@ function loadVue(mainPage = false) {
 				<span v-html="tmp[layer].challenges[data].challengeDescription"></span><br>
 				Goal: <span v-if="tmp[layer].challenges[data].goalDescription" v-html="tmp[layer].challenges[data].goalDescription"></span>
 				<span v-else>{{format(tmp[layer].challenges[data].goal)}} {{tmp[layer].challenges[data].currencyDisplayName ? tmp[layer].challenges[data].currencyDisplayName : modInfo.pointsName}}</span><br>
-				Reward: <span v-html="tmp[layer].challenges[data].rewardDescription"></span><br>
+				Reward: <span v-html="tmp[layer].challenges[data].rewardDescription"></span>
 				<span v-if="layers[layer].challenges[data].rewardDisplay !== undefined">
+					<br>
 					<span v-html="currentlyText"></span>
 					<span v-html="tmp[layer].challenges[data].rewardDisplay ? run(layers[layer].challenges[data].rewardDisplay, layers[layer].challenges[data]) : format(tmp[layer].challenges[data].rewardEffect)"></span>
 				</span>
@@ -281,7 +282,7 @@ function loadVue(mainPage = false) {
 			currentlyText() {
 				if (typeof currentlyText === "function") return currentlyText();
 				if (typeof currentlyText === "string") return currentlyText;
-				return "Currently:&nbsp;";
+				return "Currently: ";
 			},
 		},
 		template: template(`<button v-if="tmp[layer].upgrades && tmp[layer].upgrades[data] !== undefined && tmp[layer].upgrades[data].unlocked" :id='"upgrade-" + layer + "-" + data' v-on:click="buyUpg(layer, data)" :class="{
@@ -381,14 +382,11 @@ function loadVue(mainPage = false) {
 			},
 		},
 		template: template(`<div>
-			<span v-if="player[layer].points.lt('1e1000')">You have&nbsp;</span>
+			<span v-if="player[layer].points.lt('1e1000')">You have </span>
 			<h2 :style="{'color': tmp[layer].color, 'text-shadow': '0px 0px 10px' + tmp[layer].color}">{{data ? format(player[layer].points, data) : formatWhole(player[layer].points)}}</h2>&nbsp;
 			<span v-if="extraMainDisplay" v-html="extraMainDisplay"></span>
 			{{tmp[layer].resource}}
-			<span v-if="effectDescription">
-				,&nbsp;
-				<span v-html="effectDescription"></span>
-			</span><br><br>
+			<span v-if="effectDescription">, <span v-html="effectDescription"></span></span><br><br>
 		</div>`),
 	});
 
@@ -1028,7 +1026,7 @@ function loadVue(mainPage = false) {
 			<br>
 			<span v-if="overridePointDisplay" v-html="overridePointDisplay" class="overlayThing"></span>
 			<span v-else>
-				<span v-if="player.points.lt('1e1000')" class="overlayThing">You have&nbsp;</span>
+				<span v-if="player.points.lt('1e1000')" class="overlayThing">You have </span>
 				<h2 class="overlayThing" id="points">{{format(player.points)}}</h2>
 				<span v-if="player.points.lt('e1000000')" class="overlayThing">&nbsp;{{modInfo.pointsName}}</span><br>
 				<span v-if="canGenPoints()" class="overlayThing">
