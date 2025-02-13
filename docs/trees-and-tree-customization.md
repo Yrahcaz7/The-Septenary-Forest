@@ -4,7 +4,7 @@ If you want to have something beyond the standard tree on the left tab, you can 
 
 ## layoutInfo
 
-The most important part is layoutInfo, containing:
+The most important part is `layoutInfo`, containing:
 
 - `startTab`: The id of the default tab to show on the right at the start.
 
@@ -63,4 +63,4 @@ and layers/nodes are sorted in alphabetical order.
 
 - `overrideTooltip(layer)`: **OVERRIDE**. What this function returns overrides all tree node tooltips. You can use the layer parameter to make it only apply to certain layers. If it returns a [falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) value, however, it will use the default.
 
-- `overrideTreeNodeClick(layer)`: **OVERRIDE**. This function should return another function, which overrides what happens when you click on a tree node. If it does not return a function, it will use the default (which, if it is a layer, is going to that layer's tab).
+- `overrideTreeNodeClick(layer)`: **OVERRIDE**. This function should return another function based on `layer`, which overrides what happens when you click that layer's tree node. If it does not return a function, it will use the default (which, if it is a layer, is going to that layer's tab).

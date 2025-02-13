@@ -65,6 +65,8 @@ Additional features:
 
 - `update(diff)`: **optional**. This function is called every game tick. Use it for any passive resource production or time-based things. `diff` is the time since the last tick.
 
+- `onReset(resettingLayer)`: **optional**. This function is called whenever any layer resets. Use this to reset any added player data that needs resetting based on `resettingLayer`.
+
 ## Less important things
 
 - `backgroundStyle`: A CSS object containing the styling for the background of the full game. Can be a function!
@@ -74,6 +76,8 @@ Additional features:
 - `fixOldSave(oldVersion)`: Can be used to modify a save file when loading into a new version of the game. Use this to undo inflation, never forcibly hard reset your players.
 
 Additional features:
+
+- `getPoints()`: **OVERRIDE**. If this function returns a Decimal, `game.points` is set to that amount every tick instead of increasing based on `getPointGen()`. Can be used to implement a different method of point gain.
 
 - `overridePointDisplay()`: **OVERRIDE**. What this function returns overrides the point display at the top of the page. Any extra display things will still be displayed; this just replaces the point and point per second display. If it returns a [falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) value, however, it will use the default.
 
