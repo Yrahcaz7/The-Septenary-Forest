@@ -31,7 +31,7 @@ Here's a breakdown of what's in it:
 
 ```js
 // The ones here are examples. All official functions are already taken care of.
-let doNotCallTheseFunctionsEveryTick = ["doReset", "buy", "onPurchase", "blowUpEverything"];
+const doNotCallTheseFunctionsEveryTick = ["doReset", "buy", "onPurchase", "blowUpEverything"];
 ```
 
 - `winText`: **optional**. Sets the test to display when the player wins the game. (Can use basic HTML). This can be a string or a function that returns a string. If  absent or is/returns an empty string, displays a default message instead.

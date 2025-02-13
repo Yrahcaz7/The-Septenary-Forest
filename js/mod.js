@@ -33,7 +33,7 @@ const changelog = `<h1>Changelog:</h1><br>
 const doNotCallTheseFunctionsEveryTick = ["doReset", "buy", "onPurchase", "blowUpEverything"];
 
 // The test to display when the player wins the game.
-const winText = () => {
+function winText() {
 	return "You reached " + format(endPoints) + " " + modInfo.pointsName + " and won the game!<br>However, it isn't the end yet...<br>Wait for more updates for further content.";
 };
 

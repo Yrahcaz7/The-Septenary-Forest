@@ -190,7 +190,7 @@ function doReset(layer, force = false, overrideResetsNothing = false) {
 	for (layerResetting in layers) {
 		if (row >= layers[layerResetting].row && (!force || layerResetting != layer)) completeChallenge(layerResetting);
 	};
-	player.points = (row == 0 ? newDecimalZero() : (typeof getStartPoints == "function" ? getStartPoints() : newDecimalZero()));
+	player.points = (typeof getStartPoints == "function" ? getStartPoints() : newDecimalZero());
 	if (typeof onReset === "function") onReset(layer);
 	for (let x = row; x >= 0; x--) {
 		rowReset(x, layer);

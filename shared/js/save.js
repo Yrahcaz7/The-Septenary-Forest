@@ -1,5 +1,8 @@
 // ************ Save stuff ************
-let getModID = () => modInfo.id ?? `${modInfo.name.replace(/\s+/g, '-')}-${modInfo.author.replace(/\s+/g, '-')}`;
+function getModID() {
+	if (modInfo.id) return modInfo.id;
+	return modInfo.name.replace(/\s+/g, "-") + "-" + modInfo.author.replace(/\s+/g, "-");
+};
 
 function save(force) {
 	NaNcheck(player);
@@ -22,7 +25,7 @@ function startPlayerBase() {
 		hasNaN: false,
 		points: modInfo.initialStartPoints,
 		subtabs: {},
-		lastSafeTab: (readData(layoutInfo.showTree) ? "none" : layoutInfo.startTab)
+		lastSafeTab: (readData(layoutInfo.showTree) ? "none" : layoutInfo.startTab),
 	});
 };
 
@@ -202,7 +205,7 @@ function loadOptions() {
 
 function setupModInfo() {
 	modInfo.changelog = changelog;
-	modInfo.winText = (winText ? (typeof winText == "function" ? winText() : winText) : "Congratulations! You have reached the end and beaten this game, but for now...");
+	modInfo.winText = (typeof winText !== "undefined" ? (typeof winText === "function" ? winText() : winText) : "Congratulations! You have reached the end and beaten this game, but for now...");
 };
 
 function NaNcheck(data) {
@@ -266,14 +269,11 @@ function versionCheck() {
 	else delete player.beta;
 };
 
-var saveInterval = setInterval(() => {
-	if (player === undefined) return;
-	if (tmp.gameEnded && !player.keepGoing) return;
+let saveInterval = setInterval(() => {
+	if (player === undefined || (tmp.gameEnded && !player.keepGoing)) return;
 	if (options.autosave) save();
 }, 5000);
 
 window.onbeforeunload = () => {
-    if (player.autosave) {
-        save();
-    };
+    if (player.autosave) save();
 };

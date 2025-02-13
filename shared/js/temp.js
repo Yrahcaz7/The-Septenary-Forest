@@ -14,6 +14,12 @@ let activeFunctions = [
 	"getUnlocked", "getStyle", "getCanClick", "getTitle", "getDisplay", "getEffect",
 ];
 
+if (typeof doNotCallTheseFunctionsEveryTick !== "undefined") {
+	for (const func in doNotCallTheseFunctionsEveryTick) {
+		activeFunctions.push(doNotCallTheseFunctionsEveryTick[func]);
+	};
+};
+
 // Add the names of classes to traverse
 let traversableClasses = [];
 
