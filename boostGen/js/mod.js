@@ -113,3 +113,5 @@ function fixOldSave(oldVersion) {
 		delete options.extendplaces;
 	};
 };
+
+const currentlyText = "<br>Effect: ";

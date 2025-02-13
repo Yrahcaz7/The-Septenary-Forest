@@ -228,6 +228,13 @@ function loadVue(mainPage = false) {
 	addNormalComponent('challenge', {
 		props: ['layer', 'data'],
 		data() {return {tmp, options, maxedChallenge, inChallenge, challengeStyle, player, canUseChallenge, startChallenge, challengeButtonText, layers, run, format, modInfo}},
+		computed: {
+			currentlyText() {
+				if (typeof currentlyText === "function") return currentlyText();
+				if (typeof currentlyText === "string") return currentlyText;
+				return "Currently:&nbsp;";
+			},
+		},
 		template: template(`<div v-if="tmp[layer].challenges && tmp[layer].challenges[data] !== undefined && tmp[layer].challenges[data].unlocked && !(options.hideChallenges && maxedChallenge(layer, data) && !inChallenge(layer, data))" :class="[
 			'challenge',
 			challengeStyle(layer, data),
@@ -242,7 +249,10 @@ function loadVue(mainPage = false) {
 				Goal: <span v-if="tmp[layer].challenges[data].goalDescription" v-html="tmp[layer].challenges[data].goalDescription"></span>
 				<span v-else>{{format(tmp[layer].challenges[data].goal)}} {{tmp[layer].challenges[data].currencyDisplayName ? tmp[layer].challenges[data].currencyDisplayName : modInfo.pointsName}}</span><br>
 				Reward: <span v-html="tmp[layer].challenges[data].rewardDescription"></span><br>
-				<span v-if="layers[layer].challenges[data].rewardDisplay !== undefined">Currently: <span v-html="tmp[layer].challenges[data].rewardDisplay ? run(layers[layer].challenges[data].rewardDisplay, layers[layer].challenges[data]) : format(tmp[layer].challenges[data].rewardEffect)"></span></span>
+				<span v-if="layers[layer].challenges[data].rewardDisplay !== undefined">
+					<span v-html="currentlyText"></span>
+					<span v-html="tmp[layer].challenges[data].rewardDisplay ? run(layers[layer].challenges[data].rewardDisplay, layers[layer].challenges[data]) : format(tmp[layer].challenges[data].rewardEffect)"></span>
+				</span>
 			</span>
 			<node-mark :layer="layer" :data='tmp[layer].challenges[data].marked' :offset="20" :scale="1.5"></node-mark>
 		</div>`),
@@ -267,6 +277,13 @@ function loadVue(mainPage = false) {
 	addNormalComponent('upgrade', {
 		props: ['layer', 'data'],
 		data() {return {tmp, buyUpg, hasUpgrade, canAffordUpgrade, layers, run, formatWhole}},
+		computed: {
+			currentlyText() {
+				if (typeof currentlyText === "function") return currentlyText();
+				if (typeof currentlyText === "string") return currentlyText;
+				return "Currently:&nbsp;";
+			},
+		},
 		template: template(`<button v-if="tmp[layer].upgrades && tmp[layer].upgrades[data] !== undefined && tmp[layer].upgrades[data].unlocked" :id='"upgrade-" + layer + "-" + data' v-on:click="buyUpg(layer, data)" :class="{
 			[layer]: true,
 			tooltipBox: true,
@@ -282,7 +299,11 @@ function loadVue(mainPage = false) {
 			<span v-else>
 				<span v-if="tmp[layer].upgrades[data].title"><h3 v-html="tmp[layer].upgrades[data].title"></h3><br></span>
 				<span v-html="tmp[layer].upgrades[data].description"></span>
-				<span v-if="layers[layer].upgrades[data].effectDisplay"><br>Currently: <span v-html="run(layers[layer].upgrades[data].effectDisplay, layers[layer].upgrades[data])"></span></span><br><br>
+				<span v-if="layers[layer].upgrades[data].effectDisplay">
+					<br>
+					<span v-html="currentlyText"></span>
+					<span v-html="run(layers[layer].upgrades[data].effectDisplay, layers[layer].upgrades[data])"></span>
+				</span><br><br>
 				Cost: {{formatWhole(tmp[layer].upgrades[data].cost)}} {{(tmp[layer].upgrades[data].currencyDisplayName ? tmp[layer].upgrades[data].currencyDisplayName : tmp[layer].resource)}}
 			</span>
 			<tooltip v-if="tmp[layer].upgrades[data].tooltip" :text="tmp[layer].upgrades[data].tooltip"></tooltip>

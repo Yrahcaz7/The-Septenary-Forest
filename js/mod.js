@@ -30,7 +30,7 @@ const changelog = `<h1>Changelog:</h1><br>
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
 // (The ones here are examples. All official functions are already taken care of.)
-let doNotCallTheseFunctionsEveryTick = ["doReset", "buy", "onPurchase", "blowUpEverything"];
+const doNotCallTheseFunctionsEveryTick = ["doReset", "buy", "onPurchase", "blowUpEverything"];
 
 // The test to display when the player wins the game.
 const winText = () => {
@@ -69,6 +69,9 @@ const endPoints = new Decimal(Infinity);
 
 // runs after things are loaded
 function onLoad() {};
+
+// runs every frame right after point gain
+function update(diff) {};
 
 // style for the background, can be a function
 const backgroundStyle = {};
