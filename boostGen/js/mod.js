@@ -4,7 +4,7 @@ const modInfo = {
 	author: "Yrahcaz7",
 	pointsName: "points",
 	modFiles: ["tree.js", "options.js", "layers.js"],
-	initialStartPoints: new Decimal(0),
+	initialStartPoints: newDecimalZero(),
 	offlineLimit: 24, // in hours
 }
 
@@ -55,7 +55,7 @@ function canGenPoints() {
 };
 
 function getPointGen() {
-	let gain = new Decimal(1);
+	let gain = newDecimalOne();
 	if (hasUpgrade("g", 11)) gain = gain.mul(upgradeEffect("g", 11));
 	if (hasUpgrade("g", 12)) gain = gain.mul(upgradeEffect("g", 12));
 	if (hasUpgrade("g", 13)) gain = gain.mul(upgradeEffect("g", 13));

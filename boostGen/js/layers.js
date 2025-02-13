@@ -85,7 +85,7 @@ function getBoughtGenerators() {
 };
 
 function getBoughtSuperGenerators() {
-	let bought = new Decimal(0);
+	let bought = newDecimalZero();
 	for (let id in player.sg.buyables) {
 		if (player.sg.buyables[id] instanceof Decimal) {
 			bought = bought.add(player.sg.buyables[id]);
@@ -100,8 +100,8 @@ addLayer("g", {
 	position: 0,
 	startData() { return {
 		unlocked: true,
-		points: new Decimal(0),
-		passive: new Decimal(0),
+		points: newDecimalZero(),
+		passive: newDecimalZero(),
 		autoBasic: false,
 		auto1and2: false,
 		autoLCR: false,
@@ -147,17 +147,17 @@ addLayer("g", {
 		};
 		for (let id in player.g.grid) {
 			if (gridEffect("g", id).gt(0)) {
-				let gen = new Decimal(0);
-				let extra = new Decimal(0);
+				let gen = newDecimalZero();
+				let extra = newDecimalZero();
 				let checkId = Number(id) + 100;
 				if (gridEffect("g", checkId).gt(0)) {
-					if (gen.eq(0)) gen = new Decimal(1);
+					if (gen.eq(0)) gen = newDecimalOne();
 					gen = gen.mul(gridEffect("g", checkId));
 					extra = extra.add(gridEffect("g", checkId));
 				};
 				checkId = Number(id) + 101;
 				if (gridEffect("g", checkId).gt(0)) {
-					if (gen.eq(0)) gen = new Decimal(1);
+					if (gen.eq(0)) gen = newDecimalOne();
 					gen = gen.mul(gridEffect("g", checkId));
 					extra = extra.add(gridEffect("g", checkId));
 				};
@@ -222,7 +222,7 @@ addLayer("g", {
 		getStartData(id) {
 			return {
 				bought: 0,
-				amount: new Decimal(0),
+				amount: newDecimalZero(),
 			};
 		},
 		getUnlocked(id) {
@@ -250,7 +250,7 @@ addLayer("g", {
 			return "<br>Amount: " + format(data.amount) + " (" + formatWhole(data.bought) + ")<br><br>Cost: " + format(generatorCost(id)) + " points";
 		},
 		getEffect(data, id) {
-			if (!data) return new Decimal(0);
+			if (!data) return newDecimalZero();
 			return data.amount.mul(data.bought);
 		},
 	},
@@ -463,7 +463,7 @@ addLayer("b", {
 	branches: ["g"],
 	startData() { return {
 		unlocked: false,
-		points: new Decimal(0),
+		points: newDecimalZero(),
 	}},
 	color: "#6E64C4",
 	resource: "boosters",
@@ -479,7 +479,7 @@ addLayer("b", {
 		return 5;
 	},
 	gainMult() {
-		let mult = new Decimal(1);
+		let mult = newDecimalOne();
 		if (hasUpgrade("b", 13)) mult = mult.div(upgradeEffect("b", 13));
 		if (hasUpgrade("b", 15)) mult = mult.div(upgradeEffect("b", 15));
 		if (hasUpgrade("b", 24)) mult = mult.div(upgradeEffect("b", 24));
@@ -776,7 +776,7 @@ addLayer("sb", {
 	branches: ["b"],
 	startData() { return {
 		unlocked: false,
-		points: new Decimal(0),
+		points: newDecimalZero(),
 	}},
 	color: "#504899",
 	resource: "super boosters",
@@ -806,7 +806,7 @@ addLayer("sb", {
 		return 10000;
 	},
 	gainMult() {
-		let mult = new Decimal(1);
+		let mult = newDecimalOne();
 		if (hasUpgrade("b", 21)) mult = mult.div(upgradeEffect("b", 21));
 		if (hasUpgrade("b", 35)) mult = mult.div(upgradeEffect("b", 35));
 		if (hasUpgrade("sg", 21)) mult = mult.div(upgradeEffect("sg", 21));
@@ -815,7 +815,7 @@ addLayer("sb", {
 	},
 	canBuyMax() {return false},
 	effect() {
-		let mult = new Decimal(1);
+		let mult = newDecimalOne();
 		if (hasUpgrade("b", 32)) mult = mult.mul(upgradeEffect("b", 32));
 		return player.sb.points.mul(mult);
 	},
@@ -891,10 +891,10 @@ addLayer("sg", {
 	branches: ["g"],
 	startData() { return {
 		unlocked: true,
-		points: new Decimal(0),
-		best: new Decimal(0),
-		passive: new Decimal(0),
-		capacity: new Decimal(0),
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		passive: newDecimalZero(),
+		capacity: newDecimalZero(),
 	}},
 	color: "#248239",
 	resource: "super generator power",
@@ -946,11 +946,11 @@ addLayer("sg", {
 		respec() {
 			for (let id in player.sg.buyables) {
 				if (player.sg.buyables[id] instanceof Decimal) {
-					player.sg.buyables[id] = new Decimal(0);
+					player.sg.buyables[id] = newDecimalZero();
 				};
 			};
-			player.sg.passive = new Decimal(0);
-			player.sg.points = new Decimal(0);
+			player.sg.passive = newDecimalZero();
+			player.sg.points = newDecimalZero();
 		},
 		respecText: "Respec capacity",
 		respecMessage: "Are you sure you want to respec capacity? This will reset all Super Generators, but refund all capacity.",
@@ -967,7 +967,7 @@ addLayer("sg", {
 				setBuyableAmount("sg", this.id, getBuyableAmount("sg", this.id).add(1));
 			},
 			effectBase() {
-				let base = new Decimal(1);
+				let base = newDecimalOne();
 				base = base.add(buyableEffect("sg", 14));
 				return base;
 			},
@@ -1057,7 +1057,7 @@ addLayer("sg", {
 				setBuyableAmount("sg", this.id, getBuyableAmount("sg", this.id).add(1));
 			},
 			effectBase() {
-				let base = new Decimal(1);
+				let base = newDecimalOne();
 				base = base.add(buyableEffect("sg", 16));
 				return base;
 			},
@@ -1137,7 +1137,7 @@ addLayer("sg", {
 				setBuyableAmount("sg", this.id, getBuyableAmount("sg", this.id).add(1));
 			},
 			effectBase() {return new Decimal(0.32)},
-			extra() {return new Decimal(0)},
+			extra() {return newDecimalZero()},
 			effect() {return getBuyableAmount("sg", this.id).add(this.extra()).mul(this.effectBase())},
 			unlocked() {return hasMilestone("b", 13)},
 		},
@@ -1176,7 +1176,7 @@ addLayer("sg", {
 		15: {
 			title: "Capacity + 1",
 			description: "Increase total capacity by 1.",
-			effect() {return new Decimal(1)},
+			effect() {return newDecimalOne()},
 			effectDisplay() {return "+" + format(this.effect())},
 			cost: new Decimal(3e26),
 			unlocked() {return hasUpgrade("sg", 14) && hasMilestone("b", 9)},
@@ -1192,7 +1192,7 @@ addLayer("sg", {
 		22: {
 			title: "Another Capacity + 1",
 			description: "Increase total capacity by 1 again.",
-			effect() {return new Decimal(1)},
+			effect() {return newDecimalOne()},
 			effectDisplay() {return "+" + format(this.effect())},
 			cost: new Decimal(1e31),
 			unlocked() {return hasUpgrade("sg", 21) && hasMilestone("b", 10)},
@@ -1200,7 +1200,7 @@ addLayer("sg", {
 		23: {
 			title: "Yet Another Capacity + 1",
 			description: "Increase total capacity by 1 again.",
-			effect() {return new Decimal(1)},
+			effect() {return newDecimalOne()},
 			effectDisplay() {return "+" + format(this.effect())},
 			cost: new Decimal(5e35),
 			unlocked() {return hasUpgrade("sg", 22) && hasMilestone("b", 10)},
@@ -1252,7 +1252,7 @@ addLayer("sg", {
 		35: {
 			title: "Yet Another Capacity + 1",
 			description: "Increase total capacity by 1 again.",
-			effect() {return new Decimal(1)},
+			effect() {return newDecimalOne()},
 			effectDisplay() {return "+" + format(this.effect())},
 			cost: new Decimal(1e207),
 			unlocked() {return hasUpgrade("sg", 34) && hasMilestone("b", 12)},
@@ -1267,8 +1267,8 @@ addLayer("hg", {
 	branches: ["sg"],
 	startData() { return {
 		unlocked: true,
-		points: new Decimal(0),
-		passive: new Decimal(0),
+		points: newDecimalZero(),
+		passive: newDecimalZero(),
 	}},
 	color: "#164E21",
 	resource: "hyper generator power",
@@ -1318,7 +1318,7 @@ addLayer("hg", {
 				player.sg.points = player.sg.points.sub(this.cost());
 				setBuyableAmount("hg", this.id, getBuyableAmount("hg", this.id).add(1));
 			},
-			effectBase() {return new Decimal(1)},
+			effectBase() {return newDecimalOne()},
 			effect() {return getBuyableAmount("hg", this.id).mul(this.effectBase())},
 		},
 		12: {
@@ -1326,7 +1326,7 @@ addLayer("hg", {
 			display() {
 				return "Multiply hyper generator power gain by " + format(this.effectBase()) + ".<br><br>Effect: " + format(buyableEffect("hg", this.id)) + "x<br><br>Cost: " + format(this.cost()) + " hyper generator power<br><br>Bought: " + formatWhole(getBuyableAmount("hg", this.id));
 			},
-			cost() {return new Decimal(1).mul(new Decimal(5).pow(getBuyableAmount("hg", this.id).pow(1.1).add(1)))},
+			cost() {return newDecimalOne().mul(new Decimal(5).pow(getBuyableAmount("hg", this.id).pow(1.1).add(1)))},
 			canAfford() {return player.hg.points.gte(this.cost())},
 			buy() {
 				player.hg.points = player.hg.points.sub(this.cost());
@@ -1355,9 +1355,9 @@ addLayer("hg", {
 			display() {return "<h3>[Hyperspace Expansion]</h3><br><br>Sacrifice your hyper generator power for +" + format(this.formula(player.hg.points.add(getClickableState("hg", this.id))).sub(this.effect())) + " capacity.<br><br>Effect: +" + format(this.effect())},
 			canClick() {return player.hg.points.gt(0)},
 			onClick() {
-				if (!getClickableState("hg", this.id)) setClickableState("hg", this.id, new Decimal(0));
+				if (!getClickableState("hg", this.id)) setClickableState("hg", this.id, newDecimalZero());
 				setClickableState("hg", this.id, new Decimal(getClickableState("hg", this.id)).add(player.hg.points));
-				player.hg.points = new Decimal(0);
+				player.hg.points = newDecimalZero();
 			},
 			formula(number) {return new Decimal(number).add(1).log10().div(2)},
 			effect() {return this.formula(getClickableState("hg", this.id))},
@@ -1371,9 +1371,9 @@ addLayer("hg", {
 			req: new Decimal(1000),
 			canClick() {return player.hg.points.gt(0)},
 			onClick() {
-				if (!getClickableState("hg", this.id)) setClickableState("hg", this.id, new Decimal(0));
+				if (!getClickableState("hg", this.id)) setClickableState("hg", this.id, newDecimalZero());
 				setClickableState("hg", this.id, new Decimal(getClickableState("hg", this.id)).add(player.hg.points));
-				player.hg.points = new Decimal(0);
+				player.hg.points = newDecimalZero();
 			},
 			formula(number) {return new Decimal(number).add(1).pow(0.1)},
 			effect() {return this.formula(getClickableState("hg", this.id))},
@@ -1387,9 +1387,9 @@ addLayer("hg", {
 			req: new Decimal(1e10),
 			canClick() {return player.hg.points.gt(this.req)},
 			onClick() {
-				if (!getClickableState("hg", this.id)) setClickableState("hg", this.id, new Decimal(0));
+				if (!getClickableState("hg", this.id)) setClickableState("hg", this.id, newDecimalZero());
 				setClickableState("hg", this.id, new Decimal(getClickableState("hg", this.id)).add(player.hg.points));
-				player.hg.points = new Decimal(0);
+				player.hg.points = newDecimalZero();
 			},
 			formula(number) {return new Decimal(number).add(1).pow(2)},
 			effect() {return this.formula(getClickableState("hg", this.id))},
