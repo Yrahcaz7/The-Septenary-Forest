@@ -191,6 +191,7 @@ function doReset(layer, force = false, overrideResetsNothing = false) {
 		if (row >= layers[layerResetting].row && (!force || layerResetting != layer)) completeChallenge(layerResetting);
 	};
 	player.points = (row == 0 ? newDecimalZero() : (typeof getStartPoints == "function" ? getStartPoints() : newDecimalZero()));
+	if (typeof onReset === "function") onReset(layer);
 	for (let x = row; x >= 0; x--) {
 		rowReset(x, layer);
 	};
@@ -298,7 +299,8 @@ function gameLoop(diff) {
 		if (diff > limit) diff = limit;
 	};
 	addTime(diff);
-	player.points = player.points.add(tmp.pointGen.mul(diff)).max(0);
+	if (typeof getPoints === "function" && getPoints() instanceof Decimal) player.points = getPoints();
+	else player.points = player.points.add(tmp.pointGen.mul(diff)).max(0);
 	if (typeof update === "function") update(diff);
 	for (let x = 0; x <= maxRow; x++) {
 		for (item in TREE_LAYERS[x]) {

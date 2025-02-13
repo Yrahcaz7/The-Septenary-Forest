@@ -4,6 +4,7 @@ const trees = [
 	["color", "Color Factory"],
 	["number", "The Number Tree"],
 	["boostGen", "Booster-Generator Tree"],
+	["adaptation", "Adaptation Tree"],
 ];
 
 function getChopTime() {
@@ -72,7 +73,7 @@ addLayer("t", {
 					if (player.t.best.eq(0)) text += "<br><br><h3>None yet!</h3>";
 					for (let index = 0; index < player.t.best.min(trees.length + 1).toNumber(); index++) {
 						if (trees[index]) text += "<br><br><a class='link' href='" + trees[index][0] + "/index.html'>#" + (index + 1) + ": " + trees[index][1] + "</a>";
-						else text += "<br><br><h3>#" + (index + 1) + ": Coming Soon!</h3>";
+						else text += "<br><br><h3>#" + (index + 1) + ": Coming Not-So-Soon!</h3>";
 					};
 					return text;
 				}],

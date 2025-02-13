@@ -373,7 +373,7 @@ function loadVue(mainPage = false) {
 		data() {return {player, tmp, format, formatWhole, layers, run}},
 		computed: {
 			extraMainDisplay() {
-				if (typeof extraMainDisplay == 'function') return extraMainDisplay(this.layer) || "";
+				if (typeof extraMainDisplay === 'function') return extraMainDisplay(this.layer) || "";
 				return "";
 			},
 			effectDescription() {
@@ -635,7 +635,7 @@ function loadVue(mainPage = false) {
 	// data = id of microtab family
 	addNormalComponent('microtabs', {
 		props: ['layer', 'data'],
-		data() {return {tmp}},
+		data() {return {tmp, player}},
 		computed: {
 			currentTab() {return player.subtabs[layer][data]},
 		},
@@ -894,7 +894,7 @@ function loadVue(mainPage = false) {
 		data() {return {nodeShown, tmp, player, constructNodeStyle}},
 		computed: {
 			tooltipText() {
-				if (typeof overrideTooltip == 'function' && overrideTooltip(this.layer)) {
+				if (typeof overrideTooltip === 'function' && overrideTooltip(this.layer)) {
 					return overrideTooltip(this.layer);
 				};
 				if (tmp[this.layer].isLayer) {
@@ -918,7 +918,7 @@ function loadVue(mainPage = false) {
 			onClick() {
 				if (shiftDown && options.forceTooltips) {
 					player[this.layer].forceTooltip = !player[this.layer].forceTooltip;
-				} else if (typeof overrideTreeNodeClick == 'function' && typeof overrideTreeNodeClick(this.layer) == 'function') {
+				} else if (typeof overrideTreeNodeClick === 'function' && typeof overrideTreeNodeClick(this.layer) === 'function') {
 					overrideTreeNodeClick(this.layer)();
 				} else if (tmp[this.layer].isLayer) {
 					if (tmp[this.layer].leftTab) showNavTab(this.layer, this.prev);
@@ -1004,11 +1004,15 @@ function loadVue(mainPage = false) {
 	});
 
 	addNormalComponent('overlay-head', {
-		data() {return {player, format, formatTime, modInfo, canGenPoints, tmp, getPointGen}},
+		data() {return {player, format, formatTime, modInfo, canGenPoints, tmp}},
 		computed: {
 			overridePointDisplay() {
-				if (typeof overridePointDisplay == 'function') return overridePointDisplay() || "";
+				if (typeof overridePointDisplay === 'function') return overridePointDisplay() || "";
 				return "";
+			},
+			pointGen() {
+				if (typeof getPointGen === 'function') return getPointGen();
+				return newDecimalZero();
 			},
 		},
 		template: template(`<div class="overlayThing" style="
@@ -1032,7 +1036,7 @@ function loadVue(mainPage = false) {
 				<span v-if="canGenPoints()" class="overlayThing">
 					{{tmp.other.oompsMag !== 0 ?
 						format(tmp.other.oomps) + " OOM" + (tmp.other.oompsMag < 0 ? "^OOM" : (tmp.other.oompsMag > 1 ? "^" + tmp.other.oompsMag : "")) + "s"
-						: format(getPointGen())
+						: format(pointGen)
 					}}/sec
 				</span>
 			</span>
