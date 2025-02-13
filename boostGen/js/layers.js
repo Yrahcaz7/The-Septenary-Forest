@@ -839,19 +839,19 @@ addLayer("sb", {
 	milestones: {
 		0: {
 			requirementDescription: "4 super boosters",
-			effectDescription: "unlocks autobuy for Basic Generator",
+			effectDescription: "unlocks the Basic Generator autobuyer",
 			toggles: [["g", "autoBasic"]],
 			done() {return player.sb.points.gte(4)},
 		},
 		1: {
 			requirementDescription: "5 super boosters",
-			effectDescription: "unlocks autobuy for Generator Generators 1 and 2",
+			effectDescription: "unlocks the Generator Generators 1 and 2 autobuyer",
 			toggles: [["g", "auto1and2"]],
 			done() {return player.sb.points.gte(5)},
 		},
 		2: {
 			requirementDescription: "6 super boosters",
-			effectDescription: "unlocks autobuy for Left, Center, and Right Generators",
+			effectDescription: "unlocks the Left, Center, and Right Generators autobuyer",
 			toggles: [["g", "autoLCR"]],
 			done() {return player.sb.points.gte(6)},
 		},
@@ -867,7 +867,7 @@ addLayer("sb", {
 		},
 		5: {
 			requirementDescription: "9 super boosters",
-			effectDescription: "unlocks autobuy for Beginning, Backward, Forward, and Ending Generators",
+			effectDescription: "unlocks the Beginning, Backward, Forward, and Ending Generators autobuyer",
 			toggles: [["g", "autoBBFE"]],
 			done() {return player.sb.points.gte(9)},
 		},
