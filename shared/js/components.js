@@ -202,13 +202,13 @@ function loadVue(mainPage = false) {
 	// data = width in px, by default fills the full area
 	addNormalComponent('h-line', {
 		props: ['layer', 'data'],
-		template: template(`<hr class="instant" :style="data ? {'width': data} : {}" class="hl">`),
+		template: template(`<hr class="instant hl" :style="data ? {'width': data} : {}">`),
 	});
 
 	// data = height in px, by default is bad
 	addNormalComponent('v-line', {
 		props: ['layer', 'data'],
-		template: template(`<div class="instant" :style="data ? {'height': data} : {}" class="vl"></div>`),
+		template: template(`<div class="instant vl" :style="data ? {'height': data} : {}"></div>`),
 	});
 
 	// data = array of rows to include, by default is all

@@ -3,6 +3,7 @@ const trees = [
 	["realm", "Realm Creator"],
 	["color", "Color Factory"],
 	["number", "The Number Tree"],
+	["boostGen", "Booster-Generator Tree"],
 ];
 
 function getChopTime() {
