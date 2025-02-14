@@ -53,7 +53,7 @@ These are the existing components, but you can [create more with `customComponen
 - `drop-down`: Lets the user input a value with a dropdown menu. The argument a 2-element array: `[name, options]`.
     The name is the name of the variable in `player[layer]` that the input is for, and options is an array of strings for options you can use.
 
-- `upgrades`, `milestones`, `challenges`, `achievements`, `buyables`, `clickables`: Displays the layers upgrades/challenges/etc, as appropriate. The argument is optional, and is a the list of rows this component should include, if it doesn't have all of them.
+- `upgrades`, `milestones`, `challenges`, `achievements`, `buyables`, `clickables`: Displays the layer's upgrades/challenges/etc, as appropriate. The argument is optional, and is a the list of rows this component should include, if it doesn't have all of them.
 
 - `microtabs`: Display a set of subtabs for an area. The argument is the name of the set of microtabs in the "microtabs" feature.
 
@@ -78,6 +78,8 @@ Additional components:
 - `custom-resource-display`: The same as `display-text`, but uses the formatting of `resource-display`.
 
 - `contained-grid`: Displays the gridable grid for the layer in a contained div. The argument is required. The argument can either be the max width of the containing div or an array: `[max width, list of rows]`. If the argument only indicates the component's max width, the component includes all of the layer's grid rows.
+
+## Sub-componentss
 
 The rest of the components are sub-components. They can be used just like other components, but are typically part of another component.
 

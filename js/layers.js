@@ -7,17 +7,29 @@ const trees = [
 	["adaptation", "Adaptation Tree"],
 ];
 
+function getFirstWoodEffect() {
+	let exp = 0.5;
+	if (hasUpgrade("t", 32)) exp += upgradeEffect("t", 32);
+	return player.t.wood.add(1).pow(exp);
+};
+
 function getChopTime() {
 	let time = 60;
 	if (hasUpgrade("t", 13)) time /= upgradeEffect("t", 13);
 	if (hasUpgrade("t", 21)) time /= upgradeEffect("t", 21);
+	if (hasUpgrade("t", 31)) time /= upgradeEffect("t", 31);
 	return time;
 };
 
 function getAutoChopTime() {
 	let time = 60;
 	if (hasUpgrade("t", 23)) time /= upgradeEffect("t", 23);
+	if (hasUpgrade("t", 33)) time /= upgradeEffect("t", 33);
 	return time;
+};
+
+function getChopBulk() {
+	return player.t.bulkChop;
 };
 
 addLayer("t", {
@@ -33,6 +45,9 @@ addLayer("t", {
 		wood: newDecimalZero(),
 		autoChop: false,
 		autoChopTime: 0,
+		bulkChop: 1,
+		pendingChopBulk: 1,
+		pendingAutoChopBulk: 1,
 	}},
 	color: "#38A32A",
 	requires: new Decimal(10),
@@ -71,10 +86,10 @@ addLayer("t", {
 				["display-text", () => {
 					let text = "<h2>Discovered Trees:</h2>";
 					if (player.t.best.eq(0)) text += "<br><br><h3>None yet!</h3>";
-					for (let index = 0; index < player.t.best.min(trees.length + 1).toNumber(); index++) {
-						if (trees[index]) text += "<br><br><a class='link' href='" + trees[index][0] + "/index.html'>#" + (index + 1) + ": " + trees[index][1] + "</a>";
-						else text += "<br><br><h3>#" + (index + 1) + ": Coming Not-So-Soon!</h3>";
+					for (let index = 0; index < player.t.best.min(trees.length).toNumber(); index++) {
+						text += "<br><br><a class='link' href='" + trees[index][0] + "/index.html'>#" + (index + 1) + ": " + trees[index][1] + "</a>";
 					};
+					if (player.t.best.gte(trees.length)) text += "<br><br><h3>All trees discovered!</h3><br>(At least for now...)";
 					return text;
 				}],
 			],
@@ -102,6 +117,12 @@ addLayer("t", {
 					arr.push(["bar", "autoChop"]);
 					arr.push("blank");
 				};
+				if (hasUpgrade("t", 24)) {
+					arr.push(["display-text", "Chop Bulk: "]);
+					arr.push("blank");
+					arr.push(["slider", ["bulkChop", 1, 2]]);
+					arr.push("blank");
+				};
 				arr.push("upgrades");
 				return arr;
 			},
@@ -113,7 +134,7 @@ addLayer("t", {
 			time -= diff;
 			if (time <= 0) {
 				time = 0;
-				player.t.wood = player.t.wood.add(1);
+				player.t.wood = player.t.wood.add(player.t.pendingChopBulk);
 			};
 		};
 		time = Math.min(time, getChopTime());
@@ -122,22 +143,28 @@ addLayer("t", {
 			player.t.autoChopTime -= diff;
 			if (player.t.autoChopTime <= 0) {
 				player.t.autoChopTime = 0;
-				player.t.wood = player.t.wood.add(1);
+				player.t.wood = player.t.wood.add(player.t.pendingAutoChopBulk);
 			};
 		};
 		player.t.autoChopTime = Math.min(player.t.autoChopTime, getAutoChopTime());
-		if (player.t.autoChopTime === 0 && player.t.autoChop && player.t.points.gte(1)) {
-			player.t.points = player.t.points.sub(1);
+		if (player.t.autoChopTime === 0 && player.t.autoChop && player.t.points.gte(getChopBulk())) {
+			player.t.points = player.t.points.sub(getChopBulk());
+			player.t.pendingAutoChopBulk = getChopBulk();
 			player.t.autoChopTime = getAutoChopTime();
 		};
 	},
 	clickables: {
 		11: {
 			title: "Chop Tree",
-			display() {return "Chop up 1 tree, converting it into 1 wood."},
-			canClick() {return player.t.points.gte(1) && (getClickableState("t", 11) || 0) === 0},
+			display() {
+				const bulk = getChopBulk();
+				if (bulk == 1) return "Chop up " + formatWhole(bulk) + " tree, converting it into " + formatWhole(bulk) + " wood.";
+				return "Chop up " + formatWhole(bulk) + " trees, converting them into " + formatWhole(bulk) + " wood.";
+			},
+			canClick() {return player.t.points.gte(getChopBulk()) && (getClickableState("t", 11) || 0) === 0},
 			onClick() {
-				player.t.points = player.t.points.sub(1);
+				player.t.points = player.t.points.sub(getChopBulk());
+				player.t.pendingChopBulk = getChopBulk();
 				setClickableState("t", 11, getChopTime());
 			},
 			style: {"width": "250px", "min-height": "50px", "border-radius": "25px"},
@@ -174,7 +201,7 @@ addLayer("t", {
 			fullDisplay() { return "<h3>Pointy Wood</h3><br>unlocks the first wood effect<br><br>Cost: " + formatWhole(this.woodCost) + " wood" },
 			canAfford() { return player.t.wood.gte(this.woodCost) },
 			pay() { player.t.wood = player.t.wood.sub(this.woodCost) },
-			effect() { return player.t.wood.add(1).pow(0.5) },
+			effect() { return getFirstWoodEffect() },
 		},
 		13: {
 			woodCost: 6,
@@ -215,10 +242,41 @@ addLayer("t", {
 		},
 		24: {
 			woodCost: 48,
-			fullDisplay() { return "<h3>???</h3><br>coming soon!<br><br>Cost: " + formatWhole(this.woodCost) + " wood" },
+			fullDisplay() { return "<h3>Combo</h3><br>unlock bulk chopping (up to 2x)<br><br>Cost: " + formatWhole(this.woodCost) + " wood" },
 			canAfford() { return player.t.wood.gte(this.woodCost) },
 			pay() { player.t.wood = player.t.wood.sub(this.woodCost) },
 			unlocked() { return player.t.upgrades.length >= 4 },
+		},
+		31: {
+			woodCost: 24,
+			fullDisplay() { return "<h3>Frenzied Chopping</h3><br>divides chopping time by 2<br><br>Cost: " + formatWhole(this.woodCost) + " wood" },
+			canAfford() { return player.t.wood.gte(this.woodCost) },
+			pay() { player.t.wood = player.t.wood.sub(this.woodCost) },
+			effect: 2,
+			unlocked() { return player.t.upgrades.length >= 8 },
+		},
+		32: {
+			woodCost: 48,
+			fullDisplay() { return "<h3>Pointier Wood</h3><br>increases the exponent in the first wood effect formula by 0.25<br><br>Cost: " + formatWhole(this.woodCost) + " wood" },
+			canAfford() { return player.t.wood.gte(this.woodCost) },
+			pay() { player.t.wood = player.t.wood.sub(this.woodCost) },
+			effect: 0.25,
+			unlocked() { return player.t.upgrades.length >= 8 },
+		},
+		33: {
+			woodCost: 96,
+			fullDisplay() { return "<h3>Even Faster Automation</h3><br>divides auto-chopping time by 3<br><br>Cost: " + formatWhole(this.woodCost) + " wood" },
+			canAfford() { return player.t.wood.gte(this.woodCost) },
+			pay() { player.t.wood = player.t.wood.sub(this.woodCost) },
+			effect: 3,
+			unlocked() { return player.t.upgrades.length >= 8 },
+		},
+		34: {
+			woodCost: Infinity,
+			fullDisplay() { return "<h3>???</h3><br>coming soon!<br><br>Cost: " + formatWhole(this.woodCost) + " wood" },
+			canAfford() { return player.t.wood.gte(this.woodCost) },
+			pay() { player.t.wood = player.t.wood.sub(this.woodCost) },
+			unlocked() { return player.t.upgrades.length >= 8 },
 		},
 	},
 });

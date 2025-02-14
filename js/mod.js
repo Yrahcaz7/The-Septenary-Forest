@@ -12,15 +12,15 @@ const modInfo = {
 
 const VERSION = {
 	num: "0.1",
-	beta: "1",
-	name: "Wood",
+	name: "The Woods",
 };
 
 const changelog = `<h1>Changelog:</h1><br>
-	<br><h3>v0.1 Beta: Wood</h3><br>
+	<br><h3>v0.1: The Woods</h3><br>
 		- Added a new tab: Wood.<br>
 		- Added chopping and auto-chopping.<br>
-		- Added eight wood upgrades.<br>
+		- Added twelve wood upgrades.<br>
+		- Finished unifying the trees.<br>
 	<br><h3>v0.0 Beta: UNIFICATION</h3><br>
 		- Started unifying the trees.<br>
 		- Upgraded from Vue 2 to Vue 3.<br>
@@ -33,13 +33,11 @@ const changelog = `<h1>Changelog:</h1><br>
 const doNotCallTheseFunctionsEveryTick = ["doReset", "buy", "onPurchase", "blowUpEverything"];
 
 // The test to display when the player wins the game.
-function winText() {
-	return "You reached " + format(endPoints) + " " + modInfo.pointsName + " and won the game!<br>However, it isn't the end yet...<br>Wait for more updates for further content.";
-};
+const winText = "You reached 11 wood upgrades and 6 best trees and won the game!<br>However, it isn't the end yet...<br>Wait for more updates for further content.";
 
 // The amount of points the player starts with after a reset.
 function getStartPoints() {
-	return new Decimal(modInfo.initialStartPoints)
+	return new Decimal(modInfo.initialStartPoints);
 };
 
 // determines if points can be generated
@@ -60,12 +58,12 @@ function getPointGen() {
 function addedPlayerData() {return {}};
 
 // display extra things at the top of the page
-const displayThings = [
-	() => {if (tmp.gameEnded) return "You beat the game!<br>For now..."},
-];
+const displayThings = ["<br>Current endgame: 11 wood upgrades and 6 best trees"];
 
 // determines when the game "ends"
-const endPoints = new Decimal(Infinity);
+function isEndgame() {
+	return player.t.upgrades.length >= 11 && player.t.best.gte(6);
+};
 
 // runs after things are loaded
 function onLoad() {};
