@@ -1004,11 +1004,16 @@ function loadVue(mainPage = false) {
 	});
 
 	addNormalComponent('overlay-head', {
-		data() {return {player, format, formatTime, modInfo, canGenPoints, tmp}},
+		data() {return {player, format, formatTime, modInfo, tmp}},
 		computed: {
 			overridePointDisplay() {
 				if (typeof overridePointDisplay === 'function') return overridePointDisplay() || "";
 				return "";
+			},
+			canGenPoints() {
+				if (typeof canGenPoints === 'function') return canGenPoints();
+				if (typeof canGenPoints !== 'undefined') return canGenPoints;
+				return true;
 			},
 			pointGen() {
 				if (typeof getPointGen === 'function') return getPointGen();
@@ -1033,7 +1038,7 @@ function loadVue(mainPage = false) {
 				<span v-if="player.points.lt('1e1000')" class="overlayThing">You have </span>
 				<h2 class="overlayThing" id="points">{{format(player.points)}}</h2>
 				<span v-if="player.points.lt('e1000000')" class="overlayThing">&nbsp;{{modInfo.pointsName}}</span><br>
-				<span v-if="canGenPoints()" class="overlayThing">
+				<span v-if="canGenPoints" class="overlayThing">
 					{{tmp.other.oompsMag !== 0 ?
 						format(tmp.other.oomps) + " OOM" + (tmp.other.oompsMag < 0 ? "^OOM" : (tmp.other.oompsMag > 1 ? "^" + tmp.other.oompsMag : "")) + "s"
 						: format(pointGen)

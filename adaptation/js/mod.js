@@ -94,9 +94,7 @@ const changelog = `<h1>Changelog:</h1><br>
 
 const winText = "You reached 1e21,000,000 influence and won the game!<br>However, it isn't the end yet...<br>Wait for more updates for further content.";
 
-function canGenPoints() {
-	return false;
-};
+const canGenPoints = false;
 
 function getPointPotential() {
 	// retrogression overrides
@@ -177,8 +175,6 @@ function update(diff) {
 function onReset(resettingLayer) {
 	player.adaptationTime = 0;
 };
-
-const backgroundStyle = {};
 
 function maxTickLength() {
 	return 1;

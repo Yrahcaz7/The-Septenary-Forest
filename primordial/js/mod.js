@@ -5,7 +5,7 @@ const modInfo = {
 	pointsName: 'points',
 	modFiles: ['components.js', 'tree.js', 'options.js', 'assimilation.js', 'achievements.js', 'softcaps.js', 'story.js', 'tabs.js', 'layers.js'],
 	initialStartPoints: newDecimalZero(),
-	offlineLimit: 1, // in hours
+	offlineLimit: 1,
 };
 
 const VERSION = {
@@ -185,7 +185,6 @@ function winText() {
 	return 'You reached ' + format(endPoints) + ' ' + modInfo.pointsName + ' and won the game!<br>However, it isn\'t the end yet...<br>Wait for more updates for further content.';
 };
 
-// gets the end of a color tag (no color, dark, or light)
 function getdark(darkthis, type, special = false, research = false) {
 	if (darkthis.layer !== undefined) {
 		if (colorValue[1] == 'dark') return '-dark">';
@@ -213,7 +212,6 @@ function getdark(darkthis, type, special = false, research = false) {
 	return '">';
 };
 
-// gets the devotion bulk
 function getDevotionBulk() {
 	let bulk = 1;
 	if (challengeCompletions('r', 11) >= 41) bulk *= 10;
@@ -229,7 +227,6 @@ function getDevotionBulk() {
 	return bulk;
 };
 
-// gets the light boost
 function getLightBoost() {
 	let lightboost = newDecimalZero();
 	if (hasMilestone('m', 17)) lightboost = player.r.lightgainbest.mul(0.1);
@@ -240,7 +237,6 @@ function getLightBoost() {
 	return lightboost;
 };
 
-// gets the light gain
 function getLightGain() {
 	let gain = getPointGen().pow(0.001).div(10);
 	if (hasUpgrade('r', 13)) {
@@ -262,13 +258,11 @@ function getLightGain() {
 	return gain;
 };
 
-// determines if points can be generated
 function canGenPoints() {
 	if (inChallenge('r', 11)) return false;
 	return true;
 };
 
-// calculates points/sec
 function getPointGen() {
 	// init
 	let gain = newDecimalOne();
@@ -336,31 +330,22 @@ function getPointGen() {
 	return gain;
 };
 
-// added player[data]
 function addedPlayerData() {return {}};
 
-// display extra things at the top of the page
 const displayThings = [
 	() => {if (tmp.gameEnded) return 'You beat the game!<br>For now...'},
 ];
 
-// determines when the game "ends"
 const endPoints = new Decimal('e6e17');
 
-// runs after things are loaded
 function onLoad() {
 	calculateColorValue();
 };
 
-// style for the background, can be a function
-const backgroundStyle = {};
-
-// max tick length in seconds
 function maxTickLength() {
 	return 1;
 };
 
-// removes an achievment
 function removeAchievement(id = NaN) {
 	for (var i = 0; i < player.A.achievements.length; i++) {
 		if (player.A.achievements[i] == id) {
@@ -371,7 +356,6 @@ function removeAchievement(id = NaN) {
 	return false;
 };
 
-// fixes for old saves
 function fixOldSave(oldVersion) {
 	// achievement fixes
 	if (oldVersion == '2.2' && player.A.achievements.includes('123')) removeAchievement('123');
@@ -407,12 +391,10 @@ function fixOldSave(oldVersion) {
 	};
 };
 
-// gets random valid character
 function randomChar() {
 	return "&#" + Math.floor((Math.random() * (126 - 33 + 1)) + 33) + ";";
 };
 
-// gets random string
 function randomStr(length = 1, sameChar = false) {
 	if (length > 10000) length = 10000;
 	if (length <= 0) return "";

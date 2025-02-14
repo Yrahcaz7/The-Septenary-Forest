@@ -48,7 +48,9 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added a stats menu.<br>
 <br>`;
 
-const winText = `Congratulations! You have reached the end and beaten this game, but for now...`;
+function winText() {
+	return 'You reached ' + format(endPoints) + ' ' + modInfo.pointsName + ' and won the game!<br>However, it isn\'t the end yet...<br>Wait for more updates for further content.';
+};
 
 function getRandInt(min, max) {
 	min = Math.ceil(min);
@@ -91,10 +93,6 @@ function sideSpellCast() {
 			player[2].T.frenzyCasts = player[2].T.frenzyCasts.add(1);
 		};
 	setClickableState('2', 13, "ON");
-};
-
-function canGenPoints() {
-	return true;
 };
 
 function getPointGen() {
@@ -141,7 +139,9 @@ function addedPlayerData() { return {
 	T: Object.create(playerStartingStats),
 }};
 
-const displayThings = [];
+const displayThings = [
+	() => {if (tmp.gameEnded) return 'You beat the game!<br>For now...'},
+];
 
 const endPoints = new Decimal(1e15);
 
@@ -155,8 +155,6 @@ function update(diff) {
 	player.R.total = player.R.total.add(tmp.pointGen.mul(diff));
 	player.T.total = player.T.total.add(tmp.pointGen.mul(diff));
 };
-
-let backgroundStyle = {};
 
 function maxTickLength() {
 	return 3600;

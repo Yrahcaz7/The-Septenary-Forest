@@ -42,9 +42,7 @@ function getRandInt(min, max) {
 	return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
 };
 
-function canGenPoints() {
-	return false;
-};
+const canGenPoints = false;
 
 function getPointGen() {
 	return newDecimalZero();
@@ -59,8 +57,6 @@ const displayThings = [
 function isEndgame() {
 	return player.m.points.gte(4096);
 };
-
-const backgroundStyle = {};
 
 function maxTickLength() {
 	return 1;

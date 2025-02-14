@@ -27,7 +27,7 @@ Here's a breakdown of what's in it:
 
 - `changelog` is the HTML displayed in the changelog tab.
 
-- `doNotCallTheseFunctionsEveryTick` is very important, if you are adding non-standard functions. TMT calls every function anywhere in "layers" every tick to store the result, unless specifically told not to. Functions that have are used to do an action need to be identified. "Official" functions (those in the documentation) are all fine, but if you make any new ones, add their names to this array.
+- `doNotCallTheseFunctionsEveryTick` is very important, if you are adding non-standard functions. TMT calls every function anywhere in "layers" every tick to store the result, unless specifically told not to. Functions that have are used to do an action need to be identified. "Official" functions (those in the documentation) are all fine, but if you make any new ones, add their names to this array. (This feature is optional.)
 
 ```js
 // The ones here are examples. All official functions are already taken care of.
@@ -38,7 +38,7 @@ const doNotCallTheseFunctionsEveryTick = ["doReset", "buy", "onPurchase", "blowU
 
 - `getStartPoints()`: **optional**. A function that returns a Decimal that is the amount of points the player starts with after a reset. If absent, the player does not start with any points after a reset.
 
-- `canGenPoints()`: A function returning a boolean for if points should be generated. Use this if you want an upgrade to unlock generating points.
+- `canGenPoints()`: **optional**. A function returning a boolean for if points should be generated. Use this if you want an upgrade to unlock generating points. You can also have it be a constant value. If absent, points are always generated.
 
 - `getPointGen()`: A function that calculates your points per second. Anything that affects your point gain should go into the calculation here.
 
@@ -53,7 +53,7 @@ function addedPlayerData() {
 };
 ```
 
-- `displayThings`: An array of functions used to display extra things at the top of the tree tab. Each function returns a string, which is a line to display (with basic HTML support). If a function returns nothing, nothing is displayed (and it doesn't take up a line).
+- `displayThings`: **optional**. An array of functions used to display extra things at the top of the tree tab. Each function returns a string, which is a line to display (with basic HTML support). If a function returns nothing, nothing is displayed (and it doesn't take up a line).
 
 - `isEndgame()`: A function to determine if the player has reached the end of the game, at which point the "you win!" screen appears.
 
@@ -69,7 +69,7 @@ Additional features:
 
 ## Less important things
 
-- `backgroundStyle`: A CSS object containing the styling for the background of the full game. Can be a function!
+- `backgroundStyle`: **optional**. A CSS object containing the styling for the background of the full game. Can be a function!
 
 - `maxTickLength()`: Returns the maximum tick length in seconds. Only really useful if you have something that reduces over time, which long ticks mess up (usually a challenge).
 

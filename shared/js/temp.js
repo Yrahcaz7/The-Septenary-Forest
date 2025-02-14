@@ -95,14 +95,16 @@ function updateTemp() {
 		tmp[layer].prestigeNotify = prestigeNotify(layer);
 		if (tmp[layer].passiveGeneration === true) tmp[layer].passiveGeneration = 1; // This is needed because `new Decimal(true) = new Decimal(0)`
 	};
-	if (canGenPoints()) tmp.pointGen = getPointGen();
+	if (typeof canGenPoints === 'function' ? canGenPoints() : typeof canGenPoints === 'undefined' || canGenPoints) tmp.pointGen = getPointGen();
 	else tmp.pointGen = newDecimalZero();
-	tmp.backgroundStyle = readData(backgroundStyle);
+	if (typeof backgroundStyle !== "undefined") tmp.backgroundStyle = readData(backgroundStyle);
 	tmp.displayThings = [];
-	for (thing in displayThings) {
-		let text = displayThings[thing];
-		if (typeof text == "function") text = text();
-		tmp.displayThings.push(text);
+	if (typeof displayThings !== "undefined") {
+		for (thing in displayThings) {
+			let text = displayThings[thing];
+			if (typeof text == "function") text = text();
+			tmp.displayThings.push(text);
+		};
 	};
 };
 

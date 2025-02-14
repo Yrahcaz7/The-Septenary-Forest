@@ -50,10 +50,6 @@ function winText() {
 	return "You reached " + format(endgameBoosters) + " boosters and won the game!<br>However, it isn't the end yet...<br>Wait for more updates for further content.";
 };
 
-function canGenPoints() {
-	return true;
-};
-
 function getPointGen() {
 	let gain = newDecimalOne();
 	if (hasUpgrade("g", 11)) gain = gain.mul(upgradeEffect("g", 11));
@@ -91,8 +87,6 @@ function update(diff) {
 		player.points = player.points.min(tmp.pointGen.mul(productionCap));
 	};
 };
-
-const backgroundStyle = {};
 
 function maxTickLength() {
 	return 1;

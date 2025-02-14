@@ -77,10 +77,6 @@ function getUpgradeCap(layer, id) {
 	return tmp[layer].upgrades[id].cap;
 };
 
-function canGenPoints() {
-	return true;
-};
-
 function getPointGen() {
 	if (player.points.lt(0)) player.points = newDecimalZero();
 	let gain = newDecimalOne();
@@ -109,8 +105,6 @@ const displayThings = [
 ];
 
 const endPoints = new Decimal("ee16");
-
-const backgroundStyle = {};
 
 function maxTickLength() {
 	return 1;
