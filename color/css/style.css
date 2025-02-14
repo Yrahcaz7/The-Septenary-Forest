@@ -1,0 +1,98 @@
+/* Rainbow Animations */
+:root {
+	--rainbowline: linear-gradient(90deg, magenta, red, yellow, lime, cyan, blue, magenta, red, yellow, lime, cyan, blue, magenta);
+}
+
+.rainbowline-backround {
+	padding-top: 0.9em;
+	height: calc(100% - 0.9em);
+	width: 100%;
+	left: 0;
+	top: 0;
+	position: absolute;
+	background: var(--rainbowline);
+	background-size: 200%;
+	border-radius: 50%;
+	animation: 3s linear infinite rainbowline;
+}
+
+.rainbowvalue-text {
+	background: transparent;
+	color: white;
+	animation: 6s linear infinite rainbowfade, 6s linear infinite rainbowglow;
+}
+
+@keyframes rainbowline {
+	0% {background-position: 0%}
+	100% {background-position: 100%}
+}
+
+@keyframes rainbowfade {
+	0% {color: magenta}
+	16.6666666667% {color: red}
+	33.3333333333% {color: yellow}
+	50% {color: lime}
+	66.6666666667% {color: cyan}
+	83.3333333333% {color: blue}
+	100% {color: magenta}
+}
+
+@keyframes rainbowglow {
+	0% {text-shadow: 0 0 9px magenta}
+	16.6666666667% {text-shadow: 0 0 9px red}
+	33.3333333333% {text-shadow: 0 0 9px yellow}
+	50% {text-shadow: 0 0 9px lime}
+	66.6666666667% {text-shadow: 0 0 9px cyan}
+	83.3333333333% {text-shadow: 0 0 9px blue}
+	100% {text-shadow: 0 0 9px magenta}
+}
+
+/* Moon Animations */
+.moon {
+	height: 25%;
+	width: 25%;
+	position: absolute;
+	border-radius: 50%;
+}
+
+.moon.num1 {
+	background: lightgray;
+	transform-origin: 290% 200%;
+	animation: 6s linear -2s infinite orbit;
+}
+
+.moon.num2 {
+	background: darkgray;
+	transform-origin: 410% 200%;
+	animation: 9s linear -7s infinite orbit;
+}
+
+.moon.num3 {
+	background: gray;
+	transform-origin: 530% 200%;
+	animation: 14s linear 0s infinite orbit;
+}
+
+@keyframes orbit {
+	0% {transform: rotate(0deg)}
+	100% {transform: rotate(360deg)}
+}
+
+/* Misc Things */
+.treeNode {
+	height: 120px !important;
+	width: 120px !important;
+}
+
+.sidetext {
+	writing-mode: vertical-rl;
+	text-orientation: mixed;
+	margin-bottom: -0.25ch;
+}
+
+.scrollButton {
+	width: 25px;
+	height: 20px;
+	border: solid 2px #00000020;
+	border-radius: 10px;
+}

@@ -1,0 +1,29 @@
+/* Notes */
+.layer-N {
+	color: #c0c0c0;
+	text-shadow: 0 0 10px #c0c0c0;
+}
+
+/* Roman Numerals */
+.layer-rn {
+	color: #c06000;
+	text-shadow: 0 0 10px #c06000;
+}
+
+/* Digits */
+.layer-d {
+	color: #a0a0a0;
+	text-shadow: 0 0 10px #a0a0a0;
+}
+
+/* Intelligence */
+.layer-i {
+	color: #c0e020;
+	text-shadow: 0 0 10px #c0e020;
+}
+
+/* Greek Numerals */
+.layer-gn {
+	color: #e0a020;
+	text-shadow: 0 0 10px #e0a020;
+}

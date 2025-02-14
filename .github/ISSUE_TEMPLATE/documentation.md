@@ -7,11 +7,14 @@ assignees: ''
 
 ---
 
-**Which Documentation?**
+### Which Documentation?
+
 Which documentation is this about? If this is on adding new documentation, then what will that be about?
 
-**Describe the Addition/Fix/Improvement**
+### Describe the Addition/Fix/Improvement
+
 A clear and concise description of what you want added/fixed/improved.
 
-**Additional Notes**
+### Additional Notes
+
 Add any other things of importance here.
