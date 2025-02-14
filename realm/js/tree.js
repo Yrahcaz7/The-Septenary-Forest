@@ -1,9 +1,8 @@
-var layoutInfo = {
+const layoutInfo = {
     startTab: "none",
     startNavTab: "tree-tab",
 	showTree: true,
     treeLayout: "",
-	orderBranches: true,
 };
 
 addLayer("tree-tab", {

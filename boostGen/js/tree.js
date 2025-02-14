@@ -2,7 +2,7 @@ const layoutInfo = {
 	startTab: "none",
 	startNavTab: "tree-tab",
 	showTree: true,
-	treeLayout: ""
+	treeLayout: "",
 };
 
 addLayer("tree-tab", {
