@@ -1,9 +1,7 @@
-# The Primordial Tree
+# The Septenary Forest
 
-An incremental game based on `The Prestige Tree`, made using the game engine `The Modding Tree`.
+A collection of incremental games made using the game engine The Modding Tree (TMT for short).
 
-Includes a variety of mechanics, and has lots of cool colored text (can be disabled in settings.)
+I have added various features and changed some things in the base TMT structure to better suit my mods.
 
-Note: if you want to fork this to make your own mod, look in [this `docs` folder](docs/tutorials/getting-started.md), not the original `The Modding Tree` docs, because there are a few things that are different or have been added to the original.
-
-Additional note: there is no save bank, but if you get stuck progressing in the game, you can use the `Help` page in the wiki. It is not super consistently updated, but it will most likely still prove helpful.
+Due to this, I maintain my own [documentation](docs/tutorials/getting-started.md), which should be used instead of TMT's if you are forking this repo to make your own mod.
