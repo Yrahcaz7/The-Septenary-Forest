@@ -348,7 +348,7 @@ addLayer("M", {
 		["upgrades", [10]],
 	],
 	componentStyles: {
-		clickable() { return {width: "125px", "border-radius": "25px"} },
+		clickable() { return {width: "125px", "min-height": "50px", "border-radius": "25px"} },
 	},
 	clickables: {
 		11: {
@@ -356,11 +356,8 @@ addLayer("M", {
 			display() { return '<span style="color: #000000">get coins equal to ' + formatWhole(player.M.taxEff) + ' seconds of coins/sec<br><br>Effect: +' + format(getPointGen().mul(player.M.taxEff)) + '<br><br>Cost: ' + formatWhole(player.M.taxCost) + ' mana</span>' },
 			canClick() { if (player.M.mana.gte(player.M.taxCost)) return true },
 			onClick: taxCast,
-			style() {
-				const style = {height: "125px"};
-				if (tmp.M.clickables[this.id].canClick) style["background-color"] = "#CCCCCC";
-				return style;
-			},
+			color: "#CCCCCC",
+			style: {height: "125px"},
 		},
 		12: {
 			title: "<span style='color: #000000'>Call to Arms</span>",
@@ -372,11 +369,8 @@ addLayer("M", {
 				return false;
 			},
 			onClick: callCast,
-			style() {
-				const style = {height: "125px"};
-				if (tmp.M.clickables[this.id].canClick) style["background-color"] = "#CCCCCC";
-				return style;
-			},
+			color: "#CCCCCC",
+			style: {height: "125px"},
 		},
 		13: {
 			title() {
@@ -396,12 +390,11 @@ addLayer("M", {
 				return false;
 			},
 			onClick: sideSpellCast,
-			style() {
-				let style = {height: "125px"};
-				if (hasUpgrade("F", 11) && tmp.M.clickables[this.id].canClick) style["background-color"] = "#0000CC";
-				if (hasUpgrade("F", 21) && tmp.M.clickables[this.id].canClick) style["background-color"] = "#CC0000";
-				return style;
+			color() {
+				if (hasUpgrade("F", 11)) return "#0000CC";
+				if (hasUpgrade("F", 21)) return "#CC0000";
 			},
+			style: {height: "125px"},
 		},
 		101: {
 			title: "Autocasting",
@@ -420,11 +413,7 @@ addLayer("M", {
 					setClickableState(this.layer, this.id, "secondary - ON");
 				};
 			},
-			style() {
-				const style = {"min-height": "50px"};
-				if (tmp.M.clickables[this.id].canClick) style["background-color"] = "#CCCCCC";
-				return style;
-			},
+			color: "#CCCCCC",
 			unlocked() { return hasUpgrade("M", 101) },
 		},
 		102: {
@@ -441,11 +430,7 @@ addLayer("M", {
 					setClickableState(this.layer, this.id, "primary - ON");
 				};
 			},
-			style() {
-				const style = {"min-height": "50px"};
-				if (tmp.M.clickables[this.id].canClick) style["background-color"] = "#CCCCCC";
-				return style;
-			},
+			color: "#CCCCCC",
 			unlocked() { return hasUpgrade("M", 101) },
 		},
 		103: {
@@ -465,11 +450,9 @@ addLayer("M", {
 					setClickableState(this.layer, this.id, "primary - ON");
 				};
 			},
-			style() {
-				let style = {"min-height": "50px"};
-				if (hasUpgrade("F", 11) && tmp.M.clickables[this.id].canClick) style["background-color"] = "#0000CC";
-				if (hasUpgrade("F", 21) && tmp.M.clickables[this.id].canClick) style["background-color"] = "#CC0000";
-				return style;
+			color() {
+				if (hasUpgrade("F", 11)) return "#0000CC";
+				if (hasUpgrade("F", 21)) return "#CC0000";
 			},
 			unlocked() { return hasUpgrade("M", 101) },
 		},
@@ -952,7 +935,7 @@ addLayer("G", {
 	effect() {return player.G.points.mul(player.G.gemMult).mul(0.01).add(1)},
 	effectDescription() {return "which are increasing all production by " + player.G.gemMult + "% each, for a total of " + format(tmp.G.effect) + 'x'},
 	hotkeys: [
-		{key: "a", description: "A: Abdicate for gems", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+		{key: "A", description: "Shift+A: Abdicate for gems", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() {return true},
 	doReset(resettingLayer) {

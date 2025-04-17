@@ -293,7 +293,7 @@ function loadVue(mainPage = false) {
 			locked: (!canAffordUpgrade(layer, data) && !hasUpgrade(layer, data)),
 			can: (canAffordUpgrade(layer, data) && !hasUpgrade(layer, data)),
 		}" :style="[
-			(!hasUpgrade(layer, data) && canAffordUpgrade(layer, data) ? {'background-color': tmp[layer].color} : {}),
+			(!hasUpgrade(layer, data) && canAffordUpgrade(layer, data) ? {'background-color': tmp[layer].upgrades[data].color ?? tmp[layer].color} : {}),
 			tmp[layer].upgrades[data].style
 		]">
 			<span v-if="layers[layer].upgrades[data].fullDisplay" v-html="run(layers[layer].upgrades[data].fullDisplay, layers[layer].upgrades[data])"></span>
@@ -453,7 +453,7 @@ function loadVue(mainPage = false) {
 				locked: !tmp[layer].buyables[data].canBuy,
 				bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit),
 			}" :style="[
-				(tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].color} : {}),
+				(tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].buyables[data].color ?? tmp[layer].color} : {}),
 				tmp[layer].componentStyles.buyable,
 				tmp[layer].buyables[data].style,
 			]" v-on:click="interval ? null : buyBuyable(layer, data)" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
@@ -514,10 +514,10 @@ function loadVue(mainPage = false) {
 			start() {
 				if (!this.interval && layers[this.layer].clickables[this.data].onHold) {
 					this.interval = setInterval((function() {
-						let c = layers[this.layer].clickables[this.data];
+						const c = layers[this.layer].clickables[this.data];
 						if (this.time >= 5 && run(c.canClick, c)) run(c.onHold, c);
 						this.time++;
-					}).bind(this), 50)
+					}).bind(this), 50);
 				};
 			},
 			stop() {
@@ -532,7 +532,7 @@ function loadVue(mainPage = false) {
 			can: tmp[layer].clickables[data].canClick,
 			locked: !tmp[layer].clickables[data].canClick,
 		}" :style="[
-			(tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}),
+			(tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].clickables[data].color ?? tmp[layer].color} : {}),
 			tmp[layer].clickables[data].style,
 		]" v-on:click="interval ? null : clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
 			<span v-if="tmp[layer].clickables[data].title">
@@ -542,7 +542,7 @@ function loadVue(mainPage = false) {
 			<node-mark :layer="layer" :data='tmp[layer].clickables[data].marked'></node-mark>
 			<tooltip v-if="tmp[layer].clickables[data].tooltip" :text="tmp[layer].clickables[data].tooltip"></tooltip>
 		</button>`),
-	})
+	});
 
 	addNormalComponent('master-button', {
 		props: ['layer'],
@@ -630,7 +630,7 @@ function loadVue(mainPage = false) {
 			<span style="white-space: pre-line" v-html="gridRun(this.layer, 'getDisplay', player[this.layer].grid[this.data], this.data)"></span>
 			<tooltip v-if="layers[layer].grid.getTooltip" :text="gridRun(this.layer, 'getTooltip', player[this.layer].grid[this.data], this.data)"></tooltip>
 		</button>`),
-	})
+	});
 
 	// data = id of microtab family
 	addNormalComponent('microtabs', {
@@ -758,19 +758,19 @@ function loadVue(mainPage = false) {
 	addNormalComponent('upgrade-tree', {
 		props: ['layer', 'data'],
 		template: template(`<thing-tree :layer="layer" :data="data" :type="'upgrade'"></thing-tree>`),
-	})
+	});
 
 	// data = an array with the structure of the tree
 	addNormalComponent('buyable-tree', {
 		props: ['layer', 'data'],
 		template: template(`<thing-tree :layer="layer" :data="data" :type="'buyable'"></thing-tree>`),
-	})
+	});
 
 	// data = an array with the structure of the tree
 	addNormalComponent('clickable-tree', {
 		props: ['layer', 'data'],
 		template: template(`<thing-tree :layer="layer" :data="data" :type="'clickable'"></thing-tree>`),
-	})
+	});
 
 	// data = an array with the structure of the tree
 	addNormalComponent('thing-tree', {

@@ -17,13 +17,14 @@ You can make almost any value dynamic by using a function in its place, includin
     - Required:
         - unlocked: a boolean determining if this layer is unlocked or not
         - points: a Decimal, the main currency for the layer
+
     - Optional:
         - total: A Decimal, tracks total amount of main prestige currency. Always tracked, but only shown if you add it here.
         - best: A Decimal, tracks highest amount of main prestige currency. Always tracked, but only shown if you add it here.
         - unlockOrder: used to keep track of relevant layers unlocked before this one.
         - resetTime: A number, time since this layer was last prestiged (or reset by another layer)
 
-- `color`: A color associated with this layer, used in many places. (A string in hex format with a #)
+- `color`: A color associated with this layer, used in many places. (A string in hex format with a `#`.)
 
 - `row`: The row of the layer, starting at 0. This affects where the node appears on the standard tree, and which resets affect the layer.
 
