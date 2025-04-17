@@ -53,168 +53,6 @@ function getCreationBulkCost(amount, mult = 1) {
 	return total;
 };
 
-addLayer("G", {
-	name: "Gems",
-	symbol: "G",
-	row: 1,
-	position: 0,
-	startData() { return {
-		unlocked: true,
-		points: newDecimalZero(),
-		best: newDecimalZero(),
-		total: newDecimalZero(),
-		clickValue: newDecimalOne(),
-		clickTimes: newDecimalZero(),
-		gemMult: newDecimalOne(),
-		stats: [{
-			bestClickValue: newDecimalOne(),
-			bestTotalClickValue: newDecimalZero(),
-			bestCreations: newDecimalZero(),
-		}, getGemsTabStartingStats(), getGemsTabStartingStats()],
-	}},
-	color: "#CCCCCC",
-	requires: new Decimal(100000),
-	resource: "gems",
-	baseResource: "total coins this era",
-	baseAmount() {return player.stats[0].total},
-	type: "normal",
-	exponent: 0.5,
-	gainMult() {
-		let mult = newDecimalOne();
-		return mult;
-	},
-	gainExp() {
-		return newDecimalOne();
-	},
-	resetDescription: "Abdicate for ",
-	effect() {return player.G.points.mul(player.G.gemMult).mul(0.01).add(1)},
-	effectDescription() {return "which are increasing all production by " + player.G.gemMult + "% each, for a total of " + format(tmp.G.effect) + 'x'},
-	hotkeys: [
-		{key: "a", description: "A: Abdicate for gems", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-	],
-	layerShown() {return true},
-	doReset(resettingLayer) {
-		player.FC = [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()];
-		player.FCchance = new Decimal(2.5);
-		player.stats[0] = getPlayerStartingStats();
-		if (resettingLayer === "G") {
-			layerDataReset("G", ["points", "best", "stats"]);
-			player.G.stats[0] = getGemsTabStartingStats();
-			layerDataReset("C");
-			layerDataReset("M", ["stats"]);
-			player.M.stats[0] = getManaTabStartingStats();
-			layerDataReset("F");
-		};
-	},
-	update(diff) {
-		// clicks
-		let clickGain = newDecimalOne();
-		if (getBuyableAmount("C", 11).gt(0)) clickGain = clickGain.add(getBuyableAmount("C", 11).mul(buyableEffect("C", 11)));
-		if (getBuyableAmount("C", 13).gt(0) && hasUpgrade("F", 1143)) clickGain = clickGain.add(getBuyableAmount("C", 13) * buyableEffect("C", 13));
-		if (hasUpgrade("F", 1033)) clickGain = clickGain.mul(upgradeEffect("F", 1033));
-		if (hasUpgrade("F", 1041)) clickGain = clickGain.mul(upgradeEffect("F", 1041));
-		if (hasUpgrade("F", 1043)) clickGain = clickGain.mul(upgradeEffect("F", 1043));
-		if (hasUpgrade("F", 1153)) clickGain = clickGain.mul(upgradeEffect("F", 1153));
-		clickGain = clickGain.mul(tmp.G.effect);
-		if (getClickableState("M", 12) == "ON") clickGain = clickGain.mul(clickableEffect("M", 12));
-		if (hasUpgrade("F", 11) && getClickableState("M", 13) == "ON") clickGain = clickGain.mul(clickableEffect("M", 13));
-		player.G.clickValue = clickGain;
-		player.G.stats.forEach(obj => obj.bestClickValue = obj.bestClickValue.max(player.G.clickValue));
-		// faction coins
-		let FCchance = new Decimal(2.5);
-		if (getBuyableAmount("C", 13).gt(0)) FCchance = FCchance.add(getBuyableAmount("C", 13).mul(buyableEffect("C", 13).div(10)));
-		if (hasUpgrade("F", 1033)) FCchance = FCchance.add(upgradeEffect("F", 1033).mul(3));
-		if (hasUpgrade("F", 1042)) FCchance = FCchance.add(upgradeEffect("F", 1042));
-		if (hasUpgrade("F", 1061)) FCchance = FCchance.add(upgradeEffect("F", 1061));
-		if (hasUpgrade("F", 1063)) FCchance = FCchance.add(upgradeEffect("F", 1063));
-		if (hasUpgrade("G", 2011) && !hasUpgrade("G", 2012)) FCchance = FCchance.add(upgradeEffect("G", 2011));
-		if (hasUpgrade("G", 2011) && hasUpgrade("G", 2012)) FCchance = FCchance.add(upgradeEffect("G", 2011).mul(upgradeEffect("G", 2012)));
-		player.FCchance = new Decimal(FCchance);
-		player.stats.forEach(obj => obj.FCchancebest = obj.FCchancebest.max(player.FCchance));
-		player.F.points = player.FC[0].add(player.FC[1]).add(player.FC[2]).add(player.FC[3]).add(player.FC[4]).add(player.FC[5]);
-		player.stats.forEach(obj => obj.FCbest = obj.FCbest.max(player.F.points));
-		// creations
-		player.C.points = getBuyableAmount("C", 11).add(getBuyableAmount("C", 12)).add(getBuyableAmount("C", 13));
-		player.G.stats.forEach(obj => obj.bestCreations = obj.bestCreations.max(player.C.points));
-		// gems
-		if (player.G.best.gt(player.bestGems)) player.bestGems = player.G.best;
-	},
-	tabFormat: [
-		"main-display",
-		"prestige-button",
-		"blank",
-		["display-text", () => "Your faction coin find chance is " + format(player.FCchance) + "%"],
-		"blank",
-		["row", [
-			["display-text", () => "<div style='color: #FF00FF'>You have " + formatWhole(player.FC[0]) + " fairy coins</div><div style='color: #00FF00'>You have " + formatWhole(player.FC[1]) + " elf coins</div><div style='color: #00FFFF'>You have " + formatWhole(player.FC[2]) + " angel coins</div>"],
-			["blank", ["17px"]],
-			["clickables", [1]],
-			["blank", ["17px"]],
-			["display-text", () => "<div style='color: #888800'>You have " + formatWhole(player.FC[3]) + " goblin coins</div><div style='color: #8800FF'>You have " + formatWhole(player.FC[4]) + " undead coins</div><div style='color: #880000'>You have " + formatWhole(player.FC[5]) + " demon coins</div>"],
-		]],
-		"blank",
-		["display-text", () => { if (player.G.points.gte(1)) return "<h2>Gem Power Upgrades</h2>" }],
-		"blank",
-		["upgrades", [201]],
-	],
-	componentStyles: {
-		"buyable"() { return {'width':'180px', 'height':'180px'} },
-	},
-	clickables: {
-		11: {
-			title() {return "click for " + format(player.G.clickValue) + " coins"},
-			canClick() {return true},
-			onClick() {
-				// faction coin initialization
-				const factionCoinGainType = getRandInt(0, 6);
-				let factionCoinsFound = newDecimalZero();
-				let clickPower = player.G.clickValue;
-				// faction coins gained calculation
-				if (player.FCchance.gte(100)) factionCoinsFound = player.FCchance.div(100);
-				else if (player.FCchance.div(100).gte(Math.random())) factionCoinsFound = newDecimalOne();
-				if (hasUpgrade("F", 1053) && factionCoinGainType === 2) factionCoinsFound = factionCoinsFound.mul(5);
-				factionCoinsFound = factionCoinsFound.floor();
-				// faction coins gained
-				player.FC[factionCoinGainType] = player.FC[factionCoinGainType].add(factionCoinsFound);
-				player.stats.forEach(obj => obj.FCtotal = obj.FCtotal.add(factionCoinsFound));
-				// times clicked
-				player.G.clickTimes = player.G.clickTimes.add(1);
-				// best times clicked
-				if (player.G.clickTimes.gt(player.G.stats[1].bestClickTimes)) player.G.stats[1].bestClickTimes = player.G.clickTimes;
-				if (player.G.clickTimes.gt(player.G.stats[2].bestClickTimes)) player.G.stats[2].bestClickTimes = player.G.clickTimes;
-				// total times clicked
-				player.G.stats[1].totalClickTimes = player.G.stats[1].totalClickTimes.add(1);
-				player.G.stats[2].totalClickTimes = player.G.stats[2].totalClickTimes.add(1);
-				// coins gained
-				if (hasUpgrade("F", 11) && getClickableState("M", 13) == "ON") clickPower = clickPower.mul(clickableEffect("M", 13));
-				player.points = player.points.add(clickPower);
-				player.stats.forEach(obj => obj.total = obj.total.add(clickPower));
-				player.G.stats.forEach(obj => obj.bestTotalClickValue = obj.bestTotalClickValue.add(clickPower));
-			},
-		},
-	},
-	upgrades: {
-		2011: {
-			fullDisplay() { return '<h3>Gem Influence</h3><br>increase faction coin find chance based on your gems<br><br>Effect: +' + format(upgradeEffect("G", this.id)) + '%<br><br>Req: 25 1st creations'},
-			effect() { return player.G.points.add(1).pow(0.5).sub(1) },
-			canAfford() { return getBuyableAmount("C", 11).gte(25) },
-			unlocked() { return player.G.points.gte(1) },
-		},
-		2012: {
-			fullDisplay() { return '<h3>Gem Displays</h3><br>increase the effect of <b>Gem Influence</b> based on your gems<br><br>Effect: x' + format(upgradeEffect("G", this.id)) + '<br><br>Req: 25 2nd creations'},
-			effect() { return player.G.points.add(1).pow(0.2) },
-			canAfford() { return getBuyableAmount("C", 12).gte(25) },
-			unlocked() { return player.G.points.gte(1) },
-		},
-		2013: {
-			fullDisplay() { return '<h3>Gem Displays</h3><br>increase max mana and mana regen based on your gems<br><br>Effect: x' + format(upgradeEffect("G", this.id)) + '<br><br>Req: 25 3rd creations'},
-			effect() { return player.G.points.add(1).log10().add(1).pow(0.5) },
-			canAfford() { return getBuyableAmount("C", 13).gte(25) },
-			unlocked() { return player.G.points.gte(1) },
-		},
-	},
-});
-
 addLayer("C", {
 	name: "Creations",
 	row: 0,
@@ -237,7 +75,7 @@ addLayer("C", {
 		"blank",
 	],
 	componentStyles: {
-		buyable() { return {width: "180px", height: "140px", "border-radius": "25px"} },
+		buyable() { return {width: "180px", height: "130px", "border-radius": "25px"} },
 	},
 	clickables: {
 		11: {
@@ -297,7 +135,7 @@ addLayer("C", {
 				if (hasUpgrade("F", 1032)) eff = eff.mul(upgradeEffect("F", 1032));
 				return eff;
 			},
-			display() { return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount("C", this.id) + "\n\nEffect: +" + format(buyableEffect("C", this.id)) + " to passive production\n\nTotal Effect: +" + format(getBuyableAmount("C", this.id) * buyableEffect("C", this.id)) },
+			display() { return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount("C", this.id) + "\n\nEffect: +" + format(buyableEffect("C", this.id)) + " to coins/sec\n\nTotal Effect: +" + format(getBuyableAmount("C", this.id) * buyableEffect("C", this.id)) },
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
@@ -317,8 +155,8 @@ addLayer("C", {
 				return eff;
 			},
 			display() {
-				if (hasUpgrade("F", 1143)) return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount("C", this.id) + "\n\nEffect: +" + format(buyableEffect("C", this.id)) + " to click production and\n+" + format(buyableEffect("C", this.id).div(10)) + "% to FC find chance\n\nTotal Effect: +" + format(getBuyableAmount("C", this.id) * buyableEffect("C", this.id)) + "\nand +" + format((getBuyableAmount("C", this.id) * buyableEffect("C", this.id).div(10))) + "%";
-				else return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount("C", this.id) + "\n\nEffect: +" + format(buyableEffect("C", this.id)) + " to passive production and\n+" + format(buyableEffect("C", this.id).div(10)) + "% to FC find chance\n\nTotal Effect: +" + format(getBuyableAmount("C", this.id) * buyableEffect("C", this.id)) + "\nand +" + format((getBuyableAmount("C", this.id) * buyableEffect("C", this.id).div(10))) + "%";
+				if (hasUpgrade("F", 1143)) return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount("C", this.id) + "\n\nEffect: +" + format(buyableEffect("C", this.id)) + " to click production and +" + format(buyableEffect("C", this.id).div(10)) + "% to FC find chance\n\nTotal Effect: +" + format(getBuyableAmount("C", this.id) * buyableEffect("C", this.id)) + " and +" + format((getBuyableAmount("C", this.id) * buyableEffect("C", this.id).div(10))) + "%";
+				else return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount("C", this.id) + "\n\nEffect: +" + format(buyableEffect("C", this.id)) + " to coins/sec and +" + format(buyableEffect("C", this.id).div(10)) + "% to FC find chance\n\nTotal Effect: +" + format(getBuyableAmount("C", this.id) * buyableEffect("C", this.id)) + " and +" + format((getBuyableAmount("C", this.id) * buyableEffect("C", this.id).div(10))) + "%";
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
@@ -392,7 +230,7 @@ addLayer("M", {
 	color: "#AA55AA",
 	type: "none",
 	layerShown() {return true},
-	tooltip() {return formatWhole(player.M.mana) + "/" + formatWhole(player.M.maxMana) + " mana"},
+	tooltip() {return format(player.M.mana) + "/" + format(player.M.maxMana) + " mana"},
 	doReset(resettingLayer) {},
 	update(diff) {
 		let manaCapped = false;
@@ -427,7 +265,7 @@ addLayer("M", {
 		if (hasUpgrade("M", 22) && upgradeEffect("M", 22).gt(0)) manaRegen = manaRegen.add(upgradeEffect("M", 22));
 		if (hasUpgrade("M", 24) && upgradeEffect("M", 24).gt(0)) manaRegen = manaRegen.add(upgradeEffect("M", 24));
 		if (hasUpgrade("F", 1052)) manaRegen = manaRegen.mul(upgradeEffect("F", 1052));
-		if (hasUpgrade("G", 2013)) manaRegen = manaRegen.mul(upgradeEffect("G", 2013));
+		if (hasUpgrade("G", 13)) manaRegen = manaRegen.mul(upgradeEffect("G", 13));
 		player.M.manaRegen = manaRegen;
 		const diffMana = player.M.manaRegen.mul(diff);
 		// max mana buffs
@@ -435,7 +273,7 @@ addLayer("M", {
 		if (hasUpgrade("F", 1151)) maxMana = maxMana.mul(upgradeEffect("F", 1151));
 		if (hasUpgrade("M", 21)) maxMana = maxMana.mul(upgradeEffect("M", 21));
 		if (hasUpgrade("M", 23)) maxMana = maxMana.mul(upgradeEffect("M", 23));
-		if (hasUpgrade("G", 2013)) maxMana = maxMana.mul(upgradeEffect("G", 2013));
+		if (hasUpgrade("G", 13)) maxMana = maxMana.mul(upgradeEffect("G", 13));
 		player.M.maxMana = maxMana;
 		// increase mana
 		if (player.M.mana.add(diffMana).gte(player.M.maxMana)) {
@@ -510,7 +348,7 @@ addLayer("M", {
 	clickables: {
 		11: {
 			title: "<span style='color: #000000'>Tax Collection</span>",
-			display() { return '<span style="color: #000000">get coins equal to ' + formatWhole(player.M.taxEff) + ' seconds of passive production<br><br>Effect: +' + format(getPointGen().mul(player.M.taxEff)) + '<br><br>Cost: ' + formatWhole(player.M.taxCost) + ' mana</span>' },
+			display() { return '<span style="color: #000000">get coins equal to ' + formatWhole(player.M.taxEff) + ' seconds of coins/sec<br><br>Effect: +' + format(getPointGen().mul(player.M.taxEff)) + '<br><br>Cost: ' + formatWhole(player.M.taxCost) + ' mana</span>' },
 			canClick() { if (player.M.mana.gte(player.M.taxCost)) return true },
 			onClick() { taxCast() },
 		},
@@ -533,7 +371,7 @@ addLayer("M", {
 			},
 			display() {
 				if (hasUpgrade("F", 11)) return '<span style="color: #0000FF">boost click production based on your mana for 15 seconds<br>Time left: ' + format(player.M.sideSpellTime) + 's<br><br>Effect: x' + format(clickableEffect("M", this.id)) + '<br><br>Cost: ' + formatWhole(player.M.sideSpellCost) + ' mana';
-				if (hasUpgrade("F", 21)) return '<span style="color: #FF0000">boost passive production based on your mana for 15 seconds<br>Time left: ' + format(player.M.sideSpellTime) + 's<br><br>Effect: x' + format(clickableEffect("M", this.id)) + '<br><br>Cost: ' + formatWhole(player.M.sideSpellCost) + ' mana';
+				if (hasUpgrade("F", 21)) return '<span style="color: #FF0000">boost coins/sec based on your mana for 15 seconds<br>Time left: ' + format(player.M.sideSpellTime) + 's<br><br>Effect: x' + format(clickableEffect("M", this.id)) + '<br><br>Cost: ' + formatWhole(player.M.sideSpellCost) + ' mana';
 				return "";
 			},
 			effect() { return player.M.mana.add(1).pow(0.25).mul(player.M.sideSpellBoost) },
@@ -850,7 +688,7 @@ addLayer("F", {
 			unlocked() { return hasUpgrade("F", 1044) },
 		},
 		1143: {
-			fullDisplay() { return '<h3>All on One</h3><br>the 3rd creation\'s first effect now applies to click production instead of passive production<br><br>Cost: 50,000,000 coins'},
+			fullDisplay() { return '<h3>All on One</h3><br>the 3rd creation\'s first effect now applies to click production instead of coins/sec<br><br>Cost: 50,000,000 coins'},
 			cost: 50000000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -933,7 +771,7 @@ addLayer("F", {
 			unlocked() { return hasUpgrade("F", 61) },
 		},
 		1062: {
-			fullDisplay() { return '<h3>Goblin\'s Greed</h3><br>increase passive production based on your faction coins<br><br>Effect: x' + format(upgradeEffect("F", this.id)) + '<br><br>Cost: 5,000 coins'},
+			fullDisplay() { return '<h3>Goblin\'s Greed</h3><br>increase coins/sec based on your faction coins<br><br>Effect: x' + format(upgradeEffect("F", this.id)) + '<br><br>Cost: 5,000 coins'},
 			effect() { return player.F.points.add(1).pow(0.25) },
 			cost: 5000,
 			currencyInternalName: "points",
@@ -963,7 +801,7 @@ addLayer("F", {
 			unlocked() { return hasUpgrade("F", 61) },
 		},
 		1161: {
-			fullDisplay() { return '<h3>Moneyload</h3><br>increase passive production based on your faction coin find chance<br><br>Effect: x' + format(upgradeEffect("F", this.id)) + '<br><br>Cost: 500,000 coins'},
+			fullDisplay() { return '<h3>Moneyload</h3><br>increase coins/sec based on your faction coin find chance<br><br>Effect: x' + format(upgradeEffect("F", this.id)) + '<br><br>Cost: 500,000 coins'},
 			effect() { return player.FCchance.add(1).pow(0.3) },
 			cost: 500000,
 			currencyInternalName: "points",
@@ -980,7 +818,7 @@ addLayer("F", {
 			unlocked() { return hasUpgrade("F", 1064) },
 		},
 		1163: {
-			fullDisplay() { return '<h3>Goblin Pride</h3><br>increase passive production based on your goblin coins<br><br>Effect: x' + format(upgradeEffect("F", this.id)) + '<br><br>Cost: 50,000,000 coins'},
+			fullDisplay() { return '<h3>Goblin Pride</h3><br>increase coins/sec based on your goblin coins<br><br>Effect: x' + format(upgradeEffect("F", this.id)) + '<br><br>Cost: 50,000,000 coins'},
 			effect() { return player.FC[3].add(1).pow(0.3) },
 			cost: 50000000,
 			currencyInternalName: "points",
@@ -990,7 +828,7 @@ addLayer("F", {
 		},
 		// undead faction
 		1071: {
-			fullDisplay() { return '<h3>Undending Cycle</h3><br>increase passive production based on your coins<br><br>Effect: x' + format(upgradeEffect("F", this.id)) + '<br><br>Cost: 500 coins'},
+			fullDisplay() { return '<h3>Undending Cycle</h3><br>increase coins/sec based on your coins<br><br>Effect: x' + format(upgradeEffect("F", this.id)) + '<br><br>Cost: 500 coins'},
 			effect() { return player.points.add(1).pow(0.15) },
 			cost: 500,
 			currencyInternalName: "points",
@@ -999,7 +837,7 @@ addLayer("F", {
 			unlocked() { return hasUpgrade("F", 71) },
 		},
 		1072: {
-			fullDisplay() { return '<h3>Corpse Piles</h3><br>increase passive production based on your undead coins<br><br>Effect: x' + format(upgradeEffect("F", this.id)) + '<br><br>Cost: 5,000 coins'},
+			fullDisplay() { return '<h3>Corpse Piles</h3><br>increase coins/sec based on your undead coins<br><br>Effect: x' + format(upgradeEffect("F", this.id)) + '<br><br>Cost: 5,000 coins'},
 			effect() { return player.FC[4].add(1).pow(0.5) },
 			cost: 5000,
 			currencyInternalName: "points",
@@ -1008,7 +846,7 @@ addLayer("F", {
 			unlocked() { return hasUpgrade("F", 71) },
 		},
 		1073: {
-			fullDisplay() { return '<h3>Stay no More</h3><br>increase passive production based on your click production<br><br>Effect: x' + format(upgradeEffect("F", this.id)) + '<br><br>Cost: 50,000 coins'},
+			fullDisplay() { return '<h3>Stay no More</h3><br>increase coins/sec based on your click production<br><br>Effect: x' + format(upgradeEffect("F", this.id)) + '<br><br>Cost: 50,000 coins'},
 			effect() { return player.G.clickValue.add(1).pow(0.2) },
 			cost: 50000,
 			currencyInternalName: "points",
@@ -1018,7 +856,7 @@ addLayer("F", {
 		},
 		// demon faction
 		1081: {
-			fullDisplay() { return "<h3>Demonic Prestige</h3><br>increase passive production based on your creation tiers<br><br>Effect: x" + format(upgradeEffect(this.layer, this.id)) + "<br><br>Cost: 500 coins"},
+			fullDisplay() { return "<h3>Demonic Prestige</h3><br>increase coins/sec based on your creation tiers<br><br>Effect: x" + format(upgradeEffect(this.layer, this.id)) + "<br><br>Cost: 500 coins"},
 			effect() { return player.G.upgrades.length / 5 + 1 },
 			cost: 500,
 			currencyInternalName: "points",
@@ -1048,6 +886,167 @@ addLayer("F", {
 			currencyLocation() { return player },
 			style: {"color": "#880000"},
 			unlocked() { return hasUpgrade("F", 81) },
+		},
+	},
+});
+
+addLayer("G", {
+	name: "Gems",
+	symbol: "G",
+	row: 1,
+	position: 0,
+	branches: ["C", "M", "F"],
+	startData() { return {
+		unlocked: true,
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
+		clickValue: newDecimalOne(),
+		clickTimes: newDecimalZero(),
+		gemMult: newDecimalOne(),
+		stats: [{
+			bestClickValue: newDecimalOne(),
+			bestTotalClickValue: newDecimalZero(),
+			bestCreations: newDecimalZero(),
+		}, getGemsTabStartingStats(), getGemsTabStartingStats()],
+	}},
+	color: "#8888CC",
+	requires: new Decimal(100000),
+	resource: "gems",
+	baseResource: "total coins this era",
+	baseAmount() {return player.stats[0].total},
+	type: "normal",
+	exponent: 0.5,
+	gainMult() {
+		let mult = newDecimalOne();
+		return mult;
+	},
+	gainExp() {
+		return newDecimalOne();
+	},
+	resetDescription: "Abdicate for ",
+	effect() {return player.G.points.mul(player.G.gemMult).mul(0.01).add(1)},
+	effectDescription() {return "which are increasing all production by " + player.G.gemMult + "% each, for a total of " + format(tmp.G.effect) + 'x'},
+	hotkeys: [
+		{key: "a", description: "A: Abdicate for gems", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+	],
+	layerShown() {return true},
+	doReset(resettingLayer) {
+		player.FC = [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()];
+		player.FCchance = new Decimal(2.5);
+		player.stats[0] = getPlayerStartingStats();
+		if (resettingLayer === "G") {
+			layerDataReset("G", ["points", "best", "stats"]);
+			player.G.stats[0] = getGemsTabStartingStats();
+			layerDataReset("C");
+			layerDataReset("M", ["stats"]);
+			player.M.stats[0] = getManaTabStartingStats();
+			layerDataReset("F");
+		};
+	},
+	update(diff) {
+		// clicks
+		let clickGain = newDecimalOne();
+		if (getBuyableAmount("C", 11).gt(0)) clickGain = clickGain.add(getBuyableAmount("C", 11).mul(buyableEffect("C", 11)));
+		if (getBuyableAmount("C", 13).gt(0) && hasUpgrade("F", 1143)) clickGain = clickGain.add(getBuyableAmount("C", 13) * buyableEffect("C", 13));
+		if (hasUpgrade("F", 1033)) clickGain = clickGain.mul(upgradeEffect("F", 1033));
+		if (hasUpgrade("F", 1041)) clickGain = clickGain.mul(upgradeEffect("F", 1041));
+		if (hasUpgrade("F", 1043)) clickGain = clickGain.mul(upgradeEffect("F", 1043));
+		if (hasUpgrade("F", 1153)) clickGain = clickGain.mul(upgradeEffect("F", 1153));
+		clickGain = clickGain.mul(tmp.G.effect);
+		if (getClickableState("M", 12) == "ON") clickGain = clickGain.mul(clickableEffect("M", 12));
+		if (hasUpgrade("F", 11) && getClickableState("M", 13) == "ON") clickGain = clickGain.mul(clickableEffect("M", 13));
+		player.G.clickValue = clickGain;
+		player.G.stats.forEach(obj => obj.bestClickValue = obj.bestClickValue.max(player.G.clickValue));
+		// faction coins
+		let FCchance = new Decimal(2.5);
+		if (getBuyableAmount("C", 13).gt(0)) FCchance = FCchance.add(getBuyableAmount("C", 13).mul(buyableEffect("C", 13).div(10)));
+		if (hasUpgrade("F", 1033)) FCchance = FCchance.add(upgradeEffect("F", 1033).mul(3));
+		if (hasUpgrade("F", 1042)) FCchance = FCchance.add(upgradeEffect("F", 1042));
+		if (hasUpgrade("F", 1061)) FCchance = FCchance.add(upgradeEffect("F", 1061));
+		if (hasUpgrade("F", 1063)) FCchance = FCchance.add(upgradeEffect("F", 1063));
+		if (hasUpgrade("G", 11) && !hasUpgrade("G", 12)) FCchance = FCchance.add(upgradeEffect("G", 11));
+		if (hasUpgrade("G", 11) && hasUpgrade("G", 12)) FCchance = FCchance.add(upgradeEffect("G", 11).mul(upgradeEffect("G", 12)));
+		player.FCchance = new Decimal(FCchance);
+		player.stats.forEach(obj => obj.FCchancebest = obj.FCchancebest.max(player.FCchance));
+		player.F.points = player.FC[0].add(player.FC[1]).add(player.FC[2]).add(player.FC[3]).add(player.FC[4]).add(player.FC[5]);
+		player.stats.forEach(obj => obj.FCbest = obj.FCbest.max(player.F.points));
+		// creations
+		player.C.points = getBuyableAmount("C", 11).add(getBuyableAmount("C", 12)).add(getBuyableAmount("C", 13));
+		player.G.stats.forEach(obj => obj.bestCreations = obj.bestCreations.max(player.C.points));
+		// gems
+		if (player.G.best.gt(player.bestGems)) player.bestGems = player.G.best;
+	},
+	tabFormat: [
+		"main-display",
+		"prestige-button",
+		"blank",
+		["display-text", () => "Your faction coin find chance is " + format(player.FCchance) + "%"],
+		"blank",
+		["row", [
+			["display-text", () => "<div style='color: #FF00FF'>You have " + formatWhole(player.FC[0]) + " fairy coins</div><div style='color: #00FF00'>You have " + formatWhole(player.FC[1]) + " elf coins</div><div style='color: #00FFFF'>You have " + formatWhole(player.FC[2]) + " angel coins</div>"],
+			["blank", ["17px"]],
+			["clickables", [1]],
+			["blank", ["17px"]],
+			["display-text", () => "<div style='color: #888800'>You have " + formatWhole(player.FC[3]) + " goblin coins</div><div style='color: #8800FF'>You have " + formatWhole(player.FC[4]) + " undead coins</div><div style='color: #880000'>You have " + formatWhole(player.FC[5]) + " demon coins</div>"],
+		]],
+		"blank",
+		"upgrades",
+	],
+	componentStyles: {
+		"buyable"() { return {'width':'180px', 'height':'180px'} },
+	},
+	clickables: {
+		11: {
+			title() {return "click for " + format(player.G.clickValue) + " coins"},
+			canClick() {return true},
+			onClick() {
+				// faction coin initialization
+				const factionCoinGainType = getRandInt(0, 6);
+				let factionCoinsFound = newDecimalZero();
+				let clickPower = player.G.clickValue;
+				// faction coins gained calculation
+				if (player.FCchance.gte(100)) factionCoinsFound = player.FCchance.div(100);
+				else if (player.FCchance.div(100).gte(Math.random())) factionCoinsFound = newDecimalOne();
+				if (hasUpgrade("F", 1053) && factionCoinGainType === 2) factionCoinsFound = factionCoinsFound.mul(5);
+				factionCoinsFound = factionCoinsFound.floor();
+				// faction coins gained
+				player.FC[factionCoinGainType] = player.FC[factionCoinGainType].add(factionCoinsFound);
+				player.stats.forEach(obj => obj.FCtotal = obj.FCtotal.add(factionCoinsFound));
+				// times clicked
+				player.G.clickTimes = player.G.clickTimes.add(1);
+				// best times clicked
+				if (player.G.clickTimes.gt(player.G.stats[1].bestClickTimes)) player.G.stats[1].bestClickTimes = player.G.clickTimes;
+				if (player.G.clickTimes.gt(player.G.stats[2].bestClickTimes)) player.G.stats[2].bestClickTimes = player.G.clickTimes;
+				// total times clicked
+				player.G.stats[1].totalClickTimes = player.G.stats[1].totalClickTimes.add(1);
+				player.G.stats[2].totalClickTimes = player.G.stats[2].totalClickTimes.add(1);
+				// coins gained
+				if (hasUpgrade("F", 11) && getClickableState("M", 13) == "ON") clickPower = clickPower.mul(clickableEffect("M", 13));
+				player.points = player.points.add(clickPower);
+				player.stats.forEach(obj => obj.total = obj.total.add(clickPower));
+				player.G.stats.forEach(obj => obj.bestTotalClickValue = obj.bestTotalClickValue.add(clickPower));
+			},
+		},
+	},
+	upgrades: {
+		11: {
+			fullDisplay() { return '<h3>Gem Influence</h3><br>increase faction coin find chance based on your gems<br><br>Effect: +' + format(upgradeEffect("G", this.id)) + '%<br><br>Req: 25 1st creations'},
+			effect() { return player.G.points.add(1).pow(0.5).sub(1) },
+			canAfford() { return getBuyableAmount("C", 11).gte(25) },
+			unlocked() { return player.G.points.gte(1) },
+		},
+		12: {
+			fullDisplay() { return '<h3>Gem Displays</h3><br>increase the effect of <b>Gem Influence</b> based on your gems<br><br>Effect: x' + format(upgradeEffect("G", this.id)) + '<br><br>Req: 25 2nd creations'},
+			effect() { return player.G.points.add(1).pow(0.2) },
+			canAfford() { return getBuyableAmount("C", 12).gte(25) },
+			unlocked() { return player.G.points.gte(1) },
+		},
+		13: {
+			fullDisplay() { return '<h3>Gem Displays</h3><br>increase max mana and mana regen based on your gems<br><br>Effect: x' + format(upgradeEffect("G", this.id)) + '<br><br>Req: 25 3rd creations'},
+			effect() { return player.G.points.add(1).log10().add(1).pow(0.5) },
+			canAfford() { return getBuyableAmount("C", 13).gte(25) },
+			unlocked() { return player.G.points.gte(1) },
 		},
 	},
 });
