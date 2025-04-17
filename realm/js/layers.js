@@ -6,11 +6,7 @@ function getGemsTabStartingStats() { return {
 	bestCreations: newDecimalZero(),
 }};
 
-const creationNames = [
-	["Dirt", "Rich Dirt", "Richer Dirt", "Dry Soil", "Soil", "Fertile Soil", "Perfected Soil"],
-	["Pebbles", "Rocks", "Boulders", "Stone Hills", "Stone Caves"],
-	["Weeds", "Reeds", "Grass"],
-];
+const creationNames = ["Dirt", "Pebbles", "Weeds"];
 
 const creationTierReq = [10, 25, 50, 100, 250, 500, 1000];
 
@@ -27,14 +23,13 @@ const creationTierCost = [
 ];
 
 function getCreationTierUpgradeDesc(id) {
-	const names = creationNames[id - 111];
-	const index = getBuyableAmount("C", id)?.toNumber() || 0;
+	const index = getBuyableAmount("C", id).toNumber();
+	const name = creationNames[id - 111].toLowerCase();
 	const eff = creationTierEff[(id - 1) % 10][index];
-	if (id % 10 == 3) {
-		return "increase " + names[index].toLowerCase() + "'" + (names[index].endsWith("s") ? "" : "s") + " first base effect by +" + format(eff[0], 2, false) + " and second base effect by +" + format(eff[1], 2, false) + "%<br><br>Req: " + creationTierReq[index] + " " + names[index].toLowerCase() + "<br><br>Cost: " + format(tmp.C.buyables[id].cost) + " coins";
-	} else {
-		return "increase " + names[index].toLowerCase() + "'" + (names[index].endsWith("s") ? "" : "s") + " base effect by +" + format(eff, 2, false) + "<br><br>Req: " + creationTierReq[index] + " " + names[index].toLowerCase() + "<br><br>Cost: " + format(tmp.C.buyables[id].cost) + " coins";
+	if (id % 10 === 3) {
+		return "increase " + name + "'" + (name.endsWith("s") ? "" : "s") + " first base effect by +" + format(eff[0], 2, false) + " and second base effect by +" + format(eff[1], 2, false) + "%<br><br>Req: " + creationTierReq[index] + " " + name + "<br><br>Cost: " + format(tmp.C.buyables[id].cost) + " coins";
 	};
+	return "increase " + name + "'" + (name.endsWith("s") ? "" : "s") + " base effect by +" + format(eff, 2, false) + "<br><br>Req: " + creationTierReq[index] + " " + name + "<br><br>Cost: " + format(tmp.C.buyables[id].cost) + " coins";
 };
 
 function getCreationCost(amount, mult = 1) {
@@ -51,6 +46,13 @@ function getCreationBulkCost(amount, mult = 1) {
 		total = total.add(getCreationCost(amount.add(index), mult));
 	};
 	return total;
+};
+
+function romanNumeral(num) {
+	let text = "";
+	if (num >= 10) text += ["X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"][Math.floor(num / 10) % 10 - 1];
+	if (num % 10 >= 1) text += ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"][num % 10 - 1];
+	return text;
 };
 
 addLayer("C", {
@@ -96,24 +98,23 @@ addLayer("C", {
 	},
 	buyables: {
 		11: {
-			title() { return creationNames[this.id - 11][getBuyableAmount("C", this.id + 100)?.toNumber() || 0] },
+			title() { return creationNames[this.id - 11] + " " + romanNumeral(getBuyableAmount("C", "1" + this.id).toNumber() + 1) },
 			cost() { return getCreationBulkCost(getBuyableAmount("C", this.id)) },
 			effect() {
 				let eff = new Decimal(0.1);
-				if (hasUpgrade("G", 91)) eff = eff.add(0.05);
-				if (hasUpgrade("G", 101)) eff = eff.add(0.1);
-				if (hasUpgrade("G", 111)) eff = eff.add(0.2);
-				if (hasUpgrade("G", 121)) eff = eff.add(0.4);
-				if (hasUpgrade("G", 131)) eff = eff.add(0.65);
-				if (hasUpgrade("G", 141)) eff = eff.add(1);
+				for (let index = 0; index < getBuyableAmount("C", "1" + this.id).toNumber(); index++) {
+					eff = eff.add(creationTierEff[this.id - 11][index]);
+				};
 				if (hasUpgrade("F", 1083)) eff = eff.add(upgradeEffect("F", 1083).mul(1));
 				if (hasUpgrade("F", 1031)) eff = eff.mul(upgradeEffect("F", 1031));
 				if (hasUpgrade("F", 1032)) eff = eff.mul(upgradeEffect("F", 1032));
 				return eff;
 			},
 			display() {
-				if (this.cost() == newDecimalOne()) return "\nCost: 1 coin\n\nAmount: " + getBuyableAmount("C", this.id) + "\n\nEffect: +" + format(buyableEffect("C", this.id)) + " to click production\n\nTotal Effect: +" + format(getBuyableAmount("C", this.id) * buyableEffect("C", this.id));
-				else return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount("C", this.id) + "\n\nEffect: +" + format(buyableEffect("C", this.id)) + " to click production\n\nTotal Effect: +" + format(getBuyableAmount("C", this.id) * buyableEffect("C", this.id));
+				const cost = this.cost();
+				const amount = getBuyableAmount(this.layer, this.id);
+				const effect = buyableEffect(this.layer, this.id);
+				return "\nCost: " + format(cost) + " coin" + (cost.eq(newDecimalOne()) ? "" : "s") + "\n\nAmount: " + amount + "\n\nEffect: +" + format(effect) + " to click production\n\nTotal Effect: +" + format(effect * amount);
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
@@ -122,14 +123,13 @@ addLayer("C", {
 			},
 		},
 		12: {
-			title() { return creationNames[this.id - 11][getBuyableAmount("C", this.id + 100)?.toNumber() || 0] },
+			title() { return creationNames[this.id - 11] + " " + romanNumeral(getBuyableAmount("C", "1" + this.id).toNumber() + 1) },
 			cost() { return getCreationBulkCost(getBuyableAmount("C", this.id), 100) },
 			effect() {
 				let eff = new Decimal(0.25);
-				if (hasUpgrade("G", 92)) eff = eff.add(0.5);
-				if (hasUpgrade("G", 102)) eff = eff.add(1.25);
-				if (hasUpgrade("G", 112)) eff = eff.add(2);
-				if (hasUpgrade("G", 122)) eff = eff.add(3.5);
+				for (let index = 0; index < getBuyableAmount("C", "1" + this.id).toNumber(); index++) {
+					eff = eff.add(creationTierEff[this.id - 11][index]);
+				};
 				if (hasUpgrade("F", 1083)) eff = eff.add(upgradeEffect("F", 1083).mul(2));
 				if (hasUpgrade("F", 1031)) eff = eff.mul(upgradeEffect("F", 1031));
 				if (hasUpgrade("F", 1032)) eff = eff.mul(upgradeEffect("F", 1032));
@@ -143,12 +143,13 @@ addLayer("C", {
 			},
 		},
 		13: {
-			title() { return creationNames[this.id - 11][getBuyableAmount("C", this.id + 100)?.toNumber() || 0] },
+			title() { return creationNames[this.id - 11] + " " + romanNumeral(getBuyableAmount("C", "1" + this.id).toNumber() + 1) },
 			cost() { return getCreationBulkCost(getBuyableAmount("C", this.id), 10000) },
 			effect() {
 				let eff = new Decimal(2.5);
-				if (hasUpgrade("G", 93)) eff = eff.add(0.5);
-				if (hasUpgrade("G", 103)) eff = eff.add(2);
+				for (let index = 0; index < getBuyableAmount("C", "1" + this.id).toNumber(); index++) {
+					eff = eff.add(creationTierEff[this.id - 11][index]);
+				};
 				if (hasUpgrade("F", 1083)) eff = eff.add(upgradeEffect("F", 1083).mul(4));
 				if (hasUpgrade("F", 1031)) eff = eff.mul(upgradeEffect("F", 1031));
 				if (hasUpgrade("F", 1032)) eff = eff.mul(upgradeEffect("F", 1032));
@@ -165,9 +166,9 @@ addLayer("C", {
 			},
 		},
 		111: {
-			cost() { return creationTierCost[this.id - 111][getBuyableAmount("C", this.id)?.toNumber() || 0] ?? Infinity },
+			cost() { return creationTierCost[this.id - 111][getBuyableAmount("C", this.id).toNumber()] ?? Infinity },
 			display() { return getCreationTierUpgradeDesc(this.id) },
-			canAfford() { return getBuyableAmount("C", this.id - 100).gte(creationTierReq[getBuyableAmount("C", this.id)?.toNumber() || 0]) && player.points.gte(this.cost()) },
+			canAfford() { return getBuyableAmount("C", this.id - 100).gte(creationTierReq[getBuyableAmount("C", this.id).toNumber()]) && player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(1));
@@ -175,9 +176,9 @@ addLayer("C", {
 			style: {height: "80px"},
 		},
 		112: {
-			cost() { return creationTierCost[this.id - 111][getBuyableAmount("C", this.id)?.toNumber() || 0] ?? Infinity },
+			cost() { return creationTierCost[this.id - 111][getBuyableAmount("C", this.id).toNumber()] ?? Infinity },
 			display() { return getCreationTierUpgradeDesc(this.id) },
-			canAfford() { return getBuyableAmount("C", this.id - 100).gte(creationTierReq[getBuyableAmount("C", this.id)?.toNumber() || 0]) && player.points.gte(this.cost()) },
+			canAfford() { return getBuyableAmount("C", this.id - 100).gte(creationTierReq[getBuyableAmount("C", this.id).toNumber()]) && player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(1));
@@ -185,9 +186,9 @@ addLayer("C", {
 			style: {height: "80px"},
 		},
 		113: {
-			cost() { return creationTierCost[this.id - 111][getBuyableAmount("C", this.id)?.toNumber() || 0] ?? Infinity },
+			cost() { return creationTierCost[this.id - 111][getBuyableAmount("C", this.id).toNumber()] ?? Infinity },
 			display() { return getCreationTierUpgradeDesc(this.id) },
-			canAfford() { return getBuyableAmount("C", this.id - 100).gte(creationTierReq[getBuyableAmount("C", this.id)?.toNumber() || 0]) && player.points.gte(this.cost()) },
+			canAfford() { return getBuyableAmount("C", this.id - 100).gte(creationTierReq[getBuyableAmount("C", this.id).toNumber()]) && player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(1));
@@ -899,8 +900,6 @@ addLayer("G", {
 	startData() { return {
 		unlocked: true,
 		points: newDecimalZero(),
-		best: newDecimalZero(),
-		total: newDecimalZero(),
 		clickValue: newDecimalOne(),
 		clickTimes: newDecimalZero(),
 		gemMult: newDecimalOne(),
