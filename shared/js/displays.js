@@ -160,7 +160,7 @@ function updateTabFormat(layer) {
 		updateTabFormat(tmp[layer].tabFormat[tab].embedLayer);
 	};
 	// Update microtabs
-	for (family in layers[layer].microtabs) {
+	for (const family in layers[layer].microtabs) {
 		tab = player.subtabs[layer][family];
 		if (tmp[layer].microtabs[family][tab]) {
 			if (tmp[layer].microtabs[family][tab].embedLayer) updateTabFormat(tmp[layer].microtabs[family][tab].embedLayer);

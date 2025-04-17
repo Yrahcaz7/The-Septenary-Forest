@@ -5,7 +5,7 @@ let mouseY = 0;
 
 function makeParticles(data, amount = 1, type = "normal") {
 	for (let x = 0; x < amount; x++) {
-		let particle = newParticles[type]();
+		const particle = newParticles[type]();
 		for (thing in data) {
 			switch (thing) {
 				case "onClick": // Functions that should be copied over
@@ -37,7 +37,7 @@ function makeShinies(data, amount = 1) {
 };
 
 function updateParticles(diff) {
-	for (p in particles) {
+	for (const p in particles) {
 		let particle = particles[p];
 		particle.time -= diff;
 		particle.fadeInTimer -= diff;
@@ -132,7 +132,7 @@ function getOpacity(particle) {
 };
 
 function constructParticleStyle(particle) {
-	let style = {
+	const style = {
 		left: (particle.x - particle.height / 2) + "px",
 		top: (particle.y - particle.height / 2) + "px",
 		width: particle.width + "px",
@@ -152,7 +152,7 @@ function constructParticleStyle(particle) {
 };
 
 function clearParticles(check = true) {
-	for (p in particles) {
+	for (const p in particles) {
 		if (run(check, particles[p], particles[p])) {
 			delete particles[p];
 		};

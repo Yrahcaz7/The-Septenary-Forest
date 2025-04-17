@@ -20,10 +20,10 @@ let maxRow = 0;
 
 function updateHotkeys() {
 	hotkeys = {};
-	for (layer in layers) {
+	for (const layer in layers) {
 		hk = layers[layer].hotkeys;
 		if (hk) {
-			for (id in hk) {
+			for (const id in hk) {
 				hotkeys[hk[id].key] = hk[id];
 				hotkeys[hk[id].key].layer = layer;
 				hotkeys[hk[id].key].id = id;
@@ -43,18 +43,18 @@ function updateLayers() {
 	ROW_LAYERS = {};
 	TREE_LAYERS = {};
 	OTHER_LAYERS = {};
-	for (layer in layers) {
+	for (const layer in layers) {
 		setupLayer(layer);
 	};
-	for (row in OTHER_LAYERS) {
+	for (const row in OTHER_LAYERS) {
 		OTHER_LAYERS[row].sort((a, b) => a.position > b.position ? 1 : -1);
-		for (layer in OTHER_LAYERS[row]) {
+		for (const layer in OTHER_LAYERS[row]) {
 			OTHER_LAYERS[row][layer] = OTHER_LAYERS[row][layer].layer;
 		};
 	};
-	for (row in TREE_LAYERS) {
+	for (const row in TREE_LAYERS) {
 		TREE_LAYERS[row].sort((a, b) => a.position > b.position ? 1 : -1);
-		for (layer in TREE_LAYERS[row]) {
+		for (const layer in TREE_LAYERS[row]) {
 			TREE_LAYERS[row][layer] = TREE_LAYERS[row][layer].layer;
 		};
 	};
@@ -70,7 +70,7 @@ function setupLayer(layer) {
 	layers[layer].layer = layer;
 	if (layers[layer].upgrades) {
 		setRowCol(layers[layer].upgrades);
-		for (thing in layers[layer].upgrades) {
+		for (const thing in layers[layer].upgrades) {
 			if (isPlainObject(layers[layer].upgrades[thing])) {
 				layers[layer].upgrades[thing].id = thing;
 				layers[layer].upgrades[thing].layer = layer;
@@ -81,7 +81,7 @@ function setupLayer(layer) {
 		};
 	};
 	if (layers[layer].milestones) {
-		for (thing in layers[layer].milestones) {
+		for (const thing in layers[layer].milestones) {
 			if (isPlainObject(layers[layer].milestones[thing])) {
 				layers[layer].milestones[thing].id = thing;
 				layers[layer].milestones[thing].layer = layer;
@@ -93,7 +93,7 @@ function setupLayer(layer) {
 	};
 	if (layers[layer].achievements) {
 		setRowCol(layers[layer].achievements)
-		for (thing in layers[layer].achievements) {
+		for (const thing in layers[layer].achievements) {
 			if (isPlainObject(layers[layer].achievements[thing])) {
 				layers[layer].achievements[thing].id = thing;
 				layers[layer].achievements[thing].layer = layer;
@@ -105,7 +105,7 @@ function setupLayer(layer) {
 	};
 	if (layers[layer].challenges) {
 		setRowCol(layers[layer].challenges);
-		for (thing in layers[layer].challenges) {
+		for (const thing in layers[layer].challenges) {
 			if (isPlainObject(layers[layer].challenges[thing])) {
 				layers[layer].challenges[thing].id = thing;
 				layers[layer].challenges[thing].layer = layer;
@@ -123,7 +123,7 @@ function setupLayer(layer) {
 	if (layers[layer].buyables) {
 		layers[layer].buyables.layer = layer;
 		setRowCol(layers[layer].buyables);
-		for (thing in layers[layer].buyables) {
+		for (const thing in layers[layer].buyables) {
 			if (isPlainObject(layers[layer].buyables[thing])) {
 				layers[layer].buyables[thing].id = thing;
 				layers[layer].buyables[thing].layer = layer;
@@ -140,7 +140,7 @@ function setupLayer(layer) {
 	if (layers[layer].clickables) {
 		layers[layer].clickables.layer = layer;
 		setRowCol(layers[layer].clickables);
-		for (thing in layers[layer].clickables) {
+		for (const thing in layers[layer].clickables) {
 			if (isPlainObject(layers[layer].clickables[thing])) {
 				layers[layer].clickables[thing].id = thing;
 				layers[layer].clickables[thing].layer = layer;
@@ -152,7 +152,7 @@ function setupLayer(layer) {
 	};
 	if (layers[layer].bars) {
 		layers[layer].bars.layer = layer;
-		for (thing in layers[layer].bars) {
+		for (const thing in layers[layer].bars) {
 			layers[layer].bars[thing].id = thing;
 			layers[layer].bars[thing].layer = layer;
 			if (layers[layer].bars[thing].unlocked === undefined) {
@@ -161,7 +161,7 @@ function setupLayer(layer) {
 		};
 	};
 	if (layers[layer].infoboxes) {
-		for (thing in layers[layer].infoboxes) {
+		for (const thing in layers[layer].infoboxes) {
 			layers[layer].infoboxes[thing].id = thing;
 			layers[layer].infoboxes[thing].layer = layer;
 			if (layers[layer].infoboxes[thing].unlocked === undefined) {
@@ -197,15 +197,15 @@ function setupLayer(layer) {
 	if (layers[layer].name === undefined) layers[layer].name = layer;
 	if (layers[layer].layerShown === undefined) layers[layer].layerShown = true;
 	if (layers[layer].glowColor === undefined) layers[layer].glowColor = defaultGlow;
-	let row = layers[layer].row;
-	let displayRow = layers[layer].displayRow;
+	const row = layers[layer].row;
+	const displayRow = layers[layer].displayRow;
 	if (!ROW_LAYERS[row]) ROW_LAYERS[row] = {};
 	if (!TREE_LAYERS[displayRow] && !isNaN(displayRow)) TREE_LAYERS[displayRow] = [];
 	if (!OTHER_LAYERS[displayRow] && isNaN(displayRow)) OTHER_LAYERS[displayRow] = [];
 	ROW_LAYERS[row][layer] = layer;
-	let position = (layers[layer].position !== undefined ? layers[layer].position : layer);
-	if (!isNaN(displayRow) || displayRow < 0) TREE_LAYERS[displayRow].push({layer: layer, position: position});
-	else OTHER_LAYERS[displayRow].push({layer: layer, position: position});
+	const pos = (layers[layer].position !== undefined ? layers[layer].position : layer);
+	if (!isNaN(displayRow) || displayRow < 0) TREE_LAYERS[displayRow].push({layer: layer, position: pos});
+	else OTHER_LAYERS[displayRow].push({layer: layer, position: pos});
 	if (maxRow < layers[layer].displayRow) maxRow = layers[layer].displayRow;
 };
 
@@ -214,9 +214,9 @@ function addLayer(layerName, layerData, tabLayers = null) {
 	layers[layerName] = layerData;
 	layers[layerName].isLayer = true;
 	if (tabLayers !== null) {
-		let format = {};
-		for (id in tabLayers) {
-			layer = tabLayers[id];
+		const format = {};
+		for (const id in tabLayers) {
+			const layer = tabLayers[id];
 			format[layers[layer].name ? layers[layer].name : layer] = {
 				embedLayer: layer,
 				buttonStyle() {
@@ -253,7 +253,7 @@ function setRowCol(upgrades) {
 	if (upgrades.rows && upgrades.cols) return;
 	let maxRow = 0;
 	let maxCol = 0;
-	for (up in upgrades) {
+	for (const up in upgrades) {
 		if (!isNaN(up)) {
 			if (Math.floor(up / 10) > maxRow) maxRow = Math.floor(up / 10);
 			if (up % 10 > maxCol) maxCol = up % 10;
@@ -264,7 +264,7 @@ function setRowCol(upgrades) {
 };
 
 function someLayerUnlocked(row) {
-	for (layer in ROW_LAYERS[row]) {
+	for (const layer in ROW_LAYERS[row]) {
 		if (player[layer].unlocked) {
 			return true;
 		};

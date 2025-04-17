@@ -76,7 +76,7 @@ function generatorCost(id) {
 
 function getBoughtGenerators() {
 	let bought = 0;
-	for (let id in player.g.grid) {
+	for (const id in player.g.grid) {
 		if (typeof player.g.grid[id] == "object") {
 			bought += player.g.grid[id].bought;
 		};
@@ -86,7 +86,7 @@ function getBoughtGenerators() {
 
 function getBoughtSuperGenerators() {
 	let bought = newDecimalZero();
-	for (let id in player.sg.buyables) {
+	for (const id in player.sg.buyables) {
 		if (player.sg.buyables[id] instanceof Decimal) {
 			bought = bought.add(player.sg.buyables[id]);
 		};
@@ -145,7 +145,7 @@ addLayer("g", {
 		} else {
 			player.g.points = player.g.points.add(gain.mul(diff)).max(0);
 		};
-		for (let id in player.g.grid) {
+		for (const id in player.g.grid) {
 			if (gridEffect("g", id).gt(0)) {
 				let gen = newDecimalZero();
 				let extra = newDecimalZero();
@@ -174,7 +174,7 @@ addLayer("g", {
 		};
 	},
 	automate() {
-		for (let id in player.g.grid) {
+		for (const id in player.g.grid) {
 			if (generatorCostScale[id]) {
 				if (id > 500) {
 					// placeholder
@@ -944,7 +944,7 @@ addLayer("sg", {
 	},
 	buyables: {
 		respec() {
-			for (let id in player.sg.buyables) {
+			for (const id in player.sg.buyables) {
 				if (player.sg.buyables[id] instanceof Decimal) {
 					player.sg.buyables[id] = newDecimalZero();
 				};

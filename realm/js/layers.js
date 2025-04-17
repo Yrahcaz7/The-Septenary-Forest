@@ -906,7 +906,7 @@ addLayer("G", {
 	effect() {return player.G.points.mul(player.G.gemMult).mul(0.01).add(1)},
 	effectDescription() {return "which are increasing all production by " + player.G.gemMult + "% each, for a total of " + format(tmp.G.effect) + 'x'},
 	hotkeys: [
-		{key: "A", description: "Shift+A: Abdicate for gems", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+		{key: "A", description: "Shift+A: Abdicate for gems", onPress() {if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	layerShown() {return true},
 	doReset(resettingLayer) {

@@ -731,7 +731,7 @@ addLayer('d', {
 	automate() {
 		for (let num = 0; num < (hasUpgrade('gn', 32) && !inChallenge('i', 32) ? 2 : 1); num++) {
 			if (player.d.limitBreakAuto) {
-				for (upgrade in tmp.d.upgrades) {
+				for (const upgrade in tmp.d.upgrades) {
 					if (upgrade == "layer" || upgrade == "rows" || upgrade == "cols") continue;
 					if (tmp.d.upgrades[upgrade].unlocked) {
 						buyUpgrade('d', upgrade);
@@ -739,7 +739,7 @@ addLayer('d', {
 				};
 			};
 			if (player.d.numberUpgradeAuto) {
-				for (upgrade in tmp.d.buyables) {
+				for (const upgrade in tmp.d.buyables) {
 					if (upgrade == "layer" || upgrade == "rows" || upgrade == "cols" || (upgrade == "51" && !player.d.baseUpAuto)) continue;
 					if (tmp.d.buyables[upgrade].unlocked && layers.d.buyables[upgrade].canAfford()) {
 						layers.d.buyables[upgrade].buy();
@@ -1797,7 +1797,7 @@ addLayer('i', {
 	},
 	automate() {
 		if (player.i.simAuto) {
-			for (upgrade in tmp.i.buyables) {
+			for (const upgrade in tmp.i.buyables) {
 				if (upgrade == "layer" || upgrade == "rows" || upgrade == "cols" || upgrade < 40 || upgrade > 70) continue;
 				if (tmp.i.buyables[upgrade].unlocked && layers.i.buyables[upgrade].canAfford()) {
 					player.i.money = player.i.money.sub(tmp.i.buyables[upgrade].cost);
@@ -1806,7 +1806,7 @@ addLayer('i', {
 			};
 		};
 		if (player.i.replicateAuto) {
-			for (upgrade in tmp.i.buyables) {
+			for (const upgrade in tmp.i.buyables) {
 				if (upgrade == "layer" || upgrade == "rows" || upgrade == "cols" || (upgrade > 40 && upgrade < 70)) continue;
 				if (tmp.i.buyables[upgrade].unlocked && layers.i.buyables[upgrade].canAfford()) {
 					player.points = player.points.sub(tmp.i.buyables[upgrade].cost);
