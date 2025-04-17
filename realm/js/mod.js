@@ -1,20 +1,22 @@
 const modInfo = {
 	name: "Realm Creator",
-	id: "realm-creator-yrahcaz7",
 	author: "Yrahcaz7",
 	pointsName: "coins",
 	modFiles: ["tree.js", "options.js", "layers.js"],
 	initialStartPoints: newDecimalZero(),
 	offlineLimit: 1,
-}
+	useNewSaveSyntax: true,
+};
 
 const VERSION = {
-	num: "0.4",
-	name: "Super Beta",
-	beta: "2",
+	num: "0.5",
+	name: "In Development",
 };
 
 const changelog = `<h1>Changelog:</h1><br>
+	<br><h3>v0.5 - In Development</h3><br>
+		- Massive internal rework.<br>
+		- ALL OLD SAVE DATA IS REMOVED.<br>
 	<br><h3>v0.4 - Super Beta</h3><br>
 		- Added 2 new creation tiers.<br>	
 		- Added 3 gem power upgrades.<br>
@@ -49,7 +51,7 @@ const changelog = `<h1>Changelog:</h1><br>
 <br>`;
 
 function winText() {
-	return 'You reached ' + format(endPoints) + ' ' + modInfo.pointsName + ' and won the game!<br>However, it isn\'t the end yet...<br>Wait for more updates for further content.';
+	return "You reached " + format(endPoints) + " " + modInfo.pointsName + " and won the game!<br>However, it isn't the end yet...<br>Wait for more updates for further content.";
 };
 
 function getRandInt(min, max) {
@@ -59,101 +61,77 @@ function getRandInt(min, max) {
 };
 
 function taxCast(amt = newDecimalOne()) {
-	player[2].mana = player[2].mana.sub(player[2].taxCost.mul(amt));
-	player[2].G.taxCasts = player[2].G.taxCasts.add(amt);
-	player[2].R.taxCasts = player[2].R.taxCasts.add(amt);
-	player[2].T.taxCasts = player[2].T.taxCasts.add(amt);
-	let gain = getPointGen().mul(player[2].taxEff.mul(amt));
+	player.M.mana = player.M.mana.sub(player.M.taxCost.mul(amt));
+	player.M.stats.forEach(obj => obj.taxCasts = obj.taxCasts.add(amt));
+	const gain = getPointGen().mul(player.M.taxEff.mul(amt));
 	player.points = player.points.add(gain);
-	player.G.total = player.G.total.add(gain);
-	player.R.total = player.R.total.add(gain);
-	player.T.total = player.T.total.add(gain);
+	player.stats.forEach(obj => obj.total = obj.total.add(gain));
 };
 
 function callCast() {
-	player[2].callTime = new Decimal(30);
-	player[2].mana = player[2].mana.sub(player[2].callCost);
-	player[2].G.callCasts = player[2].G.callCasts.add(1);
-	player[2].R.callCasts = player[2].R.callCasts.add(1);
-	player[2].T.callCasts = player[2].T.callCasts.add(1);
-	setClickableState('2', 12, "ON");
+	player.M.callTime = new Decimal(30);
+	player.M.mana = player.M.mana.sub(player.M.callCost);
+	player.M.stats.forEach(obj => obj.callCasts = obj.callCasts.add(1));
+	setClickableState("M", 12, "ON");
 };
 
 function sideSpellCast() {
-	player[2].sideSpellTime = new Decimal(15);
-	player[2].mana = player[2].mana.sub(player[2].sideSpellCost);
-		if (hasUpgrade('3', 11)) {
-			player[2].G.holyCasts = player[2].G.holyCasts.add(1);
-			player[2].R.holyCasts = player[2].R.holyCasts.add(1);
-			player[2].T.holyCasts = player[2].T.holyCasts.add(1);
-		};
-		if (hasUpgrade('3', 21)) {
-			player[2].G.frenzyCasts = player[2].G.frenzyCasts.add(1);
-			player[2].R.frenzyCasts = player[2].R.frenzyCasts.add(1);
-			player[2].T.frenzyCasts = player[2].T.frenzyCasts.add(1);
-		};
-	setClickableState('2', 13, "ON");
+	player.M.sideSpellTime = new Decimal(15);
+	player.M.mana = player.M.mana.sub(player.M.sideSpellCost);
+	if (hasUpgrade("F", 11)) {
+		player.M.stats.forEach(obj => obj.holyCasts = obj.holyCasts.add(1));
+	} else if (hasUpgrade("F", 21)) {
+		player.M.stats.forEach(obj => obj.frenzyCasts = obj.frenzyCasts.add(1));
+	};
+	setClickableState("M", 13, "ON");
 };
 
 function getPointGen() {
 	let gain = newDecimalZero();
 	// addtitive
-	if (getBuyableAmount('1', 12).gt(0)) gain = gain.add(getBuyableAmount('1', 12) * buyableEffect('1', 12));
-	if (getBuyableAmount('1', 13).gt(0) && !hasUpgrade('3', 1143)) gain = gain.add(getBuyableAmount('1', 13) * buyableEffect('1', 13));
+	if (getBuyableAmount("G", 12).gt(0)) gain = gain.add(getBuyableAmount("G", 12) * buyableEffect("G", 12));
+	if (getBuyableAmount("G", 13).gt(0) && !hasUpgrade("F", 1143)) gain = gain.add(getBuyableAmount("G", 13) * buyableEffect("G", 13));
 	// multiplicative
-	if (hasUpgrade('3', 1062)) gain = gain.mul(upgradeEffect('3', 1062));
-	if (hasUpgrade('3', 1161)) gain = gain.mul(upgradeEffect('3', 1161));
-	if (hasUpgrade('3', 1163)) gain = gain.mul(upgradeEffect('3', 1163));
-	if (hasUpgrade('3', 1071)) gain = gain.mul(upgradeEffect('3', 1071));
-	if (hasUpgrade('3', 1072)) gain = gain.mul(upgradeEffect('3', 1072));
-	if (hasUpgrade('3', 1073)) gain = gain.mul(upgradeEffect('3', 1073));
-	if (hasUpgrade('3', 1081)) gain = gain.mul(upgradeEffect('3', 1081));
-	gain = gain.mul(tmp[1].effect);
-	if (getClickableState('2', 12) == "ON") gain = gain.mul(clickableEffect('2', 12));
-	if (hasUpgrade('3', 21) && getClickableState('2', 13) == "ON") gain = gain.mul(clickableEffect('2', 13));
+	if (hasUpgrade("F", 1062)) gain = gain.mul(upgradeEffect("F", 1062));
+	if (hasUpgrade("F", 1161)) gain = gain.mul(upgradeEffect("F", 1161));
+	if (hasUpgrade("F", 1163)) gain = gain.mul(upgradeEffect("F", 1163));
+	if (hasUpgrade("F", 1071)) gain = gain.mul(upgradeEffect("F", 1071));
+	if (hasUpgrade("F", 1072)) gain = gain.mul(upgradeEffect("F", 1072));
+	if (hasUpgrade("F", 1073)) gain = gain.mul(upgradeEffect("F", 1073));
+	if (hasUpgrade("F", 1081)) gain = gain.mul(upgradeEffect("F", 1081));
+	gain = gain.mul(tmp.G.effect);
+	if (getClickableState("M", 12) == "ON") gain = gain.mul(clickableEffect("M", 12));
+	if (hasUpgrade("F", 21) && getClickableState("M", 13) == "ON") gain = gain.mul(clickableEffect("M", 13));
 	return gain;
 };
 
-const playerStartingStats = {
+function getPlayerStartingStats() { return {
 	best: newDecimalZero(),
 	total: newDecimalZero(),
 	FCchancebest: new Decimal(2.5),
 	FCbest: newDecimalZero(),
 	FCtotal: newDecimalZero(),
-};
+}};
 
 function addedPlayerData() { return {
 	best: newDecimalZero(),
 	total: newDecimalZero(),
-	fairyCoins: newDecimalZero(),
-	elfCoins: newDecimalZero(),
-	angelCoins: newDecimalZero(),
-	goblinCoins: newDecimalZero(),
-	undeadCoins: newDecimalZero(),
-	demonCoins: newDecimalZero(),
+	FC: [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()],
 	FCchance: new Decimal(2.5),
-	FC: newDecimalZero(),
+	totalFC: newDecimalZero(),
 	bestGems: newDecimalZero(),
-	G: Object.create(playerStartingStats),
-	R: Object.create(playerStartingStats),
-	T: Object.create(playerStartingStats),
+	stats: [getPlayerStartingStats(), getPlayerStartingStats(), getPlayerStartingStats()],
 }};
 
 const displayThings = [
-	() => {if (tmp.gameEnded) return 'You beat the game!<br>For now...'},
+	() => {if (tmp.gameEnded) return "You beat the game!<br>For now..."},
 ];
 
 const endPoints = new Decimal(1e15);
 
 function update(diff) {
-	// best coins
-	player.G.best = player.G.best.max(player.points);
-	player.R.best = player.R.best.max(player.points);
-	player.T.best = player.T.best.max(player.points);
-	// total coins
-	player.G.total = player.G.total.add(tmp.pointGen.mul(diff));
-	player.R.total = player.R.total.add(tmp.pointGen.mul(diff));
-	player.T.total = player.T.total.add(tmp.pointGen.mul(diff));
+	player.stats.forEach(obj => obj.best = obj.best.max(player.points));
+	player.stats.forEach(obj => obj.total = obj.total.add(tmp.pointGen.mul(diff)));
 };
 
 function maxTickLength() {
@@ -161,18 +139,7 @@ function maxTickLength() {
 };
 
 function fixOldSave(oldVersion) {
-	// remove unused vars
-	delete player.blank;
-	delete options.colorDisplayMode;
-	delete options.colorDisplay;
-	delete options.css;
-	// rename vars
-	if (options.tooltipForcing !== undefined) {
-		options.forceTooltips = options.tooltipForcing;
-		delete options.tooltipForcing;
-	};
-	if (options.extendplaces !== undefined) {
-		options.extendPlaces = options.extendplaces;
-		delete options.extendplaces;
-	};
+	// remove old save data
+	localStorage.removeItem("realm-creator-yrahcaz7");
+	localStorage.removeItem("realm-creator-yrahcaz7_options");
 };

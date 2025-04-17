@@ -1,14 +1,23 @@
 // ************ Save stuff ************
 function getModID() {
-	if (modInfo.id) return modInfo.id;
+	if (modInfo.id) {
+		if (modInfo.useNewSaveSyntax) return modInfo.author.replace(/\s+/g, "-") + "/" + modInfo.id.replace(/\s+/g, "-");
+		return modInfo.id;
+	};
+	if (modInfo.useNewSaveSyntax) return modInfo.author.replace(/\s+/g, "-") + "/" + modInfo.name.replace(/\s+/g, "-");
 	return modInfo.name.replace(/\s+/g, "-") + "-" + modInfo.author.replace(/\s+/g, "-");
 };
 
 function save(force) {
 	NaNcheck(player);
 	if (NaNalert && !force) return;
-	localStorage.setItem(getModID(), btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
-	localStorage.setItem(getModID() + "_options", btoa(unescape(encodeURIComponent(JSON.stringify(options)))));
+	if (modInfo.useNewSaveSyntax) {
+		localStorage.setItem(getModID() + "/save", btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
+		localStorage.setItem(getModID() + "/options", btoa(unescape(encodeURIComponent(JSON.stringify(options)))));
+	} else {
+		localStorage.setItem(getModID(), btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
+		localStorage.setItem(getModID() + "_options", btoa(unescape(encodeURIComponent(JSON.stringify(options)))));
+	};
 };
 
 function startPlayerBase() {
@@ -19,6 +28,7 @@ function startPlayerBase() {
 		notify: {},
 		versionType: getModID(),
 		version: VERSION.num,
+		pre: VERSION.pre,
 		beta: VERSION.beta,
 		timePlayed: 0,
 		keepGoing: false,
@@ -30,34 +40,34 @@ function startPlayerBase() {
 };
 
 function getStartPlayer() {
-	let playerdata = startPlayerBase();
+	let playerData = startPlayerBase();
 	if (typeof addedPlayerData === "function") {
-		let extraData = addedPlayerData();
-		for (thing in extraData) {
-			playerdata[thing] = extraData[thing];
+		const extraData = addedPlayerData();
+		for (const thing in extraData) {
+			playerData[thing] = extraData[thing];
 		};
 	};
-	playerdata.infoboxes = {};
-	for (layer in layers) {
-		playerdata[layer] = getStartLayerData(layer);
+	playerData.infoboxes = {};
+	for (const layer in layers) {
+		playerData[layer] = getStartLayerData(layer);
 		if (layers[layer].tabFormat && !Array.isArray(layers[layer].tabFormat)) {
-			playerdata.subtabs[layer] = {};
-			playerdata.subtabs[layer].mainTabs = Object.keys(layers[layer].tabFormat)[0];
+			playerData.subtabs[layer] = {};
+			playerData.subtabs[layer].mainTabs = Object.keys(layers[layer].tabFormat)[0];
 		};
 		if (layers[layer].microtabs) {
-			if (playerdata.subtabs[layer] == undefined) playerdata.subtabs[layer] = {};
-			for (item in layers[layer].microtabs) {
-				playerdata.subtabs[layer][item] = Object.keys(layers[layer].microtabs[item])[0];
+			if (playerData.subtabs[layer] == undefined) playerData.subtabs[layer] = {};
+			for (const item in layers[layer].microtabs) {
+				playerData.subtabs[layer][item] = Object.keys(layers[layer].microtabs[item])[0];
 			};
 		};
 		if (layers[layer].infoboxes) {
-			if (playerdata.infoboxes[layer] == undefined) playerdata.infoboxes[layer] = {};
-			for (item in layers[layer].infoboxes) {
-				playerdata.infoboxes[layer][item] = false;
+			if (playerData.infoboxes[layer] == undefined) playerData.infoboxes[layer] = {};
+			for (const item in layers[layer].infoboxes) {
+				playerData.infoboxes[layer][item] = false;
 			};
 		};
 	};
-	return playerdata;
+	return playerData;
 };
 
 function getStartLayerData(layer) {
@@ -85,7 +95,7 @@ function getStartLayerData(layer) {
 function getStartBuyables(layer) {
 	let data = {};
 	if (layers[layer].buyables) {
-		for (id in layers[layer].buyables) {
+		for (const id in layers[layer].buyables) {
 			if (isPlainObject(layers[layer].buyables[id])) data[id] = newDecimalZero();
 		};
 	};
@@ -95,7 +105,7 @@ function getStartBuyables(layer) {
 function getStartClickables(layer) {
 	let data = {};
 	if (layers[layer].clickables) {
-		for (id in layers[layer].clickables) {
+		for (const id in layers[layer].clickables) {
 			if (isPlainObject(layers[layer].clickables[id])) data[id] = "";
 		};
 	};
@@ -105,7 +115,7 @@ function getStartClickables(layer) {
 function getStartChallenges(layer) {
 	let data = {};
 	if (layers[layer].challenges) {
-		for (id in layers[layer].challenges) {
+		for (const id in layers[layer].challenges) {
 			if (isPlainObject(layers[layer].challenges[id])) data[id] = 0;
 		};
 	};
@@ -128,7 +138,7 @@ function getStartGrid(layer) {
 function fixSave() {
 	let defaultData = getStartPlayer();
 	fixData(defaultData, player);
-	for (layer in layers) {
+	for (const layer in layers) {
 		if (player[layer].best !== undefined) player[layer].best = new Decimal(player[layer].best);
 		if (player[layer].total !== undefined) player[layer].total = new Decimal(player[layer].total);
 		if (layers[layer].tabFormat && !Array.isArray(layers[layer].tabFormat)) {
@@ -137,7 +147,7 @@ function fixSave() {
 			};
 		};
 		if (layers[layer].microtabs) {
-			for (item in layers[layer].microtabs) {
+			for (const item in layers[layer].microtabs) {
 				if (!Object.keys(layers[layer].microtabs[item]).includes(player.subtabs[layer][item])) {
 					player.subtabs[layer][item] = Object.keys(layers[layer].microtabs[item])[0];
 				};
@@ -147,8 +157,8 @@ function fixSave() {
 };
 
 function fixData(defaultData, newData) {
-	for (item in defaultData) {
-		if (defaultData[item] == null) {
+	for (const item in defaultData) {
+		if (defaultData[item] === null) {
 			if (newData[item] === undefined) newData[item] = null;
 		} else if (Array.isArray(defaultData[item])) {
 			if (newData[item] === undefined) newData[item] = defaultData[item];
@@ -166,14 +176,14 @@ function fixData(defaultData, newData) {
 };
 
 function load(mainPage = false) {
-	let get = localStorage.getItem(getModID());
-	if (get === null || get === undefined) {
-		player = getStartPlayer();
-		options = getStartOptions();
-	} else {
+	const get = localStorage.getItem(modInfo.useNewSaveSyntax ? getModID() + "/save" : getModID());
+	if (get) {
 		player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(escape(atob(get)))));
 		fixSave();
 		loadOptions();
+	} else {
+		player = getStartPlayer();
+		options = getStartOptions();
 	};
 	if (options.offlineProd) {
 		if (player.offTime === undefined) {
@@ -196,7 +206,7 @@ function load(mainPage = false) {
 };
 
 function loadOptions() {
-	let get = localStorage.getItem(getModID() + "_options");
+	const get = localStorage.getItem(modInfo.useNewSaveSyntax ? getModID() + "/options" : getModID() + "_options");
 	if (get) options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(escape(atob(get)))));
 	else options = getStartOptions();
 	if (themes.indexOf(options.theme) < 0) theme = "default";
@@ -209,7 +219,7 @@ function setupModInfo() {
 };
 
 function NaNcheck(data) {
-	for (item in data) {
+	for (const item in data) {
 		if (Array.isArray(data[item]) || isPlainObject(data[item])) {
 			NaNcheck(data[item]);
 		} else if (data[item] !== data[item] || (data[item] instanceof Decimal && data[item].isNaN())) {

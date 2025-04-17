@@ -17,6 +17,7 @@ Here's a breakdown of what's in it:
     - `offlineLimit`: A number that is the maximum amount of offline time that the player can accumulate, in hours. Any extra time is lost.
         This is useful because most of these mods are fast-paced enough that too much offline time ruins the balance, such as the time in between updates. That is why I suggest developers disable offline time on their own savefile.
     - `initialStartPoints`: A Decimal for the amount of points a new player should start with.
+    - `useNewSaveSyntax`: An additional feature that, when enabled, combines the author name and id to create a unique internal id. Any spaces in the author name or id are treated as dashes. Similar to `id`, you shouldn't change this later.
 
 - `VERSION` is used to describe the current version of your mod. It contains:
 
