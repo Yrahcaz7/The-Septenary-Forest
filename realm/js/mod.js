@@ -89,8 +89,8 @@ function sideSpellCast() {
 function getPointGen() {
 	let gain = newDecimalZero();
 	// addtitive
-	if (getBuyableAmount("G", 12).gt(0)) gain = gain.add(getBuyableAmount("G", 12) * buyableEffect("G", 12));
-	if (getBuyableAmount("G", 13).gt(0) && !hasUpgrade("F", 1143)) gain = gain.add(getBuyableAmount("G", 13) * buyableEffect("G", 13));
+	if (getBuyableAmount("C", 12).gt(0)) gain = gain.add(getBuyableAmount("C", 12) * buyableEffect("C", 12));
+	if (getBuyableAmount("C", 13).gt(0) && !hasUpgrade("F", 1143)) gain = gain.add(getBuyableAmount("C", 13) * buyableEffect("C", 13));
 	// multiplicative
 	if (hasUpgrade("F", 1062)) gain = gain.mul(upgradeEffect("F", 1062));
 	if (hasUpgrade("F", 1161)) gain = gain.mul(upgradeEffect("F", 1161));
@@ -118,7 +118,6 @@ function addedPlayerData() { return {
 	total: newDecimalZero(),
 	FC: [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()],
 	FCchance: new Decimal(2.5),
-	totalFC: newDecimalZero(),
 	bestGems: newDecimalZero(),
 	stats: [getPlayerStartingStats(), getPlayerStartingStats(), getPlayerStartingStats()],
 }};

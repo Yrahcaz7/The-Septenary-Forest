@@ -14,22 +14,26 @@ const creationNames = [
 
 const creationTierReq = [10, 25, 50, 100, 250, 500, 1000];
 
-function getCreationName(id, lowercase = false) {
-	let num = 0;
-	while (hasUpgrade("G", (+id) + (num * 10) + 90)) {
-		num++;
-	};
-	if (lowercase) return creationNames[id - 1][num].toLowerCase();
-	else return creationNames[id - 1][num];
-};
+const creationTierEff = [
+	[0.05, 0.1, 0.2, 0.4, 0.65, 1],
+	[0.5, 1.25, 2, 3.5],
+	[[0.5, 0.05], [2, 0.2]],
+];
 
-function getCreationTierUpgradeDesc(id, cost, eff, eff2 = 0) {
-	const names = creationNames[id % 10 - 1];
-	const index = Math.floor(id / 10) - 9;
+const creationTierCost = [
+	[250, 1000, 5000, 25000, 100000, 500000],
+	[5000, 25000, 100000, 500000],
+	[100000, 500000],
+];
+
+function getCreationTierUpgradeDesc(id) {
+	const names = creationNames[id - 111];
+	const index = getBuyableAmount("C", id)?.toNumber() || 0;
+	const eff = creationTierEff[(id - 1) % 10][index];
 	if (id % 10 == 3) {
-		return "<h3>" + names[index + 1] + "</h3><br>increases " + names[index].toLowerCase() + "'" + (names[index].endsWith("s") ? "" : "s") + " first base effect by +" + format(eff, 2, false) + ", second base effect by +" + format(eff2, 2, false) + "%<br><br>Req: " + creationTierReq[index] + " " + names[index].toLowerCase() + "<br><br>Cost: " + format(cost) + " coins";
+		return "increase " + names[index].toLowerCase() + "'" + (names[index].endsWith("s") ? "" : "s") + " first base effect by +" + format(eff[0], 2, false) + " and second base effect by +" + format(eff[1], 2, false) + "%<br><br>Req: " + creationTierReq[index] + " " + names[index].toLowerCase() + "<br><br>Cost: " + format(tmp.C.buyables[id].cost) + " coins";
 	} else {
-		return "<h3>" + names[index + 1] + "</h3><br>increases " + names[index].toLowerCase() + "'" + (names[index].endsWith("s") ? "" : "s") + " base effect by +" + format(eff, 2, false) + "<br><br>Req: " + creationTierReq[index] + " " + names[index].toLowerCase() + "<br><br>Cost: " + format(cost) + " coins";
+		return "increase " + names[index].toLowerCase() + "'" + (names[index].endsWith("s") ? "" : "s") + " base effect by +" + format(eff, 2, false) + "<br><br>Req: " + creationTierReq[index] + " " + names[index].toLowerCase() + "<br><br>Cost: " + format(tmp.C.buyables[id].cost) + " coins";
 	};
 };
 
@@ -38,7 +42,7 @@ function getCreationCost(amount, mult = 1) {
 };
 
 function getCreationBulk() {
-	return +(getClickableState("G", 21) || 1);
+	return +(getClickableState("C", 11) || 1);
 };
 
 function getCreationBulkCost(amount, mult = 1) {
@@ -52,7 +56,7 @@ function getCreationBulkCost(amount, mult = 1) {
 addLayer("G", {
 	name: "Gems",
 	symbol: "G",
-	row: 0,
+	row: 1,
 	position: 0,
 	startData() { return {
 		unlocked: true,
@@ -92,11 +96,11 @@ addLayer("G", {
 	doReset(resettingLayer) {
 		player.FC = [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()];
 		player.FCchance = new Decimal(2.5);
-		player.totalFC = newDecimalZero();
 		player.stats[0] = getPlayerStartingStats();
 		if (resettingLayer === "G") {
 			layerDataReset("G", ["points", "best", "stats"]);
 			player.G.stats[0] = getGemsTabStartingStats();
+			layerDataReset("C");
 			layerDataReset("M", ["stats"]);
 			player.M.stats[0] = getManaTabStartingStats();
 			layerDataReset("F");
@@ -105,8 +109,8 @@ addLayer("G", {
 	update(diff) {
 		// clicks
 		let clickGain = newDecimalOne();
-		if (getBuyableAmount("G", 11).gt(0)) clickGain = clickGain.add(getBuyableAmount("G", 11).mul(buyableEffect("G", 11)));
-		if (getBuyableAmount("G", 13).gt(0) && hasUpgrade("F", 1143)) clickGain = clickGain.add(getBuyableAmount("G", 13) * buyableEffect("G", 13));
+		if (getBuyableAmount("C", 11).gt(0)) clickGain = clickGain.add(getBuyableAmount("C", 11).mul(buyableEffect("C", 11)));
+		if (getBuyableAmount("C", 13).gt(0) && hasUpgrade("F", 1143)) clickGain = clickGain.add(getBuyableAmount("C", 13) * buyableEffect("C", 13));
 		if (hasUpgrade("F", 1033)) clickGain = clickGain.mul(upgradeEffect("F", 1033));
 		if (hasUpgrade("F", 1041)) clickGain = clickGain.mul(upgradeEffect("F", 1041));
 		if (hasUpgrade("F", 1043)) clickGain = clickGain.mul(upgradeEffect("F", 1043));
@@ -118,7 +122,7 @@ addLayer("G", {
 		player.G.stats.forEach(obj => obj.bestClickValue = obj.bestClickValue.max(player.G.clickValue));
 		// faction coins
 		let FCchance = new Decimal(2.5);
-		if (getBuyableAmount("G", 13).gt(0)) FCchance = FCchance.add(getBuyableAmount("G", 13).mul(buyableEffect("G", 13).div(10)));
+		if (getBuyableAmount("C", 13).gt(0)) FCchance = FCchance.add(getBuyableAmount("C", 13).mul(buyableEffect("C", 13).div(10)));
 		if (hasUpgrade("F", 1033)) FCchance = FCchance.add(upgradeEffect("F", 1033).mul(3));
 		if (hasUpgrade("F", 1042)) FCchance = FCchance.add(upgradeEffect("F", 1042));
 		if (hasUpgrade("F", 1061)) FCchance = FCchance.add(upgradeEffect("F", 1061));
@@ -127,11 +131,11 @@ addLayer("G", {
 		if (hasUpgrade("G", 2011) && hasUpgrade("G", 2012)) FCchance = FCchance.add(upgradeEffect("G", 2011).mul(upgradeEffect("G", 2012)));
 		player.FCchance = new Decimal(FCchance);
 		player.stats.forEach(obj => obj.FCchancebest = obj.FCchancebest.max(player.FCchance));
-		player.totalFC = player.FC[0].add(player.FC[1]).add(player.FC[2]).add(player.FC[3]).add(player.FC[4]).add(player.FC[5]);
-		player.stats.forEach(obj => obj.FCbest = obj.FCbest.max(player.totalFC));
+		player.F.points = player.FC[0].add(player.FC[1]).add(player.FC[2]).add(player.FC[3]).add(player.FC[4]).add(player.FC[5]);
+		player.stats.forEach(obj => obj.FCbest = obj.FCbest.max(player.F.points));
 		// creations
-		const bestCreations = getBuyableAmount("G", 11).add(getBuyableAmount("G", 12)).add(getBuyableAmount("G", 13));
-		player.G.stats.forEach(obj => obj.bestCreations = obj.bestCreations.max(bestCreations));
+		player.C.points = getBuyableAmount("C", 11).add(getBuyableAmount("C", 12)).add(getBuyableAmount("C", 13));
+		player.G.stats.forEach(obj => obj.bestCreations = obj.bestCreations.max(player.C.points));
 		// gems
 		if (player.G.best.gt(player.bestGems)) player.bestGems = player.G.best;
 	},
@@ -149,15 +153,6 @@ addLayer("G", {
 			["display-text", () => "<div style='color: #888800'>You have " + formatWhole(player.FC[3]) + " goblin coins</div><div style='color: #8800FF'>You have " + formatWhole(player.FC[4]) + " undead coins</div><div style='color: #880000'>You have " + formatWhole(player.FC[5]) + " demon coins</div>"],
 		]],
 		"blank",
-		["display-text", "<h2>Creations</h2>"],
-		"blank",
-		["clickables", [2]],
-		"blank",
-		"buyables",
-		"blank",
-		["display-text", () => { if (getBuyableAmount("G", 11).gte(10) || getBuyableAmount("G", 12).gte(10) || getBuyableAmount("G", 13).gte(10)) return '<h2>Creation Tier Upgrades</h2>' }],
-		"blank",
-		["upgrades", [9, 10, 11, 12, 13, 14]],
 		["display-text", () => { if (player.G.points.gte(1)) return "<h2>Gem Power Upgrades</h2>" }],
 		"blank",
 		["upgrades", [201]],
@@ -197,17 +192,65 @@ addLayer("G", {
 				player.G.stats.forEach(obj => obj.bestTotalClickValue = obj.bestTotalClickValue.add(clickPower));
 			},
 		},
-		21: {
+	},
+	upgrades: {
+		2011: {
+			fullDisplay() { return '<h3>Gem Influence</h3><br>increase faction coin find chance based on your gems<br><br>Effect: +' + format(upgradeEffect("G", this.id)) + '%<br><br>Req: 25 1st creations'},
+			effect() { return player.G.points.add(1).pow(0.5).sub(1) },
+			canAfford() { return getBuyableAmount("C", 11).gte(25) },
+			unlocked() { return player.G.points.gte(1) },
+		},
+		2012: {
+			fullDisplay() { return '<h3>Gem Displays</h3><br>increase the effect of <b>Gem Influence</b> based on your gems<br><br>Effect: x' + format(upgradeEffect("G", this.id)) + '<br><br>Req: 25 2nd creations'},
+			effect() { return player.G.points.add(1).pow(0.2) },
+			canAfford() { return getBuyableAmount("C", 12).gte(25) },
+			unlocked() { return player.G.points.gte(1) },
+		},
+		2013: {
+			fullDisplay() { return '<h3>Gem Displays</h3><br>increase max mana and mana regen based on your gems<br><br>Effect: x' + format(upgradeEffect("G", this.id)) + '<br><br>Req: 25 3rd creations'},
+			effect() { return player.G.points.add(1).log10().add(1).pow(0.5) },
+			canAfford() { return getBuyableAmount("C", 13).gte(25) },
+			unlocked() { return player.G.points.gte(1) },
+		},
+	},
+});
+
+addLayer("C", {
+	name: "Creations",
+	row: 0,
+	position: 0,
+	startData() { return {
+		unlocked: true,
+		points: newDecimalZero(),
+	}},
+	color: "#CCCCCC",
+	resource: "creations",
+	type: "none",
+	layerShown() {return true},
+	doReset(resettingLayer) {},
+	tabFormat: [
+		"clickables",
+		"blank",
+		["buyables", "1"],
+		"blank",
+		["buyables", [11]],
+		"blank",
+	],
+	componentStyles: {
+		buyable() { return {width: "180px", height: "140px", "border-radius": "25px"} },
+	},
+	clickables: {
+		11: {
 			title() {return "You are bulk buying " + formatWhole(getCreationBulk()) + "x creations"},
 			canClick() {return true},
 			onClick() {
 				const bulk = getCreationBulk();
 				if (bulk === 1) {
-					setClickableState("G", 21, 10);
+					setClickableState("C", 11, 10);
 				} else if (bulk === 10) {
-					setClickableState("G", 21, 100);
+					setClickableState("C", 11, 100);
 				} else {
-					setClickableState("G", 21, 1);
+					setClickableState("C", 11, 1);
 				};
 			},
 			style: {"width": "350px", "min-height": "30px", "border-radius": "15px"},
@@ -215,8 +258,8 @@ addLayer("G", {
 	},
 	buyables: {
 		11: {
-			title() { return getCreationName(this.id - 10) },
-			cost() { return getCreationBulkCost(getBuyableAmount("G", this.id)) },
+			title() { return creationNames[this.id - 11][getBuyableAmount("C", this.id + 100)?.toNumber() || 0] },
+			cost() { return getCreationBulkCost(getBuyableAmount("C", this.id)) },
 			effect() {
 				let eff = new Decimal(0.1);
 				if (hasUpgrade("G", 91)) eff = eff.add(0.05);
@@ -231,18 +274,18 @@ addLayer("G", {
 				return eff;
 			},
 			display() {
-				if (this.cost() == newDecimalOne()) return "\nCost: 1 coin\n\nAmount: " + getBuyableAmount("G", this.id) + "\n\nEffect: +" + format(buyableEffect("G", this.id)) + " to click production\n\nTotal Effect: +" + format(getBuyableAmount("G", this.id) * buyableEffect("G", this.id));
-				else return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount("G", this.id) + "\n\nEffect: +" + format(buyableEffect("G", this.id)) + " to click production\n\nTotal Effect: +" + format(getBuyableAmount("G", this.id) * buyableEffect("G", this.id));
+				if (this.cost() == newDecimalOne()) return "\nCost: 1 coin\n\nAmount: " + getBuyableAmount("C", this.id) + "\n\nEffect: +" + format(buyableEffect("C", this.id)) + " to click production\n\nTotal Effect: +" + format(getBuyableAmount("C", this.id) * buyableEffect("C", this.id));
+				else return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount("C", this.id) + "\n\nEffect: +" + format(buyableEffect("C", this.id)) + " to click production\n\nTotal Effect: +" + format(getBuyableAmount("C", this.id) * buyableEffect("C", this.id));
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
-				setBuyableAmount("G", this.id, getBuyableAmount("G", this.id).add(getCreationBulk()));
+				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(getCreationBulk()));
 			},
 		},
 		12: {
-			title() { return getCreationName(this.id - 10) },
-			cost() { return getCreationBulkCost(getBuyableAmount("G", this.id), 100) },
+			title() { return creationNames[this.id - 11][getBuyableAmount("C", this.id + 100)?.toNumber() || 0] },
+			cost() { return getCreationBulkCost(getBuyableAmount("C", this.id), 100) },
 			effect() {
 				let eff = new Decimal(0.25);
 				if (hasUpgrade("G", 92)) eff = eff.add(0.5);
@@ -254,16 +297,16 @@ addLayer("G", {
 				if (hasUpgrade("F", 1032)) eff = eff.mul(upgradeEffect("F", 1032));
 				return eff;
 			},
-			display() { return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount("G", this.id) + "\n\nEffect: +" + format(buyableEffect("G", this.id)) + " to passive production\n\nTotal Effect: +" + format(getBuyableAmount("G", this.id) * buyableEffect("G", this.id)) },
+			display() { return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount("C", this.id) + "\n\nEffect: +" + format(buyableEffect("C", this.id)) + " to passive production\n\nTotal Effect: +" + format(getBuyableAmount("C", this.id) * buyableEffect("C", this.id)) },
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
-				setBuyableAmount("G", this.id, getBuyableAmount("G", this.id).add(getCreationBulk()));
+				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(getCreationBulk()));
 			},
 		},
 		13: {
-			title() { return getCreationName(this.id - 10) },
-			cost() { return getCreationBulkCost(getBuyableAmount("G", this.id), 10000) },
+			title() { return creationNames[this.id - 11][getBuyableAmount("C", this.id + 100)?.toNumber() || 0] },
+			cost() { return getCreationBulkCost(getBuyableAmount("C", this.id), 10000) },
 			effect() {
 				let eff = new Decimal(2.5);
 				if (hasUpgrade("G", 93)) eff = eff.add(0.5);
@@ -274,120 +317,44 @@ addLayer("G", {
 				return eff;
 			},
 			display() {
-				if (hasUpgrade("F", 1143)) return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount("G", this.id) + "\n\nEffect: +" + format(buyableEffect("G", this.id)) + " to click production and\n+" + format(buyableEffect("G", this.id).div(10)) + "% to FC find chance\n\nTotal Effect: +" + format(getBuyableAmount("G", this.id) * buyableEffect("G", this.id)) + "\nand +" + format((getBuyableAmount("G", this.id) * buyableEffect("G", this.id).div(10))) + "%";
-				else return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount("G", this.id) + "\n\nEffect: +" + format(buyableEffect("G", this.id)) + " to passive production and\n+" + format(buyableEffect("G", this.id).div(10)) + "% to FC find chance\n\nTotal Effect: +" + format(getBuyableAmount("G", this.id) * buyableEffect("G", this.id)) + "\nand +" + format((getBuyableAmount("G", this.id) * buyableEffect("G", this.id).div(10))) + "%";
+				if (hasUpgrade("F", 1143)) return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount("C", this.id) + "\n\nEffect: +" + format(buyableEffect("C", this.id)) + " to click production and\n+" + format(buyableEffect("C", this.id).div(10)) + "% to FC find chance\n\nTotal Effect: +" + format(getBuyableAmount("C", this.id) * buyableEffect("C", this.id)) + "\nand +" + format((getBuyableAmount("C", this.id) * buyableEffect("C", this.id).div(10))) + "%";
+				else return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount("C", this.id) + "\n\nEffect: +" + format(buyableEffect("C", this.id)) + " to passive production and\n+" + format(buyableEffect("C", this.id).div(10)) + "% to FC find chance\n\nTotal Effect: +" + format(getBuyableAmount("C", this.id) * buyableEffect("C", this.id)) + "\nand +" + format((getBuyableAmount("C", this.id) * buyableEffect("C", this.id).div(10))) + "%";
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
-				setBuyableAmount("G", this.id, getBuyableAmount("G", this.id).add(getCreationBulk()));
+				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(getCreationBulk()));
 			},
 		},
-	},
-	upgrades: {
-		// creation tiers
-		91: {
-			fullDisplay() { return getCreationTierUpgradeDesc(this.id, this.cost, 0.05) },
-			cost: 250,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getBuyableAmount("G", this.id % 10 + 10).gte(creationTierReq[Math.floor(this.id / 10) - 9]) },
-		},
-		92: {
-			fullDisplay() { return getCreationTierUpgradeDesc(this.id, this.cost, 0.5) },
-			cost: 5000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getBuyableAmount("G", this.id % 10 + 10).gte(creationTierReq[Math.floor(this.id / 10) - 9]) },
-		},
-		93: {
-			fullDisplay() { return getCreationTierUpgradeDesc(this.id, this.cost, 0.5, 0.05) },
-			cost: 500000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getBuyableAmount("G", this.id % 10 + 10).gte(creationTierReq[Math.floor(this.id / 10) - 9]) },
-		},
-		101: {
-			fullDisplay() { return getCreationTierUpgradeDesc(this.id, this.cost, 0.1) },
-			cost: 1000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getBuyableAmount("G", this.id % 10 + 10).gte(creationTierReq[Math.floor(this.id / 10) - 9]) && hasUpgrade("G", this.id - 10) },
-		},
-		102: {
-			fullDisplay() { return getCreationTierUpgradeDesc(this.id, this.cost, 1.25) },
-			cost: 25000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getBuyableAmount("G", this.id % 10 + 10).gte(creationTierReq[Math.floor(this.id / 10) - 9]) && hasUpgrade("G", this.id - 10) },
-		},
-		103: {
-			fullDisplay() { return getCreationTierUpgradeDesc(this.id, this.cost, 2, 0.2) },
-			cost: 2500000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getBuyableAmount("G", this.id % 10 + 10).gte(creationTierReq[Math.floor(this.id / 10) - 9]) && hasUpgrade("G", this.id - 10) },
-		},
 		111: {
-			fullDisplay() { return getCreationTierUpgradeDesc(this.id, this.cost, 0.2) },
-			cost: 5000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getBuyableAmount("G", this.id % 10 + 10).gte(creationTierReq[Math.floor(this.id / 10) - 9]) && hasUpgrade("G", this.id - 10) },
+			cost() { return creationTierCost[this.id - 111][getBuyableAmount("C", this.id)?.toNumber() || 0] ?? Infinity },
+			display() { return getCreationTierUpgradeDesc(this.id) },
+			canAfford() { return getBuyableAmount("C", this.id - 100).gte(creationTierReq[getBuyableAmount("C", this.id)?.toNumber() || 0]) && player.points.gte(this.cost()) },
+			buy() {
+				player.points = player.points.sub(this.cost());
+				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(1));
+			},
+			style: {height: "80px"},
 		},
 		112: {
-			fullDisplay() { return getCreationTierUpgradeDesc(this.id, this.cost, 2) },
-			cost: 100000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getBuyableAmount("G", this.id % 10 + 10).gte(creationTierReq[Math.floor(this.id / 10) - 9]) && hasUpgrade("G", this.id - 10) },
+			cost() { return creationTierCost[this.id - 111][getBuyableAmount("C", this.id)?.toNumber() || 0] ?? Infinity },
+			display() { return getCreationTierUpgradeDesc(this.id) },
+			canAfford() { return getBuyableAmount("C", this.id - 100).gte(creationTierReq[getBuyableAmount("C", this.id)?.toNumber() || 0]) && player.points.gte(this.cost()) },
+			buy() {
+				player.points = player.points.sub(this.cost());
+				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(1));
+			},
+			style: {height: "80px"},
 		},
-		121: {
-			fullDisplay() { return getCreationTierUpgradeDesc(this.id, this.cost, 0.4) },
-			cost: 25000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getBuyableAmount("G", this.id % 10 + 10).gte(creationTierReq[Math.floor(this.id / 10) - 9]) && hasUpgrade("G", this.id - 10) },
-		},
-		122: {
-			fullDisplay() { return getCreationTierUpgradeDesc(this.id, this.cost, 3.5) },
-			cost: 500000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getBuyableAmount("G", this.id % 10 + 10).gte(creationTierReq[Math.floor(this.id / 10) - 9]) && hasUpgrade("G", this.id - 10) },
-		},
-		131: {
-			fullDisplay() { return getCreationTierUpgradeDesc(this.id, this.cost, 0.65) },
-			cost: 100000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getBuyableAmount("G", this.id % 10 + 10).gte(creationTierReq[Math.floor(this.id / 10) - 9]) && hasUpgrade("G", this.id - 10) },
-		},
-		141: {
-			fullDisplay() { return getCreationTierUpgradeDesc(this.id, this.cost, 1) },
-			cost: 500000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getBuyableAmount("G", this.id % 10 + 10).gte(creationTierReq[Math.floor(this.id / 10) - 9]) && hasUpgrade("G", this.id - 10) },
-		},
-		// other upgrades
-		2011: {
-			fullDisplay() { return '<h3>Gem Influence</h3><br>increase faction coin find chance based on your gems<br><br>Effect: +' + format(upgradeEffect("G", this.id)) + '%<br><br>Req: 25 1st creations'},
-			effect() { return player.G.points.add(1).pow(0.5).sub(1) },
-			canAfford() { return getBuyableAmount("G", 11).gte(25) },
-			unlocked() { return player.G.points.gte(1) },
-		},
-		2012: {
-			fullDisplay() { return '<h3>Gem Displays</h3><br>increase the effect of <b>Gem Influence</b> based on your gems<br><br>Effect: x' + format(upgradeEffect("G", this.id)) + '<br><br>Req: 25 2nd creations'},
-			effect() { return player.G.points.add(1).pow(0.2) },
-			canAfford() { return getBuyableAmount("G", 12).gte(25) },
-			unlocked() { return player.G.points.gte(1) },
-		},
-		2013: {
-			fullDisplay() { return '<h3>Gem Displays</h3><br>increase max mana and mana regen based on your gems<br><br>Effect: x' + format(upgradeEffect("G", this.id)) + '<br><br>Req: 25 3rd creations'},
-			effect() { return player.G.points.add(1).log10().add(1).pow(0.5) },
-			canAfford() { return getBuyableAmount("G", 13).gte(25) },
-			unlocked() { return player.G.points.gte(1) },
+		113: {
+			cost() { return creationTierCost[this.id - 111][getBuyableAmount("C", this.id)?.toNumber() || 0] ?? Infinity },
+			display() { return getCreationTierUpgradeDesc(this.id) },
+			canAfford() { return getBuyableAmount("C", this.id - 100).gte(creationTierReq[getBuyableAmount("C", this.id)?.toNumber() || 0]) && player.points.gte(this.cost()) },
+			buy() {
+				player.points = player.points.sub(this.cost());
+				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(1));
+			},
+			style: {height: "80px"},
 		},
 	},
 });
@@ -550,7 +517,7 @@ addLayer("M", {
 		12: {
 			title: "<span style='color: #000000'>Call to Arms</span>",
 			display() { return '<span style="color: #000000">boost all production based on your creations for 30 seconds<br>Time left: ' + format(player.M.callTime) + 's<br><br>Effect: x' + format(clickableEffect("M", this.id)) + '<br><br>Cost: ' + formatWhole(player.M.callCost) + ' mana' },
-			effect() { return player.G.stats[0].bestCreations.add(1).pow(0.15).mul(player.M.callBoost)},
+			effect() { return player.C.points.add(1).pow(0.15).mul(player.M.callBoost)},
 			canClick() {
 				if (getClickableState("M", this.id) == "ON") return false;
 				if (player.M.mana.gte(player.M.callCost)) return true;
@@ -669,7 +636,7 @@ addLayer("M", {
 		},
 		23: {
 			fullDisplay() { return '<h3>Mana Jar</h3><br>increase max mana based on your creations<br><br>Effect: x' + format(upgradeEffect("M", this.id)) + '<br><br>Req: 4,500 mana generated<br><br>Cost: 25,000 coins'},
-			effect() { return player.G.stats[0].bestCreations.add(1).pow(0.125) },
+			effect() { return player.C.points.add(1).pow(0.125) },
 			cost: 25000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -678,7 +645,7 @@ addLayer("M", {
 		},
 		24: {
 			fullDisplay() { return '<h3>Mana Sight</h3><br>increase mana regen based on your creations<br><br>Effect: +' + format(upgradeEffect("M", this.id)) + '<br><br>Req: 15,000 mana generated<br><br>Cost: 125,000 coins'},
-			effect() { return player.G.stats[0].bestCreations.add(1).pow(0.225) },
+			effect() { return player.C.points.add(1).pow(0.225) },
 			cost: 125000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -720,15 +687,16 @@ addLayer("F", {
 	position: 2,
 	startData() { return {
 		unlocked: true,
+		points: newDecimalZero(),
 	}},
 	color() {
 		if (hasUpgrade("F", 11)) return "#0000CC";
 		if (hasUpgrade("F", 21)) return "#CC0000";
 		return "#CCCCCC";
 	},
+	resource: "faction coins",
 	type: "none",
 	layerShown() {return true},
-	tooltip() {return formatWhole(player.totalFC) + " faction coins"},
 	doReset(resettingLayer) {},
 	tabFormat: [
 		["display-text", "<h2>Faction Upgrades</h2>"],
@@ -807,7 +775,7 @@ addLayer("F", {
 		},
 		1032: {
 			fullDisplay() { return '<h3>Fairy Workers</h3><br>increase the effect of basic creations based on your creations<br><br>Effect: x' + format(upgradeEffect("F", this.id)) + '<br><br>Cost: 5,000 coins'},
-			effect() { return player.G.stats[0].bestCreations.add(1).pow(0.2) },
+			effect() { return player.C.points.add(1).pow(0.2) },
 			cost: 5000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -816,7 +784,7 @@ addLayer("F", {
 		},
 		1033: {
 			fullDisplay() { return '<h3>Fairy Traders</h3><br>increase click production and faction coin find chance based on your creations<br><br>Effect: x' + format(upgradeEffect("F", this.id)) + '<br>and +' + format(upgradeEffect("F", this.id).mul(3)) + '%<br><br>Cost: 50,000 coins'},
-			effect() { return player.G.stats[0].bestCreations.add(1).pow(0.1) },
+			effect() { return player.C.points.add(1).pow(0.1) },
 			cost: 50000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -826,7 +794,7 @@ addLayer("F", {
 		// elf faction
 		1041: {
 			fullDisplay() { return '<h3>Super Clicks</h3><br>increase click production based on your creations<br><br>Effect: x' + format(upgradeEffect("F", this.id)) + '<br><br>Cost: 500 coins'},
-			effect() { return player.G.stats[0].bestCreations.add(1).pow(0.25) },
+			effect() { return player.C.points.add(1).pow(0.25) },
 			cost: 500,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -930,7 +898,7 @@ addLayer("F", {
 		},
 		1151: {
 			fullDisplay() { return '<h3>Rainbows</h3><br>increase max mana based on your faction coins<br><br>Effect: x' + format(upgradeEffect("F", this.id)) + '<br><br>Cost: 500,000 coins'},
-			effect() { return player.totalFC.add(1).pow(0.2) },
+			effect() { return player.F.points.add(1).pow(0.2) },
 			cost: 500000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -966,7 +934,7 @@ addLayer("F", {
 		},
 		1062: {
 			fullDisplay() { return '<h3>Goblin\'s Greed</h3><br>increase passive production based on your faction coins<br><br>Effect: x' + format(upgradeEffect("F", this.id)) + '<br><br>Cost: 5,000 coins'},
-			effect() { return player.totalFC.add(1).pow(0.25) },
+			effect() { return player.F.points.add(1).pow(0.25) },
 			cost: 5000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -975,7 +943,7 @@ addLayer("F", {
 		},
 		1063: {
 			fullDisplay() { return '<h3>Currency Revolution</h3><br>increase faction coin find chance based on your faction coins<br><br>Effect: +' + format(upgradeEffect("F", this.id)) + '%<br><br>Cost: 50,000 coins'},
-			effect() { return player.totalFC.add(1).pow(0.6) },
+			effect() { return player.F.points.add(1).pow(0.6) },
 			cost: 50000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -1061,9 +1029,9 @@ addLayer("F", {
 		1082: {
 			fullDisplay() { return "<h3>Demonic Blood</h3><br>increase blood frenzy effect based on your creations (higher numbered ones count more)<br><br>Effect: x" + format(upgradeEffect(this.layer, this.id)) + "<br><br>Cost: 5,000 coins"},
 			effect() {
-				let amt = getBuyableAmount("G", 11);
-				amt = amt.add(getBuyableAmount("G", 12).mul(5));
-				amt = amt.add(getBuyableAmount("G", 13).mul(25));
+				let amt = getBuyableAmount("C", 11);
+				amt = amt.add(getBuyableAmount("C", 12).mul(5));
+				amt = amt.add(getBuyableAmount("C", 13).mul(25));
 				return amt.div(10).add(1).pow(0.1);
 			},
 			cost: 5000,
@@ -1105,7 +1073,7 @@ addLayer("S", {
 				"blank",
 				["display-text", () => "<h3>CLICKS</h3><br>Your best click production is <b>" + format(player.G.stats[index].bestClickValue) + "</b><br>You have <b>" + format(player.G.stats[index].bestTotalClickValue) + "</b> coins earned from clicking total<br>" + (index === 0 ? "You have clicked <b>" + formatWhole(player.G.clickTimes) + "</b> times<br>" : "Your best times clicked is <b>" + formatWhole(player.G.stats[index].bestClickTimes) + "</b><br>You have clicked <b>" + formatWhole(player.G.stats[index].totalClickTimes) + "</b> times total")],
 				"blank",
-				["display-text", () => "<h3>FACTION COINS</h3><br>" + (index === 0 ? "You have <b>" + formatWhole(player.totalFC) + "</b> faction coins<br>" : "") + "Your best faction coins is <b>" + formatWhole(player.stats[index].FCbest) + "</b><br>You have <b>" + formatWhole(player.stats[index].FCtotal) + "</b> faction coins total<br>You have <b>" + format(player.stats[index].FCchancebest) + "%</b> best faction coin chance"],
+				["display-text", () => "<h3>FACTION COINS</h3><br>" + (index === 0 ? "You have <b>" + formatWhole(player.F.points) + "</b> faction coins<br>" : "") + "Your best faction coins is <b>" + formatWhole(player.stats[index].FCbest) + "</b><br>You have <b>" + formatWhole(player.stats[index].FCtotal) + "</b> faction coins total<br>You have <b>" + format(player.stats[index].FCchancebest) + "%</b> best faction coin chance"],
 				"blank",
 				["display-text", () => "<h3>CREATIONS</h3><br>Your best creations is <b>" + formatWhole(player.G.stats[index].bestCreations) + "</b>"],
 				"blank",
