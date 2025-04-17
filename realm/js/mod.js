@@ -134,7 +134,7 @@ function update(diff) {
 };
 
 function maxTickLength() {
-	return 3600;
+	return 15;
 };
 
 function fixOldSave(oldVersion) {

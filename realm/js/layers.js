@@ -230,6 +230,7 @@ addLayer("M", {
 	}},
 	color: "#AA55AA",
 	type: "none",
+	prestigeNotify() {return player.M.mana.gte(player.M.maxMana)},
 	layerShown() {return true},
 	tooltip() {return format(player.M.mana) + "/" + format(player.M.maxMana) + " mana"},
 	doReset(resettingLayer) {},
@@ -337,21 +338,29 @@ addLayer("M", {
 		"blank",
 		["clickables", [10]],
 		"blank",
-		["bar", "manabar"],
+		["bar", "mana"],
 		"blank",
-		["display-text", () => "<h2>Mana Upgrades</h2><br>You have " + format(player.M.stats[0].manaTotal) + " mana generated"],
+		["display-text", () => "<h2>Mana Upgrades</h2>"],
 		"blank",
 		["upgrades", [2]],
-		["display-text", () => "<h2>Autocasting Upgrades</h2><br>You have " + format(player.M.stats[1].manaTotal) + " total mana generated"],
+		["display-text", () => "<h2>Autocasting Upgrades</h2><br>You have " + format(player.M.stats[2].manaTotal) + " total mana generated"],
 		"blank",
 		["upgrades", [10]],
 	],
+	componentStyles: {
+		clickable() { return {width: "125px", "border-radius": "25px"} },
+	},
 	clickables: {
 		11: {
 			title: "<span style='color: #000000'>Tax Collection</span>",
 			display() { return '<span style="color: #000000">get coins equal to ' + formatWhole(player.M.taxEff) + ' seconds of coins/sec<br><br>Effect: +' + format(getPointGen().mul(player.M.taxEff)) + '<br><br>Cost: ' + formatWhole(player.M.taxCost) + ' mana</span>' },
 			canClick() { if (player.M.mana.gte(player.M.taxCost)) return true },
-			onClick() { taxCast() },
+			onClick: taxCast,
+			style() {
+				const style = {height: "125px"};
+				if (tmp.M.clickables[this.id].canClick) style["background-color"] = "#CCCCCC";
+				return style;
+			},
 		},
 		12: {
 			title: "<span style='color: #000000'>Call to Arms</span>",
@@ -362,17 +371,22 @@ addLayer("M", {
 				if (player.M.mana.gte(player.M.callCost)) return true;
 				return false;
 			},
-			onClick() { callCast() },
+			onClick: callCast,
+			style() {
+				const style = {height: "125px"};
+				if (tmp.M.clickables[this.id].canClick) style["background-color"] = "#CCCCCC";
+				return style;
+			},
 		},
 		13: {
 			title() {
-				if (hasUpgrade("F", 11)) return "<span style='color: #0000FF'>Holy Light</span>";
-				if (hasUpgrade("F", 21)) return "<span style='color: #FF0000'>Blood Frenzy</span>";
+				if (hasUpgrade("F", 11)) return "Holy Light";
+				if (hasUpgrade("F", 21)) return "Blood Frenzy";
 				return "CHOOSE A SIDE TO UNLOCK";
 			},
 			display() {
-				if (hasUpgrade("F", 11)) return '<span style="color: #0000FF">boost click production based on your mana for 15 seconds<br>Time left: ' + format(player.M.sideSpellTime) + 's<br><br>Effect: x' + format(clickableEffect("M", this.id)) + '<br><br>Cost: ' + formatWhole(player.M.sideSpellCost) + ' mana';
-				if (hasUpgrade("F", 21)) return '<span style="color: #FF0000">boost coins/sec based on your mana for 15 seconds<br>Time left: ' + format(player.M.sideSpellTime) + 's<br><br>Effect: x' + format(clickableEffect("M", this.id)) + '<br><br>Cost: ' + formatWhole(player.M.sideSpellCost) + ' mana';
+				if (hasUpgrade("F", 11)) return "boost click production based on your mana for 15 seconds<br>Time left: " + format(player.M.sideSpellTime) + "s<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(player.M.sideSpellCost) + " mana";
+				if (hasUpgrade("F", 21)) return "boost coins/sec based on your mana for 15 seconds<br>Time left: " + format(player.M.sideSpellTime) + "s<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(player.M.sideSpellCost) + " mana";
 				return "";
 			},
 			effect() { return player.M.mana.add(1).pow(0.25).mul(player.M.sideSpellBoost) },
@@ -381,7 +395,13 @@ addLayer("M", {
 				if (player.M.mana.gte(player.M.sideSpellCost) && hasChosenSide()) return true;
 				return false;
 			},
-			onClick() { sideSpellCast() },
+			onClick: sideSpellCast,
+			style() {
+				let style = {height: "125px"};
+				if (hasUpgrade("F", 11) && tmp.M.clickables[this.id].canClick) style["background-color"] = "#0000CC";
+				if (hasUpgrade("F", 21) && tmp.M.clickables[this.id].canClick) style["background-color"] = "#CC0000";
+				return style;
+			},
 		},
 		101: {
 			title: "Autocasting",
@@ -400,7 +420,11 @@ addLayer("M", {
 					setClickableState(this.layer, this.id, "secondary - ON");
 				};
 			},
-			style: {'min-height': '50px', 'border-radius': '25px'},
+			style() {
+				const style = {"min-height": "50px"};
+				if (tmp.M.clickables[this.id].canClick) style["background-color"] = "#CCCCCC";
+				return style;
+			},
 			unlocked() { return hasUpgrade("M", 101) },
 		},
 		102: {
@@ -417,7 +441,11 @@ addLayer("M", {
 					setClickableState(this.layer, this.id, "primary - ON");
 				};
 			},
-			style: {'min-height': '50px', 'border-radius': '25px'},
+			style() {
+				const style = {"min-height": "50px"};
+				if (tmp.M.clickables[this.id].canClick) style["background-color"] = "#CCCCCC";
+				return style;
+			},
 			unlocked() { return hasUpgrade("M", 101) },
 		},
 		103: {
@@ -437,12 +465,17 @@ addLayer("M", {
 					setClickableState(this.layer, this.id, "primary - ON");
 				};
 			},
-			style: {'min-height': '50px', 'border-radius': '25px'},
+			style() {
+				let style = {"min-height": "50px"};
+				if (hasUpgrade("F", 11) && tmp.M.clickables[this.id].canClick) style["background-color"] = "#0000CC";
+				if (hasUpgrade("F", 21) && tmp.M.clickables[this.id].canClick) style["background-color"] = "#CC0000";
+				return style;
+			},
 			unlocked() { return hasUpgrade("M", 101) },
 		},
 	},
 	bars: {
-		manabar: {
+		mana: {
 			direction: RIGHT,
 			width: 500,
 			height: 50,
@@ -453,42 +486,35 @@ addLayer("M", {
 		},
 	},
 	upgrades: {
-		11: {
-			canAfford() { return player.M.mana.gte(player.M.maxMana) },
-		},
 		21: {
-			fullDisplay() { return '<h3>Mana Cup</h3><br>increase max mana based on your mana<br><br>Effect: x' + format(upgradeEffect("M", this.id)) + '<br><br>Req: 500 mana generated<br><br>Cost: 1,500 coins'},
-			effect() { return player.M.mana.add(1).pow(0.1) },
+			fullDisplay() { return '<h3>Mana Cup</h3><br>increase max mana based on your mana generated this era<br><br>Effect: x' + format(upgradeEffect("M", this.id)) + '<br><br>Cost: 1,500 coins'},
+			effect() { return player.M.stats[0].manaTotal.add(1).pow(0.1) },
 			cost: 1500,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
-			canAfford() { return player.M.stats[0].manaTotal.gte(500) },
 		},
 		22: {
-			fullDisplay() { return '<h3>Mana Sense</h3><br>increase mana regen based on your mana<br><br>Effect: +' + format(upgradeEffect("M", this.id)) + '<br><br>Req: 1,500 mana generated<br><br>Cost: 5,000 coins'},
-			effect() { return player.M.mana.add(1).pow(0.2) },
+			fullDisplay() { return '<h3>Mana Sense</h3><br>increase mana regen based on your mana generated this era<br><br>Effect: +' + format(upgradeEffect("M", this.id)) + '<br><br>Cost: 5,000 coins'},
+			effect() { return player.M.stats[0].manaTotal.add(1).pow(0.125) },
 			cost: 5000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
-			canAfford() { return player.M.stats[0].manaTotal.gte(1500) },
 			unlocked() { return hasUpgrade("M", 21) },
 		},
 		23: {
-			fullDisplay() { return '<h3>Mana Jar</h3><br>increase max mana based on your creations<br><br>Effect: x' + format(upgradeEffect("M", this.id)) + '<br><br>Req: 4,500 mana generated<br><br>Cost: 25,000 coins'},
+			fullDisplay() { return '<h3>Mana Jar</h3><br>increase max mana based on your creations<br><br>Effect: x' + format(upgradeEffect("M", this.id)) + '<br><br>Cost: 25,000 coins'},
 			effect() { return player.C.points.add(1).pow(0.125) },
 			cost: 25000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
-			canAfford() { return player.M.stats[0].manaTotal.gte(4500) },
 			unlocked() { return hasUpgrade("M", 22) },
 		},
 		24: {
-			fullDisplay() { return '<h3>Mana Sight</h3><br>increase mana regen based on your creations<br><br>Effect: +' + format(upgradeEffect("M", this.id)) + '<br><br>Req: 15,000 mana generated<br><br>Cost: 125,000 coins'},
+			fullDisplay() { return '<h3>Mana Sight</h3><br>increase mana regen based on your creations<br><br>Effect: +' + format(upgradeEffect("M", this.id)) + '<br><br>Cost: 125,000 coins'},
 			effect() { return player.C.points.add(1).pow(0.225) },
 			cost: 125000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
-			canAfford() { return player.M.stats[0].manaTotal.gte(15000) },
 			unlocked() { return hasUpgrade("M", 23) },
 		},
 		101: {
@@ -920,9 +946,8 @@ addLayer("G", {
 		let mult = newDecimalOne();
 		return mult;
 	},
-	gainExp() {
-		return newDecimalOne();
-	},
+	gainExp() {return newDecimalOne()},
+	prestigeNotify() {return !tmp.G.passiveGeneration && tmp.G.canReset === true && tmp.G.resetGain.gte(player.G.points.max(100))},
 	resetDescription: "Abdicate for ",
 	effect() {return player.G.points.mul(player.G.gemMult).mul(0.01).add(1)},
 	effectDescription() {return "which are increasing all production by " + player.G.gemMult + "% each, for a total of " + format(tmp.G.effect) + 'x'},
@@ -979,7 +1004,7 @@ addLayer("G", {
 	tabFormat: [
 		"main-display",
 		"prestige-button",
-		"blank",
+		"resource-display",
 		["display-text", () => "Your faction coin find chance is " + format(player.FCchance) + "%"],
 		"blank",
 		["row", [
