@@ -209,13 +209,10 @@ addLayer("C", {
 });
 
 function getManaTabStartingStats() { return {
-	manaRegenBest: new Decimal(2.5),
+	manaRegen: new Decimal(2.5),
 	manaTotal: newDecimalZero(),
-	maxManaBest: new Decimal(100),
-	taxCasts: newDecimalZero(),
-	callCasts: newDecimalZero(),
-	holyCasts: newDecimalZero(),
-	frenzyCasts: newDecimalZero(),
+	maxMana: new Decimal(100),
+	casts: [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()],
 }};
 
 addLayer("M", {
@@ -245,20 +242,13 @@ addLayer("M", {
 	tooltip() {return format(player.M.mana) + "/" + format(player.M.maxMana) + " mana"},
 	doReset(resettingLayer) {},
 	update(diff) {
-		let manaCapped = false;
-		let prevMana = player.M.mana;
-		let manaRegen = new Decimal(2.5);
-		let maxMana = new Decimal(100);
-		let taxEff = new Decimal(30);
-		let callBoost = newDecimalOne();
-		let sideSpellBoost = newDecimalOne();
-		let taxCost = new Decimal(80);
-		let callCost = new Decimal(160);
-		let sideSpellCost = new Decimal(120);
 		// spell boosts
+		let taxEff = new Decimal(30);
 		if (hasUpgrade("F", 1162)) taxEff = taxEff.add(30);
 		if (hasUpgrade("F", 1152)) taxEff = taxEff.mul(2);
+		let callBoost = newDecimalOne();
 		if (hasUpgrade("F", 1152)) callBoost = callBoost.mul(2);
+		let sideSpellBoost = newDecimalOne();
 		if (hasUpgrade("F", 1152)) sideSpellBoost = sideSpellBoost.mul(2);
 		if (hasUpgrade("F", 1082)) sideSpellBoost = sideSpellBoost.mul(upgradeEffect("F", 1082));
 		// return spell boost effects
@@ -266,21 +256,25 @@ addLayer("M", {
 		player.M.callBoost = callBoost;
 		player.M.sideSpellBoost = sideSpellBoost;
 		// spell costs
+		let taxCost = new Decimal(80);
 		if (hasUpgrade("F", 1152)) taxCost = taxCost.mul(3);
+		let callCost = new Decimal(160);
 		if (hasUpgrade("F", 1152)) callCost = callCost.mul(3);
+		let sideSpellCost = new Decimal(120);
 		if (hasUpgrade("F", 1152)) sideSpellCost = sideSpellCost.mul(3);
 		// return spell cost
 		player.M.taxCost = taxCost;
 		player.M.callCost = callCost;
 		player.M.sideSpellCost = sideSpellCost;
 		// mana regen buffs
+		let manaRegen = new Decimal(2.5);
 		if (hasUpgrade("M", 12) && upgradeEffect("M", 12).gt(0)) manaRegen = manaRegen.add(upgradeEffect("M", 12));
 		if (hasUpgrade("M", 14) && upgradeEffect("M", 14).gt(0)) manaRegen = manaRegen.add(upgradeEffect("M", 14));
 		if (hasUpgrade("F", 1052)) manaRegen = manaRegen.mul(upgradeEffect("F", 1052));
 		if (hasUpgrade("G", 13)) manaRegen = manaRegen.mul(upgradeEffect("G", 13));
 		player.M.manaRegen = manaRegen;
-		const diffMana = player.M.manaRegen.mul(diff);
 		// max mana buffs
+		let maxMana = new Decimal(100);
 		if (hasUpgrade("F", 1051)) maxMana = maxMana.mul(upgradeEffect("F", 1051));
 		if (hasUpgrade("F", 1151)) maxMana = maxMana.mul(upgradeEffect("F", 1151));
 		if (hasUpgrade("M", 11)) maxMana = maxMana.mul(upgradeEffect("M", 11));
@@ -288,6 +282,9 @@ addLayer("M", {
 		if (hasUpgrade("G", 13)) maxMana = maxMana.mul(upgradeEffect("G", 13));
 		player.M.maxMana = maxMana;
 		// increase mana
+		let manaCapped = false;
+		let prevMana = player.M.mana;
+		const diffMana = player.M.manaRegen.mul(diff);
 		if (player.M.mana.add(diffMana).gte(player.M.maxMana)) {
 			player.M.mana = player.M.maxMana;
 			manaCapped = true;
@@ -295,22 +292,11 @@ addLayer("M", {
 			player.M.mana = player.M.mana.add(diffMana);
 		};
 		// total mana
-		if (manaCapped) {
-			player.M.stats[0].manaTotal = player.M.stats[0].manaTotal.add(player.M.maxMana.sub(prevMana));
-			player.M.stats[1].manaTotal = player.M.stats[1].manaTotal.add(player.M.maxMana.sub(prevMana));
-			player.M.stats[2].manaTotal = player.M.stats[2].manaTotal.add(player.M.maxMana.sub(prevMana));
-		} else {
-			player.M.stats[0].manaTotal = player.M.stats[0].manaTotal.add(diffMana);
-			player.M.stats[1].manaTotal = player.M.stats[1].manaTotal.add(diffMana);
-			player.M.stats[2].manaTotal = player.M.stats[2].manaTotal.add(diffMana);
-		};
+		if (manaCapped) player.M.stats.forEach(obj => obj.manaTotal = obj.manaTotal.add(player.M.maxMana.sub(prevMana)));
+		else player.M.stats.forEach(obj => obj.manaTotal = obj.manaTotal.add(diffMana));
 		// best mana
-		if (player.M.maxMana.gt(player.M.stats[0].maxManaBest)) player.M.stats[0].maxManaBest = player.M.maxMana;
-		if (player.M.maxMana.gt(player.M.stats[1].maxManaBest)) player.M.stats[1].maxManaBest = player.M.maxMana;
-		if (player.M.maxMana.gt(player.M.stats[2].maxManaBest)) player.M.stats[2].maxManaBest = player.M.maxMana;
-		if (player.M.manaRegen.gt(player.M.stats[0].manaRegenBest)) player.M.stats[0].manaRegenBest = player.M.manaRegen;
-		if (player.M.manaRegen.gt(player.M.stats[1].manaRegenBest)) player.M.stats[1].manaRegenBest = player.M.manaRegen;
-		if (player.M.manaRegen.gt(player.M.stats[2].manaRegenBest)) player.M.stats[2].manaRegenBest = player.M.manaRegen;
+		player.M.stats.forEach(obj => obj.maxMana = obj.maxMana.max(player.M.maxMana));
+		player.M.stats.forEach(obj => obj.manaRegen = obj.manaRegen.max(player.M.manaRegen));
 		// spell time
 		if (getClickableState("M", 12) == "ON") player.M.callTime = player.M.callTime.sub(diff);
 		if (getClickableState("M", 13) == "ON") player.M.sideSpellTime = player.M.sideSpellTime.sub(diff);
@@ -353,7 +339,7 @@ addLayer("M", {
 		["display-text", () => "<h2>Mana Upgrades</h2>"],
 		"blank",
 		["upgrades", [1]],
-		["display-text", () => "<h2>Autocasting Upgrades</h2><br>You have " + format(player.M.stats[2].manaTotal) + " total mana generated"],
+		["display-text", () => "<h2>Autocasting Upgrades</h2><br>You have generated " + format(player.M.stats[2].manaTotal) + " mana in total"],
 		"blank",
 		["upgrades", [10]],
 	],
@@ -933,8 +919,12 @@ addLayer("G", {
 		player.FCchance = new Decimal(2.5);
 		player.stats[0] = getPlayerStartingStats();
 		if (resettingLayer === "G") {
-			layerDataReset("G", ["points", "best", "stats"]);
-			player.G.stats[0] = getGemsTabStartingStats();
+			layerDataReset("G", ["points", "best", "total", "stats"]);
+			player.G.stats[0] = {
+				bestClickValue: newDecimalOne(),
+				bestTotalClickValue: newDecimalZero(),
+				bestCreations: newDecimalZero(),
+			};
 			layerDataReset("C");
 			layerDataReset("M", ["stats"]);
 			player.M.stats[0] = getManaTabStartingStats();
@@ -965,7 +955,7 @@ addLayer("G", {
 		if (hasUpgrade("G", 11) && !hasUpgrade("G", 12)) FCchance = FCchance.add(upgradeEffect("G", 11));
 		if (hasUpgrade("G", 11) && hasUpgrade("G", 12)) FCchance = FCchance.add(upgradeEffect("G", 11).mul(upgradeEffect("G", 12)));
 		player.FCchance = new Decimal(FCchance);
-		player.stats.forEach(obj => obj.FCchancebest = obj.FCchancebest.max(player.FCchance));
+		player.stats.forEach(obj => obj.FCchance = obj.FCchance.max(player.FCchance));
 		player.F.points = player.FC[0].add(player.FC[1]).add(player.FC[2]).add(player.FC[3]).add(player.FC[4]).add(player.FC[5]);
 		player.stats.forEach(obj => obj.FCbest = obj.FCbest.max(player.F.points));
 		// gems
@@ -994,11 +984,9 @@ addLayer("G", {
 			title() {return "click for " + format(player.G.clickValue) + " coins"},
 			canClick() {return true},
 			onClick() {
-				// faction coin initialization
+				// faction coins gained calculation
 				const factionCoinGainType = getRandInt(0, 6);
 				let factionCoinsFound = newDecimalZero();
-				let clickPower = player.G.clickValue;
-				// faction coins gained calculation
 				if (player.FCchance.gte(100)) factionCoinsFound = player.FCchance.div(100);
 				else if (player.FCchance.div(100).gte(Math.random())) factionCoinsFound = newDecimalOne();
 				if (hasUpgrade("F", 1053) && factionCoinGainType === 2) factionCoinsFound = factionCoinsFound.mul(5);
@@ -1015,6 +1003,7 @@ addLayer("G", {
 				player.G.stats[1].totalClickTimes = player.G.stats[1].totalClickTimes.add(1);
 				player.G.stats[2].totalClickTimes = player.G.stats[2].totalClickTimes.add(1);
 				// coins gained
+				let clickPower = player.G.clickValue;
 				if (hasUpgrade("F", 11) && getClickableState("M", 13) == "ON") clickPower = clickPower.mul(clickableEffect("M", 13));
 				player.points = player.points.add(clickPower);
 				player.stats.forEach(obj => obj.total = obj.total.add(clickPower));
@@ -1044,6 +1033,8 @@ addLayer("G", {
 	},
 });
 
+const spellName = ["Tax Collection", "Call to Arms", "Holy Light", "Blood Frenzy"];
+
 addLayer("S", {
 	name: "Stats",
 	symbol: "S",
@@ -1063,15 +1054,22 @@ addLayer("S", {
 			tabs[statName[index]] = {content: [
 				["display-text", () => "<h3>CURRENCY</h3><br>Your best coins is <b>" + format(player.stats[index].best) + "</b><br>You have generated <b>" + format(player.stats[index].total) + "</b> coins<br>" + (index === 0 ? "You have <b>" + formatWhole(player.G.points) + "</b> gems" : "Your best gems is <b>" + formatWhole(index === 2 ? player.bestGems : player.G.best) + "</b>") + "<br>"],
 				"blank",
-				["display-text", () => "<h3>CLICKS</h3><br>Your best coins/click is <b>" + format(player.G.stats[index].bestClickValue) + "</b><br>You have <b>" + format(player.G.stats[index].bestTotalClickValue) + "</b> coins earned from clicking total<br>" + (index === 0 ? "You have clicked <b>" + formatWhole(player.G.clickTimes) + "</b> times<br>" : "Your best times clicked is <b>" + formatWhole(player.G.stats[index].bestClickTimes) + "</b><br>You have clicked <b>" + formatWhole(player.G.stats[index].totalClickTimes) + "</b> times total")],
+				["display-text", () => "<h3>CLICKS</h3><br>Your best coins/click is <b>" + format(player.G.stats[index].bestClickValue) + "</b><br>You have generated <b>" + format(player.G.stats[index].bestTotalClickValue) + "</b> coins from clicking<br>" + (index === 0 ? "You have clicked <b>" + formatWhole(player.G.clickTimes) + "</b> times<br>" : "Your best times clicked is <b>" + formatWhole(player.G.stats[index].bestClickTimes) + "</b><br>You have clicked <b>" + formatWhole(player.G.stats[index].totalClickTimes) + "</b> times")],
 				"blank",
-				["display-text", () => "<h3>FACTION COINS</h3><br>" + (index === 0 ? "You have <b>" + formatWhole(player.F.points) + "</b> faction coins<br>" : "") + "Your best faction coins is <b>" + formatWhole(player.stats[index].FCbest) + "</b><br>You have <b>" + formatWhole(player.stats[index].FCtotal) + "</b> faction coins total<br>You have <b>" + format(player.stats[index].FCchancebest) + "%</b> best faction coin chance"],
+				["display-text", () => "<h3>FACTION COINS</h3><br>" + (index === 0 ? "You have <b>" + formatWhole(player.F.points) + "</b> faction coins<br>" : "") + "Your best faction coins is <b>" + formatWhole(player.stats[index].FCbest) + "</b><br>You have <b>" + formatWhole(player.stats[index].FCtotal) + "</b> faction coins total<br>You have <b>" + format(player.stats[index].FCchance) + "%</b> best faction coin chance"],
 				"blank",
 				["display-text", () => "<h3>CREATIONS</h3><br>Your best creations is <b>" + formatWhole(player.G.stats[index].bestCreations) + "</b>"],
 				"blank",
-				["display-text", () => "<h3>MANA</h3><br>Your best mana regen is <b>" + format(player.M.stats[index].manaRegenBest) + "</b><br>Your best max mana is <b>" + format(player.M.stats[index].maxManaBest) + "</b><br>You have generated a total of <b>" + format(player.M.stats[index].manaTotal) + "</b> mana"],
+				["display-text", () => "<h3>MANA</h3><br>Your best mana regen is <b>" + format(player.M.stats[index].manaRegen) + "</b><br>Your best max mana is <b>" + format(player.M.stats[index].maxMana) + "</b><br>You have generated a total of <b>" + format(player.M.stats[index].manaTotal) + "</b> mana"],
 				"blank",
-				["display-text", () => "<h3>SPELLS</h3><br>You have cast 'tax collection' <b>" + formatWhole(player.M.stats[index].taxCasts) + "</b> times<br>You have cast 'call to arms' <b>" + formatWhole(player.M.stats[index].callCasts) + "</b> times<br>You have cast 'holy light' <b>" + formatWhole(player.M.stats[index].holyCasts) + "</b> times<br>You have cast 'blood frenzy' <b>" + formatWhole(player.M.stats[index].frenzyCasts) + "</b> times<br>"],
+				["display-text", () => {
+					let text = "<h3>SPELLS</h3>";
+					for (let spell = 0; spell < spellName.length; spell++) {
+						text += "<br>You have cast '" + spellName[spell] + "' <b>" + formatWhole(player.M.stats[index].casts[spell]) + "</b> time";
+						if (player.M.stats[index].casts[spell].neq(1)) text += "s";
+					};
+					return text;
+				}],
 				"blank",
 				["display-text", () => "<h3>OTHER</h3><br>You have spent <b>" + formatTime(player.G.resetTime) + "</b>"],
 			]};
