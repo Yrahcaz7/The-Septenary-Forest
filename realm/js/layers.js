@@ -34,11 +34,7 @@ function getCreationTierUpgradeDesc(id) {
 	return "increase " + name + "'" + (name.endsWith("s") ? "" : "s") + " base effect by +" + (eff ? format(eff, 2, false) : "???") + "<br><br>Req: " + (creationTierReq[index] ? formatWhole(creationTierReq[index]) : "???") + " " + name + "<br><br>Cost: " + format(tmp.C.buyables[id].cost) + " coins";
 };
 
-function getCreationBulk() {
-	return +(getClickableState("C", 11) || 1);
-};
-
-function getCreationCost(amount, mult = 1, bulk = getCreationBulk()) {
+function getCreationCost(amount, mult = 1, bulk = player.C.bulk) {
 	const start = amount;
 	const end = start.add(bulk - 1);
 	const scale = new Decimal(50);
@@ -64,6 +60,7 @@ addLayer("C", {
 		unlocked: true,
 		points: newDecimalZero(),
 		tiers: new Decimal(3),
+		bulk: newDecimalOne(),
 	}},
 	color: "#CCCCCC",
 	resource: "creations",
@@ -77,6 +74,8 @@ addLayer("C", {
 	},
 	shouldNotify() {return tmp.C.buyables[111].canBuy || tmp.C.buyables[112].canBuy || tmp.C.buyables[113].canBuy},
 	tabFormat: [
+		["display-text", () => "You are bulk buying " + formatWhole(player.C.bulk) + "x creations"],
+		"blank",
 		"clickables",
 		"blank",
 		["buyables", "1"],
@@ -85,23 +84,29 @@ addLayer("C", {
 		"blank",
 	],
 	componentStyles: {
+		clickable() { return {width: "min-content", "min-height": "30px", "border-radius": "5px"} },
 		buyable() { return {width: "180px", height: "125px", "border-radius": "25px"} },
 	},
 	clickables: {
 		11: {
-			title() {return "You are bulk buying " + formatWhole(getCreationBulk()) + "x creations"},
-			canClick() {return true},
-			onClick() {
-				const bulk = getCreationBulk();
-				if (bulk === 1) {
-					setClickableState("C", 11, 10);
-				} else if (bulk === 10) {
-					setClickableState("C", 11, 100);
-				} else {
-					setClickableState("C", 11, 1);
-				};
-			},
-			style: {"width": "350px", "min-height": "30px", "border-radius": "15px"},
+			title: "1x",
+			canClick() {return player.C.bulk.neq(1)},
+			onClick() {player.C.bulk = newDecimalOne()},
+		},
+		12: {
+			title: "10x",
+			canClick() {return player.C.bulk.neq(10)},
+			onClick() {player.C.bulk = new Decimal(10)},
+		},
+		13: {
+			title: "100x",
+			canClick() {return player.C.bulk.neq(100)},
+			onClick() {player.C.bulk = new Decimal(100)},
+		},
+		14: {
+			title: "1,000x",
+			canClick() {return player.C.bulk.neq(1000)},
+			onClick() {player.C.bulk = new Decimal(1000)},
 		},
 	},
 	buyables: {
@@ -127,7 +132,7 @@ addLayer("C", {
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
-				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(getCreationBulk()));
+				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(player.C.bulk));
 			},
 		},
 		12: {
@@ -147,7 +152,7 @@ addLayer("C", {
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
-				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(getCreationBulk()));
+				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(player.C.bulk));
 			},
 		},
 		13: {
@@ -170,7 +175,7 @@ addLayer("C", {
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
-				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(getCreationBulk()));
+				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(player.C.bulk));
 			},
 		},
 		111: {
