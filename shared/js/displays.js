@@ -1,7 +1,7 @@
 function prestigeButtonText(layer) {
 	if (layers[layer].prestigeButtonText !== undefined) return run(layers[layer].prestigeButtonText(), layers[layer]);
-	if (tmp[layer].type == "normal") return (player[layer].points.lt(1e3) ? (tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "Reset for ") : "") + "+<b>" + formatWhole(tmp[layer].resetGain) + "</b> " + tmp[layer].resource + (tmp[layer].resetGain.lt(100) && player[layer].points.lt(1e3) ? "<br><br>Next at " + (tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAt) : format(tmp[layer].nextAt)) + " " + tmp[layer].baseResource : "");
-	if (tmp[layer].type == "static") return (tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "Reset for ") + "+<b>" + formatWhole(tmp[layer].resetGain) + "</b> " + tmp[layer].resource + "<br><br>" + (player[layer].points.lt(30) ? (tmp[layer].baseAmount.gte(tmp[layer].nextAt) && tmp[layer].canBuyMax ? "Next:" : "Req:") : "") + " " + formatWhole(tmp[layer].baseAmount) + " / " + (tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAtDisp) : format(tmp[layer].nextAtDisp)) + " " + tmp[layer].baseResource;
+	if (tmp[layer].type == "normal") return (player[layer].points.lt(1e3) ? (tmp[layer].resetDescription ?? "Reset for ") : "") + "+<b>" + formatWhole(tmp[layer].resetGain) + "</b> " + tmp[layer].resource + (tmp[layer].resetGain.lt(100) && player[layer].points.lt(1e3) ? "<br><br>Next at " + (tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAt) : format(tmp[layer].nextAt)) + " " + tmp[layer].baseResource : "");
+	if (tmp[layer].type == "static") return (tmp[layer].resetDescription ?? "Reset for ") + "+<b>" + formatWhole(tmp[layer].resetGain) + "</b> " + tmp[layer].resource + "<br><br>" + (player[layer].points.lt(30) ? (tmp[layer].baseAmount.gte(tmp[layer].nextAt) && tmp[layer].canBuyMax ? "Next:" : "Req:") : "") + " " + formatWhole(tmp[layer].baseAmount) + " / " + (tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAtDisp) : format(tmp[layer].nextAtDisp)) + " " + tmp[layer].baseResource;
 	if (tmp[layer].type == "none") return "";
 	return "You need prestige button text";
 };
@@ -23,13 +23,11 @@ function challengeStyle(layer, id) {
 };
 
 function challengeButtonText(layer, id) {
-	let text = ["Finish", "Exit Early", "Completed", "Start", "Locked"];
+	const text = ["Finish", "Exit Early", "Completed", "Start", "Locked"];
 	if (tmp[layer].challenges[id].buttonText) {
-		let buttonText;
-		if (typeof tmp[layer].challenges[id].buttonText == "function" && typeof tmp[layer].challenges[id].buttonText() == "object") {
-			buttonText = tmp[layer].challenges[id].buttonText();
-		} else if (typeof tmp[layer].challenges[id].buttonText == "object") {
-			buttonText = tmp[layer].challenges[id].buttonText;
+		let buttonText = tmp[layer].challenges[id].buttonText;
+		if (typeof tmp[layer].challenges[id].buttonText == "function") {
+			buttonText = buttonText();
 		};
 		if (buttonText) {
 			for (let index = 0; index < text.length; index++) {
@@ -43,8 +41,8 @@ function challengeButtonText(layer, id) {
 };
 
 function achievementStyle(layer, id) {
-	let ach = tmp[layer].achievements[id];
-	let style = [];
+	const ach = tmp[layer].achievements[id];
+	const style = [];
 	if (ach.image) style.push({"background-image": "url('" + ach.image + "')"});
 	if (!ach.unlocked) style.push({"visibility": "hidden"});
 	style.push(ach.style);
@@ -52,7 +50,7 @@ function achievementStyle(layer, id) {
 };
 
 function updateWidth() {
-	let screenWidth = window.innerWidth;
+	const screenWidth = window.innerWidth;
 	let splitScreen = screenWidth >= 1024;
 	if (options.forceOneTab) splitScreen = false;
 	if (player.navTab == "none") splitScreen = true;
@@ -85,16 +83,16 @@ function updateOomps(diff) {
 };
 
 function constructBarStyle(layer, id) {
-	let bar = tmp[layer].bars[id];
-	let style = {};
+	const bar = tmp[layer].bars[id];
+	const style = {};
 	let tempProgress;
 	if (bar.progress instanceof Decimal) {
 		tempProgress = (1 - Math.min(Math.max(bar.progress.toNumber(), 0), 1)) * 100;
 	} else {
 		tempProgress = (1 - Math.min(Math.max(bar.progress, 0), 1)) * 100;
 	};
-	style.dims = {"width": bar.width + "px", "height": bar.height + "px"};
-	style.fillDims = {"width": (bar.width + 0.5) + "px", "height": (bar.height + 0.5) + "px"};
+	style.dims = {width: bar.width + "px", height: bar.height + "px"};
+	style.fillDims = {width: (bar.width + 0.5) + "px", height: (bar.height + 0.5) + "px"};
 	switch (bar.direction) {
 		case UP:
 			style.fillDims["clip-path"] = "inset(" + tempProgress + "% 0% 0% 0%)";

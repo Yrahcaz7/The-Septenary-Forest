@@ -10,7 +10,7 @@ const creationName = ["Soil", "Rocks", "Grass"];
 
 const creationBulkCost = [];
 
-const creationTierReq = [10, 25, 50, 100, 250, 500, 1_000];
+const creationTierReq = [10, 25, 50, 100, 250, 500, 1_000, 2_500];
 
 const creationTierEff = [
 	[0.05, 0.1, 0.2, 0.4, 0.65, 1, 1.5],
@@ -29,9 +29,9 @@ function getCreationTierUpgradeDesc(id) {
 	const name = creationName[id - 111].toLowerCase();
 	const eff = creationTierEff[(id - 1) % 10][index];
 	if (id % 10 === 3) {
-		return "increase " + name + "'" + (name.endsWith("s") ? "" : "s") + " first base effect by +" + (eff ? format(eff, 2, false) : "???") + " and second base effect by +" + (eff ? format(eff / 10, 2, false) : "???") + "%<br><br>Req: " + format(creationTierReq[index]) + " " + name + "<br><br>Cost: " + format(tmp.C.buyables[id].cost) + " coins";
+		return "increase " + name + "'" + (name.endsWith("s") ? "" : "s") + " first base effect by +" + (eff ? format(eff, 2, false) : "???") + " and second base effect by +" + (eff ? format(eff / 10, 2, false) : "???") + "%<br><br>Req: " + (creationTierReq[index] ? formatWhole(creationTierReq[index]) : "???") + " " + name + "<br><br>Cost: " + format(tmp.C.buyables[id].cost) + " coins";
 	};
-	return "increase " + name + "'" + (name.endsWith("s") ? "" : "s") + " base effect by +" + (eff ? format(eff, 2, false) : "???") + "<br><br>Req: " + format(creationTierReq[index]) + " " + name + "<br><br>Cost: " + format(tmp.C.buyables[id].cost) + " coins";
+	return "increase " + name + "'" + (name.endsWith("s") ? "" : "s") + " base effect by +" + (eff ? format(eff, 2, false) : "???") + "<br><br>Req: " + (creationTierReq[index] ? formatWhole(creationTierReq[index]) : "???") + " " + name + "<br><br>Cost: " + format(tmp.C.buyables[id].cost) + " coins";
 };
 
 function getCreationBulk() {
@@ -909,7 +909,19 @@ addLayer("G", {
 	},
 	gainExp() {return newDecimalOne()},
 	prestigeNotify() {return !tmp.G.passiveGeneration && tmp.G.canReset === true && tmp.G.resetGain.gte(player.G.points.add(100).div(2))},
-	resetDescription: "Abdicate for ",
+	prestigeButtonText() {
+		let text = "Abdicate for +<b>" + formatWhole(tmp.G.resetGain) + "</b> gem" + (tmp.G.resetGain instanceof Decimal && tmp.G.resetGain.eq(1) ? "" : "s");
+		if (tmp.G.resetGain.exponent <= Number.MAX_SAFE_INTEGER) {
+			text += "<br><br>";
+			const roundFactor = Decimal.pow(10, tmp.G.resetGain.max(10).log10().sub(1).floor());
+			const targetValue = tmp.G.resetGain.div(roundFactor).add(1).floor().mul(roundFactor);
+			let next = targetValue.div(tmp.G.directMult);
+			if (next.gte(tmp.G.softcap)) next = next.div(tmp.G.softcap.pow(newDecimalOne().sub(tmp.G.softcapPower))).pow(newDecimalOne().div(tmp.G.softcapPower));
+			next = next.root(tmp.G.gainExp).div(tmp.G.gainMult).root(tmp.G.exponent).mul(tmp.G.requires).max(tmp.G.requires);
+			text += "Coins required for " + formatWhole(targetValue) + " gem" + (targetValue.eq(1) ? "" : "s") + ": " + format(next);
+		};
+		return text;
+	},
 	effect() {return player.G.points.mul(player.G.gemMult).div(100).add(1)},
 	effectDescription() {return "which are increasing all production by " + player.G.gemMult + "% each, for a total of " + format(tmp.G.effect) + 'x'},
 	hotkeys: [
@@ -962,8 +974,7 @@ addLayer("G", {
 	tabFormat: [
 		"main-display",
 		"prestige-button",
-		"resource-display",
-		["display-text", () => "Your faction coin find chance is " + format(player.FCchance) + "%"],
+		["custom-resource-display", () => "You have generated " + format(player.stats[0].total) + " coins this era<br><br>Your faction coin find chance is " + format(player.FCchance) + "%"],
 		"blank",
 		["row", [
 			["display-text", () => "<div style='color: #FF00FF'>You have " + formatWhole(player.FC[0]) + " fairy coins</div><div style='color: #00FF00'>You have " + formatWhole(player.FC[1]) + " elf coins</div><div style='color: #00FFFF'>You have " + formatWhole(player.FC[2]) + " angel coins</div>"],
@@ -1046,11 +1057,11 @@ addLayer("S", {
 	layerShown() {return true},
 	tooltip() {return "Stats"},
 	tabFormat: (() => {
-		const statNames = ["This Era", "This Reincarnation", "All Time"];
+		const statName = ["This Era", "This Reincarnation", "All Time"];
 		let tabs = {};
-		for (let index = 0; index < statNames.length; index++) {
-			const arr = [
-				["display-text", () => "<h3>CURRENCY</h3><br>Your best coins is <b>" + format(player.stats[index].best) + "</b><br>You have <b>" + format(player.stats[index].total) + "</b> coins total<br>" + (index === 0 ? "You have <b>" + formatWhole(player.G.points) + "</b> gems<br>" : "") + (index === 1 ? "Your best gems is <b>" + formatWhole(player.G.best) + "</b><br>" : "") + (index === 2 ? "Your best gems is <b>" + formatWhole(player.bestGems) + "</b>" : "")],
+		for (let index = 0; index < statName.length; index++) {
+			tabs[statName[index]] = {content: [
+				["display-text", () => "<h3>CURRENCY</h3><br>Your best coins is <b>" + format(player.stats[index].best) + "</b><br>You have generated <b>" + format(player.stats[index].total) + "</b> coins<br>" + (index === 0 ? "You have <b>" + formatWhole(player.G.points) + "</b> gems" : "Your best gems is <b>" + formatWhole(index === 2 ? player.bestGems : player.G.best) + "</b>") + "<br>"],
 				"blank",
 				["display-text", () => "<h3>CLICKS</h3><br>Your best coins/click is <b>" + format(player.G.stats[index].bestClickValue) + "</b><br>You have <b>" + format(player.G.stats[index].bestTotalClickValue) + "</b> coins earned from clicking total<br>" + (index === 0 ? "You have clicked <b>" + formatWhole(player.G.clickTimes) + "</b> times<br>" : "Your best times clicked is <b>" + formatWhole(player.G.stats[index].bestClickTimes) + "</b><br>You have clicked <b>" + formatWhole(player.G.stats[index].totalClickTimes) + "</b> times total")],
 				"blank",
@@ -1062,11 +1073,8 @@ addLayer("S", {
 				"blank",
 				["display-text", () => "<h3>SPELLS</h3><br>You have cast 'tax collection' <b>" + formatWhole(player.M.stats[index].taxCasts) + "</b> times<br>You have cast 'call to arms' <b>" + formatWhole(player.M.stats[index].callCasts) + "</b> times<br>You have cast 'holy light' <b>" + formatWhole(player.M.stats[index].holyCasts) + "</b> times<br>You have cast 'blood frenzy' <b>" + formatWhole(player.M.stats[index].frenzyCasts) + "</b> times<br>"],
 				"blank",
-			];
-			if (index === 0) arr.push(["display-text", () => "<h3>OTHER</h3><br>You have spent <b>" + formatTime(player.G.resetTime) + "</b> in this era"]);
-			else if (index === 1) arr.push(["display-text", () => "<h3>OTHER</h3><br>You have spent <b>" + formatTime(player.timePlayed) + "</b> in this reincarnation"]);
-			else if (index === 2) arr.push(["display-text", () => "<h3>OTHER</h3><br>You have spent <b>" + formatTime(player.timePlayed) + "</b> playing total"]);
-			tabs[statNames[index]] = {content: arr};
+				["display-text", () => "<h3>OTHER</h3><br>You have spent <b>" + formatTime(player.G.resetTime) + "</b>"],
+			]};
 		};
 		return tabs;
 	})(),

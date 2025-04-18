@@ -48,8 +48,8 @@ function getNextAt(layer, canMax = false, useType = null) {
 		return new Decimal(Infinity);
 	} else if (type == "static") {
 		if (!tmp[layer].canBuyMax) canMax = false;
-		let amt = player[layer].points.add(canMax && tmp[layer].baseAmount.gte(tmp[layer].nextAt) ? tmp[layer].resetGain : 0).div(tmp[layer].directMult);
-		let extraCost = Decimal.pow(tmp[layer].base, amt.pow(tmp[layer].exponent).div(tmp[layer].gainExp)).mul(tmp[layer].gainMult);
+		const amt = player[layer].points.add(canMax && tmp[layer].baseAmount.gte(tmp[layer].nextAt) ? tmp[layer].resetGain : 0).div(tmp[layer].directMult);
+		const extraCost = Decimal.pow(tmp[layer].base, amt.pow(tmp[layer].exponent).div(tmp[layer].gainExp)).mul(tmp[layer].gainMult);
 		let cost = extraCost.mul(tmp[layer].requires).max(tmp[layer].requires);
 		if (tmp[layer].roundUpCost) cost = cost.ceil();
 		return cost;
