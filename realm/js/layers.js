@@ -10,7 +10,7 @@ const creationName = ["Soil", "Rocks", "Grass"];
 
 const creationBulkCost = [];
 
-const creationTierReq = [10, 25, 50, 100, 250, 500, 1_000, 2_500];
+const creationTierReq = [10, 32, 100, 320, 1_000, 3_200];
 
 const creationTierEff = [
 	[0.05, 0.1, 0.2, 0.4, 0.65, 1, 1.5],
@@ -19,9 +19,9 @@ const creationTierEff = [
 ];
 
 const creationTierCost = [
-	[250, 1_000, 5_000, 25_000, 100_000, 5_000_000, 200_000_000],
-	[5_000, 25_000, 100_000, 1_000_000, 20_000_000],
-	[100_000, 1_000_000, 10_000_000],
+	[100, 1_000, 20_000, 400_000, 400_000_000],
+	[5_000, 50_000, 1_000_000, 20_000_000],
+	[100_000, 1_000_000, 20_000_000],
 ];
 
 function getCreationTierUpgradeDesc(id) {
@@ -38,9 +38,9 @@ function getCreationBulk() {
 	return +(getClickableState("C", 11) || 1);
 };
 
-function getCreationCost(amount, mult = 1) {
+function getCreationCost(amount, mult = 1, bulk = getCreationBulk()) {
 	const start = amount;
-	const end = start.add(getCreationBulk());
+	const end = start.add(bulk - 1);
 	const scale = new Decimal(50);
 	const a = scale.add(start); // scaled start
 	const b = scale.add(end); // scaled end
@@ -75,6 +75,7 @@ addLayer("C", {
 		player.G.stats.forEach(obj => obj.bestCreations = obj.bestCreations.max(player.C.points));
 		player.C.tiers = getBuyableAmount("C", 111).add(getBuyableAmount("C", 112)).add(getBuyableAmount("C", 113)).add(3);
 	},
+	shouldNotify() {return tmp.C.buyables[111].canBuy || tmp.C.buyables[112].canBuy || tmp.C.buyables[113].canBuy},
 	tabFormat: [
 		"clickables",
 		"blank",
