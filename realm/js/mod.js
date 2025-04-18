@@ -16,9 +16,13 @@ const VERSION = {
 const changelog = `<h1>Changelog:</h1><br>
 	<br><h3>v0.5 - In Development</h3><br>
 		- Massive internal rework.<br>
+		- Creations now have their own layer.<br>
+		- Creation tier series are now buyables.<br>
+		- Added 3 new creation tiers.<br>
+		- Various balancing changes.<br>
 		- ALL OLD SAVE DATA IS REMOVED.<br>
 	<br><h3>v0.4 - Super Beta</h3><br>
-		- Added 2 new creation tiers.<br>	
+		- Added 2 new creation tiers.<br>
 		- Added 3 gem power upgrades.<br>
 		- Added 4 mana upgrades.<br>
 		- Added 3 autocating upgrades.<br>
