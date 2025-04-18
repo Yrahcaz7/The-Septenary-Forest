@@ -1050,7 +1050,7 @@ addLayer("S", {
 			tabs[statName[index]] = {content: [
 				["display-text", "<h2>" + statName[index].toUpperCase() + "</h2>"],
 				"blank",
-				"h-line",
+				["h-line", "calc(100% - 12px)"],
 				"blank",
 				["display-text", () => "<h3>CURRENCY</h3><br>Your best coins is <b>" + format(player.stats[index].best) + "</b><br>You have generated <b>" + format(player.stats[index].total) + "</b> coins<br>" + (index === 0 ? "You have <b>" + formatWhole(player.G.points) + "</b> gems" : "Your best gems is <b>" + formatWhole(index === 2 ? player.bestGems : player.G.best) + "</b>")],
 				"blank",

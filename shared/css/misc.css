@@ -63,10 +63,12 @@
 
 /* Horizontal/vertical lines */
 .vl {
+	box-sizing: border-box;
 	border-left: 3px solid var(--color);
 	height: 100%;
 }
 
 .hl {
+	box-sizing: border-box;
 	border-top: 3px solid var(--color);
 }
