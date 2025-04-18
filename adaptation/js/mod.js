@@ -1,5 +1,5 @@
 const modInfo = {
-	name: "Adaptation Tree",
+	name: "The Adaptation Tree",
 	id: "adaptation-tree-yrahcaz7",
 	author: "Yrahcaz7",
 	pointsName: "power",

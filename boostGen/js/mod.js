@@ -1,5 +1,5 @@
 const modInfo = {
-	name: "Booster-Generator Tree",
+	name: "The Booster-Generator Tree",
 	id: "booster-generator-tree-yrahcaz7",
 	author: "Yrahcaz7",
 	pointsName: "points",
