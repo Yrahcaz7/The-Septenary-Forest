@@ -1,4 +1,4 @@
-let layers = {};
+const layers = {};
 
 function newDecimalZero() {
 	return new Decimal(Decimal.dZero);
@@ -21,14 +21,15 @@ let maxRow = 0;
 function updateHotkeys() {
 	hotkeys = {};
 	for (const layer in layers) {
-		hk = layers[layer].hotkeys;
+		const hk = layers[layer].hotkeys;
 		if (hk) {
 			for (const id in hk) {
 				hotkeys[hk[id].key] = hk[id];
 				hotkeys[hk[id].key].layer = layer;
 				hotkeys[hk[id].key].id = id;
-				if (hk[id].unlocked === undefined)
+				if (hk[id].unlocked === undefined) {
 					hk[id].unlocked = true;
+				};
 			};
 		};
 	};
@@ -58,7 +59,7 @@ function updateLayers() {
 			TREE_LAYERS[row][layer] = TREE_LAYERS[row][layer].layer;
 		};
 	};
-	let treeLayers = [];
+	const treeLayers = [];
 	for (x = 0; x < maxRow + 1; x++) {
 		if (TREE_LAYERS[x]) treeLayers.push(TREE_LAYERS[x]);
 	};
@@ -179,7 +180,7 @@ function setupLayer(layer) {
 		};
 	};
 	if (layers[layer].startData) {
-		data = layers[layer].startData();
+		const data = layers[layer].startData();
 		if (data.best !== undefined && data.showBest === undefined) layers[layer].showBest = true;
 		if (data.total !== undefined && data.showTotal === undefined) layers[layer].showTotal = true;
 	};

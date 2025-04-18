@@ -40,7 +40,7 @@ function startPlayerBase() {
 };
 
 function getStartPlayer() {
-	let playerData = startPlayerBase();
+	const playerData = startPlayerBase();
 	if (typeof addedPlayerData === "function") {
 		const extraData = addedPlayerData();
 		for (const thing in extraData) {
@@ -71,29 +71,29 @@ function getStartPlayer() {
 };
 
 function getStartLayerData(layer) {
-	let layerdata = {};
-	if (layers[layer].startData) layerdata = layers[layer].startData();
-	if (layerdata.unlocked === undefined) layerdata.unlocked = true;
-	if (layerdata.total === undefined) layerdata.total = newDecimalZero();
-	if (layerdata.best === undefined) layerdata.best = newDecimalZero();
-	if (layerdata.resetTime === undefined) layerdata.resetTime = 0;
-	if (layerdata.forceTooltip === undefined) layerdata.forceTooltip = false;
-	layerdata.buyables = getStartBuyables(layer);
-	if (layerdata.noRespecConfirm === undefined) layerdata.noRespecConfirm = false;
-	if (layerdata.clickables == undefined) layerdata.clickables = getStartClickables(layer);
-	layerdata.spentOnBuyables = newDecimalZero();
-	layerdata.upgrades = [];
-	layerdata.milestones = [];
-	layerdata.lastMilestone = null;
-	layerdata.achievements = [];
-	layerdata.challenges = getStartChallenges(layer);
-	layerdata.grid = getStartGrid(layer);
-	layerdata.prevTab = "";
-	return layerdata;
+	let layerData = {};
+	if (layers[layer].startData) layerData = layers[layer].startData();
+	if (layerData.unlocked === undefined) layerData.unlocked = true;
+	if (layerData.total === undefined) layerData.total = newDecimalZero();
+	if (layerData.best === undefined) layerData.best = newDecimalZero();
+	if (layerData.resetTime === undefined) layerData.resetTime = 0;
+	if (layerData.forceTooltip === undefined) layerData.forceTooltip = false;
+	layerData.buyables = getStartBuyables(layer);
+	if (layerData.noRespecConfirm === undefined) layerData.noRespecConfirm = false;
+	if (layerData.clickables === undefined) layerData.clickables = getStartClickables(layer);
+	layerData.spentOnBuyables = newDecimalZero();
+	layerData.upgrades = [];
+	layerData.milestones = [];
+	layerData.lastMilestone = null;
+	layerData.achievements = [];
+	layerData.challenges = getStartChallenges(layer);
+	layerData.grid = getStartGrid(layer);
+	layerData.prevTab = "";
+	return layerData;
 };
 
 function getStartBuyables(layer) {
-	let data = {};
+	const data = {};
 	if (layers[layer].buyables) {
 		for (const id in layers[layer].buyables) {
 			if (isPlainObject(layers[layer].buyables[id])) data[id] = newDecimalZero();
@@ -103,7 +103,7 @@ function getStartBuyables(layer) {
 };
 
 function getStartClickables(layer) {
-	let data = {};
+	const data = {};
 	if (layers[layer].clickables) {
 		for (const id in layers[layer].clickables) {
 			if (isPlainObject(layers[layer].clickables[id])) data[id] = "";
@@ -113,7 +113,7 @@ function getStartClickables(layer) {
 };
 
 function getStartChallenges(layer) {
-	let data = {};
+	const data = {};
 	if (layers[layer].challenges) {
 		for (const id in layers[layer].challenges) {
 			if (isPlainObject(layers[layer].challenges[id])) data[id] = 0;
@@ -123,7 +123,7 @@ function getStartChallenges(layer) {
 };
 
 function getStartGrid(layer) {
-	let data = {};
+	const data = {};
 	if (!layers[layer].grid) return data;
 	if (layers[layer].grid.maxRows === undefined) layers[layer].grid.maxRows = layers[layer].grid.rows;
 	if (layers[layer].grid.maxCols === undefined) layers[layer].grid.maxCols = layers[layer].grid.cols;
@@ -136,8 +136,7 @@ function getStartGrid(layer) {
 };
 
 function fixSave() {
-	let defaultData = getStartPlayer();
-	fixData(defaultData, player);
+	fixData(getStartPlayer(), player);
 	for (const layer in layers) {
 		if (player[layer].best !== undefined) player[layer].best = new Decimal(player[layer].best);
 		if (player[layer].total !== undefined) player[layer].total = new Decimal(player[layer].total);
@@ -238,7 +237,7 @@ function exportSave() {
 	el.value = btoa(JSON.stringify(player));
 	document.body.appendChild(el);
 	el.select();
-	el.setSelectionRange(0, 99999);
+	el.setSelectionRange(0, 999999);
 	document.execCommand("copy");
 	document.body.removeChild(el);
 };
@@ -246,7 +245,7 @@ function exportSave() {
 function importSave(imported = undefined, forced = false) {
 	if (imported === undefined) imported = prompt("Paste your save here");
 	try {
-		let tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(imported)));
+		const tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(imported)));
 		if (tempPlr.versionType != getModID() && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")) {
 			return; // Wrong save. Use "Forced" to force it to accept.
 		};

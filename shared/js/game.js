@@ -120,7 +120,7 @@ function rowReset(row, layer) {
 };
 
 function layerDataReset(layer, keep = []) {
-	let storedData = {unlocked: player[layer].unlocked, forceTooltip: player[layer].forceTooltip, noRespecConfirm: player[layer].noRespecConfirm, prevTab: player[layer].prevTab} // Always keep these
+	const storedData = {unlocked: player[layer].unlocked, forceTooltip: player[layer].forceTooltip, noRespecConfirm: player[layer].noRespecConfirm, prevTab: player[layer].prevTab} // Always keep these
 	for (const thing in keep) {
 		if (player[layer][keep[thing]] !== undefined) {
 			storedData[keep[thing]] = player[layer][keep[thing]];
@@ -197,13 +197,10 @@ function doReset(layer, force = false, overrideResetsNothing = false) {
 };
 
 function resetRow(row) {
-	if (prompt('Are you sure you want to reset this row? It is highly recommended that you wait until the end of your current run before doing this! Type "I WANT TO RESET THIS" to confirm') != "I WANT TO RESET THIS") return;
-	let pre_layers = ROW_LAYERS[row - 1];
-	let layers = ROW_LAYERS[row];
-	let post_layers = ROW_LAYERS[row + 1];
-	rowReset(row + 1, post_layers[0]);
-	doReset(pre_layers[0], true);
-	for (const layer in layers) {
+	if (prompt('Are you sure you want to reset this row? It is highly recommended that you wait until the end of your current run before doing this! Type "I WANT TO RESET THIS" to confirm') !== "I WANT TO RESET THIS") return;
+	rowReset(row + 1, ROW_LAYERS[row + 1][0]);
+	doReset(ROW_LAYERS[row - 1][0], true);
+	for (const layer in ROW_LAYERS[row]) {
 		player[layer].unlocked = false;
 		if (player[layer].unlockOrder) player[layer].unlockOrder = 0;
 	};
@@ -343,12 +340,12 @@ function hardReset(resetOptions = false) {
 
 let ticking = false;
 
-let interval = setInterval(() => {
+const INTERVAL = setInterval(() => {
 	if (player === undefined || tmp === undefined || ticking || (tmp.gameEnded && !player.keepGoing)) return;
 	ticking = true;
-	let now = Date.now();
+	const now = Date.now();
 	let diff = (now - player.time) / 1e3;
-	let trueDiff = diff;
+	const trueDiff = diff;
 	if (player.offTime !== undefined) {
 		if (player.offTime.remain > modInfo.offlineLimit * 3600) player.offTime.remain = modInfo.offlineLimit * 3600;
 		if (player.offTime.remain > 0) {

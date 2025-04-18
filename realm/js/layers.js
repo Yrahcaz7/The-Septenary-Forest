@@ -898,7 +898,7 @@ addLayer("G", {
 	prestigeNotify() {return !tmp.G.passiveGeneration && tmp.G.canReset === true && tmp.G.resetGain.gte(player.G.points.add(100).div(2))},
 	prestigeButtonText() {
 		let text = "Abdicate for +<b>" + formatWhole(tmp.G.resetGain) + "</b> gem" + (tmp.G.resetGain instanceof Decimal && tmp.G.resetGain.eq(1) ? "" : "s");
-		if (tmp.G.resetGain.exponent <= Number.MAX_SAFE_INTEGER) {
+		if (tmp.G.resetGain instanceof Decimal && tmp.G.resetGain.lt("1e10000")) {
 			text += "<br><br>";
 			const roundFactor = Decimal.pow(10, tmp.G.resetGain.max(10).log10().sub(1).floor());
 			const targetValue = tmp.G.resetGain.div(roundFactor).add(1).floor().mul(roundFactor);
@@ -1041,9 +1041,6 @@ addLayer("S", {
 	symbol: "S",
 	row: "side",
 	position: 0,
-	startData() { return {
-		unlocked: true,
-	}},
 	color: "#66DD66",
 	type: "none",
 	layerShown() {return true},
@@ -1053,7 +1050,11 @@ addLayer("S", {
 		let tabs = {};
 		for (let index = 0; index < statName.length; index++) {
 			tabs[statName[index]] = {content: [
-				["display-text", () => "<h3>CURRENCY</h3><br>Your best coins is <b>" + format(player.stats[index].best) + "</b><br>You have generated <b>" + format(player.stats[index].total) + "</b> coins<br>" + (index === 0 ? "You have <b>" + formatWhole(player.G.points) + "</b> gems" : "Your best gems is <b>" + formatWhole(index === 2 ? player.bestGems : player.G.best) + "</b>") + "<br>"],
+				["display-text", "<h2>" + statName[index].toUpperCase() + "</h2>"],
+				"blank",
+				"h-line",
+				"blank",
+				["display-text", () => "<h3>CURRENCY</h3><br>Your best coins is <b>" + format(player.stats[index].best) + "</b><br>You have generated <b>" + format(player.stats[index].total) + "</b> coins<br>" + (index === 0 ? "You have <b>" + formatWhole(player.G.points) + "</b> gems" : "Your best gems is <b>" + formatWhole(index === 2 ? player.bestGems : player.G.best) + "</b>")],
 				"blank",
 				["display-text", () => "<h3>CLICKS</h3><br>Your best coins/click is <b>" + format(player.G.stats[index].bestClickValue) + "</b><br>You have generated <b>" + format(player.G.stats[index].bestTotalClickValue) + "</b> coins from clicking<br>" + (index === 0 ? "You have clicked <b>" + formatWhole(player.G.clickTimes) + "</b> times<br>" : "Your best times clicked is <b>" + formatWhole(player.G.stats[index].bestClickTimes) + "</b><br>You have clicked <b>" + formatWhole(player.G.stats[index].totalClickTimes) + "</b> times")],
 				"blank",
