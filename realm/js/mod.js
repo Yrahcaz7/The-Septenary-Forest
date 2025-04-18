@@ -65,29 +65,29 @@ function getRandInt(min, max) {
 };
 
 function taxCast(amt = newDecimalOne()) {
-	player.M.mana = player.M.mana.sub(player.M.taxCost.mul(amt));
+	player.M.mana = player.M.mana.sub(getSpellCost(0).mul(amt));
 	player.M.stats.forEach(obj => obj.casts[0] = obj.casts[0].add(amt));
-	const gain = getPointGen().mul(player.M.taxEff.mul(amt));
+	const gain = getPointGen().mul(clickableEffect("M", 11).mul(amt));
 	player.points = player.points.add(gain);
 	player.stats.forEach(obj => obj.total = obj.total.add(gain));
 };
 
 function callCast() {
-	player.M.callTime = new Decimal(30);
-	player.M.mana = player.M.mana.sub(player.M.callCost);
+	player.M.spellTimes[1] = new Decimal(30);
+	player.M.mana = player.M.mana.sub(getSpellCost(1));
 	player.M.stats.forEach(obj => obj.casts[1] = obj.casts[1].add(1));
-	setClickableState("M", 12, "ON");
+	setClickableState("M", 12, true);
 };
 
 function sideSpellCast() {
-	player.M.sideSpellTime = new Decimal(15);
-	player.M.mana = player.M.mana.sub(player.M.sideSpellCost);
+	player.M.spellTimes[2] = new Decimal(15);
+	player.M.mana = player.M.mana.sub(getSpellCost(2));
 	if (hasUpgrade("F", 11)) {
 		player.M.stats.forEach(obj => obj.casts[2] = obj.casts[2].add(1));
 	} else if (hasUpgrade("F", 21)) {
 		player.M.stats.forEach(obj => obj.casts[3] = obj.casts[3].add(1));
 	};
-	setClickableState("M", 13, "ON");
+	setClickableState("M", 13, true);
 };
 
 function getPointGen() {
@@ -104,8 +104,8 @@ function getPointGen() {
 	if (hasUpgrade("F", 1073)) gain = gain.mul(upgradeEffect("F", 1073));
 	if (hasUpgrade("F", 1081)) gain = gain.mul(upgradeEffect("F", 1081));
 	gain = gain.mul(tmp.G.effect);
-	if (getClickableState("M", 12) == "ON") gain = gain.mul(clickableEffect("M", 12));
-	if (hasUpgrade("F", 21) && getClickableState("M", 13) == "ON") gain = gain.mul(clickableEffect("M", 13));
+	if (getClickableState("M", 12)) gain = gain.mul(clickableEffect("M", 12));
+	if (hasUpgrade("F", 21) && getClickableState("M", 13)) gain = gain.mul(clickableEffect("M", 13));
 	return gain;
 };
 

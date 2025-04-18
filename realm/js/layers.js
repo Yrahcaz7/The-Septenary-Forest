@@ -216,6 +216,14 @@ function getManaTabStartingStats() { return {
 	casts: [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()],
 }};
 
+const autocastTier = ["OFF", "primary - ON", "secondary - ON", "ternary - ON"];
+
+function getSpellCost(index) {
+	let cost = new Decimal([80, 160, 120][index]);
+	if (hasUpgrade("F", 1152)) cost = cost.mul(3);
+	return cost;
+};
+
 addLayer("M", {
 	name: "Mana",
 	symbol: "M",
@@ -226,14 +234,7 @@ addLayer("M", {
 		mana: newDecimalZero(),
 		maxMana: new Decimal(100),
 		manaRegen: new Decimal(2.5),
-		taxEff: new Decimal(30),
-		taxCost: new Decimal(80),
-		callBoost: newDecimalOne(),
-		callTime: newDecimalZero(),
-		callCost: new Decimal(160),
-		sideSpellBoost: newDecimalOne(),
-		sideSpellTime: newDecimalZero(),
-		sideSpellCost: new Decimal(120),
+		spellTimes: [newDecimalZero(), newDecimalZero(), newDecimalZero()],
 		stats: [getManaTabStartingStats(), getManaTabStartingStats(), getManaTabStartingStats()],
 	}},
 	color: "#AA55AA",
@@ -243,30 +244,6 @@ addLayer("M", {
 	tooltip() {return format(player.M.mana) + "/" + format(player.M.maxMana) + " mana"},
 	doReset(resettingLayer) {},
 	update(diff) {
-		// spell boosts
-		let taxEff = new Decimal(30);
-		if (hasUpgrade("F", 1162)) taxEff = taxEff.add(30);
-		if (hasUpgrade("F", 1152)) taxEff = taxEff.mul(2);
-		let callBoost = newDecimalOne();
-		if (hasUpgrade("F", 1152)) callBoost = callBoost.mul(2);
-		let sideSpellBoost = newDecimalOne();
-		if (hasUpgrade("F", 1152)) sideSpellBoost = sideSpellBoost.mul(2);
-		if (hasUpgrade("F", 1082)) sideSpellBoost = sideSpellBoost.mul(upgradeEffect("F", 1082));
-		// return spell boost effects
-		player.M.taxEff = taxEff;
-		player.M.callBoost = callBoost;
-		player.M.sideSpellBoost = sideSpellBoost;
-		// spell costs
-		let taxCost = new Decimal(80);
-		if (hasUpgrade("F", 1152)) taxCost = taxCost.mul(3);
-		let callCost = new Decimal(160);
-		if (hasUpgrade("F", 1152)) callCost = callCost.mul(3);
-		let sideSpellCost = new Decimal(120);
-		if (hasUpgrade("F", 1152)) sideSpellCost = sideSpellCost.mul(3);
-		// return spell cost
-		player.M.taxCost = taxCost;
-		player.M.callCost = callCost;
-		player.M.sideSpellCost = sideSpellCost;
 		// mana regen buffs
 		let manaRegen = new Decimal(2.5);
 		if (hasUpgrade("M", 12) && upgradeEffect("M", 12).gt(0)) manaRegen = manaRegen.add(upgradeEffect("M", 12));
@@ -299,38 +276,37 @@ addLayer("M", {
 		player.M.stats.forEach(obj => obj.maxMana = obj.maxMana.max(player.M.maxMana));
 		player.M.stats.forEach(obj => obj.manaRegen = obj.manaRegen.max(player.M.manaRegen));
 		// spell time
-		if (getClickableState("M", 12) == "ON") player.M.callTime = player.M.callTime.sub(diff);
-		if (getClickableState("M", 13) == "ON") player.M.sideSpellTime = player.M.sideSpellTime.sub(diff);
-		// spell done time
-		if (player.M.callTime.lte(0)) {
-			setClickableState("M", 12, "OFF");
-			player.M.callTime = newDecimalZero();
-		};
-		if (player.M.sideSpellTime.lte(0)) {
-			setClickableState("M", 13, "OFF");
-			player.M.sideSpellTime = newDecimalZero();
+		for (let index = 1; index < player.M.spellTimes.length; index++) {
+			if (getClickableState("M", index + 11)) {
+				player.M.spellTimes[index] = player.M.spellTimes[index].sub(diff);
+			};
+			if (player.M.spellTimes[index].lte(0)) {
+				setClickableState("M", index + 11, false);
+				player.M.spellTimes[index] = newDecimalZero();
+			};
 		};
 		// primary autocasting
-		if (player.M.callTime.lte(0) && player.M.mana.gte(player.M.callCost)) {
-			if (getClickableState("M", 102) == "primary - ON") {
+		if (player.M.spellTimes[1].lte(0) && player.M.mana.gte(getSpellCost(1))) {
+			if (getClickableState("M", 102) === 1) {
 				callCast();
-			} else if (getClickableState("M", 102) == "ternary - ON" && player.M.mana.gte(player.M.maxMana.div(2))) {
+			} else if (getClickableState("M", 102) === 3 && player.M.mana.gte(player.M.maxMana.div(2))) {
 				callCast();
 			};
 		};
-		if (player.M.sideSpellTime.lte(0) && player.M.mana.gte(player.M.sideSpellCost)) {
-			if (getClickableState("M", 103) == "primary - ON") {
+		if (player.M.spellTimes[2].lte(0) && player.M.mana.gte(getSpellCost(2))) {
+			if (getClickableState("M", 103) === 1) {
 				sideSpellCast();
-			} else if (getClickableState("M", 103) == "ternary - ON" && player.M.mana.gte(player.M.maxMana.div(2))) {
+			} else if (getClickableState("M", 103) === 3 && player.M.mana.gte(player.M.maxMana.div(2))) {
 				sideSpellCast();
 			};
 		};
 		// secondary autocasting
-		if ((player.M.callTime.gt(0) || getClickableState("M", 102) == "OFF") && (player.M.sideSpellTime.gt(0) || getClickableState("M", 103) == "OFF") && player.M.mana.gte(player.M.taxCost)) {
-			if (getClickableState("M", 101) == "secondary - ON") {
-				taxCast(player.M.mana.div(player.M.taxCost).floor());
-			} else if (getClickableState("M", 101) == "ternary - ON" && player.M.mana.gte(player.M.maxMana.div(2))) {
-				taxCast(player.M.mana.sub(player.M.maxMana.div(2)).div(player.M.taxCost).floor());
+		const taxCost = getSpellCost(0);
+		if ((player.M.spellTimes[1].gt(0) || !getClickableState("M", 102)) && (player.M.spellTimes[2].gt(0) || !getClickableState("M", 103)) && player.M.mana.gte(taxCost)) {
+			if (getClickableState("M", 101) === 2) {
+				taxCast(player.M.mana.div(taxCost).floor());
+			} else if (getClickableState("M", 101) === 3 && player.M.mana.gte(player.M.maxMana.div(2))) {
+				taxCast(player.M.mana.sub(player.M.maxMana.div(2)).div(taxCost).floor());
 			};
 		};
 	},
@@ -356,19 +332,29 @@ addLayer("M", {
 	clickables: {
 		11: {
 			title: "<span style='color: #000000'>Tax Collection</span>",
-			display() { return '<span style="color: #000000">get coins equal to ' + formatWhole(player.M.taxEff) + ' seconds of coins/sec<br><br>Effect: +' + format(getPointGen().mul(player.M.taxEff)) + '<br><br>Cost: ' + formatWhole(player.M.taxCost) + ' mana</span>' },
-			canClick() { if (player.M.mana.gte(player.M.taxCost)) return true },
+			display() { return '<span style="color: #000000">get coins equal to ' + formatWhole(clickableEffect("M", this.id)) + ' seconds of coins/sec<br><br>Effect: +' + format(tmp.pointGen.mul(clickableEffect("M", this.id))) + '<br><br>Cost: ' + formatWhole(getSpellCost(this.id - 11)) + ' mana</span>' },
+			effect() {
+				let eff = new Decimal(30);
+				if (hasUpgrade("F", 1162)) eff = eff.add(30);
+				if (hasUpgrade("F", 1152)) eff = eff.mul(2);
+				return eff;
+			},
+			canClick() { if (player.M.mana.gte(getSpellCost(this.id - 11))) return true },
 			onClick: taxCast,
 			color: "#CCCCCC",
 			style: {height: "125px"},
 		},
 		12: {
 			title: "<span style='color: #000000'>Call to Arms</span>",
-			display() { return '<span style="color: #000000">boost all production based on your creations for 30 seconds<br>Time left: ' + format(player.M.callTime) + 's<br><br>Effect: x' + format(clickableEffect("M", this.id)) + '<br><br>Cost: ' + formatWhole(player.M.callCost) + ' mana' },
-			effect() { return player.C.points.add(1).pow(0.15).mul(player.M.callBoost)},
+			display() { return '<span style="color: #000000">boost all production based on your creations for 30 seconds<br>Time left: ' + format(player.M.spellTimes[1]) + 's<br><br>Effect: x' + format(clickableEffect("M", this.id)) + '<br><br>Cost: ' + formatWhole(getSpellCost(this.id - 11)) + ' mana' },
+			effect() {
+				let eff = player.C.points.add(1).pow(0.15);
+				if (hasUpgrade("F", 1152)) eff = eff.mul(2);
+				return eff;
+			},
 			canClick() {
-				if (getClickableState("M", this.id) == "ON") return false;
-				if (player.M.mana.gte(player.M.callCost)) return true;
+				if (getClickableState("M", this.id)) return false;
+				if (player.M.mana.gte(getSpellCost(this.id - 11))) return true;
 				return false;
 			},
 			onClick: callCast,
@@ -382,14 +368,19 @@ addLayer("M", {
 				return "CHOOSE A SIDE TO UNLOCK";
 			},
 			display() {
-				if (hasUpgrade("F", 11)) return "boost coins/click based on your mana for 15 seconds<br>Time left: " + format(player.M.sideSpellTime) + "s<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(player.M.sideSpellCost) + " mana";
-				if (hasUpgrade("F", 21)) return "boost coins/sec based on your mana for 15 seconds<br>Time left: " + format(player.M.sideSpellTime) + "s<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(player.M.sideSpellCost) + " mana";
+				if (hasUpgrade("F", 11)) return "boost coins/click based on your mana for 15 seconds<br>Time left: " + format(player.M.spellTimes[2]) + "s<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana";
+				if (hasUpgrade("F", 21)) return "boost coins/sec based on your mana for 15 seconds<br>Time left: " + format(player.M.spellTimes[2]) + "s<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana";
 				return "";
 			},
-			effect() { return player.M.mana.add(1).pow(0.25).mul(player.M.sideSpellBoost) },
+			effect() {
+				let eff = player.M.mana.add(1).pow(0.25);
+				if (hasUpgrade("F", 1152)) eff = eff.mul(2);
+				if (hasUpgrade("F", 1082)) eff = eff.mul(upgradeEffect("F", 1082));
+				return eff;
+			},
 			canClick() {
-				if (getClickableState("M", this.id) == "ON") return false;
-				if (player.M.mana.gte(player.M.sideSpellCost) && hasChosenSide()) return true;
+				if (getClickableState("M", this.id)) return false;
+				if (player.M.mana.gte(getSpellCost(this.id - 11)) && hasChosenSide()) return true;
 				return false;
 			},
 			onClick: sideSpellCast,
@@ -402,18 +393,18 @@ addLayer("M", {
 		101: {
 			title: "Autocasting",
 			display() {
-				if (hasUpgrade("M", 102)) return getClickableState(this.layer, this.id) || "OFF";
+				if (hasUpgrade("M", 102)) return autocastTier[getClickableState(this.layer, this.id) || 0];
 				return "LOCKED - need better autocasting";
 			},
 			canClick() { return hasUpgrade("M", 102) },
 			onClick() {
-				if (getClickableState(this.layer, this.id) == "ternary - ON") {
-					setClickableState(this.layer, this.id, "OFF");
-				} else if (getClickableState(this.layer, this.id) == "secondary - ON") {
-					if (hasUpgrade("M", 103)) setClickableState(this.layer, this.id, "ternary - ON");
-					else setClickableState(this.layer, this.id, "OFF");
+				if (getClickableState(this.layer, this.id) === 3) {
+					setClickableState(this.layer, this.id, 0);
+				} else if (getClickableState(this.layer, this.id) === 2) {
+					if (hasUpgrade("M", 103)) setClickableState(this.layer, this.id, 3);
+					else setClickableState(this.layer, this.id, 0);
 				} else {
-					setClickableState(this.layer, this.id, "secondary - ON");
+					setClickableState(this.layer, this.id, 2);
 				};
 			},
 			color: "#CCCCCC",
@@ -421,16 +412,16 @@ addLayer("M", {
 		},
 		102: {
 			title: "Autocasting",
-			display() { return getClickableState(this.layer, this.id) || "OFF" },
+			display() { return autocastTier[getClickableState(this.layer, this.id) || 0] },
 			canClick() { return true },
 			onClick() {
-				if (getClickableState(this.layer, this.id) == "ternary - ON") {
-					setClickableState(this.layer, this.id, "OFF");
-				} else if (getClickableState(this.layer, this.id) == "primary - ON") {
-					if (hasUpgrade("M", 103)) setClickableState(this.layer, this.id, "ternary - ON");
-					else setClickableState(this.layer, this.id, "OFF");
+				if (getClickableState(this.layer, this.id) === 3) {
+					setClickableState(this.layer, this.id, 0);
+				} else if (getClickableState(this.layer, this.id) === 1) {
+					if (hasUpgrade("M", 103)) setClickableState(this.layer, this.id, 3);
+					else setClickableState(this.layer, this.id, 0);
 				} else {
-					setClickableState(this.layer, this.id, "primary - ON");
+					setClickableState(this.layer, this.id, 1);
 				};
 			},
 			color: "#CCCCCC",
@@ -441,16 +432,16 @@ addLayer("M", {
 				if (hasChosenSide()) return "Autocasting";
 				return "CHOOSE A SIDE TO UNLOCK";
 			},
-			display() { if (hasChosenSide()) return getClickableState(this.layer, this.id) || "OFF" },
+			display() { if (hasChosenSide()) return autocastTier[getClickableState(this.layer, this.id) || 0] },
 			canClick() { return hasChosenSide() },
 			onClick() {
-				if (getClickableState(this.layer, this.id) == "ternary - ON") {
-					setClickableState(this.layer, this.id, "OFF");
-				} else if (getClickableState(this.layer, this.id) == "primary - ON") {
-					if (hasUpgrade("M", 103)) setClickableState(this.layer, this.id, "ternary - ON");
-					else setClickableState(this.layer, this.id, "OFF");
+				if (getClickableState(this.layer, this.id) === 3) {
+					setClickableState(this.layer, this.id, 0);
+				} else if (getClickableState(this.layer, this.id) === 1) {
+					if (hasUpgrade("M", 103)) setClickableState(this.layer, this.id, 3);
+					else setClickableState(this.layer, this.id, 0);
 				} else {
-					setClickableState(this.layer, this.id, "primary - ON");
+					setClickableState(this.layer, this.id, 1);
 				};
 			},
 			color() {
@@ -948,8 +939,8 @@ addLayer("G", {
 		if (hasUpgrade("F", 1043)) clickGain = clickGain.mul(upgradeEffect("F", 1043));
 		if (hasUpgrade("F", 1153)) clickGain = clickGain.mul(upgradeEffect("F", 1153));
 		clickGain = clickGain.mul(tmp.G.effect);
-		if (getClickableState("M", 12) == "ON") clickGain = clickGain.mul(clickableEffect("M", 12));
-		if (hasUpgrade("F", 11) && getClickableState("M", 13) == "ON") clickGain = clickGain.mul(clickableEffect("M", 13));
+		if (getClickableState("M", 12)) clickGain = clickGain.mul(clickableEffect("M", 12));
+		if (hasUpgrade("F", 11) && getClickableState("M", 13)) clickGain = clickGain.mul(clickableEffect("M", 13));
 		player.G.clickValue = clickGain;
 		player.G.stats.forEach(obj => obj.bestClickValue = obj.bestClickValue.max(player.G.clickValue));
 		// faction coins
@@ -1011,7 +1002,7 @@ addLayer("G", {
 				player.G.stats[2].totalClickTimes = player.G.stats[2].totalClickTimes.add(1);
 				// coins gained
 				let clickPower = player.G.clickValue;
-				if (hasUpgrade("F", 11) && getClickableState("M", 13) == "ON") clickPower = clickPower.mul(clickableEffect("M", 13));
+				if (hasUpgrade("F", 11) && getClickableState("M", 13)) clickPower = clickPower.mul(clickableEffect("M", 13));
 				player.points = player.points.add(clickPower);
 				player.stats.forEach(obj => obj.total = obj.total.add(clickPower));
 				player.G.stats.forEach(obj => obj.bestTotalClickValue = obj.bestTotalClickValue.add(clickPower));
