@@ -62,7 +62,7 @@ addLayer("C", {
 		tiers: new Decimal(3),
 		bulk: newDecimalOne(),
 	}},
-	color: "#CCCCCC",
+	color: "#C0C0C0",
 	resource: "creations",
 	type: "none",
 	layerShown() {return true},
@@ -242,7 +242,7 @@ addLayer("M", {
 		spellTimes: [newDecimalZero(), newDecimalZero(), newDecimalZero()],
 		stats: [getManaTabStartingStats(), getManaTabStartingStats(), getManaTabStartingStats()],
 	}},
-	color: "#AA55AA",
+	color: "#0080E0",
 	type: "none",
 	prestigeNotify() {return player.M.mana.gte(player.M.maxMana)},
 	layerShown() {return true},
@@ -316,23 +316,29 @@ addLayer("M", {
 		};
 	},
 	tabFormat: [
-		["display-text", "<h2>Spell Casting</h2>"],
-		"blank",
-		["clickables", [1]],
-		"blank",
-		["clickables", [10]],
-		"blank",
 		["bar", "mana"],
 		"blank",
-		["display-text", () => "<h2>Mana Upgrades</h2>"],
+		["clickables", [1]],
+		["clickables", [10]],
 		"blank",
 		["upgrades", [1]],
-		["display-text", () => "<h2>Autocasting Upgrades</h2><br>You have generated " + format(player.M.stats[2].manaTotal) + " mana in total"],
+		["display-text", () => "You have generated " + format(player.M.stats[2].manaTotal) + " mana in total"],
 		"blank",
 		["upgrades", [10]],
 	],
 	componentStyles: {
-		clickable() { return {width: "125px", "min-height": "50px", "border-radius": "25px"} },
+		clickable() { return {width: "125px", "min-height": "50px", transform: "none"} },
+	},
+	bars: {
+		mana: {
+			direction: RIGHT,
+			width: 500,
+			height: 50,
+			display() { return "You have " + format(player.M.mana) + "/" + format(player.M.maxMana) + " mana<br>(" + format(player.M.manaRegen) + "/s)" },
+			fillStyle() { return {"background-color": tmp.M.color} },
+			borderStyle() { return {"border-color": tmp.M.color} },
+			progress() { return player.M.mana.div(player.M.maxMana) },
+		},
 	},
 	clickables: {
 		11: {
@@ -346,12 +352,12 @@ addLayer("M", {
 			},
 			canClick() { if (player.M.mana.gte(getSpellCost(this.id - 11))) return true },
 			onClick: taxCast,
-			color: "#CCCCCC",
-			style: {height: "125px"},
+			color: "#C0C0C0",
+			style: {height: "125px", "border-radius": "25px 25px 0 0"},
 		},
 		12: {
 			title: "<span style='color: #000000'>Call to Arms</span>",
-			display() { return '<span style="color: #000000">boost all production based on your creations for 30 seconds<br>Time left: ' + format(player.M.spellTimes[1]) + 's<br><br>Effect: x' + format(clickableEffect("M", this.id)) + '<br><br>Cost: ' + formatWhole(getSpellCost(this.id - 11)) + ' mana' },
+			display() { return '<span style="color: #000000">boost all coin generation based on your creations for 30 seconds<br>Time left: ' + format(player.M.spellTimes[1]) + 's<br><br>Effect: x' + format(clickableEffect("M", this.id)) + '<br><br>Cost: ' + formatWhole(getSpellCost(this.id - 11)) + ' mana' },
 			effect() {
 				let eff = player.C.points.add(1).pow(0.15);
 				if (hasUpgrade("F", 1152)) eff = eff.mul(2);
@@ -363,8 +369,8 @@ addLayer("M", {
 				return false;
 			},
 			onClick: callCast,
-			color: "#CCCCCC",
-			style: {height: "125px"},
+			color: "#C0C0C0",
+			style: {height: "125px", "border-radius": "25px 25px 0 0"},
 		},
 		13: {
 			title() {
@@ -390,10 +396,10 @@ addLayer("M", {
 			},
 			onClick: sideSpellCast,
 			color() {
-				if (hasUpgrade("F", 11)) return "#0000CC";
-				if (hasUpgrade("F", 21)) return "#CC0000";
+				if (hasUpgrade("F", 11)) return tmp.F.upgrades[11].color;
+				if (hasUpgrade("F", 21)) return tmp.F.upgrades[12].color;
 			},
-			style: {height: "125px"},
+			style: {height: "125px", "border-radius": "25px 25px 0 0"},
 		},
 		101: {
 			title: "Autocasting",
@@ -412,7 +418,8 @@ addLayer("M", {
 					setClickableState(this.layer, this.id, 2);
 				};
 			},
-			color: "#CCCCCC",
+			color: "#C0C0C0",
+			style: {"border-radius": "0 0 25px 25px"},
 			unlocked() { return hasUpgrade("M", 101) },
 		},
 		102: {
@@ -429,7 +436,8 @@ addLayer("M", {
 					setClickableState(this.layer, this.id, 1);
 				};
 			},
-			color: "#CCCCCC",
+			color: "#C0C0C0",
+			style: {"border-radius": "0 0 25px 25px"},
 			unlocked() { return hasUpgrade("M", 101) },
 		},
 		103: {
@@ -450,21 +458,11 @@ addLayer("M", {
 				};
 			},
 			color() {
-				if (hasUpgrade("F", 11)) return "#0000CC";
-				if (hasUpgrade("F", 21)) return "#CC0000";
+				if (hasUpgrade("F", 11)) return tmp.F.upgrades[11].color;
+				if (hasUpgrade("F", 21)) return tmp.F.upgrades[12].color;
 			},
+			style: {"border-radius": "0 0 25px 25px"},
 			unlocked() { return hasUpgrade("M", 101) },
-		},
-	},
-	bars: {
-		mana: {
-			direction: RIGHT,
-			width: 500,
-			height: 50,
-			display() { return "You have " + format(player.M.mana) + "/" + format(player.M.maxMana) + " mana<br>(" + format(player.M.manaRegen) + "/s)" },
-			fillStyle() { return {"background-color": "#AA55AA" } },
-			borderStyle() { return {"border-color": "#AA55AA"} },
-			progress() { return player.M.mana.div(player.M.maxMana) },
 		},
 	},
 	upgrades: {
@@ -541,15 +539,13 @@ addLayer("F", {
 		for (let index = 0; index < upgrades.length; index++) {
 			if (hasUpgrade("F", upgrades[index])) return tmp.F.upgrades[upgrades[index]].color;
 		};
-		return "#CCCCCC";
+		return "#C0C0C0";
 	},
 	resource: "faction coins",
 	type: "none",
 	layerShown() {return true},
 	doReset(resettingLayer) {},
 	tabFormat: [
-		["display-text", "<h2>Faction Upgrades</h2>"],
-		"blank",
 		["row", [["upgrades", [1]], ["blank", ["17px"]], ["upgrades", [2]]]],
 		["row", [["upgrades", [3]], ["blank", ["17px"]], ["upgrades", [4]], ["blank", ["17px"]], ["upgrades", [5]]]],
 		["upgrades", [103, 104, 105, 106, 107, 108, 113, 114, 115, 116, 117, 118]],
@@ -563,63 +559,63 @@ addLayer("F", {
 			fullDisplay() { return '<h3>Proof of Good Deed</h3><br>ally yourself with the side of good, which focuses on active production<br><br>Cost: 250 coins'},
 			canAfford() { return player.points.gte(250) && !hasChosenSide() },
 			pay() { player.points = player.points.sub(250) },
-			color: "#0000CC",
-			style: {"border-color": "#0000CC"},
+			color: "#4040E0",
+			style: {"border-color": "#4040E0"},
 		},
 		21: {
 			fullDisplay() { return '<h3>Proof of Evil Deed</h3><br>ally yourself with the side of evil, which focuses on passive production<br><br>Cost: 250 coins'},
 			canAfford() { return player.points.gte(250) && !hasChosenSide() },
 			pay() { player.points = player.points.sub(250) },
-			color: "#CC0000",
-			style: {"border-color": "#CC0000"},
+			color: "#E04040",
+			style: {"border-color": "#E04040"},
 		},
 		// faction picking
 		31: {
 			fullDisplay() { return '<h3>Fairy Alliance</h3><br>ally yourself with the fairies, which focus on basic creations<br><br>Cost: 5 fairy coins'},
 			canAfford() { return player.FC[0].gte(5) && !hasChosenFaction() },
 			pay() { player.FC[0] = player.FC[0].sub(5) },
-			color: "#CC00CC",
-			style: {"border-color": "#CC00CC"},
+			color: "#C040E0",
+			style: {"border-color": "#C040E0"},
 			unlocked() { return hasUpgrade("F", 11) },
 		},
 		41: {
 			fullDisplay() { return '<h3>Elven Alliance</h3><br>ally yourself with the elves, which focus on click production<br><br>Cost: 5 elf coins'},
 			canAfford() { return player.FC[1].gte(5) && !hasChosenFaction() },
 			pay() { player.FC[1] = player.FC[1].sub(5) },
-			color: "#00CC00",
-			style: {"border-color": "#00CC00"},
+			color: "#40E040",
+			style: {"border-color": "#40E040"},
 			unlocked() { return hasUpgrade("F", 11) },
 		},
 		51: {
 			fullDisplay() { return '<h3>Angel Alliance</h3><br>ally yourself with the angels, which focus on mana and spells<br><br>Cost: 5 angel coins'},
 			canAfford() { return player.FC[2].gte(5) && !hasChosenFaction() },
 			pay() { player.FC[2] = player.FC[2].sub(5) },
-			color: "#00CCCC",
-			style: {"border-color": "#00CCCC"},
+			color: "#40C0E0",
+			style: {"border-color": "#40C0E0"},
 			unlocked() { return hasUpgrade("F", 11) },
 		},
 		32: {
 			fullDisplay() { return '<h3>Goblin Alliance</h3><br>ally yourself with the goblins, which focus on faction coins<br><br>Cost: 5 goblin coins'},
 			canAfford() { return player.FC[3].gte(5) && !hasChosenFaction() },
 			pay() { player.FC[3] = player.FC[3].sub(5) },
-			color: "#888800",
-			style: {"border-color": "#888800"},
+			color: "#C08040",
+			style: {"border-color": "#C08040"},
 			unlocked() { return hasUpgrade("F", 21) },
 		},
 		42: {
 			fullDisplay() { return '<h3>Undead Alliance</h3><br>ally yourself with the undead, which focus purely on passive production<br><br>Cost: 5 undead coins'},
 			canAfford() { return player.FC[4].gte(5) && !hasChosenFaction() },
 			pay() { player.FC[4] = player.FC[4].sub(5) },
-			color: "#8800CC",
-			style: {"border-color": "#8800CC"},
+			color: "#8040C0",
+			style: {"border-color": "#8040C0"},
 			unlocked() { return hasUpgrade("F", 21) },
 		},
 		52: {
 			fullDisplay() { return '<h3>Demon Alliance</h3><br>ally yourself with the demons, which focus on non-basic creations<br><br>Cost: 5 demon coins'},
 			canAfford() { return player.FC[5].gte(5) && !hasChosenFaction() },
 			pay() { player.FC[5] = player.FC[5].sub(5) },
-			color: "#880000",
-			style: {"border-color": "#880000"},
+			color: "#C04040",
+			style: {"border-color": "#C04040"},
 			unlocked() { return hasUpgrade("F", 21) },
 		},
 		// faction upgrades
@@ -885,7 +881,7 @@ addLayer("G", {
 			bestCreations: newDecimalZero(),
 		}, getGemsTabStartingStats(), getGemsTabStartingStats()],
 	}},
-	color: "#8888CC",
+	color: "#808080",
 	requires: new Decimal(100000),
 	resource: "gems",
 	baseResource: "total coins this era",
@@ -1043,7 +1039,7 @@ addLayer("S", {
 	symbol: "S",
 	row: "side",
 	position: 0,
-	color: "#66DD66",
+	color: "#60C060",
 	type: "none",
 	layerShown() {return true},
 	tooltip() {return "Stats"},
