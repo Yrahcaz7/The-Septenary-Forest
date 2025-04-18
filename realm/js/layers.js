@@ -302,8 +302,14 @@ addLayer("M", {
 		if (getClickableState("M", 12) == "ON") player.M.callTime = player.M.callTime.sub(diff);
 		if (getClickableState("M", 13) == "ON") player.M.sideSpellTime = player.M.sideSpellTime.sub(diff);
 		// spell done time
-		if (player.M.callTime.lte(0)) setClickableState("M", 12) == "OFF", player.M.callTime = newDecimalZero();
-		if (player.M.sideSpellTime.lte(0)) setClickableState("M", 13) == "OFF", player.M.sideSpellTime = newDecimalZero();
+		if (player.M.callTime.lte(0)) {
+			setClickableState("M", 12, "OFF");
+			player.M.callTime = newDecimalZero();
+		};
+		if (player.M.sideSpellTime.lte(0)) {
+			setClickableState("M", 13, "OFF");
+			player.M.sideSpellTime = newDecimalZero();
+		};
 		// primary autocasting
 		if (player.M.callTime.lte(0) && player.M.mana.gte(player.M.callCost)) {
 			if (getClickableState("M", 102) == "primary - ON") {
@@ -320,7 +326,7 @@ addLayer("M", {
 			};
 		};
 		// secondary autocasting
-		if (player.M.callTime.gt(0) && player.M.sideSpellTime.gt(0) && player.M.mana.gte(player.M.taxCost)) {
+		if ((player.M.callTime.gt(0) || getClickableState("M", 102) == "OFF") && (player.M.sideSpellTime.gt(0) || getClickableState("M", 103) == "OFF") && player.M.mana.gte(player.M.taxCost)) {
 			if (getClickableState("M", 101) == "secondary - ON") {
 				taxCast(player.M.mana.div(player.M.taxCost).floor());
 			} else if (getClickableState("M", 101) == "ternary - ON" && player.M.mana.gte(player.M.maxMana.div(2))) {
@@ -739,7 +745,7 @@ addLayer("F", {
 			unlocked() { return hasUpgrade("F", 1054) },
 		},
 		1152: {
-			fullDisplay() { return '<h3>Prism Upgrade</h3><br>double spell effects, but triple their mana cost<br><br>Cost: 5,000,000 coins'},
+			fullDisplay() { return '<h3>Prism Upgrade</h3><br>double all spell effects, but triple all spell mana costs<br><br>Cost: 5,000,000 coins'},
 			cost: 5000000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
