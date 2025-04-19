@@ -3,8 +3,8 @@ let options = {};
 function getStartOptions() {
 	return Vue.reactive({
 		autosave: true,
-		msDisplay: 'always',
-		theme: 'default',
+		msDisplay: "always",
+		theme: "default",
 		hqTree: false,
 		offlineProd: true,
 		hideChallenges: false,
@@ -13,6 +13,7 @@ function getStartOptions() {
 		forceTooltips: true,
 		hideMilestonePopups: false,
 		extendPlaces: false,
+		clickAnywhere: true,
 	});
 };
 
@@ -36,6 +37,7 @@ const optionGrid = [
 	], [
 		{opt: "hideMilestonePopups", text() {return "Show Milestone Popups: " + formatOpt(!options[this.opt])}, onClick: toggleOpt},
 		{opt: "extendPlaces", text() {return "Extended Decimal Places: " + formatOpt(options[this.opt])}, onClick: toggleOpt},
+		{opt: "clickAnywhere", text() {return "Click Anywhere to Generate Coins: " + formatOpt(options[this.opt])}, onClick: toggleOpt},
 	],
 ];
 
