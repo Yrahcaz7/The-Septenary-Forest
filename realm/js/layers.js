@@ -10,7 +10,7 @@ const creationName = ["Soil", "Rocks", "Grass"];
 
 const creationBulkCost = [];
 
-const creationTierReq = [10, 32, 100, 320, 1_000, 3_200];
+const creationTierReq = [10, 32, 100, 320, 1_000, 3_200, 10_000];
 
 const creationTierEff = [
 	[0.05, 0.1, 0.2, 0.4, 0.65, 1, 1.5],
@@ -65,14 +65,13 @@ addLayer("C", {
 	color: "#C0C0C0",
 	resource: "creations",
 	type: "none",
-	layerShown() {return true},
-	doReset(resettingLayer) {},
+	layerShown() { return true },
 	update(diff) {
 		player.C.points = getBuyableAmount("C", 11).add(getBuyableAmount("C", 12)).add(getBuyableAmount("C", 13));
 		player.G.stats.forEach(obj => obj.bestCreations = obj.bestCreations.max(player.C.points));
 		player.C.tiers = getBuyableAmount("C", 111).add(getBuyableAmount("C", 112)).add(getBuyableAmount("C", 113)).add(3);
 	},
-	shouldNotify() {return tmp.C.buyables[111].canBuy || tmp.C.buyables[112].canBuy || tmp.C.buyables[113].canBuy},
+	shouldNotify() { return tmp.C.buyables[111].canBuy || tmp.C.buyables[112].canBuy || tmp.C.buyables[113].canBuy },
 	tabFormat: [
 		["display-text", () => "You are bulk buying " + formatWhole(player.C.bulk) + "x creations"],
 		"blank",
@@ -214,13 +213,6 @@ addLayer("C", {
 	},
 });
 
-function getManaTabStartingStats() { return {
-	manaRegen: new Decimal(2.5),
-	manaTotal: newDecimalZero(),
-	maxMana: new Decimal(100),
-	casts: [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()],
-}};
-
 const autocastTier = ["OFF", "primary - ON", "secondary - ON", "ternary - ON"];
 
 function getSpellCost(index) {
@@ -240,14 +232,12 @@ addLayer("M", {
 		maxMana: new Decimal(100),
 		manaRegen: new Decimal(2.5),
 		spellTimes: [newDecimalZero(), newDecimalZero(), newDecimalZero()],
-		stats: [getManaTabStartingStats(), getManaTabStartingStats(), getManaTabStartingStats()],
 	}},
 	color: "#0080E0",
 	type: "none",
-	prestigeNotify() {return player.M.mana.gte(player.M.maxMana)},
-	layerShown() {return true},
-	tooltip() {return format(player.M.mana) + "/" + format(player.M.maxMana) + " mana"},
-	doReset(resettingLayer) {},
+	prestigeNotify() { return player.M.mana.gte(player.M.maxMana) },
+	layerShown() { return true },
+	tooltip() { return format(player.M.mana) + "/" + format(player.M.maxMana) + " mana" },
 	update(diff) {
 		// mana regen buffs
 		let manaRegen = new Decimal(2.5);
@@ -265,21 +255,15 @@ addLayer("M", {
 		if (hasUpgrade("G", 13)) maxMana = maxMana.mul(upgradeEffect("G", 13));
 		player.M.maxMana = maxMana;
 		// increase mana
-		let manaCapped = false;
-		let prevMana = player.M.mana;
-		const diffMana = player.M.manaRegen.mul(diff);
+		let diffMana = player.M.manaRegen.mul(diff);
 		if (player.M.mana.add(diffMana).gte(player.M.maxMana)) {
-			player.M.mana = player.M.maxMana;
-			manaCapped = true;
-		} else {
-			player.M.mana = player.M.mana.add(diffMana);
+			diffMana = player.M.maxMana.sub(player.M.mana);
 		};
-		// total mana
-		if (manaCapped) player.M.stats.forEach(obj => obj.manaTotal = obj.manaTotal.add(player.M.maxMana.sub(prevMana)));
-		else player.M.stats.forEach(obj => obj.manaTotal = obj.manaTotal.add(diffMana));
-		// best mana
-		player.M.stats.forEach(obj => obj.maxMana = obj.maxMana.max(player.M.maxMana));
-		player.M.stats.forEach(obj => obj.manaRegen = obj.manaRegen.max(player.M.manaRegen));
+		player.M.mana = player.M.mana.add(diffMana);
+		// mana stats
+		if (diffMana.gt(0)) player.stats.forEach(obj => obj.manaTotal = obj.manaTotal.add(diffMana));
+		player.stats.forEach(obj => obj.maxMana = obj.maxMana.max(player.M.maxMana));
+		player.stats.forEach(obj => obj.manaRegen = obj.manaRegen.max(player.M.manaRegen));
 		// spell time
 		for (let index = 1; index < player.M.spellTimes.length; index++) {
 			if (getClickableState("M", index + 11)) {
@@ -322,7 +306,7 @@ addLayer("M", {
 		["clickables", [10]],
 		"blank",
 		["upgrades", [1]],
-		["display-text", () => "You have generated " + format(player.M.stats[2].manaTotal) + " mana in total"],
+		["display-text", () => "You have generated " + format(player.stats[2].manaTotal) + " mana in total"],
 		"blank",
 		["upgrades", [10]],
 	],
@@ -342,8 +326,8 @@ addLayer("M", {
 	},
 	clickables: {
 		11: {
-			title: "<span style='color: #000000'>Tax Collection</span>",
-			display() { return '<span style="color: #000000">get coins equal to ' + formatWhole(clickableEffect("M", this.id)) + ' seconds of coins/sec<br><br>Effect: +' + format(tmp.pointGen.mul(clickableEffect("M", this.id))) + '<br><br>Cost: ' + formatWhole(getSpellCost(this.id - 11)) + ' mana</span>' },
+			title: "Tax Collection",
+			display() { return "get coins equal to " + formatWhole(clickableEffect("M", this.id)) + " seconds of coins/sec<br><br>Effect: +" + format(tmp.pointGen.mul(clickableEffect("M", this.id))) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana</span>" },
 			effect() {
 				let eff = new Decimal(30);
 				if (hasUpgrade("F", 1162)) eff = eff.add(30);
@@ -356,8 +340,8 @@ addLayer("M", {
 			style: {height: "125px", "border-radius": "25px 25px 0 0"},
 		},
 		12: {
-			title: "<span style='color: #000000'>Call to Arms</span>",
-			display() { return '<span style="color: #000000">boost all coin generation based on your creations for 30 seconds<br>Time left: ' + format(player.M.spellTimes[1]) + 's<br><br>Effect: x' + format(clickableEffect("M", this.id)) + '<br><br>Cost: ' + formatWhole(getSpellCost(this.id - 11)) + ' mana' },
+			title: "Call to Arms",
+			display() { return "boost all coin generation based on your creations for 30 seconds<br>Time left: " + formatTime(player.M.spellTimes[1]) + "<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana" },
 			effect() {
 				let eff = player.C.points.add(1).pow(0.15);
 				if (hasUpgrade("F", 1152)) eff = eff.mul(2);
@@ -379,8 +363,8 @@ addLayer("M", {
 				return "CHOOSE A SIDE TO UNLOCK";
 			},
 			display() {
-				if (hasUpgrade("F", 11)) return "boost coins/click based on your mana for 15 seconds<br>Time left: " + format(player.M.spellTimes[2]) + "s<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana";
-				if (hasUpgrade("F", 21)) return "boost coins/sec based on your mana for 15 seconds<br>Time left: " + format(player.M.spellTimes[2]) + "s<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana";
+				if (hasUpgrade("F", 11)) return "boost coins/click based on your mana for 15 seconds<br>Time left: " + formatTime(player.M.spellTimes[2]) + "<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana";
+				if (hasUpgrade("F", 21)) return "boost coins/sec based on your mana for 15 seconds<br>Time left: " + formatTime(player.M.spellTimes[2]) + "<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana";
 				return "";
 			},
 			effect() {
@@ -468,14 +452,14 @@ addLayer("M", {
 	upgrades: {
 		11: {
 			fullDisplay() { return "<h3>Mana Cup</h3><br>increase max mana based on your mana generated this era<br><br>Effect: x" + format(upgradeEffect("M", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.M.stats[0].manaTotal.add(1).pow(0.1) },
+			effect() { return player.stats[0].manaTotal.add(1).pow(0.1) },
 			cost: 1_500,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
 		},
 		12: {
 			fullDisplay() { return "<h3>Mana Sense</h3><br>increase mana regen based on your mana generated this era<br><br>Effect: +" + format(upgradeEffect("M", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.M.stats[0].manaTotal.add(1).pow(0.125) },
+			effect() { return player.stats[0].manaTotal.add(1).pow(0.125) },
 			cost: 5_000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -499,18 +483,18 @@ addLayer("M", {
 		},
 		101: {
 			fullDisplay() { return "<h3>Primary Autocasting</h3><br>unlock autocasting<br><br>Req: 10,000 total mana generated<br><br>Cost: 333 mana" },
-			canAfford() { return player.M.mana.gte(333) && player.M.stats[1].manaTotal.gte(10000) },
+			canAfford() { return player.M.mana.gte(333) && player.stats[1].manaTotal.gte(10000) },
 			pay() { player.M.mana = player.M.mana.sub(333) },
 		},
 		102: {
 			fullDisplay() { return "<h3>Secondary Autocasting</h3><br>unlock tax collection autocasting<br><br>Req: 100,000 total mana generated<br><br>Cost: 3,333 mana" },
-			canAfford() { return player.M.mana.gte(3333) && player.M.stats[1].manaTotal.gte(100000) },
+			canAfford() { return player.M.mana.gte(3333) && player.stats[1].manaTotal.gte(100000) },
 			pay() { player.M.mana = player.M.mana.sub(3333) },
 			unlocked() { return hasUpgrade("M", 101) },
 		},
 		103: {
 			fullDisplay() { return "<h3>Ternary Autocasting</h3><br>unlock autocasting when over 50% mana<br><br>Req: 1,000,000 total mana generated<br><br>Cost: 33,333 mana" },
-			canAfford() { return player.M.mana.gte(33333) && player.M.stats[1].manaTotal.gte(1000000) },
+			canAfford() { return player.M.mana.gte(33333) && player.stats[1].manaTotal.gte(1000000) },
 			pay() { player.M.mana = player.M.mana.sub(33333) },
 			unlocked() { return hasUpgrade("M", 102) },
 		},
@@ -547,8 +531,7 @@ addLayer("F", {
 	},
 	resource: "faction coins",
 	type: "none",
-	layerShown() {return true},
-	doReset(resettingLayer) {},
+	layerShown() { return true },
 	tabFormat: [
 		["display-text", () => "You have " + formatWhole(player.F.points) + " faction coins, which are composed of:"],
 		["row", [
@@ -712,7 +695,7 @@ addLayer("F", {
 		// angel faction
 		1051: {
 			fullDisplay() { return "<h3>Angelic Capacity</h3><br>increase max mana based on your mana generated<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.M.stats[0].manaTotal.add(1).pow(0.075) },
+			effect() { return player.stats[0].manaTotal.add(1).pow(0.075) },
 			cost: 500,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -720,7 +703,7 @@ addLayer("F", {
 		},
 		1052: {
 			fullDisplay() { return "<h3>Road to Heaven</h3><br>increase mana regen based on your angel coins<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.FC[2].add(1).pow(0.5) },
+			effect() { return player.FC[2].add(1).pow(0.4) },
 			cost: 5_000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -919,7 +902,7 @@ addLayer("G", {
 		return text;
 	},
 	effect() {return player.G.points.mul(player.G.gemMult).div(100).add(1)},
-	effectDescription() {return "which are increasing all production by " + player.G.gemMult + "% each, for a total of " + format(tmp.G.effect) + 'x'},
+	effectDescription() {return "which are increasing all production by " + player.G.gemMult + "% each, for a total of " + format(tmp.G.effect) + "x"},
 	hotkeys: [
 		{key: "A", description: "Shift+A: Abdicate for gems", onPress() {if (canReset(this.layer)) doReset(this.layer)}},
 	],
@@ -935,10 +918,6 @@ addLayer("G", {
 				bestTotalClickValue: newDecimalZero(),
 				bestCreations: newDecimalZero(),
 			};
-			layerDataReset("C");
-			layerDataReset("M", ["stats"]);
-			player.M.stats[0] = getManaTabStartingStats();
-			layerDataReset("F");
 		};
 	},
 	update(diff) {
@@ -1044,13 +1023,13 @@ addLayer("S", {
 				"blank",
 				["display-text", () => "<h3>CREATIONS</h3><br>Your best creations is <b>" + formatWhole(player.G.stats[index].bestCreations) + "</b>"],
 				"blank",
-				["display-text", () => "<h3>MANA</h3><br>Your best mana regen is <b>" + format(player.M.stats[index].manaRegen) + "</b><br>Your best max mana is <b>" + format(player.M.stats[index].maxMana) + "</b><br>You have generated a total of <b>" + format(player.M.stats[index].manaTotal) + "</b> mana"],
+				["display-text", () => "<h3>MANA</h3><br>Your best mana regen is <b>" + format(player.stats[index].manaRegen) + "</b><br>Your best max mana is <b>" + format(player.stats[index].maxMana) + "</b><br>You have generated a total of <b>" + format(player.stats[index].manaTotal) + "</b> mana"],
 				"blank",
 				["display-text", () => {
 					let text = "<h3>SPELLS</h3>";
 					for (let spell = 0; spell < spellName.length; spell++) {
-						text += "<br>You have cast '" + spellName[spell] + "' <b>" + formatWhole(player.M.stats[index].casts[spell]) + "</b> time";
-						if (player.M.stats[index].casts[spell].neq(1)) text += "s";
+						text += "<br>You have cast '" + spellName[spell] + "' <b>" + formatWhole(player.stats[index].casts[spell]) + "</b> time";
+						if (player.stats[index].casts[spell].neq(1)) text += "s";
 					};
 					return text;
 				}],

@@ -66,7 +66,7 @@ function getRandInt(min, max) {
 
 function taxCast(amt = newDecimalOne()) {
 	player.M.mana = player.M.mana.sub(getSpellCost(0).mul(amt));
-	player.M.stats.forEach(obj => obj.casts[0] = obj.casts[0].add(amt));
+	player.stats.forEach(obj => obj.casts[0] = obj.casts[0].add(amt));
 	const gain = getPointGen().mul(clickableEffect("M", 11).mul(amt));
 	player.points = player.points.add(gain);
 	player.stats.forEach(obj => obj.total = obj.total.add(gain));
@@ -75,7 +75,7 @@ function taxCast(amt = newDecimalOne()) {
 function callCast() {
 	player.M.spellTimes[1] = new Decimal(30);
 	player.M.mana = player.M.mana.sub(getSpellCost(1));
-	player.M.stats.forEach(obj => obj.casts[1] = obj.casts[1].add(1));
+	player.stats.forEach(obj => obj.casts[1] = obj.casts[1].add(1));
 	setClickableState("M", 12, true);
 };
 
@@ -83,9 +83,9 @@ function sideSpellCast() {
 	player.M.spellTimes[2] = new Decimal(15);
 	player.M.mana = player.M.mana.sub(getSpellCost(2));
 	if (hasUpgrade("F", 11)) {
-		player.M.stats.forEach(obj => obj.casts[2] = obj.casts[2].add(1));
+		player.stats.forEach(obj => obj.casts[2] = obj.casts[2].add(1));
 	} else if (hasUpgrade("F", 21)) {
-		player.M.stats.forEach(obj => obj.casts[3] = obj.casts[3].add(1));
+		player.stats.forEach(obj => obj.casts[3] = obj.casts[3].add(1));
 	};
 	setClickableState("M", 13, true);
 };
@@ -110,11 +110,19 @@ function getPointGen() {
 };
 
 function getPlayerStartingStats() { return {
+	// coins
 	best: newDecimalZero(),
 	total: newDecimalZero(),
+	// faction coins
 	FCchance: new Decimal(2.5),
 	FCbest: newDecimalZero(),
 	FCtotal: newDecimalZero(),
+	// mana
+	manaRegen: new Decimal(2.5),
+	manaTotal: newDecimalZero(),
+	maxMana: new Decimal(100),
+	// spells
+	casts: [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()],
 }};
 
 function addedPlayerData() { return {

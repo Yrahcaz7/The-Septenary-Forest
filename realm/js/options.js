@@ -42,14 +42,14 @@ const optionGrid = [
 ];
 
 function formatOpt(opt) {
-	if (opt) return 'ON';
-	return 'OFF';
+	if (opt) return "ON";
+	return "OFF";
 };
 
 function toggleOpt(name) {
 	// toggle option
 	options[name] = !options[name];
 	// special
-	if (name == 'hqTree') changeTreeQuality();
-	else if (name == 'forceOneTab') needsCanvasUpdate = true;
+	if (name === "hqTree") changeTreeQuality();
+	else if (name === "forceOneTab") needsCanvasUpdate = true;
 };

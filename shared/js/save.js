@@ -223,7 +223,7 @@ function NaNcheck(data) {
 			NaNcheck(data[item]);
 		} else if (data[item] !== data[item] || (data[item] instanceof Decimal && data[item].isNaN())) {
 			if (!NaNalert) {
-				clearInterval(interval);
+				clearInterval(INTERVAL);
 				NaNalert = true;
 				alert("Invalid value found in player, named '" + item + "'. Please let the creator of this mod know! You can refresh the page, and you should be un-NaNed.");
 				return;
@@ -278,7 +278,7 @@ function versionCheck() {
 	else delete player.beta;
 };
 
-let saveInterval = setInterval(() => {
+const SAVE_INTERVAL = setInterval(() => {
 	if (player === undefined || (tmp.gameEnded && !player.keepGoing)) return;
 	if (options.autosave) save();
 }, 5000);
