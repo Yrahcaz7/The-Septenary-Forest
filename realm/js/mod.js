@@ -110,19 +110,35 @@ function getPointGen() {
 };
 
 function getPlayerStartingStats() { return {
-	// coins
+	// general
 	best: newDecimalZero(),
 	total: newDecimalZero(),
+	// passive
+	bestPassive: newDecimalOne(),
+	totalPassive: newDecimalZero(),
+	// clicks
+	bestClickValue: newDecimalOne(),
+	totalClickValue: newDecimalZero(),
+	bestClicks: newDecimalZero(),
+	totalClicks: newDecimalZero(),
 	// faction coins
 	FCchance: new Decimal(2.5),
 	FCbest: newDecimalZero(),
 	FCtotal: newDecimalZero(),
+	// creations
+	creations: newDecimalZero(),
 	// mana
 	manaRegen: new Decimal(2.5),
 	manaTotal: newDecimalZero(),
 	maxMana: new Decimal(100),
 	// spells
 	casts: [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()],
+	// alliances
+	alliances: [0, 0, 0, 0, 0, 0],
+	// time
+	allianceTimes: [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()],
+	sideTimes: [newDecimalZero(), newDecimalZero(), newDecimalZero()],
+	time: newDecimalZero(),
 }};
 
 function addedPlayerData() { return {
@@ -133,14 +149,24 @@ function addedPlayerData() { return {
 }};
 
 const displayThings = [
-	() => {if (tmp.gameEnded) return "You beat the game!<br>For now..."},
+	() => { if (tmp.gameEnded) return "You beat the game!<br>For now..." },
 ];
 
-const endPoints = new Decimal(1e15);
+const endPoints = new Decimal(1e16);
 
 function update(diff) {
+	const gain = tmp.pointGen.mul(diff);
 	player.stats.forEach(obj => obj.best = obj.best.max(player.points));
-	player.stats.forEach(obj => obj.total = obj.total.add(tmp.pointGen.mul(diff)));
+	player.stats.forEach(obj => obj.total = obj.total.add(gain));
+	player.stats.forEach(obj => obj.bestPassive = obj.bestPassive.max(tmp.pointGen));
+	player.stats.forEach(obj => obj.totalPassive = obj.totalPassive.add(gain));
+	const faction = factionAllianceUpgrade.findIndex(id => hasUpgrade("F", id));
+	if (faction >= 0) player.stats.forEach(obj => obj.allianceTimes[faction] = obj.allianceTimes[faction].add(diff));
+	let side = 2;
+	if (hasUpgrade("F", 11)) side = 0;
+	else if (hasUpgrade("F", 21)) side = 1;
+	player.stats.forEach(obj => obj.sideTimes[side] = obj.sideTimes[side].add(diff));
+	player.stats.forEach(obj => obj.time = obj.time.add(diff));
 };
 
 function maxTickLength() {

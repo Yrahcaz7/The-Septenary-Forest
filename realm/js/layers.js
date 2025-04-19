@@ -1,14 +1,4 @@
-function getGemsTabStartingStats() { return {
-	bestClickValue: newDecimalOne(),
-	bestTotalClickValue: newDecimalZero(),
-	bestClickTimes: newDecimalZero(),
-	totalClickTimes: newDecimalZero(),
-	bestCreations: newDecimalZero(),
-}};
-
 const creationName = ["Soil", "Rocks", "Grass"];
-
-const creationBulkCost = [];
 
 const creationTierReq = [10, 32, 100, 320, 1_000, 3_200, 10_000];
 
@@ -19,9 +9,9 @@ const creationTierEff = [
 ];
 
 const creationTierCost = [
-	[100, 1_000, 20_000, 400_000, 400_000_000, 2e11],
-	[5_000, 50_000, 1_000_000, 20_000_000, 2e10],
-	[100_000, 1_000_000, 20_000_000, 4e9],
+	[100, 1_000, 20_000, 400_000, 400_000_000, 4e11, 4e14],
+	[5_000, 50_000, 1_000_000, 20_000_000, 2e10, 2e13],
+	[100_000, 1_000_000, 20_000_000, 4e9, 4e12],
 ];
 
 function getCreationTierUpgradeDesc(id) {
@@ -57,7 +47,6 @@ addLayer("C", {
 	row: 0,
 	position: 0,
 	startData() { return {
-		unlocked: true,
 		points: newDecimalZero(),
 		tiers: new Decimal(3),
 		bulk: newDecimalOne(),
@@ -65,10 +54,9 @@ addLayer("C", {
 	color: "#C0C0C0",
 	resource: "creations",
 	type: "none",
-	layerShown() { return true },
 	update(diff) {
 		player.C.points = getBuyableAmount("C", 11).add(getBuyableAmount("C", 12)).add(getBuyableAmount("C", 13));
-		player.G.stats.forEach(obj => obj.bestCreations = obj.bestCreations.max(player.C.points));
+		player.stats.forEach(obj => obj.creations = obj.creations.max(player.C.points));
 		player.C.tiers = getBuyableAmount("C", 111).add(getBuyableAmount("C", 112)).add(getBuyableAmount("C", 113)).add(3);
 	},
 	shouldNotify() { return tmp.C.buyables[111].canBuy || tmp.C.buyables[112].canBuy || tmp.C.buyables[113].canBuy },
@@ -126,7 +114,7 @@ addLayer("C", {
 				const cost = this.cost();
 				const amount = getBuyableAmount(this.layer, this.id);
 				const effect = buyableEffect(this.layer, this.id);
-				return "\nCost: " + format(cost) + " coin" + (cost.eq(newDecimalOne()) ? "" : "s") + "\n\nAmount: " + amount + "\n\nEffect: +" + format(effect) + " to coins/click\n\nTotal Effect: +" + format(effect * amount);
+				return "\nCost: " + format(cost) + " coin" + (cost.eq(newDecimalOne()) ? "" : "s") + "\n\nAmount: " + formatWhole(amount) + "\n\nEffect: +" + format(effect) + " to coins/click\n\nTotal Effect: +" + format(effect * amount);
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
@@ -147,7 +135,12 @@ addLayer("C", {
 				if (hasUpgrade("F", 1032)) eff = eff.mul(upgradeEffect("F", 1032));
 				return eff;
 			},
-			display() { return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount("C", this.id) + "\n\nEffect: +" + format(buyableEffect("C", this.id)) + " to coins/sec\n\nTotal Effect: +" + format(getBuyableAmount("C", this.id) * buyableEffect("C", this.id)) },
+			display() {
+				const cost = this.cost();
+				const amount = getBuyableAmount(this.layer, this.id);
+				const effect = buyableEffect(this.layer, this.id);
+				return "\nCost: " + format(cost) + " coin" + (cost.eq(newDecimalOne()) ? "" : "s") + "\n\nAmount: " + formatWhole(amount) + "\n\nEffect: +" + format(effect) + " to coins/sec\n\nTotal Effect: +" + format(effect * amount);
+			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
@@ -168,8 +161,10 @@ addLayer("C", {
 				return eff;
 			},
 			display() {
-				if (hasUpgrade("F", 1143)) return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount("C", this.id) + "\n\nEffect: +" + format(buyableEffect("C", this.id)) + " to coins/click and +" + format(buyableEffect("C", this.id).div(10)) + "% to FC find chance\n\nTotal Effect: +" + format(getBuyableAmount("C", this.id) * buyableEffect("C", this.id)) + " and +" + format((getBuyableAmount("C", this.id) * buyableEffect("C", this.id).div(10))) + "%";
-				else return "\nCost: " + format(this.cost()) + " coins\n\nAmount: " + getBuyableAmount("C", this.id) + "\n\nEffect: +" + format(buyableEffect("C", this.id)) + " to coins/sec and +" + format(buyableEffect("C", this.id).div(10)) + "% to FC find chance\n\nTotal Effect: +" + format(getBuyableAmount("C", this.id) * buyableEffect("C", this.id)) + " and +" + format((getBuyableAmount("C", this.id) * buyableEffect("C", this.id).div(10))) + "%";
+				const cost = this.cost();
+				const amount = getBuyableAmount(this.layer, this.id);
+				const effect = buyableEffect(this.layer, this.id);
+				return "\nCost: " + format(cost) + " coins\n\nAmount: " + formatWhole(amount) + "\n\nEffect: +" + format(effect) + " to coins/" + (hasUpgrade("F", 1143) ? "click" : "sec") + " and +" + format(effect.div(10)) + "% to FC find chance\n\nTotal Effect: +" + format(amount.mul(effect)) + " and +" + format(amount.mul(effect.div(10))) + "%";
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
@@ -227,7 +222,6 @@ addLayer("M", {
 	row: 0,
 	position: 1,
 	startData() { return {
-		unlocked: true,
 		mana: newDecimalZero(),
 		maxMana: new Decimal(100),
 		manaRegen: new Decimal(2.5),
@@ -381,7 +375,7 @@ addLayer("M", {
 			onClick: sideSpellCast,
 			color() {
 				if (hasUpgrade("F", 11)) return tmp.F.upgrades[11].color;
-				if (hasUpgrade("F", 21)) return tmp.F.upgrades[12].color;
+				if (hasUpgrade("F", 21)) return tmp.F.upgrades[21].color;
 			},
 			style: {height: "125px", "border-radius": "25px 25px 0 0"},
 		},
@@ -404,12 +398,14 @@ addLayer("M", {
 			},
 			color: "#C0C0C0",
 			style: {"border-radius": "0 0 25px 25px"},
-			unlocked() { return hasUpgrade("M", 101) },
 		},
 		102: {
 			title: "Autocasting",
-			display() { return autocastTier[getClickableState(this.layer, this.id) || 0] },
-			canClick() { return true },
+			display() {
+				if (hasUpgrade("M", 101)) return autocastTier[getClickableState(this.layer, this.id) || 0];
+				return "LOCKED - need better autocasting";
+			},
+			canClick() { return hasUpgrade("M", 101) },
 			onClick() {
 				if (getClickableState(this.layer, this.id) === 3) {
 					setClickableState(this.layer, this.id, 0);
@@ -422,15 +418,15 @@ addLayer("M", {
 			},
 			color: "#C0C0C0",
 			style: {"border-radius": "0 0 25px 25px"},
-			unlocked() { return hasUpgrade("M", 101) },
 		},
 		103: {
-			title() {
-				if (hasChosenSide()) return "Autocasting";
-				return "CHOOSE A SIDE TO UNLOCK";
+			title() { return (hasChosenSide() ? "Autocasting" : "LOCKED") },
+			display() {
+				if (!hasChosenSide()) return "";
+				if (hasUpgrade("M", 101)) return autocastTier[getClickableState(this.layer, this.id) || 0];
+				return "LOCKED - need better autocasting";
 			},
-			display() { if (hasChosenSide()) return autocastTier[getClickableState(this.layer, this.id) || 0] },
-			canClick() { return hasChosenSide() },
+			canClick() { return hasChosenSide() && hasUpgrade("M", 101) },
 			onClick() {
 				if (getClickableState(this.layer, this.id) === 3) {
 					setClickableState(this.layer, this.id, 0);
@@ -443,10 +439,9 @@ addLayer("M", {
 			},
 			color() {
 				if (hasUpgrade("F", 11)) return tmp.F.upgrades[11].color;
-				if (hasUpgrade("F", 21)) return tmp.F.upgrades[12].color;
+				if (hasUpgrade("F", 21)) return tmp.F.upgrades[21].color;
 			},
 			style: {"border-radius": "0 0 25px 25px"},
-			unlocked() { return hasUpgrade("M", 101) },
 		},
 	},
 	upgrades: {
@@ -509,8 +504,15 @@ function hasChosenFaction() {
 	return hasUpgrade("F", 31) || hasUpgrade("F", 41) || hasUpgrade("F", 51) || hasUpgrade("F", 32) || hasUpgrade("F", 42) || hasUpgrade("F", 52);
 };
 
+const factionAllianceUpgrade = [31, 41, 51, 32, 42, 52];
+
+const sideName = ["good", "evil", "neutral"];
+
+const factionName = ["fairy", "elf", "angel", "goblin", "undead", "demon"];
+const pluralFactionName = ["fairies", "elves", "angels", "goblins", "undead", "demons"];
+
 function getFCdisp(index) {
-	return "<div style='color: lch(from " + tmp.F.upgrades[[31, 41, 51, 32, 42, 52][index]].color + " calc(l + 20) c h)'>" + formatWhole(player.FC[index]) + " " + ["fairy", "elf", "angel", "goblin", "undead", "demon"][index] + " coins</div>";
+	return "<div style='color: lch(from " + tmp.F.upgrades[factionAllianceUpgrade[index]].color + " calc(l + 20) c h)'>" + formatWhole(player.FC[index]) + " " + factionName[index] + " coins</div>";
 };
 
 addLayer("F", {
@@ -519,7 +521,6 @@ addLayer("F", {
 	row: 0,
 	position: 2,
 	startData() { return {
-		unlocked: true,
 		points: newDecimalZero(),
 	}},
 	color() {
@@ -531,7 +532,6 @@ addLayer("F", {
 	},
 	resource: "faction coins",
 	type: "none",
-	layerShown() { return true },
 	tabFormat: [
 		["display-text", () => "You have " + formatWhole(player.F.points) + " faction coins, which are composed of:"],
 		["row", [
@@ -568,6 +568,7 @@ addLayer("F", {
 			fullDisplay() { return "<h3>Fairy Alliance</h3><br>ally yourself with the fairies, which focus on basic creations<br><br>Cost: 5 fairy coins" },
 			canAfford() { return player.FC[0].gte(5) && !hasChosenFaction() },
 			pay() { player.FC[0] = player.FC[0].sub(5) },
+			onPurchase() { player.stats.forEach(obj => obj.alliances[0]++) },
 			color: "#C040E0",
 			style: {"border-color": "#C040E0"},
 			unlocked() { return hasUpgrade("F", 11) },
@@ -576,6 +577,7 @@ addLayer("F", {
 			fullDisplay() { return "<h3>Elven Alliance</h3><br>ally yourself with the elves, which focus on click production<br><br>Cost: 5 elf coins" },
 			canAfford() { return player.FC[1].gte(5) && !hasChosenFaction() },
 			pay() { player.FC[1] = player.FC[1].sub(5) },
+			onPurchase() { player.stats.forEach(obj => obj.alliances[1]++) },
 			color: "#40E040",
 			style: {"border-color": "#40E040"},
 			unlocked() { return hasUpgrade("F", 11) },
@@ -584,6 +586,7 @@ addLayer("F", {
 			fullDisplay() { return "<h3>Angel Alliance</h3><br>ally yourself with the angels, which focus on mana and spells<br><br>Cost: 5 angel coins" },
 			canAfford() { return player.FC[2].gte(5) && !hasChosenFaction() },
 			pay() { player.FC[2] = player.FC[2].sub(5) },
+			onPurchase() { player.stats.forEach(obj => obj.alliances[2]++) },
 			color: "#40C0E0",
 			style: {"border-color": "#40C0E0"},
 			unlocked() { return hasUpgrade("F", 11) },
@@ -592,6 +595,7 @@ addLayer("F", {
 			fullDisplay() { return "<h3>Goblin Alliance</h3><br>ally yourself with the goblins, which focus on faction coins<br><br>Cost: 5 goblin coins" },
 			canAfford() { return player.FC[3].gte(5) && !hasChosenFaction() },
 			pay() { player.FC[3] = player.FC[3].sub(5) },
+			onPurchase() { player.stats.forEach(obj => obj.alliances[3]++) },
 			color: "#C08040",
 			style: {"border-color": "#C08040"},
 			unlocked() { return hasUpgrade("F", 21) },
@@ -600,6 +604,7 @@ addLayer("F", {
 			fullDisplay() { return "<h3>Undead Alliance</h3><br>ally yourself with the undead, which focus purely on passive production<br><br>Cost: 5 undead coins" },
 			canAfford() { return player.FC[4].gte(5) && !hasChosenFaction() },
 			pay() { player.FC[4] = player.FC[4].sub(5) },
+			onPurchase() { player.stats.forEach(obj => obj.alliances[4]++) },
 			color: "#8040C0",
 			style: {"border-color": "#8040C0"},
 			unlocked() { return hasUpgrade("F", 21) },
@@ -608,6 +613,7 @@ addLayer("F", {
 			fullDisplay() { return "<h3>Demon Alliance</h3><br>ally yourself with the demons, which focus on non-basic creations<br><br>Cost: 5 demon coins" },
 			canAfford() { return player.FC[5].gte(5) && !hasChosenFaction() },
 			pay() { player.FC[5] = player.FC[5].sub(5) },
+			onPurchase() { player.stats.forEach(obj => obj.alliances[5]++) },
 			color: "#C04040",
 			style: {"border-color": "#C04040"},
 			unlocked() { return hasUpgrade("F", 21) },
@@ -657,7 +663,7 @@ addLayer("F", {
 		},
 		1043: {
 			fullDisplay() { return "<h3>Elven Spirit</h3><br>increase coins/click based on your elf coins<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.FC[1].add(1).pow(0.5) },
+			effect() { return player.FC[1].add(1).pow(0.4) },
 			cost: 50_000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -778,7 +784,7 @@ addLayer("F", {
 		},
 		1161: {
 			fullDisplay() { return "<h3>Moneyload</h3><br>increase coins/sec based on your faction coin find chance<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.FCchance.add(1).pow(0.3) },
+			effect() { return player.FCchance.add(1).pow(0.25) },
 			cost: 5_000_000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -802,7 +808,7 @@ addLayer("F", {
 		// undead faction
 		1071: {
 			fullDisplay() { return "<h3>Undending Cycle</h3><br>increase coins/sec based on your coins<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.points.add(1).pow(0.15) },
+			effect() { return player.points.add(1).log10().div(2).add(1) },
 			cost: 500,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -810,7 +816,7 @@ addLayer("F", {
 		},
 		1072: {
 			fullDisplay() { return "<h3>Corpse Piles</h3><br>increase coins/sec based on your undead coins<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.FC[4].add(1).pow(0.5) },
+			effect() { return player.FC[4].add(1).pow(0.3) },
 			cost: 5_000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -818,7 +824,7 @@ addLayer("F", {
 		},
 		1073: {
 			fullDisplay() { return "<h3>Stay no More</h3><br>increase coins/sec based on your coins/click<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.G.clickValue.add(1).pow(0.2) },
+			effect() { return player.G.clickValue.add(1).log10().div(2).add(1) },
 			cost: 50_000,
 			currencyInternalName: "points",
 			currencyLocation() { return player },
@@ -864,24 +870,17 @@ addLayer("G", {
 	position: 0,
 	branches: ["C", "M", "F"],
 	startData() { return {
-		unlocked: true,
 		points: newDecimalZero(),
 		clickValue: newDecimalOne(),
-		clickTimes: newDecimalZero(),
 		gemMult: newDecimalOne(),
-		stats: [{
-			bestClickValue: newDecimalOne(),
-			bestTotalClickValue: newDecimalZero(),
-			bestCreations: newDecimalZero(),
-		}, getGemsTabStartingStats(), getGemsTabStartingStats()],
 	}},
 	color: "#808080",
-	requires: new Decimal(100000),
+	requires: newDecimalOne(),
 	resource: "gems",
 	baseResource: "total coins this era",
 	baseAmount() {return player.stats[0].total},
 	type: "normal",
-	exponent: 0.5,
+	exponent: 0.3,
 	gainMult() {
 		let mult = newDecimalOne();
 		return mult;
@@ -901,23 +900,17 @@ addLayer("G", {
 		};
 		return text;
 	},
-	effect() {return player.G.points.mul(player.G.gemMult).div(100).add(1)},
-	effectDescription() {return "which are increasing all production by " + player.G.gemMult + "% each, for a total of " + format(tmp.G.effect) + "x"},
+	effect() { return player.G.points.mul(player.G.gemMult).div(100).add(1) },
+	effectDescription() { return "which are increasing all production by " + player.G.gemMult + "% each, for a total of " + format(tmp.G.effect) + "x" },
 	hotkeys: [
 		{key: "A", description: "Shift+A: Abdicate for gems", onPress() {if (canReset(this.layer)) doReset(this.layer)}},
 	],
-	layerShown() {return true},
 	doReset(resettingLayer) {
 		player.FC = [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()];
 		player.FCchance = new Decimal(2.5);
 		player.stats[0] = getPlayerStartingStats();
 		if (resettingLayer === "G") {
-			layerDataReset("G", ["points", "best", "total", "stats"]);
-			player.G.stats[0] = {
-				bestClickValue: newDecimalOne(),
-				bestTotalClickValue: newDecimalZero(),
-				bestCreations: newDecimalZero(),
-			};
+			layerDataReset("G", ["points", "best", "total"]);
 		};
 	},
 	update(diff) {
@@ -933,7 +926,7 @@ addLayer("G", {
 		if (getClickableState("M", 12)) clickGain = clickGain.mul(clickableEffect("M", 12));
 		if (hasUpgrade("F", 11) && getClickableState("M", 13)) clickGain = clickGain.mul(clickableEffect("M", 13));
 		player.G.clickValue = clickGain;
-		player.G.stats.forEach(obj => obj.bestClickValue = obj.bestClickValue.max(player.G.clickValue));
+		player.stats.forEach(obj => obj.bestClickValue = obj.bestClickValue.max(player.G.clickValue));
 		// faction coins
 		let FCchance = new Decimal(2.5);
 		if (getBuyableAmount("C", 13).gt(0)) FCchance = FCchance.add(getBuyableAmount("C", 13).mul(buyableEffect("C", 13).div(10)));
@@ -1004,8 +997,7 @@ addLayer("S", {
 	position: 0,
 	color: "#60C060",
 	type: "none",
-	layerShown() {return true},
-	tooltip() {return "Stats"},
+	tooltip() { return "Stats" },
 	tabFormat: (() => {
 		const statName = ["This Era", "This Reincarnation", "All Time"];
 		let tabs = {};
@@ -1015,26 +1007,64 @@ addLayer("S", {
 				"blank",
 				["h-line", "calc(100% - 12px)"],
 				"blank",
-				["display-text", () => "<h3>CURRENCY</h3><br>Your best coins is <b>" + format(player.stats[index].best) + "</b><br>You have generated <b>" + format(player.stats[index].total) + "</b> coins<br>" + (index === 0 ? "You have <b>" + formatWhole(player.G.points) + "</b> gems" : "Your best gems is <b>" + formatWhole(index === 2 ? player.bestGems : player.G.best) + "</b>")],
+				["display-text", () => "<h3>GENERAL</h3><br>Your best coins is <b>" + format(player.stats[index].best) + "</b><br>You have generated <b>" + format(player.stats[index].total) + "</b> coins<br>" + (index > 0 ? "Your best gems is <b>" + formatWhole(index === 2 ? player.bestGems : player.G.best) + "</b>" : "")],
 				"blank",
-				["display-text", () => "<h3>CLICKS</h3><br>Your best coins/click is <b>" + format(player.G.stats[index].bestClickValue) + "</b><br>You have generated <b>" + format(player.G.stats[index].bestTotalClickValue) + "</b> coins from clicking<br>" + (index === 0 ? "You have clicked <b>" + formatWhole(player.G.clickTimes) + "</b> times<br>" : "Your best times clicked is <b>" + formatWhole(player.G.stats[index].bestClickTimes) + "</b><br>You have clicked <b>" + formatWhole(player.G.stats[index].totalClickTimes) + "</b> times")],
+				["display-text", () => "<h3>PASSIVE</h3><br>Your best coins/sec is <b>" + format(player.stats[index].bestPassive) + "</b><br>You have generated <b>" + format(player.stats[index].totalPassive) + "</b> coins passively"],
 				"blank",
-				["display-text", () => "<h3>FACTION COINS</h3><br>" + (index === 0 ? "You have <b>" + formatWhole(player.F.points) + "</b> faction coins<br>" : "") + "Your best faction coins is <b>" + formatWhole(player.stats[index].FCbest) + "</b><br>You have <b>" + formatWhole(player.stats[index].FCtotal) + "</b> faction coins total<br>You have <b>" + format(player.stats[index].FCchance) + "%</b> best faction coin chance"],
+				["display-text", () => "<h3>CLICKS</h3><br>Your best coins/click is <b>" + format(player.stats[index].bestClickValue) + "</b><br>You have generated <b>" + format(player.stats[index].totalClickValue) + "</b> coins from clicking" + (index === 0 ? "" : "<br>Your best times clicked is <b>" + formatWhole(player.stats[index].bestClicks) + "</b>") + "<br>You have clicked <b>" + formatWhole(player.stats[index].totalClicks) + "</b> times"],
 				"blank",
-				["display-text", () => "<h3>CREATIONS</h3><br>Your best creations is <b>" + formatWhole(player.G.stats[index].bestCreations) + "</b>"],
+				["display-text", () => "<h3>FACTION COINS</h3><br>Your best faction coins is <b>" + formatWhole(player.stats[index].FCbest) + "</b><br>You have found <b>" + formatWhole(player.stats[index].FCtotal) + "</b> faction coins<br>You have <b>" + format(player.stats[index].FCchance) + "%</b> best faction coin chance"],
 				"blank",
-				["display-text", () => "<h3>MANA</h3><br>Your best mana regen is <b>" + format(player.stats[index].manaRegen) + "</b><br>Your best max mana is <b>" + format(player.stats[index].maxMana) + "</b><br>You have generated a total of <b>" + format(player.stats[index].manaTotal) + "</b> mana"],
+				["display-text", () => "<h3>CREATIONS</h3><br>Your best creations is <b>" + formatWhole(player.stats[index].creations) + "</b>"],
+				"blank",
+				["display-text", () => "<h3>MANA</h3><br>Your best mana regen is <b>" + format(player.stats[index].manaRegen) + "</b><br>Your best max mana is <b>" + format(player.stats[index].maxMana) + "</b><br>You have generated <b>" + format(player.stats[index].manaTotal) + "</b> mana"],
 				"blank",
 				["display-text", () => {
 					let text = "<h3>SPELLS</h3>";
+					let hasCastSpells = false;
 					for (let spell = 0; spell < spellName.length; spell++) {
-						text += "<br>You have cast '" + spellName[spell] + "' <b>" + formatWhole(player.stats[index].casts[spell]) + "</b> time";
-						if (player.stats[index].casts[spell].neq(1)) text += "s";
+						if (player.stats[index].casts[spell].gt(0)) {
+							text += "<br>You have cast '" + spellName[spell] + "' <b>" + formatWhole(player.stats[index].casts[spell]) + "</b> time";
+							if (player.stats[index].casts[spell].neq(1)) text += "s";
+							hasCastSpells = true;
+						};
+					};
+					if (!hasCastSpells) text += "<br>You have not cast any spells";
+					return text;
+				}],
+				"blank",
+				["display-text", () => {
+					let text = "<h3>FACTIONS</h3>";
+					let hasAllied = false;
+					for (let faction = 0; faction < player.stats[index].alliances.length; faction++) {
+						if (player.stats[index].alliances[faction] > 0) {
+							text += "<br>You have allied with the " + pluralFactionName[faction] + " <b>" + formatWhole(player.stats[index].alliances[faction]) + "</b> time";
+							if (player.stats[index].alliances[faction] !== 1) text += "s";
+							hasAllied = true;
+						};
+					};
+					if (!hasAllied) text += "<br>You have not allied with any factions";
+					return text;
+				}],
+				"blank",
+				["display-text", () => {
+					let text = "<h3>TIME</h3><br>You have spent <b>" + formatTime(player.stats[index].time) + "</b><br>";
+					for (let side = 0; side < player.stats[index].sideTimes.length; side++) {
+						if (player.stats[index].sideTimes[side] > 0) text += "<br>You have spent <b>" + formatTime(player.stats[index].sideTimes[side]) + "</b> being " + sideName[side];
+					};
+					let hasAllied = false;
+					for (let faction = 0; faction < player.stats[index].allianceTimes.length; faction++) {
+						if (player.stats[index].allianceTimes[faction] > 0) {
+							if (!hasAllied) {
+								text += "<br>";
+								hasAllied = true;
+							};
+							text += "<br>You have spent <b>" + formatTime(player.stats[index].allianceTimes[faction]) + "</b> allied with the " + pluralFactionName[faction];
+						};
 					};
 					return text;
 				}],
 				"blank",
-				["display-text", () => "<h3>OTHER</h3><br>You have spent <b>" + formatTime(player.G.resetTime) + "</b>"],
 			]};
 		};
 		return tabs;
@@ -1053,19 +1083,14 @@ function coinClick() {
 	player.FC[factionCoinGainType] = player.FC[factionCoinGainType].add(factionCoinsFound);
 	player.stats.forEach(obj => obj.FCtotal = obj.FCtotal.add(factionCoinsFound));
 	// times clicked
-	player.G.clickTimes = player.G.clickTimes.add(1);
-	// best times clicked
-	if (player.G.clickTimes.gt(player.G.stats[1].bestClickTimes)) player.G.stats[1].bestClickTimes = player.G.clickTimes;
-	if (player.G.clickTimes.gt(player.G.stats[2].bestClickTimes)) player.G.stats[2].bestClickTimes = player.G.clickTimes;
-	// total times clicked
-	player.G.stats[1].totalClickTimes = player.G.stats[1].totalClickTimes.add(1);
-	player.G.stats[2].totalClickTimes = player.G.stats[2].totalClickTimes.add(1);
+	player.stats.forEach(obj => obj.totalClicks = obj.totalClicks.add(1));
+	player.stats.forEach(obj => obj.bestClicks = obj.bestClicks.max(player.stats[0].totalClicks));
 	// coins gained
 	let clickPower = player.G.clickValue;
 	if (hasUpgrade("F", 11) && getClickableState("M", 13)) clickPower = clickPower.mul(clickableEffect("M", 13));
 	player.points = player.points.add(clickPower);
 	player.stats.forEach(obj => obj.total = obj.total.add(clickPower));
-	player.G.stats.forEach(obj => obj.bestTotalClickValue = obj.bestTotalClickValue.add(clickPower));
+	player.stats.forEach(obj => obj.totalClickValue = obj.totalClickValue.add(clickPower));
 };
 
 document.onclick = () => {
