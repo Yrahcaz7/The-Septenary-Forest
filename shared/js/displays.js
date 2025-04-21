@@ -7,7 +7,7 @@ function prestigeButtonText(layer) {
 };
 
 function constructNodeStyle(layer) {
-	let style = [];
+	const style = [];
 	if ((tmp[layer].isLayer && layerUnlocked(layer)) || (!tmp[layer].isLayer && tmp[layer].canClick)) style.push({"background-color": tmp[layer].color});
 	if (tmp[layer].image !== undefined) style.push({"background-image": "url('" + tmp[layer].image + "')"});
 	if (tmp[layer].notify && player[layer].unlocked) style.push({"box-shadow": "var(--hqProperty2a), 0 0 20px " + tmp[layer].trueGlowColor});
@@ -85,28 +85,28 @@ function updateOomps(diff) {
 function constructBarStyle(layer, id) {
 	const bar = tmp[layer].bars[id];
 	const style = {};
-	let tempProgress;
+	let visualProgress = 0;
 	if (bar.progress instanceof Decimal) {
-		tempProgress = (1 - Math.min(Math.max(bar.progress.toNumber(), 0), 1)) * 100;
+		visualProgress = (1 - Math.min(Math.max(bar.progress.toNumber(), 0), 1)) * 100;
 	} else {
-		tempProgress = (1 - Math.min(Math.max(bar.progress, 0), 1)) * 100;
+		visualProgress = (1 - Math.min(Math.max(bar.progress, 0), 1)) * 100;
 	};
 	style.dims = {width: bar.width + "px", height: bar.height + "px"};
 	style.fillDims = {width: (bar.width + 0.5) + "px", height: (bar.height + 0.5) + "px"};
 	switch (bar.direction) {
 		case UP:
-			style.fillDims["clip-path"] = "inset(" + tempProgress + "% 0% 0% 0%)";
+			style.fillDims["clip-path"] = "inset(" + visualProgress + "% 0% 0% 0%)";
 			style.fillDims.width = (bar.width + 1) + "px";
 			break;
 		case DOWN:
-			style.fillDims["clip-path"] = "inset(0% 0% " + tempProgress + "% 0%)";
+			style.fillDims["clip-path"] = "inset(0% 0% " + visualProgress + "% 0%)";
 			style.fillDims.width = (bar.width + 1) + "px";
 			break;
 		case RIGHT:
-			style.fillDims["clip-path"] = "inset(0% " + tempProgress + "% 0% 0%)";
+			style.fillDims["clip-path"] = "inset(0% " + visualProgress + "% 0% 0%)";
 			break;
 		case LEFT:
-			style.fillDims["clip-path"] = "inset(0% 0% 0% " + tempProgress + "%)";
+			style.fillDims["clip-path"] = "inset(0% 0% 0% " + visualProgress + "%)";
 			break;
 		case DEFAULT:
 			style.fillDims["clip-path"] = "inset(0% 50% 0% 0%)";

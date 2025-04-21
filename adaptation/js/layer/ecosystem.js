@@ -90,7 +90,7 @@ addLayer("ec", {
 			html += "<button onclick='if (player.ec.unlocked && tmp.ec.challenges[11].enterable && player.ec.chronoTime !== 0) player.ec.chronoTime = 0'";
 			if (player.ec.unlocked && tmp.ec.challenges[11].enterable && player.ec.chronoTime !== 0) html += " class='can' style='position: absolute; top: 430px; left: 430px; width: 70px; height: 70px; border: none; border-radius: 50%; background-color: #116022; color: #FFFFFF; transform: none; box-shadow: none'>SYNC OFF</button>";
 			else html += " class='locked' style='position: absolute; top: 430px; left: 430px; width: 70px; height: 70px; border: 5px solid #116022; border-radius: 50%; background-color: var(--locked); color: #116022; transform: none; box-shadow: none'>SYNC ON</button>";
-			if (tmp.ec.challenges[11].marked) html += "<div class='star' style='position: absolute; left: 20px; top: 20px; border-bottom-color: #116022; transform: scale(2, 2)'></div>";
+			if (tmp.ec.challenges[11].marked) html += "<div class='star' style='position: absolute; left: 20px; top: 20px; border-bottom-color: #116022; transform: scale(2)'></div>";
 			arr.push(["raw-html", html], "blank");
 		};
 		// ANACHRONISM rewards

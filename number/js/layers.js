@@ -2026,7 +2026,7 @@ addLayer('i', {
 			style() {
 				let color = '#77bf5f';
 				if (getClickableState(this.layer, this.id)) color = '#bf8f8f';
-				return {'width':'595px','min-height':'40px','background-color':color,'color':'rgba(0, 0, 0, 0.5)','border':'4px solid rgba(0, 0, 0, 0.125)','border-radius':'20px','transform':'scale(1, 1)'};
+				return {'width':'595px','min-height':'40px','background-color':color,'color':'rgba(0, 0, 0, 0.5)','border':'4px solid rgba(0, 0, 0, 0.125)','border-radius':'20px','transform':'scale(1)'};
 			},
 			unlocked() { return hasChallenge('i', 22) },
 		},

@@ -45,11 +45,7 @@ td {
 	width: 100%;
 }
 
-.upgAlign {
-	vertical-align: 0;
-}
-
-.bigUpgAlign {
+.upgAlign, .bigUpgAlign {
 	vertical-align: 0;
 }
 
@@ -58,11 +54,7 @@ td {
 	vertical-align: middle;
 }
 
-.can.upg:hover {
-	z-index: 2;
-}
-
-.can.buyable:hover {
+.can.upg:hover, .can.buyable:hover {
 	z-index: 2;
 }
 
@@ -89,7 +81,7 @@ td {
 }
 
 .back:hover {
-	transform: scale(1.1, 1.1);
+	transform: scale(1.1);
 	text-shadow: 0 0 7px var(--color);
 }
 
@@ -198,7 +190,7 @@ ul {
 }
 
 .front {
-	z-index: 30000
+	z-index: 30000;
 }
 
 .overlayThing {
@@ -215,7 +207,7 @@ ul {
 	background-color: transparent;
 }
 
-button > * {
+button>* {
 	pointer-events: none;
 }
 

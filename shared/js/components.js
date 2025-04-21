@@ -41,9 +41,9 @@ function loadVue(mainPage = false) {
 				<button v-if="((player.navTab == 'none' && (tmp[player.tab].row == 'side' || tmp[player.tab].row == 'otherside' || player[player.tab].prevTab)) || player[player.navTab]?.prevTab)" class="other-back overlayThing" onclick="goBack(player.navTab === 'none' ? player.tab : player.navTab)">&#8592;</button>
 				<img id="optionWheel" class="overlayThing" v-if="player.tab != 'options-tab'" src="` + (mainPage ? `` : `../`) + `shared/images/options_wheel.png" onclick="showTab('options-tab')">
 				<div id="info" v-if="player.tab != 'info-tab'" class="overlayThing" onclick="showTab('info-tab')"><br>i</div>
-				<div id="discord" class="overlayThing">
+				<div id="discord" class="overlayThing" style="z-index: 30001">
 					<img src="` + (mainPage ? `` : `../`) + `shared/images/discord.png">
-					<ul id="discord-links">
+					<ul id="discordLinks">
 						<li v-if="modInfo.discordLink"><a class="link" :href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></li>
 						<li><a class="link" href="https://discord.gg/F3xveHV" target="_blank" :style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br></li>
 						<li><a class="link" href="https://discord.gg/wwQfgPa" target="_blank" style="font-size: 16px">Main Prestige Tree server</a></li>
@@ -739,7 +739,7 @@ function loadVue(mainPage = false) {
 		template: template(`<div>
 			<span class="upgRow" v-for="row in data">
 				<table>
-					<span v-for="node in row" style="width: 0px">
+					<span v-for="node in row">
 						<tree-node :layer='node' :prev='layer' :abb='tmp[node].symbol'></tree-node>
 					</span>
 					<tbody>
@@ -851,13 +851,13 @@ function loadVue(mainPage = false) {
 				position: "absolute",
 				left: (offset - 10) + "px",
 				top: (offset - 10) + "px",
-				transform: "scale(" + (scale || 1) + "," + (scale || 1) + ")",
+				transform: "scale(" + (scale || 1) + ")",
 			}'></div>
 			<img v-else class='mark' :style='{
 				position: "absolute",
 				left: (offset - 22) + "px",
 				top: (offset - 15) + "px",
-				transform: "scale(" + (scale || 1) + "," + (scale || 1) + ")",
+				transform: "scale(" + (scale || 1) + ")",
 			}' :src="data">
 		</div>`),
 	});
@@ -1022,7 +1022,7 @@ function loadVue(mainPage = false) {
 		},
 		template: template(`<div class="overlayThing" style="
 			padding-bottom: 10px;
-			background-image: linear-gradient(#000, #000C, #0009, #0006, #0000);
+			background-image: linear-gradient(var(--background), color-mix(in srgb, var(--background) 80%, transparent), color-mix(in srgb, var(--background) 60%, transparent), color-mix(in srgb, var(--background) 40%, transparent), transparent);
 			z-index: 1000;
 			position: relative;
 		">
