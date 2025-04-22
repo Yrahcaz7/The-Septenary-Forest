@@ -1,6 +1,8 @@
-const creationName = ["Soil", "Rocks", "Grass"];
+const creationName = ["Air", "Soil", "Grass"];
 
-const creationTierReq = [10, 32, 100, 320, 1_000, 3_200, 10_000];
+function getCreationTierReq(index) {
+	return 10 ** Math.floor(index / 2) * (index % 2 === 0 ? 10 : 32);
+};
 
 const creationTierEff = [
 	[0.05, 0.1, 0.2, 0.4, 0.65, 1, 1.5],
@@ -19,9 +21,9 @@ function getCreationTierUpgradeDesc(id) {
 	const name = creationName[id - 111].toLowerCase();
 	const eff = creationTierEff[(id - 1) % 10][index];
 	if (id % 10 === 3) {
-		return "increase " + name + "'" + (name.endsWith("s") ? "" : "s") + " first base effect by +" + (eff ? format(eff, 2, false) : "???") + " and second base effect by +" + (eff ? format(eff / 10, 2, false) : "???") + "%<br><br>Req: " + (creationTierReq[index] ? formatWhole(creationTierReq[index]) : "???") + " " + name + "<br><br>Cost: " + format(tmp.C.buyables[id].cost) + " coins";
+		return "increase " + name + "'" + (name.endsWith("s") ? "" : "s") + " first base effect by +" + (eff ? format(eff, 2, false) : "???") + " and second base effect by +" + (eff ? format(eff / 10, 2, false) : "???") + "%<br><br>Req: " + formatWhole(getCreationTierReq(index)) + " " + name + "<br><br>Cost: " + format(tmp.C.buyables[id].cost) + " coins";
 	};
-	return "increase " + name + "'" + (name.endsWith("s") ? "" : "s") + " base effect by +" + (eff ? format(eff, 2, false) : "???") + "<br><br>Req: " + (creationTierReq[index] ? formatWhole(creationTierReq[index]) : "???") + " " + name + "<br><br>Cost: " + format(tmp.C.buyables[id].cost) + " coins";
+	return "increase " + name + "'" + (name.endsWith("s") ? "" : "s") + " base effect by +" + (eff ? format(eff, 2, false) : "???") + "<br><br>Req: " + formatWhole(getCreationTierReq(index)) + " " + name + "<br><br>Cost: " + format(tmp.C.buyables[id].cost) + " coins";
 };
 
 function getCreationCost(amount, mult = 1, bulk = player.C.bulk) {
@@ -176,7 +178,7 @@ addLayer("C", {
 			title: "Uptier " + creationName[0],
 			cost() { return creationTierCost[this.id - 111][getBuyableAmount("C", this.id).toNumber()] ?? Infinity },
 			display() { return getCreationTierUpgradeDesc(this.id) },
-			canAfford() { return getBuyableAmount("C", this.id - 100).gte(creationTierReq[getBuyableAmount("C", this.id).toNumber()]) && player.points.gte(this.cost()) },
+			canAfford() { return getBuyableAmount("C", this.id - 100).gte(getCreationTierReq(getBuyableAmount("C", this.id).toNumber())) && player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(1));
@@ -187,7 +189,7 @@ addLayer("C", {
 			title: "Uptier " + creationName[1],
 			cost() { return creationTierCost[this.id - 111][getBuyableAmount("C", this.id).toNumber()] ?? Infinity },
 			display() { return getCreationTierUpgradeDesc(this.id) },
-			canAfford() { return getBuyableAmount("C", this.id - 100).gte(creationTierReq[getBuyableAmount("C", this.id).toNumber()]) && player.points.gte(this.cost()) },
+			canAfford() { return getBuyableAmount("C", this.id - 100).gte(getCreationTierReq(getBuyableAmount("C", this.id).toNumber())) && player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(1));
@@ -198,7 +200,7 @@ addLayer("C", {
 			title: "Uptier " + creationName[2],
 			cost() { return creationTierCost[this.id - 111][getBuyableAmount("C", this.id).toNumber()] ?? Infinity },
 			display() { return getCreationTierUpgradeDesc(this.id) },
-			canAfford() { return getBuyableAmount("C", this.id - 100).gte(creationTierReq[getBuyableAmount("C", this.id).toNumber()]) && player.points.gte(this.cost()) },
+			canAfford() { return getBuyableAmount("C", this.id - 100).gte(getCreationTierReq(getBuyableAmount("C", this.id).toNumber())) && player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(1));
