@@ -65,10 +65,10 @@ const generatorName = {
 };
 
 function generatorCost(id) {
-	let bought = player.g.grid[id].bought;
-	let scale = generatorCostScale[id]();
-	let extra = generatorExtraCost[id];
-	if (typeof extra == "function" && !hasUpgrade("g", 44)) {
+	const bought = player.g.grid[id].bought;
+	const scale = generatorCostScale[id]();
+	const extra = generatorExtraCost[id];
+	if (extra instanceof Function && !hasUpgrade("g", 44)) {
 		return new Decimal(scale).pow(bought ** 1.25 + 1).mul(extra());
 	};
 	return new Decimal(scale).pow(bought ** 1.25 + 1);

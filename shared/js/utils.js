@@ -347,7 +347,7 @@ function adjustPopupTime(diff) {
 };
 
 function run(func, target, ...args) {
-	if (typeof func == "function") {
+	if (func instanceof Function) {
 		const bound = func.bind(target);
 		return bound(...args);
 	};
@@ -355,7 +355,7 @@ function run(func, target, ...args) {
 };
 
 function gridRun(layer, func, data, id) {
-	if (typeof layers[layer].grid[func] == "function") {
+	if (layers[layer].grid[func] instanceof Function) {
 		const bound = layers[layer].grid[func].bind(layers[layer].grid);
 		return bound(data, id);
 	};

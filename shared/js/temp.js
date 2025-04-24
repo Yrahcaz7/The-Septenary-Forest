@@ -72,7 +72,7 @@ function setupTempData(layerData, tmpData, funcsData) {
 		} else if (!!layerData[item] && typeof layerData[item] == "object" && traversableClasses.includes(layerData[item].constructor.name)) {
 			tmpData[item] = new layerData[item].constructor();
 			funcsData[item] = new layerData[item].constructor();
-		} else if (typeof layerData[item] == "function" && !activeFunctions.includes(item)) {
+		} else if (layerData[item] instanceof Function && !activeFunctions.includes(item)) {
 			funcsData[item] = layerData[item];
 			if (boolNames.includes(item)) tmpData[item] = false;
 			else tmpData[item] = newDecimalOne(); // The safest thing to put probably?
@@ -102,7 +102,7 @@ function updateTemp() {
 	if (typeof displayThings !== "undefined") {
 		for (thing in displayThings) {
 			let text = displayThings[thing];
-			if (typeof text == "function") text = text();
+			if (text instanceof Function) text = text();
 			tmp.displayThings.push(text);
 		};
 	};
@@ -116,7 +116,7 @@ function updateTempData(layerData, tmpData, funcsData, useThis) {
 			};
 		} else if (isPlainObject(layerData[item]) || (typeof layerData[item] === "object" && traversableClasses.includes(layerData[item].constructor.name))) {
 			updateTempData(layerData[item], tmpData[item], funcsData[item], useThis);
-		} else if (typeof layerData[item] == "function" && typeof tmpData[item] != "function") {
+		} else if (layerData[item] instanceof Function && !(tmpData[item] instanceof Function)) {
 			let value;
 			if (useThis !== undefined) value = layerData[item].bind(useThis)();
 			else value = layerData[item]();

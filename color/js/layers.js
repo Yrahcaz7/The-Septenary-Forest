@@ -213,7 +213,7 @@ function getColorBars() {
 				for (let index = 0; index < COLOR_MILESTONES.length; index++) {
 					if (AMOUNT.lt(COLOR_MILESTONES[index])) return AMOUNT.div(COLOR_MILESTONES[index]);
 				};
-				return AMOUNT.div(COLOR_MILESTONES[COLOR_MILESTONES.length - 1]);
+				return AMOUNT.div(COLOR_MILESTONES.at(-1));
 			},
 			display() { return "<h1 style='font-family: Flavors'>" + formatWhole(getBuyableAmount("c", BUYNUM)) },
 			fillStyle: {"background-color": HEX},
@@ -252,7 +252,7 @@ function getColorBuyables() {
 				if (getBuyableAmount("c", BUYNUM).eq(0) && getColorBulk(index) === 1) buyText = "Unlock";
 				return "<h3 style='color:" + HEX + "'>" + buyText + ": " + illionFormat(getColorCost(index), true) + " coins";
 			},
-			purchaseLimit: COLOR_MILESTONES[COLOR_MILESTONES.length - 1],
+			purchaseLimit: COLOR_MILESTONES.at(-1),
 			style: {"background-color": (COLORS[index].dark ? "#888888" : "#ffffff")},
 			unlocked() { return player.c.colors >= index },
 		};

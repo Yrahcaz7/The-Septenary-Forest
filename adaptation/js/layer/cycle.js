@@ -47,7 +47,7 @@ function cycleUnlockText(tab) {
 		if (cycleUnlocks[tab][index][3] && player.cy.unlocks[tab] >= cycleUnlocks[tab][index][3]) continue;
 		if (index > 0) text += (index >= player.cy.unlocks[tab] ? "<br><br>" : "<br>");
 		if (index >= player.cy.unlocks[tab]) text += "At " + formatWhole(cycleUnlocks[tab][index][0]) + " revolutions:<br>";
-		text += (typeof cycleUnlocks[tab][index][1] == "function" ? cycleUnlocks[tab][index][1]() : cycleUnlocks[tab][index][1]);
+		text += (cycleUnlocks[tab][index][1] instanceof Function ? cycleUnlocks[tab][index][1]() : cycleUnlocks[tab][index][1]);
 	};
 	return text;
 };

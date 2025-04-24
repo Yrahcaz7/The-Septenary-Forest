@@ -67,7 +67,7 @@ function fixOldSave(oldVersion) {
 	if (player.r) {
 		player = null;
 		save(true);
-		window.location.reload();
+		location.reload();
 	};
 	// remove unused vars
 	delete player.spacer;

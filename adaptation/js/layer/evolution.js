@@ -343,7 +343,7 @@ addLayer("e", {
 			let pending = false;
 			let text = "";
 			for (const key in extraEvolutionEffects) {
-				const eff = (typeof extraEvolutionEffects[key] == "function" ? extraEvolutionEffects[key]() : extraEvolutionEffects[key]);
+				const eff = (extraEvolutionEffects[key] instanceof Function ? extraEvolutionEffects[key]() : extraEvolutionEffects[key]);
 				if (Object.hasOwnProperty.call(extraEvolutionEffects, key) && eff) {
 					if (player.e.points.gte(+key)) {
 						if (+key === 26 && !hasChallenge("e", 13)) {

@@ -98,8 +98,8 @@ addLayer("ec", {
 			let rewards = "";
 			for (let index = 0; index < challengeCompletions("ec", 11); index++) {
 				if (index > 0) rewards += "<br>";
-				let reward = layers.ec.challenges[11].rewards[index];
-				rewards += layers.ec.challenges[11].name(index + 1) + " reward: " + (typeof reward == "function" ? reward() : reward);
+				const reward = layers.ec.challenges[11].rewards[index];
+				rewards += layers.ec.challenges[11].name(index + 1) + " reward: " + (reward instanceof Function ? reward() : reward);
 			};
 			arr.push(["display-text", rewards], "blank");
 		};

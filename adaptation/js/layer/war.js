@@ -207,16 +207,14 @@ addLayer("w", {
 		getDisplay(data, id) {
 			if (!(id == 101 || getGridData("w", id - 1) || getGridData("w", id + 1) || getGridData("w", id - 100) || getGridData("w", id + 100))) return "";
 			const upg = warUpgrades[Math.floor(id / 100) - 1][id % 100 - 1];
-			let desc = (data == 2 && upg.e.desc ? upg.e.desc : upg.desc);
-			return (typeof desc == "function" ? desc() : desc) + "<br><br>Cost: " + (data > 0 && Math.floor(id / 100) <= getEnhancableGridSize() && id % 100 <= getEnhancableGridSize() ? formatWhole(getWarUpgradeCostE(id)) + " battle enhancement" + (getWarUpgradeCostE(id) == 1 ? "" : "s") : formatWhole(upg.cost) + " battle" + (upg.cost == 1 ? "" : "s"));
+			const desc = (data == 2 && upg.e.desc ? upg.e.desc : upg.desc);
+			return (desc instanceof Function ? desc() : desc) + "<br><br>Cost: " + (data > 0 && Math.floor(id / 100) <= getEnhancableGridSize() && id % 100 <= getEnhancableGridSize() ? formatWhole(getWarUpgradeCostE(id)) + " battle enhancement" + (getWarUpgradeCostE(id) == 1 ? "" : "s") : formatWhole(upg.cost) + " battle" + (upg.cost == 1 ? "" : "s"));
 		},
 		getEffect(data, id) {
 			if (!id) return;
 			const upg = warUpgrades[Math.floor(id / 100) - 1][id % 100 - 1];
-			let eff = upg.effect;
-			if (data == 2 && upg.e.effect) eff = upg.e.effect;
-			if (typeof eff == "function") return eff();
-			return eff;
+			const eff = (data == 2 && upg.e.effect ? upg.e.effect : upg.effect);
+			return (eff instanceof Function ? eff() : eff);
 		},
 		getStyle(data, id) {
 			if (data == 2) return {"border-color": "#D69358", "background-color": "#77BF5F", "cursor": "default"};

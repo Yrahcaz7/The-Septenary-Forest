@@ -335,7 +335,7 @@ function hardReset(resetOptions = false) {
 	player = null;
 	if (resetOptions) options = null;
 	save(true);
-	window.location.reload();
+	location.reload();
 };
 
 let ticking = false;

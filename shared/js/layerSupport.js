@@ -60,7 +60,7 @@ function updateLayers() {
 		};
 	};
 	const treeLayers = [];
-	for (x = 0; x < maxRow + 1; x++) {
+	for (let x = 0; x < maxRow + 1; x++) {
 		if (TREE_LAYERS[x]) treeLayers.push(TREE_LAYERS[x]);
 	};
 	TREE_LAYERS = treeLayers;
@@ -224,7 +224,7 @@ function addLayer(layerName, layerData, tabLayers = null) {
 					if (!tmp[this.embedLayer].nodeStyle) {
 						return {"border-color": tmp[this.embedLayer].color};
 					} else {
-						style = tmp[this.embedLayer].nodeStyle;
+						const style = tmp[this.embedLayer].nodeStyle;
 						if (style["border-color"] === undefined) {
 							style["border-color"] = tmp[this.embedLayer].color;
 						};
@@ -246,7 +246,7 @@ function addNode(layerName, layerData) {
 
 // If data is a function, return the result of calling it. Otherwise, return the data.
 function readData(data, ...args) {
-	if (typeof data == "function") return data(...args);
+	if (data instanceof Function) return data(...args);
 	return data;
 };
 

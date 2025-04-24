@@ -26,7 +26,7 @@ function challengeButtonText(layer, id) {
 	const text = ["Finish", "Exit Early", "Completed", "Start", "Locked"];
 	if (tmp[layer].challenges[id].buttonText) {
 		let buttonText = tmp[layer].challenges[id].buttonText;
-		if (typeof tmp[layer].challenges[id].buttonText == "function") {
+		if (buttonText instanceof Function) {
 			buttonText = buttonText();
 		};
 		if (buttonText) {
@@ -36,7 +36,7 @@ function challengeButtonText(layer, id) {
 		};
 	};
 	if (!canUseChallenge(layer, id)) return text[4];
-	if (player[layer].activeChallenge == id) return text[canCompleteChallenge(layer, id) ? 0 : 1];
+	if (player[layer].activeChallenge === id) return text[canCompleteChallenge(layer, id) ? 0 : 1];
 	return text[maxedChallenge(layer, id) ? 2 : 3];
 };
 
@@ -44,18 +44,17 @@ function achievementStyle(layer, id) {
 	const ach = tmp[layer].achievements[id];
 	const style = [];
 	if (ach.image) style.push({"background-image": "url('" + ach.image + "')"});
-	if (!ach.unlocked) style.push({"visibility": "hidden"});
+	if (!ach.unlocked) style.push({visibility: "hidden"});
 	style.push(ach.style);
 	return style;
 };
 
 function updateWidth() {
-	const screenWidth = window.innerWidth;
-	let splitScreen = screenWidth >= 1024;
+	let splitScreen = innerWidth >= 1024;
 	if (options.forceOneTab) splitScreen = false;
-	if (player.navTab == "none") splitScreen = true;
-	tmp.other.screenWidth = screenWidth;
-	tmp.other.screenHeight = window.innerHeight;
+	if (player.navTab === "none") splitScreen = true;
+	tmp.other.screenWidth = innerWidth;
+	tmp.other.screenHeight = innerHeight;
 	tmp.other.splitScreen = splitScreen;
 	tmp.other.lastPoints = player.points;
 };
@@ -133,7 +132,7 @@ function constructTabFormat(layer, id, family) {
 		tabFunc = funcs[layer].microtabs[family][id].content;
 		location = tmp[layer].microtabs[family][id];
 	};
-	if (typeof tabLayer == "function") return tabLayer.bind(location)();
+	if (tabLayer instanceof Function) return tabLayer.bind(location)();
 	updateTempData(tabLayer, tabTemp, tabFunc, {layer, id, family});
 	return tabTemp;
 };
@@ -146,7 +145,7 @@ function updateTabFormats() {
 function updateTabFormat(layer) {
 	if (layers[layer]?.tabFormat === undefined) return;
 	let tab = player.subtabs[layer]?.mainTabs;
-	if (typeof layers[layer].tabFormat == "function") {
+	if (layers[layer].tabFormat instanceof Function) {
 		temp[layer].tabFormat = layers[layer].tabFormat();
 	} else if (Array.isArray(layers[layer].tabFormat)) {
 		temp[layer].tabFormat = constructTabFormat(layer);

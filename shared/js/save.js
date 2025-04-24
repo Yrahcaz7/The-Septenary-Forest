@@ -12,11 +12,11 @@ function save(force) {
 	NaNcheck(player);
 	if (NaNalert && !force) return;
 	if (modInfo.useNewSaveSyntax) {
-		localStorage.setItem(getModID() + "/save", btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
-		localStorage.setItem(getModID() + "/options", btoa(unescape(encodeURIComponent(JSON.stringify(options)))));
+		localStorage.setItem(getModID() + "/save", btoa(encodeURIComponent(JSON.stringify(player))));
+		localStorage.setItem(getModID() + "/options", btoa(encodeURIComponent(JSON.stringify(options))));
 	} else {
-		localStorage.setItem(getModID(), btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
-		localStorage.setItem(getModID() + "_options", btoa(unescape(encodeURIComponent(JSON.stringify(options)))));
+		localStorage.setItem(getModID(), btoa(encodeURIComponent(JSON.stringify(player))));
+		localStorage.setItem(getModID() + "_options", btoa(encodeURIComponent(JSON.stringify(options))));
 	};
 };
 
@@ -177,7 +177,7 @@ function fixData(defaultData, newData) {
 function load(mainPage = false) {
 	const get = localStorage.getItem(modInfo.useNewSaveSyntax ? getModID() + "/save" : getModID());
 	if (get) {
-		player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(escape(atob(get)))));
+		player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(atob(get))));
 		fixSave();
 		loadOptions();
 	} else {
@@ -205,10 +205,10 @@ function load(mainPage = false) {
 };
 
 function loadOptions() {
-	const get = localStorage.getItem(modInfo.useNewSaveSyntax ? getModID() + "/options" : getModID() + "_options");
-	if (get) options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(escape(atob(get)))));
-	else options = getStartOptions();
-	if (themes.indexOf(options.theme) < 0) theme = "default";
+	options = getStartOptions();
+	const get = localStorage.getItem(getModID() + (modInfo.useNewSaveSyntax ? "/" : "_") + "options");
+	if (get) options = Object.assign(options, JSON.parse(decodeURIComponent(atob(get))));
+	if (themeNames.indexOf(options.theme) < 0) theme = "default";
 	fixData(options, getStartOptions());
 };
 
@@ -234,7 +234,7 @@ function NaNcheck(data) {
 
 function exportSave() {
 	const el = document.createElement("textarea");
-	el.value = btoa(JSON.stringify(player));
+	el.value = btoa(encodeURIComponent(JSON.stringify(player)));
 	document.body.appendChild(el);
 	el.select();
 	el.setSelectionRange(0, 999999);
@@ -246,16 +246,15 @@ function importSave(imported = undefined, forced = false) {
 	if (imported === undefined) imported = prompt("Paste your save here");
 	try {
 		const tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(imported)));
-		if (tempPlr.versionType != getModID() && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")) {
+		if (tempPlr.versionType !== getModID() && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")) {
 			return; // Wrong save. Use "Forced" to force it to accept.
 		};
 		player = tempPlr;
 		player.versionType = getModID();
 		fixSave();
 		versionCheck();
-		NaNcheck(save);
 		save();
-		window.location.reload();
+		location.reload();
 	} catch (e) {
 		return;
 	};
@@ -283,6 +282,6 @@ const SAVE_INTERVAL = setInterval(() => {
 	if (options.autosave) save();
 }, 5000);
 
-window.onbeforeunload = () => {
+onbeforeunload = () => {
     if (player.autosave) save();
 };
