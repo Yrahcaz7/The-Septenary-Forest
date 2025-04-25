@@ -320,7 +320,7 @@ function gameLoop(diff) {
 			const layer = OTHER_LAYERS[row][item];
 			if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);
 			if (layers[layer].automate) layers[layer].automate();
-			player[layer].best = player[layer].best.max(player[layer].points);
+			if (player[layer].best instanceof Decimal) player[layer].best = player[layer].best.max(player[layer].points);
 			if (tmp[layer].autoUpgrade) autobuyUpgrades(layer);
 		};
 	};

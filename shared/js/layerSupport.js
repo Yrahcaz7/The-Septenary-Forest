@@ -181,8 +181,10 @@ function setupLayer(layer) {
 	};
 	if (layers[layer].startData) {
 		const data = layers[layer].startData();
-		if (data.best !== undefined && data.showBest === undefined) layers[layer].showBest = true;
-		if (data.total !== undefined && data.showTotal === undefined) layers[layer].showTotal = true;
+		if (data.points !== undefined) {
+			if (data.best !== undefined && data.showBest === undefined) layers[layer].showBest = true;
+			if (data.total !== undefined && data.showTotal === undefined) layers[layer].showTotal = true;
+		};
 	};
 	if (!layers[layer].componentStyles) layers[layer].componentStyles = {};
 	if (layers[layer].symbol === undefined) layers[layer].symbol = layer.charAt(0).toUpperCase() + layer.slice(1);

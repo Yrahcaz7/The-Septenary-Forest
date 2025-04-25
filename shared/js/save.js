@@ -73,20 +73,36 @@ function getStartPlayer() {
 function getStartLayerData(layer) {
 	const layerData = (layers[layer].startData instanceof Function ? layers[layer].startData() : {});
 	if (layerData.unlocked === undefined) layerData.unlocked = true;
-	if (layerData.total === undefined) layerData.total = newDecimalZero();
-	if (layerData.best === undefined) layerData.best = newDecimalZero();
+	if (layerData.points !== undefined) {
+		if (layerData.total === undefined) layerData.total = newDecimalZero();
+		if (layerData.best === undefined) layerData.best = newDecimalZero();
+	};
 	if (layerData.resetTime === undefined) layerData.resetTime = 0;
 	if (layerData.forceTooltip === undefined) layerData.forceTooltip = false;
-	layerData.buyables = getStartBuyables(layer);
 	if (layerData.noRespecConfirm === undefined) layerData.noRespecConfirm = false;
-	if (layerData.clickables === undefined) layerData.clickables = getStartClickables(layer);
-	layerData.spentOnBuyables = newDecimalZero();
-	layerData.upgrades = [];
-	layerData.milestones = [];
-	layerData.lastMilestone = null;
-	layerData.achievements = [];
-	layerData.challenges = getStartChallenges(layer);
-	layerData.grid = getStartGrid(layer);
+	if (layerData.clickables === undefined && layers[layer].clickables) {
+		layerData.clickables = getStartClickables(layer);
+	};
+	if (layers[layer].buyables) {
+		layerData.buyables = getStartBuyables(layer);
+		layerData.spentOnBuyables = newDecimalZero();
+	};
+	if (layers[layer].upgrades) {
+		layerData.upgrades = [];
+	};
+	if (layers[layer].milestones) {
+		layerData.milestones = [];
+		layerData.lastMilestone = null;
+	};
+	if (layers[layer].achievements) {
+		layerData.achievements = [];
+	};
+	if (layers[layer].challenges) {
+		layerData.challenges = getStartChallenges(layer);
+	};
+	if (layers[layer].grid) {
+		layerData.grid = getStartGrid(layer);
+	};
 	layerData.prevTab = "";
 	return layerData;
 };

@@ -8,21 +8,18 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `layer`: **assigned automagically**. It's the same value as the name of this layer, so you can do `player[this.layer].points` or similar to access the saved value. It makes copying code to new layers easier. It is also assigned to all upgrades and buyables and such.
 
-- `name`: **optional**. used in reset confirmations (and the default infobox title). If absent, it just uses the layer's id.
+- `name`: **optional**. Used in reset confirmations (and the default infobox title). If absent, it just uses the layer's id.
 
 - `startData()`: A function to return the default save data for this layer. Add any variables you have to it. Make sure to use `Decimal` values rather than normal numbers.
 
     Standard values:
 
-    - Required:
-        - unlocked: a boolean determining if this layer is unlocked or not.
-        - points: a Decimal, the main currency for the layer.
-
-    - Optional:
-        - total: A Decimal, tracks total amount of main prestige currency. Always tracked, but only shown if you add it here.
-        - best: A Decimal, tracks highest amount of main prestige currency. Always tracked, but only shown if you add it here.
-        - unlockOrder: used to keep track of relevant layers unlocked before this one.
-        - resetTime: A number, time since this layer was last prestiged (or reset by another layer).
+    - `unlocked`: **optional**. A boolean determining if this layer is unlocked or not. Defaults to true.
+    - `points`: A Decimal, the main currency for the layer. (Can be omitted if the layer does not have a main currency and its presige type is `none`.)
+    - `total`: **optional**. A Decimal, tracks total amount of main prestige currency. Always tracked if you use `points`, but only shown if you add it here.
+    - `best`: **optional**. A Decimal, tracks highest amount of main prestige currency. Always tracked if you use `points`, but only shown if you add it here.
+    - `unlockOrder`: **optional**. Used to keep track of relevant layers unlocked before this one.
+    - `resetTime`: **optional**. A number, time since this layer was last prestiged (or reset by another layer).
 
 - `color`: A color associated with this layer, used in many places. (A string in hex format with a `#`.)
 
@@ -32,7 +29,7 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `displayRow`: **OVERRIDE**. Changes where the layer node appears without changing where it is in the reset order.
 
-- `resource`: Name of the main currency you gain by resetting on this layer.
+- `resource`: Name of the main currency you gain by resetting on this layer. (Can be omitted if the layer does not have a main currency and its presige type is `none`.)
 
 - `effect()`: **optional**. A function that calculates and returns the current values of any bonuses inherent to the main currency. Can return a value or an object containing multiple values. *You will also have to implement the effect where it is applied.*
 
@@ -88,8 +85,8 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `type`: **optional**. Determines which prestige formula you use. Defaults to "none".
 
-    - `"normal"`: The amount of currency you gain is independent of its current amount (like Prestige). The formula before bonuses is based on `baseResource^exponent`
-    - `"static"`: The cost is dependent on your total after reset. The formula before bonuses is based on `base^(x^exponent)`
+    - `"normal"`: The amount of currency you gain is independent of its current amount (like Prestige Points in TPT). The formula before bonuses is based on `baseResource^exponent`
+    - `"static"`: The cost is dependent on your total after reset (like Boosters and Generators in TPT). The formula before bonuses is based on `base^(x^exponent)`
     - `"custom"`: You can define everything, from the calculations to the text on the button, yourself. (See more at the bottom)
     - `"none"`: This layer does not prestige, and therefore does not need any of the other features in this section.
 
