@@ -85,18 +85,13 @@ addLayer('e', {
 	automate() {
 		if (hasMilestone('m', 2) && player[this.layer].auto_upgrades) {
 			for (const id in tmp[this.layer].upgrades) {
-				if (tmp[this.layer].upgrades[id].unlocked) buyUpgrade(this.layer, id);
+				buyUpgrade(this.layer, id);
 			};
 		};
-		if (hasMilestone('m', 0) && player.e.auto_buyables) {
-			if (layers.e.buyables[11].canAfford()) {
-				layers.e.buyables[11].buy();
-			};
-			if (layers.e.buyables[12].unlocked() && layers.e.buyables[12].canAfford()) {
-				layers.e.buyables[12].buy();
-			};
-			if (layers.e.buyables[13].unlocked() && layers.e.buyables[13].canAfford()) {
-				layers.e.buyables[13].buy();
+		if (hasMilestone('m', 0) && player[this.layer].auto_buyables) {
+			updateBuyableTemp(this.layer);
+			for (const id in tmp[this.layer].buyables) {
+				buyBuyable(this.layer, id);
 			};
 		};
 	},
@@ -105,19 +100,19 @@ addLayer('e', {
 		if (hasMilestone('s', 20) && resettingLayer == 's') return;
 		if (hasMilestone('m', 2) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 1) && resettingLayer == 'gi') return;
-		let keep = ['auto_upgrades', 'auto_buyables'];
-			if (hasMilestone('c', 0) && resettingLayer == 'c') keep.push("upgrades");
-			if (hasMilestone('c', 2) && resettingLayer == 'c') keep.push("buyables");
-			if (hasMilestone('q', 1) && resettingLayer == 'q') keep.push("upgrades");
-			if (hasMilestone('q', 2) && resettingLayer == 'q') keep.push("buyables");
-			if (hasMilestone('sp', 1) && resettingLayer == 'sp') keep.push("upgrades");
-			if (hasMilestone('sp', 4) && resettingLayer == 'sp') keep.push("buyables");
-			if (hasMilestone('h', 0) && resettingLayer == 'h') keep.push("upgrades");
-			if (hasMilestone('h', 1) && resettingLayer == 'h') keep.push("buyables");
-			if (hasMilestone('ds', 3)) keep.push("upgrades");
-			if (hasMilestone('ds', 4)) keep.push("buyables");
-			if (layers[resettingLayer].row > this.row) layerDataReset('e', keep);
-		},
+		const keep = ['auto_upgrades', 'auto_buyables'];
+		if (hasMilestone('c', 0) && resettingLayer == 'c') keep.push("upgrades");
+		if (hasMilestone('c', 2) && resettingLayer == 'c') keep.push("buyables");
+		if (hasMilestone('q', 1) && resettingLayer == 'q') keep.push("upgrades");
+		if (hasMilestone('q', 2) && resettingLayer == 'q') keep.push("buyables");
+		if (hasMilestone('sp', 1) && resettingLayer == 'sp') keep.push("upgrades");
+		if (hasMilestone('sp', 4) && resettingLayer == 'sp') keep.push("buyables");
+		if (hasMilestone('h', 0) && resettingLayer == 'h') keep.push("upgrades");
+		if (hasMilestone('h', 1) && resettingLayer == 'h') keep.push("buyables");
+		if (hasMilestone('ds', 3)) keep.push("upgrades");
+		if (hasMilestone('ds', 4)) keep.push("buyables");
+		if (layers[resettingLayer].row > this.row) layerDataReset('e', keep);
+	},
 	tabFormat: getTab('e'),
 	upgrades: {
 		11: {
@@ -267,7 +262,7 @@ addLayer('e', {
 		11: {
 			cost() { return new Decimal(12).pow(getBuyableAmount('e', this.id)).add(20) },
 			title() { return '<b class="layer-e' + getdark(this, "title-buyable") + 'Purer Essence' },
-			canAfford() { return player.e.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.e.points.gte(this.cost()) },
 			purchaseLimit() {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 99;
 				else return 14;
@@ -286,7 +281,7 @@ addLayer('e', {
 		12: {
 			cost() { return new Decimal(44).pow(getBuyableAmount('e', this.id)).mul(10).add(85184) },
 			title() { return '<b class="layer-e' + getdark(this, "title-buyable") + 'Radiant Essence' },
-			canAfford() { return player.e.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.e.points.gte(this.cost()) },
 			purchaseLimit: 99,
 			buy() {
 				player.e.points = player.e.points.sub(this.cost());
@@ -312,7 +307,7 @@ addLayer('e', {
 				else return new Decimal('e10000000').pow(getBuyableAmount('e', this.id)).mul('e750000000');
 			},
 			title() { return '<b class="layer-e' + getdark(this, "title-buyable") + 'Exponential Essence' },
-			canAfford() { return player.e.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.e.points.gte(this.cost()) },
 			purchaseLimit: 99,
 			buy() {
 				player.e.points = player.e.points.sub(this.cost());
@@ -415,18 +410,13 @@ addLayer('c', {
 	automate() {
 		if (hasMilestone('s', 1) && player[this.layer].auto_upgrades) {
 			for (const id in tmp[this.layer].upgrades) {
-				if (tmp[this.layer].upgrades[id].unlocked) buyUpgrade(this.layer, id);
+				buyUpgrade(this.layer, id);
 			};
 		};
-		if (hasMilestone('s', 2) && player.c.auto_buyables) {
-			if (tmp.c.buyables[11].unlocked && tmp.c.buyables[11].canAfford) {
-				layers.c.buyables[11].buy();
-			};
-			if (tmp.c.buyables[12].unlocked && tmp.c.buyables[12].canAfford) {
-				layers.c.buyables[12].buy();
-			};
-			if (tmp.c.buyables[13].unlocked && tmp.c.buyables[13].canAfford) {
-				layers.c.buyables[13].buy();
+		if (hasMilestone('s', 2) && player[this.layer].auto_buyables) {
+			updateBuyableTemp(this.layer);
+			for (const id in layers[this.layer].buyables) {
+				buyBuyable(this.layer, id);
 			};
 		};
 	},
@@ -437,25 +427,25 @@ addLayer('c', {
 		if (hasMilestone('ei', 1) && resettingLayer == 'ei') return;
 		if (hasMilestone('w', 7) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 2) && resettingLayer == 'cl') return;
-		let keep = ['auto_upgrades', 'auto_buyables'];
-			if (hasUpgrade('sp', 21) && resettingLayer == 'sp') keep.push("buyables");
-			if (hasUpgrade('sp', 22) && resettingLayer == 'sp') keep.push("upgrades");
-			if (hasUpgrade('sp', 23) && resettingLayer == 'sp') keep.push("milestones");
-			if (hasMilestone('h', 2) && resettingLayer == 'h') keep.push("upgrades");
-			if (hasMilestone('h', 3) && resettingLayer == 'h') keep.push("buyables");
-			if (hasMilestone('h', 4) && resettingLayer == 'sp') keep.push("upgrades");
-			if (hasMilestone('h', 4) && resettingLayer == 'sp') keep.push("buyables");
-			if (hasMilestone('h', 5) && resettingLayer == 'h') keep.push("milestones");
-			if (hasMilestone('h', 5) && resettingLayer == 'sp') keep.push("milestones");
-			if (hasMilestone('ds', 2) && resettingLayer == 'ds') keep.push("milestones");
-			if (hasMilestone('ds', 5) && resettingLayer == 'ds') keep.push("upgrades");
-			if (hasMilestone('ds', 6) && resettingLayer == 'ds') keep.push("buyables");
-			if (hasMilestone('a', 1) && resettingLayer == 'a') keep.push("buyables");
-			if (hasMilestone('a', 2) && resettingLayer == 'a') keep.push("upgrades");
-			if (hasMilestone('a', 4) && resettingLayer == 'a') keep.push("milestones");
-			if (hasMilestone('s', 25) && resettingLayer == 's') keep.push("milestones");
-			if (layers[resettingLayer].row > this.row) layerDataReset('c', keep);
-		},
+		const keep = ['auto_upgrades', 'auto_buyables'];
+		if (hasUpgrade('sp', 21) && resettingLayer == 'sp') keep.push("buyables");
+		if (hasUpgrade('sp', 22) && resettingLayer == 'sp') keep.push("upgrades");
+		if (hasUpgrade('sp', 23) && resettingLayer == 'sp') keep.push("milestones");
+		if (hasMilestone('h', 2) && resettingLayer == 'h') keep.push("upgrades");
+		if (hasMilestone('h', 3) && resettingLayer == 'h') keep.push("buyables");
+		if (hasMilestone('h', 4) && resettingLayer == 'sp') keep.push("upgrades");
+		if (hasMilestone('h', 4) && resettingLayer == 'sp') keep.push("buyables");
+		if (hasMilestone('h', 5) && resettingLayer == 'h') keep.push("milestones");
+		if (hasMilestone('h', 5) && resettingLayer == 'sp') keep.push("milestones");
+		if (hasMilestone('ds', 2) && resettingLayer == 'ds') keep.push("milestones");
+		if (hasMilestone('ds', 5) && resettingLayer == 'ds') keep.push("upgrades");
+		if (hasMilestone('ds', 6) && resettingLayer == 'ds') keep.push("buyables");
+		if (hasMilestone('a', 1) && resettingLayer == 'a') keep.push("buyables");
+		if (hasMilestone('a', 2) && resettingLayer == 'a') keep.push("upgrades");
+		if (hasMilestone('a', 4) && resettingLayer == 'a') keep.push("milestones");
+		if (hasMilestone('s', 25) && resettingLayer == 's') keep.push("milestones");
+		if (layers[resettingLayer].row > this.row) layerDataReset('c', keep);
+	},
 	tabFormat: getTab('c'),
 	milestones: {
 		0: {
@@ -633,7 +623,7 @@ addLayer('c', {
 				else return getBuyableAmount('c', this.id).mul(2).add(1);
 			},
 			title() { return '<b class="layer-c' + getdark(this, "title-buyable") + 'Empowered Points' },
-			canAfford() { return player.c.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.c.points.gte(this.cost()) },
 			purchaseLimit: 99,
 			buy() {
 				player.c.points = player.c.points.sub(this.cost());
@@ -655,7 +645,7 @@ addLayer('c', {
 		12: {
 			cost() { return new Decimal(6).pow(getBuyableAmount('c', this.id)) },
 			title() { return '<b class="layer-c' + getdark(this, "title-buyable") + 'Empowered Essence' },
-			canAfford() { return player.c.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.c.points.gte(this.cost()) },
 			purchaseLimit() {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 99;
 				else return 49;
@@ -680,7 +670,7 @@ addLayer('c', {
 				else return new Decimal(1e20).pow(getBuyableAmount('c', this.id).add(1));
 			},
 			title() { return '<b class="layer-c' + getdark(this, "title-buyable") + 'Empowered Cores' },
-			canAfford() { return player.c.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.c.points.gte(this.cost()) },
 			purchaseLimit: 99,
 			buy() {
 				player.c.points = player.c.points.sub(this.cost());
@@ -776,13 +766,14 @@ addLayer('q', {
 	automate() {
 		if (hasMilestone('s', 4) && player[this.layer].auto_upgrades) {
 			for (const id in tmp[this.layer].upgrades) {
-				if (tmp[this.layer].upgrades[id].unlocked && (id < 60 || hasMilestone('ch', 20))) buyUpgrade(this.layer, id);
+				if (id < 60 || hasMilestone('ch', 20)) buyUpgrade(this.layer, id);
 			};
 		};
-		if (hasMilestone('ch', 16) && player.q.auto_buyable_11 && tmp.q.buyables[11].unlocked && layers.q.buyables[11].canAfford()) layers.q.buyables[11].buy();
-		if (hasMilestone('ch', 20) && player.q.auto_buyable_12 && tmp.q.buyables[12].unlocked && layers.q.buyables[12].canAfford()) layers.q.buyables[12].buy();
-		if (hasMilestone('ch', 22) && player.q.auto_buyable_13 && tmp.q.buyables[13].unlocked && layers.q.buyables[13].canAfford()) layers.q.buyables[13].buy();
-		if (hasMilestone('ch', 22) && player.q.auto_buyable_21 && tmp.q.buyables[21].unlocked && layers.q.buyables[21].canAfford()) layers.q.buyables[21].buy();
+		updateBuyableTemp(this.layer);
+		if (hasMilestone('ch', 16) && player.q.auto_buyable_11) buyBuyable("q", 11);
+		if (hasMilestone('ch', 20) && player.q.auto_buyable_12) buyBuyable("q", 12);
+		if (hasMilestone('ch', 22) && player.q.auto_buyable_13) buyBuyable("q", 13);
+		if (hasMilestone('ch', 22) && player.q.auto_buyable_21) buyBuyable("q", 21);
 	},
 	doReset(resettingLayer) {
 		if (challengeCompletions('r', 11) >= 30 && resettingLayer == 'r') return;
@@ -791,19 +782,19 @@ addLayer('q', {
 		if (hasMilestone('ei', 2) && resettingLayer == 'ei') return;
 		if (hasMilestone('w', 9) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 5) && resettingLayer == 'cl') return;
-		let keep = ['auto_upgrades', 'auto_buyable_11', 'auto_buyable_12', 'auto_buyable_13', 'auto_buyable_21'];
-			if (hasMilestone('sp', 3) && resettingLayer == 'sp') keep.push("milestones");
-			if (hasMilestone('sp', 5) && resettingLayer == 'sp') keep.push("upgrades");
-			if (hasMilestone('h', 5) && resettingLayer == 'h') keep.push("milestones");
-			if (hasMilestone('h', 5) && resettingLayer == 'sp') keep.push("milestones");
-			if (hasMilestone('h', 6) && resettingLayer == 'sp') keep.push("upgrades");
-			if (hasMilestone('h', 7) && resettingLayer == 'h') keep.push("upgrades");
-			if (hasMilestone('ds', 2) && resettingLayer == 'ds') keep.push("milestones");
-			if (hasMilestone('ds', 7) && resettingLayer == 'ds') keep.push("upgrades");
-			if (hasMilestone('a', 1) && resettingLayer == 'a') keep.push("upgrades");
-			if (hasMilestone('a', 5) && resettingLayer == 'a') keep.push("milestones");
-			if (hasMilestone('s', 25) && resettingLayer == 's') keep.push("milestones");
-			if (layers[resettingLayer].row > this.row) layerDataReset('q', keep);
+		const keep = ['auto_upgrades', 'auto_buyable_11', 'auto_buyable_12', 'auto_buyable_13', 'auto_buyable_21'];
+		if (hasMilestone('sp', 3) && resettingLayer == 'sp') keep.push("milestones");
+		if (hasMilestone('sp', 5) && resettingLayer == 'sp') keep.push("upgrades");
+		if (hasMilestone('h', 5) && resettingLayer == 'h') keep.push("milestones");
+		if (hasMilestone('h', 5) && resettingLayer == 'sp') keep.push("milestones");
+		if (hasMilestone('h', 6) && resettingLayer == 'sp') keep.push("upgrades");
+		if (hasMilestone('h', 7) && resettingLayer == 'h') keep.push("upgrades");
+		if (hasMilestone('ds', 2) && resettingLayer == 'ds') keep.push("milestones");
+		if (hasMilestone('ds', 7) && resettingLayer == 'ds') keep.push("upgrades");
+		if (hasMilestone('a', 1) && resettingLayer == 'a') keep.push("upgrades");
+		if (hasMilestone('a', 5) && resettingLayer == 'a') keep.push("milestones");
+		if (hasMilestone('s', 25) && resettingLayer == 's') keep.push("milestones");
+		if (layers[resettingLayer].row > this.row) layerDataReset('q', keep);
 	},
 	update(diff) {
 		if (tmp.q.tabFormat["The Decipherer"].unlocked) {
@@ -1185,7 +1176,7 @@ addLayer('q', {
 				return new Decimal('e2.5e9').pow(getBuyableAmount(this.layer, this.id)).mul('e1e10');
 			},
 			title() { return '<b class="layer-q' + getdark(this, "title-buyable") + 'Sample Quarks' },
-			canAfford() { return player.q.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.q.points.gte(this.cost()) },
 			purchaseLimit() {
 				if (player.h.limitsBroken >= 3) return 1e9;
 				return 99;
@@ -1213,7 +1204,7 @@ addLayer('q', {
 				return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)).div(div);
 			},
 			title() { return '<b class="layer-q' + getdark(this, "title-buyable") + 'Atomic Insight' },
-			canAfford() { return player.q.insight.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.q.insight.gte(this.cost()) },
 			purchaseLimit: 99,
 			buy() {
 				addBuyables(this.layer, this.id, 1);
@@ -1232,7 +1223,7 @@ addLayer('q', {
 		13: {
 			cost() { return new Decimal(10).pow(new Decimal(10).pow(getBuyableAmount(this.layer, this.id))) },
 			title() { return '<b class="layer-q' + getdark(this, "title-buyable") + 'Analyze Essence' },
-			canAfford() { return player.e.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.e.points.gte(this.cost()) },
 			purchaseLimit: 99,
 			buy() {
 				player.e.points = player.e.points.sub(this.cost());
@@ -1249,7 +1240,7 @@ addLayer('q', {
 		21: {
 			cost() { return new Decimal(5).pow(getBuyableAmount(this.layer, this.id)) },
 			title() { return '<b class="layer-q' + getdark(this, "title-buyable") + 'Insight Into Insight' },
-			canAfford() { return player.q.insight.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.q.insight.gte(this.cost()) },
 			purchaseLimit: 99,
 			buy() {
 				addBuyables(this.layer, this.id, 1);
@@ -1319,31 +1310,26 @@ addLayer('sp', {
 	automate() {
 		if (hasMilestone('m', 4) && player[this.layer].auto_upgrades) {
 			for (const id in tmp[this.layer].upgrades) {
-				if (tmp[this.layer].upgrades[id].unlocked) buyUpgrade(this.layer, id);
+				buyUpgrade(this.layer, id);
 			};
 		};
-		if (hasMilestone('m', 4) && player.sp.auto_buyables) {
-			if (layers.sp.buyables[11].canAfford()) {
-				layers.sp.buyables[11].buy();
-			};
-			if (layers.sp.buyables[12].canAfford()) {
-				layers.sp.buyables[12].buy();
-			};
-			if (layers.sp.buyables[21].canAfford()) {
-				layers.sp.buyables[21].buy();
+		if (hasMilestone('m', 4) && player[this.layer].auto_buyables) {
+			updateBuyableTemp(this.layer);
+			for (const id in layers[this.layer].buyables) {
+				buyBuyable(this.layer, id);
 			};
 		};
 	},
 	doReset(resettingLayer) {
 		if (challengeCompletions('r', 11) >= 35 && resettingLayer == 'r') return;
-		let keep = ['auto_upgrades', 'auto_buyables'];
-			if (hasMilestone('ds', 0) && resettingLayer == 'ds') keep.push("buyables");
-			if (hasMilestone('ds', 1) && resettingLayer == 'ds') keep.push("upgrades");
-			if (hasMilestone('a', 0) && resettingLayer == 'a') keep.push("buyables");
-			if (hasMilestone('a', 3) && resettingLayer == 'a') keep.push("upgrades");
-			if (hasMilestone('a', 13) && resettingLayer == 'a') keep.push("milestones");
-			if (layers[resettingLayer].row > this.row) layerDataReset('sp', keep);
-		},
+		const keep = ['auto_upgrades', 'auto_buyables'];
+		if (hasMilestone('ds', 0) && resettingLayer == 'ds') keep.push("buyables");
+		if (hasMilestone('ds', 1) && resettingLayer == 'ds') keep.push("upgrades");
+		if (hasMilestone('a', 0) && resettingLayer == 'a') keep.push("buyables");
+		if (hasMilestone('a', 3) && resettingLayer == 'a') keep.push("upgrades");
+		if (hasMilestone('a', 13) && resettingLayer == 'a') keep.push("milestones");
+		if (layers[resettingLayer].row > this.row) layerDataReset('sp', keep);
+	},
 	resetsNothing() { return hasMilestone('s', 11) || hasUpgrade('sp', 31) },
 	tabFormat: getTab('sp'),
 	milestones: {
@@ -1432,7 +1418,7 @@ addLayer('sp', {
 		11: {
 			cost() { return getBuyableAmount('sp', this.id).add(1) },
 			title() { return '<b class="layer-sp' + getdark(this, "title-buyable") + 'Protons' },
-			canAfford() { return player.sp.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.sp.points.gte(this.cost()) },
 			purchaseLimit() {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 99;
 				return 9;
@@ -1458,7 +1444,7 @@ addLayer('sp', {
 		12: {
 			cost() { return getBuyableAmount('sp', this.id).add(1) },
 			title() { return '<b class="layer-sp' + getdark(this, "title-buyable") + 'Neutrons' },
-			canAfford() { return player.sp.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.sp.points.gte(this.cost()) },
 			purchaseLimit() {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 99;
 				return 9;
@@ -1484,7 +1470,7 @@ addLayer('sp', {
 		21: {
 			cost() { return getBuyableAmount('sp', this.id).add(1) },
 			title() { return '<b class="layer-sp' + getdark(this, "title-buyable") + 'Electrons' },
-			canAfford() { return player.sp.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.sp.points.gte(this.cost()) },
 			purchaseLimit() {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 99;
 				return 9;
@@ -1586,7 +1572,7 @@ addLayer('h', {
 	automate() {
 		if (hasMilestone('m', 1) && player[this.layer].auto_upgrades) {
 			for (const id in tmp[this.layer].upgrades) {
-				if (tmp[this.layer].upgrades[id].unlocked && id < 80) buyUpgrade(this.layer, id);
+				if (id < 80) buyUpgrade(this.layer, id);
 			};
 		};
 	},
@@ -1594,14 +1580,14 @@ addLayer('h', {
 		if (challengeCompletions('r', 11) >= 27 && resettingLayer == 'r') return;
 		if (hasMilestone('m', 13) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 4) && resettingLayer == 'gi') return;
-		let keep = ['auto_upgrades', 'keep_breaking'];
-			if (hasMilestone('ds', 8) && resettingLayer == 'ds') keep.push("milestones");
-			if (hasMilestone('a', 6) && resettingLayer == 'a') keep.push("milestones");
-			if (hasMilestone('a', 11) && (resettingLayer == 'a' || resettingLayer == 'ds')) keep.push("upgrades");
-			if (hasMilestone('ch', 15) && resettingLayer == 'ch' && player.h.keep_breaking) keep.push("limitsBroken");
-			if (layers[resettingLayer].row < 6) keep.push("limitsBroken");
-			if (layers[resettingLayer].row > this.row) layerDataReset('h', keep);
-		},
+		const keep = ['auto_upgrades', 'keep_breaking'];
+		if (hasMilestone('ds', 8) && resettingLayer == 'ds') keep.push("milestones");
+		if (hasMilestone('a', 6) && resettingLayer == 'a') keep.push("milestones");
+		if (hasMilestone('a', 11) && (resettingLayer == 'a' || resettingLayer == 'ds')) keep.push("upgrades");
+		if (hasMilestone('ch', 15) && resettingLayer == 'ch' && player.h.keep_breaking) keep.push("limitsBroken");
+		if (layers[resettingLayer].row < 6) keep.push("limitsBroken");
+		if (layers[resettingLayer].row > this.row) layerDataReset('h', keep);
+	},
 	tabFormat: {
 		"Classic Hexes": {
 			content: getTab('h'),
@@ -2059,32 +2045,31 @@ addLayer('ds', {
 	automate() {
 		if (hasMilestone('m', 5) && player[this.layer].auto_upgrades) {
 			for (const id in tmp[this.layer].upgrades) {
-				if (tmp[this.layer].upgrades[id].unlocked) buyUpgrade(this.layer, id);
+				buyUpgrade(this.layer, id);
 			};
 		};
-		if (hasMilestone('m', 6) && player.ds.auto_buyables) {
-			if (layers.ds.buyables[11].canAfford()) {
-				layers.ds.buyables[11].buy();
-			};
+		if (hasMilestone('m', 6) && player[this.layer].auto_buyables) {
+			updateBuyableTemp(this.layer);
+			buyBuyable(this.layer, 11);
 		};
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone('m', 14) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 5) && resettingLayer == 'gi') return;
-		let keep = ['auto_upgrades', 'auto_buyables'];
-		let saveupg = [];
-			if (hasMilestone('m', 1) && (resettingLayer == 'm' || resettingLayer == 'gi' || resettingLayer == 'ei')) {
-				keep.push("challenges");
-				saveupg.push(22);
-			};
-			if (hasMilestone('w', 4) && resettingLayer == 'w') keep.push("challenges");
-			if (hasMilestone('cl', 3) && resettingLayer == 'cl') keep.push("challenges");
-			if (hasMilestone('ch', 5) && resettingLayer == 'ch') keep.push("challenges");
-			if (layers[resettingLayer].row > this.row) {
-				layerDataReset('ds', keep);
-				player[this.layer].upgrades = saveupg;
-			};
-		},
+		const keep = ['auto_upgrades', 'auto_buyables'];
+		const saveupg = [];
+		if (hasMilestone('m', 1) && (resettingLayer == 'm' || resettingLayer == 'gi' || resettingLayer == 'ei')) {
+			keep.push("challenges");
+			saveupg.push(22);
+		};
+		if (hasMilestone('w', 4) && resettingLayer == 'w') keep.push("challenges");
+		if (hasMilestone('cl', 3) && resettingLayer == 'cl') keep.push("challenges");
+		if (hasMilestone('ch', 5) && resettingLayer == 'ch') keep.push("challenges");
+		if (layers[resettingLayer].row > this.row) {
+			layerDataReset('ds', keep);
+			player[this.layer].upgrades = saveupg;
+		};
+	},
 	tabFormat: {
 		"Demonic Curses": {
 			content: getTab('ds'),
@@ -2209,7 +2194,7 @@ addLayer('ds', {
 				else return new Decimal(2).pow(getBuyableAmount('ds', this.id));
 			},
 			title() { return '<h3 class="layer-ds' + getdark(this, "title-buyable") + 'Demonic Energy' },
-			canAfford() { return player.ds.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.ds.points.gte(this.cost()) },
 			purchaseLimit() {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 99;
 				return 22;
@@ -2415,21 +2400,21 @@ addLayer('a', {
 	automate() {
 		if (hasMilestone('gi', 11) && player[this.layer].auto_upgrades) {
 			for (const id in tmp[this.layer].upgrades) {
-				if (tmp[this.layer].upgrades[id].unlocked) buyUpgrade(this.layer, id);
+				buyUpgrade(this.layer, id);
 			};
 		};
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone('ei', 4) && resettingLayer == 'ei') return;
-		let keep = ['auto_upgrades'];
-			if (layers[resettingLayer].row == this.row) {
-				keep.push("milestones", "points", "best", "total", "clickables");
-				if (hasMilestone('a', 12) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) keep.push("upgrades");
-			};
-			if (hasMilestone('m', 12) && resettingLayer == 'm') keep.push("milestones");
-			if (hasMilestone('cl', 8) && resettingLayer == 'cl') keep.push("milestones");
-			if (layers[resettingLayer].row >= this.row) layerDataReset('a', keep);
-		},
+		const keep = ['auto_upgrades'];
+		if (layers[resettingLayer].row == this.row) {
+			keep.push("milestones", "points", "best", "total", "clickables");
+			if (hasMilestone('a', 12) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) keep.push("upgrades");
+		};
+		if (hasMilestone('m', 12) && resettingLayer == 'm') keep.push("milestones");
+		if (hasMilestone('cl', 8) && resettingLayer == 'cl') keep.push("milestones");
+		if (layers[resettingLayer].row >= this.row) layerDataReset('a', keep);
+	},
 	resetsNothing() { return hasMilestone('a', 14) },
 	tabFormat: {
 		"Atomic Progress": {
@@ -3006,30 +2991,30 @@ addLayer('p', {
 		if (hasMilestone('ei', 3) && resettingLayer == 'ei') return;
 		if (hasMilestone('w', 10) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 6) && resettingLayer == 'cl') return;
-		let keep = ['auto_upgrades', "smart_auto_upgrades"];
-			if (resettingLayer == 'h') keep.push("points", "best", "total", "milestones");
-			if (resettingLayer == 'sp') keep.push("points", "best", "total", "milestones");
-			if (resettingLayer == 'r') keep.push("milestones");
-			if (hasMilestone('s', 25) && resettingLayer == 's') keep.push("milestones");
-			if (hasUpgrade('p', 22) && resettingLayer == 'p') {
-				let mult = newDecimalOne();
-				if (hasUpgrade('p', 61)) mult = mult.mul(upgradeEffect('p', 61));
-				if (hasUpgrade('p', 23) && hasUpgrade('p', 25)) player.p.holiness = player.p.holiness.add(player.p.divinity.mul(0.08).mul(mult));
-				else if (hasUpgrade('p', 23)) player.p.holiness = player.p.holiness.add(player.p.divinity.mul(0.06).mul(mult));
-				else player.p.holiness = player.p.holiness.add(player.p.divinity.mul(0.04).mul(mult));
-			};
-			if (hasUpgrade('p', 41) && resettingLayer == 'p') {
-				if (hasUpgrade('p', 51) && hasUpgrade('p', 55)) player.p.hymn = player.p.hymn.add(player.p.holiness.div(175).floor());
-				else if (hasUpgrade('p', 51)) player.p.hymn = player.p.hymn.add(player.p.holiness.div(200).floor());
-				else player.p.hymn = player.p.hymn.add(player.p.holiness.div(250).floor());
-			};
-			if (layers[resettingLayer].row >= this.row) player.p.divinity = newDecimalZero();
-			if (layers[resettingLayer].row > this.row) {
-				layerDataReset('p', keep);
-				if (!keep.includes("holiness")) player.p.holiness = newDecimalZero();
-				if (!keep.includes("hymn")) player.p.hymn = newDecimalZero();
-			};
-		},
+		const keep = ['auto_upgrades', "smart_auto_upgrades"];
+		if (resettingLayer == 'h') keep.push("points", "best", "total", "milestones");
+		if (resettingLayer == 'sp') keep.push("points", "best", "total", "milestones");
+		if (resettingLayer == 'r') keep.push("milestones");
+		if (hasMilestone('s', 25) && resettingLayer == 's') keep.push("milestones");
+		if (hasUpgrade('p', 22) && resettingLayer == 'p') {
+			let mult = newDecimalOne();
+			if (hasUpgrade('p', 61)) mult = mult.mul(upgradeEffect('p', 61));
+			if (hasUpgrade('p', 23) && hasUpgrade('p', 25)) player.p.holiness = player.p.holiness.add(player.p.divinity.mul(0.08).mul(mult));
+			else if (hasUpgrade('p', 23)) player.p.holiness = player.p.holiness.add(player.p.divinity.mul(0.06).mul(mult));
+			else player.p.holiness = player.p.holiness.add(player.p.divinity.mul(0.04).mul(mult));
+		};
+		if (hasUpgrade('p', 41) && resettingLayer == 'p') {
+			if (hasUpgrade('p', 51) && hasUpgrade('p', 55)) player.p.hymn = player.p.hymn.add(player.p.holiness.div(175).floor());
+			else if (hasUpgrade('p', 51)) player.p.hymn = player.p.hymn.add(player.p.holiness.div(200).floor());
+			else player.p.hymn = player.p.hymn.add(player.p.holiness.div(250).floor());
+		};
+		if (layers[resettingLayer].row >= this.row) player.p.divinity = newDecimalZero();
+		if (layers[resettingLayer].row > this.row) {
+			layerDataReset('p', keep);
+			if (!keep.includes("holiness")) player.p.holiness = newDecimalZero();
+			if (!keep.includes("hymn")) player.p.hymn = newDecimalZero();
+		};
+	},
 	update(diff) {
 		if (tmp.p.effect.gt(0) && !tmp.p.deactivated) {
 			player.p.divinity = player.p.divinity.add(tmp.p.effect.mul(diff));
@@ -3113,7 +3098,7 @@ addLayer('p', {
 		14: {
 			fullDisplay() {
 				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Prayer Divination</h3><br>Req: 100 divinity with having 0 holiness';
-				if (this.canAfford()) text += '<br><br><b>Requirements met!';
+				if (tmp[this.layer].buyables[this.id].canBuy) text += '<br><br><b>Requirements met!';
 				return text;
 			},
 			canAfford() { return player.p.divinity.gte(100) && player.p.holiness.eq(0) },
@@ -3155,7 +3140,7 @@ addLayer('p', {
 		24: {
 			fullDisplay() {
 				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Holy Conversion</h3><br>Req: 75 holiness without owning <b class="layer-p' + getdark(this, "ref", true, true) + 'Church Relics</b>';
-				if (this.canAfford()) text += '<br><br><b>Requirements met!';
+				if (tmp[this.layer].buyables[this.id].canBuy) text += '<br><br><b>Requirements met!';
 				return text;
 			},
 			canAfford() { return player.p.holiness.gte(75) && !hasUpgrade('p', 31) },
@@ -3205,7 +3190,7 @@ addLayer('p', {
 		34: {
 			fullDisplay() {
 				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Holy Shift</h3><br>Req: 1,000 holiness with 0 hymns';
-				if (this.canAfford()) text += '<br><br><b>Requirements met!';
+				if (tmp[this.layer].buyables[this.id].canBuy) text += '<br><br><b>Requirements met!';
 				return text;
 			},
 			canAfford() { return player.p.holiness.gte(1000) && player.p.hymn.eq(0) },
@@ -3258,7 +3243,7 @@ addLayer('p', {
 		44: {
 			fullDisplay() {
 				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Hymn Divination</h3><br>Req: 10,000,000 hymns without owning <b class="layer-p' + getdark(this, "ref", true, true) + 'Shorter Hymns</b>';
-				if (this.canAfford()) text += '<br><br><b>Requirements met!';
+				if (tmp[this.layer].buyables[this.id].canBuy) text += '<br><br><b>Requirements met!';
 				return text;
 			},
 			canAfford() { return player.p.hymn.gte(10000000) && !hasUpgrade('p', 51) },
@@ -3292,7 +3277,7 @@ addLayer('p', {
 		54: {
 			fullDisplay() {
 				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Even Shorter</h3><br>Req: 1e10 hymns without owning <b class="layer-p' + getdark(this, "ref", true, true) + 'Holy Hymns</b>';
-				if (this.canAfford()) text += '<br><br><b>Requirements met!';
+				if (tmp[this.layer].buyables[this.id].canBuy) text += '<br><br><b>Requirements met!';
 				return text;
 			},
 			canAfford() { return player.p.hymn.gte(1e10) && !hasUpgrade('p', 61) },
@@ -3338,7 +3323,7 @@ addLayer('p', {
 		64: {
 			fullDisplay() {
 				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Silver Sanctums</h3><br>Req: 2.5e25 prayers, 2 sanctums, and all previous research';
-				if (this.canAfford()) text += '<br><br><b>Requirements met!';
+				if (tmp[this.layer].buyables[this.id].canBuy) text += '<br><br><b>Requirements met!';
 				return text;
 			},
 			canAfford() { return player.p.points.gte(2.5e25) && player.s.points.gte(2) && hasUpgrade('p', 15) && hasUpgrade('p', 25) && hasUpgrade('p', 35) && hasUpgrade('p', 45) && hasUpgrade('p', 55) },
@@ -3512,35 +3497,35 @@ addLayer('s', {
 		if (hasMilestone('s', 12) && resettingLayer == 'a') return;
 		if (hasMilestone('w', 11) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 7) && resettingLayer == 'cl') return;
-		let keep = ["auto_worship", "auto_sacrifice", "auto_sacrificial_ceremony", "no_speed_but_more_bulk"];
-			if (challengeCompletions('r', 11) >= 9 && resettingLayer == 'r') keep.push("milestones");
-			if (layers[resettingLayer].row > this.row) {
-				layerDataReset('s', keep);
-				layerDataReset('d', keep);
-				layerDataReset('g', keep);
-				if (hasMilestone('m', 9) && resettingLayer == 'm') player.s.milestones = ['0'];
-				if (hasMilestone('m', 10) && resettingLayer == 'm') {
-					if (hasMilestone('m', 19)) set = 215;
-					else if (hasMilestone('m', 18)) set = 20;
-					else set = 5;
-					player.s.points = new Decimal(set);
-					player.s.best = new Decimal(set);
-					player.s.total = new Decimal(set);
-				};
-				if (hasMilestone('gi', 6) && resettingLayer == 'gi') {
-					if (hasMilestone('gi', 15)) set = 215;
-					else if (hasMilestone('gi', 14)) set = 85;
-					else if (hasMilestone('gi', 13)) set = 30;
-					else if (hasMilestone('gi', 9)) set = 16;
-					else if (hasMilestone('gi', 8)) set = 10;
-					else if (hasMilestone('gi', 7)) set = 7;
-					else set = 4;
-					player.s.points = new Decimal(set);
-					player.s.best = new Decimal(set);
-					player.s.total = new Decimal(set);
-				};
+		const keep = ["auto_worship", "auto_sacrifice", "auto_sacrificial_ceremony", "no_speed_but_more_bulk"];
+		if (challengeCompletions('r', 11) >= 9 && resettingLayer == 'r') keep.push("milestones");
+		if (layers[resettingLayer].row > this.row) {
+			layerDataReset('s', keep);
+			layerDataReset('d', keep);
+			layerDataReset('g', keep);
+			if (hasMilestone('m', 9) && resettingLayer == 'm') player.s.milestones = ['0'];
+			if (hasMilestone('m', 10) && resettingLayer == 'm') {
+				let set = 5;
+				if (hasMilestone('m', 19)) set = 215;
+				else if (hasMilestone('m', 18)) set = 20;
+				player.s.points = new Decimal(set);
+				player.s.best = new Decimal(set);
+				player.s.total = new Decimal(set);
 			};
-		},
+			if (hasMilestone('gi', 6) && resettingLayer == 'gi') {
+				let set = 4;
+				if (hasMilestone('gi', 15)) set = 215;
+				else if (hasMilestone('gi', 14)) set = 85;
+				else if (hasMilestone('gi', 13)) set = 30;
+				else if (hasMilestone('gi', 9)) set = 16;
+				else if (hasMilestone('gi', 8)) set = 10;
+				else if (hasMilestone('gi', 7)) set = 7;
+				player.s.points = new Decimal(set);
+				player.s.best = new Decimal(set);
+				player.s.total = new Decimal(set);
+			};
+		};
+	},
 	resetsNothing() { return hasMilestone('s', 47) },
 	tabFormat: {
 		"Landmarks": {
@@ -3884,12 +3869,12 @@ addLayer('d', {
 	color: "#AAFF00",
 	row: 2,
 	layerShown() { return false },
-	deactivated() { return getClickableState('mo', 11) && !canAssimilate('s')},
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate('s') },
 	automate() {
 		if (hasMilestone('cl', 1) && player.s.no_speed_but_more_bulk) {
-			if (hasMilestone('s', 19) && player.s.auto_worship && layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-			if (hasMilestone('s', 38) && player.s.auto_sacrifice && layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-			if (hasMilestone('s', 28) && player.s.auto_sacrificial_ceremony && layers.d.buyables[21].canAfford()) layers.d.buyables[21].buy();
+			if (hasMilestone('s', 19) && player.s.auto_worship) buyBuyable("d", 11);
+			if (hasMilestone('s', 38) && player.s.auto_sacrifice) buyBuyable("d", 12);
+			if (hasMilestone('s', 28) && player.s.auto_sacrificial_ceremony) buyBuyable("d", 21);
 		} else {
 			if (hasMilestone('s', 19) && player.s.auto_worship) {
 				let work = 1;
@@ -3900,7 +3885,7 @@ addLayer('d', {
 				if (challengeCompletions('r', 11) >= 38) work *= 2;
 				if (hasMilestone('gi', 10)) work *= 2;
 				for (let index = 0; index < work; index++) {
-					if (!layers.d.buyables[11].canAfford()) break;
+					if (!layers.d.buyables[11].canBuy()) break;
 					layers.d.buyables[11].buy();
 				};
 			};
@@ -3913,7 +3898,7 @@ addLayer('d', {
 				if (challengeCompletions('r', 11) >= 38) work *= 2;
 				if (hasMilestone('gi', 10)) work *= 2;
 				for (let index = 0; index < work; index++) {
-					if (!layers.d.buyables[12].canAfford()) break;
+					if (!layers.d.buyables[12].canBuy()) break;
 					layers.d.buyables[12].buy();
 				};
 			};
@@ -3923,7 +3908,7 @@ addLayer('d', {
 				if (challengeCompletions('r', 11) >= 38) work *= 2;
 				if (hasMilestone('gi', 10)) work *= 2;
 				for (let index = 0; index < work; index++) {
-					if (!layers.d.buyables[21].canAfford()) break;
+					if (!layers.d.buyables[21].canBuy()) break;
 					layers.d.buyables[21].buy();
 				};
 			};
@@ -3957,7 +3942,7 @@ addLayer('d', {
 				return new Decimal(10).pow(getBuyableAmount('d', this.id).add(1).mul(scale)).mul(1e50).div(div);
 			},
 			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Worship<br>' },
-			canAfford() { return player.p.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.p.points.gte(this.cost()) },
 			purchaseLimit: 1e9,
 			buy() {
 				player.p.points = player.p.points.sub(this.cost());
@@ -3967,7 +3952,7 @@ addLayer('d', {
 			display() { return 'use prayers to worship the gods. you will gain 0.1 devotion per worship.<br><br>Devotion Reward: ' + format(this.devotion()) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' prayers<br><br>Times Worshipped:<br>' + formatWhole(getBuyableAmount('d', 11)) + '/' + formatWhole(this.purchaseLimit) },
 			style() {
 				let backcolors = '#224400, #336600';
-				if (this.canAfford()) backcolors = '#112200, #448800';
+				if (tmp[this.layer].buyables[this.id].canBuy) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
 				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
@@ -3984,7 +3969,7 @@ addLayer('d', {
 				return getBuyableAmount('d', this.id).mul(scale).add(20).floor();
 			},
 			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Sacrifice<br>' },
-			canAfford() { return player.s.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.s.points.gte(this.cost()) },
 			purchaseLimit: 1e9,
 			buy() {
 				if (!hasMilestone('s', 34)) player.s.points = player.s.points.sub(this.cost());
@@ -3998,7 +3983,7 @@ addLayer('d', {
 			display() { return 'use sanctums as a sacrifice to worship the gods. you will gain<br>' + (hasMilestone('s', 24) ? '1' : '0.5') + ' devotion per sacrifice.<br>each sacrifice also multiplies relic\'s first effect by ' + (hasMilestone('s', 24) ? '2' : '1.5') + '<br>Currently: ' + format(buyableEffect('d', this.id)) + 'x<br><br>Devotion Reward: ' + format(this.devotion()) + '<br><br>' + (hasMilestone('s',34) ? 'Req' : 'Cost') + ': '  + formatWhole(this.cost()) + ' sanctums<br><br>Times Sacrificed:' + (formatWhole(getBuyableAmount('d',this.id)).length >= 8 ? '<br>' : ' ') + formatWhole(getBuyableAmount('d', this.id)) + '<br>/' + formatWhole(this.purchaseLimit) },
 			style() {
 				let backcolors = '#224400, #336600';
-				if (this.canAfford()) backcolors = '#112200, #448800';
+				if (tmp[this.layer].buyables[this.id].canBuy) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
 				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
@@ -4025,7 +4010,7 @@ addLayer('d', {
 				return getBuyableAmount('d', this.id).mul(scale).add(1).mul(1e15).floor();
 			},
 			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Sacrificial Ceremony<br>' },
-			canAfford() { return player.h.points.gte(this.cost_h()) && player.sp.points.gte(this.cost_sp()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.h.points.gte(this.cost_h()) && player.sp.points.gte(this.cost_sp()) },
 			purchaseLimit: 1e9,
 			buy() {
 				player.h.points = player.h.points.sub(this.cost_h());
@@ -4040,7 +4025,7 @@ addLayer('d', {
 			display() { return 'use hexes and subatomic particles in a sacrificial ceremony to worship the gods. you will gain 0.75 devotion per sacrificial ceremony. each sacrificial ceremony also multiplies subatomic particle gain by 1 (additive), light gain by 1 (additive), and divides worship cost by 1e25 (multiplicative, like normal)<br>Currently: ' + format(buyableEffect('d', this.id)[1]) + 'x,<br>' + format(buyableEffect('d', this.id)[1]) + 'x,<br>and /' + format(buyableEffect('d', this.id)[2]) + '<br><br>Devotion Reward: ' + format(this.devotion()) + '<br><br>Cost: ' + formatWhole(this.cost_h()) + ' hexes,<br>' + formatWhole(this.cost_sp()) + ' subatomic particles<br><br>Ceremonies Performed: ' + formatWhole(getBuyableAmount('d', this.id)) + '/' + formatWhole(this.purchaseLimit) },
 			style() {
 				let backcolors = '#224400, #336600';
-				if (this.canAfford()) backcolors = '#112200, #448800';
+				if (tmp[this.layer].buyables[this.id].canBuy) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
 				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%', 'height': '300px', 'width': '300px'};
@@ -4074,7 +4059,7 @@ addLayer('g', {
 		11: {
 			cost() { return new Decimal(10).pow(new Decimal(10).pow(getBuyableAmount('g', this.id).div(3).add(3))) },
 			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Glowing<br>Worship<br>' },
-			canAfford() { return player.p.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.p.points.gte(this.cost()) },
 			purchaseLimit: 99,
 			buy() {
 				player.p.points = player.p.points.sub(this.cost());
@@ -4084,7 +4069,7 @@ addLayer('g', {
 			display() { return 'use prayers to worship the gods. each worship increases your glow gain by 1.<br><br>Currently: ' + format(this.effect()) + '/sec<br><br>Cost: ' + formatWhole(this.cost()) + ' prayers<br><br>Times Worshipped: ' + formatWhole(getBuyableAmount('g', this.id)) + '/' + formatWhole(this.purchaseLimit) },
 			style() {
 				let backcolors = '#224400, #336600';
-				if (this.canAfford()) backcolors = '#112200, #448800';
+				if (tmp[this.layer].buyables[this.id].canBuy) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
 				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
@@ -4094,7 +4079,7 @@ addLayer('g', {
 		12: {
 			cost() { return new Decimal(5).pow(getBuyableAmount('g', this.id).add(3)) },
 			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Glowing<br>Sacrifice<br>' },
-			canAfford() { return player.s.glow.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.s.glow.gte(this.cost()) },
 			purchaseLimit: 99,
 			buy() {
 				player.s.glow = player.s.glow.sub(this.cost());
@@ -4104,7 +4089,7 @@ addLayer('g', {
 			display() { return 'use glow as a sacrifice to worship the gods. each sacrifice multiplies your glow gain by 2.<br><br>Currently: ' + format(buyableEffect('g', this.id)) + 'x<br><br>Cost: '  + formatWhole(this.cost()) + ' glow<br><br>Times Sacrificed: ' + formatWhole(getBuyableAmount('g', this.id)) + '/' + formatWhole(this.purchaseLimit) },
 			style() {
 				let backcolors = '#224400, #336600';
-				if (this.canAfford()) backcolors = '#112200, #448800';
+				if (tmp[this.layer].buyables[this.id].canBuy) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
 				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
@@ -4118,7 +4103,7 @@ addLayer('g', {
 				return new Decimal('e1e14').pow(getBuyableAmount('g', this.id).add(1).pow(2));
 			},
 			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Glowing Sacrificial Ceremony<br>' },
-			canAfford() { return player.e.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.e.points.gte(this.cost()) },
 			purchaseLimit: 99,
 			buy() {
 				player.e.points = player.e.points.sub(this.cost());
@@ -4128,7 +4113,7 @@ addLayer('g', {
 			display() { return 'use essence in a sacrificial ceremony to worship the gods. each sacrifice multiplies your glow gain by 2.5, your maximum glow by 10, and your light gain after hardcap by the amount of your glowing worships plus 1.<br><br>Currently: ' + format(buyableEffect('g', this.id)[0]) + 'x,<br>' + format(buyableEffect('g', this.id)[1]) + 'x,<br>and ' + format(buyableEffect('g', this.id)[2]) + 'x<br><br>Cost: '  + formatWhole(this.cost()) + ' essence<br><br>Ceremonies Performed: ' + formatWhole(getBuyableAmount('g', this.id)) + '/' + formatWhole(this.purchaseLimit) },
 			style() {
 				let backcolors = '#224400, #336600';
-				if (this.canAfford()) backcolors = '#112200, #448800';
+				if (tmp[this.layer].buyables[this.id].canBuy) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
 				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%', 'height': '300px', 'width': '300px'};
@@ -4192,9 +4177,9 @@ addLayer('r', {
 			if (getLightGain().gt(player.r.lightgainbest)) player.r.lightgainbest = getLightGain();
 			if (this.challenges[11].canComplete()) player.r.challenges[11]++;
 		};
-		if (hasMilestone('w', 4) && player.r.auto_upgrade_1 && layers.r.upgrades[11].unlocked) buyUpgrade('r', 11);
-		if (hasMilestone('w', 4) && player.r.auto_upgrade_2 && layers.r.upgrades[12].unlocked) buyUpgrade('r', 12);
-		if (hasMilestone('w', 4) && player.r.auto_upgrade_3 && layers.r.upgrades[13].unlocked) buyUpgrade('r', 13);
+		if (hasMilestone('w', 4) && player.r.auto_upgrade_1) buyUpgrade('r', 11);
+		if (hasMilestone('w', 4) && player.r.auto_upgrade_2) buyUpgrade('r', 12);
+		if (hasMilestone('w', 4) && player.r.auto_upgrade_3) buyUpgrade('r', 13);
 	},
 	effect() {
 		let effBoost1 = newDecimalOne();
@@ -4230,20 +4215,20 @@ addLayer('r', {
 		if (hasMilestone('ei', 0) && resettingLayer == 'ei') return;
 		if (hasMilestone('w', 5) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 1) && resettingLayer == 'cl') return;
-		let keep = ['auto_activate', 'auto_upgrade_1', 'auto_upgrade_2', 'auto_upgrade_3'];
+		const keep = ['auto_activate', 'auto_upgrade_1', 'auto_upgrade_2', 'auto_upgrade_3'];
 		let save = 0;
-			if (hasMilestone('w', 2) && resettingLayer == 'w') {
-				save = +challengeCompletions('r', 11);
-				if (new Decimal(save).gt(player.r.points)) save = player.r.points.toNumber();
-			};
-			if (layers[resettingLayer].row > this.row) layerDataReset('r', keep);
-			if (save > 0) {
-				player.r.points = new Decimal(save);
-				player.r.best = new Decimal(save);
-				player.r.total = new Decimal(save);
-				player.r.challenges[11] = save;
-			};
-		},
+		if (hasMilestone('w', 2) && resettingLayer == 'w') {
+			save = +challengeCompletions('r', 11);
+			if (new Decimal(save).gt(player.r.points)) save = player.r.points.toNumber();
+		};
+		if (layers[resettingLayer].row > this.row) layerDataReset('r', keep);
+		if (save > 0) {
+			player.r.points = new Decimal(save);
+			player.r.best = new Decimal(save);
+			player.r.total = new Decimal(save);
+			player.r.challenges[11] = save;
+		};
+	},
 	resetsNothing() { return hasMilestone('w', 4) },
 	update(diff) {
 		player.r.lightreq = new Decimal(20000).mul(new Decimal(5).pow(challengeCompletions('r', 11)));
@@ -4442,7 +4427,7 @@ addLayer('m', {
 	automate() {
 		if (hasMilestone('w', 2) && player[this.layer].auto_upgrades) {
 			for (const id in tmp[this.layer].upgrades) {
-				if (tmp[this.layer].upgrades[id].unlocked) buyUpgrade(this.layer, id);
+				buyUpgrade(this.layer, id);
 			};
 		};
 	},
@@ -4459,12 +4444,12 @@ addLayer('m', {
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone('w', 6) && resettingLayer == 'w') return;
-		let keep = ['auto_upgrades'];
-			if (hasMilestone('w', 0) && resettingLayer == 'w') keep.push('milestones');
-			if (hasMilestone('cl', 4) && resettingLayer == 'cl') keep.push('milestones');
-			if (hasMilestone('ch', 3) && resettingLayer == 'ch') keep.push('milestones');
-			if (layers[resettingLayer].row > this.row) layerDataReset('m', keep);
-		},
+		const keep = ['auto_upgrades'];
+		if (hasMilestone('w', 0) && resettingLayer == 'w') keep.push('milestones');
+		if (hasMilestone('cl', 4) && resettingLayer == 'cl') keep.push('milestones');
+		if (hasMilestone('ch', 3) && resettingLayer == 'ch') keep.push('milestones');
+		if (layers[resettingLayer].row > this.row) layerDataReset('m', keep);
+	},
 	update(diff) {
 		let effnon = new Decimal(player.m.upgrades.length);
 		if (hasUpgrade('m', 42)) effnon = effnon.mul(upgradeEffect('m', 42));
@@ -4825,12 +4810,12 @@ addLayer('gi', {
 			if (hasMilestone('ch', 14)) work *= 2;
 			if (hasMilestone('ch', 16)) work *= 2;
 			for (let index = 0; index < work; index++) {
-				if (!layers.gi.buyables[11].canAfford()) break;
+				if (!layers.gi.buyables[11].canBuy()) break;
 				layers.gi.buyables[11].buy();
 			};
 			if (layers.gi.buyables[12].unlocked()) {
 				for (let index = 0; index < work; index++) {
-					if (!layers.gi.buyables[12].canAfford()) break;
+					if (!layers.gi.buyables[12].canBuy()) break;
 					layers.gi.buyables[12].buy();
 				};
 			};
@@ -4862,12 +4847,12 @@ addLayer('gi', {
 	doReset(resettingLayer) {
 		if (hasMilestone('w', 8) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 4) && resettingLayer == 'cl') return;
-		let keep = ['auto_buyables', 'auto_prestige'];
-			if (hasMilestone('w', 1) && resettingLayer == 'w') keep.push('milestones');
-			if (hasMilestone('cl', 0) && resettingLayer == 'cl') keep.push('milestones');
-			if (hasMilestone('ch', 8) && resettingLayer == 'ch') keep.push('milestones');
-			if (layers[resettingLayer].row > this.row) layerDataReset('gi', keep);
-		},
+		const keep = ['auto_buyables', 'auto_prestige'];
+		if (hasMilestone('w', 1) && resettingLayer == 'w') keep.push('milestones');
+		if (hasMilestone('cl', 0) && resettingLayer == 'cl') keep.push('milestones');
+		if (hasMilestone('ch', 8) && resettingLayer == 'ch') keep.push('milestones');
+		if (layers[resettingLayer].row > this.row) layerDataReset('gi', keep);
+	},
 	resetsNothing() { return hasMilestone('gi', 16) },
 	update(diff) {
 		let ex = 0.2;
@@ -5004,7 +4989,7 @@ addLayer('gi', {
 				return getBuyableAmount('gi', this.id).add(1);
 			},
 			title() { return '<h3 class="layer-gi' + getdark(this, "title-buyable") + 'Better Good' },
-			canAfford() { return player.gi.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.gi.points.gte(this.cost()) },
 			purchaseLimit() {
 				if (player.h.limitsBroken >= 4) return 1e9;
 				return 8;
@@ -5020,7 +5005,7 @@ addLayer('gi', {
 		12: {
 			cost() { return getBuyableAmount('gi', this.id).div(5).add(1).floor() },
 			title() { return '<h3 class="layer-gi' + getdark(this, "title-buyable") + 'Drive out Evil' },
-			canAfford() { return player.gi.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.gi.points.gte(this.cost()) },
 			purchaseLimit() { return player.ds.points.add(1).log(10).div(12.5).floor().min(1e9) },
 			buy() {
 				if (hasMilestone('ch', 2)) player.gi.total = player.gi.total.add(this.cost());
@@ -5098,7 +5083,7 @@ addLayer('ei', {
 	automate() {
 		if (hasMilestone('w', 1) && player[this.layer].auto_upgrades) {
 			for (const id in tmp[this.layer].upgrades) {
-				if (tmp[this.layer].upgrades[id].unlocked) buyUpgrade(this.layer, id);
+				buyUpgrade(this.layer, id);
 			};
 		};
 	},
@@ -5132,13 +5117,13 @@ addLayer('ei', {
 	effectDescription() { return 'which generates <h2 class="layer-ei">' + format(tmp.ei.effect) + '</h2> evil power per second' },
 	doReset(resettingLayer) {
 		if (hasMilestone('cl', 3) && resettingLayer == 'cl') return;
-		let keep = ['auto_upgrades', 'auto_prestige'];
-			if (hasMilestone('w', 2) && resettingLayer == 'w') keep.push('milestones');
-			if (hasMilestone('w', 3) && resettingLayer == 'w') keep.push('challenges');
-			if (hasMilestone('cl', 0) && resettingLayer == 'cl') keep.push('milestones');
-			if (hasMilestone('ch', 4) && resettingLayer == 'ch') keep.push('challenges');
-			if (layers[resettingLayer].row > this.row) layerDataReset('ei', keep);
-		},
+		const keep = ['auto_upgrades', 'auto_prestige'];
+		if (hasMilestone('w', 2) && resettingLayer == 'w') keep.push('milestones');
+		if (hasMilestone('w', 3) && resettingLayer == 'w') keep.push('challenges');
+		if (hasMilestone('cl', 0) && resettingLayer == 'cl') keep.push('milestones');
+		if (hasMilestone('ch', 4) && resettingLayer == 'ch') keep.push('challenges');
+		if (layers[resettingLayer].row > this.row) layerDataReset('ei', keep);
+	},
 	resetsNothing() { return hasChallenge('ei', 12) },
 	update(diff) {
 		if (tmp.ei.effect.gt(0) && !tmp.ei.deactivated) {
@@ -5625,11 +5610,9 @@ addLayer('w', {
 	layerShown() { return hasChallenge('ei', 21) || player.w.unlocked},
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	automate() {
-		if (hasMilestone('w', 18) && player.w.auto_influence) {
-			for (const id in layers.w.buyables) {
-				if (tmp.w.buyables[id].unlocked && tmp.w.buyables[id].canAfford) {
-					layers.w.buyables[id].buy();
-				};
+		if (hasMilestone('w', 18) && player[this.layer].auto_influence) {
+			for (const id in layers[this.layer].buyables) {
+				buyBuyable(this.layer, id);
 			};
 		};
 	},
@@ -5637,27 +5620,28 @@ addLayer('w', {
 	effectDescription() { return 'which multiplies point, essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x; atom, sanctum, relic, molecule, good influence, and evil influence by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x; and light gain after hardcap by <h2 class="layer-w">' + format(tmp.w.effect[2]) + '</h2>x' },
 	doReset(resettingLayer) {
 		if (hasMilestone('ch', 12) && resettingLayer == 'ch') return;
-		let keep = ['auto_influence'], save;
-			if (hasMilestone('ch', 10) && resettingLayer == 'ch') {
-				save = player.ch.points.mul(10);
-				if (save.gt(player.w.points)) save = player.w.points;
-			} else if (hasMilestone('ch', 9) && resettingLayer == 'ch') {
-				save = player.ch.points.mul(5);
-				if (save.gt(player.w.points)) save = player.w.points;
-			} else if (hasMilestone('ch', 0) && resettingLayer == 'ch') {
-				save = player.ch.points;
-				if (save.gt(player.w.points)) save = player.w.points;
+		const keep = ['auto_influence'];
+		let save;
+		if (hasMilestone('ch', 10) && resettingLayer == 'ch') {
+			save = player.ch.points.mul(10);
+			if (save.gt(player.w.points)) save = player.w.points;
+		} else if (hasMilestone('ch', 9) && resettingLayer == 'ch') {
+			save = player.ch.points.mul(5);
+			if (save.gt(player.w.points)) save = player.w.points;
+		} else if (hasMilestone('ch', 0) && resettingLayer == 'ch') {
+			save = player.ch.points;
+			if (save.gt(player.w.points)) save = player.w.points;
+		};
+		if (hasMilestone('ch', 1) && resettingLayer == 'ch') keep.push('milestones');
+		if (layers[resettingLayer].row > this.row) {
+			layerDataReset('w', keep);
+			if (save) {
+				player.w.points = save;
+				player.w.best = save;
+				player.w.total = save;
 			};
-			if (hasMilestone('ch', 1) && resettingLayer == 'ch') keep.push('milestones');
-			if (layers[resettingLayer].row > this.row) {
-				layerDataReset('w', keep);
-				if (save) {
-					player.w.points = save;
-					player.w.best = save;
-					player.w.total = save;
-				};
-			};
-		},
+		};
+	},
 	resetsNothing() { return hasMilestone('w', 17) },
 	tabFormat: {
 		"Progress": {
@@ -5850,7 +5834,7 @@ addLayer('w', {
 				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-w-dark">Rivalry';
 				return '<h3>Rivalry';
 			},
-			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) },
 			purchaseLimit: 5000,
 			buy() {
 				if (hasMilestone('ch', 10)) {
@@ -5884,7 +5868,7 @@ addLayer('w', {
 				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-w-dark">Relic Hoarding';
 				return '<h3>Relic Hoarding';
 			},
-			canAfford() { return player.r.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.r.points.gte(this.cost()) },
 			purchaseLimit: 15,
 			buy() {
 				if (hasMilestone('ch', 10)) player.r.total = player.r.total.add(this.cost());
@@ -5909,7 +5893,7 @@ addLayer('w', {
 				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-w-dark">Power of Good';
 				return '<h3>Power of Good';
 			},
-			canAfford() { return player.s.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.s.points.gte(this.cost()) },
 			purchaseLimit() {
 				if (player.h.limitsBroken >= 1) return 1e9;
 				let max = 3;
@@ -5946,7 +5930,7 @@ addLayer('w', {
 				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-w-dark">Race for Knowledge';
 				return '<h3>Race for Knowledge';
 			},
-			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) },
 			purchaseLimit() {
 				let max = new Decimal(20);
 				if (hasMilestone('ch', 7)) max = max.add(milestoneEffect('ch', 7));
@@ -6032,35 +6016,32 @@ addLayer('cl', {
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	automate() {
 		if (hasMilestone('w', 14) && player.cl.auto_tissues) {
-			if (layers.cl.buyables[21].unlocked() && layers.cl.buyables[21].canAfford()) layers.cl.buyables[21].buy();
-			if (layers.cl.buyables[13].unlocked() && layers.cl.buyables[13].canAfford()) layers.cl.buyables[13].buy();
-			if (layers.cl.buyables[12].unlocked() && layers.cl.buyables[12].canAfford()) layers.cl.buyables[12].buy();
-			if (layers.cl.buyables[11].canAfford()) layers.cl.buyables[11].buy();
+			[21, 13, 12, 11].forEach(id => buyBuyable("cl", id));
 		};
 		if (hasMilestone('ch', 1)) {
-			if (player.cl.auto_buyable_31 && layers.cl.buyables[31].canAfford()) layers.cl.buyables[31].buy();
-			if (player.cl.auto_buyable_32 && layers.cl.buyables[32].canAfford()) {
-				layers.cl.buyables[32].buy();
-				if (hasMilestone('ch', 22) && layers.cl.buyables[32].canAfford()) layers.cl.buyables[32].buy();
+			if (player.cl.auto_buyable_31) buyBuyable("cl", 31);
+			if (player.cl.auto_buyable_32) {
+				buyBuyable("cl", 32);
+				if (hasMilestone('ch', 22)) buyBuyable("cl", 32);
 			};
-			if (player.cl.auto_buyable_33 && layers.cl.buyables[33].canAfford()) layers.cl.buyables[33].buy();
+			if (player.cl.auto_buyable_33) buyBuyable("cl", 33);
 		};
 		if (hasMilestone('ch', 6)) {
-			if (player.cl.auto_buyable_41 && layers.cl.buyables[41].canAfford()) layers.cl.buyables[41].buy();
-			if (player.cl.auto_buyable_42 && layers.cl.buyables[42].canAfford()) layers.cl.buyables[42].buy();
-			if (player.cl.auto_buyable_43 && layers.cl.buyables[43].canAfford()) layers.cl.buyables[43].buy();
+			if (player.cl.auto_buyable_41) buyBuyable("cl", 41);
+			if (player.cl.auto_buyable_42) buyBuyable("cl", 42);
+			if (player.cl.auto_buyable_43) buyBuyable("cl", 43);
 		};
 		if (hasMilestone('ch', 7)) {
-			if (player.cl.auto_buyable_51 && layers.cl.buyables[51].canAfford()) layers.cl.buyables[51].buy();
-			if (player.cl.auto_buyable_52 && layers.cl.buyables[52].canAfford()) layers.cl.buyables[52].buy();
-			if (player.cl.auto_buyable_53 && layers.cl.buyables[53].canAfford()) layers.cl.buyables[53].buy();
+			if (player.cl.auto_buyable_51) buyBuyable("cl", 51);
+			if (player.cl.auto_buyable_52) buyBuyable("cl", 52);
+			if (player.cl.auto_buyable_53) buyBuyable("cl", 53);
 		};
 	},
 	doReset(resettingLayer) {
-		let keep = ['auto_tissues', 'auto_buyable_31', 'auto_buyable_32', 'auto_buyable_33', 'auto_buyable_41', 'auto_buyable_42', 'auto_buyable_43', 'auto_buyable_51', 'auto_buyable_52', 'auto_buyable_53'];
-			if (hasMilestone('ch', 0) && resettingLayer == 'ch') keep.push('milestones');
-			if (layers[resettingLayer].row > this.row) layerDataReset('cl', keep);
-		},
+		const keep = ['auto_tissues', 'auto_buyable_31', 'auto_buyable_32', 'auto_buyable_33', 'auto_buyable_41', 'auto_buyable_42', 'auto_buyable_43', 'auto_buyable_51', 'auto_buyable_52', 'auto_buyable_53'];
+		if (hasMilestone('ch', 0) && resettingLayer == 'ch') keep.push('milestones');
+		if (layers[resettingLayer].row > this.row) layerDataReset('cl', keep);
+	},
 	resetsNothing() { return hasMilestone('cl', 12) },
 	update(diff) {
 		// init
@@ -6181,7 +6162,7 @@ addLayer('cl', {
 				return getBuyableAmount('cl', this.id).add(1);
 			},
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Nervous Tissue' },
-			canAfford() { return player.cl.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 750,
 			buy() {
 				player.cl.points = player.cl.points.sub(this.cost());
@@ -6200,7 +6181,7 @@ addLayer('cl', {
 				return getBuyableAmount('cl', this.id).add(1);
 			},
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Muscle Tissue' },
-			canAfford() { return player.cl.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 750,
 			buy() {
 				player.cl.points = player.cl.points.sub(this.cost());
@@ -6220,7 +6201,7 @@ addLayer('cl', {
 				return getBuyableAmount('cl', this.id).add(1);
 			},
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Epithelial Tissue' },
-			canAfford() { return player.cl.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 750,
 			buy() {
 				player.cl.points = player.cl.points.sub(this.cost());
@@ -6237,7 +6218,7 @@ addLayer('cl', {
 		21: {
 			cost() { return getBuyableAmount('cl', this.id).mul(10).add(10) },
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Connective Tissue' },
-			canAfford() { return player.cl.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 400,
 			buy() {
 				player.cl.points = player.cl.points.sub(this.cost());
@@ -6254,7 +6235,7 @@ addLayer('cl', {
 		31: {
 			cost() { return getBuyableAmount('cl', this.id).mul(100).add(1000) },
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Practice Makes Perfect' },
-			canAfford() { return player.cl.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 1e9,
 			buy() {
 				player.cl.points = player.cl.points.sub(this.cost());
@@ -6270,7 +6251,7 @@ addLayer('cl', {
 		32: {
 			cost() { return new Decimal(1.5).pow(getBuyableAmount('cl', this.id)).mul(10000) },
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Result Analyzing' },
-			canAfford() { return player.cl.protein.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.cl.protein.gte(this.cost()) },
 			purchaseLimit: 1e9,
 			buy() {
 				player.cl.protein = player.cl.protein.sub(this.cost());
@@ -6286,7 +6267,7 @@ addLayer('cl', {
 		33: {
 			cost() { return new Decimal(10).pow(getBuyableAmount('cl', this.id)).mul(1000000) },
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Synergizing' },
-			canAfford() { return player.cl.protein.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.cl.protein.gte(this.cost()) },
 			purchaseLimit: 1e9,
 			buy() {
 				player.cl.protein = player.cl.protein.sub(this.cost());
@@ -6305,7 +6286,7 @@ addLayer('cl', {
 				return new Decimal(10).pow(getBuyableAmount('cl', this.id)).mul(1e45);
 			},
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Deeper Comprehension' },
-			canAfford() { return player.m.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.m.points.gte(this.cost()) },
 			purchaseLimit() {
 				if (player.h.limitsBroken >= 2) return 1e9;
 				return 30;
@@ -6324,7 +6305,7 @@ addLayer('cl', {
 		42: {
 			cost() { return new Decimal(100).pow(getBuyableAmount('cl', this.id)).mul(1e14) },
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Intensive Research' },
-			canAfford() { return player.cl.protein.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.cl.protein.gte(this.cost()) },
 			purchaseLimit: 1e9,
 			buy() {
 				player.cl.protein = player.cl.protein.sub(this.cost());
@@ -6340,7 +6321,7 @@ addLayer('cl', {
 		43: {
 			cost() { return new Decimal(10).pow(getBuyableAmount('cl', this.id)).mul(1e33) },
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Passive Discovery' },
-			canAfford() { return player.cl.protein.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.cl.protein.gte(this.cost()) },
 			purchaseLimit: 1e9,
 			buy() {
 				player.cl.protein = player.cl.protein.sub(this.cost());
@@ -6364,7 +6345,7 @@ addLayer('cl', {
 		51: {
 			cost() { return getBuyableAmount('cl', this.id).mul(500).add(4000) },
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'More Perfection' },
-			canAfford() { return player.cl.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 1e9,
 			buy() {
 				player.cl.points = player.cl.points.sub(this.cost());
@@ -6381,7 +6362,7 @@ addLayer('cl', {
 		52: {
 			cost() { return new Decimal(1e5).pow(getBuyableAmount('cl', this.id)).mul(1e40) },
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'More Synergy' },
-			canAfford() { return player.cl.protein.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.cl.protein.gte(this.cost()) },
 			purchaseLimit: 1e9,
 			buy() {
 				player.cl.protein = player.cl.protein.sub(this.cost());
@@ -6401,7 +6382,7 @@ addLayer('cl', {
 				return new Decimal(1e5).pow(getBuyableAmount('cl', this.id)).mul(1e50);
 			},
 			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Innate Evil' },
-			canAfford() { return player.cl.protein.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.cl.protein.gte(this.cost()) },
 			purchaseLimit: 60,
 			buy() {
 				player.cl.protein = player.cl.protein.sub(this.cost());
@@ -6493,9 +6474,9 @@ addLayer('ch', {
 	]},
 	effectDescription() { return 'which multiplies essence gain by <h2 class="layer-ch">' + format(tmp.ch.effect[0]) + '</h2>x, multiplies war gain by <h2 class="layer-ch">' + format(tmp.ch.effect[1]) + '</h2>x, and multiplies protein found from cellular life by <h2 class="layer-ch">' + format(tmp.ch.effect[2]) + '</h2>x' },
 	doReset(resettingLayer) {
-		let keep = [];
-			if (layers[resettingLayer].row > this.row) layerDataReset('ch', keep);
-		},
+		const keep = [];
+		if (layers[resettingLayer].row > this.row) layerDataReset('ch', keep);
+	},
 	tabFormat: {
 		"Accumulation": {
 			content: getTab('ch'),
@@ -6774,9 +6755,9 @@ addLayer('mo', {
 	hotkeys: [{key: 'o', description: 'O: Reset for multicellular organisms', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.ch.unlocked || player.mo.unlocked },
 	doReset(resettingLayer) {
-		let keep = [];
-			if (layers[resettingLayer].row > this.row) layerDataReset('mo', keep);
-		},
+		const keep = [];
+		if (layers[resettingLayer].row > this.row) layerDataReset('mo', keep);
+	},
 	resetsNothing() { return true },
 	tabFormat: {
 		"Assimilation": {

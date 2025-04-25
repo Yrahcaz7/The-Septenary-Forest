@@ -78,13 +78,15 @@ addLayer("em", {
 	}],
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = [];
+		const keep = [];
 		layerDataReset("em", keep);
 	},
 	shouldNotify() {
-		if (hasMilestone("em", 12) && player.em.points.gte(4))
-			for (const key in tmp.em.buyables)
-				if (key > 20 && tmp.em.buyables[key]?.unlocked && tmp.em.buyables[key]?.canAfford) return true;
+		if (hasMilestone("em", 12) && player.em.points.gte(4)) {
+			for (const key in tmp.em.buyables) {
+				if (key > 20 && tmp.em.buyables[key]?.canBuy) return true;
+			};
+		};
 	},
 	componentStyles: {
 		"prestige-button"() {if (tmp.em.canReset && tmp.em.nodeStyle) return tmp.em.nodeStyle},
@@ -282,7 +284,7 @@ addLayer("em", {
 				return "manipulate some politics to make 1 leader to join your faction<br><br>Effect: +" + formatWhole(b.effect) + (getBuyableAmount(this.layer, this.id).lt(b.purchaseLimit) ? "<br><br>Cost: " + format(b.cost) + " control" : "") + "<br><br>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + b.purchaseLimit;
 			},
 			purchaseLimit: 22,
-			canAfford() {return player.t.control.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit)},
+			canAfford() {return player.t.control.gte(this.cost())},
 			buy() {
 				player.t.control = player.t.control.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);

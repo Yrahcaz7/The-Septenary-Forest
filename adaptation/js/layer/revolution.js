@@ -153,7 +153,7 @@ addLayer("r", {
 	}],
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = [];
+		const keep = [];
 		if (hasMilestone("r", 34) && layers[resettingLayer].row == 5) keep.push("milestones", "lastMilestone");
 		layerDataReset("r", keep);
 	},
@@ -645,9 +645,9 @@ addLayer("r", {
 			effectDescription() {return "you bulk 10x influence generators<br>(this resets influence generator amounts)<br>Req: " + formatWhole(this.requirement) + " change"},
 			done() {return player.r.change.gte(this.requirement)},
 			onComplete() {
-				for (const key in player.ex.buyables)
-					if (Object.hasOwnProperty.call(player.ex.buyables, key) && key < 20)
-						player.ex.buyables[key] = newDecimalZero();
+				for (const key in player.ex.buyables) {
+					if (key < 20) player.ex.buyables[key] = newDecimalZero();
+				};
 			},
 			unlocked() {return hasMilestone("r", this.id - 1) || player.em.unlocked},
 		},
@@ -961,9 +961,9 @@ addLayer("r", {
 			effectDescription() {return "you bulk 10x influence generators<br>(this resets influence generator amounts)<br>Req: " + formatWhole(this.requirement) + " change"},
 			done() {return player.r.change.gte(this.requirement)},
 			onComplete() {
-				for (const key in player.ex.buyables)
-					if (Object.hasOwnProperty.call(player.ex.buyables, key) && key < 20)
-						player.ex.buyables[key] = newDecimalZero();
+				for (const key in player.ex.buyables) {
+					if (key < 20) player.ex.buyables[key] = newDecimalZero();
+				};
 			},
 			unlocked() {return hasMilestone("r", this.id - 1)},
 		},

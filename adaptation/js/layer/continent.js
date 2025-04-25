@@ -108,7 +108,7 @@ addLayer("co", {
 	}],
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = [];
+		const keep = [];
 		layerDataReset("co", keep);
 	},
 	update(diff) {

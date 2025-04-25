@@ -131,7 +131,7 @@ addLayer("cy", {
 	}],
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = [];
+		const keep = [];
 		layerDataReset("cy", keep);
 	},
 	update(diff) {

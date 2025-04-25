@@ -73,7 +73,7 @@ addLayer("t", {
 	],
 	layerShown() {return true},
 	doReset(resettingLayer) {
-		let keep = [];
+		const keep = [];
 		if (layers[resettingLayer].row > this.row) layerDataReset('t', keep);
 	},
 	tabFormat: {

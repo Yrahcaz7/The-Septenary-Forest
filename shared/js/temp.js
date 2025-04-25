@@ -129,6 +129,10 @@ function updateChallengeTemp(layer) {
 	updateTempData(layers[layer].challenges, tmp[layer].challenges, funcs[layer].challenges);
 };
 
+function updateUpgradeTemp(layer) {
+	updateTempData(layers[layer].upgrades, tmp[layer].upgrades, funcs[layer].upgrades);
+};
+
 function updateBuyableTemp(layer) {
 	updateTempData(layers[layer].buyables, tmp[layer].buyables, funcs[layer].buyables);
 };

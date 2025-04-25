@@ -160,13 +160,15 @@ addLayer("w", {
 	}],
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = [];
+		const keep = [];
 		layerDataReset("w", keep);
 	},
 	shouldNotify() {
-		for (let row = 1; row <= tmp.w.grid.rows; row++)
-			for (let col = 1; col <= tmp.w.grid.cols; col++)
+		for (let row = 1; row <= tmp.w.grid.rows; row++) {
+			for (let col = 1; col <= tmp.w.grid.cols; col++) {
 				if (layers.w.grid.getCanClick(getGridData("w", row * 100 + col), row * 100 + col)) return true;
+			};
+		};
 	},
 	componentStyles: {
 		"contained-grid"() {return {"box-sizing": "border-box", "border": "2px solid #C77055", "padding": "16px"}},
@@ -230,13 +232,13 @@ addLayer("w", {
 	buyables: {
 		respec(onlyE = false) {
 			if (onlyE || player.t.points.gte(player.cy.unlocks[1] >= 4 ? 6 : 10)) {
-				for (const key in player.w.grid)
-					if (Object.hasOwnProperty.call(player.w.grid, key))
-						player.w.grid[key] = (player.l.points.gte(player.cy.unlocks[3] >= 4 ? 7 : 20) && getWarUpgradeCostE(key) <= 0 ? 2 : 1);
+				for (const key in player.w.grid) {
+					player.w.grid[key] = (player.l.points.gte(player.cy.unlocks[3] >= 4 ? 7 : 20) && getWarUpgradeCostE(key) <= 0 ? 2 : 1);
+				};
 			} else {
-				for (const key in player.w.grid)
-					if (Object.hasOwnProperty.call(player.w.grid, key))
-						player.w.grid[key] = 0;
+				for (const key in player.w.grid) {
+					player.w.grid[key] = 0;
+				};
 				player.w.spent = newDecimalZero();
 			};
 			player.w.spentE = newDecimalZero();

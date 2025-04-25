@@ -114,7 +114,7 @@ addLayer("ec", {
 	}],
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = [];
+		const keep = [];
 		if (player.cy.unlocks[1] >= 8 || player.l.points.gte(5)) keep.push("challenges");
 		layerDataReset("ec", keep);
 	},

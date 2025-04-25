@@ -71,8 +71,7 @@ function getStartPlayer() {
 };
 
 function getStartLayerData(layer) {
-	let layerData = {};
-	if (layers[layer].startData) layerData = layers[layer].startData();
+	const layerData = (layers[layer].startData instanceof Function ? layers[layer].startData() : {});
 	if (layerData.unlocked === undefined) layerData.unlocked = true;
 	if (layerData.total === undefined) layerData.total = newDecimalZero();
 	if (layerData.best === undefined) layerData.best = newDecimalZero();
@@ -141,13 +140,13 @@ function fixSave() {
 		if (player[layer].best !== undefined) player[layer].best = new Decimal(player[layer].best);
 		if (player[layer].total !== undefined) player[layer].total = new Decimal(player[layer].total);
 		if (layers[layer].tabFormat && !Array.isArray(layers[layer].tabFormat)) {
-			if (!Object.keys(layers[layer].tabFormat).includes(player.subtabs[layer].mainTabs)) {
+			if (!(layers[layer].tabFormat[player.subtabs[layer].mainTabs] instanceof Object)) {
 				player.subtabs[layer].mainTabs = Object.keys(layers[layer].tabFormat)[0];
 			};
 		};
 		if (layers[layer].microtabs) {
 			for (const item in layers[layer].microtabs) {
-				if (!Object.keys(layers[layer].microtabs[item]).includes(player.subtabs[layer][item])) {
+				if (!(layers[layer].microtabs[item][player.subtabs[layer][item]] instanceof Object)) {
 					player.subtabs[layer][item] = Object.keys(layers[layer].microtabs[item])[0];
 				};
 			};
@@ -159,14 +158,11 @@ function fixData(defaultData, newData) {
 	for (const item in defaultData) {
 		if (defaultData[item] === null) {
 			if (newData[item] === undefined) newData[item] = null;
-		} else if (Array.isArray(defaultData[item])) {
-			if (newData[item] === undefined) newData[item] = defaultData[item];
-			else fixData(defaultData[item], newData[item]);
 		} else if (defaultData[item] instanceof Decimal) { // Convert to Decimal
 			if (newData[item] === undefined) newData[item] = defaultData[item];
 			else newData[item] = new Decimal(newData[item]);
-		} else if (!!defaultData[item] && typeof defaultData[item] === "object") {
-			if (newData[item] === undefined || typeof defaultData[item] !== "object") newData[item] = defaultData[item];
+		} else if (defaultData[item] instanceof Object) {
+			if (newData[item] === undefined) newData[item] = defaultData[item];
 			else fixData(defaultData[item], newData[item]);
 		} else {
 			if (newData[item] === undefined) newData[item] = defaultData[item];
@@ -175,7 +171,7 @@ function fixData(defaultData, newData) {
 };
 
 function load(mainPage = false) {
-	const get = localStorage.getItem(modInfo.useNewSaveSyntax ? getModID() + "/save" : getModID());
+	const get = localStorage.getItem(getModID() + (modInfo.useNewSaveSyntax ? "/save" : ""));
 	if (get) {
 		player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(atob(get))));
 		fixSave();
@@ -233,13 +229,17 @@ function NaNcheck(data) {
 };
 
 function exportSave() {
-	const el = document.createElement("textarea");
-	el.value = btoa(encodeURIComponent(JSON.stringify(player)));
-	document.body.appendChild(el);
-	el.select();
-	el.setSelectionRange(0, 999999);
-	document.execCommand("copy");
-	document.body.removeChild(el);
+	if (navigator.clipboard) {
+		navigator.clipboard.writeText(btoa(encodeURIComponent(JSON.stringify(player)))).then(() => {
+			alert("Your save has been successfully copied to the clipboard.");
+		}, err => {
+			alert("Could not copy save: ", err);
+			console.error("Could not copy save: ", err);
+		});
+	} else {
+		alert("Could not copy save: navigator.clipboard is not supported in this context.");
+		console.error("Could not copy save: navigator.clipboard is not supported in this context.");
+	};
 };
 
 function importSave(imported = undefined, forced = false) {

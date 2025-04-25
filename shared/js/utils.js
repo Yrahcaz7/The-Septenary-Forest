@@ -9,20 +9,20 @@ function respecBuyables(layer, ...args) {
 };
 
 function canAffordUpgrade(layer, id) {
-	let upg = tmp[layer].upgrades[id];
+	const upg = tmp[layer].upgrades[id];
 	if (tmp[layer].deactivated || upg.canAfford === false) return false;
 	if (upg.cost !== undefined) return canAffordPurchase(layer, upg, upg.cost);
 	return true;
 };
 
 function canBuyBuyable(layer, id) {
-	let b = temp[layer].buyables[id];
+	const b = temp[layer].buyables[id];
 	return (b.unlocked && run(b.canAfford, b) && player[layer].buyables[id].lt(b.purchaseLimit) && !tmp[layer].deactivated);
 };
 
 function canAffordPurchase(layer, thing, cost) {
 	if (thing.currencyInternalName) {
-		let name = thing.currencyInternalName;
+		const name = thing.currencyInternalName;
 		if (thing.currencyLocation) {
 			return thing.currencyLocation[name].gte(cost);
 		} else if (thing.currencyLayer) {
@@ -41,20 +41,20 @@ function buyUpgrade(layer, id) {
 
 function buyUpg(layer, id) {
 	if (!tmp[layer].upgrades || !tmp[layer].upgrades[id]) return;
-	let upg = tmp[layer].upgrades[id];
+	const upg = tmp[layer].upgrades[id];
 	if (!player[layer].unlocked || player[layer].deactivated || !upg.unlocked || player[layer].upgrades.includes(id) || upg.canAfford === false) return;
-	let pay = layers[layer].upgrades[id].pay;
+	const pay = layers[layer].upgrades[id].pay;
 	if (pay !== undefined) {
 		run(pay, layers[layer].upgrades[id]);
 	} else {
-		let cost = upg.cost;
+		const cost = upg.cost;
 		if (upg.currencyInternalName) {
-			let name = upg.currencyInternalName;
+			const name = upg.currencyInternalName;
 			if (upg.currencyLocation) {
 				if (upg.currencyLocation[name].lt(cost)) return;
 				upg.currencyLocation[name] = upg.currencyLocation[name].sub(cost);
 			} else if (upg.currencyLayer) {
-				let lr = upg.currencyLayer;
+				const lr = upg.currencyLayer;
 				if (player[lr][name].lt(cost)) return;
 				player[lr][name] = player[lr][name].sub(cost);
 			} else {
@@ -70,6 +70,7 @@ function buyUpg(layer, id) {
 	if (upg.onPurchase !== undefined) {
 		run(upg.onPurchase, upg);
 	};
+	updateUpgradeTemp(layer);
 	needCanvasUpdate = true;
 };
 
@@ -98,7 +99,7 @@ function clickGrid(layer, id) {
 
 // Function to determine if the player is in a challenge
 function inChallenge(layer, id) {
-	let challenge = player[layer].activeChallenge;
+	const challenge = player[layer].activeChallenge;
 	if (!challenge) return false;
 	if (challenge == id) return true;
 	if (layers[layer].challenges[challenge].countsAs) {
@@ -166,13 +167,13 @@ function prestigeNotify(layer) {
 		};
 	};
 	if (tmp[layer].autoPrestige || tmp[layer].passiveGeneration) return false;
-	else if (tmp[layer].type == 'static') return tmp[layer].canReset;
-	else if (tmp[layer].type == 'normal') return tmp[layer].canReset && tmp[layer].resetGain.gte(player[layer].points.div(10));
-	else return false;
+	if (tmp[layer].type === 'static') return tmp[layer].canReset;
+	if (tmp[layer].type === 'normal') return tmp[layer].canReset && tmp[layer].resetGain.gte(player[layer].points.div(10));
+	return false;
 };
 
 function notifyLayer(name) {
-	if (player.tab == name || !layerUnlocked(name)) return;
+	if (player.tab === name || !layerUnlocked(name)) return;
 	player.notify[name] = 1;
 };
 

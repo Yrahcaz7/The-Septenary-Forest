@@ -122,7 +122,7 @@ addLayer("g", {
 	],
 	layerShown() {return true},
 	doReset(resettingLayer) {
-		let keep = ["autoBasic", "auto1and2", "autoLCR", "autoBBFE"];
+		const keep = ["autoBasic", "auto1and2", "autoLCR", "autoBBFE"];
 		if (hasMilestone("b", 3)) keep.push("upgrades");
 		if (layers[resettingLayer].row > this.row) layerDataReset("g", keep);
 	},
@@ -509,7 +509,7 @@ addLayer("b", {
 		onPress() {if (player.b.unlocked) doReset("b")},
 	}],
 	doReset(resettingLayer) {
-		let keep = [];
+		const keep = [];
 		if (layers[resettingLayer].row > this.row) layerDataReset("b", keep);
 	},
 	componentStyles: {
@@ -833,7 +833,7 @@ addLayer("sb", {
 		onPress() {if (player.sb.unlocked) doReset("sb")},
 	}],
 	doReset(resettingLayer) {
-		let keep = [];
+		const keep = [];
 		if (layers[resettingLayer].row > this.row) layerDataReset("sb", keep);
 	},
 	milestones: {
@@ -911,7 +911,7 @@ addLayer("sg", {
 	],
 	layerShown() {return hasMilestone("b", 8)},
 	doReset(resettingLayer) {
-		let keep = ["buyables", "best"];
+		const keep = ["buyables", "best"];
 		if (hasMilestone("b", 14)) keep.push("upgrades");
 		if (layers[resettingLayer].row > this.row) layerDataReset("sg", keep);
 	},
@@ -1286,7 +1286,7 @@ addLayer("hg", {
 	],
 	layerShown() {return hasMilestone("b", 14)},
 	doReset(resettingLayer) {
-		let keep = ["clickables"];
+		const keep = ["clickables"];
 		if (layers[resettingLayer].row > this.row) layerDataReset("hg", keep);
 	},
 	update(diff) {

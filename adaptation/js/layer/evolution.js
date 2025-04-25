@@ -344,7 +344,7 @@ addLayer("e", {
 			let text = "";
 			for (const key in extraEvolutionEffects) {
 				const eff = (extraEvolutionEffects[key] instanceof Function ? extraEvolutionEffects[key]() : extraEvolutionEffects[key]);
-				if (Object.hasOwnProperty.call(extraEvolutionEffects, key) && eff) {
+				if (eff) {
 					if (player.e.points.gte(+key)) {
 						if (+key === 26 && !hasChallenge("e", 13)) {
 							text += "<br><br>You need to complete the 3rd retrogression to obtain the next effect.";
@@ -383,7 +383,7 @@ addLayer("e", {
 	}],
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = [];
+		const keep = [];
 		if (player.cy.unlocks[1] >= 9
 			|| player.l.points.gte(2)
 			|| player.ec.points.gte(3)
@@ -491,9 +491,9 @@ addLayer("e", {
 			},
 			rewardEffect() {
 				let retrogressions = 0;
-				for (const id in player.e.challenges)
-					if (Object.hasOwnProperty.call(player.e.challenges, id))
-						retrogressions += player.e.challenges[id];
+				for (const id in player.e.challenges) {
+					retrogressions += player.e.challenges[id];
+				};
 				let base = new Decimal(1.1);
 				if (hasMilestone("a", 16)) base = base.add(milestoneEffect("a", 16));
 				let mult = newDecimalOne();
@@ -516,9 +516,9 @@ addLayer("e", {
 			},
 			rewardEffect() {
 				let retrogressions = 0;
-				for (const id in player.e.challenges)
-					if (Object.hasOwnProperty.call(player.e.challenges, id))
-						retrogressions += player.e.challenges[id];
+				for (const id in player.e.challenges) {
+					retrogressions += player.e.challenges[id];
+				};
 				let exp = new Decimal(0.25);
 				if (hasMilestone("a", 21)) exp = exp.add(milestoneEffect("a", 21));
 				let mult = newDecimalOne();

@@ -1144,9 +1144,7 @@ function loadVue(mainPage = false) {
 	// add custom components
 	if (typeof customComponents === "object" && isPlainObject(customComponents)) {
 		for (const name in customComponents) {
-			if (customComponents.hasOwnProperty(name)) {
-				app.component(name, customComponents[name]);
-			};
+			app.component(name, customComponents[name]);
 		};
 	};
 

@@ -169,7 +169,7 @@ addLayer("t", {
 	}],
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = [];
+		const keep = [];
 		layerDataReset("t", keep);
 	},
 	update(diff) {
@@ -193,18 +193,22 @@ addLayer("t", {
 		for (let row = 1; row <= getAutoControlTiers() && row <= tmp.t.grid.rows; row++) {
 			for (let col = 1; col <= tmp.t.grid.cols; col++) {
 				const id = row * 100 + col;
-				if (layers.t.grid.getCanClick(getGridData("t", id), id))
+				if (layers.t.grid.getCanClick(getGridData("t", id), id)) {
 					layers.t.grid.onClick(getGridData("t", id), id);
+				};
 			};
 		};
 	},
 	shouldNotify() {
 		if (player.t.controlUnlocked) {
-			for (let row = 1; row <= tmp.t.grid.rows; row++)
-				for (let col = 1; col <= tmp.t.grid.cols; col++)
+			for (let row = 1; row <= tmp.t.grid.rows; row++) {
+				for (let col = 1; col <= tmp.t.grid.cols; col++) {
 					if (layers.t.grid.getCanClick(getGridData("t", row * 100 + col), row * 100 + col)) return true;
-			for (const key in tmp.t.buyables)
-				if (tmp.t.buyables[key]?.unlocked && tmp.t.buyables[key]?.canAfford) return true;
+				};
+			};
+			for (const key in tmp.t.buyables) {
+				if (tmp.t.buyables[key]?.canBuy) return true;
+			};
 		};
 	},
 	componentStyles: {
@@ -263,7 +267,7 @@ addLayer("t", {
 			title: "Greater Control",
 			display() {return "unlock another tier of control nodes<br><br>on first buy, also improves the first control effect" + (getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) ? "<br><br>Cost: " + format(this.cost()) + " control" : "") + "<br><br>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + this.purchaseLimit()},
 			purchaseLimit() {return getControlImprovementLimit(2)},
-			canAfford() {return player.t.control.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit())},
+			canAfford() {return player.t.control.gte(this.cost())},
 			buy() {
 				player.t.control = player.t.control.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -280,7 +284,7 @@ addLayer("t", {
 				return 1 / (1.5 ** amt) + 1;
 			},
 			purchaseLimit() {return getControlImprovementLimit(3)},
-			canAfford() {return player.t.control.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit())},
+			canAfford() {return player.t.control.gte(this.cost())},
 			buy() {
 				player.t.control = player.t.control.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -293,7 +297,7 @@ addLayer("t", {
 			display() {return "reduce the cost of all tiers of <b>Assimilation</b>, <b>Leadership</b>, and <b>Capacity</b><br><br>on third buy, also improves the third control effect" + (getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) ? "<br><br>Cost: " + format(this.cost()) + " control" : "") + "<br><br>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + this.purchaseLimit()},
 			effect() {return getBuyableAmount(this.layer, this.id).toNumber()},
 			purchaseLimit() {return getControlImprovementLimit(4)},
-			canAfford() {return player.t.control.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit())},
+			canAfford() {return player.t.control.gte(this.cost())},
 			buy() {
 				player.t.control = player.t.control.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);

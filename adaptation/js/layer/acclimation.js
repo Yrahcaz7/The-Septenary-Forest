@@ -149,7 +149,7 @@ addLayer("a", {
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row >= this.row) player.a.populationTime = 0;
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = ["autoCRA", "autoFER", "autoANA", "autoSOV"];
+		const keep = ["autoCRA", "autoFER", "autoANA", "autoSOV"];
 		if (player.ex.unlocked || resettingLayer == "d") keep.push("milestones", "lastMilestone");
 		layerDataReset("a", keep);
 	},
@@ -182,10 +182,10 @@ addLayer("a", {
 	},
 	automate() {
 		if (player.ec.unlocked) {
-			if (player.a.autoCRA && layers.a.buyables[11].canAfford()) layers.a.buyables[11].buy();
-			if (player.a.autoFER && layers.a.buyables[12].canAfford()) layers.a.buyables[12].buy();
-			if (player.a.autoANA && layers.a.buyables[13].canAfford()) layers.a.buyables[13].buy();
-			if (player.a.autoSOV && layers.a.buyables[14].canAfford()) layers.a.buyables[14].buy();
+			if (player.a.autoCRA) buyBuyable("a", 11);
+			if (player.a.autoFER) buyBuyable("a", 12);
+			if (player.a.autoANA) buyBuyable("a", 13);
+			if (player.a.autoSOV) buyBuyable("a", 14);
 		};
 	},
 	componentStyles: {
@@ -214,7 +214,7 @@ addLayer("a", {
 				return "multiply population maximum by " + format(b.effectBase) + (b.effectBase.gte(1000000) ? "" : "<br>(population max also influences gain)") + "<br><br>Effect: " + format(b.effect) + "x<br><br>Cost: " + formatWhole(b.cost) + " acclimation points<br><br>Level: " + (getBuyableAmount(this.layer, this.id).gte(b.purchaseLimit) ? "1e10/1e10" : formatWhole(getBuyableAmount(this.layer, this.id))) + (b.extra.eq(0) ? "" : " + " + formatWhole(b.extra));
 			},
 			purchaseLimit() {return getAcclimationStatLimit()},
-			canAfford() {return player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) && !inChallenge("sp", 11)},
+			canAfford() {return player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && !inChallenge("sp", 11)},
 			buy() {
 				if (!hasMilestone("r", 2)) player[this.layer].spent = player[this.layer].spent.add(this.cost());
 				addBuyables(this.layer, this.id, getStatBulk());
@@ -247,7 +247,7 @@ addLayer("a", {
 				return "multiply population gain by " + format(b.effectBase) + "<br><br>Effect: " + format(b.effect) + "x<br><br>Cost: " + formatWhole(b.cost) + " acclimation points<br><br>Level: " + (getBuyableAmount(this.layer, this.id).gte(b.purchaseLimit) ? "1e10/1e10" : formatWhole(getBuyableAmount(this.layer, this.id))) + (b.extra.eq(0) ? "" : " + " + formatWhole(b.extra));
 			},
 			purchaseLimit() {return getAcclimationStatLimit()},
-			canAfford() {return player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) && !inChallenge("sp", 11)},
+			canAfford() {return player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && !inChallenge("sp", 11)},
 			buy() {
 				if (!hasMilestone("r", 2)) player[this.layer].spent = player[this.layer].spent.add(this.cost());
 				addBuyables(this.layer, this.id, getStatBulk());
@@ -285,7 +285,7 @@ addLayer("a", {
 				return "divide acclimation requirement by " + format(b.effectBase) + "<br><br>Effect: /" + format(b.effect) + "<br><br>Cost: " + formatWhole(b.cost) + " acclimation points<br><br>Level: " + (getBuyableAmount(this.layer, this.id).gte(b.purchaseLimit) ? "1e10/1e10" : formatWhole(getBuyableAmount(this.layer, this.id))) + (b.extra.eq(0) ? "" : " + " + formatWhole(b.extra));
 			},
 			purchaseLimit() {return getAcclimationStatLimit()},
-			canAfford() {return player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) && !inChallenge("sp", 12)},
+			canAfford() {return player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && !inChallenge("sp", 12)},
 			buy() {
 				if (!hasMilestone("r", 2)) player[this.layer].spent = player[this.layer].spent.add(this.cost());
 				addBuyables(this.layer, this.id, getStatBulk());
@@ -320,7 +320,7 @@ addLayer("a", {
 				return "multiply population amount in population effects by " + format(b.effectBase) + "<br><br>Effect: " + format(b.effect) + "x<br><br>Cost: " + formatWhole(b.cost) + " acclimation points<br><br>Level: " + (getBuyableAmount(this.layer, this.id).gte(b.purchaseLimit) ? "1e10/1e10" : formatWhole(getBuyableAmount(this.layer, this.id))) + (b.extra.eq(0) ? "" : " + " + formatWhole(b.extra));
 			},
 			purchaseLimit() {return getAcclimationStatLimit()},
-			canAfford() {return player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) && !inChallenge("sp", 11)},
+			canAfford() {return player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && !inChallenge("sp", 11)},
 			buy() {
 				if (!hasMilestone("r", 2)) player[this.layer].spent = player[this.layer].spent.add(this.cost());
 				addBuyables(this.layer, this.id, getStatBulk());

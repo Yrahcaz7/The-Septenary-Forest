@@ -146,7 +146,7 @@ function getColorCost(index) {
 };
 
 function getColorTabContent() {
-	let content = [["display-text", "You have <h2 class='rainbowvalue-text'>" + formatWhole(player.c.colors) + "</h2> colors unlocked"]];
+	const content = [["display-text", "You have <h2 class='rainbowvalue-text'>" + formatWhole(player.c.colors) + "</h2> colors unlocked"]];
 	if (tmp.c.clickables[11].unlocked) {
 		content.push("blank");
 		content.push("clickables");
@@ -173,7 +173,7 @@ function getColorTabContent() {
 };
 
 function getColorBars() {
-	let bars = {};
+	const bars = {};
 	for (let index = 0; index < COLORS.length; index++) {
 		const NAME = COLORS[index].name;
 		const HEX = COLORS[index].hex;
@@ -226,7 +226,7 @@ function getColorBars() {
 };
 
 function getColorBuyables() {
-	let buyables = {};
+	const buyables = {};
 	for (let index = 0; index < COLORS.length; index++) {
 		const HEX = COLORS[index].hex;
 		const BUYNUM = (index + 1) * 10 + 1;
@@ -241,7 +241,7 @@ function getColorBuyables() {
 				if (getGridData("m", DIVNUM)) divnum = divnum.mul(getGridData("m", DIVNUM));
 				return amt.div(2).pow(2).add(new Decimal(1.32).pow(amt.pow(0.9))).div(divnum);
 			},
-			canAfford() { return player.points.gte(getColorCost(index)) && getBuyableAmount("c", BUYNUM).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(getColorCost(index)) },
 			buy() {
 				player.points = player.points.sub(getColorCost(index));
 				addBuyables("c", BUYNUM, getColorBulk(index));
@@ -286,7 +286,7 @@ addLayer("c", {
 	tooltip() { return formatWhole(player.c.colors) + " colors unlocked" },
 	layerShown() { return true },
 	doReset(resettingLayer) {
-		let keep = [];
+		const keep = [];
 		if (resettingLayer == "m") keep.push("colorBest", "clickables");
 		if (layers[resettingLayer].row > this.row) layerDataReset("c", keep);
 	},
@@ -379,7 +379,7 @@ addLayer("c", {
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect: 1.1,
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		12: {
 			coinCost: 1e9,
@@ -392,7 +392,7 @@ addLayer("c", {
 					registerColorCost(index, getColorBulk(index));
 				};
 			},
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		13: {
 			coinCost: 1e12,
@@ -400,7 +400,7 @@ addLayer("c", {
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return (player.c.colors) ** 2 / 100 + 1 },
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		14: {
 			coinCost: 1e15,
@@ -408,7 +408,7 @@ addLayer("c", {
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return player.m.points.add(1).log10().div(5).add(1) },
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		15: {
 			coinCost: 1e18,
@@ -421,7 +421,7 @@ addLayer("c", {
 					registerColorCost(index, getColorBulk(index));
 				};
 			},
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		21: {
 			coinCost: 1e21,
@@ -429,7 +429,7 @@ addLayer("c", {
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return player.m.points.add(1).log10().div(4).add(1) },
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		22: {
 			coinCost: 1e24,
@@ -442,7 +442,7 @@ addLayer("c", {
 					registerColorCost(index, getColorBulk(index));
 				};
 			},
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		23: {
 			coinCost: 1e27,
@@ -450,7 +450,7 @@ addLayer("c", {
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return (player.c.colors) ** 2 / 100 + 1 },
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		24: {
 			coinCost: 1e30,
@@ -458,14 +458,14 @@ addLayer("c", {
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return player.c.upgrades.length / 10 + 1 },
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		25: {
 			coinCost: 1e33,
 			fullDisplay() { return "<h3>???</h3><br>coming soon!<br><br>Cost: " + illionFormat(this.coinCost) + " coins" },
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 	},
 });

@@ -161,7 +161,7 @@ addLayer('rn', {
 	passiveGeneration() { if (hasMilestone('d', 6)) return 10 },
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = [];
+		const keep = [];
 		if ((hasMilestone('gn', 1) && resettingLayer == 'gn') || (hasMilestone('i', 17) && resettingLayer == 'i')) keep.push('upgrades');
 		if ((hasMilestone('gn', 2) && resettingLayer == 'gn') || (hasMilestone('i', 19) && resettingLayer == 'i')) keep.push('calc', 'upCalc', 'overCalc');
 		layerDataReset('rn', keep);
@@ -586,8 +586,8 @@ addLayer('d', {
 	autoPrestige() { return player.d.digitAuto },
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = ["numberUpgradeAuto", "baseUpAuto", "digitAuto", "limitBreakAuto"];
-		let keepMile = [];
+		const keep = ["numberUpgradeAuto", "baseUpAuto", "digitAuto", "limitBreakAuto"];
+		const keepMile = [];
 		if ((hasMilestone('gn', 0) && resettingLayer == 'gn') || (hasMilestone('i', 10) && resettingLayer == 'i')) {
 			keepMile.push('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
 		};
@@ -739,16 +739,12 @@ addLayer('d', {
 				};
 			};
 			if (player.d.numberUpgradeAuto) {
-				for (const upgrade in tmp.d.buyables) {
-					if (upgrade == "layer" || upgrade == "rows" || upgrade == "cols" || (upgrade == "51" && !player.d.baseUpAuto)) continue;
-					if (tmp.d.buyables[upgrade].unlocked && layers.d.buyables[upgrade].canAfford()) {
-						layers.d.buyables[upgrade].buy();
-					};
+				for (const id in layers.d.buyables) {
+					if (id == "layer" || id == "rows" || id == "cols" || (id == "51" && !player.d.baseUpAuto)) continue;
+					buyBuyable("d", +id);
 				};
 			} else if (player.d.baseUpAuto) {
-				if (tmp.d.buyables[51].unlocked && layers.d.buyables[51].canAfford()) {
-					layers.d.buyables[51].buy();
-				};
+				buyBuyable("d", 51);
 			};
 		};
 	},
@@ -801,7 +797,7 @@ addLayer('d', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit());
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -828,7 +824,7 @@ addLayer('d', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit());
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -854,7 +850,7 @@ addLayer('d', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -872,7 +868,7 @@ addLayer('d', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -898,7 +894,7 @@ addLayer('d', {
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit());
 				return text;
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -944,7 +940,7 @@ addLayer('d', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -995,7 +991,7 @@ addLayer('d', {
 					+ `Cost: ` + format(this.cost()) + ` of your number<br><br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit) + `</h3>`;
 			},
-			canAfford() { return player.d.number.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.d.number.gte(this.cost()) },
 			buy() {
 				player.d.number = player.d.number.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -1021,7 +1017,7 @@ addLayer('d', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit());
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -1044,7 +1040,7 @@ addLayer('d', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -1067,7 +1063,7 @@ addLayer('d', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit());
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -1797,21 +1793,13 @@ addLayer('i', {
 	},
 	automate() {
 		if (player.i.simAuto) {
-			for (const upgrade in tmp.i.buyables) {
-				if (upgrade == "layer" || upgrade == "rows" || upgrade == "cols" || upgrade < 40 || upgrade > 70) continue;
-				if (tmp.i.buyables[upgrade].unlocked && layers.i.buyables[upgrade].canAfford()) {
-					player.i.money = player.i.money.sub(tmp.i.buyables[upgrade].cost);
-					addBuyables('i', upgrade, 1);
-				};
+			for (const id in layers.i.buyables) {
+				if (id > 40 && id < 70) buyBuyable("i", +id);
 			};
 		};
 		if (player.i.replicateAuto) {
-			for (const upgrade in tmp.i.buyables) {
-				if (upgrade == "layer" || upgrade == "rows" || upgrade == "cols" || (upgrade > 40 && upgrade < 70)) continue;
-				if (tmp.i.buyables[upgrade].unlocked && layers.i.buyables[upgrade].canAfford()) {
-					player.points = player.points.sub(tmp.i.buyables[upgrade].cost);
-					addBuyables('i', upgrade, 1);
-				};
+			for (const id in layers.i.buyables) {
+				if (id < 40 || id > 70) buyBuyable("i", +id);
 			};
 		};
 	},
@@ -2042,7 +2030,7 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -2060,7 +2048,7 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -2094,7 +2082,7 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -2133,7 +2121,7 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -2156,7 +2144,7 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -2179,7 +2167,7 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -2202,7 +2190,7 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -2228,7 +2216,7 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -2254,7 +2242,7 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -2280,7 +2268,7 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -2306,7 +2294,7 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -2325,7 +2313,7 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -2344,7 +2332,7 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -2363,7 +2351,7 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -2382,7 +2370,7 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -2418,7 +2406,7 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -3043,7 +3031,7 @@ addLayer('gn', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -3065,7 +3053,7 @@ addLayer('gn', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -3087,7 +3075,7 @@ addLayer('gn', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
