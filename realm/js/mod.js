@@ -16,10 +16,13 @@ const VERSION = {
 const changelog = `<h1>Changelog:</h1><br>
 	<br><h3>v0.5 - In Development</h3><br>
 		- Massive internal rework.<br>
+		- You can now click anywhere to gain coins.<br>
 		- Creations now have their own layer.<br>
 		- Creation tier series are now buyables.<br>
-		- Added 3 new creation tiers.<br>
+		- Added 6 new creation tiers.<br>
+		- Added 1 gem power upgrade.<br>
 		- Various balancing changes.<br>
+		- Added more stats to the stat menu again.<br>
 		- ALL OLD SAVE DATA IS REMOVED.<br>
 	<br><h3>v0.4 - Super Beta</h3><br>
 		- Added 2 new creation tiers.<br>
@@ -84,7 +87,7 @@ function sideSpellCast() {
 	player.M.mana = player.M.mana.sub(getSpellCost(2));
 	if (hasUpgrade("F", 11)) {
 		player.stats.forEach(obj => obj.casts[2] = obj.casts[2].add(1));
-	} else if (hasUpgrade("F", 21)) {
+	} else if (hasUpgrade("F", 12)) {
 		player.stats.forEach(obj => obj.casts[3] = obj.casts[3].add(1));
 	};
 	setClickableState("M", 13, true);
@@ -105,7 +108,7 @@ function getPointGen() {
 	if (hasUpgrade("F", 1081)) gain = gain.mul(upgradeEffect("F", 1081));
 	gain = gain.mul(tmp.G.effect);
 	if (getClickableState("M", 12)) gain = gain.mul(clickableEffect("M", 12));
-	if (hasUpgrade("F", 21) && getClickableState("M", 13)) gain = gain.mul(clickableEffect("M", 13));
+	if (hasUpgrade("F", 12) && getClickableState("M", 13)) gain = gain.mul(clickableEffect("M", 13));
 	return gain;
 };
 
@@ -142,29 +145,57 @@ function getPlayerStartingStats() { return {
 }};
 
 function addedPlayerData() { return {
-	FC: [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()],
+	clickValue: newDecimalOne(),
 	FCchance: new Decimal(2.5),
+	FC: [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()],
 	bestGems: newDecimalZero(),
 	stats: [getPlayerStartingStats(), getPlayerStartingStats(), getPlayerStartingStats()],
 }};
 
 const displayThings = [
-	() => { if (tmp.gameEnded) return "You beat the game!<br>For now..." },
+	() => { return format(player.clickValue) + "/click" },
 ];
 
-const endPoints = new Decimal(1e16);
+const endPoints = new Decimal(1e18);
 
 function update(diff) {
+	// passive
 	const gain = tmp.pointGen.mul(diff);
 	player.stats.forEach(obj => obj.best = obj.best.max(player.points));
 	player.stats.forEach(obj => obj.total = obj.total.add(gain));
 	player.stats.forEach(obj => obj.bestPassive = obj.bestPassive.max(tmp.pointGen));
 	player.stats.forEach(obj => obj.totalPassive = obj.totalPassive.add(gain));
-	const faction = factionAllianceUpgrade.findIndex(id => hasUpgrade("F", id));
-	if (faction >= 0) player.stats.forEach(obj => obj.allianceTimes[faction] = obj.allianceTimes[faction].add(diff));
+	// clicks
+	let clickValue = newDecimalOne();
+	if (getBuyableAmount("C", 11).gt(0)) clickValue = clickValue.add(getBuyableAmount("C", 11).mul(buyableEffect("C", 11)));
+	if (getBuyableAmount("C", 13).gt(0) && hasUpgrade("F", 1143)) clickValue = clickValue.add(getBuyableAmount("C", 13) * buyableEffect("C", 13));
+	if (hasUpgrade("F", 1033)) clickValue = clickValue.mul(upgradeEffect("F", 1033));
+	if (hasUpgrade("F", 1041)) clickValue = clickValue.mul(upgradeEffect("F", 1041));
+	if (hasUpgrade("F", 1043)) clickValue = clickValue.mul(upgradeEffect("F", 1043));
+	if (hasUpgrade("F", 1153)) clickValue = clickValue.mul(upgradeEffect("F", 1153));
+	clickValue = clickValue.mul(tmp.G.effect);
+	if (getClickableState("M", 12)) clickValue = clickValue.mul(clickableEffect("M", 12));
+	if (hasUpgrade("F", 11) && getClickableState("M", 13)) clickValue = clickValue.mul(clickableEffect("M", 13));
+	player.clickValue = clickValue;
+	player.stats.forEach(obj => obj.bestClickValue = obj.bestClickValue.max(player.clickValue));
+	// faction coins
+	let FCchance = new Decimal(2.5);
+	if (getBuyableAmount("C", 13).gt(0)) FCchance = FCchance.add(getBuyableAmount("C", 13).mul(tmp.C.buyables[13].effect2));
+	if (hasUpgrade("F", 1033)) FCchance = FCchance.add(upgradeEffect("F", 1033).mul(3));
+	if (hasUpgrade("F", 1042)) FCchance = FCchance.add(upgradeEffect("F", 1042));
+	if (hasUpgrade("F", 1061)) FCchance = FCchance.add(upgradeEffect("F", 1061));
+	if (hasUpgrade("F", 1063)) FCchance = FCchance.add(upgradeEffect("F", 1063));
+	if (hasUpgrade("G", 11)) FCchance = FCchance.add(upgradeEffect("G", 11));
+	player.FCchance = FCchance;
+	player.stats.forEach(obj => obj.FCchance = obj.FCchance.max(player.FCchance));
+	player.F.points = player.FC[0].add(player.FC[1]).add(player.FC[2]).add(player.FC[3]).add(player.FC[4]).add(player.FC[5]);
+	player.stats.forEach(obj => obj.FCbest = obj.FCbest.max(player.F.points));
+	// time
+	const alliance = getAllianceIndex();
+	if (alliance >= 0) player.stats.forEach(obj => obj.allianceTimes[alliance] = obj.allianceTimes[alliance].add(diff));
 	let side = 2;
 	if (hasUpgrade("F", 11)) side = 0;
-	else if (hasUpgrade("F", 21)) side = 1;
+	else if (hasUpgrade("F", 12)) side = 1;
 	player.stats.forEach(obj => obj.sideTimes[side] = obj.sideTimes[side].add(diff));
 	player.stats.forEach(obj => obj.time = obj.time.add(diff));
 };
@@ -178,3 +209,5 @@ function fixOldSave(oldVersion) {
 	localStorage.removeItem("realm-creator-yrahcaz7");
 	localStorage.removeItem("realm-creator-yrahcaz7_options");
 };
+
+const currentlyText = "<br>Effect: ";

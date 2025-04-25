@@ -15,14 +15,14 @@ You can make almost any value dynamic by using a function in its place, includin
     Standard values:
 
     - Required:
-        - unlocked: a boolean determining if this layer is unlocked or not
-        - points: a Decimal, the main currency for the layer
+        - unlocked: a boolean determining if this layer is unlocked or not.
+        - points: a Decimal, the main currency for the layer.
 
     - Optional:
         - total: A Decimal, tracks total amount of main prestige currency. Always tracked, but only shown if you add it here.
         - best: A Decimal, tracks highest amount of main prestige currency. Always tracked, but only shown if you add it here.
         - unlockOrder: used to keep track of relevant layers unlocked before this one.
-        - resetTime: A number, time since this layer was last prestiged (or reset by another layer)
+        - resetTime: A number, time since this layer was last prestiged (or reset by another layer).
 
 - `color`: A color associated with this layer, used in many places. (A string in hex format with a `#`.)
 
@@ -129,7 +129,7 @@ You can make almost any value dynamic by using a function in its place, includin
 
 Additional features:
 
-- `onPrestigeIsAfterGain`: **optional**. A boolean indicating whether this layer's `onPrestige()` function triggers after prestige resource gain but before resetting anything. By default is false, which makes `onPrestige()` trigger before both.
+- `onPrestigeIsAfterGain`: **optional**. A boolean indicating whether this layer's `onPrestige()` function triggers after prestige resource gain but before resetting anything (this also means that any relevant milestones and achievements will be updated to reflect the gain). By default is false, which makes `onPrestige()` trigger before both gain and reset.
 
 - `logged`: **optional**. For normal layers, if this is a [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) value, the resource gain becomes the log of the previous gain plus one. If it is exactly `true`, the log base is `10`, otherwise the log base is `new Decimal(logged)`. Can also be a function. Has no effect on static layers.
 
