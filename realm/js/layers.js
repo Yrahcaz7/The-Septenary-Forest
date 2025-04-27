@@ -1,29 +1,32 @@
 const creationName = ["Air", "Soil", "Grass"];
+const creationCostBase = [1, 100, 10_000];
 
 function getCreationTierReq(index) {
 	return 10 ** Math.floor(index / 2) * (index % 2 === 0 ? 10 : 32);
 };
 
 const creationTierEff = [
-	[0.05, 0.1, 0.2, 0.4, 0.65, 1, 1.5, 2],
-	[0.5, 1.25, 2, 3.5, 5, 7.5, 8],
-	[0.5, 2, 2.5, 2.5, 5, 7],
+	[0.05, 0.1, 0.2, 0.4, 0.65, 1, 1.5, 2, 3],
+	[0.5, 1.25, 2, 3.5, 5, 7.5, 8, 10],
+	[0.5, 2, 2.5, 2.5, 5, 7, 8],
 ];
 
-const creationTierCost = [
-	[100, 1_000, 20_000, 400_000, 400_000_000, 4e11, 4e14, 4e17],
-	[5_000, 50_000, 1_000_000, 20_000_000, 2e10, 2e13, 2e16],
-	[100_000, 1_000_000, 20_000_000, 4e9, 4e12, 4e15],
-];
+function getCreationTierCost(id) {
+	if (!creationTierEff[id - 111][getBuyableAmount("C", id).toNumber()]) return Infinity;
+	if (getBuyableAmount("C", id).gte(3)) return getBuyableAmount("C", id).pow_base(1_000).div(10_000).mul(creationCostBase[id - 111]);
+	if (getBuyableAmount("C", id).eq(2)) return new Decimal(20_000).mul(creationCostBase[id - 111]);
+	if (getBuyableAmount("C", id).eq(1)) return new Decimal(1_000).mul(creationCostBase[id - 111]);
+	return new Decimal(100).mul(creationCostBase[id - 111]);
+};
 
 function getCreationTierUpgradeDesc(id) {
 	const index = getBuyableAmount("C", id).toNumber();
 	const name = creationName[id - 111].toLowerCase();
-	const eff = creationTierEff[(id - 1) % 10][index];
+	const eff = creationTierEff[id - 111][index];
 	return "increase " + name + "'" + (name.endsWith("s") ? "" : "s") + " first base effect by +" + (eff ? format(eff, 2, false) : "???") + "<br><br>Req: " + formatWhole(getCreationTierReq(index)) + " " + name + "<br><br>Cost: " + format(tmp.C.buyables[id].cost) + " coins";
 };
 
-function getCreationCost(amount, mult = 1, bulk = player.C.bulk) {
+function getCreationCost(id, bulk = player.C.bulk, amount = getBuyableAmount("C", id)) {
 	const start = amount;
 	const end = start.add(bulk - 1);
 	const scale = new Decimal(50);
@@ -31,12 +34,13 @@ function getCreationCost(amount, mult = 1, bulk = player.C.bulk) {
 	const b = scale.add(end); // scaled end
 	let cost = start.pow(2).neg().add(start).add(end.pow(2)).add(end).mul(25).div(scale); // ∑n=start→end (50n/scale)
 	cost = cost.add(a.pow(6).mul(-2).add(a.pow(5).mul(6)).sub(a.pow(4).mul(5)).add(a.pow(2)).add(b.pow(6).mul(2)).add(b.pow(5).mul(6)).add(b.pow(4).mul(5)).sub(b.pow(2)).div(scale.pow(5).mul(12))); // ∑n=a→b (n/scale)^5
-	return cost.mul(mult);
+	return cost.mul(creationCostBase[id - 11]);
 };
 
 function romanNumeral(num) {
 	let text = "";
-	if (num >= 10) text += ["X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"][Math.floor(num / 10) % 10 - 1];
+	if (num >= 100) text += ["C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"][Math.floor(num / 100) % 10 - 1];
+	if (num % 100 >= 10) text += ["X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"][Math.floor(num / 10) % 10 - 1];
 	if (num % 10 >= 1) text += ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"][num % 10 - 1];
 	return text;
 };
@@ -98,7 +102,7 @@ addLayer("C", {
 	buyables: {
 		11: {
 			title() { return creationName[this.id - 11] + " " + romanNumeral(getBuyableAmount("C", "1" + this.id).toNumber() + 1) },
-			cost() { return getCreationCost(getBuyableAmount("C", this.id)) },
+			cost() { return getCreationCost(this.id) },
 			effect() {
 				let eff = new Decimal(0.1);
 				for (let index = 0; index < getBuyableAmount("C", "1" + this.id).toNumber(); index++) {
@@ -123,7 +127,7 @@ addLayer("C", {
 		},
 		12: {
 			title() { return creationName[this.id - 11] + " " + romanNumeral(getBuyableAmount("C", "1" + this.id).toNumber() + 1) },
-			cost() { return getCreationCost(getBuyableAmount("C", this.id), 100) },
+			cost() { return getCreationCost(this.id) },
 			effect() {
 				let eff = new Decimal(0.25);
 				for (let index = 0; index < getBuyableAmount("C", "1" + this.id).toNumber(); index++) {
@@ -148,7 +152,7 @@ addLayer("C", {
 		},
 		13: {
 			title() { return creationName[this.id - 11] + " " + romanNumeral(getBuyableAmount("C", "1" + this.id).toNumber() + 1) },
-			cost() { return getCreationCost(getBuyableAmount("C", this.id), 10000) },
+			cost() { return getCreationCost(this.id) },
 			effect() {
 				let eff = new Decimal(2.5);
 				for (let index = 0; index < getBuyableAmount("C", "1" + this.id).toNumber(); index++) {
@@ -174,36 +178,36 @@ addLayer("C", {
 		},
 		111: {
 			title: "Uptier " + creationName[0],
-			cost() { return creationTierCost[this.id - 111][getBuyableAmount("C", this.id).toNumber()] ?? Infinity },
+			cost() { return getCreationTierCost(this.id) },
 			display() { return getCreationTierUpgradeDesc(this.id) },
 			canAfford() { return getBuyableAmount("C", this.id - 100).gte(getCreationTierReq(getBuyableAmount("C", this.id).toNumber())) && player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(1));
 			},
-			style: {height: "100px"},
+			style: {height: "90px"},
 		},
 		112: {
 			title: "Uptier " + creationName[1],
-			cost() { return creationTierCost[this.id - 111][getBuyableAmount("C", this.id).toNumber()] ?? Infinity },
+			cost() { return getCreationTierCost(this.id) },
 			display() { return getCreationTierUpgradeDesc(this.id) },
 			canAfford() { return getBuyableAmount("C", this.id - 100).gte(getCreationTierReq(getBuyableAmount("C", this.id).toNumber())) && player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(1));
 			},
-			style: {height: "100px"},
+			style: {height: "90px"},
 		},
 		113: {
 			title: "Uptier " + creationName[2],
-			cost() { return creationTierCost[this.id - 111][getBuyableAmount("C", this.id).toNumber()] ?? Infinity },
+			cost() { return getCreationTierCost(this.id) },
 			display() { return getCreationTierUpgradeDesc(this.id) },
 			canAfford() { return getBuyableAmount("C", this.id - 100).gte(getCreationTierReq(getBuyableAmount("C", this.id).toNumber())) && player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				setBuyableAmount("C", this.id, getBuyableAmount("C", this.id).add(1));
 			},
-			style: {height: "100px"},
+			style: {height: "90px"},
 		},
 	},
 });
@@ -904,16 +908,6 @@ addLayer("G", {
 	hotkeys: [
 		{key: "A", description: "Shift+A: Abdicate for gems", onPress() {if (canReset(this.layer)) doReset(this.layer)}},
 	],
-	doReset(resettingLayer) {
-		player.clickValue = newDecimalOne();
-		player.FCchance = new Decimal(2.5);
-		player.FC = [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()];
-		player.stats[0] = getPlayerStartingStats();
-		if (layers[resettingLayer].row > this.row) {
-			const keep = [];
-			layerDataReset(this.layer, keep);
-		};
-	},
 	onPrestige(gain) {
 		if (player.G.best.gt(player.bestGems)) player.bestGems = player.G.best;
 	},

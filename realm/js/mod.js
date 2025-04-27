@@ -19,7 +19,7 @@ const changelog = `<h1>Changelog:</h1><br>
 		- You can now click anywhere to gain coins.<br>
 		- Creations now have their own layer.<br>
 		- Creation tier series are now buyables.<br>
-		- Added 6 new creation tiers.<br>
+		- Added 9 new creation tiers.<br>
 		- Added 1 gem power upgrade.<br>
 		- Various balancing changes.<br>
 		- Added more stats to the stat menu again.<br>
@@ -112,6 +112,12 @@ function getPointGen() {
 	return gain;
 };
 
+const displayThings = [
+	() => { return format(player.clickValue) + "/click" },
+];
+
+const endPoints = new Decimal(1e20);
+
 function getPlayerStartingStats() { return {
 	// general
 	best: newDecimalZero(),
@@ -152,11 +158,12 @@ function addedPlayerData() { return {
 	stats: [getPlayerStartingStats(), getPlayerStartingStats(), getPlayerStartingStats()],
 }};
 
-const displayThings = [
-	() => { return format(player.clickValue) + "/click" },
-];
-
-const endPoints = new Decimal(1e18);
+function doReset(resettingLayer) {
+	player.clickValue = newDecimalOne();
+	player.FCchance = new Decimal(2.5);
+	player.FC = [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()];
+	player.stats[0] = getPlayerStartingStats();
+};
 
 function update(diff) {
 	// passive
