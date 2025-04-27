@@ -242,7 +242,6 @@ addLayer("M", {
 	color: "#0080E0",
 	type: "none",
 	prestigeNotify() { return player.M.mana.gte(player.M.maxMana) },
-	layerShown() { return true },
 	tooltip() { return format(player.M.mana) + "/" + format(player.M.maxMana) + " mana" },
 	update(diff) {
 		// mana regen buffs

@@ -3,7 +3,6 @@ addLayer("s", {
 	symbol: "S",
 	position: 0,
 	startData() { return {
-		unlocked: true,
 		points: newDecimalZero(),
 		best: newDecimalZero(),
 		total: newDecimalZero(),

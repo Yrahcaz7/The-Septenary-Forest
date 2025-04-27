@@ -71,7 +71,6 @@ addLayer("t", {
 	hotkeys: [
 		{key: "t", description: "T: Reset for trees", onPress() {if (canReset(this.layer)) doReset(this.layer)}},
 	],
-	layerShown() {return true},
 	doReset(resettingLayer) {
 		const keep = [];
 		if (layers[resettingLayer].row > this.row) layerDataReset('t', keep);

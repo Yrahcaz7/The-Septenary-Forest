@@ -33,10 +33,9 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `effect()`: **optional**. A function that calculates and returns the current values of any bonuses inherent to the main currency. Can return a value or an object containing multiple values. *You will also have to implement the effect where it is applied.*
 
-- `effectDescription`: **optional**. A function that returns a description of this effect. If the text stays constant, it can just be a string.
+- `effectDescription()`: **optional**. A function that returns a description of this effect. If the text stays constant, it can just be a string.
 
-- `layerShown()`: **optional**. A function returning a boolean which determines if this layer's node should be visible on the tree. It can also return "ghost", which will hide the layer, but its node will still take up space in the tree.
-    Defaults to true.
+- `layerShown()`: **optional**. A function returning a boolean which determines if this layer's node should be visible on the tree. (If the value stays constant, it can just be a boolean.) It can also return "ghost", which will hide the layer, but its node will still take up space in the tree. Defaults to true.
 
 - `hotkeys`: **optional**. An array containing information on any hotkeys associated with this layer:
 

@@ -99,7 +99,6 @@ addLayer("g", {
 	symbol: "G",
 	position: 0,
 	startData() { return {
-		unlocked: true,
 		points: newDecimalZero(),
 		passive: newDecimalZero(),
 		autoBasic: false,
@@ -120,7 +119,6 @@ addLayer("g", {
 		"blank",
 		"upgrades",
 	],
-	layerShown() {return true},
 	doReset(resettingLayer) {
 		const keep = ["autoBasic", "auto1and2", "autoLCR", "autoBBFE"];
 		if (hasMilestone("b", 3)) keep.push("upgrades");
@@ -890,7 +888,6 @@ addLayer("sg", {
 	position: 1,
 	branches: ["g"],
 	startData() { return {
-		unlocked: true,
 		points: newDecimalZero(),
 		best: newDecimalZero(),
 		passive: newDecimalZero(),
@@ -1266,7 +1263,6 @@ addLayer("hg", {
 	position: 2,
 	branches: ["sg"],
 	startData() { return {
-		unlocked: true,
 		points: newDecimalZero(),
 		passive: newDecimalZero(),
 	}},

@@ -3,13 +3,11 @@ addLayer('A', {
 	symbol: 'A',
 	position: 0,
 	startData() { return {
-		unlocked: true,
 		points: newDecimalZero(),
 	}},
 	color: '#A5BCC2',
 	resource: 'achievements',
 	row: 'side',
-	layerShown() { return true },
 	effectDescription() {
 		let text = ['<br>which are multiplying your point ', '', '', ''];
 		if (hasUpgrade('ds', 21)) {

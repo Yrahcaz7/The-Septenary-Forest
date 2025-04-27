@@ -4,17 +4,13 @@ addLayer('N', {
 	row: 'side',
 	position: 0,
 	startData() { return {
-		unlocked: true,
 		points: newDecimalZero(),
-		record: newDecimalZero(),
 	}},
 	color: '#c0c0c0',
 	resource: 'notes',
 	type: 'none',
-	layerShown() { return true },
 	tabFormat: [
-		['display-text', () => 'You have <h2 class="layer-N">' + formatWhole(player.N.points) + '</h2> notes'],
-		'blank',
+		'main-display',
 		['display-text', () => {
 			let text = '<h3>Note #1 - Roman Numeral Transcription</h3><br><br>';
 			text += 'N ----- 0<br>';
@@ -72,12 +68,12 @@ addLayer('N', {
 	update(diff) {
 		let amount = newDecimalOne();
 		if (player.gn.unlocked) amount = amount.add(1);
-		player.N.points = amount.round();
-		if (player.N.points.gt(player.N.record)) {
-			let title = 'title not found';
-			player.N.record = player.N.record.add(1).round();
-			if (player.N.points.eq(1)) title = 'Roman Numeral Transcription';
-			else if (player.N.points.eq(2)) title = 'Greek Numeral Transcription';
+		player.N.points = amount;
+		if (player.N.points.gt(player.N.total)) {
+			player.N.total = player.N.total.add(1);
+			let title = '???';
+			if (player.N.total.eq(1)) title = 'Roman Numeral Transcription';
+			else if (player.N.total.eq(2)) title = 'Greek Numeral Transcription';
 			doPopup('none', title, 'New note found!', 3, '#cccccc');
 		};
 	},
@@ -91,7 +87,6 @@ addLayer('rn', {
 	branches: ['d', 'gn'],
 	tooltip() { return romanNumeralFormat(player.rn.points) + ' roman numerals' },
 	startData() { return {
-		unlocked: true,
 		points: newDecimalZero(),
 		best: newDecimalZero(),
 		total: newDecimalZero(),
@@ -171,7 +166,6 @@ addLayer('rn', {
 		description: 'R: reset for roman numerals',
 		onPress() { if (player.rn.unlocked) doReset('rn') },
 	}],
-	layerShown() { return true },
 	tabFormat: [
 		['display-text', () => {
 			if (player.rn.points.gte('1e1000')) return '<h2 class="layer-rn">' + romanNumeralFormat(player.rn.points) + '</h2> roman numerals';
@@ -624,7 +618,6 @@ addLayer('d', {
 		if (hasUpgrade('d', 94)) eff = eff.mul(upgradeEffect('d', 94));
 		return eff;
 	},
-	layerShown() { return true },
 	tabFormat: {
 		Number: {
 			content: () => {

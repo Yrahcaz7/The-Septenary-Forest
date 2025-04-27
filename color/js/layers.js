@@ -274,7 +274,6 @@ addLayer("c", {
 	row: 0,
 	position: 0,
 	startData() { return {
-		unlocked: true,
 		colors: 0,
 		colorBest: 0,
 		earnings: Array.from({length: COLORS.length}, () => newDecimalZero()),
@@ -283,7 +282,6 @@ addLayer("c", {
 	color: "#ffffff",
 	nodeStyle: {border: "0px transparent"},
 	tooltip() { return formatWhole(player.c.colors) + " colors unlocked" },
-	layerShown() { return true },
 	doReset(resettingLayer) {
 		const keep = [];
 		if (resettingLayer == "m") keep.push("colorBest", "clickables");
@@ -535,7 +533,6 @@ addLayer("m", {
 		description: "Shift+M: Reset for multiplier",
 		onPress() { if (player.m.unlocked) doReset("m") },
 	}],
-	layerShown() { return true },
 	tabFormat: [
 		"main-display",
 		"prestige-button",

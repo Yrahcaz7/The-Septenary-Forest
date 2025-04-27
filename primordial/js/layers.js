@@ -3,7 +3,6 @@ addLayer('e', {
 	symbol: 'E',
 	position: 0,
 	startData() { return {
-		unlocked: true,
 		points: newDecimalZero(),
 		best: newDecimalZero(),
 		total: newDecimalZero(),
@@ -64,7 +63,6 @@ addLayer('e', {
 	},
 	row: 0,
 	hotkeys: [{key: 'e', description: 'E: Reset for essence', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
-	layerShown() { return true },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
@@ -391,7 +389,6 @@ addLayer('c', {
 	softcapPower: 0.7,
 	row: 1,
 	hotkeys: [{key: 'c', description: 'C: Reset for cores', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
-	layerShown() { return true },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
