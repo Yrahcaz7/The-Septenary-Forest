@@ -3,7 +3,6 @@ const modInfo = {
 	author: "Yrahcaz7",
 	pointsName: "coins",
 	modFiles: ["components.js", "tree.js", "options.js", "layers.js"],
-	initialStartPoints: newDecimalZero(),
 	offlineLimit: 1,
 	useNewSaveSyntax: true,
 };

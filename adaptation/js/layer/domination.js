@@ -102,8 +102,8 @@ addLayer("d", {
 		};
 	},
 	componentStyles: {
-		"buyable"() {return {"width": "210px", "height": "110px"}},
-		"clickable"() {return {"min-height": "30px", "transform": "none"}},
+		buyable: {width: "210px", height: "110px"},
+		clickable: {"min-height": "30px", transform: "none"},
 	},
 	buyables: {
 		11: {
@@ -276,7 +276,7 @@ addLayer("d", {
 				setClickableState("d", 13, !getClickableState("d", 13));
 				if (getClickableState("d", 13)) setClickableState("d", 14, false);
 			},
-			style: {"width": "40px", "border-radius": "10px 0 0 10px"},
+			style: {width: "40px", "border-radius": "10px 0 0 10px"},
 		},
 		14: {
 			display() {return (getClickableState("d", 14) ? "Both" : "Only Extra")},
@@ -285,7 +285,7 @@ addLayer("d", {
 				setClickableState("d", 14, !getClickableState("d", 14));
 				if (getClickableState("d", 14)) setClickableState("d", 13, false);
 			},
-			style: {"width": "40px", "border-radius": "0 10px 10px 0"},
+			style: {width: "40px", "border-radius": "0 10px 10px 0"},
 		},
 	},
 	milestones: {

@@ -67,7 +67,7 @@ addLayer("ex", {
 		autoGI: false,
 	}},
 	color: "#B44990",
-	nodeStyle() {if (tmp.ex.canReset || player.ex.unlocked) return {"background": "border-box linear-gradient(to right, #EE7770, #B44990, #E03330)"}},
+	nodeStyle() {if (tmp.ex.canReset || player.ex.unlocked) return {background: "border-box linear-gradient(to right, #EE7770, #B44990, #E03330)"}},
 	resource: "expansion points",
 	row: 4,
 	baseResource: "acclimation points",
@@ -243,7 +243,7 @@ addLayer("ex", {
 	},
 	componentStyles: {
 		"prestige-button"() {if (tmp.ex.canReset && tmp.ex.nodeStyle) return tmp.ex.nodeStyle},
-		"buyable"() {return {"width": "500px", "height": "60px", "border-radius": "0px"}},
+		"buyable"() {return {width: "500px", height: "60px", "border-radius": "0px"}},
 	},
 	buyables: {
 		11: {
@@ -396,7 +396,7 @@ addLayer("ex", {
 				return extra;
 			},
 			style() {
-				let obj = {"width": "250px", "height": "100px", "border-radius": "25px"};
+				let obj = {width: "250px", height: "100px", "border-radius": "25px"};
 				if (tmp[this.layer].buyables[this.id].canBuy) obj.background = tmp.ex.nodeStyle.background;
 				return obj;
 			},
@@ -419,7 +419,7 @@ addLayer("ex", {
 				addBuyables(this.layer, this.id, bulk);
 			},
 			style() {
-				let obj = {"width": "250px", "height": "100px", "border-radius": "25px"};
+				let obj = {width: "250px", height: "100px", "border-radius": "25px"};
 				if (tmp[this.layer].buyables[this.id].canBuy) obj.background = tmp.ex.nodeStyle.background;
 				return obj;
 			},
@@ -448,7 +448,7 @@ addLayer("ex", {
 				addBuyables(this.layer, this.id, 1);
 			},
 			style() {
-				let obj = {"width": "400px", "height": "110px", "border-radius": "25px"};
+				let obj = {width: "400px", height: "110px", "border-radius": "25px"};
 				if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) obj["border-color"] = "#B44990";
 				else if (tmp[this.layer].buyables[this.id].canBuy) obj.background = tmp.ex.nodeStyle.background;
 				return obj;

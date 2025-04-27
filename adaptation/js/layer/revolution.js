@@ -13,7 +13,7 @@ addLayer("r", {
 		change: newDecimalZero(),
 	}},
 	color: "#EE7770",
-	nodeStyle() {if (tmp.r.canReset || player.r.unlocked) return {"background": "border-box linear-gradient(to right, #55B020, #EE7770, #B44990)"}},
+	nodeStyle() {if (tmp.r.canReset || player.r.unlocked) return {background: "border-box linear-gradient(to right, #55B020, #EE7770, #B44990)"}},
 	resource: "revolutions",
 	row: 4,
 	baseResource: "evolutions",

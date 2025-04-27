@@ -3528,14 +3528,14 @@ addLayer('s', {
 	},
 	resetsNothing() { return hasMilestone('s', 47) },
 	tabFormat: {
-		"Landmarks": {
+		Landmarks: {
 			content: getTab('s'),
 		},
-		"Devotion": {
+		Devotion: {
 			content: getUnlockableTab('s', "Devotion"),
 			unlocked() { return hasMilestone('s', 13) },
 		},
-		"Glow": {
+		Glow: {
 			content: getUnlockableTab('s', "Glow"),
 			unlocked() { return isAssimilated('s') || player.mo.assimilating === 's' },
 		},
@@ -4464,10 +4464,10 @@ addLayer('m', {
 		player.m.unique_total = player.m.unique_nonextra.add(player.m.unique_extra);
 	},
 	tabFormat: {
-		"Microscope": {
+		Microscope: {
 			content: getTab('m'),
 		},
-		"Constructor": {
+		Constructor: {
 			content: getTab('m', "Constructor"),
 		},
 	},
@@ -5644,10 +5644,10 @@ addLayer('w', {
 	},
 	resetsNothing() { return hasMilestone('w', 17) },
 	tabFormat: {
-		"Progress": {
+		Progress: {
 			content: getTab('w'),
 		},
-		"Influences": {
+		Influences: {
 			content: getTab('w', "Influences"),
 		},
 	},
@@ -6078,10 +6078,10 @@ addLayer('cl', {
 		"Life Tracker": {
 			content: getTab('cl'),
 		},
-		"Tissues": {
+		Tissues: {
 			content: getTab('cl', "Tissues"),
 		},
-		"Protein": {
+		Protein: {
 			content: getUnlockableTab('cl', "Protein"),
 			unlocked() { return hasMilestone('w', 16)},
 		},
@@ -6478,14 +6478,14 @@ addLayer('ch', {
 		if (layers[resettingLayer].row > this.row) layerDataReset('ch', keep);
 	},
 	tabFormat: {
-		"Accumulation": {
+		Accumulation: {
 			content: getTab('ch'),
 		},
 		"The Tides": {
 			content: getUnlockableTab('ch', "The Tides"),
 			unlocked() { return hasMilestone('ch', 1) },
 		},
-		"Story": {
+		Story: {
 			content: getTab('ch', "Story"),
 		},
 	},
@@ -6760,13 +6760,13 @@ addLayer('mo', {
 	},
 	resetsNothing() { return true },
 	tabFormat: {
-		"Assimilation": {
+		Assimilation: {
 			content: getTab('mo'),
 		},
-		"Rewards": {
+		Rewards: {
 			content: getTab('mo', "Rewards"),
 		},
-		"Synergism": {
+		Synergism: {
 			content: getUnlockableTab('mo', "Synergism"),
 			unlocked() { return isAssimilated('a') || player.mo.assimilating === 'a' },
 		},

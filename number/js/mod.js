@@ -4,7 +4,6 @@ const modInfo = {
 	author: "Yrahcaz7",
 	pointsName: "arabic numerals",
 	modFiles: ["formatting.js", "tree.js", "options.js", "layers.js"],
-	initialStartPoints: newDecimalZero(),
 	offlineLimit: 1,
 };
 

@@ -20,7 +20,7 @@ addLayer("co", {
 		settlers: newDecimalZero(),
 	}},
 	color: "#55B020",
-	nodeStyle() {if (tmp.co.canReset || player.co.unlocked) return {"background": "border-box linear-gradient(to right, #116022, #55B020, #B44990)"}},
+	nodeStyle() {if (tmp.co.canReset || player.co.unlocked) return {background: "border-box linear-gradient(to right, #116022, #55B020, #B44990)"}},
 	resource: "continents",
 	row: 5,
 	baseResource: "species",
@@ -120,7 +120,7 @@ addLayer("co", {
 	},
 	componentStyles: {
 		"prestige-button"() {if (tmp.co.canReset && tmp.co.nodeStyle) return tmp.co.nodeStyle},
-		"challenge"() {return {"width": "500px", "height": "500px", "background": "none", "border-radius": "10%", "border-color": "#55B020", "color": "var(--color)", "cursor": "default"}},
+		challenge: {width: "500px", height: "500px", background: "none", "border-radius": "10%", "border-color": "#55B020", color: "var(--color)", cursor: "default"},
 	},
 	challenges: {
 		11: {

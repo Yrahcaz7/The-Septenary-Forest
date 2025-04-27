@@ -186,7 +186,7 @@ function getColorBars() {
 			display() { if (getBuyableAmount("c", BUYNUM).gt(0) && player.c.earnings[index]) return "coins/cycle: " + illionFormat(player.c.earnings[index]) + "<br>(" + illionFormat(player.c.earnings[index].mul(getColorSpeed(index))) + "/sec)" },
 			fillStyle: {"background-color": HEX},
 			borderStyle: {"border-color": HEX},
-			style: {"color": (COLORS[index].dark ? "#888888" : "#ffffff")},
+			style: {color: (COLORS[index].dark ? "#888888" : "#ffffff")},
 			unlocked() { return player.c.colors >= index },
 		};
 		bars[NAME + "Buy"] = {
@@ -201,7 +201,7 @@ function getColorBars() {
 			display() { return format(this.progress().min(1).mul(100)) + "%" },
 			fillStyle: {"background-color": HEX},
 			borderStyle: {"border-color": HEX},
-			style: {"color": (COLORS[index].dark ? "#888888" : "#ffffff")},
+			style: {color: (COLORS[index].dark ? "#888888" : "#ffffff")},
 			unlocked() { return player.c.colors >= index },
 		};
 		bars[NAME + "Prog"] = {
@@ -218,7 +218,7 @@ function getColorBars() {
 			display() { return "<h1 style='font-family: Flavors'>" + formatWhole(getBuyableAmount("c", BUYNUM)) },
 			fillStyle: {"background-color": HEX},
 			borderStyle: {"border-color": HEX},
-			style: {"color": (COLORS[index].dark ? "#888888" : "#ffffff"), "border-radius": "50%"},
+			style: {color: (COLORS[index].dark ? "#888888" : "#ffffff"), "border-radius": "50%"},
 			unlocked() { return player.c.colors >= index },
 		};
 	};
@@ -542,9 +542,9 @@ addLayer("m", {
 		["custom-resource-display", () => "You have " + player.c.colors + " colors unlocked<br>Your best colors unlocked is " + player.c.colorBest],
 		"blank",
 		["column", [
-			["raw-html", "<button class='scrollButton can' onclick='this.parentElement.nextElementSibling.scrollBy(-92, 0)'>\<</button><h2 style='padding: 0 5px 0 5px'>Multiplier Distribution</h2><button class='scrollButton can' onclick='this.parentElement.nextElementSibling.scrollBy(92, 0)'>\></button>", {"display": "flex", "justify-content": "space-between", "padding": "0 5px 0 5px"}],
+			["raw-html", "<button class='scrollButton can' onclick='this.parentElement.nextElementSibling.scrollBy(-92, 0)'>\<</button><h2 style='padding: 0 5px 0 5px'>Multiplier Distribution</h2><button class='scrollButton can' onclick='this.parentElement.nextElementSibling.scrollBy(92, 0)'>\></button>", {display: "flex", "justify-content": "space-between", padding: "0 5px 0 5px"}],
 			["contained-grid", "calc(100% - 10px)"],
-			["display-text", "Click one of the colored buttons at the bottom to select that multiplier color.", {"padding": "0 5px 0 5px"}],
+			["display-text", "Click one of the colored buttons at the bottom to select that multiplier color.", {padding: "0 5px 0 5px"}],
 		]],
 		"blank",
 		"milestones",

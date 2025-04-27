@@ -81,7 +81,7 @@ addLayer("t", {
 		extra: {},
 	}},
 	color: "#E03330",
-	nodeStyle() {if (tmp.t.canReset || player.t.unlocked) return {"background": "border-box linear-gradient(to right, #EE7770, #E03330, #C77055)"}},
+	nodeStyle() {if (tmp.t.canReset || player.t.unlocked) return {background: "border-box linear-gradient(to right, #EE7770, #E03330, #C77055)"}},
 	resource: "territories",
 	row: 5,
 	baseResource: "domination points",
@@ -213,8 +213,8 @@ addLayer("t", {
 	},
 	componentStyles: {
 		"prestige-button"() {if (tmp.t.canReset && tmp.t.nodeStyle) return tmp.t.nodeStyle},
-		"contained-grid"() {return {"box-sizing": "border-box", "border": "2px solid #E03330", "padding": "16px"}},
-		"gridable"() {return {"width": "120px", "height": "120px", "border-radius": "0px"}},
+		"contained-grid"() {return {"box-sizing": "border-box", border: "2px solid #E03330", padding: "16px"}},
+		"gridable"() {return {width: "120px", height: "120px", "border-radius": "0px"}},
 	},
 	grid: {
 		rows() {return 2 + getBuyableAmount("t", 11).toNumber()},

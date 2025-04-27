@@ -333,7 +333,7 @@ function doPopup(type = 'none', text = 'This is a test popup.', title = '', time
 			break;
 	};
 	if (title != '') popupTitle = title;
-	activePopups.push({"time": timer, "type": popupType, "title": popupTitle, "message": text + "<br>", "id": popupID, "color": color});
+	activePopups.push({time: timer, type: popupType, title: popupTitle, message: text + "<br>", id: popupID, "color": color});
 	popupID++;
 };
 

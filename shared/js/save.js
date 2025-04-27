@@ -33,7 +33,7 @@ function startPlayerBase() {
 		timePlayed: 0,
 		keepGoing: false,
 		hasNaN: false,
-		points: modInfo.initialStartPoints,
+		points: modInfo.initialStartPoints || newDecimalZero(),
 		subtabs: {},
 		lastSafeTab: (readData(layoutInfo.showTree) ? "none" : layoutInfo.startTab),
 	});

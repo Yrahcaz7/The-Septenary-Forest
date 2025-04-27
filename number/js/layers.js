@@ -24,7 +24,7 @@ addLayer('N', {
 			text += 'L ----- 50<br>';
 			text += 'C ----- 100<br>';
 			text += 'D ----- 500<br>';
-			text += '&#8576; ----- 1,000<br>';
+			text += 'M ----- 1,000<br>';
 			if (player.N.points.gte(2)) {
 				text += '<br><h3>Note #2 - Greek Numeral Transcription</h3><br><br>';
 				text += '𐆊 ----- 0<br>';
@@ -626,7 +626,7 @@ addLayer('d', {
 	},
 	layerShown() { return true },
 	tabFormat: {
-		"Number": {
+		Number: {
 			content: () => {
 				let content = [
 					['display-text', 'You have <h2 class="layer-d">' + formatWhole(player.d.points) + '</h2> digits (and your number is <h2 class="layer-d">' + formatWhole(player.d.number) + '</h2>), which increases arabic numeral gain by +<h2 class="layer-d">' + format(tmp.d.effect) + '</h2>%'],
@@ -647,7 +647,7 @@ addLayer('d', {
 				return content;
 			},
 		},
-		"Milestones": {
+		Milestones: {
 			content: [
 				['display-text', () => 'You have <h2 class="layer-d">' + formatWhole(player.d.points) + '</h2> digits (and your number is <h2 class="layer-d">' + formatWhole(player.d.number) + '</h2>), which increases arabic numeral gain by +<h2 class="layer-d">' + format(tmp.d.effect) + '</h2>%'],
 				'blank',
@@ -1652,7 +1652,7 @@ addLayer('i', {
 	},
 	layerShown() { return hasMilestone('d', 15) || player.i.unlocked },
 	tabFormat: {
-		"Milestones": {
+		Milestones: {
 			content: [
 				'main-display',
 				'prestige-button',
@@ -1661,7 +1661,7 @@ addLayer('i', {
 				'milestones',
 			],
 		},
-		"Replicator": {
+		Replicator: {
 			content: [
 				'main-display',
 				'prestige-button',
@@ -1678,7 +1678,7 @@ addLayer('i', {
 			],
 			unlocked() { return player.i.unlocked },
 		},
-		"Simulation": {
+		Simulation: {
 			content: [
 				'main-display',
 				'prestige-button',
@@ -1701,7 +1701,7 @@ addLayer('i', {
 			],
 			unlocked() { return hasMilestone('i', 5) },
 		},
-		"Feats": {
+		Feats: {
 			content: [
 				'main-display',
 				'prestige-button',
@@ -2616,7 +2616,7 @@ addLayer('gn', {
 	}],
 	layerShown() { return hasMilestone('i', 9) || player.gn.unlocked },
 	tabFormat: {
-		"Milestones": {
+		Milestones: {
 			content: [
 				['display-text', () => {
 					if (player.gn.points.gte('1e1000')) return '<h2 class="layer-gn">' + greekNumeralFormat(player.rn.points) + '</h2> greek numerals';
@@ -2636,7 +2636,7 @@ addLayer('gn', {
 				'milestones',
 			],
 		},
-		"Studies": {
+		Studies: {
 			content: [
 				['display-text', () => {
 					if (player.gn.points.gte('1e1000')) return '<h2 class="layer-gn">' + greekNumeralFormat(player.rn.points) + '</h2> greek numerals';
@@ -2658,7 +2658,7 @@ addLayer('gn', {
 				'blank',
 			],
 		},
-		"Comprehension": {
+		Comprehension: {
 			content: [
 				['display-text', () => {
 					if (player.gn.points.gte('1e1000')) return '<h2 class="layer-gn">' + greekNumeralFormat(player.rn.points) + '</h2> greek numerals';

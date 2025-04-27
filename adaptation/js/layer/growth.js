@@ -121,8 +121,8 @@ addLayer("g", {
 		};
 	},
 	componentStyles: {
-		"buyable"() {return {"width": "210px", "height": "110px"}},
-		"clickable"() {return {"min-height": "30px", "transform": "none"}},
+		buyable: {width: "210px", height: "110px"},
+		clickable: {"min-height": "30px", transform: "none"},
 	},
 	buyables: {
 		11: {
@@ -351,7 +351,7 @@ addLayer("g", {
 			canClick() {return getClickableState("g", 11) > 0 && !getClickableState("g", 14)},
 			onClick() {setClickableState("g", 11, (getClickableState("g", 11) || 0) - 1)},
 			onHold() {setClickableState("g", 11, (getClickableState("g", 11) || 0) - 1)},
-			style: {"width": "45px", "border-radius": "10px 0 0 10px"},
+			style: {width: "45px", "border-radius": "10px 0 0 10px"},
 		},
 		12: {
 			display() {return "<h2>+50</h2>"},
@@ -361,7 +361,7 @@ addLayer("g", {
 			},
 			onClick() {setClickableState("g", 11, (getClickableState("g", 11) || 0) + 1)},
 			onHold() {setClickableState("g", 11, (getClickableState("g", 11) || 0) + 1)},
-			style: {"width": "45px", "border-radius": "0 10px 10px 0"},
+			style: {width: "45px", "border-radius": "0 10px 10px 0"},
 		},
 		13: {
 			display() {return (getClickableState("g", 13) ? "Both" : "Only Base")},
@@ -370,7 +370,7 @@ addLayer("g", {
 				setClickableState("g", 13, !getClickableState("g", 13));
 				if (getClickableState("g", 13)) setClickableState("g", 14, false);
 			},
-			style: {"width": "40px", "border-radius": "10px 0 0 10px"},
+			style: {width: "40px", "border-radius": "10px 0 0 10px"},
 		},
 		14: {
 			display() {return (getClickableState("g", 14) ? "Both" : "Only Extra")},
@@ -379,7 +379,7 @@ addLayer("g", {
 				setClickableState("g", 14, !getClickableState("g", 14));
 				if (getClickableState("g", 14)) setClickableState("g", 13, false);
 			},
-			style: {"width": "40px", "border-radius": "0 10px 10px 0"},
+			style: {width: "40px", "border-radius": "0 10px 10px 0"},
 		},
 	},
 	milestones: {

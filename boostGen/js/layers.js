@@ -207,8 +207,8 @@ addLayer("g", {
 		};
 	},
 	componentStyles: {
-		"gridable"() {return {"width": "105px", "height": "105px"}},
-		"upgrade"() {return {"width": "125px", "height": "125px"}},
+		gridable: {width: "105px", height: "105px"},
+		upgrade: {width: "125px", height: "125px"},
 	},
 	grid: {
 		rows() {
@@ -513,7 +513,7 @@ addLayer("b", {
 		if (layers[resettingLayer].row > this.row) layerDataReset("b", keep);
 	},
 	componentStyles: {
-		"upgrade"() {return {"width": "125px", "height": "125px"}},
+		upgrade: {width: "125px", height: "125px"},
 	},
 	milestones: {
 		0: {
@@ -939,8 +939,8 @@ addLayer("sg", {
 		player.sg.capacity = cap;
 	},
 	componentStyles: {
-		"buyable"() {return {"width": "200px", "height": "125px"}},
-		"upgrade"() {return {"width": "125px", "height": "125px"}},
+		buyable: {width: "200px", height: "125px"},
+		upgrade: {width: "125px", height: "125px"},
 	},
 	buyables: {
 		respec() {
@@ -1303,8 +1303,8 @@ addLayer("hg", {
 		if (player.hg.points.gt(player.hg.best)) player.hg.best = player.hg.points;
 	},
 	componentStyles: {
-		"buyable"() {return {"width": "200px", "height": "125px"}},
-		"clickable"() {return {"width": "200px", "height": "125px"}},
+		buyable: {width: "200px", height: "125px"},
+		clickable: {width: "200px", height: "125px"},
 	},
 	buyables: {
 		11: {

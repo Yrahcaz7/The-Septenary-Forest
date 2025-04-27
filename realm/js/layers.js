@@ -74,8 +74,8 @@ addLayer("C", {
 		"blank",
 	],
 	componentStyles: {
-		clickable() { return {width: "min-content", "min-height": "30px", "border-radius": "5px"} },
-		buyable() { return {width: "180px", height: "125px", "border-radius": "25px"} },
+		clickable: {width: "min-content", "min-height": "30px", "border-radius": "5px"},
+		buyable: {width: "180px", height: "125px", "border-radius": "25px"},
 	},
 	clickables: {
 		11: {

@@ -171,9 +171,9 @@ addLayer("w", {
 		};
 	},
 	componentStyles: {
-		"contained-grid"() {return {"box-sizing": "border-box", "border": "2px solid #C77055", "padding": "16px"}},
-		"gridable"() {return {"width": "120px", "height": "120px", "border-radius": "0px"}},
-		"master-button"() {return {"margin-right": "18px"}},
+		"contained-grid": {"box-sizing": "border-box", border: "2px solid #C77055", padding: "16px"},
+		gridable: {width: "120px", height: "120px", "border-radius": "0px"},
+		"master-button": {"margin-right": "18px"},
 	},
 	grid: {
 		rows() {
@@ -219,12 +219,12 @@ addLayer("w", {
 			return (eff instanceof Function ? eff() : eff);
 		},
 		getStyle(data, id) {
-			if (data == 2) return {"border-color": "#D69358", "background-color": "#77BF5F", "cursor": "default"};
+			if (data == 2) return {"border-color": "#D69358", "background-color": "#77BF5F", cursor: "default"};
 			if (data == 1) {
 				if (this.getCanClick(data, id)) return {"background-color": "#D69358"};
 				const size = getEnhancableGridSize();
 				if (Math.floor(id / 100) <= size && id % 100 <= size) return {"background-color": "#6C9060"};
-				return {"background-color": "#77BF5F", "cursor": "default"};
+				return {"background-color": "#77BF5F", cursor: "default"};
 			};
 			if (!(id == 101 || getGridData("w", id - 1) || getGridData("w", id + 1) || getGridData("w", id - 100) || getGridData("w", id + 100))) return {"background-color": "#FFFFFF40"};
 		},

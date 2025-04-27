@@ -171,7 +171,7 @@ Additional features:
 
 ```js
 componentStyles: {
-    challenge() { return {height: options.challengeHeight + "px"} },
+    challenge() { if (options.smallChallenges) return {height: "200px"} },
     "prestige-button": {color: "#AA66AA"},
 }
 ```

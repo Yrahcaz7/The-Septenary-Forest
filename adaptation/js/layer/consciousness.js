@@ -25,7 +25,7 @@ addLayer("cb", {
 		focusUnlocked: false,
 	}},
 	color: "#E5B55A",
-	nodeStyle() {if (tmp.cb.canReset || player.cb.unlocked) return {"background": "border-box linear-gradient(to right, #EE7770, #E5B55A, #B44990)"}},
+	nodeStyle() {if (tmp.cb.canReset || player.cb.unlocked) return {background: "border-box linear-gradient(to right, #EE7770, #E5B55A, #B44990)"}},
 	resource: "conscious beings",
 	row: 3,
 	baseResource: "growth points",
@@ -117,7 +117,7 @@ addLayer("cb", {
 			svg += "</svg>";
 			svg += "<div style='position: relative; float: left; margin: -54px 0px 0px 7.5px; font-size: 48px; color: #DFDFDF'>E</div>";
 			svg += "<div style='position: relative; float: right; margin: -54px 9px 0px 0px; font-size: 48px; color: #DFDFDF'>A</div>";
-			arr.push(["display-text", svg, {"display": "inline-block", "width": "500px", "height": "50px", "border": "solid 4px #E5B55A"}]);
+			arr.push(["display-text", svg, {display: "inline-block", width: "500px", height: "50px", border: "solid 4px #E5B55A"}]);
 			if (!hasChallenge("sp", 17)) arr.push(["row", [["clickable", 13], ["clickable", 11], ["clickable", 15], ["clickable", 12], ["clickable", 14]]]);
 			arr.push("blank");
 			let next = new Decimal(getFocusBase()).pow(tmp.cb.effect[3] + 1).mul(getFocusRequirement());
@@ -152,7 +152,7 @@ addLayer("cb", {
 	},
 	componentStyles: {
 		"prestige-button"() {if (tmp.cb.canReset && tmp.cb.nodeStyle) return tmp.cb.nodeStyle},
-		"clickable"() {return {"min-height": "58px", "border": "solid 4px #E5B55A", "border-radius": "0px", "color": "#DFDFDF", "transform": "none"}},
+		clickable: {"min-height": "58px", border: "solid 4px #E5B55A", "border-radius": "0px", color: "#DFDFDF", transform: "none"},
 	},
 	clickables: {
 		11: {
@@ -187,7 +187,7 @@ addLayer("cb", {
 			},
 			canClick() {return (getClickableState("cb", 11) || 0) + (getClickableState("cb", 12) || 0) < tmp.cb.effect[3]},
 			onClick() {setClickableState("cb", 11, tmp.cb.effect[3] - (getClickableState("cb", 12) || 0))},
-			style: {"width": "74px", "background-color": "#EE7770"},
+			style: {width: "74px", "background-color": "#EE7770"},
 		},
 		14: {
 			title: "MAX A",
@@ -199,7 +199,7 @@ addLayer("cb", {
 			},
 			canClick() {return (getClickableState("cb", 11) || 0) + (getClickableState("cb", 12) || 0) < tmp.cb.effect[3]},
 			onClick() {setClickableState("cb", 12, tmp.cb.effect[3] - (getClickableState("cb", 11) || 0))},
-			style: {"width": "74px", "background-color": "#B44990"},
+			style: {width: "74px", "background-color": "#B44990"},
 		},
 		15: {
 			title: "Reset Focus",
