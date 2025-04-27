@@ -247,7 +247,7 @@ function loadVue(mainPage = false) {
 			<span v-else>
 				<span v-html="tmp[layer].challenges[data].challengeDescription"></span><br>
 				Goal: <span v-if="tmp[layer].challenges[data].goalDescription" v-html="tmp[layer].challenges[data].goalDescription"></span>
-				<span v-else>{{format(tmp[layer].challenges[data].goal)}} {{tmp[layer].challenges[data].currencyDisplayName ? tmp[layer].challenges[data].currencyDisplayName : modInfo.pointsName}}</span><br>
+				<span v-else>{{format(tmp[layer].challenges[data].goal)}} {{tmp[layer].challenges[data].currencyDisplayName ? tmp[layer].challenges[data].currencyDisplayName : (modInfo.pointsName || "points")}}</span><br>
 				Reward: <span v-html="tmp[layer].challenges[data].rewardDescription"></span>
 				<span v-if="layers[layer].challenges[data].rewardDisplay !== undefined">
 					<br>
@@ -1037,7 +1037,7 @@ function loadVue(mainPage = false) {
 			<span v-else>
 				<span v-if="player.points.lt('1e1000')" class="overlayThing">You have </span>
 				<h2 class="overlayThing" id="points">{{format(player.points)}}</h2>
-				<span v-if="player.points.lt('e1000000')" class="overlayThing">&nbsp;{{modInfo.pointsName}}</span><br>
+				<span v-if="player.points.lt('e1000000')" class="overlayThing">&nbsp;{{modInfo.pointsName || "points"}}</span><br>
 				<span v-if="canGenPoints" class="overlayThing">
 					{{tmp.other.oompsMag !== 0 ?
 						format(tmp.other.oomps) + " OOM" + (tmp.other.oompsMag < 0 ? "^OOM" : (tmp.other.oompsMag > 1 ? "^" + tmp.other.oompsMag : "")) + "s"
@@ -1071,7 +1071,7 @@ function loadVue(mainPage = false) {
 			<a class="link" href="https://discord.gg/F3xveHV" target="_blank" :style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br><br>
 			<a class="link" href="https://discord.gg/wwQfgPa" target="_blank" style="font-size: 16px">Main Prestige Tree server</a><br>
 			<div v-if="endPoints !== undefined">
-				<br>Current Endgame: {{format(endPoints) + " " + (modInfo.pointsName ? modInfo.pointsName : "points")}}<br>
+				<br>Current Endgame: {{format(endPoints) + " " + (modInfo.pointsName || "points")}}<br>
 			</div><br>
 			Time Played: {{formatTime(player.timePlayed)}}<br><br>
 			<h3>Hotkeys</h3><br><br>

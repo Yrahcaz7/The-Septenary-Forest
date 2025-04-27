@@ -69,10 +69,6 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added 2 calculator options.<br>
 <br>`;
 
-function winText() {
-	return "You reached " + format(endPoints) + " " + modInfo.pointsName + " and won the game!<br>However, it isn't the end yet...<br>Wait for more updates for further content.";
-};
-
 function getUpgradeCap(layer, id) {
 	return tmp[layer].upgrades[id].cap;
 };

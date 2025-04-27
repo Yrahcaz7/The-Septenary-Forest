@@ -2,7 +2,6 @@ const modInfo = {
 	name: 'The Primordial Tree',
 	id: 'Yrahcaz7-ModTree-ThePrimordialTree',
 	author: 'Yrahcaz7',
-	pointsName: 'points',
 	modFiles: ['components.js', 'tree.js', 'options.js', 'assimilation.js', 'achievements.js', 'softcaps.js', 'story.js', 'tabs.js', 'layers.js'],
 	initialStartPoints: newDecimalZero(),
 	offlineLimit: 1,
@@ -180,10 +179,6 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added six upgrades.<br>
 		- Added a rebuyable.<br>
 <br>`;
-
-function winText() {
-	return 'You reached ' + format(endPoints) + ' ' + modInfo.pointsName + ' and won the game!<br>However, it isn\'t the end yet...<br>Wait for more updates for further content.';
-};
 
 function getdark(darkthis, type, special = false, research = false) {
 	if (darkthis.layer !== undefined) {
