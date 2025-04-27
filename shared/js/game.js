@@ -210,7 +210,7 @@ function resetRow(row) {
 };
 
 function startChallenge(layer, x) {
-	if (!player[layer].unlocked || !tmp[layer].challenges[x].unlocked) return;
+	if ((!player[layer].unlocked && tmp[layer].upgrades.needLayerUnlocked !== false) || !tmp[layer].challenges[x].unlocked) return;
 	if (player[layer].activeChallenge == x && canExitChallenge(layer, x)) {
 		completeChallenge(layer, x);
 		doReset(layer, true);

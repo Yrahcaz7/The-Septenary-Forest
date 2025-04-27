@@ -86,3 +86,7 @@ You can use these features along with it:
 - `showRespec()`: **optional**. A function determining whether or not to show the button, if respecBuyables is defined. Defaults to true if absent.
 
 - `respecMessage`: **optional**. A custom confirmation message on respec, in place of the default one.
+
+Additional features on the main buyables object:
+
+- `needLayerUnlocked`: **optional**. If this is false, the layer need not be unlocked for the player to purchase buyables.

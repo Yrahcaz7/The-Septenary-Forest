@@ -87,3 +87,7 @@ The old goal system uses these features:
 - `currencyLayer`: **deprecated**. The internal name of the layer that currency is stored in. If it's not in a layer, omit. If it's not stored directly in a layer, instead use the next feature.
 
 - `currencyLocation()`: **deprecated**. If your currency is stored in something inside a layer (e.g. a buyable's amount), you can access it this way. This is a function returning the object in "player" that contains the value (like `player[this.layer].buyables`)
+
+Additional features on the main challenges object:
+
+- `needLayerUnlocked`: **optional**. If this is false, the layer need not be unlocked for the player to enter challenges.

@@ -70,3 +70,7 @@ If you want to do something more complicated like upgrades that cost two currenc
 - `canAfford()`: **OVERRIDE**. A function determining if you are able to buy the upgrade. (If you also have a cost, it will check both the cost and this function.)
 
 - `pay()`: **OVERRIDE**. A function that reduces your currencies when you buy the upgrade.
+
+Additional features on the main upgrades object:
+
+- `needLayerUnlocked`: **optional**. If this is false, the layer need not be unlocked for the player to purchase upgrades.

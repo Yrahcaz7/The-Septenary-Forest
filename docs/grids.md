@@ -66,3 +66,7 @@ Features:
 - `getTooltip(data, id)`: **optional**. Adds a tooltip to the gridables, appears when they hovered over. Can use basic HTML. Default is no tooltip. If this returns an empty value, that also disables the tooltip.
 
 - `layer`: **assigned automagically**. It's the same value as the name of this layer, so you can do `player[this.layer].points` or similar.
+
+Additional features:
+
+- `needLayerUnlocked`: **optional**. If this is false, the layer need not be unlocked for the player to click gridables.

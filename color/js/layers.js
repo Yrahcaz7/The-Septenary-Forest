@@ -576,11 +576,11 @@ addLayer("m", {
 			};
 		},
 		getCanClick(data, id) { return id >= 401 },
-		overrideNeedLayerUnlocked: true,
 		onClick(data, id) {
 			const INDEX = id % 100 - 2;
 			player.m.type = INDEX;
 		},
+		needLayerUnlocked: false,
 	},
 	milestones: {
 		0: {
