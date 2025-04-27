@@ -801,7 +801,7 @@ function loadVue(mainPage = false) {
 		template: template(`<input class="instant" :id="'input-' + layer + '-' + data" :value="player[layer][data].toString()" v-on:focus="focused = true" v-on:blur="focused = false" v-on:change="player[layer][data] = toValue(document.getElementById('input-' + layer + '-' + data).value, player[layer][data])">`),
 	});
 
-	// Updates the value in player[layer][data][0]
+	// Updates the value in player[layer][data[0]] (min=data[1], max=data[2])
 	addNormalComponent('slider', {
 		props: ['layer', 'data'],
 		data() {return {player}},

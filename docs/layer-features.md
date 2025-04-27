@@ -167,12 +167,12 @@ Additional features:
 
 - `glowColor`: **optional**. The color that this layer will be highlighted if it should notify. The default is red. You can use this if you want several different notification types!
 
-- `componentStyles`: **optional**. An object that contains a set of functions returning CSS objects. Each of these will be applied to any components on the layer with the type of its id. Example:
+- `componentStyles`: **optional**. An object that contains a set of CSS objects (they can be functions that return a CSS object as well). Each of these will be applied to any components on the layer with the type of its id. Example:
 
 ```js
 componentStyles: {
-    "challenge"() { return {'height': '200px'} },
-    "prestige-button"() { return {'color': '#AA66AA'} },
+    challenge() { return {height: options.challengeHeight + "px"} },
+    "prestige-button": {color: "#AA66AA"},
 }
 ```
 

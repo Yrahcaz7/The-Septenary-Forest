@@ -237,6 +237,7 @@ addLayer("M", {
 		maxMana: new Decimal(100),
 		manaRegen: new Decimal(2.5),
 		spellTimes: [newDecimalZero(), newDecimalZero(), newDecimalZero()],
+		autoPercent: 50,
 	}},
 	color: "#0080E0",
 	type: "none",
@@ -283,14 +284,14 @@ addLayer("M", {
 		if (player.M.spellTimes[1].lte(0) && player.M.mana.gte(getSpellCost(1))) {
 			if (getClickableState("M", 102) === 1) {
 				callCast();
-			} else if (getClickableState("M", 102) === 3 && player.M.mana.gte(player.M.maxMana.div(2))) {
+			} else if (getClickableState("M", 102) === 3 && player.M.mana.gte(player.M.maxMana.mul(player.M.autoPercent / 100))) {
 				callCast();
 			};
 		};
 		if (player.M.spellTimes[2].lte(0) && player.M.mana.gte(getSpellCost(2))) {
 			if (getClickableState("M", 103) === 1) {
 				sideSpellCast();
-			} else if (getClickableState("M", 103) === 3 && player.M.mana.gte(player.M.maxMana.div(2))) {
+			} else if (getClickableState("M", 103) === 3 && player.M.mana.gte(player.M.maxMana.mul(player.M.autoPercent / 100))) {
 				sideSpellCast();
 			};
 		};
@@ -299,24 +300,27 @@ addLayer("M", {
 		if ((player.M.spellTimes[1].gt(0) || !getClickableState("M", 102)) && (player.M.spellTimes[2].gt(0) || !getClickableState("M", 103)) && player.M.mana.gte(taxCost)) {
 			if (getClickableState("M", 101) === 2) {
 				taxCast(player.M.mana.div(taxCost).floor());
-			} else if (getClickableState("M", 101) === 3 && player.M.mana.gte(player.M.maxMana.div(2))) {
-				taxCast(player.M.mana.sub(player.M.maxMana.div(2)).div(taxCost).floor());
+			} else if (getClickableState("M", 101) === 3 && player.M.mana.gte(player.M.maxMana.mul(player.M.autoPercent / 100))) {
+				taxCast(player.M.mana.sub(player.M.maxMana.mul(player.M.autoPercent / 100)).div(taxCost).floor());
 			};
 		};
 	},
-	tabFormat: [
-		["bar", "mana"],
-		"blank",
-		["clickables", [1]],
-		["clickables", [10]],
-		"blank",
-		["upgrades", [1]],
-		["display-text", () => "You have generated " + format(player.stats[2].manaTotal) + " mana in total"],
-		"blank",
-		["upgrades", [10]],
-	],
+	tabFormat() {
+		const arr = [["bar", "mana"]];
+		if (hasUpgrade("M", 103)) arr.push("blank", "mana-auto-percent-slider");
+		arr.push("blank");
+		arr.push(["clickables", [1]]);
+		arr.push(["clickables", [10]]);
+		arr.push("blank");
+		arr.push(["upgrades", [1]]);
+		arr.push(["display-text", "You have generated " + format(player.stats[2].manaTotal) + " mana in total"]);
+		arr.push("blank");
+		arr.push(["upgrades", [10]]);
+		return arr;
+	},
 	componentStyles: {
-		clickable() { return {width: "125px", "min-height": "50px", transform: "none"} },
+		upgrade: {height: "120px", "border-radius": "25px"},
+		clickable: {width: "125px", "min-height": "50px", transform: "none"},
 	},
 	bars: {
 		mana: {
@@ -482,20 +486,23 @@ addLayer("M", {
 			unlocked() { return hasUpgrade("M", 13) },
 		},
 		101: {
-			fullDisplay() { return "<h3>Primary Autocasting</h3><br>unlock autocasting<br><br>Req: 10,000 total mana generated<br><br>Cost: 333 mana" },
-			canAfford() { return player.M.mana.gte(333) && player.stats[1].manaTotal.gte(10000) },
-			pay() { player.M.mana = player.M.mana.sub(333) },
+			fullDisplay() { return "<h3>Primary Autocasting</h3><br>unlock autocasting<br><br>Req: 10,000 total mana generated<br><br>Cost: " + format(this.cost) + " coins" },
+			cost: 1_000,
+			currencyInternalName: "points",
+			currencyLocation() { return player },
 		},
 		102: {
-			fullDisplay() { return "<h3>Secondary Autocasting</h3><br>unlock tax collection autocasting<br><br>Req: 100,000 total mana generated<br><br>Cost: 3,333 mana" },
-			canAfford() { return player.M.mana.gte(3333) && player.stats[1].manaTotal.gte(100000) },
-			pay() { player.M.mana = player.M.mana.sub(3333) },
+			fullDisplay() { return "<h3>Secondary Autocasting</h3><br>unlock tax collection autocasting<br><br>Req: 100,000 total mana generated<br><br>Cost: " + format(this.cost) + " coins" },
+			cost: 1_000_000,
+			currencyInternalName: "points",
+			currencyLocation() { return player },
 			unlocked() { return hasUpgrade("M", 101) },
 		},
 		103: {
-			fullDisplay() { return "<h3>Ternary Autocasting</h3><br>unlock autocasting when over 50% mana<br><br>Req: 1,000,000 total mana generated<br><br>Cost: 33,333 mana" },
-			canAfford() { return player.M.mana.gte(33333) && player.stats[1].manaTotal.gte(1000000) },
-			pay() { player.M.mana = player.M.mana.sub(33333) },
+			fullDisplay() { return "<h3>Ternary Autocasting</h3><br>unlock autocasting when mana is at least a specified percent of max mana<br><br>Req: 1,000,000 total mana generated<br><br>Cost: " + format(this.cost) + " coins" },
+			cost: 1e12,
+			currencyInternalName: "points",
+			currencyLocation() { return player },
 			unlocked() { return hasUpgrade("M", 102) },
 		},
 	},
@@ -595,7 +602,7 @@ addLayer("F", {
 		["upgrades", [103, 104, 105, 106, 107, 108, 113, 114, 115, 116, 117, 118]],
 	],
 	componentStyles: {
-		upgrade() { return {height: "120px"} },
+		upgrade: {height: "120px", "border-radius": "25px"},
 	},
 	upgrades: {
 		// faction picking
@@ -919,6 +926,9 @@ addLayer("G", {
 		"blank",
 		"upgrades",
 	],
+	componentStyles: {
+		upgrade: {height: "120px", "border-radius": "25px"},
+	},
 	upgrades: {
 		11: {
 			title: "Gem Influence",

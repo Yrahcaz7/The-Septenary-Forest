@@ -82,9 +82,9 @@ const COLOR_MILESTONES = [10, 25, 50, 100, 150, 200, 300, 400, 500, 600];
 const COLOR_MILESTONE_MULT = [2.5, 5, 10, 50, 200, 200, 400, 400, 800, 800];
 
 const COLOR_UPGRADE_STYLE = {
-	"background": "var(--rainbowline)",
+	background: "var(--rainbowline)",
 	"background-size": "200%",
-	"animation": "3s linear infinite rainbowline",
+	animation: "3s linear infinite rainbowline",
 };
 
 function registerColorCost(index, bulk) {
@@ -263,7 +263,6 @@ function getColorBuyables() {
 function getAverageCoinGain() {
 	let gain = newDecimalZero();
 	for (let index = 0; index < player.c.colors; index++) {
-		const NAME = COLORS[index].name;
 		if (player.c.earnings[index]) gain = gain.add(player.c.earnings[index].mul(getColorSpeed(index)));
 	};
 	return gain;
@@ -282,7 +281,7 @@ addLayer("c", {
 		time: Array.from({length: COLORS.length}, () => newDecimalZero()),
 	}},
 	color: "#ffffff",
-	nodeStyle: {"border": "0px transparent"},
+	nodeStyle: {border: "0px transparent"},
 	tooltip() { return formatWhole(player.c.colors) + " colors unlocked" },
 	layerShown() { return true },
 	doReset(resettingLayer) {
@@ -332,10 +331,10 @@ addLayer("c", {
 		};
 	},
 	tabFormat: {
-		"Colors": {
+		Colors: {
 			content: getColorTabContent,
 		},
-		"Upgrades": {
+		Upgrades: {
 			content: [
 				["display-text", () => "You have <h2 class='rainbowvalue-text'>" + formatWhole(player.c.colors) + "</h2> colors unlocked"],
 				"blank",
@@ -345,7 +344,7 @@ addLayer("c", {
 		},
 	},
 	componentStyles: {
-		"buyable"() { return {"height": "25px", "width": "175px", "border-radius": "10px", "z-index": "99"} },
+		buyable: {height: "25px", width: "175px", "border-radius": "10px", "z-index": 99},
 	},
 	bars: getColorBars(),
 	buyables: getColorBuyables(),
@@ -502,7 +501,7 @@ addLayer("m", {
 		return mult;
 	},
 	getResetGain(x = 0) {
-		let num = player.c.colors + x;
+		const num = player.c.colors + x;
 		if (num < tmp.m.requires) return newDecimalZero();
 		let gain = new Decimal(2).pow(num + 1 - tmp.m.requires);
 		gain = gain.mul(tmp.m.gainMult);
@@ -551,8 +550,8 @@ addLayer("m", {
 		"milestones",
 	],
 	componentStyles: {
-		"column"() { return {"width": "fit-content", "max-width": "calc(100% - 14px)", "border": "2px solid #ffffff", "border-radius": "20px", "padding": "5px 0"} },
-		"contained-grid"() { return {"padding": "5px"} },
+		column: {width: "fit-content", "max-width": "calc(100% - 14px)", border: "2px solid #ffffff", "border-radius": "20px", padding: "5px 0"},
+		"contained-grid": {padding: "5px"},
 	},
 	grid: {
 		rows: 4,
@@ -571,12 +570,12 @@ addLayer("m", {
 		getStyle(data, id) {
 			const INDEX = id % 100 - 2;
 			return {
-				"width": "90px",
-				"height": (id >= 401 ? "30px" : "90px"),
+				width: "90px",
+				height: (id >= 401 ? "30px" : "90px"),
 				"border-color": (id >= 401 ? (INDEX >= 0 ? COLORS[INDEX].hex : "#888888") : "#00000020"),
 				"border-radius": "10px",
 				"background-color": (INDEX >= 0 ? (COLORS[INDEX].dark ? "#888888" : "#f0f0f0") : "#f0f0f0"),
-				"color": (INDEX >= 0 ? COLORS[INDEX].hex : "#000000"),
+				color: (INDEX >= 0 ? COLORS[INDEX].hex : "#000000"),
 			};
 		},
 		getCanClick(data, id) { return id >= 401 },

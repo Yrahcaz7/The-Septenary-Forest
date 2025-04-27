@@ -130,7 +130,7 @@ function setClickableState(layer, id, state) {
 };
 
 function getGridData(layer, id) {
-	if ((modInfo.friendlyErrors === undefined || modInfo.friendlyErrors) && (!layers[layer]?.grid || !layers[layer].grid[id])) {
+	if ((modInfo.friendlyErrors === undefined || modInfo.friendlyErrors) && !layers[layer]?.grid) {
 		console.warn("There was an attempt to get the data of a gridable with id '" + id + "' in layer '" + layer + "', but that layer does not " + (layers[layer] ? "have a grid" : "exist") + ".");
 		return undefined;
 	};
@@ -139,7 +139,7 @@ function getGridData(layer, id) {
 };
 
 function setGridData(layer, id, data) {
-	if ((modInfo.friendlyErrors === undefined || modInfo.friendlyErrors) && (!layers[layer]?.grid || !layers[layer].grid[id])) {
+	if ((modInfo.friendlyErrors === undefined || modInfo.friendlyErrors) && !layers[layer]?.grid) {
 		console.warn("There was an attempt to set the data of a gridable with id '" + id + "' in layer '" + layer + "', but that layer does not " + (layers[layer] ? "have a grid" : "exist") + ".");
 		return;
 	};
@@ -196,7 +196,7 @@ function achievementEffect(layer, id) {
 };
 
 function gridEffect(layer, id) {
-	if ((modInfo.friendlyErrors === undefined || modInfo.friendlyErrors) && (!layers[layer]?.grid || !layers[layer].grid[id])) {
+	if ((modInfo.friendlyErrors === undefined || modInfo.friendlyErrors) && !layers[layer]?.grid) {
 		console.error("There was an attempt to get the effect of a gridable with id '" + id + "' in layer '" + layer + "', but that layer does not " + (layers[layer] ? "have a grid" : "exist") + ".");
 		return undefined;
 	};
