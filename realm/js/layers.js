@@ -1057,26 +1057,23 @@ addLayer("S", {
 	})(),
 });
 
-function coinClick() {
-	// faction coins gained calculation
-	const factionCoinGainType = getRandInt(0, 6);
-	let factionCoinsFound = newDecimalZero();
-	if (player.FCchance.gte(100)) factionCoinsFound = player.FCchance.div(100);
-	else if (player.FCchance.div(100).gte(Math.random())) factionCoinsFound = newDecimalOne();
-	if (hasUpgrade("F", 1053) && factionCoinGainType === 2) factionCoinsFound = factionCoinsFound.mul(5);
-	factionCoinsFound = factionCoinsFound.floor();
+document.onclick = () => {
+	// faction coins calculation
+	const FCtype = getRandInt(0, 6);
+	let FCfound = player.FCchance.div(100);
+	if ((FCfound.toNumber() % 1) > Math.random()) {
+		FCfound = FCfound.add(1);
+	};
+	FCfound = FCfound.floor();
+	if (hasUpgrade("F", 1053) && FCtype === 2) FCfound = FCfound.mul(5);
 	// faction coins gained
-	player.FC[factionCoinGainType] = player.FC[factionCoinGainType].add(factionCoinsFound);
-	player.stats.forEach(obj => obj.FCtotal = obj.FCtotal.add(factionCoinsFound));
+	player.FC[FCtype] = player.FC[FCtype].add(FCfound);
+	player.stats.forEach(obj => obj.FCtotal = obj.FCtotal.add(FCfound));
 	// times clicked
 	player.stats.forEach(obj => obj.totalClicks = obj.totalClicks.add(1));
 	player.stats.forEach(obj => obj.bestClicks = obj.bestClicks.max(player.stats[0].totalClicks));
 	// coins gained
-	let clickPower = player.clickValue;
-	if (hasUpgrade("F", 11) && getClickableState("M", 13)) clickPower = clickPower.mul(clickableEffect("M", 13));
-	player.points = player.points.add(clickPower);
-	player.stats.forEach(obj => obj.total = obj.total.add(clickPower));
-	player.stats.forEach(obj => obj.totalClickValue = obj.totalClickValue.add(clickPower));
+	player.points = player.points.add(player.clickValue);
+	player.stats.forEach(obj => obj.total = obj.total.add(player.clickValue));
+	player.stats.forEach(obj => obj.totalClickValue = obj.totalClickValue.add(player.clickValue));
 };
-
-document.onclick = coinClick;
