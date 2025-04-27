@@ -300,7 +300,9 @@ addLayer("M", {
 			if (getClickableState("M", 101) === 2) {
 				taxCast(player.M.mana.div(taxCost).floor());
 			} else if (getClickableState("M", 101) === 3 && player.M.mana.gte(player.M.maxMana.mul(player.M.autoPercent / 100))) {
-				taxCast(player.M.mana.sub(player.M.maxMana.mul(player.M.autoPercent / 100)).div(taxCost).floor());
+				let amt = player.M.mana.sub(player.M.maxMana.mul(player.M.autoPercent / 100)).div(taxCost).floor();
+				if (player.M.mana.sub(amt.mul(taxCost)).gte(taxCost)) amt = amt.add(1);
+				taxCast(amt);
 			};
 		};
 	},
