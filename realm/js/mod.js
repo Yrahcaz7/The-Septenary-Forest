@@ -92,15 +92,15 @@ function getPointGen() {
 	let gain = newDecimalZero();
 	// addtitive
 	if (getBuyableAmount("C", 12).gt(0)) gain = gain.add(getBuyableAmount("C", 12) * buyableEffect("C", 12));
-	if (getBuyableAmount("C", 13).gt(0) && !hasUpgrade("F", 1143)) gain = gain.add(getBuyableAmount("C", 13) * buyableEffect("C", 13));
+	if (getBuyableAmount("C", 13).gt(0) && !hasFactionUpgrade(1, 2, 1)) gain = gain.add(getBuyableAmount("C", 13) * buyableEffect("C", 13));
 	// multiplicative
-	if (hasUpgrade("F", 1062)) gain = gain.mul(upgradeEffect("F", 1062));
-	if (hasUpgrade("F", 1161)) gain = gain.mul(upgradeEffect("F", 1161));
-	if (hasUpgrade("F", 1163)) gain = gain.mul(upgradeEffect("F", 1163));
-	if (hasUpgrade("F", 1071)) gain = gain.mul(upgradeEffect("F", 1071));
-	if (hasUpgrade("F", 1072)) gain = gain.mul(upgradeEffect("F", 1072));
-	if (hasUpgrade("F", 1073)) gain = gain.mul(upgradeEffect("F", 1073));
-	if (hasUpgrade("F", 1081)) gain = gain.mul(upgradeEffect("F", 1081));
+	if (hasFactionUpgrade(0, 1, 3)) gain = gain.mul(factionUpgradeEffect(0, 1));
+	if (hasFactionUpgrade(1, 0, 3)) gain = gain.mul(factionUpgradeEffect(1, 0));
+	if (hasFactionUpgrade(1, 2, 3)) gain = gain.mul(factionUpgradeEffect(1, 2));
+	if (hasFactionUpgrade(0, 0, 4)) gain = gain.mul(factionUpgradeEffect(0, 0));
+	if (hasFactionUpgrade(0, 1, 4)) gain = gain.mul(factionUpgradeEffect(0, 1));
+	if (hasFactionUpgrade(0, 2, 4)) gain = gain.mul(factionUpgradeEffect(0, 2));
+	if (hasFactionUpgrade(0, 0, 5)) gain = gain.mul(factionUpgradeEffect(0, 0));
 	gain = gain.mul(tmp.G.effect);
 	if (getClickableState("M", 12)) gain = gain.mul(clickableEffect("M", 12));
 	if (hasUpgrade("F", 12) && getClickableState("M", 13)) gain = gain.mul(clickableEffect("M", 13));
@@ -170,11 +170,11 @@ function update(diff) {
 	// clicks
 	let clickValue = newDecimalOne();
 	if (getBuyableAmount("C", 11).gt(0)) clickValue = clickValue.add(getBuyableAmount("C", 11).mul(buyableEffect("C", 11)));
-	if (getBuyableAmount("C", 13).gt(0) && hasUpgrade("F", 1143)) clickValue = clickValue.add(getBuyableAmount("C", 13) * buyableEffect("C", 13));
-	if (hasUpgrade("F", 1033)) clickValue = clickValue.mul(upgradeEffect("F", 1033));
-	if (hasUpgrade("F", 1041)) clickValue = clickValue.mul(upgradeEffect("F", 1041));
-	if (hasUpgrade("F", 1043)) clickValue = clickValue.mul(upgradeEffect("F", 1043));
-	if (hasUpgrade("F", 1153)) clickValue = clickValue.mul(upgradeEffect("F", 1153));
+	if (getBuyableAmount("C", 13).gt(0) && hasFactionUpgrade(1, 2, 1)) clickValue = clickValue.add(getBuyableAmount("C", 13) * buyableEffect("C", 13));
+	if (hasFactionUpgrade(0, 2, 0)) clickValue = clickValue.mul(factionUpgradeEffect(0, 2));
+	if (hasFactionUpgrade(0, 0, 1)) clickValue = clickValue.mul(factionUpgradeEffect(0, 0));
+	if (hasFactionUpgrade(0, 2, 1)) clickValue = clickValue.mul(factionUpgradeEffect(0, 2));
+	if (hasFactionUpgrade(1, 2, 2)) clickValue = clickValue.mul(factionUpgradeEffect(1, 2));
 	clickValue = clickValue.mul(tmp.G.effect);
 	if (getClickableState("M", 12)) clickValue = clickValue.mul(clickableEffect("M", 12));
 	if (hasUpgrade("F", 11) && getClickableState("M", 13)) clickValue = clickValue.mul(clickableEffect("M", 13));
@@ -183,10 +183,10 @@ function update(diff) {
 	// faction coins
 	let FCchance = new Decimal(2.5);
 	if (getBuyableAmount("C", 13).gt(0)) FCchance = FCchance.add(getBuyableAmount("C", 13).mul(tmp.C.buyables[13].effect2));
-	if (hasUpgrade("F", 1033)) FCchance = FCchance.add(upgradeEffect("F", 1033).mul(3));
-	if (hasUpgrade("F", 1042)) FCchance = FCchance.add(upgradeEffect("F", 1042));
-	if (hasUpgrade("F", 1061)) FCchance = FCchance.add(upgradeEffect("F", 1061));
-	if (hasUpgrade("F", 1063)) FCchance = FCchance.add(upgradeEffect("F", 1063));
+	if (hasFactionUpgrade(0, 2, 0)) FCchance = FCchance.add(factionUpgradeEffect(0, 2).mul(3));
+	if (hasFactionUpgrade(0, 1, 1)) FCchance = FCchance.add(factionUpgradeEffect(0, 1));
+	if (hasFactionUpgrade(0, 0, 3)) FCchance = FCchance.add(factionUpgradeEffect(0, 0));
+	if (hasFactionUpgrade(0, 2, 3)) FCchance = FCchance.add(factionUpgradeEffect(0, 2));
 	if (hasUpgrade("G", 11)) FCchance = FCchance.add(upgradeEffect("G", 11));
 	player.FCchance = FCchance;
 	player.stats.forEach(obj => obj.FCchance = obj.FCchance.max(player.FCchance));

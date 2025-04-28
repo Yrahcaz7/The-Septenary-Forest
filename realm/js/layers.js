@@ -108,9 +108,9 @@ addLayer("C", {
 				for (let index = 0; index < getBuyableAmount("C", "1" + this.id).toNumber(); index++) {
 					eff = eff.add(creationTierEff[this.id - 11][index]);
 				};
-				if (hasUpgrade("F", 1083)) eff = eff.add(upgradeEffect("F", 1083).mul(1));
-				if (hasUpgrade("F", 1031)) eff = eff.mul(upgradeEffect("F", 1031));
-				if (hasUpgrade("F", 1032)) eff = eff.mul(upgradeEffect("F", 1032));
+				if (hasFactionUpgrade(0, 2, 5)) eff = eff.add(factionUpgradeEffect(0, 2).mul(1));
+				if (hasFactionUpgrade(0, 0, 0)) eff = eff.mul(factionUpgradeEffect(0, 0));
+				if (hasFactionUpgrade(0, 1, 0)) eff = eff.mul(factionUpgradeEffect(0, 1));
 				return eff;
 			},
 			display() {
@@ -133,9 +133,9 @@ addLayer("C", {
 				for (let index = 0; index < getBuyableAmount("C", "1" + this.id).toNumber(); index++) {
 					eff = eff.add(creationTierEff[this.id - 11][index]);
 				};
-				if (hasUpgrade("F", 1083)) eff = eff.add(upgradeEffect("F", 1083).mul(2));
-				if (hasUpgrade("F", 1031)) eff = eff.mul(upgradeEffect("F", 1031));
-				if (hasUpgrade("F", 1032)) eff = eff.mul(upgradeEffect("F", 1032));
+				if (hasFactionUpgrade(0, 2, 5)) eff = eff.add(factionUpgradeEffect(0, 2).mul(2));
+				if (hasFactionUpgrade(0, 0, 0)) eff = eff.mul(factionUpgradeEffect(0, 0));
+				if (hasFactionUpgrade(0, 1, 0)) eff = eff.mul(factionUpgradeEffect(0, 1));
 				return eff;
 			},
 			display() {
@@ -158,9 +158,9 @@ addLayer("C", {
 				for (let index = 0; index < getBuyableAmount("C", "1" + this.id).toNumber(); index++) {
 					eff = eff.add(creationTierEff[this.id - 11][index]);
 				};
-				if (hasUpgrade("F", 1083)) eff = eff.add(upgradeEffect("F", 1083).mul(4));
-				if (hasUpgrade("F", 1031)) eff = eff.mul(upgradeEffect("F", 1031));
-				if (hasUpgrade("F", 1032)) eff = eff.mul(upgradeEffect("F", 1032));
+				if (hasFactionUpgrade(0, 2, 5)) eff = eff.add(factionUpgradeEffect(0, 2).mul(4));
+				if (hasFactionUpgrade(0, 0, 0)) eff = eff.mul(factionUpgradeEffect(0, 0));
+				if (hasFactionUpgrade(0, 1, 0)) eff = eff.mul(factionUpgradeEffect(0, 1));
 				return eff;
 			},
 			effect2: 0.25,
@@ -168,7 +168,7 @@ addLayer("C", {
 				const b = tmp[this.layer].buyables[this.id];
 				const amount = getBuyableAmount(this.layer, this.id);
 				const effect = buyableEffect(this.layer, this.id);
-				return "\nCost: " + format(b.cost) + " coins\n\nAmount: " + formatWhole(amount) + "\n\nEffect: +" + format(effect) + " to coins/" + (hasUpgrade("F", 1143) ? "click" : "sec") + " and +" + format(b.effect2) + "% to FC find chance\n\nTotal Effect: +" + format(amount.mul(effect)) + " and +" + format(amount.mul(b.effect2)) + "%";
+				return "\nCost: " + format(b.cost) + " coins\n\nAmount: " + formatWhole(amount) + "\n\nEffect: +" + format(effect) + " to coins/" + (hasFactionUpgrade(1, 2, 1) ? "click" : "sec") + " and +" + format(b.effect2) + "% to FC find chance\n\nTotal Effect: +" + format(amount.mul(effect)) + " and +" + format(amount.mul(b.effect2)) + "%";
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
@@ -216,7 +216,7 @@ const autocastTier = ["OFF", "primary - ON", "secondary - ON", "ternary - ON"];
 
 function getSpellCost(index) {
 	let cost = new Decimal([80, 160, 120][index]);
-	if (hasUpgrade("F", 1152)) cost = cost.mul(3);
+	if (hasFactionUpgrade(1, 1, 2)) cost = cost.mul(3);
 	return cost;
 };
 
@@ -248,13 +248,13 @@ addLayer("M", {
 		let manaRegen = new Decimal(2.5);
 		if (hasUpgrade("M", 12) && upgradeEffect("M", 12).gt(0)) manaRegen = manaRegen.add(upgradeEffect("M", 12));
 		if (hasUpgrade("M", 14) && upgradeEffect("M", 14).gt(0)) manaRegen = manaRegen.add(upgradeEffect("M", 14));
-		if (hasUpgrade("F", 1052)) manaRegen = manaRegen.mul(upgradeEffect("F", 1052));
+		if (hasFactionUpgrade(0, 1, 2)) manaRegen = manaRegen.mul(factionUpgradeEffect(0, 1));
 		if (hasUpgrade("G", 13)) manaRegen = manaRegen.mul(upgradeEffect("G", 13));
 		player.M.manaRegen = manaRegen;
 		// max mana buffs
 		let maxMana = new Decimal(100);
-		if (hasUpgrade("F", 1051)) maxMana = maxMana.mul(upgradeEffect("F", 1051));
-		if (hasUpgrade("F", 1151)) maxMana = maxMana.mul(upgradeEffect("F", 1151));
+		if (hasFactionUpgrade(0, 0, 2)) maxMana = maxMana.mul(factionUpgradeEffect(0, 0));
+		if (hasFactionUpgrade(1, 0, 2)) maxMana = maxMana.mul(factionUpgradeEffect(1, 0));
 		if (hasUpgrade("M", 11)) maxMana = maxMana.mul(upgradeEffect("M", 11));
 		if (hasUpgrade("M", 13)) maxMana = maxMana.mul(upgradeEffect("M", 13));
 		if (hasUpgrade("G", 13)) maxMana = maxMana.mul(upgradeEffect("G", 13));
@@ -340,8 +340,8 @@ addLayer("M", {
 			display() { return "get coins equal to " + formatWhole(clickableEffect("M", this.id)) + " seconds of coins/sec<br><br>Effect: +" + format(tmp.pointGen.mul(clickableEffect("M", this.id))) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana</span>" },
 			effect() {
 				let eff = new Decimal(30);
-				if (hasUpgrade("F", 1162)) eff = eff.add(30);
-				if (hasUpgrade("F", 1152)) eff = eff.mul(2);
+				if (hasFactionUpgrade(1, 1, 3)) eff = eff.add(30);
+				if (hasFactionUpgrade(1, 1, 2)) eff = eff.mul(2);
 				return eff;
 			},
 			canClick() { if (player.M.mana.gte(getSpellCost(this.id - 11))) return true },
@@ -354,7 +354,7 @@ addLayer("M", {
 			display() { return "boost all coin generation based on your creations for 30 seconds<br>Time left: " + formatTime(player.M.spellTimes[1]) + "<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana" },
 			effect() {
 				let eff = player.C.points.add(1).pow(0.15);
-				if (hasUpgrade("F", 1152)) eff = eff.mul(2);
+				if (hasFactionUpgrade(1, 1, 2)) eff = eff.mul(2);
 				return eff;
 			},
 			canClick() {
@@ -379,8 +379,8 @@ addLayer("M", {
 			},
 			effect() {
 				let eff = player.M.mana.add(1).pow(0.25);
-				if (hasUpgrade("F", 1152)) eff = eff.mul(2);
-				if (hasUpgrade("F", 1082)) eff = eff.mul(upgradeEffect("F", 1082));
+				if (hasFactionUpgrade(1, 1, 2)) eff = eff.mul(2);
+				if (hasFactionUpgrade(0, 1, 5)) eff = eff.mul(factionUpgradeEffect(0, 1));
 				return eff;
 			},
 			canClick() {
@@ -569,6 +569,86 @@ function getAllianceUpgrade(index) {
 	}
 };
 
+const factionUpgrades = [[
+	["Magic Dust", "multiply the first effect of basic creations based on your mana regen", () => player.M.manaRegen.mul(2).add(1).pow(0.5), "x"],
+	["Fairy Workers", "multiply the first effect of basic creations based on your creations", () => player.C.points.add(1).pow(0.2), "x"],
+	["Fairy Traders", "multiply coins/click and faction coin find chance based on your creations", () => player.C.points.add(1).pow(0.1), "x"],
+], [
+	["Super Clicks", "multiply coins/click based on your creations", () => player.C.points.add(1).pow(0.25), "x"],
+	["Elven Luck", "increase faction coin find chance based on your coins/click", () => player.clickValue.add(1).pow(0.3), "+", "%"],
+	["Elven Spirit", "multiply coins/click based on your elf coins", () => player.FC[1].add(1).pow(0.4), "x"],
+	["Elven Clicks", "multiply coins/click based on your coins", () => player.points.add(1).pow(0.01), "x"],
+	["Enchanted Clicks", "multiply coins/click based on your mana regen", () => player.M.manaRegen.add(1).pow(0.5), "x"],
+	["All on One", "the 3rd creation's first effect now applies to coins/click instead of coins/sec"],
+], [
+	["Angelic Capacity", "multiply max mana based on your mana generated this era", () => player.stats[0].manaTotal.add(1).pow(0.075), "x"],
+	["Road to Heaven", "multiply mana regen based on your angel coins", () => player.FC[2].add(1).pow(0.4), "x"],
+	["Angels Supreme", "gain 5x angel coins"],
+	["Rainbows", "multiply max mana based on your faction coins", () => player.F.points.add(1).pow(0.2), "x"],
+	["Prism Upgrade", "double all spell effects, but triple all spell mana costs"],
+	["Angelic Clicks", "multiply coins/click based on your max mana", () => player.M.maxMana.add(1).pow(0.05), "x"],
+], [
+	["Jackpot", "increase faction coin find chance based on your coins", () => player.points.add(1).log10().mul(10).add(1), "+", "%"],
+	["Goblin's Greed", "multiply coins/sec based on your faction coins", () => player.F.points.add(1).pow(0.25), "x"],
+	["Currency Revolution", "increase faction coin find chance based on your faction coins", () => player.F.points.add(1).pow(0.6), "+", "%"],
+	["Moneyload", "multiply coins/sec based on your faction coin find chance", () => player.FCchance.add(1).pow(0.25), "x"],
+	["Absurd Taxes", "increase the base effect of Tax Collection by +30 seconds"],
+	["Goblin Pride", "multiply coins/sec based on your goblin coins", () => player.FC[3].add(1).pow(0.3), "x"],
+], [
+	["Undending Cycle", "multiply coins/sec based on your coins", () => player.points.add(1).log10().div(2).add(1), "x"],
+	["Corpse Piles", "multiply coins/sec based on your undead coins", () => player.FC[4].add(1).pow(0.3), "x"],
+	["Stay no More", "multiply coins/sec based on your coins/click", () => player.clickValue.add(1).log10().div(2).add(1), "x"],
+], [
+	["Demonic Prestige", "multiply coins/sec based on your creation tiers", () => player.C.tiers.div(5).add(1), "x"],
+	["Demonic Blood", "multiply blood frenzy effect based on your creations (higher numbered ones count more)", () => [11, 12, 13].reduce((acc, id, num) => acc.add(getBuyableAmount("C", id).mul(5 ** num)), new Decimal(0)).div(10).add(1).pow(0.1), "x"],
+	["Polished Rage", "increase all creation's first base effects based on their number and your gems", () => player.G.points.add(1).pow(0.1).sub(1), "+(", " * 2^num)"],
+]];
+
+function getFactionUpgrade(row, num, faction = -1) {
+	const obj = {};
+	if (num < 3) {
+		obj.fullDisplay = function() {
+			const alliance = getAllianceIndex(faction);
+			if (alliance < 0) return "";
+			const upg = factionUpgrades[alliance][3 * row + num];
+			if (upg) return "<h3>" + upg[0] + "</h3><br>" + upg[1] + (upg.length > 2 ? "<br><br>Effect: " + (upg[3] || "") + format(upgradeEffect("F", this.id)) + (upg[4] || "") : "") + "<br><br>Cost: " + format(this.cost) + " coins";
+			return "";
+		};
+		obj.effect = () => {
+			const alliance = getAllianceIndex(faction);
+			if (alliance < 0) return;
+			const upg = factionUpgrades[alliance][3 * row + num];
+			if (upg) return (upg[2] instanceof Function ? upg[2]() : upg[2]);
+		};
+		obj.cost = new Decimal(10).pow(1.5 * (row ** 2) + 2.5 * row + 2 + (row + 1) * num).mul(5);
+		obj.currencyInternalName = "points";
+		obj.currencyLocation = () => player;
+		if (row === 0) obj.unlocked = hasChosenFaction;
+		else obj.unlocked = () => hasChosenFaction() && hasUpgrade("F", 104 + 10 * row);
+	} else {
+		const cost = 25 * (10 ** (row ** 2));
+		obj.fullDisplay = function() {
+			const name = (factionName[getAllianceIndex(faction)] || "???");
+			const types = getFactionCoinTypes(faction);
+			return "<h3>" + name.at(0).toUpperCase() + name.slice(1) + " Trade Route</h3><br>unlock 3 more " + name + " upgrades<br><br>Cost: " + formatWhole(cost) + " " + (types.length === 2 ? factionName[types[0]] + " and " + factionName[types[1]] : name) + " coins";
+		};
+		obj.canAfford = () => getFactionCoinTypes(faction).every(type => player.FC[type].gte(cost));
+		obj.pay = () => getFactionCoinTypes(faction).forEach(type => player.FC[type] = player.FC[type].sub(cost));
+		if (row === 0) obj.unlocked = () => hasChosenFaction() && factionUpgrades[getAllianceIndex(faction)]?.length >= 3 * (row + 2);
+		else obj.unlocked = () => hasChosenFaction() && hasUpgrade("F", 104 + 10 * row) && factionUpgrades[getAllianceIndex(faction)]?.length >= 3 * (row + 2);
+	};
+	obj.color = () => factionColor[getAllianceIndex(faction)] || "#C0C0C0";
+	return obj;
+};
+
+function hasFactionUpgrade(row, num, faction) {
+	return faction === getAllianceIndex() && hasUpgrade("F", 111 + 10 * row + num);
+};
+
+function factionUpgradeEffect(row, num) {
+	return upgradeEffect("F", 111 + 10 * row + num);
+};
+
 function getFCdisp(index) {
 	return "<div style='color: lch(from " + factionColor[index] + " calc(l + 20) c h)'>" + formatWhole(player.FC[index]) + " " + factionName[index] + " coins</div>";
 };
@@ -600,7 +680,7 @@ addLayer("F", {
 		"blank",
 		["row", [["upgrade", 21], ["blank", ["17px"]], ["upgrade", 22], ["blank", ["17px"]], ["upgrade", 23]]],
 		"blank",
-		["upgrades", [103, 104, 105, 106, 107, 108, 113, 114, 115, 116, 117, 118]],
+		["upgrades", [11, 12]],
 	],
 	componentStyles: {
 		upgrade: {height: "120px", "border-radius": "25px"},
@@ -631,247 +711,13 @@ addLayer("F", {
 		22: getAllianceUpgrade(1),
 		23: getAllianceUpgrade(2),
 		// faction upgrades
-		// fairy faction
-		1031: {
-			fullDisplay() { return "<h3>Magic Dust</h3><br>multiply the first effect of basic creations based on your mana regen<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.M.manaRegen.mul(2).add(1).pow(0.5) },
-			cost: 500,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getAllianceIndex() === 0 },
-		},
-		1032: {
-			fullDisplay() { return "<h3>Fairy Workers</h3><br>multiply the first effect of basic creations based on your creations<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.C.points.add(1).pow(0.2) },
-			cost: 5_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getAllianceIndex() === 0 },
-		},
-		1033: {
-			fullDisplay() { return "<h3>Fairy Traders</h3><br>multiply coins/click and faction coin find chance based on your creations<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br>and +" + format(upgradeEffect("F", this.id).mul(3)) + "%<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.C.points.add(1).pow(0.1) },
-			cost: 50_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getAllianceIndex() === 0 },
-		},
-		// elf faction
-		1041: {
-			fullDisplay() { return "<h3>Super Clicks</h3><br>multiply coins/click based on your creations<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.C.points.add(1).pow(0.25) },
-			cost: 500,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getAllianceIndex() === 1 },
-		},
-		1042: {
-			fullDisplay() { return "<h3>Elven Luck</h3><br>increase faction coin find chance based on your coins/click<br><br>Effect: +" + format(upgradeEffect("F", this.id)) + "%<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.clickValue.add(1).pow(0.3) },
-			cost: 5_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getAllianceIndex() === 1 },
-		},
-		1043: {
-			fullDisplay() { return "<h3>Elven Spirit</h3><br>multiply coins/click based on your elf coins<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.FC[1].add(1).pow(0.4) },
-			cost: 50_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getAllianceIndex() === 1 },
-		},
-		1044: {
-			fullDisplay() { return "<h3>Elf Trade Route</h3><br>unlock 3 more elf upgrades<br><br>Cost: 25 elf coins" },
-			canAfford() { return player.FC[1].gte(25) },
-			pay() { player.FC[1] = player.FC[1].sub(25) },
-			unlocked() { return getAllianceIndex() === 1 },
-		},
-		1141: {
-			fullDisplay() { return "<h3>Elven Clicks</h3><br>multiply coins/click based on your coins<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.points.add(1).pow(0.01) },
-			cost: 5_000_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return hasUpgrade("F", 1044) },
-		},
-		1142: {
-			fullDisplay() { return "<h3>Enchanted Clicks</h3><br>multiply coins/click based on your mana regen<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.M.manaRegen.add(1).pow(0.5) },
-			cost: 500_000_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return hasUpgrade("F", 1044) },
-		},
-		1143: {
-			fullDisplay() { return "<h3>All on One</h3><br>the 3rd creation's first effect now applies to coins/click instead of coins/sec<br><br>Cost: " + format(this.cost) + " coins" },
-			cost: 5e10,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return hasUpgrade("F", 1044) },
-		},
-		// angel faction
-		1051: {
-			fullDisplay() { return "<h3>Angelic Capacity</h3><br>multiply max mana based on your mana generated<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.stats[0].manaTotal.add(1).pow(0.075) },
-			cost: 500,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getAllianceIndex() === 2 },
-		},
-		1052: {
-			fullDisplay() { return "<h3>Road to Heaven</h3><br>multiply mana regen based on your angel coins<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.FC[2].add(1).pow(0.4) },
-			cost: 5_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getAllianceIndex() === 2 },
-		},
-		1053: {
-			fullDisplay() { return "<h3>Angels Supreme</h3><br>gain 5x angel coins<br><br>Cost: " + format(this.cost) + " coins" },
-			cost: 50_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getAllianceIndex() === 2 },
-		},
-		1054: {
-			fullDisplay() { return "<h3>Angel Trade Route</h3><br>unlock 3 more angel upgrades<br><br>Cost: 25 angel coins" },
-			canAfford() { return player.FC[2].gte(25) },
-			pay() { player.FC[2] = player.FC[2].sub(25) },
-			unlocked() { return getAllianceIndex() === 2 },
-		},
-		1151: {
-			fullDisplay() { return "<h3>Rainbows</h3><br>multiply max mana based on your faction coins<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.F.points.add(1).pow(0.2) },
-			cost: 5_000_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return hasUpgrade("F", 1054) },
-		},
-		1152: {
-			fullDisplay() { return "<h3>Prism Upgrade</h3><br>double all spell effects, but triple all spell mana costs<br><br>Cost: " + format(this.cost) + " coins" },
-			cost: 500_000_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return hasUpgrade("F", 1054) },
-		},
-		1153: {
-			fullDisplay() { return "<h3>Angelic Clicks</h3><br>multiply coins/click based on your max mana<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.M.maxMana.add(1).pow(0.05) },
-			cost: 5e10,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return hasUpgrade("F", 1054) },
-		},
-		// goblin faction
-		1061: {
-			fullDisplay() { return "<h3>Jackpot</h3><br>increase faction coin find chance based on your coins<br><br>Effect: +" + format(upgradeEffect("F", this.id)) + "%<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.points.add(1).pow(0.2) },
-			cost: 500,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getAllianceIndex() === 3 },
-		},
-		1062: {
-			fullDisplay() { return "<h3>Goblin's Greed</h3><br>multiply coins/sec based on your faction coins<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.F.points.add(1).pow(0.25) },
-			cost: 5_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getAllianceIndex() === 3 },
-		},
-		1063: {
-			fullDisplay() { return "<h3>Currency Revolution</h3><br>increase faction coin find chance based on your faction coins<br><br>Effect: +" + format(upgradeEffect("F", this.id)) + "%<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.F.points.add(1).pow(0.6) },
-			cost: 50_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getAllianceIndex() === 3 },
-		},
-		1064: {
-			fullDisplay() { return "<h3>Goblin Trade Route</h3><br>unlock 3 more goblin upgrades<br><br>Cost: 25 goblin coins" },
-			canAfford() { return player.FC[3].gte(25) },
-			pay() { player.FC[3] = player.FC[3].sub(25) },
-			unlocked() { return getAllianceIndex() === 3 },
-		},
-		1161: {
-			fullDisplay() { return "<h3>Moneyload</h3><br>multiply coins/sec based on your faction coin find chance<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.FCchance.add(1).pow(0.25) },
-			cost: 5_000_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return hasUpgrade("F", 1064) },
-		},
-		1162: {
-			fullDisplay() { return "<h3>Absurd Taxes</h3><br>increase the base effect of Tax Collection by +30 seconds<br><br>Cost: " + format(this.cost) + " coins" },
-			cost: 500_000_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return hasUpgrade("F", 1064) },
-		},
-		1163: {
-			fullDisplay() { return "<h3>Goblin Pride</h3><br>multiply coins/sec based on your goblin coins<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.FC[3].add(1).pow(0.3) },
-			cost: 5e10,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return hasUpgrade("F", 1064) },
-		},
-		// undead faction
-		1071: {
-			fullDisplay() { return "<h3>Undending Cycle</h3><br>multiply coins/sec based on your coins<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.points.add(1).log10().div(2).add(1) },
-			cost: 500,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getAllianceIndex() === 4 },
-		},
-		1072: {
-			fullDisplay() { return "<h3>Corpse Piles</h3><br>multiply coins/sec based on your undead coins<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.FC[4].add(1).pow(0.3) },
-			cost: 5_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getAllianceIndex() === 4 },
-		},
-		1073: {
-			fullDisplay() { return "<h3>Stay no More</h3><br>multiply coins/sec based on your coins/click<br><br>Effect: x" + format(upgradeEffect("F", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.clickValue.add(1).log10().div(2).add(1) },
-			cost: 50_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getAllianceIndex() === 4 },
-		},
-		// demon faction
-		1081: {
-			fullDisplay() { return "<h3>Demonic Prestige</h3><br>multiply coins/sec based on your creation tiers<br><br>Effect: x" + format(upgradeEffect(this.layer, this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.C.tiers.div(5).add(1) },
-			cost: 500,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getAllianceIndex() === 5 },
-		},
-		1082: {
-			fullDisplay() { return "<h3>Demonic Blood</h3><br>multiply blood frenzy effect based on your creations (higher numbered ones count more)<br><br>Effect: x" + format(upgradeEffect(this.layer, this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() {
-				let amt = getBuyableAmount("C", 11);
-				amt = amt.add(getBuyableAmount("C", 12).mul(5));
-				amt = amt.add(getBuyableAmount("C", 13).mul(25));
-				return amt.div(10).add(1).pow(0.1);
-			},
-			cost: 5_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getAllianceIndex() === 5 },
-		},
-		1083: {
-			fullDisplay() { return "<h3>Polished Rage</h3><br>increase all creation's first base effects based on their number and your gems<br><br>Effect: +(" + format(upgradeEffect(this.layer, this.id)) + " * 2^num)<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.G.points.add(1).pow(0.1).sub(1) },
-			cost: 50_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return getAllianceIndex() === 5 },
-		},
+		111: getFactionUpgrade(0, 0),
+		112: getFactionUpgrade(0, 1),
+		113: getFactionUpgrade(0, 2),
+		114: getFactionUpgrade(0, 3),
+		121: getFactionUpgrade(1, 0),
+		122: getFactionUpgrade(1, 1),
+		123: getFactionUpgrade(1, 2),
 	},
 });
 
@@ -1065,7 +911,7 @@ document.onclick = () => {
 		FCfound = FCfound.add(1);
 	};
 	FCfound = FCfound.floor();
-	if (hasUpgrade("F", 1053) && FCtype === 2) FCfound = FCfound.mul(5);
+	if (hasFactionUpgrade(0, 2, 2) && FCtype === 2) FCfound = FCfound.mul(5);
 	// faction coins gained
 	player.FC[FCtype] = player.FC[FCtype].add(FCfound);
 	player.stats.forEach(obj => obj.FCtotal = obj.FCtotal.add(FCfound));
