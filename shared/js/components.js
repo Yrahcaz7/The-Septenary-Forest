@@ -143,13 +143,11 @@ function loadVue(mainPage = false) {
 	addNormalComponent('row', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
-		template: template(`<div class="upgTable instant">
-			<div class="upgRow">
-				<div v-for="(item, index) in data">
-					<component v-if="!Array.isArray(item)" :is="item" :layer="layer" :style="tmp[layer].componentStyles[item]"></component>
-					<component v-else-if="item.length == 3" :is="item[0]" :layer="layer" :data="item[1]" :style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]"></component>
-					<component v-else-if="item.length == 2" :is="item[0]" :layer="layer" :data="item[1]" :style="tmp[layer].componentStyles[item[0]]"></component>
-				</div>
+		template: template(`<div class="upgRow instant">
+			<div v-for="(item, index) in data">
+				<component v-if="!Array.isArray(item)" :is="item" :layer="layer" :style="tmp[layer].componentStyles[item]"></component>
+				<component v-else-if="item.length == 3" :is="item[0]" :layer="layer" :data="item[1]" :style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]"></component>
+				<component v-else-if="item.length == 2" :is="item[0]" :layer="layer" :data="item[1]" :style="tmp[layer].componentStyles[item[0]]"></component>
 			</div>
 		</div>`),
 	});
@@ -158,19 +156,17 @@ function loadVue(mainPage = false) {
 	addNormalComponent('column', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
-		template: template(`<div class="upgTable instant">
-			<div class="upgCol">
-				<template v-for="item in data">
-					<template v-if="item">
-						<component v-if="!Array.isArray(item)" :is="item" :layer="layer" :style="tmp[layer].componentStyles[item]"></component>
-						<component v-else-if="item.length == 2" :is="item[0]" :layer="layer" :data="item[1]" :style="tmp[layer].componentStyles[item[0]]"></component>
-						<component v-else-if="item.length == 3" :is="item[0]" :layer="layer" :data="item[1]" :style="[
-							tmp[layer].componentStyles[item[0]],
-							(item[2] ? item[2] : {}),
-						]"></component>
-					</template>
+		template: template(`<div class="upgCol instant">
+			<template v-for="item in data">
+				<template v-if="item">
+					<component v-if="!Array.isArray(item)" :is="item" :layer="layer" :style="tmp[layer].componentStyles[item]"></component>
+					<component v-else-if="item.length == 2" :is="item[0]" :layer="layer" :data="item[1]" :style="tmp[layer].componentStyles[item[0]]"></component>
+					<component v-else-if="item.length == 3" :is="item[0]" :layer="layer" :data="item[1]" :style="[
+						tmp[layer].componentStyles[item[0]],
+						(item[2] ? item[2] : {}),
+					]"></component>
 				</template>
-			</div>
+			</template>
 		</div>`),
 	});
 
@@ -215,7 +211,7 @@ function loadVue(mainPage = false) {
 	addNormalComponent('challenges', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
-		template: template(`<div v-if="tmp[layer].challenges" class="upgTable">
+		template: template(`<div v-if="tmp[layer].challenges" class="upgCol">
 			<div v-for="row in (data === undefined ? tmp[layer].challenges.rows : data)" class="upgRow">
 				<div v-for="col in tmp[layer].challenges.cols">
 					<challenge v-if="tmp[layer].challenges[row * 10 + col] !== undefined && tmp[layer].challenges[row * 10 + col].unlocked" :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.challenge"></challenge>
@@ -263,7 +259,7 @@ function loadVue(mainPage = false) {
 	addNormalComponent('upgrades', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
-		template: template(`<div v-if="tmp[layer].upgrades" class="upgTable">
+		template: template(`<div v-if="tmp[layer].upgrades" class="upgCol">
 			<div v-for="row in (data === undefined ? tmp[layer].upgrades.rows : data)" class="upgRow">
 				<div v-for="col in tmp[layer].upgrades.cols">
 					<div v-if="tmp[layer].upgrades[row * 10 + col] !== undefined && tmp[layer].upgrades[row * 10 + col].unlocked" class="upgAlign">
@@ -407,7 +403,7 @@ function loadVue(mainPage = false) {
 	addNormalComponent('buyables', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
-		template: template(`<div v-if="tmp[layer].buyables" class="upgTable">
+		template: template(`<div v-if="tmp[layer].buyables" class="upgCol">
 			<respec-button v-if="tmp[layer].buyables.respec && !(tmp[layer].buyables.showRespec !== undefined && tmp[layer].buyables.showRespec == false)" :layer="layer" :style="[
 				{'margin-bottom': '12px'},
 				tmp[layer].componentStyles['respec-button'],
@@ -486,7 +482,7 @@ function loadVue(mainPage = false) {
 	addNormalComponent('clickables', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
-		template: template(`<div v-if="tmp[layer].clickables" class="upgTable">
+		template: template(`<div v-if="tmp[layer].clickables" class="upgCol">
 			<master-button v-if="tmp[layer].clickables.masterButtonPress && (tmp[layer].clickables.showMasterButton === undefined || tmp[layer].clickables.showMasterButton)" :layer="layer" :style="[
 				{'margin-bottom': '12px'},
 				tmp[layer].componentStyles['master-button'],
@@ -558,7 +554,7 @@ function loadVue(mainPage = false) {
 	addNormalComponent('grid', {
 		props: ['layer', 'data'],
 		data() {return {tmp, run, layers}},
-		template: template(`<div v-if="tmp[layer].grid" class="upgTable">
+		template: template(`<div v-if="tmp[layer].grid" class="upgCol">
 			<div v-for="row in (data === undefined ? tmp[layer].grid.rows : data)" class="upgRow">
 				<div v-for="col in tmp[layer].grid.cols">
 					<div v-if="run(layers[layer].grid.getUnlocked, layers[layer].grid, row * 100 + col)" class="upgAlign" style="margin: 1px; height: inherit">
@@ -573,7 +569,7 @@ function loadVue(mainPage = false) {
 	addNormalComponent('contained-grid', {
 		props: ['layer', 'data'],
 		data() {return {tmp, run, layers}},
-		template: template(`<div v-if="tmp[layer].grid" class="upgTable" :style="{
+		template: template(`<div v-if="tmp[layer].grid" class="upgCol" :style="{
 			'width': 'fit-content',
 			'max-width': (Array.isArray(data) ? data[0] : data),
 			'overflow': 'auto',
@@ -640,7 +636,7 @@ function loadVue(mainPage = false) {
 			currentTab() {return player.subtabs[layer][data]},
 		},
 		template: template(`<div v-if="tmp[layer].microtabs" style="border-style: solid">
-			<div class="upgTable instant">
+			<div class="upgCol instant">
 				<tab-buttons :layer="layer" :data="tmp[layer].microtabs[data]" :name="data" :style="tmp[layer].componentStyles['tab-buttons']"></tab-buttons>
 			</div>
 			<layer-tab v-if="tmp[layer].microtabs[data][player.subtabs[layer][data]].embedLayer" :layer="tmp[layer].microtabs[data][player.subtabs[layer][data]].embedLayer" :embedded="true"></layer-tab>
@@ -690,7 +686,7 @@ function loadVue(mainPage = false) {
 	addNormalComponent('achievements', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
-		template: template(`<div v-if="tmp[layer].achievements" class="upgTable">
+		template: template(`<div v-if="tmp[layer].achievements" class="upgCol">
 			<div v-for="row in (data === undefined ? tmp[layer].achievements.rows : data)" class="upgRow">
 				<div v-for="col in tmp[layer].achievements.cols">
 					<div v-if="tmp[layer].achievements[row * 10 + col] !== undefined && tmp[layer].achievements[row * 10 + col].unlocked" class="upgAlign">
@@ -969,7 +965,7 @@ function loadVue(mainPage = false) {
 					<column :layer="layer" :data="tmp[layer].tabFormat"></column>
 				</div>
 				<div v-else>
-					<div class="upgTable" :style="{
+					<div class="upgCol" :style="{
 						'padding-top': (embedded ? '0' : '25px'),
 						'margin-top': (embedded ? '-10px' : '0'),
 						'margin-bottom': '24px',

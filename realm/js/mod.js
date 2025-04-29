@@ -74,7 +74,6 @@ function callCast() {
 	player.M.spellTimes[1] = new Decimal(30);
 	player.M.mana = player.M.mana.sub(getSpellCost(1));
 	player.stats.forEach(obj => obj.casts[1] = obj.casts[1].add(1));
-	setClickableState("M", 12, true);
 };
 
 function sideSpellCast() {
@@ -85,7 +84,6 @@ function sideSpellCast() {
 	} else if (hasUpgrade("F", 12)) {
 		player.stats.forEach(obj => obj.casts[3] = obj.casts[3].add(1));
 	};
-	setClickableState("M", 13, true);
 };
 
 function getPointGen() {
@@ -102,8 +100,8 @@ function getPointGen() {
 	if (hasFactionUpgrade(0, 2, 4)) gain = gain.mul(factionUpgradeEffect(0, 2));
 	if (hasFactionUpgrade(0, 0, 5)) gain = gain.mul(factionUpgradeEffect(0, 0));
 	gain = gain.mul(tmp.G.effect);
-	if (getClickableState("M", 12)) gain = gain.mul(clickableEffect("M", 12));
-	if (hasUpgrade("F", 12) && getClickableState("M", 13)) gain = gain.mul(clickableEffect("M", 13));
+	if (player.M.spellTimes[1].gt(0)) gain = gain.mul(clickableEffect("M", 12));
+	if (hasUpgrade("F", 12) && player.M.spellTimes[2].gt(0)) gain = gain.mul(clickableEffect("M", 13));
 	return gain;
 };
 
@@ -176,8 +174,8 @@ function update(diff) {
 	if (hasFactionUpgrade(0, 2, 1)) clickValue = clickValue.mul(factionUpgradeEffect(0, 2));
 	if (hasFactionUpgrade(1, 2, 2)) clickValue = clickValue.mul(factionUpgradeEffect(1, 2));
 	clickValue = clickValue.mul(tmp.G.effect);
-	if (getClickableState("M", 12)) clickValue = clickValue.mul(clickableEffect("M", 12));
-	if (hasUpgrade("F", 11) && getClickableState("M", 13)) clickValue = clickValue.mul(clickableEffect("M", 13));
+	if (player.M.spellTimes[1].gt(0)) clickValue = clickValue.mul(clickableEffect("M", 12));
+	if (hasUpgrade("F", 11) && player.M.spellTimes[2].gt(0)) clickValue = clickValue.mul(clickableEffect("M", 13));
 	player.clickValue = clickValue;
 	player.stats.forEach(obj => obj.bestClickValue = obj.bestClickValue.max(player.clickValue));
 	// faction coins

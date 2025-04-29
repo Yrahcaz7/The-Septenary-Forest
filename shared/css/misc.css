@@ -69,4 +69,5 @@
 .hl {
 	box-sizing: border-box;
 	border-top: 3px solid var(--color);
+	width: 100%;
 }

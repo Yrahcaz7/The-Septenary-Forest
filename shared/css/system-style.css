@@ -23,7 +23,7 @@ td {
 	padding: 0;
 }
 
-.upgTable {
+.upgCol {
 	display: flex !important;
 	flex-flow: column wrap;
 	justify-content: center;
@@ -39,10 +39,6 @@ td {
 	align-items: center;
 	max-width: 100%;
 	margin: 0 auto;
-}
-
-.upgCol {
-	width: 100%;
 }
 
 .upgAlign, .bigUpgAlign {

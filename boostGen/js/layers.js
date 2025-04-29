@@ -1275,7 +1275,7 @@ addLayer("hg", {
 		"blank",
 		"buyables",
 		"blank",
-		"h-line",
+		["h-line", "calc(100% - 12px)"],
 		"blank",
 		"clickables",
 		"blank",

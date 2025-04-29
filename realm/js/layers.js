@@ -212,8 +212,6 @@ addLayer("C", {
 	},
 });
 
-const autocastTier = ["OFF", "primary - ON", "secondary - ON", "ternary - ON"];
-
 function getSpellCost(index) {
 	let cost = new Decimal([80, 160, 120][index]);
 	if (hasFactionUpgrade(1, 1, 2)) cost = cost.mul(3);
@@ -225,6 +223,28 @@ function getSideColor(side = -1) {
 	if (side === 0) return "#4040E0";
 	if (side === 1) return "#E04040";
 	return "#C0C0C0";
+};
+
+function getAutocastHTML(id, can, color) {
+	const num = (hasUpgrade("M", 103) ? 2 : 1);
+	let html = "<div>";
+	for (let index = 0; index < num; index++) {
+		html += "<button id='autocast-" + id + "-" + index + "'";
+		if (can) html += ` onclick='setClickableState("M", ${id}, ${getClickableState("M", id) === index + 1 ? 0 : index + 1})'`;
+		html += " class='upg tooltipBox " + (can ? "can" : "locked") + "' style='";
+		if (can) html += "background-color: " + (index === 1 ? tmp.M.color : color) + "; ";
+		html += "border-radius: 0px 0px " + (index === 0 && num === 2 ? 0 : 25) + "px " + (index === 1 ? 0 : 25) + "px; width: " + (num === 2 ? 62.5 : 125) + "px; min-height: min-content; transform: none'>";
+			html += "<svg width='40' height='40' viewBox='0 0 40 40' fill='none' stroke='#000000' stroke-width='2'>";
+				html += "<g id='arrow'>";
+					html += "<path d='m 5,20 a 15,15 0 0 1 11,-14.5 a 15,15 0 0 1 17,7' style='stroke-linecap: round'/>";
+					html += "<path d='m 34,5 v 8 h -8' style='stroke-linecap: round; stroke-linejoin: round'/>";
+				html += "</g>";
+				html += "<use href='#arrow' transform-origin='20 20' transform='rotate(180)'/>";
+				if (getClickableState("M", id) === index + 1) html += "<text x='20' y='20' text-anchor='middle' dominant-baseline='central' fill='#000000' stroke='none' style='font-size: 15px'>ON</text>";
+			html += "</svg>";
+		html += "</button>";
+	};
+	return html + "</div>";
 };
 
 addLayer("M", {
@@ -271,35 +291,29 @@ addLayer("M", {
 		player.stats.forEach(obj => obj.manaRegen = obj.manaRegen.max(player.M.manaRegen));
 		// spell time
 		for (let index = 1; index < player.M.spellTimes.length; index++) {
-			if (getClickableState("M", index + 11)) {
-				player.M.spellTimes[index] = player.M.spellTimes[index].sub(diff);
-			};
-			if (player.M.spellTimes[index].lte(0)) {
-				setClickableState("M", index + 11, false);
-				player.M.spellTimes[index] = newDecimalZero();
-			};
+			player.M.spellTimes[index] = player.M.spellTimes[index].sub(diff).max(0);
 		};
 		// primary autocasting
 		if (player.M.spellTimes[1].lte(0) && player.M.mana.gte(getSpellCost(1))) {
-			if (getClickableState("M", 102) === 1) {
+			if (getClickableState("M", 12) === 1) {
 				callCast();
-			} else if (getClickableState("M", 102) === 3 && player.M.mana.gte(player.M.maxMana.mul(player.M.autoPercent / 100))) {
+			} else if (getClickableState("M", 12) === 2 && player.M.mana.gte(player.M.maxMana.mul(player.M.autoPercent / 100))) {
 				callCast();
 			};
 		};
 		if (player.M.spellTimes[2].lte(0) && player.M.mana.gte(getSpellCost(2))) {
-			if (getClickableState("M", 103) === 1) {
+			if (getClickableState("M", 13) === 1) {
 				sideSpellCast();
-			} else if (getClickableState("M", 103) === 3 && player.M.mana.gte(player.M.maxMana.mul(player.M.autoPercent / 100))) {
+			} else if (getClickableState("M", 13) === 2 && player.M.mana.gte(player.M.maxMana.mul(player.M.autoPercent / 100))) {
 				sideSpellCast();
 			};
 		};
 		// secondary autocasting
 		const taxCost = getSpellCost(0);
-		if ((player.M.spellTimes[1].gt(0) || !getClickableState("M", 102)) && (player.M.spellTimes[2].gt(0) || !getClickableState("M", 103)) && player.M.mana.gte(taxCost)) {
-			if (getClickableState("M", 101) === 2) {
+		if ((player.M.spellTimes[1].gt(0) || !getClickableState("M", 12)) && (player.M.spellTimes[2].gt(0) || !getClickableState("M", 13)) && player.M.mana.gte(taxCost)) {
+			if (getClickableState("M", 11) === 1) {
 				taxCast(player.M.mana.div(taxCost).floor());
-			} else if (getClickableState("M", 101) === 3 && player.M.mana.gte(player.M.maxMana.mul(player.M.autoPercent / 100))) {
+			} else if (getClickableState("M", 11) === 2 && player.M.mana.gte(player.M.maxMana.mul(player.M.autoPercent / 100))) {
 				let amt = player.M.mana.sub(player.M.maxMana.mul(player.M.autoPercent / 100)).div(taxCost).floor();
 				if (player.M.mana.sub(amt.mul(taxCost)).gte(taxCost)) amt = amt.add(1);
 				taxCast(amt);
@@ -310,8 +324,11 @@ addLayer("M", {
 		const arr = [["bar", "mana"]];
 		if (hasUpgrade("M", 103)) arr.push("blank", "mana-auto-percent-slider");
 		arr.push("blank");
-		arr.push(["clickables", [1]]);
-		arr.push(["clickables", [10]]);
+		arr.push(["row", [
+			["column", [["clickable", 11], ["raw-html", getAutocastHTML(11, hasUpgrade("M", 102), "#C0C0C0")]], {margin: "0 7px"}],
+			["column", [["clickable", 12], ["raw-html", getAutocastHTML(12, hasUpgrade("M", 101), "#C0C0C0")]], {margin: "0 7px"}],
+			["column", [["clickable", 13], ["raw-html", getAutocastHTML(13, hasChosenSide() && hasUpgrade("M", 101), getSideColor())]], {margin: "0 7px"}]
+		]]);
 		arr.push("blank");
 		arr.push(["upgrades", [1]]);
 		arr.push(["display-text", "You have generated " + format(player.stats[2].manaTotal) + " mana in total"]);
@@ -321,7 +338,7 @@ addLayer("M", {
 	},
 	componentStyles: {
 		upgrade: {height: "120px", "border-radius": "25px"},
-		clickable: {width: "125px", "min-height": "50px", transform: "none"},
+		clickable: {width: "125px", height: "125px", "border-radius": "25px 25px 0 0", transform: "none"},
 	},
 	bars: {
 		mana: {
@@ -344,10 +361,9 @@ addLayer("M", {
 				if (hasFactionUpgrade(1, 1, 2)) eff = eff.mul(2);
 				return eff;
 			},
-			canClick() { if (player.M.mana.gte(getSpellCost(this.id - 11))) return true },
+			canClick() { return player.M.mana.gte(getSpellCost(this.id - 11)) },
 			onClick: taxCast,
 			color: "#C0C0C0",
-			style: {height: "125px", "border-radius": "25px 25px 0 0"},
 		},
 		12: {
 			title: "Call to Arms",
@@ -357,14 +373,9 @@ addLayer("M", {
 				if (hasFactionUpgrade(1, 1, 2)) eff = eff.mul(2);
 				return eff;
 			},
-			canClick() {
-				if (getClickableState("M", this.id)) return false;
-				if (player.M.mana.gte(getSpellCost(this.id - 11))) return true;
-				return false;
-			},
+			canClick() { return player.M.spellTimes[this.id - 11].lte(0) && player.M.mana.gte(getSpellCost(this.id - 11)) },
 			onClick: callCast,
 			color: "#C0C0C0",
-			style: {height: "125px", "border-radius": "25px 25px 0 0"},
 		},
 		13: {
 			title() {
@@ -383,75 +394,9 @@ addLayer("M", {
 				if (hasFactionUpgrade(0, 1, 5)) eff = eff.mul(factionUpgradeEffect(0, 1));
 				return eff;
 			},
-			canClick() {
-				if (getClickableState("M", this.id)) return false;
-				if (player.M.mana.gte(getSpellCost(this.id - 11)) && hasChosenSide()) return true;
-				return false;
-			},
+			canClick() { return hasChosenSide() && player.M.spellTimes[this.id - 11].lte(0) && player.M.mana.gte(getSpellCost(this.id - 11)) },
 			onClick: sideSpellCast,
 			color: getSideColor,
-			style: {height: "125px", "border-radius": "25px 25px 0 0"},
-		},
-		101: {
-			title: "Autocasting",
-			display() {
-				if (hasUpgrade("M", 102)) return autocastTier[getClickableState(this.layer, this.id) || 0];
-				return "LOCKED - need better autocasting";
-			},
-			canClick() { return hasUpgrade("M", 102) },
-			onClick() {
-				if (getClickableState(this.layer, this.id) === 3) {
-					setClickableState(this.layer, this.id, 0);
-				} else if (getClickableState(this.layer, this.id) === 2) {
-					if (hasUpgrade("M", 103)) setClickableState(this.layer, this.id, 3);
-					else setClickableState(this.layer, this.id, 0);
-				} else {
-					setClickableState(this.layer, this.id, 2);
-				};
-			},
-			color: "#C0C0C0",
-			style: {"border-radius": "0 0 25px 25px"},
-		},
-		102: {
-			title: "Autocasting",
-			display() {
-				if (hasUpgrade("M", 101)) return autocastTier[getClickableState(this.layer, this.id) || 0];
-				return "LOCKED - need better autocasting";
-			},
-			canClick() { return hasUpgrade("M", 101) },
-			onClick() {
-				if (getClickableState(this.layer, this.id) === 3) {
-					setClickableState(this.layer, this.id, 0);
-				} else if (getClickableState(this.layer, this.id) === 1) {
-					if (hasUpgrade("M", 103)) setClickableState(this.layer, this.id, 3);
-					else setClickableState(this.layer, this.id, 0);
-				} else {
-					setClickableState(this.layer, this.id, 1);
-				};
-			},
-			color: "#C0C0C0",
-			style: {"border-radius": "0 0 25px 25px"},
-		},
-		103: {
-			title() { return (hasChosenSide() ? "Autocasting" : "LOCKED") },
-			display() {
-				if (!hasChosenSide()) return "";
-				if (hasUpgrade("M", 101)) return autocastTier[getClickableState(this.layer, this.id) || 0];
-				return "LOCKED - need better autocasting";
-			},
-			canClick() { return hasChosenSide() && hasUpgrade("M", 101) },
-			onClick() {
-				if (getClickableState(this.layer, this.id) === 3) {
-					setClickableState(this.layer, this.id, 0);
-				} else if (getClickableState(this.layer, this.id) === 1) {
-					if (hasUpgrade("M", 103)) setClickableState(this.layer, this.id, 3);
-					else setClickableState(this.layer, this.id, 0);
-				} else {
-					setClickableState(this.layer, this.id, 1);
-				};
-			},
-			color: getSideColor,
-			style: {"border-radius": "0 0 25px 25px"},
 		},
 	},
 	upgrades: {
