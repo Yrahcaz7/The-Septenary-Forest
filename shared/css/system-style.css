@@ -23,26 +23,20 @@ td {
 	padding: 0;
 }
 
-.upgCol {
+.upgCol, .upgRow {
 	display: flex !important;
-	flex-flow: column wrap;
 	justify-content: center;
 	align-items: center;
 	max-width: 100%;
 	margin: 0 auto;
+}
+
+.upgCol {
+	flex-flow: column wrap;
 }
 
 .upgRow {
-	display: flex !important;
 	flex-flow: row wrap;
-	justify-content: center;
-	align-items: center;
-	max-width: 100%;
-	margin: 0 auto;
-}
-
-.upgAlign, .bigUpgAlign {
-	vertical-align: 0;
 }
 
 .treeThing {
@@ -57,23 +51,17 @@ td {
 .back {
 	position: absolute;
 	top: 0;
-	left: 0;
-	background-color: transparent;
-	border: 1px solid transparent;
+	left: 10px;
+	background: none;
+	border: none;
 	color: var(--color);
 	font-size: 40px;
 	cursor: pointer;
 }
 
-.other-back {
-	position: absolute;
-	top: 0;
+.big.back {
 	left: 60px;
-	background-color: transparent;
-	border: 1px solid transparent;
-	color: var(--color);
 	font-size: 60px;
-	cursor: pointer;
 }
 
 .back:hover {

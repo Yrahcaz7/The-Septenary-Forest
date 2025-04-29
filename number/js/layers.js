@@ -762,10 +762,10 @@ addLayer('d', {
 			return '<h2>' + data;
 		},
 		getStyle(data, id) {
-			if (buyableEffect('d', 51).gte(10) && id == 101) return {'height':'30px','width':'170px','border-radius':'0%'};
-			if (hasUpgrade('d', 11) && id == 102) return {'height':'30px','width':'130px','border-radius':'0%'};
-			if (player.d.points.gt(99) && id == 101) return {'height':'30px','width':'120px','border-radius':'0%'};
-			return {'height':'30px','width':'30px','border-radius':'50%'};
+			if (buyableEffect('d', 51).gte(10) && id == 101) return {height:'30px',width:'170px','border-radius':'0'};
+			if (hasUpgrade('d', 11) && id == 102) return {height:'30px',width:'130px','border-radius':'0'};
+			if (player.d.points.gt(99) && id == 101) return {height:'30px',width:'120px','border-radius':'0'};
+			return {height:'30px',width:'30px','border-radius':'50%'};
 		},
 	},
 	clickables: {
@@ -795,7 +795,7 @@ addLayer('d', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit() {
 				lim = new Decimal(250);
 				if (getBuyableAmount('d', 31).gt(0)) lim = lim.add(buyableEffect('d', 31));
@@ -822,7 +822,7 @@ addLayer('d', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit() {
 				let cap = new Decimal(1000);
 				if (hasUpgrade('gn', 22) && !inChallenge('i', 32)) cap = cap.add(upgradeEffect('gn', 22));
@@ -848,7 +848,7 @@ addLayer('d', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 200,
 		},
 		32: {
@@ -866,7 +866,7 @@ addLayer('d', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 33333,
 		},
 		21: {
@@ -892,7 +892,7 @@ addLayer('d', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit() {
 				let limit = new Decimal(500);
 				if (hasChallenge('i', 12)) limit = limit.add(challengeEffect('i', 12));
@@ -920,7 +920,7 @@ addLayer('d', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			unlocked() { return hasMilestone('d', 7) },
 		},
 		31: {
@@ -938,7 +938,7 @@ addLayer('d', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 20,
 			unlocked() { return hasMilestone('d', 8) },
 		},
@@ -961,7 +961,7 @@ addLayer('d', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			unlocked() { return hasMilestone('d', 8) },
 		},
 		51: {
@@ -989,7 +989,7 @@ addLayer('d', {
 				player.d.number = player.d.number.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'300px','height':'300px','border-radius':'50%'},
+			style: {width:'300px',height:'300px','border-radius':'50%'},
 			purchaseLimit: 8,
 			unlocked() {
 				if (inChallenge('i', 11)) return false;
@@ -1015,7 +1015,7 @@ addLayer('d', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit() {
 				let limit = new Decimal(25);
 				if (hasChallenge('i', 11)) limit = limit.add(challengeEffect('i', 11));
@@ -1038,7 +1038,7 @@ addLayer('d', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 4,
 			unlocked() { return hasMilestone('d', 17) },
 		},
@@ -1061,7 +1061,7 @@ addLayer('d', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit() {
 				let cap = new Decimal(50);
 				if (hasUpgrade('gn', 21) && !inChallenge('i', 32)) cap = cap.add(upgradeEffect('gn', 21));
@@ -2005,9 +2005,9 @@ addLayer('i', {
 				else setClickableState(this.layer, this.id, true);
 			},
 			style() {
-				let color = '#77bf5f';
-				if (getClickableState(this.layer, this.id)) color = '#bf8f8f';
-				return {'width':'595px','min-height':'40px','background-color':color,'color':'rgba(0, 0, 0, 0.5)','border':'4px solid rgba(0, 0, 0, 0.125)','border-radius':'20px','transform':'scale(1)'};
+				let bg = '#77bf5f';
+				if (getClickableState(this.layer, this.id)) bg = '#bf8f8f';
+				return {width:'595px','min-height':'40px','background-color':bg,color:'rgba(0, 0, 0, 0.5)',border:'4px solid rgba(0, 0, 0, 0.125)','border-radius':'20px',transform:'none'};
 			},
 			unlocked() { return hasChallenge('i', 22) },
 		},
@@ -2028,7 +2028,7 @@ addLayer('i', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 5,
 		},
 		12: {
@@ -2046,7 +2046,7 @@ addLayer('i', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 20,
 		},
 		31: {
@@ -2064,7 +2064,7 @@ addLayer('i', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 		},
 		32: {
 			cost() { return new Decimal('1e5900') },
@@ -2080,7 +2080,7 @@ addLayer('i', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 1,
 		},
 		33: {
@@ -2098,7 +2098,7 @@ addLayer('i', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 		},
 		41: {
 			cost() {
@@ -2119,7 +2119,7 @@ addLayer('i', {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 2500, // 17500
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2142,7 +2142,7 @@ addLayer('i', {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 2500, // 17500
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2165,7 +2165,7 @@ addLayer('i', {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 2500, // 17500
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2188,7 +2188,7 @@ addLayer('i', {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 2500, // 17500
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2214,7 +2214,7 @@ addLayer('i', {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 25,
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2240,7 +2240,7 @@ addLayer('i', {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 25,
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2266,7 +2266,7 @@ addLayer('i', {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 30,
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2292,7 +2292,7 @@ addLayer('i', {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 30,
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2311,7 +2311,7 @@ addLayer('i', {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 10,
 			unlocked() { return hasMilestone('i', 7) },
 		},
@@ -2330,7 +2330,7 @@ addLayer('i', {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 10,
 			unlocked() { return hasMilestone('i', 7) },
 		},
@@ -2349,7 +2349,7 @@ addLayer('i', {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 10,
 			unlocked() { return hasMilestone('i', 7) },
 		},
@@ -2368,7 +2368,7 @@ addLayer('i', {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 10,
 			unlocked() { return hasMilestone('i', 7) },
 		},
@@ -2387,7 +2387,7 @@ addLayer('i', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			unlocked() { return hasMilestone('i', 7) },
 		},
 		72: {
@@ -2404,7 +2404,7 @@ addLayer('i', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 1,
 			unlocked() { return hasMilestone('i', 7) },
 		},
@@ -2423,7 +2423,7 @@ addLayer('i', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			unlocked() { return hasMilestone('i', 7) },
 		},
 	},
@@ -2436,7 +2436,7 @@ addLayer('i', {
 			rewardEffect() { return challengeCompletions(this.layer, this.id) },
 			canComplete() { return player.points.gte(new Decimal('1e100').pow(challengeCompletions(this.layer, this.id)).mul('1e1000')) },
 			doReset: true,
-			style: {'width':'290px','height':'230px','border-radius':'20px'},
+			style: {width:'290px',height:'230px','border-radius':'20px'},
 			marked: false,
 			completionLimit() {
 				let cap = 10;
@@ -2453,7 +2453,7 @@ addLayer('i', {
 			rewardEffect() { return new Decimal(challengeCompletions(this.layer, this.id)).mul(25) },
 			canComplete() { return player.points.gte(new Decimal('1e100').pow(challengeCompletions(this.layer, this.id)).mul('1e1100')) },
 			doReset: true,
-			style: {'width':'290px','height':'230px','border-radius':'20px'},
+			style: {width:'290px',height:'230px','border-radius':'20px'},
 			marked: false,
 			completionLimit() {
 				let cap = 10;
@@ -2470,7 +2470,7 @@ addLayer('i', {
 			rewardEffect() { return new Decimal(10000).pow(challengeCompletions(this.layer, this.id)) },
 			canComplete() { return player.points.gte(new Decimal(200).pow(challengeCompletions(this.layer, this.id)).mul(1e13)) },
 			doReset: true,
-			style: {'width':'290px','height':'230px','border-radius':'20px'},
+			style: {width:'290px',height:'230px','border-radius':'20px'},
 			marked: false,
 			completionLimit: 20,
 			unlocked() { return hasMilestone('i', 9) },
@@ -2483,7 +2483,7 @@ addLayer('i', {
 			rewardEffect() { return new Decimal(2).pow(challengeCompletions(this.layer, this.id)) },
 			canComplete() { return player.points.gte(new Decimal('1e1000').pow(challengeCompletions(this.layer, this.id)).mul('1e4000')) },
 			doReset: true,
-			style: {'width':'290px','height':'230px','border-radius':'20px'},
+			style: {width:'290px',height:'230px','border-radius':'20px'},
 			marked: false,
 			completionLimit: 3,
 			unlocked() { return hasMilestone('i', 9) && hasMilestone('i', 11) },
@@ -2497,7 +2497,7 @@ addLayer('i', {
 			canComplete() { return player.points.gte(new Decimal('1e50').pow(challengeCompletions(this.layer, this.id)).mul('1e1200')) },
 			doReset: true,
 			countsAs: [12, 22],
-			style: {'width':'290px','height':'230px','border-radius':'20px'},
+			style: {width:'290px',height:'230px','border-radius':'20px'},
 			marked: false,
 			completionLimit() {
 				let cap = 15;
@@ -2515,7 +2515,7 @@ addLayer('i', {
 			canComplete() { return player.points.gte(new Decimal(1e5).pow(challengeCompletions(this.layer, this.id)).mul(1e50)) },
 			doReset: true,
 			countsAs: [21],
-			style: {'width':'290px','height':'230px','border-radius':'20px'},
+			style: {width:'290px',height:'230px','border-radius':'20px'},
 			marked: false,
 			completionLimit: 10,
 			unlocked() { return hasMilestone('i', 9) && hasMilestone('gn', 4) },
@@ -2529,7 +2529,7 @@ addLayer('i', {
 			canComplete() { return player.points.gte(new Decimal(1e25).pow(challengeCompletions(this.layer, this.id)).mul(1e200)) },
 			doReset: true,
 			countsAs: [11, 21, 32],
-			style: {'width':'290px','height':'230px','border-radius':'20px'},
+			style: {width:'290px',height:'230px','border-radius':'20px'},
 			marked: false,
 			completionLimit() {
 				let cap = 10;
@@ -2548,7 +2548,7 @@ addLayer('i', {
 			canComplete() { return player.points.gte(new Decimal(1e10).pow(challengeCompletions(this.layer, this.id)).mul(1e240)) },
 			doReset: true,
 			countsAs: [11, 12, 21, 22, 31, 32, 41],
-			style: {'width':'290px','height':'230px','border-radius':'20px'},
+			style: {width:'290px',height:'230px','border-radius':'20px'},
 			marked: false,
 			completionLimit() {
 				let cap = 20;
@@ -3029,7 +3029,7 @@ addLayer('gn', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 10,
 			unlocked() { return hasMilestone('gn', 15) },
 		},
@@ -3051,7 +3051,7 @@ addLayer('gn', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 10,
 			unlocked() { return hasMilestone('gn', 15) },
 		},
@@ -3073,7 +3073,7 @@ addLayer('gn', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 5,
 			unlocked() { return hasMilestone('gn', 15) },
 		},
@@ -3095,7 +3095,7 @@ addLayer('gn', {
 				player.gn.points = player.gn.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			unlocked() { return hasMilestone('gn', 15) },
 		},
 	},

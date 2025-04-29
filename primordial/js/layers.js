@@ -3099,7 +3099,7 @@ addLayer('p', {
 				return text;
 			},
 			canAfford() { return player.p.divinity.gte(100) && player.p.holiness.eq(0) },
-			style: {'height':'120px','border':'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
+			style: {height:'120px',border:'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && !hasUpgrade('p', 14) },
 		},
 		15: {
@@ -3141,7 +3141,7 @@ addLayer('p', {
 				return text;
 			},
 			canAfford() { return player.p.holiness.gte(75) && !hasUpgrade('p', 31) },
-			style: {'height':'120px','border':'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
+			style: {height:'120px',border:'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 22) && !hasUpgrade('p', 24) },
 		},
 		25: {
@@ -3191,7 +3191,7 @@ addLayer('p', {
 				return text;
 			},
 			canAfford() { return player.p.holiness.gte(1000) && player.p.hymn.eq(0) },
-			style: {'height':'120px','border':'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
+			style: {height:'120px',border:'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 22) && !hasUpgrade('p', 34) },
 		},
 		35: {
@@ -3244,7 +3244,7 @@ addLayer('p', {
 				return text;
 			},
 			canAfford() { return player.p.hymn.gte(10000000) && !hasUpgrade('p', 51) },
-			style: {'height':'120px','border':'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
+			style: {height:'120px',border:'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) && !hasUpgrade('p', 44) },
 		},
 		45: {
@@ -3278,7 +3278,7 @@ addLayer('p', {
 				return text;
 			},
 			canAfford() { return player.p.hymn.gte(1e10) && !hasUpgrade('p', 61) },
-			style: {'height':'120px','border':'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
+			style: {height:'120px',border:'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) && !hasUpgrade('p', 54) },
 		},
 		55: {
@@ -3324,7 +3324,7 @@ addLayer('p', {
 				return text;
 			},
 			canAfford() { return player.p.points.gte(2.5e25) && player.s.points.gte(2) && hasUpgrade('p', 15) && hasUpgrade('p', 25) && hasUpgrade('p', 35) && hasUpgrade('p', 45) && hasUpgrade('p', 55) },
-			style: {'height':'120px','border':'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
+			style: {height:'120px',border:'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) && !hasUpgrade('p', 64) },
 		},
 		65: {
@@ -3952,7 +3952,7 @@ addLayer('d', {
 				if (tmp[this.layer].buyables[this.id].canBuy) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
 				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
-				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
+				return {'background-image': 'radial-gradient(' + backcolors + ')', color: textcolor, 'border-radius': '50%'};
 			},
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -3983,7 +3983,7 @@ addLayer('d', {
 				if (tmp[this.layer].buyables[this.id].canBuy) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
 				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
-				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
+				return {'background-image': 'radial-gradient(' + backcolors + ')', color: textcolor, 'border-radius': '50%'};
 			},
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -4025,7 +4025,7 @@ addLayer('d', {
 				if (tmp[this.layer].buyables[this.id].canBuy) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
 				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
-				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%', 'height': '300px', 'width': '300px'};
+				return {'background-image': 'radial-gradient(' + backcolors + ')', color: textcolor, 'border-radius': '50%', height: '300px', width: '300px'};
 			},
 			unlocked() { return hasMilestone('s', 14) },
 		},
@@ -4069,7 +4069,7 @@ addLayer('g', {
 				if (tmp[this.layer].buyables[this.id].canBuy) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
 				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
-				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
+				return {'background-image': 'radial-gradient(' + backcolors + ')', color: textcolor, 'border-radius': '50%'};
 			},
 			unlocked() { return isAssimilated('s') || player.mo.assimilating === 's' },
 		},
@@ -4089,7 +4089,7 @@ addLayer('g', {
 				if (tmp[this.layer].buyables[this.id].canBuy) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
 				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
-				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%'};
+				return {'background-image': 'radial-gradient(' + backcolors + ')', color: textcolor, 'border-radius': '50%'};
 			},
 			unlocked() { return isAssimilated('s') || player.mo.assimilating === 's' },
 		},
@@ -4113,7 +4113,7 @@ addLayer('g', {
 				if (tmp[this.layer].buyables[this.id].canBuy) backcolors = '#112200, #448800';
 				let textcolor = '#AAFF00';
 				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
-				return {'background-image': 'radial-gradient(' + backcolors + ')', 'color': textcolor, 'border-radius': '50%', 'height': '300px', 'width': '300px'};
+				return {'background-image': 'radial-gradient(' + backcolors + ')', color: textcolor, 'border-radius': '50%', height: '300px', width: '300px'};
 			},
 			unlocked() { return isAssimilated('s') || player.mo.assimilating === 's' },
 		},
@@ -4335,7 +4335,7 @@ addLayer('r', {
 				if (num.gt(205)) bgcolor = 'rgb(205,205,255)';
 				let textcolor = '#B9A975';
 				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
-				return {'background-color':bgcolor, 'color':textcolor, 'border-radius':'70px', 'height':'450px', 'width':'450px'};
+				return {'background-color':bgcolor, color:textcolor, 'border-radius':'70px', height:'450px', width:'450px'};
 			},
 		},
 	},
@@ -5813,7 +5813,7 @@ addLayer('w', {
 			},
 			baseStyle: {'background-image':'linear-gradient(#08FF87, #AAFF00)'},
 			fillStyle:  {'background-image':'linear-gradient(#FF4400, #BA0035)'},
-			textStyle: {'color':'#000000'},
+			textStyle: {color:'#000000'},
 		},
 	},
 	buyables: {

@@ -38,7 +38,7 @@ function loadVue(mainPage = false) {
 				left: player.tab !== 'none' && player.navTab !== 'none',
 			}" :style="{'margin-top': !readData(layoutInfo.showTree) && player.tab == 'info-tab' ? '50px' : ''}">
 				<div id="version" onclick="showTab('changelog-tab')" class="overlayThing" style="margin-right: 13px">{{VERSION.withoutName}}</div>
-				<button v-if="((player.navTab == 'none' && (tmp[player.tab].row == 'side' || tmp[player.tab].row == 'otherside' || player[player.tab].prevTab)) || player[player.navTab]?.prevTab)" class="other-back overlayThing" onclick="goBack(player.navTab === 'none' ? player.tab : player.navTab)">&#8592;</button>
+				<button v-if="((player.navTab == 'none' && (tmp[player.tab].row == 'side' || tmp[player.tab].row == 'otherside' || player[player.tab].prevTab)) || player[player.navTab]?.prevTab)" class="big back overlayThing" onclick="goBack(player.navTab === 'none' ? player.tab : player.navTab)">&#8592;</button>
 				<img id="optionWheel" class="overlayThing" v-if="player.tab != 'options-tab'" src="` + (mainPage ? `` : `../`) + `shared/images/options_wheel.png" onclick="showTab('options-tab')">
 				<div id="info" v-if="player.tab != 'info-tab'" class="overlayThing" onclick="showTab('info-tab')"><br>i</div>
 				<div id="discord" class="overlayThing" style="z-index: 30001">
@@ -126,11 +126,11 @@ function loadVue(mainPage = false) {
 	// data = optional height in px or [width in px, height in px]
 	addNormalComponent('blank', {
 		props: ['layer', 'data'],
-		template: template(`<div class="instant">
-			<div class="instant" v-if="!data" :style="{'width': '8px', 'height': '17px'}"></div>
-			<div class="instant" v-else-if="Array.isArray(data)" :style="{'width': data[0], 'height': data[1]}"></div>
-			<div class="instant" v-else :style="{'width': '8px', 'height': data}"><br></div>
-		</div>`),
+		template: template(`
+			<div class="instant" v-if="!data" style="width: 8px; height: 17px"></div>
+			<div class="instant" v-else-if="Array.isArray(data)" :style="{width: data[0], height: data[1]}"></div>
+			<div class="instant" v-else :style="{width: '8px', height: data}"><br></div>
+		`),
 	});
 
 	// data = the URL of the image
@@ -198,13 +198,13 @@ function loadVue(mainPage = false) {
 	// data = width in px, by default fills the full area
 	addNormalComponent('h-line', {
 		props: ['layer', 'data'],
-		template: template(`<hr class="instant hl" :style="data ? {'width': data} : {}">`),
+		template: template(`<hr class="instant hl" :style="data ? {width: data} : {}">`),
 	});
 
 	// data = height in px, by default is bad
 	addNormalComponent('v-line', {
 		props: ['layer', 'data'],
-		template: template(`<div class="instant vl" :style="data ? {'height': data} : {}"></div>`),
+		template: template(`<div class="instant vl" :style="data ? {height: data} : {}"></div>`),
 	});
 
 	// data = array of rows to include, by default is all
@@ -213,9 +213,9 @@ function loadVue(mainPage = false) {
 		data() {return {tmp}},
 		template: template(`<div v-if="tmp[layer].challenges" class="upgCol">
 			<div v-for="row in (data === undefined ? tmp[layer].challenges.rows : data)" class="upgRow">
-				<div v-for="col in tmp[layer].challenges.cols">
+				<template v-for="col in tmp[layer].challenges.cols">
 					<challenge v-if="tmp[layer].challenges[row * 10 + col] !== undefined && tmp[layer].challenges[row * 10 + col].unlocked" :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.challenge"></challenge>
-				</div>
+				</template>
 			</div>
 		</div>`),
 	});
@@ -261,11 +261,9 @@ function loadVue(mainPage = false) {
 		data() {return {tmp}},
 		template: template(`<div v-if="tmp[layer].upgrades" class="upgCol">
 			<div v-for="row in (data === undefined ? tmp[layer].upgrades.rows : data)" class="upgRow">
-				<div v-for="col in tmp[layer].upgrades.cols">
-					<div v-if="tmp[layer].upgrades[row * 10 + col] !== undefined && tmp[layer].upgrades[row * 10 + col].unlocked" class="upgAlign">
-						<upgrade :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.upgrade"></upgrade>
-					</div>
-				</div>
+				<template v-for="col in tmp[layer].upgrades.cols">
+					<upgrade v-if="tmp[layer].upgrades[row * 10 + col] !== undefined && tmp[layer].upgrades[row * 10 + col].unlocked" :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.upgrade"></upgrade>
+				</template>
 			</div><br>
 		</div>`),
 	});
@@ -379,7 +377,7 @@ function loadVue(mainPage = false) {
 		},
 		template: template(`<div>
 			<span v-if="player[layer].points.lt('1e1000')">You have </span>
-			<h2 :style="{'color': tmp[layer].color, 'text-shadow': '0px 0px 10px' + tmp[layer].color}">{{data ? format(player[layer].points, data) : formatWhole(player[layer].points)}}</h2>&nbsp;
+			<h2 :style="{color: tmp[layer].color, 'text-shadow': '0px 0px 10px' + tmp[layer].color}">{{data ? format(player[layer].points, data) : formatWhole(player[layer].points)}}</h2>&nbsp;
 			<span v-if="extraMainDisplay" v-html="extraMainDisplay"></span>
 			{{tmp[layer].resource}}
 			<span v-if="effectDescription">, <span v-html="effectDescription"></span></span><br><br>
@@ -409,15 +407,9 @@ function loadVue(mainPage = false) {
 				tmp[layer].componentStyles['respec-button'],
 			]"></respec-button>
 			<div v-for="row in (data === undefined ? tmp[layer].buyables.rows : data)" class="upgRow">
-				<div v-for="col in tmp[layer].buyables.cols">
-					<div v-if="tmp[layer].buyables[row * 10 + col] !== undefined && tmp[layer].buyables[row * 10 + col].unlocked" class="upgAlign" :style="{
-						'margin-left': '7px',
-						'margin-right': '7px',
-						'height': (data ? data : 'inherit'),
-					}">
-						<buyable :layer="layer" :data="row * 10 + col"></buyable>
-					</div>
-				</div><br>
+				<template v-for="col in tmp[layer].buyables.cols">
+					<buyable v-if="tmp[layer].buyables[row * 10 + col] !== undefined && tmp[layer].buyables[row * 10 + col].unlocked" :layer="layer" :data="row * 10 + col" style="margin: 0 7px"></buyable>
+				</template><br>
 			</div>
 		</div>`),
 	});
@@ -488,16 +480,9 @@ function loadVue(mainPage = false) {
 				tmp[layer].componentStyles['master-button'],
 			]"></master-button>
 			<div v-for="row in (data === undefined ? tmp[layer].clickables.rows : data)" class="upgRow">
-				<div v-for="col in tmp[layer].clickables.cols">
-					<div v-if="tmp[layer].clickables[row * 10 + col] !== undefined && tmp[layer].clickables[row * 10 + col].unlocked" class="upgAlign" :style="{
-						'margin-left': '7px',
-						'margin-right': '7px',
-						'height': (data ? data : 'inherit'),
-					}">
-						<clickable :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.clickable"></clickable>
-					</div>
-				</div>
-				<br>
+				<template v-for="col in tmp[layer].clickables.cols">
+					<clickable v-if="tmp[layer].clickables[row * 10 + col] !== undefined && tmp[layer].clickables[row * 10 + col].unlocked" :layer="layer" :data="row * 10 + col" :style="[{margin: '0 7px'}, tmp[layer].componentStyles.clickable]"></clickable>
+				</template><br>
 			</div>
 		</div>`),
 	});
@@ -556,11 +541,9 @@ function loadVue(mainPage = false) {
 		data() {return {tmp, run, layers}},
 		template: template(`<div v-if="tmp[layer].grid" class="upgCol">
 			<div v-for="row in (data === undefined ? tmp[layer].grid.rows : data)" class="upgRow">
-				<div v-for="col in tmp[layer].grid.cols">
-					<div v-if="run(layers[layer].grid.getUnlocked, layers[layer].grid, row * 100 + col)" class="upgAlign" style="margin: 1px; height: inherit">
-						<gridable :layer="layer" :data="row * 100 + col" :style="tmp[layer].componentStyles.gridable"></gridable>
-					</div>
-				</div><br>
+				<template v-for="col in tmp[layer].grid.cols">
+					<gridable v-if="run(layers[layer].grid.getUnlocked, layers[layer].grid, row * 100 + col)" :layer="layer" :data="row * 100 + col" :style="[{margin: '1px'}, tmp[layer].componentStyles.gridable]"></gridable>
+				</template><br>
 			</div>
 		</div>`),
 	});
@@ -570,17 +553,15 @@ function loadVue(mainPage = false) {
 		props: ['layer', 'data'],
 		data() {return {tmp, run, layers}},
 		template: template(`<div v-if="tmp[layer].grid" class="upgCol" :style="{
-			'width': 'fit-content',
+			width: 'fit-content',
 			'max-width': (Array.isArray(data) ? data[0] : data),
-			'overflow': 'auto',
+			overflow: 'auto',
 			'overscroll-behavior-x': 'none',
 		}">
 			<div v-for="row in (Array.isArray(data) ? data[1] : Math.min(tmp[layer].grid.rows, tmp[layer].grid.maxRows))" class="upgRow" style="max-width: none; flex-wrap: nowrap; justify-content: initial">
-				<div v-for="col in Math.min(tmp[layer].grid.cols, tmp[layer].grid.maxCols)">
-					<div v-if="run(layers[layer].grid.getUnlocked, layers[layer].grid, row * 100 + col)" class="upgAlign" style="margin: 1px; height: inherit">
-						<gridable :layer="layer" :data="row * 100 + col" :style="tmp[layer].componentStyles.gridable"></gridable>
-					</div>
-				</div><br>
+				<template v-for="col in Math.min(tmp[layer].grid.cols, tmp[layer].grid.maxCols)">
+					<gridable v-if="run(layers[layer].grid.getUnlocked, layers[layer].grid, row * 100 + col)" :layer="layer" :data="row * 100 + col" :style="[{margin: '1px'}, tmp[layer].componentStyles.gridable]"></gridable>
+				</template><br>
 			</div>
 		</div>`),
 	});
@@ -655,7 +636,7 @@ function loadVue(mainPage = false) {
 			<div :style="[
 				tmp[layer].bars[data].style,
 				style.dims,
-				{'display': 'table'},
+				{display: 'table'},
 			]">
 				<div class="overlayTextContainer barBorder" :style="[
 					tmp[layer].bars[data].borderStyle,
@@ -688,11 +669,9 @@ function loadVue(mainPage = false) {
 		data() {return {tmp}},
 		template: template(`<div v-if="tmp[layer].achievements" class="upgCol">
 			<div v-for="row in (data === undefined ? tmp[layer].achievements.rows : data)" class="upgRow">
-				<div v-for="col in tmp[layer].achievements.cols">
-					<div v-if="tmp[layer].achievements[row * 10 + col] !== undefined && tmp[layer].achievements[row * 10 + col].unlocked" class="upgAlign">
-						<achievement :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.achievement"></achievement>
-					</div>
-				</div>
+				<template v-for="col in tmp[layer].achievements.cols">
+					<achievement v-if="tmp[layer].achievements[row * 10 + col] !== undefined && tmp[layer].achievements[row * 10 + col].unlocked" :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.achievement"></achievement>
+				</template>
 			</div><br>
 		</div>`),
 	});
@@ -733,20 +712,12 @@ function loadVue(mainPage = false) {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
 		template: template(`<div>
-			<span class="upgRow" v-for="row in data">
-				<table>
-					<span v-for="node in row">
-						<tree-node :layer='node' :prev='layer' :abb='tmp[node].symbol'></tree-node>
-					</span>
-					<tbody>
-						<tr>
-							<td>
-								<button class="treeNode hidden"></button>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</span>
+			<template v-for="row in data">
+				<div class="upgRow">
+					<tree-node v-for="node in row" :layer='node' :prev='layer' :abb='tmp[node].symbol'></tree-node>
+				</div>
+				<div class="hidden"></div>
+			</template>
 		</div>`),
 	});
 
@@ -773,20 +744,12 @@ function loadVue(mainPage = false) {
 		props: ['layer', 'data', 'type'],
 		data() {return {tmp}},
 		template: template(`<div>
-			<span class="upgRow" v-for="row in data">
-				<table>
-					<span v-for="id in row" style="width: 0; height: 0" class="upgAlign">
-						<component v-if="tmp[layer][type + 's'][id] !== undefined && tmp[layer][type + 's'][id].unlocked" :is="type" :layer="layer" :data="id" :style="tmp[layer].componentStyles[type]" class="treeThing"></component>
-					</span>
-					<tbody>
-						<tr>
-							<td>
-								<button class="treeNode hidden"></button>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</span>
+			<template v-for="row in data">
+				<template v-for="id in row">
+					<component v-if="tmp[layer][type + 's'][id] !== undefined && tmp[layer][type + 's'][id].unlocked" :is="type" :layer="layer" :data="id" :style="tmp[layer].componentStyles[type]" class="treeThing"></component>
+				</template>
+				<div class="hidden"></div>
+			</template>
 		</div>`),
 	});
 
@@ -956,15 +919,13 @@ function loadVue(mainPage = false) {
 				tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style
 				: {}
 		]" class="noBackground">
-			<div v-if="back">
-				<button :class="back == 'big' ? 'other-back' : 'back'" v-on:click="goBack(layer)">&#8592;</button>
-			</div>
+			<button v-if="back" :class="back == 'big' ? 'big back' : 'back'" v-on:click="goBack(layer)">&#8592;</button>
 			<template v-if="tmp[layer].tabFormat">
-				<div v-if="Array.isArray(tmp[layer].tabFormat)">
+				<template v-if="Array.isArray(tmp[layer].tabFormat)">
 					<div v-if="spacing" :style="{height: spacing}"></div>
 					<column :layer="layer" :data="tmp[layer].tabFormat"></column>
-				</div>
-				<div v-else>
+				</template>
+				<template v-else>
 					<div class="upgCol" :style="{
 						'padding-top': (embedded ? '0' : '25px'),
 						'margin-top': (embedded ? '-10px' : '0'),
@@ -974,9 +935,9 @@ function loadVue(mainPage = false) {
 					</div>
 					<layer-tab v-if="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].embedLayer" :layer="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].embedLayer" :embedded="true"></layer-tab>
 					<column v-else :layer="layer" :data="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].content"></column>
-				</div>
+				</template>
 			</template>
-			<div v-else>
+			<template v-else>
 				<div v-if="spacing" :style="{height: spacing}"></div>
 				<infobox v-if="tmp[layer].infoboxes" :layer="layer" :data="Object.keys(tmp[layer].infoboxes)[0]"></infobox>
 				<main-display :style="tmp[layer].componentStyles['main-display']" :layer="layer"></main-display>
@@ -995,7 +956,7 @@ function loadVue(mainPage = false) {
 				<challenges :style="tmp[layer].componentStyles.challenges" :layer="layer"></challenges>
 				<achievements :style="tmp[layer].componentStyles.achievements" :layer="layer"></achievements>
 				<br><br>
-			</div>
+			</template>
 		</div>`),
 	});
 
@@ -1022,28 +983,27 @@ function loadVue(mainPage = false) {
 			z-index: 1000;
 			position: relative;
 		">
-			<span v-if="player.devSpeed && player.devSpeed !== 1" class="overlayThing">
+			<div v-if="player.devSpeed && player.devSpeed !== 1">
 				<br>Dev Speed: {{format(player.devSpeed)}}x<br>
-			</span>
-			<span v-if="player.offTime !== undefined" class="overlayThing">
+			</div>
+			<div v-if="player.offTime !== undefined">
 				<br>Offline Time: {{formatTime(player.offTime.remain)}}<br>
-			</span>
-			<br>
-			<span v-if="overridePointDisplay" v-html="overridePointDisplay" class="overlayThing"></span>
-			<span v-else>
-				<span v-if="player.points.lt('1e1000')" class="overlayThing">You have </span>
-				<h2 class="overlayThing" id="points">{{format(player.points)}}</h2>
-				<span v-if="player.points.lt('e1000000')" class="overlayThing">&nbsp;{{modInfo.pointsName || "points"}}</span><br>
-				<span v-if="canGenPoints" class="overlayThing">
+			</div><br>
+			<div v-if="overridePointDisplay" v-html="overridePointDisplay"></div>
+			<div v-else>
+				<template v-if="player.points.lt('1e1000')">You have </template>
+				<h2 id="points">{{format(player.points)}}</h2>
+				<template v-if="player.points.lt('e1000000')">&nbsp;{{modInfo.pointsName || "points"}}</template>
+				<div v-if="canGenPoints">
 					{{tmp.other.oompsMag !== 0 ?
 						format(tmp.other.oomps) + " OOM" + (tmp.other.oompsMag < 0 ? "^OOM" : (tmp.other.oompsMag > 1 ? "^" + tmp.other.oompsMag : "")) + "s"
 						: format(pointGen)
 					}}/sec
-				</span>
-			</span>
-			<div v-for="thing in tmp.displayThings" class="overlayThing">
-				<span v-if="thing" v-html="thing"></span>
+				</div>
 			</div>
+			<template v-for="thing in tmp.displayThings">
+				<div v-if="thing" v-html="thing"></div>
+			</template>
 		</div>`),
 	});
 
@@ -1055,9 +1015,9 @@ function loadVue(mainPage = false) {
 		template: template(`<div>
 			<h2>{{modInfo.name}}</h2><br>
 			<h3>{{VERSION.withName}}</h3><br>
-			<span v-if="modInfo.author">
+			<template v-if="modInfo.author">
 				Made by {{modInfo.author}}<br>
-			</span><br>
+			</template><br>
 			The Modding Tree <a href="https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md" target="_blank" class="link" style="font-size: 14px; display: inline">{{TMT_VERSION.tmtNum}}</a> by Acamaeda and FlamemasterNXF<br>
 			The Prestige Tree made by Jacorb and Aarex<br><br>
 			<div class="link" onclick="showTab('changelog-tab')">Changelog</div><br><br>
@@ -1066,17 +1026,17 @@ function loadVue(mainPage = false) {
 			</span>
 			<a class="link" href="https://discord.gg/F3xveHV" target="_blank" :style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br><br>
 			<a class="link" href="https://discord.gg/wwQfgPa" target="_blank" style="font-size: 16px">Main Prestige Tree server</a><br>
-			<div v-if="endPoints !== undefined">
+			<template v-if="endPoints !== undefined">
 				<br>Current Endgame: {{format(endPoints) + " " + (modInfo.pointsName || "points")}}<br>
-			</div><br>
+			</template><br>
 			Time Played: {{formatTime(player.timePlayed)}}<br><br>
 			<h3>Hotkeys</h3><br><br>
-			<span v-for="key in hotkeys">
-				<span v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked">
+			<template v-for="key in hotkeys">
+				<template v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked">
 					{{key.description}}<br>
-				</span>
-			</span>
-			` + (mainPage ? `` : `<br><a class="link" href="../index.html">Back to main page</a><br><br>`) + `
+				</template>
+			</template><br>
+			` + (mainPage ? `` : `<a class="link" href="../index.html">Back to main page</a><br><br>`) + `
 		</div>`),
 	});
 
@@ -1091,7 +1051,7 @@ function loadVue(mainPage = false) {
 					if (optionGrid[row][index].onClick === toggleOpt) template += `toggleOpt('` + optionGrid[row][index].opt + `')`;
 					else template += `optionGrid[` + row + `][` + index + `].onClick()`;
 					template += `">`;
-					if (typeof optionGrid[row][index].text === "function") template += `{{optionGrid[` + row + `][` + index + `].text()}}`;
+					if (optionGrid[row][index].text instanceof Function) template += `{{optionGrid[` + row + `][` + index + `].text()}}`;
 					else template += optionGrid[row][index].text;
 					template += `</button></td>`;
 				};

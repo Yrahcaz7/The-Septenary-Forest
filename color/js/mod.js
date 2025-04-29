@@ -86,9 +86,9 @@ function fixOldSave(oldVersion) {
 
 function overridePointDisplay() {
 	let html = "";
-	if (player.points.lt("1e1000")) html += "<span class'overlayThing'>You have </span>";
-	html += "<h2 class='overlayThing' id='points'>" + illionFormat(player.points) + "</h2>";
-	if (player.points.lt("e1000000")) html += "<span class='overlayThing'> " + modInfo.pointsName + "</span><br>";
-	html += "(average: " + illionFormat(getAverageCoinGain()) + "/sec)";
+	if (player.points.lt("1e1000")) html += "You have ";
+	html += "<h2 id='points'>" + illionFormat(player.points) + "</h2>";
+	if (player.points.lt("e1000000")) html += " " + modInfo.pointsName;
+	html += "<div>(average: " + illionFormat(getAverageCoinGain()) + "/sec)</div>";
 	return html;
 };
