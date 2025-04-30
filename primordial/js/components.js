@@ -11,6 +11,6 @@ const customComponents = {
 			{'margin-left': '16px'},
 			(player[layer].points.gte(assimilationReq[layer]) ? {'background-color': tmp.mo.color} : {}),
 			tmp[layer].componentStyles['prestige-button'],
-		]" v-html="(player[layer].points.gte(assimilationReq[layer]) ? 'Assimilate this layer!' : 'Reach ' + format(assimilationReq[layer]) + ' ' + tmp[layer].resource + ' to fully Assimilate this layer.')" v-on:click="completeAssimilation(layer)"></button>`),
+		]" v-html="(player[layer].points.gte(assimilationReq[layer]) ? 'Assimilate this layer!' : 'Reach ' + format(assimilationReq[layer]) + ' ' + tmp[layer].resource + ' to fully Assimilate this layer.')" @click="completeAssimilation(layer)"></button>`),
 	},
 };

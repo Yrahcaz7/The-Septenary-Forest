@@ -70,7 +70,7 @@ function loadVue(mainPage = false) {
 			<!-- popups -->
 			<div class="popup-container">
 				<transition-group name="fade">
-					<div v-for="(popup, index) in activePopups" class="popup" :class="popup.type" :key="'p' + popup.id" v-on:click="() => activePopups.splice(index, 1)" :style="popup.color ? {'background-color': popup.color} : {}">
+					<div v-for="(popup, index) in activePopups" class="popup" :class="popup.type" :key="'p' + popup.id" @click="() => activePopups.splice(index, 1)" :style="popup.color ? {'background-color': popup.color} : {}">
 						<h3>{{popup.title}}</h3><br>
 						<h2 v-html="popup.message"></h2>
 					</div>
@@ -185,7 +185,7 @@ function loadVue(mainPage = false) {
 			'border-color': tmp[layer].color,
 			'border-radius': (player.infoboxes[layer][data] ? 0 : '8px'),
 		}, tmp[layer].infoboxes[data].style]">
-			<button class="story-title" :style="[{'background-color': tmp[layer].color}, tmp[layer].infoboxes[data].titleStyle]" v-on:click="player.infoboxes[layer][data] = !player.infoboxes[layer][data]">
+			<button class="story-title" :style="[{'background-color': tmp[layer].color}, tmp[layer].infoboxes[data].titleStyle]" @click="player.infoboxes[layer][data] = !player.infoboxes[layer][data]">
 				<span class="story-toggle">{{player.infoboxes[layer][data] ? "+" : "-"}}</span>
 				<span v-html="tmp[layer].infoboxes[data].title ? tmp[layer].infoboxes[data].title : (tmp[layer].name)"></span>
 			</button>
@@ -238,7 +238,7 @@ function loadVue(mainPage = false) {
 		]" :style="tmp[layer].challenges[data].style">
 			<br>
 			<h3 v-html="tmp[layer].challenges[data].name"></h3><br><br>
-			<button :class="{longUpg: true, can: canUseChallenge(layer, data), [layer]: true}" :style="{'background-color': tmp[layer].color}" v-on:click="startChallenge(layer, data)">{{challengeButtonText(layer, data)}}</button><br><br>
+			<button :class="{longUpg: true, can: canUseChallenge(layer, data), [layer]: true}" :style="{'background-color': tmp[layer].color}" @click="startChallenge(layer, data)">{{challengeButtonText(layer, data)}}</button><br><br>
 			<span v-if="layers[layer].challenges[data].fullDisplay" v-html="run(layers[layer].challenges[data].fullDisplay, layers[layer].challenges[data])"></span>
 			<span v-else>
 				<span v-html="tmp[layer].challenges[data].challengeDescription"></span><br>
@@ -279,7 +279,7 @@ function loadVue(mainPage = false) {
 				return "Currently: ";
 			},
 		},
-		template: template(`<button v-if="tmp[layer].upgrades && tmp[layer].upgrades[data] !== undefined && tmp[layer].upgrades[data].unlocked" :id='"upgrade-" + layer + "-" + data' v-on:click="buyUpg(layer, data)" :class="{
+		template: template(`<button v-if="tmp[layer].upgrades && tmp[layer].upgrades[data] !== undefined && tmp[layer].upgrades[data].unlocked" :id='"upgrade-" + layer + "-" + data' @click="buyUpg(layer, data)" :class="{
 			[layer]: true,
 			tooltipBox: true,
 			upg: true,
@@ -344,7 +344,7 @@ function loadVue(mainPage = false) {
 	addNormalComponent('toggle', {
 		props: ['layer', 'data'],
 		data() {return {tmp, toggleAuto, formatOpt, player}},
-		template: template(`<button class="smallUpg can" :style="{'background-color': tmp[data[0]].color}" v-on:click="toggleAuto(data)">{{formatOpt(player[data[0]][data[1]])}}</button>`),
+		template: template(`<button class="smallUpg can" :style="{'background-color': tmp[data[0]].color}" @click="toggleAuto(data)">{{formatOpt(player[data[0]][data[1]])}}</button>`),
 	});
 
 	addNormalComponent('prestige-button', {
@@ -358,7 +358,7 @@ function loadVue(mainPage = false) {
 		}" :style="[
 			(tmp[layer].canReset ? {'background-color': tmp[layer].color} : {}),
 			tmp[layer].componentStyles['prestige-button'],
-		]" v-html="prestigeButtonText(layer)" v-on:click="doReset(layer)"></button>`),
+		]" v-html="prestigeButtonText(layer)" @click="doReset(layer)"></button>`),
 	});
 
 	// Displays the main resource for the layer
@@ -444,7 +444,7 @@ function loadVue(mainPage = false) {
 				(tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].buyables[data].color ?? tmp[layer].color} : {}),
 				tmp[layer].componentStyles.buyable,
 				tmp[layer].buyables[data].style,
-			]" v-on:click="interval ? null : buyBuyable(layer, data)" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart.passive="start" @touchend="stop" @touchcancel="stop">
+			]" @click="interval ? null : buyBuyable(layer, data)" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart.passive="start" @touchend="stop" @touchcancel="stop">
 				<span v-if="tmp[layer].buyables[data].title">
 					<h2 v-html="tmp[layer].buyables[data].title"></h2><br>
 				</span>
@@ -466,7 +466,7 @@ function loadVue(mainPage = false) {
 				<input type="checkbox" v-model="player[layer].noRespecConfirm">
 				<tooltip :text="'Disable respec confirmation'"></tooltip>
 			</div>
-			<button v-on:click="respecBuyables(layer)" :class="{longUpg: true, can: player[layer].unlocked, locked: !player[layer].unlocked}" style="margin-right: 18px">{{tmp[layer].buyables.respecText ? tmp[layer].buyables.respecText : "Respec"}}</button>
+			<button @click="respecBuyables(layer)" :class="{longUpg: true, can: player[layer].unlocked, locked: !player[layer].unlocked}" style="margin-right: 18px">{{tmp[layer].buyables.respecText ? tmp[layer].buyables.respecText : "Respec"}}</button>
 		</div>`),
 	});
 
@@ -515,7 +515,7 @@ function loadVue(mainPage = false) {
 		}" :style="[
 			(tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].clickables[data].color ?? tmp[layer].color} : {}),
 			tmp[layer].clickables[data].style,
-		]" v-on:click="interval ? null : clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart.passive="start" @touchend="stop" @touchcancel="stop">
+		]" @click="interval ? null : clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart.passive="start" @touchend="stop" @touchcancel="stop">
 			<span v-if="tmp[layer].clickables[data].title">
 				<h2 v-html="tmp[layer].clickables[data].title"></h2><br>
 			</span>
@@ -528,7 +528,7 @@ function loadVue(mainPage = false) {
 	addNormalComponent('master-button', {
 		props: ['layer'],
 		data() {return {tmp, run, player}},
-		template: template(`<button v-if="tmp[layer].clickables && tmp[layer].clickables.masterButtonPress && (tmp[layer].clickables.showMasterButton === undefined || tmp[layer].clickables.showMasterButton)" v-on:click="run(tmp[layer].clickables.masterButtonPress, tmp[layer].clickables)" :class="{
+		template: template(`<button v-if="tmp[layer].clickables && tmp[layer].clickables.masterButtonPress && (tmp[layer].clickables.showMasterButton === undefined || tmp[layer].clickables.showMasterButton)" @click="run(tmp[layer].clickables.masterButtonPress, tmp[layer].clickables)" :class="{
 			longUpg: true,
 			can: player[layer].unlocked,
 			locked: !player[layer].unlocked,
@@ -600,7 +600,7 @@ function loadVue(mainPage = false) {
 		}" :style="[
 			(canClick ? {'background-color': tmp[layer].color} : {}),
 			gridRun(layer, 'getStyle', player[this.layer].grid[this.data], this.data),
-		]" v-on:click="clickGrid(layer, data)" @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart.passive="start" @touchend="stop" @touchcancel="stop">
+		]" @click="clickGrid(layer, data)" @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart.passive="start" @touchend="stop" @touchcancel="stop">
 			<span v-if="layers[layer].grid.getTitle">
 				<h3 v-html="gridRun(this.layer, 'getTitle', player[this.layer].grid[this.data], this.data)"></h3><br>
 			</span>
@@ -757,7 +757,7 @@ function loadVue(mainPage = false) {
 	addNormalComponent('text-input', {
 		props: ['layer', 'data'],
 		data() {return {player, focused, toValue}},
-		template: template(`<input class="instant" :id="'input-' + layer + '-' + data" :value="player[layer][data].toString()" v-on:focus="focused = true" v-on:blur="focused = false" v-on:change="player[layer][data] = toValue(document.getElementById('input-' + layer + '-' + data).value, player[layer][data])">`),
+		template: template(`<input class="instant" :id="'input-' + layer + '-' + data" :value="player[layer][data].toString()" @focus="focused = true" @blur="focused = false" @change="player[layer][data] = toValue(document.getElementById('input-' + layer + '-' + data).value, player[layer][data])">`),
 	});
 
 	// Updates the value in player[layer][data[0]] (min=data[1], max=data[2])
@@ -783,7 +783,7 @@ function loadVue(mainPage = false) {
 	addNormalComponent('sell-one', {
 		props: ['layer', 'data'],
 		data() {return {tmp, run, player}},
-		template: template(`<button v-if="tmp[layer].buyables && tmp[layer].buyables[data].sellOne && (tmp[layer].buyables[data].canSellOne === undefined || tmp[layer].buyables[data].canSellOne)" v-on:click="run(tmp[layer].buyables[data].sellOne, tmp[layer].buyables[data])" :class="{
+		template: template(`<button v-if="tmp[layer].buyables && tmp[layer].buyables[data].sellOne && (tmp[layer].buyables[data].canSellOne === undefined || tmp[layer].buyables[data].canSellOne)" @click="run(tmp[layer].buyables[data].sellOne, tmp[layer].buyables[data])" :class="{
 			longUpg: true,
 			can: player[layer].unlocked,
 			locked: !player[layer].unlocked,
@@ -794,7 +794,7 @@ function loadVue(mainPage = false) {
 	addNormalComponent('sell-all', {
 		props: ['layer', 'data'],
 		data() {return {tmp, run, player}},
-		template: template(`<button v-if="tmp[layer].buyables && tmp[layer].buyables[data].sellAll && (tmp[layer].buyables[data].canSellAll === undefined || tmp[layer].buyables[data].canSellAll)" v-on:click="run(tmp[layer].buyables[data].sellAll, tmp[layer].buyables[data])" :class="{
+		template: template(`<button v-if="tmp[layer].buyables && tmp[layer].buyables[data].sellAll && (tmp[layer].buyables[data].canSellAll === undefined || tmp[layer].buyables[data].canSellAll)" @click="run(tmp[layer].buyables[data].sellAll, tmp[layer].buyables[data])" :class="{
 			longUpg: true,
 			can: player[layer].unlocked,
 			locked: !player[layer].unlocked,
@@ -837,7 +837,7 @@ function loadVue(mainPage = false) {
 							: {}),
 						tmp[layer].componentStyles['tab-button'],
 						data[tab].buttonStyle,
-					]" v-on:click="() => {
+					]" @click="() => {
 						player.subtabs[layer][name] = tab;
 						updateTabFormats();
 						needCanvasUpdate = true;
@@ -887,7 +887,7 @@ function loadVue(mainPage = false) {
 				};
 			},
 		},
-		template: template(`<button v-if="nodeShown(layer)" :id="layer" v-on:click="onClick" :class="{
+		template: template(`<button v-if="nodeShown(layer)" :id="layer" @click="onClick" :class="{
 			treeNode: tmp[layer].isLayer,
 			treeButton: !tmp[layer].isLayer,
 			smallNode: size == 'small',
@@ -919,7 +919,7 @@ function loadVue(mainPage = false) {
 				tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style
 				: {}
 		]" class="noBackground">
-			<button v-if="back" :class="back == 'big' ? 'big back' : 'back'" v-on:click="goBack(layer)">&#8592;</button>
+			<button v-if="back" :class="back == 'big' ? 'big back' : 'back'" @click="goBack(layer)">&#8592;</button>
 			<template v-if="tmp[layer].tabFormat">
 				<template v-if="Array.isArray(tmp[layer].tabFormat)">
 					<div v-if="spacing" :style="{height: spacing}"></div>
@@ -1073,7 +1073,7 @@ function loadVue(mainPage = false) {
 			<div class='particle instant' :style="[
 				constructParticleStyle(data),
 				data.style,
-			]" v-on:click="run(data.onClick, data)" v-on:mouseenter="run(data.onMouseOver, data)" v-on:mouseleave="run(data.onMouseLeave, data)">
+			]" @click="run(data.onClick, data)" @mouseenter="run(data.onMouseOver, data)" @mouseleave="run(data.onMouseLeave, data)">
 				<span v-html="data.text"></span>
 			</div>
 			<svg version="2" v-if="data.color">

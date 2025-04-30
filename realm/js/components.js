@@ -7,4 +7,33 @@ const customComponents = {
 			<input type="range" v-model="player[layer].autoPercent" min="0" max="100" style='width: 500px'>
 		</div>`),
 	},
+	"autocast-toggle": {
+		props: ["layer", "data"],
+		data() { return {tmp, getSideColor} },
+		computed: {
+			unlockedModes() { return (hasUpgrade(this.layer, 103) ? 2 : 1) },
+			canClick() { return hasUpgrade(this.layer, this.data[1]) && (!this.data[2] || hasChosenSide()) },
+			activeMode() { return getClickableState(this.layer, this.data[0]) },
+		},
+		methods: {
+			toggle(mode) { if (this.canClick) setClickableState(this.layer, this.data[0], mode === this.activeMode ? 0 : mode) },
+		},
+		template: template(`<div>
+			<button v-for="mode in unlockedModes" :class="'upg tooltipBox ' + (canClick ? 'can' : 'locked')" :style="[(canClick ? {'background-color': (mode === 2 ? tmp.M.color : (data[2] ? getSideColor() : '#C0C0C0'))} : {}), {
+				'border-radius': '0px 0px ' + (mode < unlockedModes ? '0' : '25') + 'px ' + (mode > 1 ? '0' : '25') + 'px',
+				width: (125 / unlockedModes) + 'px',
+				'min-height': 'min-content',
+				transform: 'none',
+			}]" @click="toggle(mode)">
+				<svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#000000" stroke-width="2">
+					<g id="arrow">
+						<path d="m 5,20 a 15,15 0 0 1 11,-14.5 a 15,15 0 0 1 17,7" style="stroke-linecap: round"/>
+						<path d="m 34,5 v 8 h -8" style="stroke-linecap: round; stroke-linejoin: round"/>
+					</g>
+					<use href="#arrow" transform-origin="20 20" transform="rotate(180)"/>
+					<text v-if="mode === activeMode" x="20" y="20" text-anchor="middle" dominant-baseline="central" fill="#000000" stroke="none" style="font-size: 15px">ON</text>
+				</svg>
+			</button>
+		</div>`),
+	},
 };

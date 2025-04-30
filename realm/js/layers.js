@@ -225,28 +225,6 @@ function getSideColor(side = -1) {
 	return "#C0C0C0";
 };
 
-function getAutocastHTML(id, can, color) {
-	const num = (hasUpgrade("M", 103) ? 2 : 1);
-	let html = "<div>";
-	for (let index = 0; index < num; index++) {
-		html += "<button id='autocast-" + id + "-" + index + "'";
-		if (can) html += ` onclick='setClickableState("M", ${id}, ${getClickableState("M", id) === index + 1 ? 0 : index + 1})'`;
-		html += " class='upg tooltipBox " + (can ? "can" : "locked") + "' style='";
-		if (can) html += "background-color: " + (index === 1 ? tmp.M.color : color) + "; ";
-		html += "border-radius: 0px 0px " + (index === 0 && num === 2 ? 0 : 25) + "px " + (index === 1 ? 0 : 25) + "px; width: " + (num === 2 ? 62.5 : 125) + "px; min-height: min-content; transform: none'>";
-			html += "<svg width='40' height='40' viewBox='0 0 40 40' fill='none' stroke='#000000' stroke-width='2'>";
-				html += "<g id='arrow'>";
-					html += "<path d='m 5,20 a 15,15 0 0 1 11,-14.5 a 15,15 0 0 1 17,7' style='stroke-linecap: round'/>";
-					html += "<path d='m 34,5 v 8 h -8' style='stroke-linecap: round; stroke-linejoin: round'/>";
-				html += "</g>";
-				html += "<use href='#arrow' transform-origin='20 20' transform='rotate(180)'/>";
-				if (getClickableState("M", id) === index + 1) html += "<text x='20' y='20' text-anchor='middle' dominant-baseline='central' fill='#000000' stroke='none' style='font-size: 15px'>ON</text>";
-			html += "</svg>";
-		html += "</button>";
-	};
-	return html + "</div>";
-};
-
 addLayer("M", {
 	name: "Mana",
 	symbol: "M",
@@ -325,9 +303,9 @@ addLayer("M", {
 		if (hasUpgrade("M", 103)) arr.push("blank", "mana-auto-percent-slider");
 		arr.push("blank");
 		arr.push(["row", [
-			["column", [["clickable", 11], ["raw-html", getAutocastHTML(11, hasUpgrade("M", 102), "#C0C0C0")]], {margin: "0 7px"}],
-			["column", [["clickable", 12], ["raw-html", getAutocastHTML(12, hasUpgrade("M", 101), "#C0C0C0")]], {margin: "0 7px"}],
-			["column", [["clickable", 13], ["raw-html", getAutocastHTML(13, hasChosenSide() && hasUpgrade("M", 101), getSideColor())]], {margin: "0 7px"}]
+			["column", [["clickable", 11], ["autocast-toggle", [11, 102]]], {margin: "0 7px"}],
+			["column", [["clickable", 12], ["autocast-toggle", [12, 101]]], {margin: "0 7px"}],
+			["column", [["clickable", 13], ["autocast-toggle", [13, 101, true]]], {margin: "0 7px"}]
 		]]);
 		arr.push("blank");
 		arr.push(["upgrades", [1]]);
