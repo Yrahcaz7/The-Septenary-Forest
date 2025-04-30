@@ -98,6 +98,11 @@ addLayer("C", {
 			canClick() {return player.C.bulk.neq(1000)},
 			onClick() {player.C.bulk = new Decimal(1000)},
 		},
+		15: {
+			title: "10,000x",
+			canClick() {return player.C.bulk.neq(10000)},
+			onClick() {player.C.bulk = new Decimal(10000)},
+		},
 	},
 	buyables: {
 		11: {
@@ -599,9 +604,9 @@ addLayer("F", {
 			["display-text", () => getFCdisp(3) + getFCdisp(4) + getFCdisp(5), {display: "inline-block", "min-width": "200px"}],
 		]],
 		"blank",
-		["row", [["upgrade", 11], ["blank", ["17px"]], ["upgrade", 12], ["blank", ["17px"]], ["upgrade", 13]]],
+		["row", [["upgrade", 11, {margin: "0 7px"}], ["upgrade", 12, {margin: "0 7px"}], ["upgrade", 13, {margin: "0 7px"}]]],
 		"blank",
-		["row", [["upgrade", 21], ["blank", ["17px"]], ["upgrade", 22], ["blank", ["17px"]], ["upgrade", 23]]],
+		["row", [["upgrade", 21, {margin: "0 7px"}], ["upgrade", 22, {margin: "0 7px"}], ["upgrade", 23, {margin: "0 7px"}]]],
 		"blank",
 		["upgrades", [11, 12]],
 	],
@@ -629,6 +634,7 @@ addLayer("F", {
 			canAfford() { return false },
 			color: getSideColor(2),
 			style: {"border-color": "color-mix(in srgb, " + getSideColor(2) + " 87.5%, #000000 12.5%)"},
+			unlocked() { return false },
 		},
 		21: getAllianceUpgrade(0),
 		22: getAllianceUpgrade(1),
