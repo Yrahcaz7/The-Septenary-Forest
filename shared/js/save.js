@@ -7,8 +7,8 @@ function getModID() {
 function save(force) {
 	NaNcheck(player);
 	if (NaNalert && !force) return;
-	localStorage.setItem(getModID(), btoa(unescape(encodeURIComponent(JSON.stringify(player)))));
-	localStorage.setItem(getModID() + "_options", btoa(unescape(encodeURIComponent(JSON.stringify(options)))));
+	localStorage.setItem(getModID(), btoa(encodeURIComponent(JSON.stringify(player))));
+	localStorage.setItem(getModID() + "_options", btoa(encodeURIComponent(JSON.stringify(options))));
 };
 
 function startPlayerBase() {
@@ -171,7 +171,7 @@ function load(mainPage = false) {
 		player = getStartPlayer();
 		options = getStartOptions();
 	} else {
-		player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(escape(atob(get)))));
+		player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(atob(get))));
 		fixSave();
 		loadOptions();
 	};
@@ -197,7 +197,7 @@ function load(mainPage = false) {
 
 function loadOptions() {
 	let get = localStorage.getItem(getModID() + "_options");
-	if (get) options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(escape(atob(get)))));
+	if (get) options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(atob(get))));
 	else options = getStartOptions();
 	if (themes.indexOf(options.theme) < 0) theme = "default";
 	fixData(options, getStartOptions());
