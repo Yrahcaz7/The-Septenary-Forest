@@ -149,6 +149,19 @@ function getSideColor(side = -1) {
 	return "#C0C0C0";
 };
 
+const manaUpgrades = [
+	["Mana Cup", "multiply max mana based on your mana generated this era", 1_500, () => player.stats[0].manaTotal.add(1).pow(0.1), "x"],
+	["Mana Sense", "increase mana regen based on your mana generated this era", 5_000, () => player.stats[0].manaTotal.add(1).pow(0.125), "+"],
+	["Mana Jar", "multiply max mana based on your creations", 25_000, () => player.C.points.add(1).pow(0.125), "x"],
+	["Mana Sight", "increase mana regen based on your creations", 125_000, () => player.C.points.add(1).pow(0.225), "+"],
+];
+
+const autocastingUpgrades = [
+	["Primary Autocasting", "unlock autocasting", 1_000],
+	["Secondary Autocasting", "unlock tax collection autocasting", 1_000_000],
+	["Ternary Autocasting", "unlock autocasting when mana is at least a specified percent of max mana", 1e12],
+];
+
 addLayer("M", {
 	name: "Mana",
 	symbol: "M",
@@ -288,59 +301,29 @@ addLayer("M", {
 			color: getSideColor,
 		},
 	},
-	upgrades: {
-		11: {
-			fullDisplay() { return "<h3>Mana Cup</h3><br>multiply max mana based on your mana generated this era<br><br>Effect: x" + format(upgradeEffect("M", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.stats[0].manaTotal.add(1).pow(0.1) },
-			cost: 1_500,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-		},
-		12: {
-			fullDisplay() { return "<h3>Mana Sense</h3><br>increase mana regen based on your mana generated this era<br><br>Effect: +" + format(upgradeEffect("M", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.stats[0].manaTotal.add(1).pow(0.125) },
-			cost: 5_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return hasUpgrade("M", 11) },
-		},
-		13: {
-			fullDisplay() { return "<h3>Mana Jar</h3><br>multiply max mana based on your creations<br><br>Effect: x" + format(upgradeEffect("M", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.C.points.add(1).pow(0.125) },
-			cost: 25_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return hasUpgrade("M", 12) },
-		},
-		14: {
-			fullDisplay() { return "<h3>Mana Sight</h3><br>increase mana regen based on your creations<br><br>Effect: +" + format(upgradeEffect("M", this.id)) + "<br><br>Cost: " + format(this.cost) + " coins" },
-			effect() { return player.C.points.add(1).pow(0.225) },
-			cost: 125_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return hasUpgrade("M", 13) },
-		},
-		101: {
-			fullDisplay() { return "<h3>Primary Autocasting</h3><br>unlock autocasting<br><br>Req: 10,000 total mana generated<br><br>Cost: " + format(this.cost) + " coins" },
-			cost: 1_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-		},
-		102: {
-			fullDisplay() { return "<h3>Secondary Autocasting</h3><br>unlock tax collection autocasting<br><br>Req: 100,000 total mana generated<br><br>Cost: " + format(this.cost) + " coins" },
-			cost: 1_000_000,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return hasUpgrade("M", 101) },
-		},
-		103: {
-			fullDisplay() { return "<h3>Ternary Autocasting</h3><br>unlock autocasting when mana is at least a specified percent of max mana<br><br>Req: 1,000,000 total mana generated<br><br>Cost: " + format(this.cost) + " coins" },
-			cost: 1e12,
-			currencyInternalName: "points",
-			currencyLocation() { return player },
-			unlocked() { return hasUpgrade("M", 102) },
-		},
-	},
+	upgrades: (() => {
+		const data = {};
+		for (let index = 0; index < manaUpgrades.length; index++) {
+			data[index + 11] = {
+				fullDisplay() { return "<h3>" + manaUpgrades[index][0] + "</h3><br>" + manaUpgrades[index][1] + "<br><br>Effect: " + (manaUpgrades[index][4] || "") + format(upgradeEffect("M", this.id)) + (manaUpgrades[index][5] || "") + "<br><br>Cost: " + format(manaUpgrades[index][2]) + " coins" },
+				effect() { return manaUpgrades[index][3]() },
+				cost: manaUpgrades[index][2],
+				currencyInternalName: "points",
+				currencyLocation() { return player },
+			};
+			if (index > 0) data[index + 11].unlocked = () => hasUpgrade("M", index + 10);
+		};
+		for (let index = 0; index < autocastingUpgrades.length; index++) {
+			data[index + 101] = {
+				fullDisplay() { return "<h3>" + autocastingUpgrades[index][0] + "</h3><br>" + autocastingUpgrades[index][1] + "<br><br>Cost: " + format(autocastingUpgrades[index][2]) + " coins" },
+				cost: autocastingUpgrades[index][2],
+				currencyInternalName: "points",
+				currencyLocation() { return player },
+			};
+			if (index > 0) data[index + 101].unlocked = () => hasUpgrade("M", index + 100);
+		};
+		return data;
+	})(),
 });
 
 function hasChosenSide() {
