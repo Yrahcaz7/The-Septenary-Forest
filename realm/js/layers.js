@@ -150,16 +150,16 @@ function getSideColor(side = -1) {
 };
 
 const manaUpgrades = [
-	["Mana Cup", "multiply max mana based on your mana generated this era", 1_500, () => player.stats[0].manaTotal.add(1).pow(0.1), "x"],
-	["Mana Sense", "increase mana regen based on your mana generated this era", 5_000, () => player.stats[0].manaTotal.add(1).pow(0.125), "+"],
-	["Mana Jar", "multiply max mana based on your creations", 25_000, () => player.C.points.add(1).pow(0.125), "x"],
-	["Mana Sight", "increase mana regen based on your creations", 125_000, () => player.C.points.add(1).pow(0.225), "+"],
+	["Mana Cup", "multiply max mana based on your mana generated this era", () => player.stats[0].manaTotal.add(1).pow(0.1), "x"],
+	["Mana Sense", "increase mana regen based on your mana generated this era", () => player.stats[0].manaTotal.add(1).pow(0.125), "+"],
+	["Mana Jar", "multiply max mana based on your creations", () => player.C.points.add(1).pow(0.125), "x"],
+	["Mana Sight", "increase mana regen based on your creations", () => player.C.points.add(1).pow(0.225), "+"],
 ];
 
 const autocastingUpgrades = [
-	["Primary Autocasting", "unlock autocasting", 1_000],
-	["Secondary Autocasting", "unlock tax collection autocasting", 1_000_000],
-	["Ternary Autocasting", "unlock autocasting when mana is at least a specified percent of max mana", 1e12],
+	["Primary Autocasting", "unlock autocasting"],
+	["Secondary Autocasting", "unlock tax collection autocasting"],
+	["Ternary Autocasting", "unlock autocasting when mana is at least a specified percent of max mana"],
 ];
 
 addLayer("M", {
@@ -305,9 +305,9 @@ addLayer("M", {
 		const data = {};
 		for (let index = 0; index < manaUpgrades.length; index++) {
 			data[index + 11] = {
-				fullDisplay() { return "<h3>" + manaUpgrades[index][0] + "</h3><br>" + manaUpgrades[index][1] + "<br><br>Effect: " + (manaUpgrades[index][4] || "") + format(upgradeEffect("M", this.id)) + (manaUpgrades[index][5] || "") + "<br><br>Cost: " + format(manaUpgrades[index][2]) + " coins" },
-				effect() { return manaUpgrades[index][3]() },
-				cost: manaUpgrades[index][2],
+				fullDisplay() { return "<h3>" + manaUpgrades[index][0] + "</h3><br>" + manaUpgrades[index][1] + "<br><br>Effect: " + (manaUpgrades[index][3] || "") + format(upgradeEffect("M", this.id)) + (manaUpgrades[index][4] || "") + "<br><br>Cost: " + format(this.cost) + " coins" },
+				effect() { return manaUpgrades[index][2]() },
+				cost: new Decimal(5).pow(index).mul(1000),
 				currencyInternalName: "points",
 				currencyLocation() { return player },
 			};
@@ -315,8 +315,8 @@ addLayer("M", {
 		};
 		for (let index = 0; index < autocastingUpgrades.length; index++) {
 			data[index + 101] = {
-				fullDisplay() { return "<h3>" + autocastingUpgrades[index][0] + "</h3><br>" + autocastingUpgrades[index][1] + "<br><br>Cost: " + format(autocastingUpgrades[index][2]) + " coins" },
-				cost: autocastingUpgrades[index][2],
+				fullDisplay() { return "<h3>" + autocastingUpgrades[index][0] + "</h3><br>" + autocastingUpgrades[index][1] + "<br><br>Cost: " + format(this.cost) + " coins" },
+				cost: new Decimal(1_000).pow(new Decimal(2).pow(index)),
 				currencyInternalName: "points",
 				currencyLocation() { return player },
 			};
@@ -539,6 +539,21 @@ addLayer("F", {
 	},
 });
 
+const gemUpgrades = [
+	["Gem Influence", "increase faction coin find chance based on your total gems", () => {
+		let eff = player.G.total.add(1).log10().mul(10);
+		if (hasUpgrade("G", 12)) eff = eff.mul(upgradeEffect("G", 12));
+		return eff;
+	}, "+", "%"],
+	["Gem Displays", "multiply the effect of Gem Influence based on your gems", () => player.G.points.add(1).log10().add(1), "x"],
+	["Magic Gems", "multiply max mana and mana regen based on your gems", () => {
+		let eff = player.G.points.add(1).log10().add(1).pow(0.5);
+		if (hasUpgrade("G", 14)) eff = eff.mul(upgradeEffect("G", 14));
+		return eff;
+	}, "x"],
+	["Magic Residue", "multiply the effect of Magic Gems based on your best gems", () => player.G.best.add(1).log10().add(1).pow(0.25), "x"],
+];
+
 addLayer("G", {
 	name: "Gems",
 	symbol: "G",
@@ -579,6 +594,7 @@ addLayer("G", {
 	effectDescription() { return "which are increasing all production by " + player.G.gemMult + "% each, for a total of " + format(tmp.G.effect) + "x" },
 	hotkeys: [
 		{key: "A", description: "Shift+A: Abdicate for gems", onPress() {if (canReset(this.layer)) doReset(this.layer)}},
+		{key: "G", description: "Shift+G: Abdicate for gems", onPress() {if (canReset(this.layer)) doReset(this.layer)}},
 	],
 	onPrestige(gain) {
 		if (player.G.best.gt(player.bestGems)) player.bestGems = player.G.best;
@@ -594,47 +610,20 @@ addLayer("G", {
 	componentStyles: {
 		upgrade: {height: "120px", "border-radius": "25px"},
 	},
-	upgrades: {
-		11: {
-			title: "Gem Influence",
-			description: "increase faction coin find chance based on your total gems",
-			effect() {
-				let eff = player.G.total.add(1).log10().mul(10);
-				if (hasUpgrade("G", 12)) eff = eff.mul(upgradeEffect("G", 12));
-				return eff;
-			},
-			effectDisplay() { return "+" + format(upgradeEffect("G", this.id)) + "%" },
-			cost: 1,
-		},
-		12: {
-			title: "Gem Displays",
-			description: "multiply the effect of <b>Gem Influence</b> based on your gems",
-			effect() { return player.G.points.add(1).log10().add(1) },
-			effectDisplay() { return "x" + format(upgradeEffect("G", this.id)) },
-			cost: 100,
-			unlocked() { return hasUpgrade("G", 11) },
-		},
-		13: {
-			title: "Magic Gems",
-			description: "multiply max mana and mana regen based on your gems",
-			effect() {
-				let eff = player.G.points.add(1).log10().add(1).pow(0.5);
-				if (hasUpgrade("G", 14)) eff = eff.mul(upgradeEffect("G", 14));
-				return eff;
-			},
-			effectDisplay() { return "x" + format(upgradeEffect("G", this.id)) },
-			cost: 10_000,
-			unlocked() { return hasUpgrade("G", 12) },
-		},
-		14: {
-			title: "Magic Residue",
-			description: "multiply the effect of <b>Magic Gems</b> based on your best gems",
-			effect() { return player.G.best.add(1).log10().add(1).pow(0.25) },
-			effectDisplay() { return "x" + format(upgradeEffect("G", this.id)) },
-			cost: 1_000_000,
-			unlocked() { return hasUpgrade("G", 13) },
-		},
-	},
+	upgrades: (() => {
+		const data = {};
+		for (let index = 0; index < gemUpgrades.length; index++) {
+			data[index + 11] = {
+				title: gemUpgrades[index][0],
+				description: gemUpgrades[index][1],
+				effect() { return gemUpgrades[index][2]() },
+				effectDisplay() { return (gemUpgrades[index][3] || "") + format(upgradeEffect("G", this.id)) + (gemUpgrades[index][4] || "") },
+				cost: new Decimal(100).pow(index),
+			};
+			if (index > 0) data[index + 11].unlocked = () => hasUpgrade("G", index + 10);
+		};
+		return data;
+	})(),
 });
 
 const spellName = ["Tax Collection", "Call to Arms", "Holy Light", "Blood Frenzy"];
