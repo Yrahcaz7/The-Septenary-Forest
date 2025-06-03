@@ -94,7 +94,7 @@ addLayer("C", {
 					if (index === 2) {
 						return text + "Effects: +" + format(b.effect) + " to coins/" + (hasFactionUpgrade(1, 2, 1) ? "click" : "sec") + " and +" + format(b.effect2) + "% to FC find chance\n\nTotal Effects: +" + format(amount.mul(b.effect)) + " and +" + format(amount.mul(b.effect2)) + "%";
 					};
-					return text + "Effect: +" + format(b.effect) + " to coins/sec\n\nTotal Effect: +" + format(b.effect * amount);
+					return text + "Effect: +" + format(b.effect) + " to coins/" + (index === 0 ? "click" : "sec") + "\n\nTotal Effect: +" + format(b.effect * amount);
 				},
 				canAfford() { return player.points.gte(this.cost()) },
 				buy() {
