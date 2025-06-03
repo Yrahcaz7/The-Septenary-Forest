@@ -9,11 +9,11 @@ const modInfo = {
 
 const VERSION = {
 	num: "0.5",
-	name: "In Development",
+	name: "Reworked Beta",
 };
 
 const changelog = `<h1>Changelog:</h1><br>
-	<br><h3>v0.5 - In Development</h3><br>
+	<br><h3>v0.5 - Reworked Beta</h3><br>
 		- Massive internal rework.<br>
 		- You can now click anywhere to gain coins.<br>
 		- Creations now have their own layer.<br>
@@ -60,6 +60,14 @@ function getRandInt(min, max) {
 	min = Math.ceil(min);
 	max = Math.floor(max);
 	return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+};
+
+function romanNumeral(num) {
+	let text = "";
+	if (num >= 100) text += ["C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"][Math.floor(num / 100) % 10 - 1];
+	if (num % 100 >= 10) text += ["X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"][Math.floor(num / 10) % 10 - 1];
+	if (num % 10 >= 1) text += ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"][num % 10 - 1];
+	return text;
 };
 
 function taxCast(amt = newDecimalOne()) {
