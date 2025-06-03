@@ -77,33 +77,18 @@ addLayer("C", {
 		clickable: {width: "min-content", "min-height": "30px", "border-radius": "5px"},
 		buyable: {width: "180px", height: "125px", "border-radius": "25px"},
 	},
-	clickables: {
-		11: {
-			title: "1x",
-			canClick() {return player.C.bulk.neq(1)},
-			onClick() {player.C.bulk = newDecimalOne()},
-		},
-		12: {
-			title: "10x",
-			canClick() {return player.C.bulk.neq(10)},
-			onClick() {player.C.bulk = new Decimal(10)},
-		},
-		13: {
-			title: "100x",
-			canClick() {return player.C.bulk.neq(100)},
-			onClick() {player.C.bulk = new Decimal(100)},
-		},
-		14: {
-			title: "1,000x",
-			canClick() {return player.C.bulk.neq(1000)},
-			onClick() {player.C.bulk = new Decimal(1000)},
-		},
-		15: {
-			title: "10,000x",
-			canClick() {return player.C.bulk.neq(10000)},
-			onClick() {player.C.bulk = new Decimal(10000)},
-		},
-	},
+	clickables: (() => {
+		const data = {};
+		for (let index = 0; index < 6; index++) {
+			const amt = new Decimal(10).pow(index);
+			data[index + 11] = {
+				title: formatWhole(amt) + "x",
+				canClick() { return player.C.bulk.neq(amt) },
+				onClick() { player.C.bulk = new Decimal(amt) },
+			};
+		};
+		return data;
+	})(),
 	buyables: {
 		11: {
 			title() { return creationName[this.id - 11] + " " + romanNumeral(getBuyableAmount("C", "1" + this.id).toNumber() + 1) },
