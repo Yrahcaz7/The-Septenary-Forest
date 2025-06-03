@@ -21,7 +21,11 @@ addLayer("C", {
 		player.C.tiers = tiers;
 		player.stats.forEach(obj => obj.creations = obj.creations.max(player.C.points));
 	},
-	shouldNotify() { return tmp.C.buyables[111].canBuy || tmp.C.buyables[112].canBuy || tmp.C.buyables[113].canBuy },
+	shouldNotify() {
+		for (const key in player.C.buyables) {
+			if (key > 100 && tmp.C.buyables[key].canBuy) return true;
+		};
+	},
 	tabFormat: [
 		["display-text", () => "You are bulk buying " + formatWhole(player.C.bulk) + "x creations"],
 		"blank",
@@ -191,30 +195,17 @@ addLayer("M", {
 		for (let index = 1; index < player.M.spellTimes.length; index++) {
 			player.M.spellTimes[index] = player.M.spellTimes[index].sub(diff).max(0);
 		};
-		// primary autocasting
-		if (player.M.spellTimes[1].lte(0) && player.M.mana.gte(getSpellCost(1))) {
-			if (getClickableState("M", 12) === 1) {
-				callCast();
-			} else if (getClickableState("M", 12) === 2 && player.M.mana.gte(player.M.maxMana.mul(player.M.autoPercent / 100))) {
-				callCast();
-			};
-		};
-		if (player.M.spellTimes[2].lte(0) && player.M.mana.gte(getSpellCost(2))) {
-			if (getClickableState("M", 13) === 1) {
-				sideSpellCast();
-			} else if (getClickableState("M", 13) === 2 && player.M.mana.gte(player.M.maxMana.mul(player.M.autoPercent / 100))) {
-				sideSpellCast();
-			};
-		};
-		// secondary autocasting
-		const taxCost = getSpellCost(0);
-		if ((player.M.spellTimes[1].gt(0) || !getClickableState("M", 12)) && (player.M.spellTimes[2].gt(0) || !getClickableState("M", 13)) && player.M.mana.gte(taxCost)) {
-			if (getClickableState("M", 11) === 1) {
-				taxCast(player.M.mana.div(taxCost).floor());
-			} else if (getClickableState("M", 11) === 2 && player.M.mana.gte(player.M.maxMana.mul(player.M.autoPercent / 100))) {
-				let amt = player.M.mana.sub(player.M.maxMana.mul(player.M.autoPercent / 100)).div(taxCost).floor();
-				if (player.M.mana.sub(amt.mul(taxCost)).gte(taxCost)) amt = amt.add(1);
-				taxCast(amt);
+		// autocasting
+		for (let index = 2; index >= 0; index--) {
+			const cost = getSpellCost(index);
+			if (player.M.spellTimes[index].lte(0) && player.M.mana.gte(cost)) {
+				if (getClickableState("M", index + 11) === 1) {
+					castSpell(index, player.M.mana.div(cost).floor());
+				} else if (getClickableState("M", index + 11) === 2 && player.M.mana.gte(player.M.maxMana.mul(player.M.autoPercent / 100))) {
+					let amt = player.M.mana.sub(player.M.maxMana.mul(player.M.autoPercent / 100)).div(cost).floor();
+					if (player.M.mana.sub(amt.mul(cost)).gte(cost)) amt = amt.add(1);
+					castSpell(index, amt);
+				};
 			};
 		};
 	},
@@ -260,7 +251,7 @@ addLayer("M", {
 				return eff;
 			},
 			canClick() { return player.M.mana.gte(getSpellCost(this.id - 11)) },
-			onClick: taxCast,
+			onClick() { castSpell(this.id - 11) },
 			color: "#C0C0C0",
 		},
 		12: {
@@ -272,7 +263,7 @@ addLayer("M", {
 				return eff;
 			},
 			canClick() { return player.M.spellTimes[this.id - 11].lte(0) && player.M.mana.gte(getSpellCost(this.id - 11)) },
-			onClick: callCast,
+			onClick() { castSpell(this.id - 11) },
 			color: "#C0C0C0",
 		},
 		13: {
@@ -293,7 +284,7 @@ addLayer("M", {
 				return eff;
 			},
 			canClick() { return hasChosenSide() && player.M.spellTimes[this.id - 11].lte(0) && player.M.mana.gte(getSpellCost(this.id - 11)) },
-			onClick: sideSpellCast,
+			onClick() { castSpell(this.id - 11) },
 			color: getSideColor,
 		},
 	},

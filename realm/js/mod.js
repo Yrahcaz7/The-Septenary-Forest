@@ -59,7 +59,7 @@ const changelog = `<h1>Changelog:</h1><br>
 function getRandInt(min, max) {
 	min = Math.ceil(min);
 	max = Math.floor(max);
-	return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+	return Math.floor(Math.random() * (max - min) + min); // The minimum is inclusive and the maximum is exclusive
 };
 
 function romanNumeral(num) {
@@ -70,27 +70,27 @@ function romanNumeral(num) {
 	return text;
 };
 
-function taxCast(amt = newDecimalOne()) {
-	player.M.mana = player.M.mana.sub(getSpellCost(0).mul(amt));
-	player.stats.forEach(obj => obj.casts[0] = obj.casts[0].add(amt));
-	const gain = getPointGen().mul(clickableEffect("M", 11).mul(amt));
-	player.points = player.points.add(gain);
-	player.stats.forEach(obj => obj.total = obj.total.add(gain));
-};
+const baseSpellDuration = [0, 30, 15, 15].map(x => new Decimal(x));
 
-function callCast() {
-	player.M.spellTimes[1] = new Decimal(30);
-	player.M.mana = player.M.mana.sub(getSpellCost(1));
-	player.stats.forEach(obj => obj.casts[1] = obj.casts[1].add(1));
-};
-
-function sideSpellCast() {
-	player.M.spellTimes[2] = new Decimal(15);
-	player.M.mana = player.M.mana.sub(getSpellCost(2));
-	if (hasUpgrade("F", 11)) {
-		player.stats.forEach(obj => obj.casts[2] = obj.casts[2].add(1));
-	} else if (hasUpgrade("F", 12)) {
-		player.stats.forEach(obj => obj.casts[3] = obj.casts[3].add(1));
+function castSpell(index, amt = newDecimalOne()) {
+	const cost = getSpellCost(index);
+	if (index === 0) {
+		player.M.mana = player.M.mana.sub(cost.mul(amt));
+		player.stats.forEach(obj => obj.casts[0] = obj.casts[0].add(amt));
+		const gain = getPointGen().mul(clickableEffect("M", 11).mul(amt));
+		player.points = player.points.add(gain);
+		player.stats.forEach(obj => obj.total = obj.total.add(gain));
+	} else {
+		player.M.spellTimes[index] = baseSpellDuration[index];
+		player.M.mana = player.M.mana.sub(cost);
+		if (index === 2) {
+			if (hasUpgrade("F", 12)) {
+				index = 3;
+			} else if (!hasUpgrade("F", 11)) {
+				index = -1;
+			};
+		};
+		if (index >= 0) player.stats.forEach(obj => obj.casts[index] = obj.casts[index].add(1));
 	};
 };
 
