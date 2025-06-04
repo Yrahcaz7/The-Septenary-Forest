@@ -18,7 +18,8 @@ const changelog = `<h1>Changelog:</h1><br>
 		- You can now click anywhere to gain coins.<br>
 		- Creations now have their own layer.<br>
 		- Creation tier series are now buyables.<br>
-		- Added 9 new creation tiers.<br>
+		- Added 1 new creation per alignment.<br>
+		- Added many new creation tiers.<br>
 		- Added 1 gem power upgrade.<br>
 		- Various balancing changes.<br>
 		- Added more stats to the stat menu again.<br>
@@ -99,6 +100,7 @@ function getPointGen() {
 	// addtitive
 	if (getBuyableAmount("C", 12).gt(0)) gain = gain.add(getBuyableAmount("C", 12) * buyableEffect("C", 12));
 	if (getBuyableAmount("C", 13).gt(0) && !hasFactionUpgrade(1, 2, 1)) gain = gain.add(getBuyableAmount("C", 13) * buyableEffect("C", 13));
+	if (getBuyableAmount("C", 14).gt(0) && hasUpgrade("F", 12)) gain = gain.add(getBuyableAmount("C", 14) * buyableEffect("C", 14));
 	// multiplicative
 	if (hasFactionUpgrade(0, 1, 3)) gain = gain.mul(factionUpgradeEffect(0, 1));
 	if (hasFactionUpgrade(1, 0, 3)) gain = gain.mul(factionUpgradeEffect(1, 0));
@@ -177,6 +179,7 @@ function update(diff) {
 	let clickValue = newDecimalOne();
 	if (getBuyableAmount("C", 11).gt(0)) clickValue = clickValue.add(getBuyableAmount("C", 11).mul(buyableEffect("C", 11)));
 	if (getBuyableAmount("C", 13).gt(0) && hasFactionUpgrade(1, 2, 1)) clickValue = clickValue.add(getBuyableAmount("C", 13) * buyableEffect("C", 13));
+	if (getBuyableAmount("C", 14).gt(0) && hasUpgrade("F", 11)) clickValue = clickValue.add(getBuyableAmount("C", 14) * buyableEffect("C", 14));
 	if (hasFactionUpgrade(0, 2, 0)) clickValue = clickValue.mul(factionUpgradeEffect(0, 2));
 	if (hasFactionUpgrade(0, 0, 1)) clickValue = clickValue.mul(factionUpgradeEffect(0, 0));
 	if (hasFactionUpgrade(0, 2, 1)) clickValue = clickValue.mul(factionUpgradeEffect(0, 2));

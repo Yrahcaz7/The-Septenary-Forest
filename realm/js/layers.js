@@ -26,16 +26,19 @@ addLayer("C", {
 			if (key > 100 && tmp.C.buyables[key].canBuy) return true;
 		};
 	},
-	tabFormat: [
-		["display-text", () => "You are bulk buying " + formatWhole(player.C.bulk) + "x creations"],
-		"blank",
-		"clickables",
-		"blank",
-		["buyables", [1]],
-		"blank",
-		["buyables", [11]],
-		"blank",
-	],
+	tabFormat() {
+		const row = [];
+		for (let index = 0; tmp.C.buyables[index + 11]?.unlocked; index++) {
+			row.push(["column", [["buyable", index + 11], ["buyable", index + 111]], {margin: "0 7px"}]);
+		};
+		return [
+			["display-text", "You are bulk buying " + formatWhole(player.C.bulk) + "x creations"],
+			"blank",
+			"clickables",
+			"blank",
+			["row", row],
+		];
+	},
 	componentStyles: {
 		clickable: {width: "min-content", "min-height": "30px", "border-radius": "5px"},
 		buyable: {width: "180px", height: "125px", "border-radius": "25px"},
@@ -54,22 +57,32 @@ addLayer("C", {
 	})(),
 	buyables: (() => {
 		const data = {};
-		const creationName = ["Air", "Soil", "Grass"];
-		const creationCostBase = [1, 100, 10_000];
-		const firstBaseCreationEff = [0.1, 0.25, 2.5];
-		const secondBaseCreationEff = [undefined, undefined, 0.25];
+		function getCreationName(num) {
+			if (num === 0) return "Air";
+			if (num === 1) return "Soil";
+			if (num === 2) return "Grass";
+			if (num === 3) {
+				if (hasUpgrade("F", 11)) return "Water";
+				if (hasUpgrade("F", 12)) return "Fire";
+			};
+			return "???";
+		};
+		function getCreationCost(num) {
+			return 100 ** (2 ** num - 1);
+		};
 		const creationTierEff = [
-			[0.05, 0.1, 0.2, 0.4, 0.65, 1, 1.5, 2, 3],
-			[0.5, 1.25, 2, 3.5, 5, 7.5, 8, 10],
-			[0.5, 2, 2.5, 2.5, 5, 7, 8],
+			[0.05, 0.1,  0.2, 0.4, 0.65, 1,    1.5,  2,  3],
+			[0.5,  1.25, 2,   3.5, 5,    7.5,  8,    10],
+			[2,    3,    5,   7,   10,   13,   15],
+			[200,  300,  500, 700, 1000, 1300, 1500],
 		];
 		function getCreationTierReq(tier) {
 			return 10 ** Math.floor(tier / 2) * (tier % 2 === 0 ? 10 : 32);
 		};
-		for (let index = 0; index < 3; index++) {
+		for (let index = 0; index < 4; index++) {
 			data[index + 11] = {
 				effect() {
-					let eff = new Decimal(firstBaseCreationEff[index]);
+					let eff = new Decimal([0.1, 0.25, 5, 500][index]);
 					for (let tier = 0; tier < getBuyableAmount("C", index + 111).toNumber(); tier++) {
 						eff = eff.add(creationTierEff[index][tier]);
 					};
@@ -80,7 +93,7 @@ addLayer("C", {
 					};
 					return eff;
 				},
-				title() { return creationName[index] + " " + romanNumeral(getBuyableAmount("C", index + 111).toNumber() + 1) },
+				title() { return getCreationName(index) + " " + romanNumeral(getBuyableAmount("C", index + 111).toNumber() + 1) },
 				cost() {
 					const start = getBuyableAmount("C", index + 11);
 					const end = start.add(player.C.bulk - 1);
@@ -89,7 +102,7 @@ addLayer("C", {
 					const b = scale.add(end); // scaled end
 					let cost = start.pow(2).neg().add(start).add(end.pow(2)).add(end).mul(25).div(scale); // ∑n=start→end (50n/scale)
 					cost = cost.add(a.pow(6).mul(-2).add(a.pow(5).mul(6)).sub(a.pow(4).mul(5)).add(a.pow(2)).add(b.pow(6).mul(2)).add(b.pow(5).mul(6)).add(b.pow(4).mul(5)).sub(b.pow(2)).div(scale.pow(5).mul(12))); // ∑n=a→b (n/scale)^5
-					return cost.mul(creationCostBase[index]);
+					return cost.mul(getCreationCost(index));
 				},
 				display() {
 					const b = tmp.C.buyables[index + 11];
@@ -98,7 +111,7 @@ addLayer("C", {
 					if (index === 2) {
 						return text + "Effects: +" + format(b.effect) + " to coins/" + (hasFactionUpgrade(1, 2, 1) ? "click" : "sec") + " and +" + format(b.effect2) + "% to FC find chance\n\nTotal Effects: +" + format(amount.mul(b.effect)) + " and +" + format(amount.mul(b.effect2)) + "%";
 					};
-					return text + "Effect: +" + format(b.effect) + " to coins/" + (index === 0 ? "click" : "sec") + "\n\nTotal Effect: +" + format(b.effect * amount);
+					return text + "Effect: +" + format(b.effect) + " to coins/" + (index === 0 || (index >= 3 && hasUpgrade("F", 11)) ? "click" : "sec") + "\n\nTotal Effect: +" + format(b.effect * amount);
 				},
 				canAfford() { return player.points.gte(this.cost()) },
 				buy() {
@@ -106,21 +119,21 @@ addLayer("C", {
 					addBuyables("C", index + 11, player.C.bulk);
 				},
 			};
-			if (secondBaseCreationEff[index] !== undefined) {
-				data[index + 11].effect2 = new Decimal(secondBaseCreationEff[index]);
+			if (index === 2) {
+				data[index + 11].effect2 = new Decimal(0.25);
 			};
 			data[index + 111] = {
-				title: "Uptier " + creationName[index],
+				title() { return "Uptier " + getCreationName(index) },
 				cost() {
 					if (!creationTierEff[index][getBuyableAmount("C", index + 111).toNumber()]) return new Decimal(Infinity);
-					if (getBuyableAmount("C", index + 111).gte(3)) return getBuyableAmount("C", index + 111).pow_base(1_000).div(10_000).mul(creationCostBase[index]);
-					if (getBuyableAmount("C", index + 111).eq(2)) return new Decimal(20_000).mul(creationCostBase[index]);
-					if (getBuyableAmount("C", index + 111).eq(1)) return new Decimal(1_000).mul(creationCostBase[index]);
-					return new Decimal(100).mul(creationCostBase[index]);
+					if (getBuyableAmount("C", index + 111).gte(3)) return getBuyableAmount("C", index + 111).pow_base(1_000).div(10_000).mul(getCreationCost(index));
+					if (getBuyableAmount("C", index + 111).eq(2)) return new Decimal(20_000).mul(getCreationCost(index));
+					if (getBuyableAmount("C", index + 111).eq(1)) return new Decimal(1_000).mul(getCreationCost(index));
+					return new Decimal(100).mul(getCreationCost(index));
 				},
 				display() {
 					const tier = getBuyableAmount("C", index + 111).toNumber();
-					const name = creationName[index].toLowerCase();
+					const name = getCreationName(index).toLowerCase();
 					const eff = creationTierEff[index][tier];
 					return "increase " + name + "'" + (name.endsWith("s") ? "" : "s") + " first base effect by +" + (eff ? format(eff, 2, false) : "???") + "<br><br>Req: " + formatWhole(getCreationTierReq(tier)) + " " + name + "<br><br>Cost: " + format(tmp.C.buyables[index + 111].cost) + " coins";
 				},
@@ -130,6 +143,12 @@ addLayer("C", {
 					addBuyables("C", index + 111, 1);
 				},
 				style: {height: "90px"},
+			};
+			if (index >= 3) {
+				data[index + 11].color = getSideColor;
+				data[index + 111].color = getSideColor;
+				data[index + 11].unlocked = hasChosenSide;
+				data[index + 111].unlocked = hasChosenSide;
 			};
 		};
 		return data;
