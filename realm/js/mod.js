@@ -159,7 +159,7 @@ function addedPlayerData() { return {
 	stats: [getPlayerStartingStats(), getPlayerStartingStats(), getPlayerStartingStats()],
 }};
 
-function doReset(resettingLayer) {
+function onReset(resettingLayer) {
 	player.clickValue = newDecimalOne();
 	player.FCchance = new Decimal(2.5);
 	player.FC = [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()];
