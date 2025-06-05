@@ -155,6 +155,17 @@ addLayer("C", {
 	})(),
 });
 
+function getSpellEffect(index) {
+	let eff = tmp.M.clickables[index + 11].baseEffect;
+	if (index === 0) {
+		if (hasFactionUpgrade(1, 1, 3)) eff = eff.add(30);
+	} else if (index === 2) {
+		if (hasFactionUpgrade(0, 1, 5)) eff = eff.mul(factionUpgradeEffect(0, 1));
+	};
+	if (hasFactionUpgrade(1, 1, 2)) eff = eff.mul(2);
+	return eff;
+};
+
 function getSpellCost(index) {
 	let cost = new Decimal([80, 160, 120][index]);
 	if (hasFactionUpgrade(1, 1, 2)) cost = cost.mul(3);
@@ -272,53 +283,34 @@ addLayer("M", {
 			progress() { return player.M.mana.div(player.M.maxMana) },
 		},
 	},
-	clickables: {
-		11: {
-			title: "Tax Collection",
-			display() { return "get coins equal to " + formatWhole(clickableEffect("M", this.id)) + " seconds of coins/sec<br><br>Effect: +" + format(tmp.pointGen.mul(clickableEffect("M", this.id))) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana</span>" },
-			effect() {
-				let eff = new Decimal(30);
-				if (hasFactionUpgrade(1, 1, 3)) eff = eff.add(30);
-				if (hasFactionUpgrade(1, 1, 2)) eff = eff.mul(2);
-				return eff;
+	clickables: (() => {
+		const data = {
+			11: {
+				title: "Tax Collection",
+				display() { return "get coins equal to " + formatWhole(clickableEffect("M", this.id)) + " seconds of coins/sec<br><br>Effect: +" + format(tmp.pointGen.mul(clickableEffect("M", this.id))) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana</span>" },
+				baseEffect: new Decimal(30),
 			},
-			canClick() { return player.M.mana.gte(getSpellCost(this.id - 11)) },
-			onClick() { castSpell(this.id - 11) },
-			color: "#C0C0C0",
-		},
-		12: {
-			title: "Call to Arms",
-			display() { return "boost all coin generation based on your creations for 30 seconds<br>Time left: " + formatTime(player.M.spellTimes[1]) + "<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana" },
-			effect() {
-				let eff = player.C.points.add(1).pow(0.15);
-				if (hasFactionUpgrade(1, 1, 2)) eff = eff.mul(2);
-				return eff;
+			12: {
+				title: "Call to Arms",
+				display() { return "boost all coin generation based on your creations for 30 seconds<br>Time left: " + formatTime(player.M.spellTimes[1]) + "<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana" },
+				baseEffect() { return player.C.points.add(1).pow(0.15) },
 			},
-			canClick() { return player.M.spellTimes[this.id - 11].lte(0) && player.M.mana.gte(getSpellCost(this.id - 11)) },
-			onClick() { castSpell(this.id - 11) },
-			color: "#C0C0C0",
-		},
-		13: {
-			title() {
-				if (hasUpgrade("F", 11)) return "Holy Light";
-				if (hasUpgrade("F", 12)) return "Blood Frenzy";
+			13: {
+				title() { return ["Holy Light", "Blood Frenzy"].find((_, index) => hasUpgrade("F", index + 11)) },
+				display() { return "boost " + ["coins/click", "coins/sec", "all coin generation"].find((_, index) => hasUpgrade("F", index + 11)) + " based on your mana for 15 seconds<br>Time left: " + formatTime(player.M.spellTimes[2]) + "<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana" },
+				baseEffect() { return player.M.mana.add(1).pow(0.25) },
+				color: getSideColor,
+				unlocked: hasChosenSide,
 			},
-			display() {
-				if (hasUpgrade("F", 11)) return "boost coins/click based on your mana for 15 seconds<br>Time left: " + formatTime(player.M.spellTimes[2]) + "<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana";
-				if (hasUpgrade("F", 12)) return "boost coins/sec based on your mana for 15 seconds<br>Time left: " + formatTime(player.M.spellTimes[2]) + "<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana";
-			},
-			effect() {
-				let eff = player.M.mana.add(1).pow(0.25);
-				if (hasFactionUpgrade(1, 1, 2)) eff = eff.mul(2);
-				if (hasFactionUpgrade(0, 1, 5)) eff = eff.mul(factionUpgradeEffect(0, 1));
-				return eff;
-			},
-			canClick() { return player.M.spellTimes[this.id - 11].lte(0) && player.M.mana.gte(getSpellCost(this.id - 11)) },
-			onClick() { castSpell(this.id - 11) },
-			color: getSideColor,
-			unlocked: hasChosenSide,
-		},
-	},
+		};
+		for (let index = 0; index < 3; index++) {
+			data[index + 11].effect = () => getSpellEffect(index);
+			data[index + 11].canClick = () => player.M.spellTimes[index].lte(0) && player.M.mana.gte(getSpellCost(index));
+			data[index + 11].onClick = () => castSpell(index);
+			if (!data[index + 11].color) data[index + 11].color = "#C0C0C0";
+		};
+		return data;
+	})(),
 	upgrades: (() => {
 		const data = {};
 		for (let index = 0; index < manaUpgrades.length; index++) {
