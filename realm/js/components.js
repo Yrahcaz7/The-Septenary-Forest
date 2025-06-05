@@ -7,19 +7,34 @@ const customComponents = {
 			<input type="range" v-model="player[layer].autoPercent" min="0" max="100" style='width: 500px'>
 		</div>`),
 	},
+	"max-spell-cast": {
+		props: ["layer", "data"],
+		data() { return {tmp, castSpell, formatWhole} },
+		computed: {
+			spellCasts() { return player[this.layer].mana.div(getSpellCost(this.data - 11)).floor() },
+		},
+		template: template(`<button :class="'upg tooltipBox ' + (tmp[layer].clickables[data].canClick ? 'can' : 'locked')" :style="[(tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].clickables[data].color} : {}), {
+			'border-radius': '0',
+			width: '125px',
+			'min-height': '25px',
+			transform: 'none',
+		}]" @click="castSpell(data - 11, spellCasts)">
+			Cast Max ({{formatWhole(spellCasts)}}x)
+		</button>`),
+	},
 	"autocast-toggle": {
 		props: ["layer", "data"],
-		data() { return {tmp, getSideColor} },
+		data() { return {tmp} },
 		computed: {
 			unlockedModes() { return (hasUpgrade(this.layer, 103) ? 2 : 1) },
-			canClick() { return hasUpgrade(this.layer, this.data[1]) && (!this.data[2] || hasChosenSide()) },
+			canClick() { return hasUpgrade(this.layer, this.data[1]) },
 			activeMode() { return getClickableState(this.layer, this.data[0]) },
 		},
 		methods: {
 			toggle(mode) { if (this.canClick) setClickableState(this.layer, this.data[0], mode === this.activeMode ? 0 : mode) },
 		},
 		template: template(`<div>
-			<button v-for="mode in unlockedModes" :class="'upg tooltipBox ' + (canClick ? 'can' : 'locked')" :style="[(canClick ? {'background-color': (mode === 2 ? tmp.M.color : (data[2] ? getSideColor() : '#C0C0C0'))} : {}), {
+			<button v-for="mode in unlockedModes" :class="'upg tooltipBox ' + (canClick ? 'can' : 'locked')" :style="[(canClick ? {'background-color': (mode === 2 ? tmp[layer].color : tmp[layer].clickables[data[0]].color)} : {}), {
 				'border-radius': '0px 0px ' + (mode < unlockedModes ? '0' : '25') + 'px ' + (mode > 1 ? '0' : '25') + 'px',
 				width: (125 / unlockedModes) + 'px',
 				'min-height': 'min-content',

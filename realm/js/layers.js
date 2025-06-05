@@ -242,24 +242,24 @@ addLayer("M", {
 		};
 	},
 	tabFormat() {
-		const arr = [["bar", "mana"]];
-		if (hasUpgrade("M", 103)) arr.push("blank", "mana-auto-percent-slider");
-		arr.push("blank");
-		arr.push(["row", [
-			["column", [["clickable", 11], ["autocast-toggle", [11, 102]]], {margin: "0 7px"}],
-			["column", [["clickable", 12], ["autocast-toggle", [12, 101]]], {margin: "0 7px"}],
-			["column", [["clickable", 13], ["autocast-toggle", [13, 101, true]]], {margin: "0 7px"}]
-		]]);
-		arr.push("blank");
-		arr.push(["upgrades", [1]]);
-		arr.push(["display-text", "You have generated " + format(player.stats[2].manaTotal) + " mana in total"]);
-		arr.push("blank");
-		arr.push(["upgrades", [10]]);
-		return arr;
+		const content = [["bar", "mana"]];
+		if (hasUpgrade("M", 103)) content.push("blank", "mana-auto-percent-slider");
+		content.push("blank");
+		const row = [["column", [["clickable", 11, {"min-height": "105px", height: "105px"}], ["max-spell-cast", 11], ["autocast-toggle", [11, 102]]], {margin: "0 7px"}]];
+		for (let index = 1; tmp.M.clickables[index + 11]?.unlocked; index++) {
+			row.push(["column", [["clickable", index + 11], ["autocast-toggle", [index + 11, 101]]], {margin: "0 7px"}]);
+		};
+		content.push(["row", row]);
+		content.push("blank");
+		content.push(["upgrades", [1]]);
+		content.push(["display-text", "You have generated " + format(player.stats[2].manaTotal) + " mana in total"]);
+		content.push("blank");
+		content.push(["upgrades", [10]]);
+		return content;
 	},
 	componentStyles: {
 		upgrade: {height: "120px", "border-radius": "25px"},
-		clickable: {width: "125px", height: "125px", "border-radius": "25px 25px 0 0", transform: "none"},
+		clickable: {width: "125px", height: "130px", "border-radius": "25px 25px 0 0", transform: "none"},
 	},
 	bars: {
 		mana: {
@@ -302,12 +302,10 @@ addLayer("M", {
 			title() {
 				if (hasUpgrade("F", 11)) return "Holy Light";
 				if (hasUpgrade("F", 12)) return "Blood Frenzy";
-				return "CHOOSE A SIDE TO UNLOCK";
 			},
 			display() {
 				if (hasUpgrade("F", 11)) return "boost coins/click based on your mana for 15 seconds<br>Time left: " + formatTime(player.M.spellTimes[2]) + "<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana";
 				if (hasUpgrade("F", 12)) return "boost coins/sec based on your mana for 15 seconds<br>Time left: " + formatTime(player.M.spellTimes[2]) + "<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana";
-				return "";
 			},
 			effect() {
 				let eff = player.M.mana.add(1).pow(0.25);
@@ -315,9 +313,10 @@ addLayer("M", {
 				if (hasFactionUpgrade(0, 1, 5)) eff = eff.mul(factionUpgradeEffect(0, 1));
 				return eff;
 			},
-			canClick() { return hasChosenSide() && player.M.spellTimes[this.id - 11].lte(0) && player.M.mana.gte(getSpellCost(this.id - 11)) },
+			canClick() { return player.M.spellTimes[this.id - 11].lte(0) && player.M.mana.gte(getSpellCost(this.id - 11)) },
 			onClick() { castSpell(this.id - 11) },
 			color: getSideColor,
+			unlocked: hasChosenSide,
 		},
 	},
 	upgrades: (() => {
