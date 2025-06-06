@@ -134,7 +134,7 @@ function getPlayerStartingStats() { return {
 	bestClicks: newDecimalZero(),
 	totalClicks: newDecimalZero(),
 	// faction coins
-	FCchance: new Decimal(2.5),
+	FCchance: new Decimal(5),
 	FCbest: newDecimalZero(),
 	FCtotal: newDecimalZero(),
 	// creations
@@ -155,7 +155,7 @@ function getPlayerStartingStats() { return {
 
 function addedPlayerData() { return {
 	clickValue: newDecimalOne(),
-	FCchance: new Decimal(2.5),
+	FCchance: new Decimal(5),
 	FC: [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()],
 	bestGems: newDecimalZero(),
 	stats: [getPlayerStartingStats(), getPlayerStartingStats(), getPlayerStartingStats()],
@@ -163,7 +163,7 @@ function addedPlayerData() { return {
 
 function onReset(resettingLayer) {
 	player.clickValue = newDecimalOne();
-	player.FCchance = new Decimal(2.5);
+	player.FCchance = new Decimal(5);
 	player.FC = [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()];
 	player.stats[0] = getPlayerStartingStats();
 };
@@ -190,7 +190,7 @@ function update(diff) {
 	player.clickValue = clickValue;
 	player.stats.forEach(obj => obj.bestClickValue = obj.bestClickValue.max(player.clickValue));
 	// faction coins
-	let FCchance = new Decimal(2.5);
+	let FCchance = new Decimal(5);
 	if (getBuyableAmount("C", 13).gt(0)) FCchance = FCchance.add(getBuyableAmount("C", 13).mul(tmp.C.buyables[13].effect2));
 	if (hasFactionUpgrade(0, 2, 0)) FCchance = FCchance.add(factionUpgradeEffect(0, 2).mul(3));
 	if (hasFactionUpgrade(0, 1, 1)) FCchance = FCchance.add(factionUpgradeEffect(0, 1));
