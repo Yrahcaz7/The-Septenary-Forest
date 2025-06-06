@@ -8,11 +8,14 @@ const modInfo = {
 };
 
 const VERSION = {
-	num: "0.5",
-	name: "Reworked Beta",
+	num: "1.0",
+	name: "Actually Playable",
 };
 
 const changelog = `<h1>Changelog:</h1><br>
+	<br><h3>v1.0 - Actually Playable</h3><br>
+		- Added 2 fairy upgrades.<br>
+		- Rebalanced many things.<br>
 	<br><h3>v0.5 - Reworked Beta</h3><br>
 		- Massive internal rework.<br>
 		- You can now click anywhere to gain coins.<br>
@@ -181,6 +184,7 @@ function update(diff) {
 	if (getBuyableAmount("C", 13).gt(0) && hasFactionUpgrade(1, 2, 1)) clickValue = clickValue.add(getBuyableAmount("C", 13) * buyableEffect("C", 13));
 	if (getBuyableAmount("C", 14).gt(0) && hasUpgrade("F", 11)) clickValue = clickValue.add(getBuyableAmount("C", 14) * buyableEffect("C", 14));
 	if (hasFactionUpgrade(0, 2, 0)) clickValue = clickValue.mul(factionUpgradeEffect(0, 2));
+	if (hasFactionUpgrade(1, 0, 0)) clickValue = clickValue.mul(factionUpgradeEffect(1, 0));
 	if (hasFactionUpgrade(0, 0, 1)) clickValue = clickValue.mul(factionUpgradeEffect(0, 0));
 	if (hasFactionUpgrade(0, 2, 1)) clickValue = clickValue.mul(factionUpgradeEffect(0, 2));
 	if (hasFactionUpgrade(1, 2, 2)) clickValue = clickValue.mul(factionUpgradeEffect(1, 2));

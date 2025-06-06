@@ -71,10 +71,10 @@ addLayer("C", {
 			return 100 ** (2 ** num - 1);
 		};
 		const creationTierEff = [
-			[0.05, 0.1,  0.2, 0.4, 0.65, 1,    1.5,  2,  3],
-			[0.5,  1.25, 2,   3.5, 5,    7.5,  8,    10],
-			[2,    3,    5,   7,   10,   13,   15],
-			[200,  300,  500, 700, 1000, 1300, 1500],
+			[0.1,  0.05, 0.1,  0.2, 0.4, 0.65, 1,    1.5,  2,  3],
+			[0.25, 0.5,  1.25, 2,   3.5, 5,    7.5,  8,    10],
+			[20,   5,    7,    8,   10,  14,   16,   20],
+			[500,  200,  300,  500, 700, 1000, 1300, 1500],
 		];
 		function getCreationTierReq(tier) {
 			return 10 ** Math.floor(tier / 2) * (tier % 2 === 0 ? 10 : 32);
@@ -82,14 +82,15 @@ addLayer("C", {
 		for (let index = 0; index < 4; index++) {
 			data[index + 11] = {
 				effect() {
-					let eff = new Decimal([0.1, 0.25, 5, 500][index]);
-					for (let tier = 0; tier < getBuyableAmount("C", index + 111).toNumber(); tier++) {
+					let eff = newDecimalZero();
+					for (let tier = 0; tier <= getBuyableAmount("C", index + 111).toNumber(); tier++) {
 						eff = eff.add(creationTierEff[index][tier]);
 					};
 					if (hasFactionUpgrade(0, 2, 5)) eff = eff.add(factionUpgradeEffect(0, 2).mul(2 ** index));
 					if (index < 3) {
 						if (hasFactionUpgrade(0, 0, 0)) eff = eff.mul(factionUpgradeEffect(0, 0));
 						if (hasFactionUpgrade(0, 1, 0)) eff = eff.mul(factionUpgradeEffect(0, 1));
+						if (hasFactionUpgrade(1, 1, 0)) eff = eff.mul(factionUpgradeEffect(1, 1));
 					};
 					return eff;
 				},
@@ -126,10 +127,8 @@ addLayer("C", {
 				title() { return "Uptier " + getCreationName(index) },
 				cost() {
 					if (!creationTierEff[index][getBuyableAmount("C", index + 111).toNumber()]) return new Decimal(Infinity);
-					if (getBuyableAmount("C", index + 111).gte(3)) return getBuyableAmount("C", index + 111).pow_base(1_000).div(10_000).mul(getCreationCost(index));
-					if (getBuyableAmount("C", index + 111).eq(2)) return new Decimal(20_000).mul(getCreationCost(index));
-					if (getBuyableAmount("C", index + 111).eq(1)) return new Decimal(1_000).mul(getCreationCost(index));
-					return new Decimal(100).mul(getCreationCost(index));
+					if (getBuyableAmount("C", index + 111).gte(4)) return getBuyableAmount("C", index + 111).pow_base(1_000).div(10_000).mul(getCreationCost(index));
+					return getBuyableAmount("C", index + 111).pow_base(20).mul(50 * getCreationCost(index));
 				},
 				display() {
 					const tier = getBuyableAmount("C", index + 111).toNumber();
@@ -400,6 +399,9 @@ const factionUpgrades = [[
 	["Magic Dust", "multiply the first effect of basic creations based on your mana regen", () => player.M.manaRegen.mul(2).add(1).pow(0.5), "x"],
 	["Fairy Workers", "multiply the first effect of basic creations based on your creations", () => player.C.points.add(1).pow(0.2), "x"],
 	["Fairy Traders", "multiply coins/click and faction coin find chance based on your creations", () => player.C.points.add(1).pow(0.1), "x"],
+	["Active Workers", "multiply coins/click based on your coins/sec", () => new Decimal(tmp.pointGen).add(1).pow(0.1), "x"],
+	["Epitome of Mischief", "multiply the first effect of basic creations based on your fairy coins", () => player.FC[0].add(1).pow(0.3), "x"],
+	["???", "???", () => new Decimal(0)],
 ], [
 	["Super Clicks", "multiply coins/click based on your creations", () => player.C.points.add(1).pow(0.25), "x"],
 	["Elven Luck", "increase faction coin find chance based on your coins/click", () => player.clickValue.add(1).pow(0.3), "+", "%"],
@@ -575,7 +577,7 @@ addLayer("G", {
 		gemMult: newDecimalOne(),
 	}},
 	color: "#808080",
-	requires: new Decimal(100),
+	requires: new Decimal(1_000),
 	resource: "gems",
 	baseResource: "total coins this era",
 	baseAmount() {return player.stats[0].total},
@@ -585,8 +587,8 @@ addLayer("G", {
 		let mult = newDecimalOne();
 		return mult;
 	},
-	gainExp() {return newDecimalOne()},
-	prestigeNotify() {return !tmp.G.passiveGeneration && tmp.G.canReset === true && tmp.G.resetGain.gte(player.G.points.add(100).div(2))},
+	gainExp() { return newDecimalOne() },
+	prestigeNotify() { return !tmp.G.passiveGeneration && tmp.G.canReset === true && tmp.G.resetGain.gte(player.G.points.add(100).div(2)) },
 	prestigeButtonText() {
 		let text = "Abdicate for +<b>" + formatWhole(tmp.G.resetGain) + "</b> gem" + (tmp.G.resetGain instanceof Decimal && tmp.G.resetGain.eq(1) ? "" : "s");
 		if (tmp.G.resetGain instanceof Decimal && tmp.G.resetGain.lt("1e10000")) {
