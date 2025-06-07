@@ -86,7 +86,7 @@ function castSpell(index, amt = newDecimalOne()) {
 		player.M.mana = player.M.mana.sub(cost.mul(amt));
 		player.stats.forEach(obj => obj.casts[0] = obj.casts[0].add(amt));
 		let gain = tmp.pointGen.mul(clickableEffect("M", 11));
-		if (hasUpgrade("M", 23)) gain = gain.add(player.clickValue.mul(10));
+		if (hasUpgrade("M", 23)) gain = gain.add(player.clickValue.mul(getSpellEffect(0, true)));
 		gain = gain.mul(amt);
 		player.points = player.points.add(gain);
 		player.stats.forEach(obj => obj.total = obj.total.add(gain));
@@ -130,7 +130,7 @@ const displayThings = [
 	() => { return format(player.clickValue) + "/click" },
 ];
 
-const endPoints = new Decimal(1e20);
+const endPoints = new Decimal(1e16);
 
 function getPlayerStartingStats() { return {
 	// general
@@ -207,8 +207,8 @@ function update(diff) {
 	if (hasFactionUpgrade(0, 2, 0)) FCchance = FCchance.add(factionUpgradeEffect(0, 2).mul(3));
 	if (hasFactionUpgrade(0, 1, 1)) FCchance = FCchance.add(factionUpgradeEffect(0, 1));
 	if (hasFactionUpgrade(0, 0, 3)) FCchance = FCchance.add(factionUpgradeEffect(0, 0));
-	if (hasFactionUpgrade(0, 2, 3)) FCchance = FCchance.add(factionUpgradeEffect(0, 2));
 	if (hasUpgrade("G", 11)) FCchance = FCchance.add(upgradeEffect("G", 11));
+	if (hasFactionUpgrade(0, 2, 3)) FCchance = FCchance.mul(factionUpgradeEffect(0, 2));
 	player.FCchance = FCchance;
 	player.stats.forEach(obj => obj.FCchance = obj.FCchance.max(player.FCchance));
 	player.F.points = player.FC[0].add(player.FC[1]).add(player.FC[2]).add(player.FC[3]).add(player.FC[4]).add(player.FC[5]);

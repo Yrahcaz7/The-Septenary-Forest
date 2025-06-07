@@ -158,10 +158,10 @@ addLayer("C", {
 	})(),
 });
 
-function getSpellEffect(index) {
-	let eff = tmp.M.clickables[index + 11].baseEffect;
+function getSpellEffect(index, second = false) {
+	let eff = tmp.M.clickables[index + 11]["baseEffect" + (second ? "2" : "")];
 	if (index === 0) {
-		if (hasFactionUpgrade(1, 1, 3)) eff = eff.add(30);
+		if (hasFactionUpgrade(1, 1, 3) && !second) eff = eff.add(30);
 	} else if (index === 2) {
 		if (hasFactionUpgrade(0, 1, 5)) eff = eff.mul(factionUpgradeEffect(0, 1));
 	};
@@ -209,7 +209,7 @@ addLayer("M", {
 		maxMana: new Decimal(100),
 		manaRegen: new Decimal(2.5),
 		spellTimes: [newDecimalZero(), newDecimalZero(), newDecimalZero()],
-		autoPercent: 50,
+		autoPercent: 100,
 	}},
 	color: "#0080E0",
 	type: "none",
@@ -302,12 +302,14 @@ addLayer("M", {
 				display() {
 					let gain = tmp.pointGen.mul(clickableEffect("M", this.id));
 					if (hasUpgrade("M", 23)) {
-						gain = gain.add(player.clickValue.mul(10));
-						return "get coins equal to " + formatWhole(clickableEffect("M", this.id)) + "x coins/sec and 10x coins/click<br><br>Effect: +" + format(gain) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana</span>";
+						let eff2 = getSpellEffect(this.id - 11, true);
+						gain = gain.add(player.clickValue.mul(eff2));
+						return "get coins equal to " + formatWhole(clickableEffect("M", this.id)) + "x coins/sec and " + formatWhole(eff2) + "x coins/click<br><br>Effect: +" + format(gain) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana</span>";
 					};
 					return "get coins equal to " + formatWhole(clickableEffect("M", this.id)) + " seconds of coins/sec<br><br>Effect: +" + format(gain) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana</span>";
 				},
 				baseEffect: new Decimal(30),
+				baseEffect2: new Decimal(10),
 			},
 			12: {
 				title: "Call to Arms",
@@ -413,7 +415,7 @@ function getAllianceUpgrade(index) {
 		pay() { getFactionCoinTypes(index).forEach(type => player.FC[type] = player.FC[type].sub(5)) },
 		onPurchase() {
 			const alliance = getAllianceIndex(index);
-			if (alliance > 0) player.stats.forEach(obj => obj.alliances[alliance]++);
+			if (alliance >= 0) player.stats.forEach(obj => obj.alliances[alliance]++);
 		},
 		color() { return factionColor[getAllianceIndex(index)] || "#C0C0C0" },
 		style() { return {"border-color": "color-mix(in srgb, " + this.color() + " 87.5%, #000000 12.5%)"} },
@@ -422,33 +424,33 @@ function getAllianceUpgrade(index) {
 };
 
 const factionUpgrades = [[
-	["Magic Dust", "multiply the first effect of basic creations based on your mana regen", () => player.M.manaRegen.mul(2).add(1).pow(0.5), "x"],
+	["Magic Dust", "multiply the first effect of basic creations based on your mana regen", () => player.M.manaRegen.mul(4).add(1).pow(0.4), "x"],
 	["Fairy Workers", "multiply the first effect of basic creations based on your creations", () => player.C.points.add(1).pow(0.2), "x"],
 	["Fairy Traders", "multiply coins/click and faction coin find chance based on your creations", () => player.C.points.add(1).pow(0.1), "x"],
-	["Active Workers", "multiply coins/click based on your coins/sec", () => new Decimal(tmp.pointGen).add(1).pow(0.1), "x"],
+	["Active Workers", "multiply coins/click based on your coins/sec", () => new Decimal(tmp.pointGen).add(1).log10().div(2).add(1), "x"],
 	["Epitome of Mischief", "multiply the first effect of basic creations based on your fairy coins", () => player.FC[0].add(1).pow(0.3), "x"],
 	["The Roots of Mana", "multiply mana regen based on your basic creations", () => [11, 12, 13].reduce((acc, id) => acc.add(getBuyableAmount("C", id)), newDecimalOne()).pow(0.05), "x"],
 ], [
-	["Super Clicks", "multiply coins/click based on your creations", () => player.C.points.add(1).pow(0.25), "x"],
-	["Elven Luck", "increase faction coin find chance based on your coins/click", () => player.clickValue.add(1).pow(0.3), "+", "%"],
+	["Super Clicks", "multiply coins/click based on your creations", () => player.C.points.add(1).pow(0.3), "x"],
+	["Elven Luck", "increase faction coin find chance based on your coins/click", () => player.clickValue.add(1).log10().mul(20), "+", "%"],
 	["Elven Spirit", "multiply coins/click based on your elf coins", () => player.FC[1].add(1).pow(0.4), "x"],
-	["Elven Clicks", "multiply coins/click based on your coins", () => player.points.add(1).pow(0.01), "x"],
+	["Elven Clicks", "multiply coins/click based on your coins", () => player.points.add(1).log10().add(1), "x"],
 	["Enchanted Clicks", "multiply coins/click based on your mana regen", () => player.M.manaRegen.add(1).pow(0.5), "x"],
 	["All on One", "the 3rd creation's first effect now applies to coins/click instead of coins/sec"],
 ], [
-	["Angelic Capacity", "multiply max mana based on your mana generated this era", () => player.stats[0].manaTotal.add(1).pow(0.075), "x"],
+	["Angelic Capacity", "multiply max mana based on your mana generated this era", () => player.stats[0].manaTotal.add(1).pow(0.125), "x"],
 	["Road to Heaven", "multiply mana regen based on your angel coins", () => player.FC[2].add(1).pow(0.4), "x"],
 	["Angels Supreme", "multiply angel coin gain by 5"],
-	["Rainbows", "multiply max mana based on your faction coins", () => player.F.points.add(1).pow(0.2), "x"],
+	["Rainbows", "multiply max mana based on your faction coins", () => player.F.points.add(1).pow(0.25), "x"],
 	["Prism Upgrade", "double all spell effects, but triple all spell mana costs"],
-	["Angelic Clicks", "multiply coins/click based on your max mana", () => player.M.maxMana.add(1).pow(0.05), "x"],
+	["Angelic Clicks", "multiply coins/click based on your max mana", () => player.M.maxMana.add(1).pow(0.2), "x"],
 ], [
-	["Jackpot", "increase faction coin find chance based on your coins", () => player.points.add(1).log10().mul(10).add(1), "+", "%"],
+	["Jackpot", "increase faction coin find chance based on your coins", () => player.points.add(1).log10().mul(10), "+", "%"],
 	["Goblin's Greed", "multiply coins/sec based on your faction coins", () => player.F.points.add(1).pow(0.25), "x"],
-	["Currency Revolution", "increase faction coin find chance based on your faction coins", () => player.F.points.add(1).pow(0.6), "+", "%"],
-	["Moneyload", "multiply coins/sec based on your faction coin find chance", () => player.FCchance.add(1).pow(0.25), "x"],
+	["Currency Revolution", "multiply faction coin find chance based on your faction coins", () => player.F.points.add(1).log10().div(2).add(1), "x"],
+	["Moneyload", "multiply coins/sec based on your faction coin find chance", () => player.FCchance.add(1).pow(0.2), "x"],
 	["Absurd Taxes", "increase the first base effect of Tax Collection by 30"],
-	["Goblin Pride", "multiply coins/sec based on your goblin coins", () => player.FC[3].add(1).pow(0.3), "x"],
+	["Goblin Pride", "multiply coins/sec based on your goblin coins", () => player.FC[3].add(1).pow(0.25), "x"],
 ], [
 	["Undending Cycle", "multiply coins/sec based on your coins", () => player.points.add(1).log10().div(2).add(1), "x"],
 	["Corpse Piles", "multiply coins/sec based on your undead coins", () => player.FC[4].add(1).pow(hasFactionUpgrade(1, 1, 4) ? 0.4 : 0.3), "x"],
