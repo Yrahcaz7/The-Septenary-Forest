@@ -137,7 +137,7 @@ addLayer("C", {
 				display() {
 					const tier = getBuyableAmount("C", index + 111).toNumber();
 					const name = getCreationName(index).toLowerCase();
-					const eff = creationTierEff[index][tier];
+					const eff = creationTierEff[index][tier + 1];
 					return "increase " + name + "'" + (name.endsWith("s") ? "" : "s") + " first base effect by +" + (eff ? format(eff, 2, false) : "???") + "<br><br>Req: " + formatWhole(getCreationTierReq(tier)) + " " + name + "<br><br>Cost: " + format(tmp.C.buyables[index + 111].cost) + " coins";
 				},
 				canAfford() { return getBuyableAmount("C", index + 11).gte(getCreationTierReq(getBuyableAmount("C", index + 111).toNumber())) && player.points.gte(this.cost()) },
