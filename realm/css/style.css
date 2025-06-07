@@ -2,7 +2,7 @@ table.stats {
 	border-collapse: collapse;
 }
 
-.stats th, .stats td {
+table.stats th, table.stats td {
 	border: 2px solid var(--color);
 	padding: 4px;
 }

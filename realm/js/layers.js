@@ -32,7 +32,7 @@ addLayer("C", {
 			row.push(["column", [["buyable", index + 11], ["buyable", index + 111]], {margin: "0 7px"}]);
 		};
 		return [
-			["display-text", "You are bulk buying " + formatWhole(player.C.bulk) + "x creations"],
+			["display-text", "You are bulk buying <b>" + formatWhole(player.C.bulk) + "x</b> creations"],
 			"blank",
 			"clickables",
 			"blank",
@@ -277,7 +277,7 @@ addLayer("M", {
 		content.push(["row", row]);
 		content.push("blank");
 		content.push(["upgrades", [1, 2]]);
-		content.push(["display-text", "You have generated " + format(player.stats[2].manaTotal) + " mana in total"]);
+		content.push(["display-text", "You have generated <b>" + format(player.stats[2].manaTotal) + "</b> mana in total"]);
 		content.push("blank");
 		content.push(["upgrades", [10]]);
 		return content;
@@ -291,7 +291,7 @@ addLayer("M", {
 			direction: RIGHT,
 			width: 500,
 			height: 50,
-			display() { return "You have " + format(player.M.mana) + "/" + format(player.M.maxMana) + " mana<br>(" + format(player.M.manaRegen) + "/s)" },
+			display() { return "You have <b>" + format(player.M.mana) + "/" + format(player.M.maxMana) + "</b> mana<br>(" + format(player.M.manaRegen) + "/s)" },
 			fillStyle() { return {"background-color": tmp.M.color} },
 			borderStyle() { return {"border-color": tmp.M.color} },
 			progress() { return player.M.mana.div(player.M.maxMana) },
@@ -476,7 +476,7 @@ function lighten(color, amount = 20) {
 };
 
 function getFCdisp(index) {
-	return "<div style='color: " + lighten(factionColor[index]) + "'>" + formatWhole(player.FC[index]) + " " + factionName[index] + " coins</div>";
+	return "<div style='color: " + lighten(factionColor[index]) + "'><b>" + formatWhole(player.FC[index]) + "</b> " + factionName[index] + " coins</div>";
 };
 
 addLayer("F", {
@@ -495,7 +495,7 @@ addLayer("F", {
 	resource: "faction coins",
 	type: "none",
 	tabFormat: [
-		["display-text", () => "Your faction coin find chance is " + format(player.FCchance) + "%<br><br>You have " + formatWhole(player.F.points) + " faction coins, which are composed of:"],
+		["display-text", () => "Your faction coin find chance is <b>" + format(player.FCchance) + "%</b><br><br>You have <b>" + formatWhole(player.F.points) + "</b> faction coins, which are composed of:"],
 		["row", [
 			["display-text", () => getFCdisp(0) + getFCdisp(1) + getFCdisp(2), {display: "inline-block", "min-width": "200px"}],
 			["blank", ["17px"]],
@@ -548,6 +548,11 @@ addLayer("F", {
 	},
 });
 
+function layerEffNum(layer, num, extra) {
+	if (options.colorText) return `<h2 style="color: ${tmp[layer].color}; text-shadow: ${tmp[layer].color} 0px 0px 10px">${format(num)}${extra}</h2>`;
+	return `<b>${format(num)}${extra}</b>`;
+};
+
 addLayer("G", {
 	name: "Gems",
 	symbol: "G",
@@ -570,7 +575,7 @@ addLayer("G", {
 		return mult;
 	},
 	gainExp() { return newDecimalOne() },
-	prestigeNotify() { return !tmp.G.passiveGeneration && tmp.G.canReset === true && tmp.G.resetGain.gte(player.G.points.add(100).div(2)) },
+	prestigeNotify() { return !tmp.G.passiveGeneration && tmp.G.canReset === true && tmp.G.resetGain.gte(player.G.points.add(new Decimal(100).div(player.G.gemMult)).div(2)) },
 	prestigeButtonText() {
 		let text = "Abdicate for +<b>" + formatWhole(tmp.G.resetGain) + "</b> gem" + (tmp.G.resetGain instanceof Decimal && tmp.G.resetGain.eq(1) ? "" : "s");
 		if (tmp.G.resetGain instanceof Decimal && tmp.G.resetGain.lt("1e10000")) {
@@ -585,7 +590,7 @@ addLayer("G", {
 		return text;
 	},
 	effect() { return player.G.points.mul(player.G.gemMult).div(100).add(1) },
-	effectDescription() { return "which are increasing all production by " + player.G.gemMult + "% each, for a total of " + format(tmp.G.effect) + "x" },
+	effectDescription() { return `which are increasing all production by ${layerEffNum("G", player.G.gemMult, "%")} each, for a total of ${layerEffNum("G", tmp.G.effect, "x")}` },
 	hotkeys: [
 		{key: "A", description: "Shift+A: Abdicate for gems", onPress() {if (canReset(this.layer)) doReset(this.layer)}},
 		{key: "G", description: "Shift+G: Abdicate for gems", onPress() {if (canReset(this.layer)) doReset(this.layer)}},
