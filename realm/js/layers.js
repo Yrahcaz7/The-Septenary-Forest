@@ -471,7 +471,8 @@ function factionUpgradeEffect(row, num) {
 };
 
 function lighten(color, amount = 20) {
-	return "lch(from " + color + " calc(l + " + amount + ") c h)";
+	if (options.colorText) return "lch(from " + color + " calc(l + " + amount + ") c h)";
+	return "inherit";
 };
 
 function getFCdisp(index) {
@@ -641,15 +642,15 @@ addLayer("S", {
 				"blank",
 				["display-text", () => "<h3>GENERAL</h3><br>Your best coins is <b>" + format(player.stats[index].best) + "</b><br>You have generated <b>" + format(player.stats[index].total) + "</b> coins<br>" + (index > 0 ? "Your best gems is <b>" + formatWhole(index === 2 ? player.bestGems : player.G.best) + "</b>" : "")],
 				"blank",
-				["display-text", () => "<h3>PASSIVE</h3><br>Your best coins/sec is <b>" + format(player.stats[index].bestPassive) + "</b><br>You have generated <b>" + format(player.stats[index].totalPassive) + "</b> coins passively", {color: lighten(getSideColor(1))}],
+				["display-text", () => "<h3>PASSIVE</h3><br>Your best coins/sec is <b>" + format(player.stats[index].bestPassive) + "</b><br>You have generated <b>" + format(player.stats[index].totalPassive) + "</b> coins passively", () => { return {color: lighten(getSideColor(1))} }],
 				"blank",
-				["display-text", () => "<h3>CLICKS</h3><br>Your best coins/click is <b>" + format(player.stats[index].bestClickValue) + "</b><br>You have generated <b>" + format(player.stats[index].totalClickValue) + "</b> coins from clicking" + (index === 0 ? "" : "<br>Your best times clicked is <b>" + formatWhole(player.stats[index].bestClicks) + "</b>") + "<br>You have clicked <b>" + formatWhole(player.stats[index].totalClicks) + "</b> times", {color: lighten(getSideColor(0))}],
+				["display-text", () => "<h3>CLICKS</h3><br>Your best coins/click is <b>" + format(player.stats[index].bestClickValue) + "</b><br>You have generated <b>" + format(player.stats[index].totalClickValue) + "</b> coins from clicking" + (index === 0 ? "" : "<br>Your best times clicked is <b>" + formatWhole(player.stats[index].bestClicks) + "</b>") + "<br>You have clicked <b>" + formatWhole(player.stats[index].totalClicks) + "</b> times", () => { return {color: lighten(getSideColor(0))} }],
 				"blank",
 				["display-text", () => "<h3>FACTION COINS</h3><br>Your best faction coins is <b>" + formatWhole(player.stats[index].FCbest) + "</b><br>You have found <b>" + formatWhole(player.stats[index].FCtotal) + "</b> faction coins<br>You have <b>" + format(player.stats[index].FCchance) + "%</b> best faction coin chance"],
 				"blank",
-				["display-text", () => "<h3>CREATIONS</h3><br>Your best creations is <b>" + formatWhole(player.stats[index].creations) + "</b>", {color: lighten(layers.C.color)}],
+				["display-text", () => "<h3>CREATIONS</h3><br>Your best creations is <b>" + formatWhole(player.stats[index].creations) + "</b>", () => { return {color: lighten(layers.C.color)} }],
 				"blank",
-				["display-text", () => "<h3>MANA</h3><br>Your best mana regen is <b>" + format(player.stats[index].manaRegen) + "</b><br>Your best max mana is <b>" + format(player.stats[index].maxMana) + "</b><br>You have generated <b>" + format(player.stats[index].manaTotal) + "</b> mana", {color: lighten(layers.M.color)}],
+				["display-text", () => "<h3>MANA</h3><br>Your best mana regen is <b>" + format(player.stats[index].manaRegen) + "</b><br>Your best max mana is <b>" + format(player.stats[index].maxMana) + "</b><br>You have generated <b>" + format(player.stats[index].manaTotal) + "</b> mana", () => { return {color: lighten(layers.M.color)} }],
 				"blank",
 				["display-text", () => {
 					let text = "<h3>SPELLS</h3><table class='stats'><tr><th>SPELL NAME</th><th>NUMBER OF CASTS</th><th>TIME SPENT ACTIVE</th></tr>";

@@ -19,6 +19,7 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added 3 demon upgrades.<br>
 		- Changed how autocasting works.<br>
 		- Improved the stat menu and added more stats.<br>
+		- Added an option to toggle colored text.<br>
 		- Rebalanced many things.<br>
 	<br><h3>v0.5 - Reworked Beta</h3><br>
 		- Massive internal rework.<br>

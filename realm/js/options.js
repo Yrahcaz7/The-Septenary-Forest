@@ -13,6 +13,7 @@ function getStartOptions() {
 		forceTooltips: true,
 		hideMilestonePopups: false,
 		extendPlaces: false,
+		colorText: true,
 	});
 };
 
@@ -36,6 +37,7 @@ const optionGrid = [
 	], [
 		{opt: "hideMilestonePopups", text() {return "Show Milestone Popups: " + formatOpt(!options[this.opt])}, onClick: toggleOpt},
 		{opt: "extendPlaces", text() {return "Extended Decimal Places: " + formatOpt(options[this.opt])}, onClick: toggleOpt},
+		{opt: "colorText", text() {return "Colored Text: " + (options[this.opt] ? "ALL" : "ONLY CURRENCY")}, onClick: toggleOpt},
 	],
 ];
 
