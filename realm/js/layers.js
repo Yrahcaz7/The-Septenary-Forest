@@ -448,10 +448,10 @@ function getFactionUpgrade(row, num, faction = -1) {
 		else obj.unlocked = () => hasChosenFaction() && hasUpgrade("F", 104 + 10 * row);
 	} else {
 		const cost = 25 * (10 ** (row ** 2));
-		obj.fullDisplay = function() {
+		obj.fullDisplay = () => {
 			const name = (factionName[getAllianceIndex(faction)] || "???");
 			const types = getFactionCoinTypes(faction);
-			return "<h3>" + name.at(0).toUpperCase() + name.slice(1) + " Trade Route</h3><br>unlock 3 more " + name + " upgrades<br><br>Cost: " + formatWhole(cost) + " " + (types.length === 2 ? factionName[types[0]] + " and " + factionName[types[1]] : name) + " coins";
+			return "<h3>" + ["First", "Second"][row] + " " + name.at(0).toUpperCase() + name.slice(1) + " Trade Route</h3><br>unlock 3 more " + name + " upgrades<br><br>Cost: " + formatWhole(cost) + " " + (types.length === 2 ? factionName[types[0]] + " and " + factionName[types[1]] : name) + " coins";
 		};
 		obj.canAfford = () => getFactionCoinTypes(faction).every(type => player.FC[type].gte(cost));
 		obj.pay = () => getFactionCoinTypes(faction).forEach(type => player.FC[type] = player.FC[type].sub(cost));
@@ -506,7 +506,7 @@ addLayer("F", {
 		"blank",
 		["row", [["upgrade", 21, {margin: "0 7px"}], ["upgrade", 22, {margin: "0 7px"}], ["upgrade", 23, {margin: "0 7px"}]]],
 		"blank",
-		["upgrades", [11, 12]],
+		["upgrades", [11, 12, 13]],
 	],
 	componentStyles: {
 		upgrade: {height: "120px", "border-radius": "25px"},
@@ -545,6 +545,10 @@ addLayer("F", {
 		121: getFactionUpgrade(1, 0),
 		122: getFactionUpgrade(1, 1),
 		123: getFactionUpgrade(1, 2),
+		124: getFactionUpgrade(1, 3),
+		131: getFactionUpgrade(2, 0),
+		132: getFactionUpgrade(2, 1),
+		133: getFactionUpgrade(2, 2),
 	},
 });
 
@@ -569,7 +573,7 @@ addLayer("G", {
 	baseResource: "total coins this era",
 	baseAmount() {return player.stats[0].total},
 	type: "normal",
-	exponent: 0.3333333333333333,
+	exponent: 0.3,
 	gainMult() {
 		let mult = newDecimalOne();
 		return mult;
