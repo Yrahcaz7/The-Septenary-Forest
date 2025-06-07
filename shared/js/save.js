@@ -109,30 +109,24 @@ function getStartLayerData(layer) {
 
 function getStartBuyables(layer) {
 	const data = {};
-	if (layers[layer].buyables) {
-		for (const id in layers[layer].buyables) {
-			if (isPlainObject(layers[layer].buyables[id])) data[id] = newDecimalZero();
-		};
+	for (const id in layers[layer].buyables) {
+		if (isPlainObject(layers[layer].buyables[id])) data[id] = newDecimalZero();
 	};
 	return data;
 };
 
 function getStartClickables(layer) {
 	const data = {};
-	if (layers[layer].clickables) {
-		for (const id in layers[layer].clickables) {
-			if (isPlainObject(layers[layer].clickables[id])) data[id] = "";
-		};
+	for (const id in layers[layer].clickables) {
+		if (isPlainObject(layers[layer].clickables[id])) data[id] = "";
 	};
 	return data;
 };
 
 function getStartChallenges(layer) {
 	const data = {};
-	if (layers[layer].challenges) {
-		for (const id in layers[layer].challenges) {
-			if (isPlainObject(layers[layer].challenges[id])) data[id] = 0;
-		};
+	for (const id in layers[layer].challenges) {
+		if (isPlainObject(layers[layer].challenges[id])) data[id] = 0;
 	};
 	return data;
 };

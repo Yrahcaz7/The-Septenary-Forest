@@ -126,14 +126,7 @@ function layerDataReset(layer, keep = []) {
 			storedData[keep[thing]] = player[layer][keep[thing]];
 		};
 	};
-	player[layer].buyables = getStartBuyables(layer);
-	player[layer].clickables = getStartClickables(layer);
-	player[layer].challenges = getStartChallenges(layer);
-	player[layer].grid = getStartGrid(layer);
 	layOver(player[layer], getStartLayerData(layer));
-	player[layer].upgrades = [];
-	player[layer].milestones = [];
-	player[layer].achievements = [];
 	for (const thing in storedData) {
 		player[layer][thing] = storedData[thing];
 	};
