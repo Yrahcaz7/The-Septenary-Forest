@@ -179,10 +179,14 @@ function getSideColor(side = -1) {
 };
 
 const manaUpgrades = [
-	["Mana Cup", "multiply max mana based on your mana generated this era", () => player.stats[0].manaTotal.add(1).pow(0.1), "x"],
-	["Mana Sense", "increase mana regen based on your mana generated this era", () => player.stats[0].manaTotal.add(1).pow(0.125), "+"],
-	["Mana Jar", "multiply max mana based on your creations", () => player.C.points.add(1).pow(0.125), "x"],
-	["Mana Sight", "increase mana regen based on your creations", () => player.C.points.add(1).pow(0.225), "+"],
+	["Magic Proficiency", "multiply max mana based on your mana generated this era", () => player.stats[0].manaTotal.add(1).pow(0.1), "x"],
+	["Mana Sight", "increase mana regen based on your mana generated this era", () => player.stats[0].manaTotal.add(1).pow(0.125), "+"],
+	["Mana Vessels", "multiply max mana based on your creations", () => player.C.points.add(1).pow(0.125), "x"],
+	["Magical Environment", "increase mana regen based on your creations", () => player.C.points.add(1).pow(0.225), "+"],
+	["Attunement", "multiply max mana based on your faction coins", () => player.F.points.add(1).pow(0.05), "x"],
+	["Magical Aid", "increase mana regen based on your faction coins", () => player.F.points.add(1).pow(0.3), "+"],
+	["Focused Taxing", "make 'Tax Collection' also give coins equal to 10x coins/click"],
+	["Reinforced Weapons", "improve the 'Call to Arms' effect formula"],
 ];
 
 const autocastingUpgrades = [
@@ -210,8 +214,10 @@ addLayer("M", {
 	update(diff) {
 		// mana regen buffs
 		let manaRegen = new Decimal(2.5);
-		if (hasUpgrade("M", 12) && upgradeEffect("M", 12).gt(0)) manaRegen = manaRegen.add(upgradeEffect("M", 12));
-		if (hasUpgrade("M", 14) && upgradeEffect("M", 14).gt(0)) manaRegen = manaRegen.add(upgradeEffect("M", 14));
+		if (hasUpgrade("M", 12)) manaRegen = manaRegen.add(upgradeEffect("M", 12));
+		if (hasUpgrade("M", 14)) manaRegen = manaRegen.add(upgradeEffect("M", 14));
+		if (hasUpgrade("M", 22)) manaRegen = manaRegen.add(upgradeEffect("M", 22));
+		if (hasFactionUpgrade(1, 2, 0)) manaRegen = manaRegen.mul(factionUpgradeEffect(1, 2));
 		if (hasFactionUpgrade(0, 1, 2)) manaRegen = manaRegen.mul(factionUpgradeEffect(0, 1));
 		if (hasUpgrade("G", 13)) manaRegen = manaRegen.mul(upgradeEffect("G", 13));
 		player.M.manaRegen = manaRegen;
@@ -221,6 +227,7 @@ addLayer("M", {
 		if (hasFactionUpgrade(1, 0, 2)) maxMana = maxMana.mul(factionUpgradeEffect(1, 0));
 		if (hasUpgrade("M", 11)) maxMana = maxMana.mul(upgradeEffect("M", 11));
 		if (hasUpgrade("M", 13)) maxMana = maxMana.mul(upgradeEffect("M", 13));
+		if (hasUpgrade("M", 21)) maxMana = maxMana.mul(upgradeEffect("M", 21));
 		if (hasUpgrade("G", 13)) maxMana = maxMana.mul(upgradeEffect("G", 13));
 		player.M.maxMana = maxMana;
 		// increase mana
@@ -255,13 +262,13 @@ addLayer("M", {
 		const content = [["bar", "mana"]];
 		if (hasUpgrade("M", 103)) content.push("blank", "mana-auto-percent-slider");
 		content.push("blank");
-		const row = [["column", [["clickable", 11, {"min-height": "105px", height: "105px"}], ["max-spell-cast", 11], ["autocast-toggle", [11, 102]]], {margin: "0 7px"}]];
+		const row = [["column", [["clickable", 11, {"min-height": "110px", height: "110px"}], ["max-spell-cast", 11], ["autocast-toggle", [11, 102]]], {margin: "0 7px"}]];
 		for (let index = 1; tmp.M.clickables[index + 11]?.unlocked; index++) {
 			row.push(["column", [["clickable", index + 11], ["autocast-toggle", [index + 11, 101]]], {margin: "0 7px"}]);
 		};
 		content.push(["row", row]);
 		content.push("blank");
-		content.push(["upgrades", [1]]);
+		content.push(["upgrades", [1, 2]]);
 		content.push(["display-text", "You have generated " + format(player.stats[2].manaTotal) + " mana in total"]);
 		content.push("blank");
 		content.push(["upgrades", [10]]);
@@ -269,7 +276,7 @@ addLayer("M", {
 	},
 	componentStyles: {
 		upgrade: {height: "120px", "border-radius": "25px"},
-		clickable: {width: "125px", height: "130px", "border-radius": "25px 25px 0 0", transform: "none"},
+		clickable: {width: "125px", height: "135px", "border-radius": "25px 25px 0 0", transform: "none"},
 	},
 	bars: {
 		mana: {
@@ -286,13 +293,20 @@ addLayer("M", {
 		const data = {
 			11: {
 				title: "Tax Collection",
-				display() { return "get coins equal to " + formatWhole(clickableEffect("M", this.id)) + " seconds of coins/sec<br><br>Effect: +" + format(tmp.pointGen.mul(clickableEffect("M", this.id))) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana</span>" },
+				display() {
+					let gain = tmp.pointGen.mul(clickableEffect("M", this.id));
+					if (hasUpgrade("M", 23)) {
+						gain = gain.add(player.clickValue.mul(10));
+						return "get coins equal to " + formatWhole(clickableEffect("M", this.id)) + "x coins/sec and 10x coins/click<br><br>Effect: +" + format(gain) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana</span>";
+					};
+					return "get coins equal to " + formatWhole(clickableEffect("M", this.id)) + " seconds of coins/sec<br><br>Effect: +" + format(gain) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana</span>";
+				},
 				baseEffect: new Decimal(30),
 			},
 			12: {
 				title: "Call to Arms",
 				display() { return "boost all coin generation based on your creations for 30 seconds<br>Time left: " + formatTime(player.M.spellTimes[1]) + "<br><br>Effect: x" + format(clickableEffect("M", this.id)) + "<br><br>Cost: " + formatWhole(getSpellCost(this.id - 11)) + " mana" },
-				baseEffect() { return player.C.points.add(1).pow(0.15) },
+				baseEffect() { return player.C.points.add(1).pow(hasUpgrade("M", 24) ? 0.2 : 0.15) },
 			},
 			13: {
 				title() { return ["Holy Light", "Blood Frenzy"].find((_, index) => hasUpgrade("F", index + 11)) },
@@ -313,14 +327,20 @@ addLayer("M", {
 	upgrades: (() => {
 		const data = {};
 		for (let index = 0; index < manaUpgrades.length; index++) {
-			data[index + 11] = {
-				fullDisplay() { return "<h3>" + manaUpgrades[index][0] + "</h3><br>" + manaUpgrades[index][1] + "<br><br>Effect: " + (manaUpgrades[index][3] || "") + format(upgradeEffect("M", this.id)) + (manaUpgrades[index][4] || "") + "<br><br>Cost: " + format(this.cost) + " coins" },
-				effect() { return manaUpgrades[index][2]() },
-				cost: new Decimal(5).pow(index).mul(1000),
+			const row = Math.floor(index / 4);
+			const col = index % 4;
+			data[row * 10 + col + 11] = {
+				cost: new Decimal(5).pow(2 * (row ** 2) + 3 * row + col * (row + 1)).mul(1000),
 				currencyInternalName: "points",
 				currencyLocation() { return player },
 			};
-			if (index > 0) data[index + 11].unlocked = () => hasUpgrade("M", index + 10);
+			if (manaUpgrades[index][2]) {
+				data[row * 10 + col + 11].fullDisplay = function() { return "<h3>" + manaUpgrades[index][0] + "</h3><br>" + manaUpgrades[index][1] + "<br><br>Effect: " + (manaUpgrades[index][3] || "") + format(upgradeEffect("M", this.id)) + (manaUpgrades[index][4] || "") + "<br><br>Cost: " + format(this.cost) + " coins" };
+				data[row * 10 + col + 11].effect = manaUpgrades[index][2];
+			} else {
+				data[row * 10 + col + 11].fullDisplay = function() { return "<h3>" + manaUpgrades[index][0] + "</h3><br>" + manaUpgrades[index][1] + "<br><br>Cost: " + format(this.cost) + " coins" };
+			};
+			if (index > 0) data[row * 10 + col + 11].unlocked = () => hasUpgrade("M", Math.floor((index - 1) / 4) * 10 + ((index - 1) % 4) + 11);
 		};
 		for (let index = 0; index < autocastingUpgrades.length; index++) {
 			data[index + 101] = {
@@ -401,7 +421,7 @@ const factionUpgrades = [[
 	["Fairy Traders", "multiply coins/click and faction coin find chance based on your creations", () => player.C.points.add(1).pow(0.1), "x"],
 	["Active Workers", "multiply coins/click based on your coins/sec", () => new Decimal(tmp.pointGen).add(1).pow(0.1), "x"],
 	["Epitome of Mischief", "multiply the first effect of basic creations based on your fairy coins", () => player.FC[0].add(1).pow(0.3), "x"],
-	["???", "???", () => new Decimal(0)],
+	["The Roots of Mana", "multiply mana regen based on your basic creations", () => getBuyableAmount("C", 11).add(getBuyableAmount("C", 12)).add(getBuyableAmount("C", 13)).add(1).pow(0.05), "x"],
 ], [
 	["Super Clicks", "multiply coins/click based on your creations", () => player.C.points.add(1).pow(0.25), "x"],
 	["Elven Luck", "increase faction coin find chance based on your coins/click", () => player.clickValue.add(1).pow(0.3), "+", "%"],
@@ -421,7 +441,7 @@ const factionUpgrades = [[
 	["Goblin's Greed", "multiply coins/sec based on your faction coins", () => player.F.points.add(1).pow(0.25), "x"],
 	["Currency Revolution", "increase faction coin find chance based on your faction coins", () => player.F.points.add(1).pow(0.6), "+", "%"],
 	["Moneyload", "multiply coins/sec based on your faction coin find chance", () => player.FCchance.add(1).pow(0.25), "x"],
-	["Absurd Taxes", "increase the base effect of Tax Collection by +30 seconds"],
+	["Absurd Taxes", "increase the first base effect of Tax Collection by 30"],
 	["Goblin Pride", "multiply coins/sec based on your goblin coins", () => player.FC[3].add(1).pow(0.3), "x"],
 ], [
 	["Undending Cycle", "multiply coins/sec based on your coins", () => player.points.add(1).log10().div(2).add(1), "x"],

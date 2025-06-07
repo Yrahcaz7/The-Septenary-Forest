@@ -14,7 +14,8 @@ const VERSION = {
 
 const changelog = `<h1>Changelog:</h1><br>
 	<br><h3>v1.0 - Actually Playable</h3><br>
-		- Added 2 fairy upgrades.<br>
+		- Added 4 mana upgrades.<br>
+		- Added 3 fairy upgrades.<br>
 		- Rebalanced many things.<br>
 	<br><h3>v0.5 - Reworked Beta</h3><br>
 		- Massive internal rework.<br>
@@ -81,7 +82,9 @@ function castSpell(index, amt = newDecimalOne()) {
 	if (index === 0) {
 		player.M.mana = player.M.mana.sub(cost.mul(amt));
 		player.stats.forEach(obj => obj.casts[0] = obj.casts[0].add(amt));
-		const gain = getPointGen().mul(clickableEffect("M", 11).mul(amt));
+		let gain = tmp.pointGen.mul(clickableEffect("M", 11));
+		if (hasUpgrade("M", 23)) gain = gain.add(player.clickValue.mul(10));
+		gain = gain.mul(amt);
 		player.points = player.points.add(gain);
 		player.stats.forEach(obj => obj.total = obj.total.add(gain));
 	} else {
