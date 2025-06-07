@@ -471,7 +471,7 @@ function factionUpgradeEffect(row, num) {
 };
 
 function lighten(color, amount = 20) {
-	if (options.colorText) return "lch(from " + color + " calc(l + " + amount + ") c h)";
+	if (options.colorText === "all") return "lch(from " + color + " calc(l + " + amount + ") c h)";
 	return "inherit";
 };
 
@@ -549,7 +549,7 @@ addLayer("F", {
 });
 
 function layerEffNum(layer, num, extra) {
-	if (options.colorText) return `<h2 style="color: ${tmp[layer].color}; text-shadow: ${tmp[layer].color} 0px 0px 10px">${format(num)}${extra}</h2>`;
+	if (options.colorText !== "points") return `<h2 style="color: ${tmp[layer].color}; text-shadow: ${tmp[layer].color} 0px 0px 10px">${format(num)}${extra}</h2>`;
 	return `<b>${format(num)}${extra}</b>`;
 };
 
@@ -661,24 +661,22 @@ addLayer("S", {
 				["display-text", () => "<h3>MANA</h3><br>Your best mana regen is <b>" + format(player.stats[index].manaRegen) + "</b><br>Your best max mana is <b>" + format(player.stats[index].maxMana) + "</b><br>You have generated <b>" + format(player.stats[index].manaTotal) + "</b> mana", () => { return {color: lighten(layers.M.color)} }],
 				"blank",
 				["display-text", () => {
+					if (player.stats[index].casts.every(amt => amt.eq(0))) return "<h3>SPELLS</h3><br>You have not cast any spells";
 					let text = "<h3>SPELLS</h3><table class='stats'><tr><th>SPELL NAME</th><th>NUMBER OF CASTS</th><th>TIME SPENT ACTIVE</th></tr>";
-					let hasCastSpells = false;
-					for (let spell = 0; spell < spellName.length; spell++) {
+					for (let spell = 0; spell < player.stats[index].casts.length; spell++) {
 						if (player.stats[index].casts[spell].eq(0)) continue;
 						text += "<tr style='color: " + lighten(getSideColor([2, 2, 0, 1][spell])) + "'>";
 						text += "<td>" + spellName[spell] + "</td>";
 						text += "<td><b>" + formatWhole(player.stats[index].casts[spell]) + "</b></td>";
 						text += "<td><b>" + formatTime(player.stats[index].spellTimes[spell]) + "</b></td>";
 						text += "</tr>";
-						hasCastSpells = true;
 					};
-					if (!hasCastSpells) text += "<tr><td colspan='3'>You have not cast any spells</td></tr>";
 					return text + "</table>";
 				}],
 				"blank",
 				["display-text", () => {
+					if (player.stats[index].alliances.every(amt => amt === 0)) return "<h3>FACTIONS</h3><br>You have not allied with any factions";
 					let text = "<h3>FACTIONS</h3><table class='stats'><tr><th>FACTION NAME</th><th>NUMBER OF ALLIANCES</th><th>TIME SPENT ALLIED</th></tr>";
-					let hasAllied = false;
 					for (let faction = 0; faction < player.stats[index].alliances.length; faction++) {
 						if (player.stats[index].alliances[faction] === 0) continue;
 						text += "<tr style='color: " + lighten(factionColor[faction]) + "'>";
@@ -686,9 +684,7 @@ addLayer("S", {
 						text += "<td><b>" + formatWhole(player.stats[index].alliances[faction]) + "</b></td>";
 						text += "<td><b>" + formatTime(player.stats[index].allianceTimes[faction]) + "</b></td>";
 						text += "</tr>";
-						hasAllied = true;
 					};
-					if (!hasAllied) text += "<tr><td colspan='3'>You have not allied with any factions</td></tr>";
 					return text + "</table>";
 				}],
 				"blank",
