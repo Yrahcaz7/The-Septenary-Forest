@@ -2,7 +2,7 @@ const modInfo = {
 	name: "Realm Creator",
 	author: "Yrahcaz7",
 	pointsName: "coins",
-	modFiles: ["components.js", "tree.js", "options.js", "layers.js"],
+	modFiles: ["components.js", "tree.js", "options.js", "upgrades.js", "layers.js"],
 	offlineLimit: 1,
 };
 
