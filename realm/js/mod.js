@@ -16,6 +16,8 @@ const changelog = `<h1>Changelog:</h1><br>
 	<br><h3>v1.0 - Actually Playable</h3><br>
 		- Added 4 mana upgrades.<br>
 		- Added 3 fairy upgrades.<br>
+		- Added 3 undead upgrades.<br>
+		- Added 3 demon upgrades.<br>
 		- Rebalanced many things.<br>
 	<br><h3>v0.5 - Reworked Beta</h3><br>
 		- Massive internal rework.<br>
@@ -35,6 +37,7 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added 3 autocating upgrades.<br>
 		- Added 6 elf upgrades.<br>
 		- Added 6 angel upgrades.<br>
+		- Added 3 undead upgrades.<br>
 		- Added 3 demon upgrades.<br>
 		- Added even more stats to the stat menu.<br>
 		- Various fixes.<br>
@@ -114,6 +117,8 @@ function getPointGen() {
 	if (hasFactionUpgrade(0, 0, 4)) gain = gain.mul(factionUpgradeEffect(0, 0));
 	if (hasFactionUpgrade(0, 1, 4)) gain = gain.mul(factionUpgradeEffect(0, 1));
 	if (hasFactionUpgrade(0, 2, 4)) gain = gain.mul(factionUpgradeEffect(0, 2));
+	if (hasFactionUpgrade(1, 0, 4)) gain = gain.mul(factionUpgradeEffect(1, 0));
+	if (hasFactionUpgrade(1, 2, 4)) gain = gain.mul(2);
 	if (hasFactionUpgrade(0, 0, 5)) gain = gain.mul(factionUpgradeEffect(0, 0));
 	gain = gain.mul(tmp.G.effect);
 	if (player.M.spellTimes[1].gt(0)) gain = gain.mul(clickableEffect("M", 12));

@@ -68,7 +68,9 @@ addLayer("C", {
 			return "???";
 		};
 		function getCreationCost(num) {
-			return 100 ** (2 ** num - 1);
+			let base = 1;
+			if (hasFactionUpgrade(1, 0, 5)) base /= 1.2;
+			return 100 ** ((1 + base) ** num - 1);
 		};
 		const creationTierEff = [
 			[0.1,  0.05, 0.1,  0.2, 0.4, 0.65, 1,    1.5,  2,  3],
@@ -91,6 +93,8 @@ addLayer("C", {
 						if (hasFactionUpgrade(0, 0, 0)) eff = eff.mul(factionUpgradeEffect(0, 0));
 						if (hasFactionUpgrade(0, 1, 0)) eff = eff.mul(factionUpgradeEffect(0, 1));
 						if (hasFactionUpgrade(1, 1, 0)) eff = eff.mul(factionUpgradeEffect(1, 1));
+					} else {
+						if (hasFactionUpgrade(1, 2, 5)) eff = eff.mul(factionUpgradeEffect(1, 2));
 					};
 					return eff;
 				},
@@ -186,7 +190,7 @@ const manaUpgrades = [
 	["Attunement", "multiply max mana based on your faction coins", () => player.F.points.add(1).pow(0.05), "x"],
 	["Magical Aid", "increase mana regen based on your faction coins", () => player.F.points.add(1).pow(0.3), "+"],
 	["Focused Taxing", "make 'Tax Collection' also give coins equal to 10x coins/click"],
-	["Reinforced Weapons", "improve the 'Call to Arms' effect formula"],
+	["Reinforced Weapons", "improve the 'Call to Arms' effect"],
 ];
 
 const autocastingUpgrades = [
@@ -219,12 +223,14 @@ addLayer("M", {
 		if (hasUpgrade("M", 22)) manaRegen = manaRegen.add(upgradeEffect("M", 22));
 		if (hasFactionUpgrade(1, 2, 0)) manaRegen = manaRegen.mul(factionUpgradeEffect(1, 2));
 		if (hasFactionUpgrade(0, 1, 2)) manaRegen = manaRegen.mul(factionUpgradeEffect(0, 1));
+		if (hasFactionUpgrade(1, 1, 5)) manaRegen = manaRegen.mul(factionUpgradeEffect(1, 1));
 		if (hasUpgrade("G", 13)) manaRegen = manaRegen.mul(upgradeEffect("G", 13));
 		player.M.manaRegen = manaRegen;
 		// max mana buffs
 		let maxMana = new Decimal(100);
 		if (hasFactionUpgrade(0, 0, 2)) maxMana = maxMana.mul(factionUpgradeEffect(0, 0));
 		if (hasFactionUpgrade(1, 0, 2)) maxMana = maxMana.mul(factionUpgradeEffect(1, 0));
+		if (hasFactionUpgrade(1, 1, 5)) maxMana = maxMana.mul(factionUpgradeEffect(1, 1));
 		if (hasUpgrade("M", 11)) maxMana = maxMana.mul(upgradeEffect("M", 11));
 		if (hasUpgrade("M", 13)) maxMana = maxMana.mul(upgradeEffect("M", 13));
 		if (hasUpgrade("M", 21)) maxMana = maxMana.mul(upgradeEffect("M", 21));
@@ -421,7 +427,7 @@ const factionUpgrades = [[
 	["Fairy Traders", "multiply coins/click and faction coin find chance based on your creations", () => player.C.points.add(1).pow(0.1), "x"],
 	["Active Workers", "multiply coins/click based on your coins/sec", () => new Decimal(tmp.pointGen).add(1).pow(0.1), "x"],
 	["Epitome of Mischief", "multiply the first effect of basic creations based on your fairy coins", () => player.FC[0].add(1).pow(0.3), "x"],
-	["The Roots of Mana", "multiply mana regen based on your basic creations", () => getBuyableAmount("C", 11).add(getBuyableAmount("C", 12)).add(getBuyableAmount("C", 13)).add(1).pow(0.05), "x"],
+	["The Roots of Mana", "multiply mana regen based on your basic creations", () => [11, 12, 13].reduce((acc, id) => acc.add(getBuyableAmount("C", id)), newDecimalOne()).pow(0.05), "x"],
 ], [
 	["Super Clicks", "multiply coins/click based on your creations", () => player.C.points.add(1).pow(0.25), "x"],
 	["Elven Luck", "increase faction coin find chance based on your coins/click", () => player.clickValue.add(1).pow(0.3), "+", "%"],
@@ -432,7 +438,7 @@ const factionUpgrades = [[
 ], [
 	["Angelic Capacity", "multiply max mana based on your mana generated this era", () => player.stats[0].manaTotal.add(1).pow(0.075), "x"],
 	["Road to Heaven", "multiply mana regen based on your angel coins", () => player.FC[2].add(1).pow(0.4), "x"],
-	["Angels Supreme", "gain 5x angel coins"],
+	["Angels Supreme", "multiply angel coin gain by 5"],
 	["Rainbows", "multiply max mana based on your faction coins", () => player.F.points.add(1).pow(0.2), "x"],
 	["Prism Upgrade", "double all spell effects, but triple all spell mana costs"],
 	["Angelic Clicks", "multiply coins/click based on your max mana", () => player.M.maxMana.add(1).pow(0.05), "x"],
@@ -445,12 +451,18 @@ const factionUpgrades = [[
 	["Goblin Pride", "multiply coins/sec based on your goblin coins", () => player.FC[3].add(1).pow(0.3), "x"],
 ], [
 	["Undending Cycle", "multiply coins/sec based on your coins", () => player.points.add(1).log10().div(2).add(1), "x"],
-	["Corpse Piles", "multiply coins/sec based on your undead coins", () => player.FC[4].add(1).pow(0.3), "x"],
+	["Corpse Piles", "multiply coins/sec based on your undead coins", () => player.FC[4].add(1).pow(hasFactionUpgrade(1, 1, 4) ? 0.4 : 0.3), "x"],
 	["Stay no More", "multiply coins/sec based on your coins/click", () => player.clickValue.add(1).log10().div(2).add(1), "x"],
+	["Necromancy Manual", "multiply coins/sec based on your mana generated this era", () => player.stats[0].manaTotal.add(1).pow(0.075), "x"],
+	["Smarter Zombies", "improve the 'Corpse Piles' effect"],
+	["Page of the Necronomicon", "multiply coins/sec and undead coin gain by 2"],
 ], [
 	["Demonic Prestige", "multiply coins/sec based on your creation tiers", () => player.C.tiers.div(5).add(1), "x"],
-	["Demonic Blood", "multiply blood frenzy effect based on your creations (higher numbered ones count more)", () => [11, 12, 13].reduce((acc, id, num) => acc.add(getBuyableAmount("C", id).mul(5 ** num)), new Decimal(0)).div(10).add(1).pow(0.1), "x"],
-	["Polished Rage", "increase all creation's first base effects based on their number and your gems", () => player.G.points.add(1).pow(0.1).sub(1), "+(", " * 2^num)"],
+	["Demonic Blood", "multiply blood frenzy effect based on your creations (higher numbered ones count more)", () => [11, 12, 13, 14].reduce((acc, id, num) => acc.add(getBuyableAmount("C", id).mul(5 ** num)), newDecimalOne()).pow(0.1), "x"],
+	["Polished Rage", "increase all creation's first base effects based on their number and your gems", () => player.G.points.add(1).pow(0.05), "+(", " * 2^num)"],
+	["Demonic Deals", "divide the creation cost scaling per number by 1.2 (this also affects tiers)"],
+	["Bloody Magic", "multiply mana regen and max mana based on your demon coins", () => player.FC[5].add(1).pow(0.125), "x"],
+	["Higher Order", "multiply the first effect of non-basic creations based on your creation tiers", () => player.C.tiers.div(2).add(1), "x"],
 ]];
 
 function getFactionUpgrade(row, num, faction = -1) {
@@ -751,6 +763,7 @@ document.onclick = () => {
 	};
 	FCfound = FCfound.floor();
 	if (hasFactionUpgrade(0, 2, 2) && FCtype === 2) FCfound = FCfound.mul(5);
+	if (hasFactionUpgrade(1, 2, 4) && FCtype === 4) FCfound = FCfound.mul(2);
 	// faction coins gained
 	player.FC[FCtype] = player.FC[FCtype].add(FCfound);
 	player.stats.forEach(obj => obj.FCtotal = obj.FCtotal.add(FCfound));
