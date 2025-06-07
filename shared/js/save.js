@@ -1,17 +1,17 @@
 // ************ Save stuff ************
 function getModID() {
 	if (modInfo.id) {
-		if (modInfo.useNewSaveSyntax) return modInfo.author.replace(/\s+/g, "-") + "/" + modInfo.id.replace(/\s+/g, "-");
+		if (modInfo.useNewSaveSyntax === undefined || modInfo.useNewSaveSyntax) return modInfo.author.replace(/\s+/g, "-") + "/" + modInfo.id.replace(/\s+/g, "-");
 		return modInfo.id;
 	};
-	if (modInfo.useNewSaveSyntax) return modInfo.author.replace(/\s+/g, "-") + "/" + modInfo.name.replace(/\s+/g, "-");
+	if (modInfo.useNewSaveSyntax === undefined || modInfo.useNewSaveSyntax) return modInfo.author.replace(/\s+/g, "-") + "/" + modInfo.name.replace(/\s+/g, "-");
 	return modInfo.name.replace(/\s+/g, "-") + "-" + modInfo.author.replace(/\s+/g, "-");
 };
 
 function save(force) {
 	NaNcheck(player);
 	if (NaNalert && !force) return;
-	if (modInfo.useNewSaveSyntax) {
+	if (modInfo.useNewSaveSyntax === undefined || modInfo.useNewSaveSyntax) {
 		localStorage.setItem(getModID() + "/save", btoa(encodeURIComponent(JSON.stringify(player))));
 		localStorage.setItem(getModID() + "/options", btoa(encodeURIComponent(JSON.stringify(options))));
 	} else {
@@ -187,7 +187,7 @@ function fixData(defaultData, newData) {
 };
 
 function load(mainPage = false) {
-	const get = localStorage.getItem(getModID() + (modInfo.useNewSaveSyntax ? "/save" : ""));
+	const get = localStorage.getItem(getModID() + (modInfo.useNewSaveSyntax === undefined || modInfo.useNewSaveSyntax ? "/save" : ""));
 	if (get) {
 		player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(atob(get))));
 		fixSave();
@@ -218,7 +218,7 @@ function load(mainPage = false) {
 
 function loadOptions() {
 	options = getStartOptions();
-	const get = localStorage.getItem(getModID() + (modInfo.useNewSaveSyntax ? "/" : "_") + "options");
+	const get = localStorage.getItem(getModID() + (modInfo.useNewSaveSyntax === undefined || modInfo.useNewSaveSyntax ? "/" : "_") + "options");
 	if (get) options = Object.assign(options, JSON.parse(decodeURIComponent(atob(get))));
 	if (themeNames.indexOf(options.theme) < 0) theme = "default";
 	fixData(options, getStartOptions());

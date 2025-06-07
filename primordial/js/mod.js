@@ -4,6 +4,7 @@ const modInfo = {
 	author: 'Yrahcaz7',
 	modFiles: ['components.js', 'tree.js', 'options.js', 'assimilation.js', 'achievements.js', 'softcaps.js', 'story.js', 'tabs.js', 'layers.js'],
 	offlineLimit: 1,
+	useNewSaveSyntax: false,
 };
 
 const VERSION = {

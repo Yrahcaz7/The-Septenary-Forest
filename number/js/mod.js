@@ -5,6 +5,7 @@ const modInfo = {
 	pointsName: "arabic numerals",
 	modFiles: ["formatting.js", "tree.js", "options.js", "layers.js"],
 	offlineLimit: 1,
+	useNewSaveSyntax: false,
 };
 
 const VERSION = {

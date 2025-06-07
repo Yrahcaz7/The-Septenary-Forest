@@ -17,7 +17,7 @@ Here's a breakdown of what's in it:
     - `offlineLimit`: A number that is the maximum amount of offline time that the player can accumulate, in hours. Any extra time is lost.
         This is useful because most of these mods are fast-paced enough that too much offline time ruins the balance, such as the time in between updates. That is why I suggest developers disable offline time on their own savefile.
     - `initialStartPoints`: **optional**. A Decimal for the amount of points a new player should start with.
-    - `useNewSaveSyntax`: **optional** *(additional feature)*. When this is true, the author name and the mod id are combined to create a unique internal id. Any spaces in the name or id are treated as dashes. Similar to `id`, you shouldn't change this later (and if you use this, you shouldn't change `name` later, either).
+    - `useNewSaveSyntax`: **optional** *(additional feature)*. This combines the author name and the mod id to create a unique internal id. Any spaces in the name or id are treated as dashes. Similar to `id`, you shouldn't change this later (and if you use this, you shouldn't change `author` later, either). This is enabled by default.
     - `friendlyErrors`: **optional** *(additional feature)*. When this is false, it disables my custom friendly errors and warnings that try to detect when things have gone wrong. (It's enabled by default because it can be very helpful and it shouldn't change anything functionally. Disabling it may slightly increase performance.)
 
 - `VERSION` is used to describe the current version of your mod. It contains:

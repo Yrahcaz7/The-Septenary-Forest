@@ -5,6 +5,7 @@ const modInfo = {
 	pointsName: "power",
 	modFiles: ["tree.js", "options.js", "stats.js", "layer/stimulation.js", "layer/growth.js", "layer/evolution.js", "layer/acclimation.js", "layer/species.js", "layer/consciousness.js", "layer/domination.js", "layer/ecosystem.js", "layer/revolution.js", "layer/expansion.js", "layer/war.js", "layer/leader.js", "layer/continent.js", "layer/territory.js", "layer/cycle.js", "layer/empire.js"],
 	offlineLimit: 1,
+	useNewSaveSyntax: false,
 	friendlyErrors: false,
 };
 

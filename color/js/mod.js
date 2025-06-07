@@ -6,6 +6,7 @@ const modInfo = {
 	modFiles: ["formatting.js", "components.js", "tree.js", "options.js", "layers.js"],
 	initialStartPoints: newDecimalOne(),
 	offlineLimit: 1,
+	useNewSaveSyntax: false,
 };
 
 const VERSION = {

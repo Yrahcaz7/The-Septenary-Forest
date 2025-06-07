@@ -4,7 +4,6 @@ const modInfo = {
 	pointsName: "coins",
 	modFiles: ["components.js", "tree.js", "options.js", "layers.js"],
 	offlineLimit: 1,
-	useNewSaveSyntax: true,
 };
 
 const VERSION = {
