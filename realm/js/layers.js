@@ -192,6 +192,7 @@ addLayer("M", {
 		maxMana: new Decimal(100),
 		manaRegen: new Decimal(2.5),
 		spellTimes: [newDecimalZero(), newDecimalZero(), newDecimalZero()],
+		spellOrder: [0, 1, 2],
 		autoPercent: 100,
 	}},
 	color: "#0080E0",
@@ -234,15 +235,16 @@ addLayer("M", {
 			player.M.spellTimes[index] = player.M.spellTimes[index].sub(diff).max(0);
 		};
 		// autocasting
-		for (let index = 2; index >= 0; index--) {
-			const cost = getSpellCost(index);
-			if (player.M.spellTimes[index].lte(0) && player.M.mana.gte(cost)) {
-				if (getClickableState("M", index + 11) === 1) {
-					castSpell(index, player.M.mana.div(cost).floor());
-				} else if (getClickableState("M", index + 11) === 2 && player.M.mana.gte(player.M.maxMana.mul(player.M.autoPercent / 100))) {
+		for (let index = 0; index < player.M.spellOrder.length; index++) {
+			const spellIndex = player.M.spellOrder[index];
+			const cost = getSpellCost(spellIndex);
+			if (player.M.spellTimes[spellIndex].lte(0) && player.M.mana.gte(cost)) {
+				if (getClickableState("M", spellIndex + 11) === 1) {
+					castSpell(spellIndex, player.M.mana.div(cost).floor());
+				} else if (getClickableState("M", spellIndex + 11) === 2 && player.M.mana.gte(player.M.maxMana.mul(player.M.autoPercent / 100))) {
 					let amt = player.M.mana.sub(player.M.maxMana.mul(player.M.autoPercent / 100)).div(cost).floor();
 					if (player.M.mana.sub(amt.mul(cost)).gte(cost)) amt = amt.add(1);
-					castSpell(index, amt);
+					castSpell(spellIndex, amt);
 				};
 			};
 		};
@@ -251,9 +253,9 @@ addLayer("M", {
 		const content = [["bar", "mana"]];
 		if (hasUpgrade("M", 103)) content.push("blank", "mana-auto-percent-slider");
 		content.push("blank");
-		const row = [["column", [["clickable", 11, {"min-height": "110px", height: "110px"}], ["max-spell-cast", 11], ["autocast-toggle", [11, 102]]], {margin: "0 7px"}]];
+		const row = [["column", [["clickable", 11, {"min-height": "110px", height: "110px"}], ["max-spell-cast", 11], ["autocast-toggle", 11]], {margin: "0 7px"}]];
 		for (let index = 1; tmp.M.clickables[index + 11]?.unlocked; index++) {
-			row.push(["column", [["clickable", index + 11], ["autocast-toggle", [index + 11, 101]]], {margin: "0 7px"}]);
+			row.push(["column", [["clickable", index + 11], ["autocast-toggle", index + 11]], {margin: "0 7px"}]);
 		};
 		content.push(["row", row]);
 		content.push("blank");

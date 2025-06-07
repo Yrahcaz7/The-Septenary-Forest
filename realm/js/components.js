@@ -27,14 +27,20 @@ const customComponents = {
 		data() { return {tmp} },
 		computed: {
 			unlockedModes() { return (hasUpgrade(this.layer, 103) ? 2 : 1) },
-			canClick() { return hasUpgrade(this.layer, this.data[1]) },
-			activeMode() { return getClickableState(this.layer, this.data[0]) },
+			canClick() { return hasUpgrade(this.layer, 101) },
+			canOrder() { return hasUpgrade(this.layer, 102) },
+			spellOrder() { return player[this.layer].spellOrder.indexOf(this.data - 11) },
+			activeMode() { return getClickableState(this.layer, this.data) },
 		},
 		methods: {
-			toggle(mode) { if (this.canClick) setClickableState(this.layer, this.data[0], mode === this.activeMode ? 0 : mode) },
+			toggle(mode) {
+				if (!this.canClick) return;
+				setClickableState(this.layer, this.data, mode === this.activeMode ? 0 : mode);
+				if (this.canOrder && mode === this.activeMode) player[this.layer].spellOrder.push(player[this.layer].spellOrder.splice(this.spellOrder, 1)[0]);
+			},
 		},
 		template: template(`<div>
-			<button v-for="mode in unlockedModes" :class="'upg tooltipBox ' + (canClick ? 'can' : 'locked')" :style="[(canClick ? {'background-color': (mode === 2 ? tmp[layer].color : tmp[layer].clickables[data[0]].color)} : {}), {
+			<button v-for="mode in unlockedModes" :class="'upg tooltipBox ' + (canClick ? 'can' : 'locked')" :style="[(canClick ? {'background-color': (mode === 2 ? tmp[layer].color : tmp[layer].clickables[data].color)} : {}), {
 				'border-radius': '0px 0px ' + (mode < unlockedModes ? '0' : '25') + 'px ' + (mode > 1 ? '0' : '25') + 'px',
 				width: (125 / unlockedModes) + 'px',
 				'min-height': 'min-content',
@@ -46,7 +52,7 @@ const customComponents = {
 						<path d="m 34,5 v 8 h -8" style="stroke-linecap: round; stroke-linejoin: round"/>
 					</g>
 					<use href="#arrow" transform-origin="20 20" transform="rotate(180)"/>
-					<text v-if="mode === activeMode" x="20" y="20" text-anchor="middle" dominant-baseline="central" fill="#000000" stroke="none" style="font-size: 15px">ON</text>
+					<text v-if="mode === activeMode" x="20" y="19.9" text-anchor="middle" dominant-baseline="central" fill="#000000" stroke="none" style="font-size: 15px">{{this.canOrder ? this.spellOrder + 1 : "ON"}}</text>
 				</svg>
 			</button>
 		</div>`),

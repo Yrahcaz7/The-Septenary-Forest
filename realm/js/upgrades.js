@@ -10,9 +10,9 @@ const manaUpgrades = [
 ];
 
 const autocastingUpgrades = [
-	["Primary Autocasting", "unlock autocasting"],
-	["Secondary Autocasting", "unlock tax collection autocasting"],
-	["Ternary Autocasting", "unlock autocasting when mana is at least a specified percent of max mana"],
+	["Magic Cycles", "unlock autocasting"],
+	["Cyclical Layering", "unlock ordering autocasts"],
+	["Delayed Casting", "unlock autocasting only when mana is at least a specified percent of max mana"],
 ];
 
 const factionUpgrades = [[
