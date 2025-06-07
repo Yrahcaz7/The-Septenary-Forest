@@ -377,10 +377,10 @@ function loadVue(mainPage = false) {
 		},
 		template: template(`<div>
 			<span v-if="player[layer].points.lt('1e1000')">You have </span>
-			<h2 :style="{color: tmp[layer].color, 'text-shadow': '0px 0px 10px' + tmp[layer].color}">{{data ? format(player[layer].points, data) : formatWhole(player[layer].points)}}</h2>&nbsp;
+			<h2 :style="{color: tmp[layer].color, 'text-shadow': tmp[layer].color + ' 0px 0px 10px'}">{{data ? format(player[layer].points, data) : formatWhole(player[layer].points)}}</h2>&nbsp;
 			<span v-if="extraMainDisplay" v-html="extraMainDisplay"></span>
 			{{tmp[layer].resource}}
-			<span v-if="effectDescription">, <span v-html="effectDescription"></span></span><br><br>
+			<span v-if="effectDescription" v-html="', ' + effectDescription"></span><br><br>
 		</div>`),
 	});
 
