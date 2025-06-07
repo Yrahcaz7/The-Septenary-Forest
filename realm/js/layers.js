@@ -175,6 +175,17 @@ function getSpellCost(index) {
 	return cost;
 };
 
+function getSpellIndex(index) {
+	if (index === 2) {
+		if (hasUpgrade("F", 12)) {
+			index = 3;
+		} else if (!hasUpgrade("F", 11)) {
+			index = -1;
+		};
+	};
+	return index;
+};
+
 function getSideColor(side = -1) {
 	if (side < 0) side = [11, 12].findIndex(id => hasUpgrade("F", id));
 	if (side === 0) return "#4040E0";
@@ -232,7 +243,13 @@ addLayer("M", {
 		player.stats.forEach(obj => obj.manaRegen = obj.manaRegen.max(player.M.manaRegen));
 		// spell time
 		for (let index = 1; index < player.M.spellTimes.length; index++) {
-			player.M.spellTimes[index] = player.M.spellTimes[index].sub(diff).max(0);
+			const newTime = player.M.spellTimes[index].sub(diff).max(0);
+			const diffTime = player.M.spellTimes[index].sub(newTime);
+			if (diffTime.gt(0)) {
+				player.M.spellTimes[index] = newTime;
+				const spellIndex = getSpellIndex(index);
+				if (spellIndex >= 0) player.stats.forEach(obj => obj.spellTimes[spellIndex] = obj.spellTimes[spellIndex].add(diffTime));
+			};
 		};
 		// autocasting
 		for (let index = 0; index < player.M.spellOrder.length; index++) {
@@ -453,8 +470,12 @@ function factionUpgradeEffect(row, num) {
 	return upgradeEffect("F", 111 + 10 * row + num);
 };
 
+function lighten(color, amount = 20) {
+	return "lch(from " + color + " calc(l + " + amount + ") c h)";
+};
+
 function getFCdisp(index) {
-	return "<div style='color: lch(from " + factionColor[index] + " calc(l + 20) c h)'>" + formatWhole(player.FC[index]) + " " + factionName[index] + " coins</div>";
+	return "<div style='color: " + lighten(factionColor[index]) + "'>" + formatWhole(player.FC[index]) + " " + factionName[index] + " coins</div>";
 };
 
 addLayer("F", {
@@ -620,58 +641,52 @@ addLayer("S", {
 				"blank",
 				["display-text", () => "<h3>GENERAL</h3><br>Your best coins is <b>" + format(player.stats[index].best) + "</b><br>You have generated <b>" + format(player.stats[index].total) + "</b> coins<br>" + (index > 0 ? "Your best gems is <b>" + formatWhole(index === 2 ? player.bestGems : player.G.best) + "</b>" : "")],
 				"blank",
-				["display-text", () => "<h3>PASSIVE</h3><br>Your best coins/sec is <b>" + format(player.stats[index].bestPassive) + "</b><br>You have generated <b>" + format(player.stats[index].totalPassive) + "</b> coins passively"],
+				["display-text", () => "<h3>PASSIVE</h3><br>Your best coins/sec is <b>" + format(player.stats[index].bestPassive) + "</b><br>You have generated <b>" + format(player.stats[index].totalPassive) + "</b> coins passively", {color: lighten(getSideColor(1))}],
 				"blank",
-				["display-text", () => "<h3>CLICKS</h3><br>Your best coins/click is <b>" + format(player.stats[index].bestClickValue) + "</b><br>You have generated <b>" + format(player.stats[index].totalClickValue) + "</b> coins from clicking" + (index === 0 ? "" : "<br>Your best times clicked is <b>" + formatWhole(player.stats[index].bestClicks) + "</b>") + "<br>You have clicked <b>" + formatWhole(player.stats[index].totalClicks) + "</b> times"],
+				["display-text", () => "<h3>CLICKS</h3><br>Your best coins/click is <b>" + format(player.stats[index].bestClickValue) + "</b><br>You have generated <b>" + format(player.stats[index].totalClickValue) + "</b> coins from clicking" + (index === 0 ? "" : "<br>Your best times clicked is <b>" + formatWhole(player.stats[index].bestClicks) + "</b>") + "<br>You have clicked <b>" + formatWhole(player.stats[index].totalClicks) + "</b> times", {color: lighten(getSideColor(0))}],
 				"blank",
 				["display-text", () => "<h3>FACTION COINS</h3><br>Your best faction coins is <b>" + formatWhole(player.stats[index].FCbest) + "</b><br>You have found <b>" + formatWhole(player.stats[index].FCtotal) + "</b> faction coins<br>You have <b>" + format(player.stats[index].FCchance) + "%</b> best faction coin chance"],
 				"blank",
-				["display-text", () => "<h3>CREATIONS</h3><br>Your best creations is <b>" + formatWhole(player.stats[index].creations) + "</b>"],
+				["display-text", () => "<h3>CREATIONS</h3><br>Your best creations is <b>" + formatWhole(player.stats[index].creations) + "</b>", {color: lighten(layers.C.color)}],
 				"blank",
-				["display-text", () => "<h3>MANA</h3><br>Your best mana regen is <b>" + format(player.stats[index].manaRegen) + "</b><br>Your best max mana is <b>" + format(player.stats[index].maxMana) + "</b><br>You have generated <b>" + format(player.stats[index].manaTotal) + "</b> mana"],
+				["display-text", () => "<h3>MANA</h3><br>Your best mana regen is <b>" + format(player.stats[index].manaRegen) + "</b><br>Your best max mana is <b>" + format(player.stats[index].maxMana) + "</b><br>You have generated <b>" + format(player.stats[index].manaTotal) + "</b> mana", {color: lighten(layers.M.color)}],
 				"blank",
 				["display-text", () => {
-					let text = "<h3>SPELLS</h3>";
+					let text = "<h3>SPELLS</h3><table class='stats'><tr><th>SPELL NAME</th><th>NUMBER OF CASTS</th><th>TIME SPENT ACTIVE</th></tr>";
 					let hasCastSpells = false;
 					for (let spell = 0; spell < spellName.length; spell++) {
-						if (player.stats[index].casts[spell].gt(0)) {
-							text += "<br>You have cast '" + spellName[spell] + "' <b>" + formatWhole(player.stats[index].casts[spell]) + "</b> time";
-							if (player.stats[index].casts[spell].neq(1)) text += "s";
-							hasCastSpells = true;
-						};
+						if (player.stats[index].casts[spell].eq(0)) continue;
+						text += "<tr style='color: " + lighten(getSideColor([2, 2, 0, 1][spell])) + "'>";
+						text += "<td>" + spellName[spell] + "</td>";
+						text += "<td><b>" + formatWhole(player.stats[index].casts[spell]) + "</b></td>";
+						text += "<td><b>" + formatTime(player.stats[index].spellTimes[spell]) + "</b></td>";
+						text += "</tr>";
+						hasCastSpells = true;
 					};
-					if (!hasCastSpells) text += "<br>You have not cast any spells";
-					return text;
+					if (!hasCastSpells) text += "<tr><td colspan='3'>You have not cast any spells</td></tr>";
+					return text + "</table>";
 				}],
 				"blank",
 				["display-text", () => {
-					let text = "<h3>FACTIONS</h3>";
+					let text = "<h3>FACTIONS</h3><table class='stats'><tr><th>FACTION NAME</th><th>NUMBER OF ALLIANCES</th><th>TIME SPENT ALLIED</th></tr>";
 					let hasAllied = false;
 					for (let faction = 0; faction < player.stats[index].alliances.length; faction++) {
-						if (player.stats[index].alliances[faction] > 0) {
-							text += "<br>You have allied with the " + pluralFactionName[faction] + " <b>" + formatWhole(player.stats[index].alliances[faction]) + "</b> time";
-							if (player.stats[index].alliances[faction] !== 1) text += "s";
-							hasAllied = true;
-						};
+						if (player.stats[index].alliances[faction] === 0) continue;
+						text += "<tr style='color: " + lighten(factionColor[faction]) + "'>";
+						text += "<td>" + pluralFactionName[faction].at(0).toUpperCase() + pluralFactionName[faction].slice(1) + "</td>";
+						text += "<td><b>" + formatWhole(player.stats[index].alliances[faction]) + "</b></td>";
+						text += "<td><b>" + formatTime(player.stats[index].allianceTimes[faction]) + "</b></td>";
+						text += "</tr>";
+						hasAllied = true;
 					};
-					if (!hasAllied) text += "<br>You have not allied with any factions";
-					return text;
+					if (!hasAllied) text += "<tr><td colspan='3'>You have not allied with any factions</td></tr>";
+					return text + "</table>";
 				}],
 				"blank",
 				["display-text", () => {
-					let text = "<h3>TIME</h3><br>You have spent <b>" + formatTime(player.stats[index].time) + "</b><br>";
+					let text = "<h3>TIME</h3><div>You have spent <b>" + formatTime(player.stats[index].time) + "</b> in total</div><br>";
 					for (let side = 0; side < player.stats[index].sideTimes.length; side++) {
-						if (player.stats[index].sideTimes[side] > 0) text += "<br>You have spent <b>" + formatTime(player.stats[index].sideTimes[side]) + "</b> being " + sideName[side];
-					};
-					let hasAllied = false;
-					for (let faction = 0; faction < player.stats[index].allianceTimes.length; faction++) {
-						if (player.stats[index].allianceTimes[faction] > 0) {
-							if (!hasAllied) {
-								text += "<br>";
-								hasAllied = true;
-							};
-							text += "<br>You have spent <b>" + formatTime(player.stats[index].allianceTimes[faction]) + "</b> allied with the " + pluralFactionName[faction];
-						};
+						if (player.stats[index].sideTimes[side] > 0) text += "<div style='color: " + lighten(getSideColor(side)) + "'>You have spent <b>" + formatTime(player.stats[index].sideTimes[side]) + "</b> being " + sideName[side] + "</div>";
 					};
 					return text;
 				}],

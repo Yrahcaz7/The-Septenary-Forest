@@ -757,7 +757,7 @@ addLayer('d', {
 			if (hasUpgrade('d', 11) && id == 102) return '<h2>Limit broken';
 			if (player.d.points.gt(99) && id == 101) return '<h2>Limit bent';
 			if (player.d.limited) return '<h2>' + formatWhole(buyableEffect('d', 51).sub(1));
-			data = player.d.meta.charAt(id - 101);
+			data = player.d.meta.at(id - 101);
 			setGridData('d', id, data);
 			return '<h2>' + data;
 		},

@@ -8,15 +8,17 @@ const modInfo = {
 
 const VERSION = {
 	num: "1.0",
-	name: "Actually Playable",
+	name: "Actually Playable Version",
 };
 
 const changelog = `<h1>Changelog:</h1><br>
-	<br><h3>v1.0 - Actually Playable</h3><br>
+	<br><h3>v1.0 - Actually Playable Version</h3><br>
 		- Added 4 mana upgrades.<br>
 		- Added 3 fairy upgrades.<br>
 		- Added 3 undead upgrades.<br>
 		- Added 3 demon upgrades.<br>
+		- Changed how autocasting works.<br>
+		- Improved the stat menu and added more stats.<br>
 		- Rebalanced many things.<br>
 	<br><h3>v0.5 - Reworked Beta</h3><br>
 		- Massive internal rework.<br>
@@ -92,13 +94,7 @@ function castSpell(index, amt = newDecimalOne()) {
 	} else {
 		player.M.spellTimes[index] = baseSpellDuration[index];
 		player.M.mana = player.M.mana.sub(cost);
-		if (index === 2) {
-			if (hasUpgrade("F", 12)) {
-				index = 3;
-			} else if (!hasUpgrade("F", 11)) {
-				index = -1;
-			};
-		};
+		index = getSpellIndex(index);
 		if (index >= 0) player.stats.forEach(obj => obj.casts[index] = obj.casts[index].add(1));
 	};
 };
@@ -129,7 +125,7 @@ const displayThings = [
 	() => { return format(player.clickValue) + "/click" },
 ];
 
-const endPoints = new Decimal(1e16);
+const endPoints = new Decimal(1e18);
 
 function getPlayerStartingStats() { return {
 	// general
@@ -155,6 +151,7 @@ function getPlayerStartingStats() { return {
 	maxMana: new Decimal(100),
 	// spells
 	casts: [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()],
+	spellTimes: [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()],
 	// alliances
 	alliances: [0, 0, 0, 0, 0, 0],
 	// time

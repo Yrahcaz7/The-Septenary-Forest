@@ -187,7 +187,7 @@ function setupLayer(layer) {
 		};
 	};
 	if (!layers[layer].componentStyles) layers[layer].componentStyles = {};
-	if (layers[layer].symbol === undefined) layers[layer].symbol = layer.charAt(0).toUpperCase() + layer.slice(1);
+	if (layers[layer].symbol === undefined) layers[layer].symbol = layer.at(0).toUpperCase() + layer.slice(1);
 	if (layers[layer].unlockOrder === undefined) layers[layer].unlockOrder = [];
 	if (layers[layer].gainMult === undefined) layers[layer].gainMult = newDecimalOne();
 	if (layers[layer].gainExp === undefined) layers[layer].gainExp = newDecimalOne();
