@@ -2,7 +2,7 @@ const modInfo = {
 	name: "Realm Creator",
 	author: "Yrahcaz7",
 	pointsName: "coins",
-	modFiles: ["components.js", "tree.js", "options.js", "upgrades.js", "layers.js"],
+	modFiles: ["components.js", "tree.js", "options.js", "upgrades.js", "layer/factions.js", "layer/mana.js", "layer/creations.js", "layer/gems.js", "layer/stats.js"],
 	offlineLimit: 1,
 };
 
@@ -81,26 +81,6 @@ function romanNumeral(num) {
 	return text;
 };
 
-const baseSpellDuration = [0, 30, 15, 15].map(x => new Decimal(x));
-
-function castSpell(index, amt = newDecimalOne()) {
-	const cost = getSpellCost(index);
-	if (index === 0) {
-		player.M.mana = player.M.mana.sub(cost.mul(amt));
-		player.stats.forEach(obj => obj.casts[0] = obj.casts[0].add(amt));
-		let gain = tmp.pointGen.mul(clickableEffect("M", 11));
-		if (hasUpgrade("M", 23)) gain = gain.add(player.clickValue.mul(getSpellEffect(0, true)));
-		gain = gain.mul(amt);
-		player.points = player.points.add(gain);
-		player.stats.forEach(obj => obj.total = obj.total.add(gain));
-	} else {
-		player.M.spellTimes[index] = baseSpellDuration[index];
-		player.M.mana = player.M.mana.sub(cost);
-		index = getSpellIndex(index);
-		if (index >= 0) player.stats.forEach(obj => obj.casts[index] = obj.casts[index].add(1));
-	};
-};
-
 function getPointGen() {
 	let gain = newDecimalZero();
 	// addtitive
@@ -124,7 +104,7 @@ function getPointGen() {
 };
 
 const displayThings = [
-	() => { return format(player.clickValue) + "/click" },
+	() => format(player.clickValue) + "/click",
 ];
 
 const endPoints = new Decimal(1e18);
@@ -233,3 +213,25 @@ function fixOldSave(oldVersion) {
 };
 
 const currentlyText = "<br>Effect: ";
+
+document.onclick = () => {
+	// faction coins calculation
+	const FCtype = getRandInt(0, 6);
+	let FCfound = player.FCchance.div(100);
+	if ((FCfound.toNumber() % 1) > Math.random()) {
+		FCfound = FCfound.add(1);
+	};
+	FCfound = FCfound.floor();
+	if (hasFactionUpgrade(0, 2, 2) && FCtype === 2) FCfound = FCfound.mul(5);
+	if (hasFactionUpgrade(1, 2, 4) && FCtype === 4) FCfound = FCfound.mul(2);
+	// faction coins gained
+	player.FC[FCtype] = player.FC[FCtype].add(FCfound);
+	player.stats.forEach(obj => obj.FCtotal = obj.FCtotal.add(FCfound));
+	// times clicked
+	player.stats.forEach(obj => obj.totalClicks = obj.totalClicks.add(1));
+	player.stats.forEach(obj => obj.bestClicks = obj.bestClicks.max(player.stats[0].totalClicks));
+	// coins gained
+	player.points = player.points.add(player.clickValue);
+	player.stats.forEach(obj => obj.total = obj.total.add(player.clickValue));
+	player.stats.forEach(obj => obj.totalClickValue = obj.totalClickValue.add(player.clickValue));
+};
