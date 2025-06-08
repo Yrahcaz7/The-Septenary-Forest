@@ -182,7 +182,7 @@ function update(diff) {
 	player.stats.forEach(obj => obj.bestClickValue = obj.bestClickValue.max(player.clickValue));
 	// faction coins
 	let FCchance = new Decimal(5);
-	if (getBuyableAmount("C", 13).gt(0)) FCchance = FCchance.add(getBuyableAmount("C", 13).mul(tmp.C.buyables[13].effect2));
+	if (getBuyableAmount("C", 13).gt(0)) FCchance = FCchance.add(tmp.C.buyables[13].effect2total);
 	if (hasFactionUpgrade(0, 2, 0)) FCchance = FCchance.add(factionUpgradeEffect(0, 2).mul(3));
 	if (hasFactionUpgrade(0, 1, 1)) FCchance = FCchance.add(factionUpgradeEffect(0, 1));
 	if (hasFactionUpgrade(0, 0, 3)) FCchance = FCchance.add(factionUpgradeEffect(0, 0));

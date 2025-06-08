@@ -106,9 +106,9 @@ addLayer("C", {
 					const amount = getBuyableAmount("C", index + 11);
 					const text = `\nCost: ${format(b.cost)} coin${b.cost.eq(1) ? "" : "s"}\n\nAmount: ${formatWhole(amount)}\n\n`;
 					if (index === 2) {
-						return text + `Effects: +${format(b.effect)} to coins/${hasFactionUpgrade(1, 2, 1) ? "click" : "sec"} and +${format(b.effect2)}% to FC find chance\n\nTotal Effects: +${format(amount.mul(b.effect))} and +${format(amount.mul(b.effect2))}%`;
+						return text + `Effects: +${format(b.effect)} coins/${hasFactionUpgrade(1, 2, 1) ? "click" : "sec"} and +${format(b.effect2)}% FC find chance\n\nTotal Effects: +${format(amount.mul(b.effect))} and +${format(b.effect2total)}%${b.effect2total.gt(50) ? " (softcapped)" : ""}`;
 					};
-					return text + `Effect: +${format(b.effect)} to coins/${index === 0 || (index >= 3 && hasUpgrade("F", 11)) ? "click" : "sec"}\n\nTotal Effect: +${format(b.effect * amount)}`;
+					return text + `Effect: +${format(b.effect)} coins/${index === 0 || (index >= 3 && hasUpgrade("F", 11)) ? "click" : "sec"}\n\nTotal Effect: +${format(b.effect * amount)}`;
 				},
 				canAfford() { return player.points.gte(this.cost()) },
 				buy() {
@@ -117,7 +117,12 @@ addLayer("C", {
 				},
 			};
 			if (index === 2) {
-				data[index + 11].effect2 = new Decimal(0.25);
+				data[index + 11].effect2 = new Decimal(5);
+				data[index + 11].effect2total = function() {
+					let eff = getBuyableAmount("C", index + 11).mul(this.effect2);
+					if (eff.gt(50)) eff = eff.div(50).pow(0.25).mul(50);
+					return eff;
+				};
 			};
 			data[index + 111] = {
 				title() { return "Uptier " + getCreationName(index) },
