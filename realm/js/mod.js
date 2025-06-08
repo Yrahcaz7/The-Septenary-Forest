@@ -2,7 +2,7 @@ const modInfo = {
 	name: "Realm Creator",
 	author: "Yrahcaz7",
 	pointsName: "coins",
-	modFiles: ["components.js", "tree.js", "options.js", "upgrades.js", "layer/factions.js", "layer/mana.js", "layer/creations.js", "layer/gems.js", "layer/reincarnation.js", "layer/stats.js"],
+	modFiles: ["components.js", "tree.js", "options.js", "upgrades.js", "layer/factions.js", "layer/mana.js", "layer/components.js", "layer/gems.js", "layer/reincarnation.js", "layer/info.js", "layer/stats.js"],
 	offlineLimit: 1,
 };
 
@@ -25,16 +25,16 @@ const changelog = `<h1>Changelog:</h1><br>
 	<br><h3>v0.5 - Reworked Beta</h3><br>
 		- Massive internal rework.<br>
 		- You can now click anywhere to gain coins.<br>
-		- Creations now have their own layer.<br>
+		- Components now have their own layer.<br>
 		- Creation tier series are now buyables.<br>
 		- Added 1 new creation per alignment.<br>
-		- Added many new creation tiers.<br>
+		- Added many new component tiers.<br>
 		- Added 1 gem power upgrade.<br>
 		- Various balancing changes.<br>
 		- Added more stats to the stat menu again.<br>
 		- ALL OLD SAVE DATA IS REMOVED.<br>
 	<br><h3>v0.4 - Super Beta</h3><br>
-		- Added 2 new creation tiers.<br>
+		- Added 2 new component tiers.<br>
 		- Added 3 gem power upgrades.<br>
 		- Added 4 mana upgrades.<br>
 		- Added 3 autocating upgrades.<br>
@@ -45,7 +45,7 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added even more stats to the stat menu.<br>
 		- Various fixes.<br>
 	<br><h3>v0.3 - Spells Beta</h3><br>
-		- Added 5 new creation tiers.<br>
+		- Added 5 new component tiers.<br>
 		- Added casting, mana, and spells.<br>
 		- Added 2 normal spells.<br>
 		- Added 2 side spells.<br>
@@ -55,7 +55,7 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added more types of stats to the stat menu.<br>
 		- Minor fixes.<br>
 	<br><h3>v0.2 - Factions Beta</h3><br>
-		- Added 5 new creation tiers.<br>
+		- Added 5 new component tiers.<br>
 		- Added faction coins.<br>
 		- Added choosing a faction.<br>
 		- Added a new tab for faction stuff.<br>
@@ -63,7 +63,7 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added faction coin stats to the stat menu.<br>
 	<br><h3>v0.1 - Beta Test</h3><br>
 		- Added the click button.<br>
-		- Added 3 creations.<br>
+		- Added 3 components.<br>
 		- Added a stats menu.<br>
 <br>`;
 
@@ -126,8 +126,8 @@ function getPlayerStartingStats() { return {
 	FCchance: new Decimal(5),
 	FCbest: newDecimalZero(),
 	FCtotal: newDecimalZero(),
-	// creations
-	creations: newDecimalZero(),
+	// components
+	components: newDecimalZero(),
 	// mana
 	manaRegen: new Decimal(2.5),
 	manaTotal: newDecimalZero(),

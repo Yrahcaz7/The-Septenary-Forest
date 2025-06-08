@@ -2,7 +2,7 @@ addLayer("S", {
 	name: "Stats",
 	symbol: "S",
 	row: "side",
-	position: 0,
+	position: 1,
 	color: "#60C060",
 	type: "none",
 	tooltip: "Stats",
@@ -14,7 +14,7 @@ addLayer("S", {
 			tabs[statName[index]].content.push(["display-text", () => `<h3>GENERAL</h3><br>Your best coins is <b>${format(player.stats[index].best)}</b><br>You have generated <b>${format(player.stats[index].total)}</b> coins`], "blank");
 			tabs[statName[index]].content.push(["display-text", () => `<h3>PASSIVE</h3><br>Your best coins/sec is <b>${format(player.stats[index].bestPassive)}</b><br>You have generated <b>${format(player.stats[index].totalPassive)}</b> coins passively`, () => { return {color: lighten(getSideColor(1))} }], "blank");
 			tabs[statName[index]].content.push(["display-text", () => `<h3>CLICKS</h3><br>Your best coins/click is <b>${format(player.stats[index].bestClickValue)}</b><br>You have generated <b>${format(player.stats[index].totalClickValue)}</b> coins from clicking${index === 0 ? "" : "<br>Your best times clicked is <b>" + formatWhole(player.stats[index].bestClicks) + "</b>"}<br>You have clicked <b>${formatWhole(player.stats[index].totalClicks)}</b> times`, () => { return {color: lighten(getSideColor(0))} }], "blank");
-			tabs[statName[index]].content.push(["display-text", () => `<h3>CREATIONS</h3><br>Your best creations is <b>${formatWhole(player.stats[index].creations)}</b>`, () => { return {color: lighten(layers.C.color)} }], "blank");
+			tabs[statName[index]].content.push(["display-text", () => `<h3>COMPONENTS</h3><br>Your best components is <b>${formatWhole(player.stats[index].components)}</b>`, () => { return {color: lighten(layers.C.color)} }], "blank");
 			tabs[statName[index]].content.push(["display-text", () => `<h3>MANA</h3><br>Your best mana regen is <b>${format(player.stats[index].manaRegen)}</b><br>Your best max mana is <b>${format(player.stats[index].maxMana)}</b><br>You have generated <b>${format(player.stats[index].manaTotal)}</b> mana`, () => { return {color: lighten(layers.M.color)} }], "blank");
 			tabs[statName[index]].content.push(["display-text", () => `<h3>FACTION COINS</h3><br>Your best faction coins is <b>${formatWhole(player.stats[index].FCbest)}</b><br>You have found <b>${formatWhole(player.stats[index].FCtotal)}</b> faction coins<br>Your best faction coin chance is <b>${format(player.stats[index].FCchance)}%</b>`, () => {
 				const faction = getAllianceIndex();

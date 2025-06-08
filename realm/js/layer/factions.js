@@ -44,7 +44,7 @@ function getFactionCoinTypes(index = -1, side = -1) {
 const sideName = ["good", "evil", "neutral"];
 const factionName = ["fairy", "elf", "angel", "goblin", "undead", "demon"];
 const pluralFactionName = ["fairies", "elves", "angels", "goblins", "undead", "demons"];
-const factionFocus = ["basic creations", "click production", "mana and spells", "faction coins", "passive production", "non-basic creations"];
+const factionFocus = ["basic components", "click production", "mana and spells", "faction coins", "passive production", "advanced components"];
 const factionColor = ["#C040E0", "#40E040", "#40C0E0", "#C08040", "#8040C0", "#C04040"];
 
 function getAllianceUpgrade(index) {

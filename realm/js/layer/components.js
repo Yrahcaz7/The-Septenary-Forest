@@ -1,5 +1,5 @@
 addLayer("C", {
-	name: "Creations",
+	name: "Components",
 	row: 0,
 	position: 0,
 	startData() { return {
@@ -8,18 +8,18 @@ addLayer("C", {
 		bulk: newDecimalOne(),
 	}},
 	color: "#C0C0C0",
-	resource: "creations",
+	resource: "components",
 	type: "none",
 	update(diff) {
-		let creations = newDecimalZero();
+		let components = newDecimalZero();
 		let tiers = new Decimal(3);
 		for (const key in player.C.buyables) {
-			if (key < 100) creations = creations.add(getBuyableAmount("C", key));
+			if (key < 100) components = components.add(getBuyableAmount("C", key));
 			else tiers = tiers.add(getBuyableAmount("C", key));
 		};
-		player.C.points = creations;
+		player.C.points = components;
 		player.C.tiers = tiers;
-		player.stats.forEach(obj => obj.creations = obj.creations.max(player.C.points));
+		player.stats.forEach(obj => obj.components = obj.components.max(player.C.points));
 	},
 	shouldNotify() {
 		for (const key in player.C.buyables) {
@@ -36,7 +36,7 @@ addLayer("C", {
 			buyableRow.push(["column", [["buyable", index + 11], ["buyable", index + 111]], {margin: "0 7px"}]);
 		};
 		return [
-			["display-text", `You are bulk buying <b>${formatWhole(player.C.bulk)}x</b> creations`],
+			["display-text", `You are bulk buying <b>${formatWhole(player.C.bulk)}x</b> components`],
 			"blank",
 			["row", clickableRow],
 			"blank",

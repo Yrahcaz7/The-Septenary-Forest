@@ -165,11 +165,11 @@ addLayer("M", {
 				baseEffect2: new Decimal(10),
 			},
 			12: {
-				display() { return `boost all coin generation based on your creations for 30 seconds<br>Time left: ${formatTime(player.M.spellTimes[1])}<br><br>Effect: ${format(clickableEffect("M", this.id))}x<br><br>Cost: ${formatWhole(getSpellCost(this.id - 11))} mana` },
+				display() { return `boost all coin production based on your components for 30 seconds<br>Time left: ${formatTime(player.M.spellTimes[1])}<br><br>Effect: ${format(clickableEffect("M", this.id))}x<br><br>Cost: ${formatWhole(getSpellCost(this.id - 11))} mana` },
 				baseEffect() { return player.C.points.add(1).pow(hasUpgrade("M", 24) ? 0.2 : 0.15) },
 			},
 			13: {
-				display() { return `boost ${["coins/click", "coins/sec", "all coin generation"].find((_, index) => hasUpgrade("F", index + 11))} based on your mana for 15 seconds<br>Time left: ${formatTime(player.M.spellTimes[2])}<br><br>Effect: ${format(clickableEffect("M", this.id))}x<br><br>Cost: ${formatWhole(getSpellCost(this.id - 11))} mana` },
+				display() { return `boost ${["coins/click", "coins/sec", "all coin production"].find((_, index) => hasUpgrade("F", index + 11))} based on your mana for 15 seconds<br>Time left: ${formatTime(player.M.spellTimes[2])}<br><br>Effect: ${format(clickableEffect("M", this.id))}x<br><br>Cost: ${formatWhole(getSpellCost(this.id - 11))} mana` },
 				baseEffect() { return player.M.mana.add(1).pow(0.25) },
 				color: getSideColor,
 				unlocked: hasChosenSide,
