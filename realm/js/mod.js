@@ -21,6 +21,7 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Improved the stat menu and added more stats.<br>
 		- Added an option to toggle colored text.<br>
 		- Rebalanced many things.<br>
+		- Fixed various bugs.<br>
 	<br><h3>v0.5 - Reworked Beta</h3><br>
 		- Massive internal rework.<br>
 		- You can now click anywhere to gain coins.<br>

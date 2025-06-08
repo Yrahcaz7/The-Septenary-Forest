@@ -199,7 +199,7 @@ addLayer("M", {
 	}},
 	color: "#0080E0",
 	type: "none",
-	prestigeNotify() { return player.M.mana.gte(player.M.maxMana) },
+	prestigeNotify() { return player.M.mana.gte(player.M.maxMana) && tmp.pointGen instanceof Decimal && (tmp.pointGen.gt(0) || player.M.mana.gt(getSpellCost(1)) || (tmp.M.clickables[13].unlocked && player.M.mana.gt(getSpellCost(2)))) },
 	tooltip() { return format(player.M.mana) + "/" + format(player.M.maxMana) + " mana" },
 	update(diff) {
 		// mana regen buffs
