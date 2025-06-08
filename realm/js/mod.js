@@ -167,6 +167,7 @@ function addedPlayerData() { return {
 	FCchance: new Decimal(5),
 	FC: [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()],
 	bestGems: newDecimalZero(),
+	totalGems: newDecimalZero(),
 	stats: [getPlayerStartingStats(), getPlayerStartingStats(), getPlayerStartingStats()],
 }};
 
