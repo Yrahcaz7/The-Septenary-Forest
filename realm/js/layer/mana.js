@@ -56,7 +56,7 @@ addLayer("M", {
 		maxMana: new Decimal(100),
 		manaRegen: new Decimal(2.5),
 		spellTimes: [newDecimalZero(), newDecimalZero(), newDecimalZero()],
-		spellOrder: [0, 1, 2],
+		spellOrder: [],
 		autoPercent: 100,
 	}},
 	color: "#0080E0",
@@ -105,8 +105,9 @@ addLayer("M", {
 			};
 		};
 		// autocasting
-		for (let index = 0; index < player.M.spellOrder.length; index++) {
-			const spellIndex = player.M.spellOrder[index];
+		const isOrdered = hasUpgrade("M", 102);
+		for (let index = 0; index < player.M[isOrdered ? "spellOrder" : "spellTimes"].length; index++) {
+			const spellIndex = (isOrdered ? player.M.spellOrder[index] : index);
 			const cost = getSpellCost(spellIndex);
 			if (player.M.spellTimes[spellIndex].lte(0) && player.M.mana.gte(cost)) {
 				if (getClickableState("M", spellIndex + 11) === 1) {

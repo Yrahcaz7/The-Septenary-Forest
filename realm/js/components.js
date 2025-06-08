@@ -38,11 +38,10 @@ const customComponents = {
 	},
 	"autocast-toggle": {
 		props: ["layer", "data"],
-		data() { return {tmp} },
+		data() { return {tmp, hasUpgrade} },
 		computed: {
 			unlockedModes() { return (hasUpgrade(this.layer, 103) ? 2 : 1) },
 			canClick() { return hasUpgrade(this.layer, 101) },
-			canOrder() { return hasUpgrade(this.layer, 102) },
 			spellOrder() { return player[this.layer].spellOrder.indexOf(this.data - 11) },
 			activeMode() { return getClickableState(this.layer, this.data) },
 		},
@@ -50,7 +49,8 @@ const customComponents = {
 			toggle(mode) {
 				if (!this.canClick) return;
 				setClickableState(this.layer, this.data, mode === this.activeMode ? 0 : mode);
-				if (this.canOrder && mode === this.activeMode) player[this.layer].spellOrder.push(player[this.layer].spellOrder.splice(this.spellOrder, 1)[0]);
+				if (this.spellOrder >= 0) player[this.layer].spellOrder.splice(this.spellOrder, 1);
+				if (mode === this.activeMode) player[this.layer].spellOrder.push(this.data - 11);
 			},
 		},
 		template: template(`<div>
@@ -66,7 +66,7 @@ const customComponents = {
 						<path d="m 34,5 v 8 h -8" style="stroke-linecap: round; stroke-linejoin: round"/>
 					</g>
 					<use href="#arrow" transform-origin="20 20" transform="rotate(180)"/>
-					<text v-if="mode === activeMode" x="20" y="19.9" text-anchor="middle" dominant-baseline="central" fill="#000000" stroke="none" style="font-size: 15px">{{this.canOrder ? this.spellOrder + 1 : "ON"}}</text>
+					<text v-if="mode === activeMode" x="20" y="19.9" text-anchor="middle" dominant-baseline="central" fill="#000000" stroke="none" style="font-size: 15px">{{hasUpgrade(layer, 102) ? this.spellOrder + 1 : "ON"}}</text>
 				</svg>
 			</button>
 		</div>`),

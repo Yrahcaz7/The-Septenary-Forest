@@ -37,7 +37,7 @@ const factionUpgrades = [[
 	["Prism Upgrade", "double all spell effects, but triple all spell mana costs"],
 	["Angelic Clicks", "multiply coins/click based on your max mana", () => player.M.maxMana.add(1).pow(0.2), "", "x"],
 ], [
-	["Jackpot", "increase faction coin find chance based on your coins", () => player.points.add(1).log10().mul(10), "+", "%"],
+	["Jackpot", "increase faction coin find chance based on your coins", () => player.points.add(1).log10().mul(20), "+", "%"],
 	["Goblin's Greed", "multiply coins/sec based on your faction coins", () => player.F.points.add(1).pow(0.25), "", "x"],
 	["Currency Revolution", "multiply faction coin find chance based on your faction coins", () => player.F.points.add(1).log10().div(2).add(1), "", "x"],
 	["Moneyload", "multiply coins/sec based on your faction coin find chance", () => player.FCchance.add(1).pow(0.2), "", "x"],
