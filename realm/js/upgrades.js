@@ -5,8 +5,8 @@ const manaUpgrades = [
 	["Magical Environment", "increase mana regen based on your creations", () => player.C.points.add(1).pow(0.225), "+"],
 	["Attunement", "multiply max mana based on your faction coins", () => player.F.points.add(1).pow(0.05), "", "x"],
 	["Magical Aid", "increase mana regen based on your faction coins", () => player.F.points.add(1).pow(0.3), "+"],
-	["Focused Taxing", "make 'Tax Collection' also give coins equal to 10x coins/click"],
-	["Reinforced Weapons", "improve the 'Call to Arms' effect"],
+	["Special Relativity", "make 'Time Bending' also give coins equal to 10x coins/click"],
+	["Elemental Harmony", "improve the 'Equalization' effect"],
 ];
 
 const autocastingUpgrades = [
@@ -41,7 +41,7 @@ const factionUpgrades = [[
 	["Goblin's Greed", "multiply coins/sec based on your faction coins", () => player.F.points.add(1).pow(0.25), "", "x"],
 	["Currency Revolution", "multiply faction coin find chance based on your faction coins", () => player.F.points.add(1).log10().div(2).add(1), "", "x"],
 	["Moneyload", "multiply coins/sec based on your faction coin find chance", () => player.FCchance.add(1).pow(0.2), "", "x"],
-	["Absurd Taxes", "increase the first base effect of Tax Collection by 30"],
+	["Overflowing Greed", "multiply coins/sec and goblin coin gain by 2"],
 	["Goblin Pride", "multiply coins/sec based on your goblin coins", () => player.FC[3].add(1).pow(0.25), "", "x"],
 ], [
 	["Undending Cycle", "multiply coins/sec based on your coins", () => player.points.add(1).log10().div(2).add(1), "", "x"],

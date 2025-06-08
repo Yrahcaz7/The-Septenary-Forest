@@ -41,6 +41,7 @@ function getFactionCoinTypes(index = -1, side = -1) {
 	return [];
 };
 
+const sideName = ["good", "evil", "neutral"];
 const factionName = ["fairy", "elf", "angel", "goblin", "undead", "demon"];
 const pluralFactionName = ["fairies", "elves", "angels", "goblins", "undead", "demons"];
 const factionFocus = ["basic creations", "click production", "mana and spells", "faction coins", "passive production", "non-basic creations"];

@@ -90,6 +90,7 @@ function getPointGen() {
 	// multiplicative
 	if (hasFactionUpgrade(0, 1, 3)) gain = gain.mul(factionUpgradeEffect(0, 1));
 	if (hasFactionUpgrade(1, 0, 3)) gain = gain.mul(factionUpgradeEffect(1, 0));
+	if (hasFactionUpgrade(1, 1, 3)) gain = gain.mul(2);
 	if (hasFactionUpgrade(1, 2, 3)) gain = gain.mul(factionUpgradeEffect(1, 2));
 	if (hasFactionUpgrade(0, 0, 4)) gain = gain.mul(factionUpgradeEffect(0, 0));
 	if (hasFactionUpgrade(0, 1, 4)) gain = gain.mul(factionUpgradeEffect(0, 1));
@@ -107,7 +108,7 @@ const displayThings = [
 	() => format(player.clickValue) + "/click",
 ];
 
-const endPoints = new Decimal(1e18);
+const endPoints = new Decimal(1e16);
 
 function getPlayerStartingStats() { return {
 	// general
@@ -223,6 +224,7 @@ document.onclick = () => {
 	};
 	FCfound = FCfound.floor();
 	if (hasFactionUpgrade(0, 2, 2) && FCtype === 2) FCfound = FCfound.mul(5);
+	if (hasFactionUpgrade(1, 1, 3) && FCtype === 3) FCfound = FCfound.mul(2);
 	if (hasFactionUpgrade(1, 2, 4) && FCtype === 4) FCfound = FCfound.mul(2);
 	// faction coins gained
 	player.FC[FCtype] = player.FC[FCtype].add(FCfound);

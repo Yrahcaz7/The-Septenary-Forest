@@ -17,9 +17,7 @@ function getSpellCost(index) {
 
 function getSpellEffect(index, second = false) {
 	let eff = tmp.M.clickables[index + 11][`baseEffect${second ? "2" : ""}`];
-	if (index === 0) {
-		if (hasFactionUpgrade(1, 1, 3) && !second) eff = eff.add(30);
-	} else if (index === 2) {
+	if (index === 2) {
 		if (hasFactionUpgrade(0, 1, 5)) eff = eff.mul(factionUpgradeEffect(0, 1));
 	};
 	if (hasFactionUpgrade(1, 1, 2)) eff = eff.mul(2);
@@ -45,6 +43,8 @@ function castSpell(index, amt = newDecimalOne()) {
 		if (index >= 0) player.stats.forEach(obj => obj.casts[index] = obj.casts[index].add(1));
 	};
 };
+
+const spellName = ["Time Bending", "Equalization", "Holy Light", "Blood Frenzy"];
 
 addLayer("M", {
 	name: "Mana",
@@ -124,7 +124,7 @@ addLayer("M", {
 		const content = [["bar", "mana"]];
 		if (hasUpgrade("M", 103)) content.push("blank", "mana-auto-percent-slider");
 		content.push("blank");
-		const row = [["column", [["clickable", 11, {"min-height": "110px", height: "110px"}], ["max-spell-cast", 11], ["autocast-toggle", 11]], {margin: "0 7px"}]];
+		const row = [["column", [["clickable", 11, {"min-height": "100px", height: "100px"}], ["max-spell-cast", 11], ["autocast-toggle", 11]], {margin: "0 7px"}]];
 		for (let index = 1; tmp.M.clickables[index + 11]?.unlocked; index++) {
 			row.push(["column", [["clickable", index + 11], ["autocast-toggle", index + 11]], {margin: "0 7px"}]);
 		};
@@ -136,7 +136,7 @@ addLayer("M", {
 	},
 	componentStyles: {
 		upgrade: {height: "120px", "border-radius": "25px"},
-		clickable: {width: "125px", height: "135px", "border-radius": "25px 25px 0 0", transform: "none"},
+		clickable: {width: "125px", height: "125px", "border-radius": "25px 25px 0 0", transform: "none"},
 	},
 	bars: {
 		mana: {
@@ -152,7 +152,6 @@ addLayer("M", {
 	clickables: (() => {
 		const data = {
 			11: {
-				title: "Tax Collection",
 				display() {
 					let gain = tmp.pointGen.mul(clickableEffect("M", this.id));
 					if (hasUpgrade("M", 23)) {
@@ -166,12 +165,10 @@ addLayer("M", {
 				baseEffect2: new Decimal(10),
 			},
 			12: {
-				title: "Call to Arms",
 				display() { return `boost all coin generation based on your creations for 30 seconds<br>Time left: ${formatTime(player.M.spellTimes[1])}<br><br>Effect: ${format(clickableEffect("M", this.id))}x<br><br>Cost: ${formatWhole(getSpellCost(this.id - 11))} mana` },
 				baseEffect() { return player.C.points.add(1).pow(hasUpgrade("M", 24) ? 0.2 : 0.15) },
 			},
 			13: {
-				title() { return ["Holy Light", "Blood Frenzy"].find((_, index) => hasUpgrade("F", index + 11)) },
 				display() { return `boost ${["coins/click", "coins/sec", "all coin generation"].find((_, index) => hasUpgrade("F", index + 11))} based on your mana for 15 seconds<br>Time left: ${formatTime(player.M.spellTimes[2])}<br><br>Effect: ${format(clickableEffect("M", this.id))}x<br><br>Cost: ${formatWhole(getSpellCost(this.id - 11))} mana` },
 				baseEffect() { return player.M.mana.add(1).pow(0.25) },
 				color: getSideColor,
@@ -179,6 +176,7 @@ addLayer("M", {
 			},
 		};
 		for (let index = 0; index < 3; index++) {
+			data[index + 11].title = () => spellName[getSpellIndex(index)];
 			data[index + 11].effect = () => getSpellEffect(index);
 			data[index + 11].canClick = () => player.M.spellTimes[index].lte(0) && player.M.mana.gte(getSpellCost(index));
 			data[index + 11].onClick = () => castSpell(index);

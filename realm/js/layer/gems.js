@@ -14,12 +14,12 @@ addLayer("G", {
 		gemMult: newDecimalOne(),
 	}},
 	color: "#808080",
-	requires: new Decimal(1_000),
+	requires: new Decimal(100),
 	resource: "gems",
 	baseResource: "total coins this era",
 	baseAmount() {return player.stats[0].total},
 	type: "normal",
-	exponent: 0.3,
+	exponent: 0.25,
 	gainMult() {
 		let mult = newDecimalOne();
 		return mult;
