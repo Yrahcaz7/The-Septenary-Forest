@@ -400,7 +400,7 @@ function getAllianceUpgrade(index) {
 		fullDisplay() {
 			const alliance = getAllianceIndex(index);
 			const name = (factionName[alliance] || "???");
-			const types = getFactionCoinTypes(faction);
+			const types = getFactionCoinTypes(alliance);
 			return `<h3>${name.at(0).toUpperCase() + name.slice(1)} Alliance</h3><br>ally yourself with the ${pluralFactionName[alliance] || "???"}, which focus on ${factionFocus[alliance] || "???"}<br><br>Cost: 5 ${types.length === 2 ? factionName[types[0]] + " and " + factionName[types[1]] : name} coins`;
 		},
 		canAfford() { return getFactionCoinTypes(index).every(type => player.FC[type].gte(5)) && !hasChosenFaction() },
