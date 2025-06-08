@@ -50,11 +50,12 @@ addLayer("C", {
 		const data = {};
 		function getCreationName(num) {
 			if (num === 0) return "Air";
-			if (num === 1) return "Soil";
-			if (num === 2) return "Grass";
+			if (num === 1) return "Stone";
+			if (num === 2) return "Coal";
 			if (num === 3) {
 				if (hasUpgrade("F", 11)) return "Water";
 				if (hasUpgrade("F", 12)) return "Fire";
+				return "Iron";
 			};
 			return "???";
 		};
