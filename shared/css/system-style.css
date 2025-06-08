@@ -189,6 +189,7 @@ ul {
 	right: 55px;
 	top: 65px;
 	background-color: transparent;
+	gap: 20px;
 }
 
 button>* {

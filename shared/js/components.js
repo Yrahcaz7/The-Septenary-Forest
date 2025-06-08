@@ -39,10 +39,10 @@ function loadVue(mainPage = false) {
 			}" :style="{'margin-top': !readData(layoutInfo.showTree) && player.tab == 'info-tab' ? '50px' : ''}">
 				<div id="version" onclick="showTab('changelog-tab')" class="overlayThing" style="margin-right: 13px">{{VERSION.withoutName}}</div>
 				<button v-if="((player.navTab == 'none' && (tmp[player.tab].row == 'side' || tmp[player.tab].row == 'otherside' || player[player.tab].prevTab)) || player[player.navTab]?.prevTab)" class="big back overlayThing" onclick="goBack(player.navTab === 'none' ? player.tab : player.navTab)">&#8592;</button>
-				<img id="optionWheel" class="overlayThing" v-if="player.tab != 'options-tab'" src="${mainPage ? `` : `../`}shared/images/options_wheel.png" onclick="showTab('options-tab')">
+				<img id="optionWheel" class="overlayThing" v-if="player.tab != 'options-tab'" src="${mainPage ? "" : "../"}shared/images/options_wheel.png" onclick="showTab('options-tab')">
 				<div id="info" v-if="player.tab != 'info-tab'" class="overlayThing" onclick="showTab('info-tab')"><br>i</div>
 				<div id="discord" class="overlayThing" style="z-index: 30001">
-					<img src="${mainPage ? `` : `../`}shared/images/discord.png">
+					<img src="${mainPage ? "" : "../"}shared/images/discord.png">
 					<ul id="discordLinks">
 						<li v-if="modInfo.discordLink"><a class="link" :href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></li>
 						<li><a class="link" href="https://discord.gg/F3xveHV" target="_blank" :style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br></li>
@@ -50,10 +50,10 @@ function loadVue(mainPage = false) {
 					</ul>
 				</div>
 				<overlay-head v-if="!gameEnded"></overlay-head>
-				<div class="sideLayers">
-					<div v-for="(node, index) in OTHER_LAYERS.side">
+				<div class="upgCol sideLayers">
+					<template v-for="(node, index) in OTHER_LAYERS.side">
 						<tree-node :layer='node' :abb='tmp[node].symbol' :size="'small'"></tree-node>
-					</div>
+					</template>
 				</div>
 			</div>
 			<!-- tree tab -->
@@ -78,9 +78,9 @@ function loadVue(mainPage = false) {
 			</div>
 			<!-- particles -->
 			<div class="particle-container">
-				<div v-for="(particle, index) in particles">
+				<template v-for="(particle, index) in particles">
 					<particle :data="particle" :index="index"></particle>
-				</div>
+				</template>
 			</div>
 			<!-- layer tab -->
 			<div v-if="player.navTab !== 'none' && player.tab !== 'none' && !gameEnded" onscroll="resizeCanvas()" :class="{
@@ -1067,20 +1067,18 @@ function loadVue(mainPage = false) {
 	});
 
 	addNormalComponent('particle', {
-		props: ['data', 'index'],
-		data() {return {constructParticleStyle, run}},
-		template: template(`<div>
-			<div class='particle instant' :style="[
-				constructParticleStyle(data),
-				data.style,
-			]" @click="run(data.onClick, data)" @mouseenter="run(data.onMouseOver, data)" @mouseleave="run(data.onMouseLeave, data)">
-				<span v-html="data.text"></span>
-			</div>
-			<svg version="2" v-if="data.color">
+		props: ['data'],
+		data() {return {constructParticleStyle, run, getParticleImage}},
+		template: template(`<div class='particle instant' :style="[
+			constructParticleStyle(data, ${mainPage}),
+			data.style,
+		]" @click="run(data.onClick, data)" @mouseenter="run(data.onMouseOver, data)" @mouseleave="run(data.onMouseLeave, data)">
+			<svg v-if="data.color" style="display: none">
 				<mask :id="'pmask' + data.id">
-					<image id="img" :href="data.image" x="0" y="0" :height="data.width" :width="data.height"></image>
+					<image id="img" :href="getParticleImage(data, ${mainPage})" x="0" y="0" :width="data.width" :height="data.height"></image>
 				</mask>
 			</svg>
+			<span v-if="data.text" v-html="data.text"></span>
 		</div>`),
 	});
 

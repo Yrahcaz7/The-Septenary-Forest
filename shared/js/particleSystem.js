@@ -77,7 +77,6 @@ const newParticles = {
 			y: mouseY,
 			width: 35,
 			height: 35,
-			image: "images/particle.png",
 			angle: 0,
 			spread: 30,
 			offset: 10,
@@ -100,7 +99,6 @@ const newParticles = {
 			y: Math.random() * (tmp.other.screenHeight - 100) + 50,
 			width: 50,
 			height: 50,
-			image: "images/particle.png",
 			angle: 0,
 			spread: 0,
 			offset: 0,
@@ -131,9 +129,15 @@ function getOpacity(particle) {
 	return 1
 };
 
-function constructParticleStyle(particle) {
+function getParticleImage(particle, mainPage = true) {
+	if (particle.image) return particle.image;
+	if (mainPage) return "shared/images/particle.png";
+	return "../shared/images/particle.png";
+};
+
+function constructParticleStyle(particle, mainPage = true) {
 	const style = {
-		left: (particle.x - particle.height / 2) + "px",
+		left: (particle.x - particle.width / 2) + "px",
 		top: (particle.y - particle.height / 2) + "px",
 		width: particle.width + "px",
 		height: particle.height + "px",
@@ -144,9 +148,9 @@ function constructParticleStyle(particle) {
 	if (particle.color) {
 		style["background-color"] = particle.color;
 		style.mask = "url(#pmask" + particle.id + ")";
-		style["-webkit-mask-box-image"] = "url(" + particle.image + ")";
+		style["-webkit-mask-box-image-source"] = "url(" + getParticleImage(particle, mainPage) + ")";
 	} else {
-		style["background-image"] = "url(" + particle.image + ")";
+		style["background-image"] = "url(" + getParticleImage(particle, mainPage) + ")";
 	};
 	return style;
 };

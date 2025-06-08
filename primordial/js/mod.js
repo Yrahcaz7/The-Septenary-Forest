@@ -370,6 +370,7 @@ function fixOldSave(oldVersion) {
 	};
 	// remove unused vars
 	delete player.ghost0;
+	delete player.blank;
 	delete player.r.sanctummult;
 	delete player.r.essencemult;
 	delete options.css;
