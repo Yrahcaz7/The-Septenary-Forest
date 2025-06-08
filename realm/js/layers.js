@@ -27,34 +27,25 @@ addLayer("C", {
 		};
 	},
 	tabFormat() {
-		const row = [];
+		const clickableRow = [];
+		for (let index = 0; index < 6; index++) {
+			clickableRow.push(["bulk-button", index, {margin: "0 7px"}]);
+		};
+		const buyableRow = [];
 		for (let index = 0; tmp.C.buyables[index + 11]?.unlocked; index++) {
-			row.push(["column", [["buyable", index + 11], ["buyable", index + 111]], {margin: "0 7px"}]);
+			buyableRow.push(["column", [["buyable", index + 11], ["buyable", index + 111]], {margin: "0 7px"}]);
 		};
 		return [
 			["display-text", "You are bulk buying <b>" + formatWhole(player.C.bulk) + "x</b> creations"],
 			"blank",
-			"clickables",
+			["row", clickableRow],
 			"blank",
-			["row", row],
+			["row", buyableRow],
 		];
 	},
 	componentStyles: {
-		clickable: {width: "min-content", "min-height": "30px", "border-radius": "5px"},
 		buyable: {width: "180px", height: "125px", "border-radius": "25px"},
 	},
-	clickables: (() => {
-		const data = {};
-		for (let index = 0; index < 6; index++) {
-			const amt = new Decimal(10).pow(index);
-			data[index + 11] = {
-				title: formatWhole(amt) + "x",
-				canClick() { return player.C.bulk.neq(amt) },
-				onClick() { player.C.bulk = new Decimal(amt) },
-			};
-		};
-		return data;
-	})(),
 	buyables: (() => {
 		const data = {};
 		function getCreationName(num) {

@@ -1,10 +1,24 @@
 const customComponents = {
+	"bulk-button": {
+		props: ["layer", "data"],
+		data() { return {player, tmp, formatWhole} },
+		computed: {
+			bulkAmount() { return new Decimal(10).pow(this.data) },
+		},
+		template: template(`<button :class="'upg tooltipBox ' + (player[layer].bulk.eq(bulkAmount) ? 'locked' : 'can')" :style="[(player[layer].bulk.eq(bulkAmount) ? {} : {'background-color': tmp[layer].color}), {
+			width: 'min-content',
+			'min-height': '30px',
+			'border-radius': '5px',
+		}]" @click="player[layer].bulk = bulkAmount">
+			<h2>{{formatWhole(bulkAmount)}}x</h2>
+		</button>`),
+	},
 	"mana-auto-percent-slider": {
 		props: ["layer"],
 		data() { return {player, format} },
 		template: template(`<div class="tooltipBox">
 			<tooltip :text="'Ternary: autocast when mana is at least ' + player[layer].autoPercent + '% of max mana (' + format(player[layer].maxMana.mul(player[layer].autoPercent / 100)) + ')'"></tooltip>
-			<input type="range" v-model="player[layer].autoPercent" min="0" max="100" style='width: 500px'>
+			<input type="range" v-model="player[layer].autoPercent" min="0" max="100" style="width: 500px">
 		</div>`),
 	},
 	"max-spell-cast": {

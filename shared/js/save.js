@@ -85,7 +85,6 @@ function getStartLayerData(layer) {
 	};
 	if (layers[layer].buyables) {
 		layerData.buyables = getStartBuyables(layer);
-		layerData.spentOnBuyables = newDecimalZero();
 	};
 	if (layers[layer].upgrades) {
 		layerData.upgrades = [];
