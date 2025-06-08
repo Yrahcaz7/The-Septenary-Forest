@@ -2,10 +2,9 @@ const modInfo = {
 	name: 'The Primordial Tree',
 	id: 'Yrahcaz7-ModTree-ThePrimordialTree',
 	author: 'Yrahcaz7',
-	pointsName: 'points',
 	modFiles: ['components.js', 'tree.js', 'options.js', 'assimilation.js', 'achievements.js', 'softcaps.js', 'story.js', 'tabs.js', 'layers.js'],
-	initialStartPoints: newDecimalZero(),
 	offlineLimit: 1,
+	useNewSaveSyntax: false,
 };
 
 const VERSION = {
@@ -181,10 +180,6 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added a rebuyable.<br>
 <br>`;
 
-function winText() {
-	return 'You reached ' + format(endPoints) + ' ' + modInfo.pointsName + ' and won the game!<br>However, it isn\'t the end yet...<br>Wait for more updates for further content.';
-};
-
 function getdark(darkthis, type, special = false, research = false) {
 	if (darkthis.layer !== undefined) {
 		if (colorValue[1] == 'dark') return '-dark">';
@@ -192,17 +187,19 @@ function getdark(darkthis, type, special = false, research = false) {
 		if (((type == 'title' || type == 'title-hasend') && colorValue[0][0]) || (type == 'ref' && colorValue[0][1])) {
 			if (research) return '">';
 			else {
+				let darkcanafford = false;
 				if (special) darkcanafford = darkthis.canAfford();
 				else darkcanafford = player[darkthis.layer].points.gte(darkthis.cost);
 				if ((darkcanafford && !hasUpgrade(darkthis.layer, darkthis.id)) || (type == 'title-hasend' && hasUpgrade(darkthis.layer, darkthis.id))) return '-dark">';
 			};
 		} else if (type == 'title-light' && colorValue[0][0]) {
+			let darkcanafford = false;
 			if (special) darkcanafford = darkthis.canAfford();
 			else darkcanafford = player[darkthis.layer].points.gte(darkthis.cost);
 			if (darkcanafford && !hasUpgrade(darkthis.layer, darkthis.id)) return '-dark">';
 			return '-light">';
 		} else if (type == 'title-buyable' && colorValue[0][0]) {
-			if (darkthis.canAfford() && getBuyableAmount(darkthis.layer, darkthis.id)) return '-dark">';
+			if (darkthis.canBuy()) return '-dark">';
 		} else if (type == 'clickable' && colorValue[0][0]) {
 			if (darkthis.canClick()) return '-dark">';
 		} else {
@@ -373,6 +370,7 @@ function fixOldSave(oldVersion) {
 	};
 	// remove unused vars
 	delete player.ghost0;
+	delete player.blank;
 	delete player.r.sanctummult;
 	delete player.r.essencemult;
 	delete options.css;

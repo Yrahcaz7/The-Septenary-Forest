@@ -90,7 +90,7 @@ addLayer("g", {
 	}],
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = ["autoSTR", "autoWIS", "autoAGI", "autoINT"];
+		const keep = ["autoSTR", "autoWIS", "autoAGI", "autoINT"];
 		if (player.cy.unlocks[1] >= 1
 			|| player.l.points.gte(5)
 			|| player.r.points.gte(6)
@@ -99,28 +99,30 @@ addLayer("g", {
 		if (keep.includes("milestones")) {
 			layerDataReset("g", keep);
 		} else {
-			let keepMile = [], keepMileNum = 0;
+			const keepMile = [];
+			let keepMileNum = 0;
 			if (layers[resettingLayer].row == 2 && player.e.points.gte(36)) keepMileNum = 41;
 			else if (resettingLayer == "e" && hasChallenge("e", 12)) keepMileNum = 16;
-			if (keepMileNum > 0)
-				for (let index = 0; index < player.g.milestones.length; index++)
-					if (player.g.milestones[index] < keepMileNum)
-						keepMile.push(player.g.milestones[index]);
+			for (let index = 0; index < player.g.milestones.length; index++) {
+				if (player.g.milestones[index] < keepMileNum) {
+					keepMile.push(player.g.milestones[index]);
+				};
+			};
 			layerDataReset("g", keep);
 			player.g.milestones = keepMile;
 		};
 	},
 	automate() {
 		if (player.e.points.gte(30) || player.sp.unlocked) {
-			if (player.g.autoSTR && layers.g.buyables[11].canAfford()) layers.g.buyables[11].buy();
-			if (player.g.autoWIS && layers.g.buyables[12].canAfford()) layers.g.buyables[12].buy();
-			if (player.g.autoAGI && layers.g.buyables[13].canAfford()) layers.g.buyables[13].buy();
-			if (player.g.autoINT && layers.g.buyables[14].canAfford()) layers.g.buyables[14].buy();
+			if (player.g.autoSTR) buyBuyable("g", 11);
+			if (player.g.autoWIS) buyBuyable("g", 12);
+			if (player.g.autoAGI) buyBuyable("g", 13);
+			if (player.g.autoINT) buyBuyable("g", 14);
 		};
 	},
 	componentStyles: {
-		"buyable"() {return {"width": "210px", "height": "110px"}},
-		"clickable"() {return {"min-height": "30px", "transform": "none"}},
+		buyable: {width: "210px", height: "110px"},
+		clickable: {"min-height": "30px", transform: "none"},
 	},
 	buyables: {
 		11: {
@@ -153,7 +155,7 @@ addLayer("g", {
 				if (hasMilestone("g", 61)) max += 750;
 				return max;
 			},
-			canAfford() {return player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) && !inChallenge("e", 12) && !inChallenge("e", 16)},
+			canAfford() {return player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && !inChallenge("e", 12) && !inChallenge("e", 16)},
 			buy() {
 				if (!inChallenge("e", 21)) player[this.layer].spent = player[this.layer].spent.add(this.cost());
 				setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(getStatBulk()).min(1000));
@@ -196,7 +198,7 @@ addLayer("g", {
 				if (hasMilestone("g", 62)) max += 750;
 				return max;
 			},
-			canAfford() {return player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) && !inChallenge("e", 12) && !inChallenge("e", 16)},
+			canAfford() {return player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && !inChallenge("e", 12) && !inChallenge("e", 16)},
 			buy() {
 				if (!inChallenge("e", 21)) player[this.layer].spent = player[this.layer].spent.add(this.cost());
 				setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(getStatBulk()).min(1000));
@@ -240,7 +242,7 @@ addLayer("g", {
 				if (hasMilestone("g", 46)) max += 840;
 				return max;
 			},
-			canAfford() {return player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) && !inChallenge("e", 12) && !inChallenge("e", 16)},
+			canAfford() {return player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && !inChallenge("e", 12) && !inChallenge("e", 16)},
 			buy() {
 				if (!inChallenge("e", 21)) player[this.layer].spent = player[this.layer].spent.add(this.cost());
 				setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(getStatBulk()).min(1000));
@@ -306,7 +308,7 @@ addLayer("g", {
 				if (hasMilestone("g", 63) && player.g.resetTime) max += 800;
 				return max;
 			},
-			canAfford() {return player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) && !inChallenge("e", 11) && !inChallenge("e", 16)},
+			canAfford() {return player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && !inChallenge("e", 11) && !inChallenge("e", 16)},
 			buy() {
 				if (!inChallenge("e", 21)) player[this.layer].spent = player[this.layer].spent.add(this.cost());
 				setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(getStatBulk()).min(1000));
@@ -349,7 +351,7 @@ addLayer("g", {
 			canClick() {return getClickableState("g", 11) > 0 && !getClickableState("g", 14)},
 			onClick() {setClickableState("g", 11, (getClickableState("g", 11) || 0) - 1)},
 			onHold() {setClickableState("g", 11, (getClickableState("g", 11) || 0) - 1)},
-			style: {"width": "45px", "border-radius": "10px 0 0 10px"},
+			style: {width: "45px", "border-radius": "10px 0 0 10px"},
 		},
 		12: {
 			display() {return "<h2>+50</h2>"},
@@ -359,7 +361,7 @@ addLayer("g", {
 			},
 			onClick() {setClickableState("g", 11, (getClickableState("g", 11) || 0) + 1)},
 			onHold() {setClickableState("g", 11, (getClickableState("g", 11) || 0) + 1)},
-			style: {"width": "45px", "border-radius": "0 10px 10px 0"},
+			style: {width: "45px", "border-radius": "0 10px 10px 0"},
 		},
 		13: {
 			display() {return (getClickableState("g", 13) ? "Both" : "Only Base")},
@@ -368,7 +370,7 @@ addLayer("g", {
 				setClickableState("g", 13, !getClickableState("g", 13));
 				if (getClickableState("g", 13)) setClickableState("g", 14, false);
 			},
-			style: {"width": "40px", "border-radius": "10px 0 0 10px"},
+			style: {width: "40px", "border-radius": "10px 0 0 10px"},
 		},
 		14: {
 			display() {return (getClickableState("g", 14) ? "Both" : "Only Extra")},
@@ -377,7 +379,7 @@ addLayer("g", {
 				setClickableState("g", 14, !getClickableState("g", 14));
 				if (getClickableState("g", 14)) setClickableState("g", 13, false);
 			},
-			style: {"width": "40px", "border-radius": "0 10px 10px 0"},
+			style: {width: "40px", "border-radius": "0 10px 10px 0"},
 		},
 	},
 	milestones: {

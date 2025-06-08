@@ -20,7 +20,7 @@ const customComponents = {
             {'margin-left': '16px'},
             (player[layer].points.gte(assimilationReq[layer]) ? {'background-color': tmp[data].color} : {}),
             tmp[layer].componentStyles['prestige-button'],
-        ]" v-html="(player[layer].points.gte(assimilationReq[layer]) ? 'Assimilate this layer!' : 'Reach ' + format(assimilationReq[layer]) + ' ' + tmp[layer].resource + ' to fully Assimilate this layer.')" v-on:click="completeAssimilation(layer)"></button>`),
+        ]" v-html="(player[layer].points.gte(assimilationReq[layer]) ? 'Assimilate this layer!' : 'Reach ' + format(assimilationReq[layer]) + ' ' + tmp[layer].resource + ' to fully Assimilate this layer.')" @click="completeAssimilation(layer)"></button>`),
     },
 };
 ```
@@ -41,6 +41,4 @@ Lastly, the `template` attribute is a string that contains an HTML-like structur
 
 In this example, the template is passed through the `template()` function, removing any tabs and line breaks from the string.
 
-Since there are already so many great resources out there that explain how Vue 3 components work, I won't explain them here.
-
-Instead, you can check out [this documentation on template syntax](https://vuejs.org/guide/essentials/template-syntax.html) or simply learn by looking at the code for the already existing components.
+For more detail, you can check out [this documentation on template syntax](https://vuejs.org/guide/essentials/template-syntax.html) or look at the [code for the already existing components](/shared/js/components.js).

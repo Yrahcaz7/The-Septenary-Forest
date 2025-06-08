@@ -160,18 +160,20 @@ addLayer("w", {
 	}],
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = [];
+		const keep = [];
 		layerDataReset("w", keep);
 	},
 	shouldNotify() {
-		for (let row = 1; row <= tmp.w.grid.rows; row++)
-			for (let col = 1; col <= tmp.w.grid.cols; col++)
+		for (let row = 1; row <= tmp.w.grid.rows; row++) {
+			for (let col = 1; col <= tmp.w.grid.cols; col++) {
 				if (layers.w.grid.getCanClick(getGridData("w", row * 100 + col), row * 100 + col)) return true;
+			};
+		};
 	},
 	componentStyles: {
-		"contained-grid"() {return {"box-sizing": "border-box", "border": "2px solid #C77055", "padding": "16px"}},
-		"gridable"() {return {"width": "120px", "height": "120px", "border-radius": "0px"}},
-		"master-button"() {return {"margin-right": "18px"}},
+		"contained-grid": {"box-sizing": "border-box", border: "2px solid #C77055", padding: "16px"},
+		gridable: {width: "120px", height: "120px", "border-radius": "0px"},
+		"master-button": {"margin-right": "18px"},
 	},
 	grid: {
 		rows() {
@@ -207,24 +209,22 @@ addLayer("w", {
 		getDisplay(data, id) {
 			if (!(id == 101 || getGridData("w", id - 1) || getGridData("w", id + 1) || getGridData("w", id - 100) || getGridData("w", id + 100))) return "";
 			const upg = warUpgrades[Math.floor(id / 100) - 1][id % 100 - 1];
-			let desc = (data == 2 && upg.e.desc ? upg.e.desc : upg.desc);
-			return (typeof desc == "function" ? desc() : desc) + "<br><br>Cost: " + (data > 0 && Math.floor(id / 100) <= getEnhancableGridSize() && id % 100 <= getEnhancableGridSize() ? formatWhole(getWarUpgradeCostE(id)) + " battle enhancement" + (getWarUpgradeCostE(id) == 1 ? "" : "s") : formatWhole(upg.cost) + " battle" + (upg.cost == 1 ? "" : "s"));
+			const desc = (data == 2 && upg.e.desc ? upg.e.desc : upg.desc);
+			return (desc instanceof Function ? desc() : desc) + "<br><br>Cost: " + (data > 0 && Math.floor(id / 100) <= getEnhancableGridSize() && id % 100 <= getEnhancableGridSize() ? formatWhole(getWarUpgradeCostE(id)) + " battle enhancement" + (getWarUpgradeCostE(id) == 1 ? "" : "s") : formatWhole(upg.cost) + " battle" + (upg.cost == 1 ? "" : "s"));
 		},
 		getEffect(data, id) {
 			if (!id) return;
 			const upg = warUpgrades[Math.floor(id / 100) - 1][id % 100 - 1];
-			let eff = upg.effect;
-			if (data == 2 && upg.e.effect) eff = upg.e.effect;
-			if (typeof eff == "function") return eff();
-			return eff;
+			const eff = (data == 2 && upg.e.effect ? upg.e.effect : upg.effect);
+			return (eff instanceof Function ? eff() : eff);
 		},
 		getStyle(data, id) {
-			if (data == 2) return {"border-color": "#D69358", "background-color": "#77BF5F", "cursor": "default"};
+			if (data == 2) return {"border-color": "#D69358", "background-color": "#77BF5F", cursor: "default"};
 			if (data == 1) {
 				if (this.getCanClick(data, id)) return {"background-color": "#D69358"};
 				const size = getEnhancableGridSize();
 				if (Math.floor(id / 100) <= size && id % 100 <= size) return {"background-color": "#6C9060"};
-				return {"background-color": "#77BF5F", "cursor": "default"};
+				return {"background-color": "#77BF5F", cursor: "default"};
 			};
 			if (!(id == 101 || getGridData("w", id - 1) || getGridData("w", id + 1) || getGridData("w", id - 100) || getGridData("w", id + 100))) return {"background-color": "#FFFFFF40"};
 		},
@@ -232,13 +232,13 @@ addLayer("w", {
 	buyables: {
 		respec(onlyE = false) {
 			if (onlyE || player.t.points.gte(player.cy.unlocks[1] >= 4 ? 6 : 10)) {
-				for (const key in player.w.grid)
-					if (Object.hasOwnProperty.call(player.w.grid, key))
-						player.w.grid[key] = (player.l.points.gte(player.cy.unlocks[3] >= 4 ? 7 : 20) && getWarUpgradeCostE(key) <= 0 ? 2 : 1);
+				for (const key in player.w.grid) {
+					player.w.grid[key] = (player.l.points.gte(player.cy.unlocks[3] >= 4 ? 7 : 20) && getWarUpgradeCostE(key) <= 0 ? 2 : 1);
+				};
 			} else {
-				for (const key in player.w.grid)
-					if (Object.hasOwnProperty.call(player.w.grid, key))
-						player.w.grid[key] = 0;
+				for (const key in player.w.grid) {
+					player.w.grid[key] = 0;
+				};
 				player.w.spent = newDecimalZero();
 			};
 			player.w.spentE = newDecimalZero();

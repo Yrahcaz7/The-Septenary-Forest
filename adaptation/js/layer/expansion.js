@@ -67,7 +67,7 @@ addLayer("ex", {
 		autoGI: false,
 	}},
 	color: "#B44990",
-	nodeStyle() {if (tmp.ex.canReset || player.ex.unlocked) return {"background": "border-box linear-gradient(to right, #EE7770, #B44990, #E03330)"}},
+	nodeStyle() {if (tmp.ex.canReset || player.ex.unlocked) return {background: "border-box linear-gradient(to right, #EE7770, #B44990, #E03330)"}},
 	resource: "expansion points",
 	row: 4,
 	baseResource: "acclimation points",
@@ -145,7 +145,7 @@ addLayer("ex", {
 			else text += " and divides the conscious being and domination requirements by /" + format(tmp.ex.effect[4]);
 			text += "<br><br>By default, each influence generator maxes out at 100 seconds of production.";
 		};
-		let arr = [
+		const arr = [
 			"main-display",
 			"prestige-button",
 			"resource-display",
@@ -154,9 +154,11 @@ addLayer("ex", {
 		];
 		if (player.ex.influenceUnlocked) {
 			arr.push(["buyables", "2"], "blank");
-			for (const key in tmp.ex.buyables)
-				if (Object.hasOwnProperty.call(tmp.ex.buyables, key) && key < 20 && tmp.ex.buyables[key].unlocked)
+			for (const key in tmp.ex.buyables) {
+				if (key < 20 && tmp.ex.buyables[key].unlocked) {
 					arr.push(["buyable", +key], "blank");
+				};
+			};
 			if (getUnlockedExpansionGens() >= 7) {
 				let html = "<div style='display: grid'>";
 				html += "<button class='buyable tooltipBox locked' style='width: 500px; height: 60px; border-radius: 0px; background-color: #FFFFFF40' id='buyable-ex-20'>";
@@ -184,11 +186,11 @@ addLayer("ex", {
 	}],
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = ["autoIG", "autoTE", "autoGI"];
+		const keep = ["autoIG", "autoTE", "autoGI"];
 		layerDataReset("ex", keep);
-		for (const key in layers.ex.buyables)
-			if (Object.hasOwnProperty.call(layers.ex.buyables, key) && key < 20)
-				player.ex.extra[key - 11] = newDecimalZero();
+		for (const key in layers.ex.buyables) {
+			if (key < 20) player.ex.extra[key - 11] = newDecimalZero();
+		};
 	},
 	update(diff) {
 		if (challengeCompletions("ec", 11) >= 7 && !player.ex.influenceUnlocked) player.ex.influenceUnlocked = true;
@@ -196,47 +198,52 @@ addLayer("ex", {
 			diff *= buyableEffect("ex", 31);
 			if (hasMilestone("r", 50)) diff *= milestoneEffect("r", 50);
 			for (const key in layers.ex.buyables) {
-				if (Object.hasOwnProperty.call(layers.ex.buyables, key) && key < 20 && hasBuyable("ex", key) && tmp.ex.buyables[key].unlocked) {
+				if (key < 20 && hasBuyable("ex", key) && tmp.ex.buyables[key].unlocked) {
 					let eff = buyableEffect("ex", key);
 					if (key == 11) {
 						eff = eff.pow(buyableEffect("em", 13).add(1));
-						if (player.ex.influence.lt(eff.mul(100)))
+						if (player.ex.influence.lt(eff.mul(100))) {
 							player.ex.influence = player.ex.influence.add(eff.mul(diff)).min(eff.mul(100));
+						};
 					} else {
-						if (player.ex.extra[key - 12].lt(eff.mul(100)))
+						if (player.ex.extra[key - 12].lt(eff.mul(100))) {
 							player.ex.extra[key - 12] = player.ex.extra[key - 12].add(eff.mul(diff)).min(eff.mul(100));
+						};
 					};
 				};
 			};
 			if (getUnlockedExpansionGens() >= 7) {
-				let eff = expansionGen10Effect();
-				if (player.ex.extra[8].lt(eff.mul(100)))
+				const eff = expansionGen10Effect();
+				if (player.ex.extra[8].lt(eff.mul(100))) {
 					player.ex.extra[8] = player.ex.extra[8].add(eff.mul(diff)).min(eff.mul(100));
+				};
 			};
 		};
 	},
 	automate() {
 		if (player.co.unlocked && player.ex.autoIG) {
-			for (const key in layers.ex.buyables)
-				if (Object.hasOwnProperty.call(layers.ex.buyables, key) && key < 20 && tmp.ex.buyables[key].unlocked && layers.ex.buyables[key].canAfford())
-					layers.ex.buyables[key].buy();
+			for (const key in tmp.ex.buyables) {
+				if (key < 20) buyBuyable("ex", key);
+			};
 		};
 		if (player.co.unlocked && player.ex.autoTE) {
-			if (layers.ex.buyables[21].canAfford()) layers.ex.buyables[21].buy();
-			if (layers.ex.buyables[22].canAfford()) layers.ex.buyables[22].buy();
+			buyBuyable("ex", 21);
+			buyBuyable("ex", 22);
 		};
 		if (hasMilestone("d", 53) && player.ex.autoGI) {
-			if (layers.ex.buyables[31].canAfford()) layers.ex.buyables[31].buy();
+			buyBuyable("ex", 31);
 		};
 	},
 	shouldNotify() {
-		if (player.ex.influenceUnlocked)
-			for (const key in tmp.ex.buyables)
-				if (tmp.ex.buyables[key]?.unlocked && tmp.ex.buyables[key]?.canAfford) return true;
+		if (player.ex.influenceUnlocked) {
+			for (const key in tmp.ex.buyables) {
+				if (tmp.ex.buyables[key]?.canBuy) return true;
+			};
+		};
 	},
 	componentStyles: {
 		"prestige-button"() {if (tmp.ex.canReset && tmp.ex.nodeStyle) return tmp.ex.nodeStyle},
-		"buyable"() {return {"width": "500px", "height": "60px", "border-radius": "0px"}},
+		"buyable"() {return {width: "500px", height: "60px", "border-radius": "0px"}},
 	},
 	buyables: {
 		11: {
@@ -249,7 +256,7 @@ addLayer("ex", {
 			},
 			canAfford() {return player.ex.influenceUnlocked && player[this.layer].points.gte(this.cost())},
 			buy() {addBuyables(this.layer, this.id, getExpansionGenBulk())},
-			style() {if (this.canAfford()) return tmp.ex.nodeStyle},
+			style() {if (tmp[this.layer].buyables[this.id].canBuy) return tmp.ex.nodeStyle},
 		},
 		12: {
 			cost(amt) {return getExpansionGenCost(this.id, amt)},
@@ -261,7 +268,7 @@ addLayer("ex", {
 			},
 			canAfford() {return player.ex.influenceUnlocked && player[this.layer].points.gte(this.cost())},
 			buy() {addBuyables(this.layer, this.id, getExpansionGenBulk())},
-			style() {if (this.canAfford()) return tmp.ex.nodeStyle},
+			style() {if (tmp[this.layer].buyables[this.id].canBuy) return tmp.ex.nodeStyle},
 		},
 		13: {
 			cost(amt) {return getExpansionGenCost(this.id, amt)},
@@ -273,7 +280,7 @@ addLayer("ex", {
 			},
 			canAfford() {return player.ex.influenceUnlocked && player[this.layer].points.gte(this.cost())},
 			buy() {addBuyables(this.layer, this.id, getExpansionGenBulk())},
-			style() {if (this.canAfford()) return tmp.ex.nodeStyle},
+			style() {if (tmp[this.layer].buyables[this.id].canBuy) return tmp.ex.nodeStyle},
 		},
 		14: {
 			cost(amt) {return getExpansionGenCost(this.id, amt)},
@@ -285,7 +292,7 @@ addLayer("ex", {
 			},
 			canAfford() {return player.ex.influenceUnlocked && player[this.layer].points.gte(this.cost())},
 			buy() {addBuyables(this.layer, this.id, getExpansionGenBulk())},
-			style() {if (this.canAfford()) return tmp.ex.nodeStyle},
+			style() {if (tmp[this.layer].buyables[this.id].canBuy) return tmp.ex.nodeStyle},
 			unlocked() {return getUnlockedExpansionGens() >= 1},
 		},
 		15: {
@@ -298,7 +305,7 @@ addLayer("ex", {
 			},
 			canAfford() {return player.ex.influenceUnlocked && player[this.layer].points.gte(this.cost())},
 			buy() {addBuyables(this.layer, this.id, getExpansionGenBulk())},
-			style() {if (this.canAfford()) return tmp.ex.nodeStyle},
+			style() {if (tmp[this.layer].buyables[this.id].canBuy) return tmp.ex.nodeStyle},
 			unlocked() {return getUnlockedExpansionGens() >= 2},
 		},
 		16: {
@@ -311,7 +318,7 @@ addLayer("ex", {
 			},
 			canAfford() {return player.ex.influenceUnlocked && player[this.layer].points.gte(this.cost())},
 			buy() {addBuyables(this.layer, this.id, getExpansionGenBulk())},
-			style() {if (this.canAfford()) return tmp.ex.nodeStyle},
+			style() {if (tmp[this.layer].buyables[this.id].canBuy) return tmp.ex.nodeStyle},
 			unlocked() {return getUnlockedExpansionGens() >= 3},
 		},
 		17: {
@@ -324,7 +331,7 @@ addLayer("ex", {
 			},
 			canAfford() {return player.ex.influenceUnlocked && player[this.layer].points.gte(this.cost())},
 			buy() {addBuyables(this.layer, this.id, getExpansionGenBulk())},
-			style() {if (this.canAfford()) return tmp.ex.nodeStyle},
+			style() {if (tmp[this.layer].buyables[this.id].canBuy) return tmp.ex.nodeStyle},
 			unlocked() {return getUnlockedExpansionGens() >= 4},
 		},
 		18: {
@@ -337,7 +344,7 @@ addLayer("ex", {
 			},
 			canAfford() {return player.ex.influenceUnlocked && player[this.layer].points.gte(this.cost())},
 			buy() {addBuyables(this.layer, this.id, getExpansionGenBulk())},
-			style() {if (this.canAfford()) return tmp.ex.nodeStyle},
+			style() {if (tmp[this.layer].buyables[this.id].canBuy) return tmp.ex.nodeStyle},
 			unlocked() {return getUnlockedExpansionGens() >= 5},
 		},
 		19: {
@@ -350,7 +357,7 @@ addLayer("ex", {
 			},
 			canAfford() {return player.ex.influenceUnlocked && player[this.layer].points.gte(this.cost())},
 			buy() {addBuyables(this.layer, this.id, getExpansionGenBulk())},
-			style() {if (this.canAfford()) return tmp.ex.nodeStyle},
+			style() {if (tmp[this.layer].buyables[this.id].canBuy) return tmp.ex.nodeStyle},
 			unlocked() {return getUnlockedExpansionGens() >= 6},
 		},
 		21: {
@@ -389,8 +396,8 @@ addLayer("ex", {
 				return extra;
 			},
 			style() {
-				let obj = {"width": "250px", "height": "100px", "border-radius": "25px"};
-				if (this.canAfford()) obj.background = tmp.ex.nodeStyle.background;
+				let obj = {width: "250px", height: "100px", "border-radius": "25px"};
+				if (tmp[this.layer].buyables[this.id].canBuy) obj.background = tmp.ex.nodeStyle.background;
 				return obj;
 			},
 		},
@@ -412,8 +419,8 @@ addLayer("ex", {
 				addBuyables(this.layer, this.id, bulk);
 			},
 			style() {
-				let obj = {"width": "250px", "height": "100px", "border-radius": "25px"};
-				if (this.canAfford()) obj.background = tmp.ex.nodeStyle.background;
+				let obj = {width: "250px", height: "100px", "border-radius": "25px"};
+				if (tmp[this.layer].buyables[this.id].canBuy) obj.background = tmp.ex.nodeStyle.background;
 				return obj;
 			},
 		},
@@ -423,7 +430,7 @@ addLayer("ex", {
 			title: "Generator improvement",
 			display() {
 				const GI = tmp[this.layer].buyables[this.id];
-				let amt = getBuyableAmount(this.layer, this.id).toNumber();
+				const amt = getBuyableAmount(this.layer, this.id).toNumber();
 				if (GENERATOR_IMPROVEMENTS[amt + 1]) return "improve the generator formulas and time for generators goes faster, but reset influence and all non-bought generators<br><br>Next: " + GENERATOR_IMPROVEMENTS[amt] + " --> " + GENERATOR_IMPROVEMENTS[amt + 1] + " and " + formatWhole(GI.effect) + "x --> " + formatWhole(GI.effect + 1) + "x<br><br>Cost: " + format(GI.cost) + " influence<br><br>Bought: " + formatWhole(amt) + "/" + formatWhole(GI.purchaseLimit);
 				return "improve the generator formulas and time for generators goes faster, but reset influence and all non-bought generators<br><br>Effects: " + GENERATOR_IMPROVEMENTS[0] + " --> " + GENERATOR_IMPROVEMENTS[amt] + " and 1x --> " + formatWhole(GI.effect) + "x<br><br>Bought: " + formatWhole(amt) + "/" + formatWhole(GI.purchaseLimit);
 			},
@@ -432,18 +439,18 @@ addLayer("ex", {
 				if (hasMilestone("r", 75)) limit += milestoneEffect("r", 75);
 				return limit;
 			},
-			canAfford() {return player.ex.influenceUnlocked && player.ex.influence.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit())},
+			canAfford() {return player.ex.influenceUnlocked && player.ex.influence.gte(this.cost())},
 			buy() {
 				player.ex.influence = newDecimalZero();
-				for (const key in layers.ex.buyables)
-					if (Object.hasOwnProperty.call(layers.ex.buyables, key) && key < 20)
-						player.ex.extra[key - 11] = newDecimalZero();
+				for (const key in layers.ex.buyables) {
+					if (key < 20) player.ex.extra[key - 11] = newDecimalZero();
+				};
 				addBuyables(this.layer, this.id, 1);
 			},
 			style() {
-				let obj = {"width": "400px", "height": "110px", "border-radius": "25px"};
+				let obj = {width: "400px", height: "110px", "border-radius": "25px"};
 				if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) obj["border-color"] = "#B44990";
-				else if (this.canAfford()) obj.background = tmp.ex.nodeStyle.background;
+				else if (tmp[this.layer].buyables[this.id].canBuy) obj.background = tmp.ex.nodeStyle.background;
 				return obj;
 			},
 		},

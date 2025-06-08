@@ -10,13 +10,15 @@ Here's a breakdown of what's in it:
     - `name`: The name of your mod. (a string)
     - `id`: The id for your mod, a unique string that is used to determine savefile location. Be sure to set it when you start making a mod, and don't change it later because it will erase all saves.
     - `author`: The name of the author, displayed in the info tab.
-    - `pointsName`: This changes what is displayed instead of "points" for the main currency. (It does not affect it in the code.)
+    - `pointsName`: **optional**. This changes what is displayed instead of "points" for the main currency. (It does not affect it in the code.)
     - `modFiles`: An array of file addresses which will be loaded for this mod. Using smaller files makes it easier to find what you're looking for.
-    - `discordName`, `discordLink`: If you have a Discord server or other discussion place, you can add a link to it.
+    - `discordName`, `discordLink`: **optional**. If you have a Discord server or other discussion place, you can add a link to it.
         "discordName" is the text on the link, and "discordLink" is the url of an invite. If you're using a Discord invite, please make sure it's set to never expire.
     - `offlineLimit`: A number that is the maximum amount of offline time that the player can accumulate, in hours. Any extra time is lost.
         This is useful because most of these mods are fast-paced enough that too much offline time ruins the balance, such as the time in between updates. That is why I suggest developers disable offline time on their own savefile.
-    - `initialStartPoints`: A Decimal for the amount of points a new player should start with.
+    - `initialStartPoints`: **optional**. A Decimal for the amount of points a new player should start with.
+    - `useNewSaveSyntax`: **optional** *(additional feature)*. This combines the author name and the mod id to create a unique internal id. Any spaces in the name or id are treated as dashes. Similar to `id`, you shouldn't change this later (and if you use this, you shouldn't change `author` later, either). This is enabled by default.
+    - `friendlyErrors`: **optional** *(additional feature)*. When this is false, it disables my custom friendly errors and warnings that try to detect when things have gone wrong. (It's enabled by default because it can be very helpful and it shouldn't change anything functionally. Disabling it may slightly increase performance.)
 
 - `VERSION` is used to describe the current version of your mod. It contains:
 
@@ -27,7 +29,7 @@ Here's a breakdown of what's in it:
 
 - `changelog` is the HTML displayed in the changelog tab.
 
-- `doNotCallTheseFunctionsEveryTick` is very important, if you are adding non-standard functions. TMT calls every function anywhere in "layers" every tick to store the result, unless specifically told not to. Functions that have are used to do an action need to be identified. "Official" functions (those in the documentation) are all fine, but if you make any new ones, add their names to this array. (This feature is optional.)
+- `doNotCallTheseFunctionsEveryTick` is very important, if you are adding non-standard functions. TMT calls every function anywhere in "layers" every tick to store the result, unless specifically told not to. Functions that are used to do an action need to be identified. "Official" functions (those in the documentation) are all fine, but if you make any new ones, add their names to this array. (This feature is optional.)
 
 ```js
 // The ones here are examples. All official functions are already taken care of.

@@ -1,6 +1,10 @@
-for (file in modInfo.modFiles) {
+function loadModFile(index) {
 	let script = document.createElement("script");
-	script.setAttribute("src", "js/" + modInfo.modFiles[file]);
-	script.setAttribute("async", "false");
-	document.head.insertBefore(script, document.getElementById("temp"));
+	script.src = "js/" + modInfo.modFiles[index];
+	if (index + 1 < modInfo.modFiles.length) script.onload = () => {
+		loadModFile(index + 1);
+	};
+	document.head.appendChild(script);
 };
+
+loadModFile(0);

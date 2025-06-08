@@ -3,8 +3,8 @@ const trees = [
 	["realm", "Realm Creator"],
 	["color", "Color Factory"],
 	["number", "The Number Tree"],
-	["boostGen", "Booster-Generator Tree"],
-	["adaptation", "Adaptation Tree"],
+	["boostGen", "The Booster-Generator Tree"],
+	["adaptation", "The Adaptation Tree"],
 ];
 
 function getFirstWoodEffect() {
@@ -71,13 +71,12 @@ addLayer("t", {
 	hotkeys: [
 		{key: "t", description: "T: Reset for trees", onPress() {if (canReset(this.layer)) doReset(this.layer)}},
 	],
-	layerShown() {return true},
 	doReset(resettingLayer) {
-		let keep = [];
+		const keep = [];
 		if (layers[resettingLayer].row > this.row) layerDataReset('t', keep);
 	},
 	tabFormat: {
-		"Links": {
+		Links: {
 			content: [
 				"main-display",
 				"prestige-button",
@@ -94,7 +93,7 @@ addLayer("t", {
 				}],
 			],
 		},
-		"Wood": {
+		Wood: {
 			content() {
 				let text = "You have <h2 class='layer-t'>" + formatWhole(player.t.wood) + "</h2> wood";
 				if (hasUpgrade("t", 12)) text += ", which multiplies point gain by <h2 class='layer-t'>" + format(upgradeEffect("t", 12)) + "</h2>x";
@@ -167,7 +166,7 @@ addLayer("t", {
 				player.t.pendingChopBulk = getChopBulk();
 				setClickableState("t", 11, getChopTime());
 			},
-			style: {"width": "250px", "min-height": "50px", "border-radius": "25px"},
+			style: {width: "250px", "min-height": "50px", "border-radius": "25px"},
 		},
 	},
 	bars: {

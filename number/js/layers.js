@@ -4,17 +4,13 @@ addLayer('N', {
 	row: 'side',
 	position: 0,
 	startData() { return {
-		unlocked: true,
 		points: newDecimalZero(),
-		record: newDecimalZero(),
 	}},
 	color: '#c0c0c0',
 	resource: 'notes',
 	type: 'none',
-	layerShown() { return true },
 	tabFormat: [
-		['display-text', () => 'You have <h2 class="layer-N">' + formatWhole(player.N.points) + '</h2> notes'],
-		'blank',
+		'main-display',
 		['display-text', () => {
 			let text = '<h3>Note #1 - Roman Numeral Transcription</h3><br><br>';
 			text += 'N ----- 0<br>';
@@ -24,7 +20,7 @@ addLayer('N', {
 			text += 'L ----- 50<br>';
 			text += 'C ----- 100<br>';
 			text += 'D ----- 500<br>';
-			text += '&#8576; ----- 1,000<br>';
+			text += 'M ----- 1,000<br>';
 			if (player.N.points.gte(2)) {
 				text += '<br><h3>Note #2 - Greek Numeral Transcription</h3><br><br>';
 				text += '𐆊 ----- 0<br>';
@@ -72,12 +68,12 @@ addLayer('N', {
 	update(diff) {
 		let amount = newDecimalOne();
 		if (player.gn.unlocked) amount = amount.add(1);
-		player.N.points = amount.round();
-		if (player.N.points.gt(player.N.record)) {
-			let title = 'title not found';
-			player.N.record = player.N.record.add(1).round();
-			if (player.N.points.eq(1)) title = 'Roman Numeral Transcription';
-			else if (player.N.points.eq(2)) title = 'Greek Numeral Transcription';
+		player.N.points = amount;
+		if (player.N.points.gt(player.N.total)) {
+			player.N.total = player.N.total.add(1);
+			let title = '???';
+			if (player.N.total.eq(1)) title = 'Roman Numeral Transcription';
+			else if (player.N.total.eq(2)) title = 'Greek Numeral Transcription';
 			doPopup('none', title, 'New note found!', 3, '#cccccc');
 		};
 	},
@@ -91,7 +87,6 @@ addLayer('rn', {
 	branches: ['d', 'gn'],
 	tooltip() { return romanNumeralFormat(player.rn.points) + ' roman numerals' },
 	startData() { return {
-		unlocked: true,
 		points: newDecimalZero(),
 		best: newDecimalZero(),
 		total: newDecimalZero(),
@@ -161,7 +156,7 @@ addLayer('rn', {
 	passiveGeneration() { if (hasMilestone('d', 6)) return 10 },
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = [];
+		const keep = [];
 		if ((hasMilestone('gn', 1) && resettingLayer == 'gn') || (hasMilestone('i', 17) && resettingLayer == 'i')) keep.push('upgrades');
 		if ((hasMilestone('gn', 2) && resettingLayer == 'gn') || (hasMilestone('i', 19) && resettingLayer == 'i')) keep.push('calc', 'upCalc', 'overCalc');
 		layerDataReset('rn', keep);
@@ -171,7 +166,6 @@ addLayer('rn', {
 		description: 'R: reset for roman numerals',
 		onPress() { if (player.rn.unlocked) doReset('rn') },
 	}],
-	layerShown() { return true },
 	tabFormat: [
 		['display-text', () => {
 			if (player.rn.points.gte('1e1000')) return '<h2 class="layer-rn">' + romanNumeralFormat(player.rn.points) + '</h2> roman numerals';
@@ -586,8 +580,8 @@ addLayer('d', {
 	autoPrestige() { return player.d.digitAuto },
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = ["numberUpgradeAuto", "baseUpAuto", "digitAuto", "limitBreakAuto"];
-		let keepMile = [];
+		const keep = ["numberUpgradeAuto", "baseUpAuto", "digitAuto", "limitBreakAuto"];
+		const keepMile = [];
 		if ((hasMilestone('gn', 0) && resettingLayer == 'gn') || (hasMilestone('i', 10) && resettingLayer == 'i')) {
 			keepMile.push('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
 		};
@@ -624,9 +618,8 @@ addLayer('d', {
 		if (hasUpgrade('d', 94)) eff = eff.mul(upgradeEffect('d', 94));
 		return eff;
 	},
-	layerShown() { return true },
 	tabFormat: {
-		"Number": {
+		Number: {
 			content: () => {
 				let content = [
 					['display-text', 'You have <h2 class="layer-d">' + formatWhole(player.d.points) + '</h2> digits (and your number is <h2 class="layer-d">' + formatWhole(player.d.number) + '</h2>), which increases arabic numeral gain by +<h2 class="layer-d">' + format(tmp.d.effect) + '</h2>%'],
@@ -647,7 +640,7 @@ addLayer('d', {
 				return content;
 			},
 		},
-		"Milestones": {
+		Milestones: {
 			content: [
 				['display-text', () => 'You have <h2 class="layer-d">' + formatWhole(player.d.points) + '</h2> digits (and your number is <h2 class="layer-d">' + formatWhole(player.d.number) + '</h2>), which increases arabic numeral gain by +<h2 class="layer-d">' + format(tmp.d.effect) + '</h2>%'],
 				'blank',
@@ -731,7 +724,7 @@ addLayer('d', {
 	automate() {
 		for (let num = 0; num < (hasUpgrade('gn', 32) && !inChallenge('i', 32) ? 2 : 1); num++) {
 			if (player.d.limitBreakAuto) {
-				for (upgrade in tmp.d.upgrades) {
+				for (const upgrade in tmp.d.upgrades) {
 					if (upgrade == "layer" || upgrade == "rows" || upgrade == "cols") continue;
 					if (tmp.d.upgrades[upgrade].unlocked) {
 						buyUpgrade('d', upgrade);
@@ -739,16 +732,12 @@ addLayer('d', {
 				};
 			};
 			if (player.d.numberUpgradeAuto) {
-				for (upgrade in tmp.d.buyables) {
-					if (upgrade == "layer" || upgrade == "rows" || upgrade == "cols" || (upgrade == "51" && !player.d.baseUpAuto)) continue;
-					if (tmp.d.buyables[upgrade].unlocked && layers.d.buyables[upgrade].canAfford()) {
-						layers.d.buyables[upgrade].buy();
-					};
+				for (const id in layers.d.buyables) {
+					if (id == "layer" || id == "rows" || id == "cols" || (id == "51" && !player.d.baseUpAuto)) continue;
+					buyBuyable("d", +id);
 				};
 			} else if (player.d.baseUpAuto) {
-				if (tmp.d.buyables[51].unlocked && layers.d.buyables[51].canAfford()) {
-					layers.d.buyables[51].buy();
-				};
+				buyBuyable("d", 51);
 			};
 		};
 	},
@@ -768,15 +757,15 @@ addLayer('d', {
 			if (hasUpgrade('d', 11) && id == 102) return '<h2>Limit broken';
 			if (player.d.points.gt(99) && id == 101) return '<h2>Limit bent';
 			if (player.d.limited) return '<h2>' + formatWhole(buyableEffect('d', 51).sub(1));
-			data = player.d.meta.charAt(id - 101);
+			data = player.d.meta.at(id - 101);
 			setGridData('d', id, data);
 			return '<h2>' + data;
 		},
 		getStyle(data, id) {
-			if (buyableEffect('d', 51).gte(10) && id == 101) return {'height':'30px','width':'170px','border-radius':'0%'};
-			if (hasUpgrade('d', 11) && id == 102) return {'height':'30px','width':'130px','border-radius':'0%'};
-			if (player.d.points.gt(99) && id == 101) return {'height':'30px','width':'120px','border-radius':'0%'};
-			return {'height':'30px','width':'30px','border-radius':'50%'};
+			if (buyableEffect('d', 51).gte(10) && id == 101) return {height:'30px',width:'170px','border-radius':'0'};
+			if (hasUpgrade('d', 11) && id == 102) return {height:'30px',width:'130px','border-radius':'0'};
+			if (player.d.points.gt(99) && id == 101) return {height:'30px',width:'120px','border-radius':'0'};
+			return {height:'30px',width:'30px','border-radius':'50%'};
 		},
 	},
 	clickables: {
@@ -801,12 +790,12 @@ addLayer('d', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit());
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit() {
 				lim = new Decimal(250);
 				if (getBuyableAmount('d', 31).gt(0)) lim = lim.add(buyableEffect('d', 31));
@@ -828,12 +817,12 @@ addLayer('d', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit());
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit() {
 				let cap = new Decimal(1000);
 				if (hasUpgrade('gn', 22) && !inChallenge('i', 32)) cap = cap.add(upgradeEffect('gn', 22));
@@ -854,12 +843,12 @@ addLayer('d', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 200,
 		},
 		32: {
@@ -872,12 +861,12 @@ addLayer('d', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 33333,
 		},
 		21: {
@@ -898,12 +887,12 @@ addLayer('d', {
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit());
 				return text;
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit() {
 				let limit = new Decimal(500);
 				if (hasChallenge('i', 12)) limit = limit.add(challengeEffect('i', 12));
@@ -931,7 +920,7 @@ addLayer('d', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			unlocked() { return hasMilestone('d', 7) },
 		},
 		31: {
@@ -944,12 +933,12 @@ addLayer('d', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 20,
 			unlocked() { return hasMilestone('d', 8) },
 		},
@@ -972,7 +961,7 @@ addLayer('d', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			unlocked() { return hasMilestone('d', 8) },
 		},
 		51: {
@@ -995,12 +984,12 @@ addLayer('d', {
 					+ `Cost: ` + format(this.cost()) + ` of your number<br><br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit) + `</h3>`;
 			},
-			canAfford() { return player.d.number.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.d.number.gte(this.cost()) },
 			buy() {
 				player.d.number = player.d.number.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'300px','height':'300px','border-radius':'50%'},
+			style: {width:'300px',height:'300px','border-radius':'50%'},
 			purchaseLimit: 8,
 			unlocked() {
 				if (inChallenge('i', 11)) return false;
@@ -1021,12 +1010,12 @@ addLayer('d', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit());
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit() {
 				let limit = new Decimal(25);
 				if (hasChallenge('i', 11)) limit = limit.add(challengeEffect('i', 11));
@@ -1044,12 +1033,12 @@ addLayer('d', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 4,
 			unlocked() { return hasMilestone('d', 17) },
 		},
@@ -1067,12 +1056,12 @@ addLayer('d', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit());
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit() {
 				let cap = new Decimal(50);
 				if (hasUpgrade('gn', 21) && !inChallenge('i', 32)) cap = cap.add(upgradeEffect('gn', 21));
@@ -1656,7 +1645,7 @@ addLayer('i', {
 	},
 	layerShown() { return hasMilestone('d', 15) || player.i.unlocked },
 	tabFormat: {
-		"Milestones": {
+		Milestones: {
 			content: [
 				'main-display',
 				'prestige-button',
@@ -1665,7 +1654,7 @@ addLayer('i', {
 				'milestones',
 			],
 		},
-		"Replicator": {
+		Replicator: {
 			content: [
 				'main-display',
 				'prestige-button',
@@ -1682,7 +1671,7 @@ addLayer('i', {
 			],
 			unlocked() { return player.i.unlocked },
 		},
-		"Simulation": {
+		Simulation: {
 			content: [
 				'main-display',
 				'prestige-button',
@@ -1705,7 +1694,7 @@ addLayer('i', {
 			],
 			unlocked() { return hasMilestone('i', 5) },
 		},
-		"Feats": {
+		Feats: {
 			content: [
 				'main-display',
 				'prestige-button',
@@ -1797,21 +1786,13 @@ addLayer('i', {
 	},
 	automate() {
 		if (player.i.simAuto) {
-			for (upgrade in tmp.i.buyables) {
-				if (upgrade == "layer" || upgrade == "rows" || upgrade == "cols" || upgrade < 40 || upgrade > 70) continue;
-				if (tmp.i.buyables[upgrade].unlocked && layers.i.buyables[upgrade].canAfford()) {
-					player.i.money = player.i.money.sub(tmp.i.buyables[upgrade].cost);
-					addBuyables('i', upgrade, 1);
-				};
+			for (const id in layers.i.buyables) {
+				if (id > 40 && id < 70) buyBuyable("i", +id);
 			};
 		};
 		if (player.i.replicateAuto) {
-			for (upgrade in tmp.i.buyables) {
-				if (upgrade == "layer" || upgrade == "rows" || upgrade == "cols" || (upgrade > 40 && upgrade < 70)) continue;
-				if (tmp.i.buyables[upgrade].unlocked && layers.i.buyables[upgrade].canAfford()) {
-					player.points = player.points.sub(tmp.i.buyables[upgrade].cost);
-					addBuyables('i', upgrade, 1);
-				};
+			for (const id in layers.i.buyables) {
+				if (id < 40 || id > 70) buyBuyable("i", +id);
 			};
 		};
 	},
@@ -2024,9 +2005,9 @@ addLayer('i', {
 				else setClickableState(this.layer, this.id, true);
 			},
 			style() {
-				let color = '#77bf5f';
-				if (getClickableState(this.layer, this.id)) color = '#bf8f8f';
-				return {'width':'595px','min-height':'40px','background-color':color,'color':'rgba(0, 0, 0, 0.5)','border':'4px solid rgba(0, 0, 0, 0.125)','border-radius':'20px','transform':'scale(1, 1)'};
+				let bg = '#77bf5f';
+				if (getClickableState(this.layer, this.id)) bg = '#bf8f8f';
+				return {width:'595px','min-height':'40px','background-color':bg,color:'rgba(0, 0, 0, 0.5)',border:'4px solid rgba(0, 0, 0, 0.125)','border-radius':'20px',transform:'none'};
 			},
 			unlocked() { return hasChallenge('i', 22) },
 		},
@@ -2042,12 +2023,12 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 5,
 		},
 		12: {
@@ -2060,12 +2041,12 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 20,
 		},
 		31: {
@@ -2083,7 +2064,7 @@ addLayer('i', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 		},
 		32: {
 			cost() { return new Decimal('1e5900') },
@@ -2094,12 +2075,12 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 1,
 		},
 		33: {
@@ -2117,7 +2098,7 @@ addLayer('i', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 		},
 		41: {
 			cost() {
@@ -2133,12 +2114,12 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 2500, // 17500
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2156,12 +2137,12 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 2500, // 17500
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2179,12 +2160,12 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 2500, // 17500
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2202,12 +2183,12 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 2500, // 17500
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2228,12 +2209,12 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 25,
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2254,12 +2235,12 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 25,
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2280,12 +2261,12 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 30,
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2306,12 +2287,12 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 30,
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2325,12 +2306,12 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 10,
 			unlocked() { return hasMilestone('i', 7) },
 		},
@@ -2344,12 +2325,12 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 10,
 			unlocked() { return hasMilestone('i', 7) },
 		},
@@ -2363,12 +2344,12 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 10,
 			unlocked() { return hasMilestone('i', 7) },
 		},
@@ -2382,12 +2363,12 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` money<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.i.money.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() {
 				player.i.money = player.i.money.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 10,
 			unlocked() { return hasMilestone('i', 7) },
 		},
@@ -2406,7 +2387,7 @@ addLayer('i', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			unlocked() { return hasMilestone('i', 7) },
 		},
 		72: {
@@ -2418,12 +2399,12 @@ addLayer('i', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 1,
 			unlocked() { return hasMilestone('i', 7) },
 		},
@@ -2442,7 +2423,7 @@ addLayer('i', {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			unlocked() { return hasMilestone('i', 7) },
 		},
 	},
@@ -2455,7 +2436,7 @@ addLayer('i', {
 			rewardEffect() { return challengeCompletions(this.layer, this.id) },
 			canComplete() { return player.points.gte(new Decimal('1e100').pow(challengeCompletions(this.layer, this.id)).mul('1e1000')) },
 			doReset: true,
-			style: {'width':'290px','height':'230px','border-radius':'20px'},
+			style: {width:'290px',height:'230px','border-radius':'20px'},
 			marked: false,
 			completionLimit() {
 				let cap = 10;
@@ -2472,7 +2453,7 @@ addLayer('i', {
 			rewardEffect() { return new Decimal(challengeCompletions(this.layer, this.id)).mul(25) },
 			canComplete() { return player.points.gte(new Decimal('1e100').pow(challengeCompletions(this.layer, this.id)).mul('1e1100')) },
 			doReset: true,
-			style: {'width':'290px','height':'230px','border-radius':'20px'},
+			style: {width:'290px',height:'230px','border-radius':'20px'},
 			marked: false,
 			completionLimit() {
 				let cap = 10;
@@ -2489,7 +2470,7 @@ addLayer('i', {
 			rewardEffect() { return new Decimal(10000).pow(challengeCompletions(this.layer, this.id)) },
 			canComplete() { return player.points.gte(new Decimal(200).pow(challengeCompletions(this.layer, this.id)).mul(1e13)) },
 			doReset: true,
-			style: {'width':'290px','height':'230px','border-radius':'20px'},
+			style: {width:'290px',height:'230px','border-radius':'20px'},
 			marked: false,
 			completionLimit: 20,
 			unlocked() { return hasMilestone('i', 9) },
@@ -2502,7 +2483,7 @@ addLayer('i', {
 			rewardEffect() { return new Decimal(2).pow(challengeCompletions(this.layer, this.id)) },
 			canComplete() { return player.points.gte(new Decimal('1e1000').pow(challengeCompletions(this.layer, this.id)).mul('1e4000')) },
 			doReset: true,
-			style: {'width':'290px','height':'230px','border-radius':'20px'},
+			style: {width:'290px',height:'230px','border-radius':'20px'},
 			marked: false,
 			completionLimit: 3,
 			unlocked() { return hasMilestone('i', 9) && hasMilestone('i', 11) },
@@ -2516,7 +2497,7 @@ addLayer('i', {
 			canComplete() { return player.points.gte(new Decimal('1e50').pow(challengeCompletions(this.layer, this.id)).mul('1e1200')) },
 			doReset: true,
 			countsAs: [12, 22],
-			style: {'width':'290px','height':'230px','border-radius':'20px'},
+			style: {width:'290px',height:'230px','border-radius':'20px'},
 			marked: false,
 			completionLimit() {
 				let cap = 15;
@@ -2534,7 +2515,7 @@ addLayer('i', {
 			canComplete() { return player.points.gte(new Decimal(1e5).pow(challengeCompletions(this.layer, this.id)).mul(1e50)) },
 			doReset: true,
 			countsAs: [21],
-			style: {'width':'290px','height':'230px','border-radius':'20px'},
+			style: {width:'290px',height:'230px','border-radius':'20px'},
 			marked: false,
 			completionLimit: 10,
 			unlocked() { return hasMilestone('i', 9) && hasMilestone('gn', 4) },
@@ -2548,7 +2529,7 @@ addLayer('i', {
 			canComplete() { return player.points.gte(new Decimal(1e25).pow(challengeCompletions(this.layer, this.id)).mul(1e200)) },
 			doReset: true,
 			countsAs: [11, 21, 32],
-			style: {'width':'290px','height':'230px','border-radius':'20px'},
+			style: {width:'290px',height:'230px','border-radius':'20px'},
 			marked: false,
 			completionLimit() {
 				let cap = 10;
@@ -2567,7 +2548,7 @@ addLayer('i', {
 			canComplete() { return player.points.gte(new Decimal(1e10).pow(challengeCompletions(this.layer, this.id)).mul(1e240)) },
 			doReset: true,
 			countsAs: [11, 12, 21, 22, 31, 32, 41],
-			style: {'width':'290px','height':'230px','border-radius':'20px'},
+			style: {width:'290px',height:'230px','border-radius':'20px'},
 			marked: false,
 			completionLimit() {
 				let cap = 20;
@@ -2628,7 +2609,7 @@ addLayer('gn', {
 	}],
 	layerShown() { return hasMilestone('i', 9) || player.gn.unlocked },
 	tabFormat: {
-		"Milestones": {
+		Milestones: {
 			content: [
 				['display-text', () => {
 					if (player.gn.points.gte('1e1000')) return '<h2 class="layer-gn">' + greekNumeralFormat(player.rn.points) + '</h2> greek numerals';
@@ -2648,7 +2629,7 @@ addLayer('gn', {
 				'milestones',
 			],
 		},
-		"Studies": {
+		Studies: {
 			content: [
 				['display-text', () => {
 					if (player.gn.points.gte('1e1000')) return '<h2 class="layer-gn">' + greekNumeralFormat(player.rn.points) + '</h2> greek numerals';
@@ -2670,7 +2651,7 @@ addLayer('gn', {
 				'blank',
 			],
 		},
-		"Comprehension": {
+		Comprehension: {
 			content: [
 				['display-text', () => {
 					if (player.gn.points.gte('1e1000')) return '<h2 class="layer-gn">' + greekNumeralFormat(player.rn.points) + '</h2> greek numerals';
@@ -3043,12 +3024,12 @@ addLayer('gn', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 10,
 			unlocked() { return hasMilestone('gn', 15) },
 		},
@@ -3065,12 +3046,12 @@ addLayer('gn', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 10,
 			unlocked() { return hasMilestone('gn', 15) },
 		},
@@ -3087,12 +3068,12 @@ addLayer('gn', {
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
 					+ `Amount: ` + formatWhole(getBuyableAmount(this.layer, this.id)) + `/` + formatWhole(this.purchaseLimit);
 			},
-			canAfford() { return player.points.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(this.cost()) },
 			buy() {
 				player.points = player.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			purchaseLimit: 5,
 			unlocked() { return hasMilestone('gn', 15) },
 		},
@@ -3114,7 +3095,7 @@ addLayer('gn', {
 				player.gn.points = player.gn.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {'width':'120px','height':'120px'},
+			style: {width:'120px',height:'120px'},
 			unlocked() { return hasMilestone('gn', 15) },
 		},
 	},

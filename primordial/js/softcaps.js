@@ -20,7 +20,6 @@ addLayer('SC', {
 	symbol: 'SC',
 	position: 2,
 	startData() { return {
-		unlocked: true,
 		points: newDecimalZero(),
 		softcaps: [],
 	}},

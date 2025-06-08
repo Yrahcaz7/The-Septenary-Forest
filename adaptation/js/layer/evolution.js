@@ -343,8 +343,8 @@ addLayer("e", {
 			let pending = false;
 			let text = "";
 			for (const key in extraEvolutionEffects) {
-				const eff = (typeof extraEvolutionEffects[key] == "function" ? extraEvolutionEffects[key]() : extraEvolutionEffects[key]);
-				if (Object.hasOwnProperty.call(extraEvolutionEffects, key) && eff) {
+				const eff = (extraEvolutionEffects[key] instanceof Function ? extraEvolutionEffects[key]() : extraEvolutionEffects[key]);
+				if (eff) {
 					if (player.e.points.gte(+key)) {
 						if (+key === 26 && !hasChallenge("e", 13)) {
 							text += "<br><br>You need to complete the 3rd retrogression to obtain the next effect.";
@@ -383,7 +383,7 @@ addLayer("e", {
 	}],
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = [];
+		const keep = [];
 		if (player.cy.unlocks[1] >= 9
 			|| player.l.points.gte(2)
 			|| player.ec.points.gte(3)
@@ -399,7 +399,7 @@ addLayer("e", {
 		player.e.challenges[21] = Math.floor(player.e.challenges[21]);
 	},
 	componentStyles: {
-		"challenge"() {return {"min-height": "360px", "height": "fit-content", "border-radius": "50px"}},
+		challenge: {"min-height": "360px", height: "fit-content", "border-radius": "50px"},
 	},
 	challenges: {
 		11: {
@@ -409,7 +409,7 @@ addLayer("e", {
 			canComplete() {return player.g.points.gte(this.goal)},
 			unlocked() {return player.e.challengesUnlocked || hasChallenge("e", this.id)},
 			overrideResetsNothing: true,
-			style: {"width": "250px"},
+			style: {width: "250px"},
 		},
 		12: {
 			name: "2nd Retrogression",
@@ -423,7 +423,7 @@ addLayer("e", {
 			unlockReq: 8,
 			enterable() {return player.e.points.gte(this.unlockReq) || hasChallenge("e", this.id)},
 			overrideResetsNothing: true,
-			style: {"width": "250px"},
+			style: {width: "250px"},
 		},
 		13: {
 			name: "3rd Retrogression",
@@ -437,7 +437,7 @@ addLayer("e", {
 			unlockReq: 11,
 			enterable() {return player.e.points.gte(this.unlockReq) || hasChallenge("e", this.id)},
 			overrideResetsNothing: true,
-			style: {"width": "250px"},
+			style: {width: "250px"},
 		},
 		14: {
 			name: "4th Retrogression",
@@ -451,7 +451,7 @@ addLayer("e", {
 			unlockReq: 14,
 			enterable() {return player.e.points.gte(this.unlockReq) || hasChallenge("e", this.id)},
 			overrideResetsNothing: true,
-			style: {"width": "250px"},
+			style: {width: "250px"},
 		},
 		15: {
 			name: "5th Retrogression",
@@ -466,7 +466,7 @@ addLayer("e", {
 			enterable() {return player.e.points.gte(this.unlockReq) || hasChallenge("e", this.id)},
 			overrideResetsNothing: true,
 			countsAs: [11, 12, 13, 14],
-			style: {"width": "250px"},
+			style: {width: "250px"},
 		},
 		16: {
 			name: "6th Retrogression",
@@ -481,7 +481,7 @@ addLayer("e", {
 			unlocked() {return (hasChallenge("e", this.id - 1) && hasMilestone("a", 12)) || hasChallenge("e", this.id)},
 			enterable() {return player.e.points.gte(this.unlockReq) || hasChallenge("e", this.id)},
 			overrideResetsNothing: true,
-			style: {"width": "250px"},
+			style: {width: "250px"},
 		},
 		17: {
 			name: "7th Retrogression",
@@ -491,9 +491,9 @@ addLayer("e", {
 			},
 			rewardEffect() {
 				let retrogressions = 0;
-				for (const id in player.e.challenges)
-					if (Object.hasOwnProperty.call(player.e.challenges, id))
-						retrogressions += player.e.challenges[id];
+				for (const id in player.e.challenges) {
+					retrogressions += player.e.challenges[id];
+				};
 				let base = new Decimal(1.1);
 				if (hasMilestone("a", 16)) base = base.add(milestoneEffect("a", 16));
 				let mult = newDecimalOne();
@@ -506,7 +506,7 @@ addLayer("e", {
 			unlockReq: 95,
 			enterable() {return player.e.points.gte(this.unlockReq)},
 			overrideResetsNothing: true,
-			style: {"width": "250px"},
+			style: {width: "250px"},
 		},
 		18: {
 			name: "8th Retrogression",
@@ -516,9 +516,9 @@ addLayer("e", {
 			},
 			rewardEffect() {
 				let retrogressions = 0;
-				for (const id in player.e.challenges)
-					if (Object.hasOwnProperty.call(player.e.challenges, id))
-						retrogressions += player.e.challenges[id];
+				for (const id in player.e.challenges) {
+					retrogressions += player.e.challenges[id];
+				};
 				let exp = new Decimal(0.25);
 				if (hasMilestone("a", 21)) exp = exp.add(milestoneEffect("a", 21));
 				let mult = newDecimalOne();
@@ -531,7 +531,7 @@ addLayer("e", {
 			unlockReq: 124,
 			enterable() {return player.e.points.gte(this.unlockReq)},
 			overrideResetsNothing: true,
-			style: {"width": "250px"},
+			style: {width: "250px"},
 		},
 		19: {
 			name: "9th Retrogression",
@@ -551,7 +551,7 @@ addLayer("e", {
 			enterable() {return player.e.points.gte(this.unlockReq)},
 			overrideResetsNothing: true,
 			countsAs: [11, 12, 13, 14, 15, 16, 17, 18],
-			style: {"width": "250px"},
+			style: {width: "250px"},
 		},
 		21: {
 			name: "10th Retrogression",
@@ -602,7 +602,7 @@ addLayer("e", {
 				if (tmp.r.effect[2]) limit *= tmp.r.effect[2].toNumber();
 				return Math.floor(limit);
 			},
-			style: {"width": "calc(100% - 8px)", "max-width": "600px"},
+			style: {width: "calc(100% - 8px)", "max-width": "600px"},
 		},
 	},
 });

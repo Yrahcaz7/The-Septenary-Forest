@@ -1,11 +1,10 @@
 const modInfo = {
-	name: "Booster-Generator Tree",
+	name: "The Booster-Generator Tree",
 	id: "booster-generator-tree-yrahcaz7",
 	author: "Yrahcaz7",
-	pointsName: "points",
 	modFiles: ["tree.js", "options.js", "layers.js"],
-	initialStartPoints: newDecimalZero(),
-	offlineLimit: 24, // in hours
+	offlineLimit: 24,
+	useNewSaveSyntax: false,
 }
 
 const VERSION = {

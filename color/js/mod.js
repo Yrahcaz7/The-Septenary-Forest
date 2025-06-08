@@ -6,6 +6,7 @@ const modInfo = {
 	modFiles: ["formatting.js", "components.js", "tree.js", "options.js", "layers.js"],
 	initialStartPoints: newDecimalOne(),
 	offlineLimit: 1,
+	useNewSaveSyntax: false,
 };
 
 const VERSION = {
@@ -44,11 +45,9 @@ function getRandInt(min, max) {
 
 const canGenPoints = false;
 
-function getPointGen() {
-	return newDecimalZero();
-};
+function getPointGen() { return newDecimalZero() };
 
-function addedPlayerData() {return {}};
+function addedPlayerData() { return {} };
 
 const displayThings = [
 	() => { if (tmp.gameEnded) return "You beat the game!<br>For now..." },
@@ -67,7 +66,7 @@ function fixOldSave(oldVersion) {
 	if (player.r) {
 		player = null;
 		save(true);
-		window.location.reload();
+		location.reload();
 	};
 	// remove unused vars
 	delete player.spacer;
@@ -86,9 +85,9 @@ function fixOldSave(oldVersion) {
 
 function overridePointDisplay() {
 	let html = "";
-	if (player.points.lt("1e1000")) html += "<span class'overlayThing'>You have </span>";
-	html += "<h2 class='overlayThing' id='points'>" + illionFormat(player.points) + "</h2>";
-	if (player.points.lt("e1000000")) html += "<span class='overlayThing'> " + modInfo.pointsName + "</span><br>";
-	html += "(average: " + illionFormat(getAverageCoinGain()) + "/sec)";
+	if (player.points.lt("1e1000")) html += "You have ";
+	html += "<h2 id='points'>" + illionFormat(player.points) + "</h2>";
+	if (player.points.lt("e1000000")) html += " " + modInfo.pointsName;
+	html += "<div>(average: " + illionFormat(getAverageCoinGain()) + "/sec)</div>";
 	return html;
 };

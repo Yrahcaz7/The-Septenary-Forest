@@ -25,9 +25,9 @@
 }
 
 #info:hover {
-	transform: scale(1.2, 1.2);
+	transform: scale(1.2);
 	text-shadow: 5px 0 10px #02f2f2,
-				-3px 0 12px #02f2f2;
+	            -3px 0 12px #02f2f2;
 }
 
 #discord {
@@ -38,22 +38,31 @@
 	height: 40px;
 }
 
-#discord img {
+#discord>img {
+	position: relative;
 	width: 100%;
 	height: 100%;
+	z-index: 1;
 }
 
-#discord-links {
+#discordLinks {
 	position: absolute;
 	top: 0;
-	padding-top: 44px;
-	left: -244px;
+	left: -280px;
 	width: 200px;
+	padding: 40px 25px 15px 35px;
+	background-color: color-mix(in srgb, var(--background) 95%, var(--points));
+	border-radius: 10px;
+	box-shadow: 0px 0px 10px 10px color-mix(in srgb, var(--background) 95%, var(--points));
 	transition: left .3s ease;
 }
 
-#discord:hover #discord-links {
-	left: -4px;
+#discordLinks>li {
+	margin-top: 10px;
+}
+
+#discord:hover>#discordLinks {
+	left: -10px;
 }
 
 #version {
@@ -67,7 +76,7 @@
 }
 
 #version:hover {
-	transform: scale(1.1, 1.1);
+	transform: scale(1.1);
 	right: 4.8px;
 }
 
@@ -89,7 +98,7 @@ a {
 }
 
 .link:hover {
-	transform: scale(1.2, 1.2);
+	transform: scale(1.2);
 	text-shadow: 5px 0 10px #02f2f2, -3px 0 12px #02f2f2;
 }
 

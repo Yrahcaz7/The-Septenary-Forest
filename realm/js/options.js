@@ -3,8 +3,8 @@ let options = {};
 function getStartOptions() {
 	return Vue.reactive({
 		autosave: true,
-		msDisplay: 'always',
-		theme: 'default',
+		msDisplay: "always",
+		theme: "default",
 		hqTree: false,
 		offlineProd: true,
 		hideChallenges: false,
@@ -13,6 +13,7 @@ function getStartOptions() {
 		forceTooltips: true,
 		hideMilestonePopups: false,
 		extendPlaces: false,
+		colorText: "all",
 	});
 };
 
@@ -36,18 +37,27 @@ const optionGrid = [
 	], [
 		{opt: "hideMilestonePopups", text() {return "Show Milestone Popups: " + formatOpt(!options[this.opt])}, onClick: toggleOpt},
 		{opt: "extendPlaces", text() {return "Extended Decimal Places: " + formatOpt(options[this.opt])}, onClick: toggleOpt},
+		{opt: "colorText", text() {return "Colored Text: " + COLOR_DISPLAYS[COLOR_SETTINGS.indexOf(options[this.opt])]}, onClick: adjustColorText},
 	],
 ];
 
 function formatOpt(opt) {
-	if (opt) return 'ON';
-	return 'OFF';
+	if (opt) return "ON";
+	return "OFF";
 };
 
 function toggleOpt(name) {
 	// toggle option
 	options[name] = !options[name];
 	// special
-	if (name == 'hqTree') changeTreeQuality();
-	else if (name == 'forceOneTab') needsCanvasUpdate = true;
+	if (name === "hqTree") changeTreeQuality();
+	else if (name === "forceOneTab") needsCanvasUpdate = true;
+};
+
+const COLOR_DISPLAYS = ["ALL", "MAIN CURRENCY AND EFFECTS", "ONLY MAIN CURRENCY"];
+
+const COLOR_SETTINGS = ["all", "eff", "points"];
+
+function adjustColorText() {
+	options.colorText = COLOR_SETTINGS[(COLOR_SETTINGS.indexOf(options.colorText) + 1) % COLOR_SETTINGS.length];
 };

@@ -32,7 +32,7 @@ function setupTemp() {
 	tmp.gameEnded = false;
 	funcs = {};
 	setupTempData(layers, tmp, funcs);
-	for (layer in layers) {
+	for (const layer in layers) {
 		tmp[layer].resetGain = {};
 		tmp[layer].nextAt = {};
 		tmp[layer].nextAtDisp = {};
@@ -56,7 +56,7 @@ function setupTemp() {
 const boolNames = ["unlocked", "deactivated"];
 
 function setupTempData(layerData, tmpData, funcsData) {
-	for (item in layerData) {
+	for (const item in layerData) {
 		if (layerData[item] == null) {
 			tmpData[item] = null;
 		} else if (layerData[item] instanceof Decimal) {
@@ -72,7 +72,7 @@ function setupTempData(layerData, tmpData, funcsData) {
 		} else if (!!layerData[item] && typeof layerData[item] == "object" && traversableClasses.includes(layerData[item].constructor.name)) {
 			tmpData[item] = new layerData[item].constructor();
 			funcsData[item] = new layerData[item].constructor();
-		} else if (typeof layerData[item] == "function" && !activeFunctions.includes(item)) {
+		} else if (layerData[item] instanceof Function && !activeFunctions.includes(item)) {
 			funcsData[item] = layerData[item];
 			if (boolNames.includes(item)) tmpData[item] = false;
 			else tmpData[item] = newDecimalOne(); // The safest thing to put probably?
@@ -85,7 +85,7 @@ function setupTempData(layerData, tmpData, funcsData) {
 function updateTemp() {
 	if (tmp === undefined) setupTemp();
 	updateTempData(layers, tmp, funcs);
-	for (layer in layers) {
+	for (const layer in layers) {
 		tmp[layer].resetGain = getResetGain(layer);
 		tmp[layer].nextAt = getNextAt(layer);
 		tmp[layer].nextAtDisp = getNextAt(layer, true);
@@ -102,21 +102,21 @@ function updateTemp() {
 	if (typeof displayThings !== "undefined") {
 		for (thing in displayThings) {
 			let text = displayThings[thing];
-			if (typeof text == "function") text = text();
+			if (text instanceof Function) text = text();
 			tmp.displayThings.push(text);
 		};
 	};
 };
 
 function updateTempData(layerData, tmpData, funcsData, useThis) {
-	for (item in funcsData) {
+	for (const item in funcsData) {
 		if (Array.isArray(layerData[item])) {
 			if (item !== "tabFormat" && item !== "content") { // These are only updated when needed
 				updateTempData(layerData[item], tmpData[item], funcsData[item], useThis);
 			};
 		} else if (isPlainObject(layerData[item]) || (typeof layerData[item] === "object" && traversableClasses.includes(layerData[item].constructor.name))) {
 			updateTempData(layerData[item], tmpData[item], funcsData[item], useThis);
-		} else if (typeof layerData[item] == "function" && typeof tmpData[item] != "function") {
+		} else if (layerData[item] instanceof Function && !(tmpData[item] instanceof Function)) {
 			let value;
 			if (useThis !== undefined) value = layerData[item].bind(useThis)();
 			else value = layerData[item]();
@@ -129,6 +129,10 @@ function updateChallengeTemp(layer) {
 	updateTempData(layers[layer].challenges, tmp[layer].challenges, funcs[layer].challenges);
 };
 
+function updateUpgradeTemp(layer) {
+	updateTempData(layers[layer].upgrades, tmp[layer].upgrades, funcs[layer].upgrades);
+};
+
 function updateBuyableTemp(layer) {
 	updateTempData(layers[layer].buyables, tmp[layer].buyables, funcs[layer].buyables);
 };
@@ -138,9 +142,9 @@ function updateClickableTemp(layer) {
 };
 
 function setupBuyables(layer) {
-	for (id in layers[layer].buyables) {
+	for (const id in layers[layer].buyables) {
 		if (isPlainObject(layers[layer].buyables[id])) {
-			let b = layers[layer].buyables[id];
+			const b = layers[layer].buyables[id];
 			b.actualCostFunction = b.cost;
 			b.cost = function(x) {
 				x = (x === undefined ? player[this.layer].buyables[this.id] : x);

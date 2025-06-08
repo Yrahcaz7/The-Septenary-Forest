@@ -22,7 +22,7 @@ addLayer("em", {
 		spent: 0,
 	}},
 	color: "#B44990",
-	nodeStyle() {if (tmp.em.canReset || player.em.unlocked) return {"background": "border-box linear-gradient(to right, #55B020, #B44990, #C77055)"}},
+	nodeStyle() {if (tmp.em.canReset || player.em.unlocked) return {background: "border-box linear-gradient(to right, #55B020, #B44990, #C77055)"}},
 	resource: "empires",
 	row: 6,
 	baseResource: "expansion points",
@@ -78,22 +78,24 @@ addLayer("em", {
 	}],
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = [];
+		const keep = [];
 		layerDataReset("em", keep);
 	},
 	shouldNotify() {
-		if (hasMilestone("em", 12) && player.em.points.gte(4))
-			for (const key in tmp.em.buyables)
-				if (key > 20 && tmp.em.buyables[key]?.unlocked && tmp.em.buyables[key]?.canAfford) return true;
+		if (hasMilestone("em", 12) && player.em.points.gte(4)) {
+			for (const key in tmp.em.buyables) {
+				if (key > 20 && tmp.em.buyables[key]?.canBuy) return true;
+			};
+		};
 	},
 	componentStyles: {
 		"prestige-button"() {if (tmp.em.canReset && tmp.em.nodeStyle) return tmp.em.nodeStyle},
-		"microtabs"() {return {"box-sizing": "border-box", "width": "fit-content", "max-width": "calc(100% - 34px)", "border": "2px solid #B44990", "padding": "8.5px"}},
-		"tab-button"() {return {"margin": "8.5px"}},
+		"microtabs"() {return {"box-sizing": "border-box", width: "fit-content", "max-width": "calc(100% - 34px)", border: "2px solid #B44990", padding: "8.5px"}},
+		"tab-button"() {return {margin: "8.5px"}},
 	},
 	microtabs: {
 		features: {
-			"Aspects": {
+			Aspects: {
 				content() {
 					if (player.em.points.lt(1)) return [["display-text", "Reach 1 empire to unlock Aspects"]];
 					return [
@@ -107,10 +109,10 @@ addLayer("em", {
 						"respec-button",
 					];
 				},
-				style: {"margin": "8.5px"},
+				style: {margin: "8.5px"},
 				unlocked() {return player.em.points.gte(1)},
 			},
-			"Phases": {
+			Phases: {
 				content() {
 					if (player.em.points.lt(2)) return [["display-text", "Reach 2 empires to unlock Phases"]];
 					return [
@@ -119,10 +121,10 @@ addLayer("em", {
 						"milestones",
 					];
 				},
-				style: {"margin": "8.5px"},
+				style: {margin: "8.5px"},
 				unlocked() {return player.em.points.gte(2)},
 			},
-			"Factions": {
+			Factions: {
 				content() {
 					if (player.em.points.lt(4)) return [["display-text", "Reach 4 empires to unlock Factions"]];
 					return [
@@ -131,10 +133,10 @@ addLayer("em", {
 						["row", [["buyable", 21], ["buyable", 22]]],
 					];
 				},
-				style: {"margin": "8.5px"},
+				style: {margin: "8.5px"},
 				unlocked() {return hasMilestone("em", 12)},
 			},
-			"Sectors": {
+			Sectors: {
 				content() {
 					if (player.em.points.lt(8)) return [["display-text", "Reach 8 empires to unlock Sectors"]];
 					return [
@@ -148,7 +150,7 @@ addLayer("em", {
 						["row", [["buyable", 31], ["buyable", 32], ["buyable", 33]]],
 					];
 				},
-				style: {"margin": "8.5px"},
+				style: {margin: "8.5px"},
 				unlocked() {return hasMilestone("em", 28)},
 			},
 		},
@@ -176,7 +178,7 @@ addLayer("em", {
 				player[this.layer].spent++;
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {"width": "210px", "height": "110px"},
+			style: {width: "210px", height: "110px"},
 		},
 		12: {
 			cost(amt) {return amt.add(1).mul(hasMilestone("em", 4) ? 450 : 500)},
@@ -205,7 +207,7 @@ addLayer("em", {
 				player[this.layer].spent++;
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {"width": "210px", "height": "110px"},
+			style: {width: "210px", height: "110px"},
 		},
 		13: {
 			cost(amt) {return amt.add(1).mul(hasMilestone("em", 9) ? 450 : 500)},
@@ -236,7 +238,7 @@ addLayer("em", {
 				player[this.layer].spent++;
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {"width": "210px", "height": "110px"},
+			style: {width: "210px", height: "110px"},
 		},
 		14: {
 			cost(amt) {return amt.add(1).mul(hasMilestone("em", 9) ? 450 : 500)},
@@ -266,7 +268,7 @@ addLayer("em", {
 				player[this.layer].spent++;
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {"width": "210px", "height": "110px"},
+			style: {width: "210px", height: "110px"},
 		},
 		21: {
 			cost(amt) {
@@ -282,7 +284,7 @@ addLayer("em", {
 				return "manipulate some politics to make 1 leader to join your faction<br><br>Effect: +" + formatWhole(b.effect) + (getBuyableAmount(this.layer, this.id).lt(b.purchaseLimit) ? "<br><br>Cost: " + format(b.cost) + " control" : "") + "<br><br>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + b.purchaseLimit;
 			},
 			purchaseLimit: 22,
-			canAfford() {return player.t.control.gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit)},
+			canAfford() {return player.t.control.gte(this.cost())},
 			buy() {
 				player.t.control = player.t.control.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -375,7 +377,7 @@ addLayer("em", {
 			display() {return "Claim " + format(getEconomyClickValue() * 100, 3) + "% of the unclaimed portion of the current economic sector (+" + format(tmp.em.clickables[21].effect * 100, 3) + "% progress)"},
 			canClick() {return true},
 			onClick() {setClickableState("em", 21, (getClickableState("em", 21) || 0) + this.effect())},
-			style: {"min-height": "60px", "width": "150px", "border-radius": "30px", "margin-left": "7px", "margin-right": "7px"},
+			style: {"min-height": "60px", width: "150px", "border-radius": "30px", "margin-left": "7px", "margin-right": "7px"},
 		},
 		22: {
 			display() {return "Take over this economic sector (requires 99.999% progress and will set progress to 0%)"},
@@ -384,7 +386,7 @@ addLayer("em", {
 				setClickableState("em", 21, 0);
 				setClickableState("em", 22, (getClickableState("em", 22) || 0) + 1);
 			},
-			style: {"min-height": "60px", "width": "150px", "border-radius": "30px", "margin-left": "7px", "margin-right": "7px"},
+			style: {"min-height": "60px", width: "150px", "border-radius": "30px", "margin-left": "7px", "margin-right": "7px"},
 		},
 	},
 	milestones: {

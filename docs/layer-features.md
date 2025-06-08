@@ -8,22 +8,20 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `layer`: **assigned automagically**. It's the same value as the name of this layer, so you can do `player[this.layer].points` or similar to access the saved value. It makes copying code to new layers easier. It is also assigned to all upgrades and buyables and such.
 
-- `name`: **optional**. used in reset confirmations (and the default infobox title). If absent, it just uses the layer's id.
+- `name`: **optional**. Used in reset confirmations (and the default infobox title). If absent, it just uses the layer's id.
 
 - `startData()`: A function to return the default save data for this layer. Add any variables you have to it. Make sure to use `Decimal` values rather than normal numbers.
 
     Standard values:
 
-    - Required:
-        - unlocked: a boolean determining if this layer is unlocked or not
-        - points: a Decimal, the main currency for the layer
-    - Optional:
-        - total: A Decimal, tracks total amount of main prestige currency. Always tracked, but only shown if you add it here.
-        - best: A Decimal, tracks highest amount of main prestige currency. Always tracked, but only shown if you add it here.
-        - unlockOrder: used to keep track of relevant layers unlocked before this one.
-        - resetTime: A number, time since this layer was last prestiged (or reset by another layer)
+    - `unlocked`: **optional**. A boolean determining if this layer is unlocked or not. Defaults to true.
+    - `points`: A Decimal, the main currency for the layer. (Can be omitted if the layer does not have a main currency and its presige type is `none`.)
+    - `total`: **optional**. A Decimal, tracks total amount of main prestige currency. Always tracked if you use `points`, but only shown if you add it here.
+    - `best`: **optional**. A Decimal, tracks highest amount of main prestige currency. Always tracked if you use `points`, but only shown if you add it here.
+    - `unlockOrder`: **optional**. Used to keep track of relevant layers unlocked before this one.
+    - `resetTime`: **optional**. A number, time since this layer was last prestiged (or reset by another layer).
 
-- `color`: A color associated with this layer, used in many places. (A string in hex format with a #)
+- `color`: A color associated with this layer, used in many places. (A string in hex format with a `#`.)
 
 - `row`: The row of the layer, starting at 0. This affects where the node appears on the standard tree, and which resets affect the layer.
 
@@ -31,14 +29,13 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `displayRow`: **OVERRIDE**. Changes where the layer node appears without changing where it is in the reset order.
 
-- `resource`: Name of the main currency you gain by resetting on this layer.
+- `resource`: Name of the main currency you gain by resetting on this layer. (Can be omitted if the layer does not have a main currency and its presige type is `none`.)
 
 - `effect()`: **optional**. A function that calculates and returns the current values of any bonuses inherent to the main currency. Can return a value or an object containing multiple values. *You will also have to implement the effect where it is applied.*
 
-- `effectDescription`: **optional**. A function that returns a description of this effect. If the text stays constant, it can just be a string.
+- `effectDescription()`: **optional**. A function that returns a description of this effect. If the text stays constant, it can just be a string.
 
-- `layerShown()`: **optional**. A function returning a boolean which determines if this layer's node should be visible on the tree. It can also return "ghost", which will hide the layer, but its node will still take up space in the tree.
-    Defaults to true.
+- `layerShown()`: **optional**. A function returning a boolean which determines if this layer's node should be visible on the tree. (If the value stays constant, it can just be a boolean.) It can also return "ghost", which will hide the layer, but its node will still take up space in the tree. Defaults to true.
 
 - `hotkeys`: **optional**. An array containing information on any hotkeys associated with this layer:
 
@@ -87,8 +84,8 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `type`: **optional**. Determines which prestige formula you use. Defaults to "none".
 
-    - `"normal"`: The amount of currency you gain is independent of its current amount (like Prestige). The formula before bonuses is based on `baseResource^exponent`
-    - `"static"`: The cost is dependent on your total after reset. The formula before bonuses is based on `base^(x^exponent)`
+    - `"normal"`: The amount of currency you gain is independent of its current amount (like Prestige Points in TPT). The formula before bonuses is based on `baseResource^exponent`
+    - `"static"`: The cost is dependent on your total after reset (like Boosters and Generators in TPT). The formula before bonuses is based on `base^(x^exponent)`
     - `"custom"`: You can define everything, from the calculations to the text on the button, yourself. (See more at the bottom)
     - `"none"`: This layer does not prestige, and therefore does not need any of the other features in this section.
 
@@ -116,21 +113,19 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `canBuyMax()`: **sometimes required**. Required for static layers. Function used to determine if buying max is permitted.
 
-- `onPrestige(gain)`: **optional**. A function that triggers when this layer prestiges, just before you gain the currency.  Can be used to have secondary resource gain on prestige, or to recalculate things or whatnot.
+- `onPrestige(gain)`: **optional**. A function that triggers when this layer prestiges, just before you gain the currency. Can be used to have secondary resource gain on prestige, or to recalculate things or whatnot.
 
 - `resetDescription`: **optional**. Use this to replace "Reset for " on the Prestige button with something else.
 
 - `prestigeButtonText()`: **sometimes required**. Use this to make the entirety of the text a Prestige button contains. Only required for custom layers, but usable by all types.
 
-- `passiveGeneration()`: **optional**. Returns a regular number. You automatically generate your gain times this number every second (does nothing if absent)
-    This is good for automating normal layers.
+- `passiveGeneration()`: **optional**. Returns a regular number. You automatically generate your gain times this number every second (does nothing if absent). This is good for automating normal layers.
 
-- `autoPrestige()`: **optional**. Returns a boolean. If it is true, the layer will always automatically do a prestige if it can.
-    This is good for automating static layers.
+- `autoPrestige()`: **optional**. Returns a boolean. If it is true, the layer will always automatically do a prestige if it can. This is good for automating static layers.
 
 Additional features:
 
-- `onPrestigeIsAfterGain`: **optional**. A boolean indicating whether this layer's `onPrestige()` function triggers after prestige resource gain but before resetting anything. By default is false, which makes `onPrestige()` trigger before both.
+- `onPrestigeIsAfterGain`: **optional**. A boolean indicating whether this layer's `onPrestige()` function triggers after prestige resource gain but before resetting anything (this also means that any relevant milestones and achievements will be updated to reflect the gain). By default is false, which makes `onPrestige()` trigger before both gain and reset.
 
 - `logged`: **optional**. For normal layers, if this is a [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) value, the resource gain becomes the log of the previous gain plus one. If it is exactly `true`, the log base is `10`, otherwise the log base is `new Decimal(logged)`. Can also be a function. Has no effect on static layers.
 
@@ -171,12 +166,12 @@ Additional features:
 
 - `glowColor`: **optional**. The color that this layer will be highlighted if it should notify. The default is red. You can use this if you want several different notification types!
 
-- `componentStyles`: **optional**. An object that contains a set of functions returning CSS objects. Each of these will be applied to any components on the layer with the type of its id. Example:
+- `componentStyles`: **optional**. An object that contains a set of CSS objects (they can be functions that return a CSS object as well). Each of these will be applied to any components on the layer with the type of its id. Example:
 
 ```js
 componentStyles: {
-    "challenge"() { return {'height': '200px'} },
-    "prestige-button"() { return {'color': '#AA66AA'} },
+    challenge() { if (options.smallChallenges) return {height: "200px"} },
+    "prestige-button": {color: "#AA66AA"},
 }
 ```
 

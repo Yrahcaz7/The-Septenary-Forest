@@ -1,14 +1,23 @@
 // ************ Save stuff ************
 function getModID() {
-	if (modInfo.id) return modInfo.id;
+	if (modInfo.id) {
+		if (modInfo.useNewSaveSyntax === undefined || modInfo.useNewSaveSyntax) return modInfo.author.replace(/\s+/g, "-") + "/" + modInfo.id.replace(/\s+/g, "-");
+		return modInfo.id;
+	};
+	if (modInfo.useNewSaveSyntax === undefined || modInfo.useNewSaveSyntax) return modInfo.author.replace(/\s+/g, "-") + "/" + modInfo.name.replace(/\s+/g, "-");
 	return modInfo.name.replace(/\s+/g, "-") + "-" + modInfo.author.replace(/\s+/g, "-");
 };
 
 function save(force) {
 	NaNcheck(player);
 	if (NaNalert && !force) return;
-	localStorage.setItem(getModID(), btoa(encodeURIComponent(JSON.stringify(player))));
-	localStorage.setItem(getModID() + "_options", btoa(encodeURIComponent(JSON.stringify(options))));
+	if (modInfo.useNewSaveSyntax === undefined || modInfo.useNewSaveSyntax) {
+		localStorage.setItem(getModID() + "/save", btoa(encodeURIComponent(JSON.stringify(player))));
+		localStorage.setItem(getModID() + "/options", btoa(encodeURIComponent(JSON.stringify(options))));
+	} else {
+		localStorage.setItem(getModID(), btoa(encodeURIComponent(JSON.stringify(player))));
+		localStorage.setItem(getModID() + "_options", btoa(encodeURIComponent(JSON.stringify(options))));
+	};
 };
 
 function startPlayerBase() {
@@ -19,101 +28,110 @@ function startPlayerBase() {
 		notify: {},
 		versionType: getModID(),
 		version: VERSION.num,
+		pre: VERSION.pre,
 		beta: VERSION.beta,
 		timePlayed: 0,
 		keepGoing: false,
 		hasNaN: false,
-		points: modInfo.initialStartPoints,
+		points: modInfo.initialStartPoints || newDecimalZero(),
 		subtabs: {},
 		lastSafeTab: (readData(layoutInfo.showTree) ? "none" : layoutInfo.startTab),
 	});
 };
 
 function getStartPlayer() {
-	let playerdata = startPlayerBase();
+	const playerData = startPlayerBase();
 	if (typeof addedPlayerData === "function") {
-		let extraData = addedPlayerData();
-		for (thing in extraData) {
-			playerdata[thing] = extraData[thing];
+		const extraData = addedPlayerData();
+		for (const thing in extraData) {
+			playerData[thing] = extraData[thing];
 		};
 	};
-	playerdata.infoboxes = {};
-	for (layer in layers) {
-		playerdata[layer] = getStartLayerData(layer);
+	playerData.infoboxes = {};
+	for (const layer in layers) {
+		playerData[layer] = getStartLayerData(layer);
 		if (layers[layer].tabFormat && !Array.isArray(layers[layer].tabFormat)) {
-			playerdata.subtabs[layer] = {};
-			playerdata.subtabs[layer].mainTabs = Object.keys(layers[layer].tabFormat)[0];
+			playerData.subtabs[layer] = {};
+			playerData.subtabs[layer].mainTabs = Object.keys(layers[layer].tabFormat)[0];
 		};
 		if (layers[layer].microtabs) {
-			if (playerdata.subtabs[layer] == undefined) playerdata.subtabs[layer] = {};
-			for (item in layers[layer].microtabs) {
-				playerdata.subtabs[layer][item] = Object.keys(layers[layer].microtabs[item])[0];
+			if (playerData.subtabs[layer] == undefined) playerData.subtabs[layer] = {};
+			for (const item in layers[layer].microtabs) {
+				playerData.subtabs[layer][item] = Object.keys(layers[layer].microtabs[item])[0];
 			};
 		};
 		if (layers[layer].infoboxes) {
-			if (playerdata.infoboxes[layer] == undefined) playerdata.infoboxes[layer] = {};
-			for (item in layers[layer].infoboxes) {
-				playerdata.infoboxes[layer][item] = false;
+			if (playerData.infoboxes[layer] == undefined) playerData.infoboxes[layer] = {};
+			for (const item in layers[layer].infoboxes) {
+				playerData.infoboxes[layer][item] = false;
 			};
 		};
 	};
-	return playerdata;
+	return playerData;
 };
 
 function getStartLayerData(layer) {
-	let layerdata = {};
-	if (layers[layer].startData) layerdata = layers[layer].startData();
-	if (layerdata.unlocked === undefined) layerdata.unlocked = true;
-	if (layerdata.total === undefined) layerdata.total = newDecimalZero();
-	if (layerdata.best === undefined) layerdata.best = newDecimalZero();
-	if (layerdata.resetTime === undefined) layerdata.resetTime = 0;
-	if (layerdata.forceTooltip === undefined) layerdata.forceTooltip = false;
-	layerdata.buyables = getStartBuyables(layer);
-	if (layerdata.noRespecConfirm === undefined) layerdata.noRespecConfirm = false;
-	if (layerdata.clickables == undefined) layerdata.clickables = getStartClickables(layer);
-	layerdata.spentOnBuyables = newDecimalZero();
-	layerdata.upgrades = [];
-	layerdata.milestones = [];
-	layerdata.lastMilestone = null;
-	layerdata.achievements = [];
-	layerdata.challenges = getStartChallenges(layer);
-	layerdata.grid = getStartGrid(layer);
-	layerdata.prevTab = "";
-	return layerdata;
+	const layerData = (layers[layer].startData instanceof Function ? layers[layer].startData() : {});
+	if (layerData.unlocked === undefined) layerData.unlocked = true;
+	if (layerData.points !== undefined) {
+		if (layerData.total === undefined) layerData.total = newDecimalZero();
+		if (layerData.best === undefined) layerData.best = newDecimalZero();
+	};
+	if (layerData.resetTime === undefined) layerData.resetTime = 0;
+	if (layerData.forceTooltip === undefined) layerData.forceTooltip = false;
+	if (layerData.noRespecConfirm === undefined) layerData.noRespecConfirm = false;
+	if (layerData.clickables === undefined && layers[layer].clickables) {
+		layerData.clickables = getStartClickables(layer);
+	};
+	if (layers[layer].buyables) {
+		layerData.buyables = getStartBuyables(layer);
+	};
+	if (layers[layer].upgrades) {
+		layerData.upgrades = [];
+	};
+	if (layers[layer].milestones) {
+		layerData.milestones = [];
+		layerData.lastMilestone = null;
+	};
+	if (layers[layer].achievements) {
+		layerData.achievements = [];
+	};
+	if (layers[layer].challenges) {
+		layerData.challenges = getStartChallenges(layer);
+	};
+	if (layers[layer].grid) {
+		layerData.grid = getStartGrid(layer);
+	};
+	layerData.prevTab = "";
+	return layerData;
 };
 
 function getStartBuyables(layer) {
-	let data = {};
-	if (layers[layer].buyables) {
-		for (id in layers[layer].buyables) {
-			if (isPlainObject(layers[layer].buyables[id])) data[id] = newDecimalZero();
-		};
+	const data = {};
+	for (const id in layers[layer].buyables) {
+		if (isPlainObject(layers[layer].buyables[id])) data[id] = newDecimalZero();
 	};
 	return data;
 };
 
 function getStartClickables(layer) {
-	let data = {};
-	if (layers[layer].clickables) {
-		for (id in layers[layer].clickables) {
-			if (isPlainObject(layers[layer].clickables[id])) data[id] = "";
-		};
+	const data = {};
+	for (const id in layers[layer].clickables) {
+		if (isPlainObject(layers[layer].clickables[id])) data[id] = "";
 	};
 	return data;
 };
 
 function getStartChallenges(layer) {
-	let data = {};
-	if (layers[layer].challenges) {
-		for (id in layers[layer].challenges) {
-			if (isPlainObject(layers[layer].challenges[id])) data[id] = 0;
-		};
+	const data = {};
+	for (const id in layers[layer].challenges) {
+		if (isPlainObject(layers[layer].challenges[id])) data[id] = 0;
 	};
 	return data;
 };
 
 function getStartGrid(layer) {
-	let data = {};
+	const data = {};
 	if (!layers[layer].grid) return data;
 	if (layers[layer].grid.maxRows === undefined) layers[layer].grid.maxRows = layers[layer].grid.rows;
 	if (layers[layer].grid.maxCols === undefined) layers[layer].grid.maxCols = layers[layer].grid.cols;
@@ -126,19 +144,18 @@ function getStartGrid(layer) {
 };
 
 function fixSave() {
-	let defaultData = getStartPlayer();
-	fixData(defaultData, player);
-	for (layer in layers) {
+	fixData(getStartPlayer(), player);
+	for (const layer in layers) {
 		if (player[layer].best !== undefined) player[layer].best = new Decimal(player[layer].best);
 		if (player[layer].total !== undefined) player[layer].total = new Decimal(player[layer].total);
 		if (layers[layer].tabFormat && !Array.isArray(layers[layer].tabFormat)) {
-			if (!Object.keys(layers[layer].tabFormat).includes(player.subtabs[layer].mainTabs)) {
+			if (!(layers[layer].tabFormat[player.subtabs[layer].mainTabs] instanceof Object)) {
 				player.subtabs[layer].mainTabs = Object.keys(layers[layer].tabFormat)[0];
 			};
 		};
 		if (layers[layer].microtabs) {
-			for (item in layers[layer].microtabs) {
-				if (!Object.keys(layers[layer].microtabs[item]).includes(player.subtabs[layer][item])) {
+			for (const item in layers[layer].microtabs) {
+				if (!(layers[layer].microtabs[item][player.subtabs[layer][item]] instanceof Object)) {
 					player.subtabs[layer][item] = Object.keys(layers[layer].microtabs[item])[0];
 				};
 			};
@@ -147,17 +164,14 @@ function fixSave() {
 };
 
 function fixData(defaultData, newData) {
-	for (item in defaultData) {
-		if (defaultData[item] == null) {
+	for (const item in defaultData) {
+		if (defaultData[item] === null) {
 			if (newData[item] === undefined) newData[item] = null;
-		} else if (Array.isArray(defaultData[item])) {
-			if (newData[item] === undefined) newData[item] = defaultData[item];
-			else fixData(defaultData[item], newData[item]);
 		} else if (defaultData[item] instanceof Decimal) { // Convert to Decimal
 			if (newData[item] === undefined) newData[item] = defaultData[item];
 			else newData[item] = new Decimal(newData[item]);
-		} else if (!!defaultData[item] && typeof defaultData[item] === "object") {
-			if (newData[item] === undefined || typeof defaultData[item] !== "object") newData[item] = defaultData[item];
+		} else if (defaultData[item] instanceof Object) {
+			if (newData[item] === undefined) newData[item] = defaultData[item];
 			else fixData(defaultData[item], newData[item]);
 		} else {
 			if (newData[item] === undefined) newData[item] = defaultData[item];
@@ -166,14 +180,14 @@ function fixData(defaultData, newData) {
 };
 
 function load(mainPage = false) {
-	let get = localStorage.getItem(getModID());
-	if (get === null || get === undefined) {
-		player = getStartPlayer();
-		options = getStartOptions();
-	} else {
+	const get = localStorage.getItem(getModID() + (modInfo.useNewSaveSyntax === undefined || modInfo.useNewSaveSyntax ? "/save" : ""));
+	if (get) {
 		player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(atob(get))));
 		fixSave();
 		loadOptions();
+	} else {
+		player = getStartPlayer();
+		options = getStartOptions();
 	};
 	if (options.offlineProd) {
 		if (player.offTime === undefined) {
@@ -196,25 +210,25 @@ function load(mainPage = false) {
 };
 
 function loadOptions() {
-	let get = localStorage.getItem(getModID() + "_options");
-	if (get) options = Object.assign(getStartOptions(), JSON.parse(decodeURIComponent(atob(get))));
-	else options = getStartOptions();
-	if (themes.indexOf(options.theme) < 0) theme = "default";
+	options = getStartOptions();
+	const get = localStorage.getItem(getModID() + (modInfo.useNewSaveSyntax === undefined || modInfo.useNewSaveSyntax ? "/" : "_") + "options");
+	if (get) options = Object.assign(options, JSON.parse(decodeURIComponent(atob(get))));
+	if (themeNames.indexOf(options.theme) < 0) theme = "default";
 	fixData(options, getStartOptions());
 };
 
 function setupModInfo() {
 	modInfo.changelog = changelog;
-	modInfo.winText = (typeof winText !== "undefined" ? (typeof winText === "function" ? winText() : winText) : "Congratulations! You have reached the end and beaten this game, but for now...");
+	modInfo.winText = (typeof winText !== "undefined" ? (winText instanceof Function ? winText() : winText) : (typeof endPoints !== "undefined" ? "You reached " + format(endPoints) + " " + (modInfo.pointsName || "points") + " and beat the game!<br>However, it isn't the end yet...<br>Wait for more updates for further content." : "Congratulations! You have reached the end and beaten this game, but for now..."));
 };
 
 function NaNcheck(data) {
-	for (item in data) {
+	for (const item in data) {
 		if (Array.isArray(data[item]) || isPlainObject(data[item])) {
 			NaNcheck(data[item]);
 		} else if (data[item] !== data[item] || (data[item] instanceof Decimal && data[item].isNaN())) {
 			if (!NaNalert) {
-				clearInterval(interval);
+				clearInterval(INTERVAL);
 				NaNalert = true;
 				alert("Invalid value found in player, named '" + item + "'. Please let the creator of this mod know! You can refresh the page, and you should be un-NaNed.");
 				return;
@@ -224,29 +238,32 @@ function NaNcheck(data) {
 };
 
 function exportSave() {
-	const el = document.createElement("textarea");
-	el.value = btoa(JSON.stringify(player));
-	document.body.appendChild(el);
-	el.select();
-	el.setSelectionRange(0, 99999);
-	document.execCommand("copy");
-	document.body.removeChild(el);
+	if (navigator.clipboard) {
+		navigator.clipboard.writeText(btoa(encodeURIComponent(JSON.stringify(player)))).then(() => {
+			alert("Your save has been successfully copied to the clipboard.");
+		}, err => {
+			alert("Could not copy save: ", err);
+			console.error("Could not copy save: ", err);
+		});
+	} else {
+		alert("Could not copy save: navigator.clipboard is not supported in this context.");
+		console.error("Could not copy save: navigator.clipboard is not supported in this context.");
+	};
 };
 
 function importSave(imported = undefined, forced = false) {
 	if (imported === undefined) imported = prompt("Paste your save here");
 	try {
-		let tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(imported)));
-		if (tempPlr.versionType != getModID() && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")) {
+		const tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(imported)));
+		if (tempPlr.versionType !== getModID() && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")) {
 			return; // Wrong save. Use "Forced" to force it to accept.
 		};
 		player = tempPlr;
 		player.versionType = getModID();
 		fixSave();
 		versionCheck();
-		NaNcheck(save);
 		save();
-		window.location.reload();
+		location.reload();
 	} catch (e) {
 		return;
 	};
@@ -269,11 +286,11 @@ function versionCheck() {
 	else delete player.beta;
 };
 
-let saveInterval = setInterval(() => {
+const SAVE_INTERVAL = setInterval(() => {
 	if (player === undefined || (tmp.gameEnded && !player.keepGoing)) return;
 	if (options.autosave) save();
 }, 5000);
 
-window.onbeforeunload = () => {
+onbeforeunload = () => {
     if (player.autosave) save();
 };

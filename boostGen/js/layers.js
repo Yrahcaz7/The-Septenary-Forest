@@ -65,10 +65,10 @@ const generatorName = {
 };
 
 function generatorCost(id) {
-	let bought = player.g.grid[id].bought;
-	let scale = generatorCostScale[id]();
-	let extra = generatorExtraCost[id];
-	if (typeof extra == "function" && !hasUpgrade("g", 44)) {
+	const bought = player.g.grid[id].bought;
+	const scale = generatorCostScale[id]();
+	const extra = generatorExtraCost[id];
+	if (extra instanceof Function && !hasUpgrade("g", 44)) {
 		return new Decimal(scale).pow(bought ** 1.25 + 1).mul(extra());
 	};
 	return new Decimal(scale).pow(bought ** 1.25 + 1);
@@ -76,7 +76,7 @@ function generatorCost(id) {
 
 function getBoughtGenerators() {
 	let bought = 0;
-	for (let id in player.g.grid) {
+	for (const id in player.g.grid) {
 		if (typeof player.g.grid[id] == "object") {
 			bought += player.g.grid[id].bought;
 		};
@@ -86,7 +86,7 @@ function getBoughtGenerators() {
 
 function getBoughtSuperGenerators() {
 	let bought = newDecimalZero();
-	for (let id in player.sg.buyables) {
+	for (const id in player.sg.buyables) {
 		if (player.sg.buyables[id] instanceof Decimal) {
 			bought = bought.add(player.sg.buyables[id]);
 		};
@@ -99,7 +99,6 @@ addLayer("g", {
 	symbol: "G",
 	position: 0,
 	startData() { return {
-		unlocked: true,
 		points: newDecimalZero(),
 		passive: newDecimalZero(),
 		autoBasic: false,
@@ -120,9 +119,8 @@ addLayer("g", {
 		"blank",
 		"upgrades",
 	],
-	layerShown() {return true},
 	doReset(resettingLayer) {
-		let keep = ["autoBasic", "auto1and2", "autoLCR", "autoBBFE"];
+		const keep = ["autoBasic", "auto1and2", "autoLCR", "autoBBFE"];
 		if (hasMilestone("b", 3)) keep.push("upgrades");
 		if (layers[resettingLayer].row > this.row) layerDataReset("g", keep);
 	},
@@ -145,7 +143,7 @@ addLayer("g", {
 		} else {
 			player.g.points = player.g.points.add(gain.mul(diff)).max(0);
 		};
-		for (let id in player.g.grid) {
+		for (const id in player.g.grid) {
 			if (gridEffect("g", id).gt(0)) {
 				let gen = newDecimalZero();
 				let extra = newDecimalZero();
@@ -174,7 +172,7 @@ addLayer("g", {
 		};
 	},
 	automate() {
-		for (let id in player.g.grid) {
+		for (const id in player.g.grid) {
 			if (generatorCostScale[id]) {
 				if (id > 500) {
 					// placeholder
@@ -207,8 +205,8 @@ addLayer("g", {
 		};
 	},
 	componentStyles: {
-		"gridable"() {return {"width": "105px", "height": "105px"}},
-		"upgrade"() {return {"width": "125px", "height": "125px"}},
+		gridable: {width: "105px", height: "105px"},
+		upgrade: {width: "125px", height: "125px"},
 	},
 	grid: {
 		rows() {
@@ -509,11 +507,11 @@ addLayer("b", {
 		onPress() {if (player.b.unlocked) doReset("b")},
 	}],
 	doReset(resettingLayer) {
-		let keep = [];
+		const keep = [];
 		if (layers[resettingLayer].row > this.row) layerDataReset("b", keep);
 	},
 	componentStyles: {
-		"upgrade"() {return {"width": "125px", "height": "125px"}},
+		upgrade: {width: "125px", height: "125px"},
 	},
 	milestones: {
 		0: {
@@ -833,7 +831,7 @@ addLayer("sb", {
 		onPress() {if (player.sb.unlocked) doReset("sb")},
 	}],
 	doReset(resettingLayer) {
-		let keep = [];
+		const keep = [];
 		if (layers[resettingLayer].row > this.row) layerDataReset("sb", keep);
 	},
 	milestones: {
@@ -890,7 +888,6 @@ addLayer("sg", {
 	position: 1,
 	branches: ["g"],
 	startData() { return {
-		unlocked: true,
 		points: newDecimalZero(),
 		best: newDecimalZero(),
 		passive: newDecimalZero(),
@@ -911,7 +908,7 @@ addLayer("sg", {
 	],
 	layerShown() {return hasMilestone("b", 8)},
 	doReset(resettingLayer) {
-		let keep = ["buyables", "best"];
+		const keep = ["buyables", "best"];
 		if (hasMilestone("b", 14)) keep.push("upgrades");
 		if (layers[resettingLayer].row > this.row) layerDataReset("sg", keep);
 	},
@@ -939,12 +936,12 @@ addLayer("sg", {
 		player.sg.capacity = cap;
 	},
 	componentStyles: {
-		"buyable"() {return {"width": "200px", "height": "125px"}},
-		"upgrade"() {return {"width": "125px", "height": "125px"}},
+		buyable: {width: "200px", height: "125px"},
+		upgrade: {width: "125px", height: "125px"},
 	},
 	buyables: {
 		respec() {
-			for (let id in player.sg.buyables) {
+			for (const id in player.sg.buyables) {
 				if (player.sg.buyables[id] instanceof Decimal) {
 					player.sg.buyables[id] = newDecimalZero();
 				};
@@ -1266,7 +1263,6 @@ addLayer("hg", {
 	position: 2,
 	branches: ["sg"],
 	startData() { return {
-		unlocked: true,
 		points: newDecimalZero(),
 		passive: newDecimalZero(),
 	}},
@@ -1279,14 +1275,14 @@ addLayer("hg", {
 		"blank",
 		"buyables",
 		"blank",
-		"h-line",
+		["h-line", "calc(100% - 12px)"],
 		"blank",
 		"clickables",
 		"blank",
 	],
 	layerShown() {return hasMilestone("b", 14)},
 	doReset(resettingLayer) {
-		let keep = ["clickables"];
+		const keep = ["clickables"];
 		if (layers[resettingLayer].row > this.row) layerDataReset("hg", keep);
 	},
 	update(diff) {
@@ -1303,8 +1299,8 @@ addLayer("hg", {
 		if (player.hg.points.gt(player.hg.best)) player.hg.best = player.hg.points;
 	},
 	componentStyles: {
-		"buyable"() {return {"width": "200px", "height": "125px"}},
-		"clickable"() {return {"width": "200px", "height": "125px"}},
+		buyable: {width: "200px", height: "125px"},
+		clickable: {width: "200px", height: "125px"},
 	},
 	buyables: {
 		11: {

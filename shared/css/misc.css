@@ -20,7 +20,7 @@
 }
 
 .tabButton:hover {
-	transform: scale(1.1, 1.1);
+	transform: scale(1.1);
 	text-shadow: 0 0 7px var(--color);
 }
 
@@ -36,14 +36,12 @@
 	transform: translateX(-50%);
 	padding: 7px;
 	font-family: "Lucida Console", "Courier New", monospace;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
 	border-radius: 3px;
 	opacity: 0;
 	transition: opacity 0.5s;
 	position: absolute;
 	z-index: 20000;
-	background-color: var(--background_tooltip);
+	background-color: var(--tooltipBackground);
 	color: var(--points);
 	content: attr(tooltip);
 	font-size: 14px;
@@ -58,15 +56,18 @@
 	margin-left: -5px;
 	border-width: 5px;
 	border-style: solid;
-	border-color: var(--background_tooltip) transparent transparent transparent;
+	border-color: var(--tooltipBackground) transparent transparent transparent;
 }
 
 /* Horizontal/vertical lines */
 .vl {
+	box-sizing: border-box;
 	border-left: 3px solid var(--color);
 	height: 100%;
 }
 
 .hl {
+	box-sizing: border-box;
 	border-top: 3px solid var(--color);
+	width: 100%;
 }

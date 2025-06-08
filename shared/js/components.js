@@ -38,22 +38,22 @@ function loadVue(mainPage = false) {
 				left: player.tab !== 'none' && player.navTab !== 'none',
 			}" :style="{'margin-top': !readData(layoutInfo.showTree) && player.tab == 'info-tab' ? '50px' : ''}">
 				<div id="version" onclick="showTab('changelog-tab')" class="overlayThing" style="margin-right: 13px">{{VERSION.withoutName}}</div>
-				<button v-if="((player.navTab == 'none' && (tmp[player.tab].row == 'side' || tmp[player.tab].row == 'otherside' || player[player.tab].prevTab)) || player[player.navTab]?.prevTab)" class="other-back overlayThing" onclick="goBack(player.navTab === 'none' ? player.tab : player.navTab)">&#8592;</button>
-				<img id="optionWheel" class="overlayThing" v-if="player.tab != 'options-tab'" src="` + (mainPage ? `` : `../`) + `shared/images/options_wheel.png" onclick="showTab('options-tab')">
+				<button v-if="((player.navTab == 'none' && (tmp[player.tab].row == 'side' || tmp[player.tab].row == 'otherside' || player[player.tab].prevTab)) || player[player.navTab]?.prevTab)" class="big back overlayThing" onclick="goBack(player.navTab === 'none' ? player.tab : player.navTab)">&#8592;</button>
+				<img id="optionWheel" class="overlayThing" v-if="player.tab != 'options-tab'" src="${mainPage ? "" : "../"}shared/images/options_wheel.png" onclick="showTab('options-tab')">
 				<div id="info" v-if="player.tab != 'info-tab'" class="overlayThing" onclick="showTab('info-tab')"><br>i</div>
-				<div id="discord" class="overlayThing">
-					<img src="` + (mainPage ? `` : `../`) + `shared/images/discord.png">
-					<ul id="discord-links">
+				<div id="discord" class="overlayThing" style="z-index: 30001">
+					<img src="${mainPage ? "" : "../"}shared/images/discord.png">
+					<ul id="discordLinks">
 						<li v-if="modInfo.discordLink"><a class="link" :href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></li>
 						<li><a class="link" href="https://discord.gg/F3xveHV" target="_blank" :style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br></li>
 						<li><a class="link" href="https://discord.gg/wwQfgPa" target="_blank" style="font-size: 16px">Main Prestige Tree server</a></li>
 					</ul>
 				</div>
 				<overlay-head v-if="!gameEnded"></overlay-head>
-				<div class="sideLayers">
-					<div v-for="(node, index) in OTHER_LAYERS.side">
+				<div class="upgCol sideLayers">
+					<template v-for="(node, index) in OTHER_LAYERS.side">
 						<tree-node :layer='node' :abb='tmp[node].symbol' :size="'small'"></tree-node>
-					</div>
+					</template>
 				</div>
 			</div>
 			<!-- tree tab -->
@@ -70,7 +70,7 @@ function loadVue(mainPage = false) {
 			<!-- popups -->
 			<div class="popup-container">
 				<transition-group name="fade">
-					<div v-for="(popup, index) in activePopups" class="popup" :class="popup.type" :key="'p' + popup.id" v-on:click="() => activePopups.splice(index, 1)" :style="popup.color ? {'background-color': popup.color} : {}">
+					<div v-for="(popup, index) in activePopups" class="popup" :class="popup.type" :key="'p' + popup.id" @click="() => activePopups.splice(index, 1)" :style="popup.color ? {'background-color': popup.color} : {}">
 						<h3>{{popup.title}}</h3><br>
 						<h2 v-html="popup.message"></h2>
 					</div>
@@ -78,9 +78,9 @@ function loadVue(mainPage = false) {
 			</div>
 			<!-- particles -->
 			<div class="particle-container">
-				<div v-for="(particle, index) in particles">
+				<template v-for="(particle, index) in particles">
 					<particle :data="particle" :index="index"></particle>
-				</div>
+				</template>
 			</div>
 			<!-- layer tab -->
 			<div v-if="player.navTab !== 'none' && player.tab !== 'none' && !gameEnded" onscroll="resizeCanvas()" :class="{
@@ -126,11 +126,11 @@ function loadVue(mainPage = false) {
 	// data = optional height in px or [width in px, height in px]
 	addNormalComponent('blank', {
 		props: ['layer', 'data'],
-		template: template(`<div class="instant">
-			<div class="instant" v-if="!data" :style="{'width': '8px', 'height': '17px'}"></div>
-			<div class="instant" v-else-if="Array.isArray(data)" :style="{'width': data[0], 'height': data[1]}"></div>
-			<div class="instant" v-else :style="{'width': '8px', 'height': data}"><br></div>
-		</div>`),
+		template: template(`
+			<div class="instant" v-if="!data" style="width: 8px; height: 17px"></div>
+			<div class="instant" v-else-if="Array.isArray(data)" :style="{width: data[0], height: data[1]}"></div>
+			<div class="instant" v-else :style="{width: '8px', height: data}"><br></div>
+		`),
 	});
 
 	// data = the URL of the image
@@ -143,13 +143,11 @@ function loadVue(mainPage = false) {
 	addNormalComponent('row', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
-		template: template(`<div class="upgTable instant">
-			<div class="upgRow">
-				<div v-for="(item, index) in data">
-					<component v-if="!Array.isArray(item)" :is="item" :layer="layer" :style="tmp[layer].componentStyles[item]"></component>
-					<component v-else-if="item.length == 3" :is="item[0]" :layer="layer" :data="item[1]" :style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]"></component>
-					<component v-else-if="item.length == 2" :is="item[0]" :layer="layer" :data="item[1]" :style="tmp[layer].componentStyles[item[0]]"></component>
-				</div>
+		template: template(`<div class="upgRow instant">
+			<div v-for="(item, index) in data">
+				<component v-if="!Array.isArray(item)" :is="item" :layer="layer" :style="tmp[layer].componentStyles[item]"></component>
+				<component v-else-if="item.length == 3" :is="item[0]" :layer="layer" :data="item[1]" :style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]"></component>
+				<component v-else-if="item.length == 2" :is="item[0]" :layer="layer" :data="item[1]" :style="tmp[layer].componentStyles[item[0]]"></component>
 			</div>
 		</div>`),
 	});
@@ -158,19 +156,17 @@ function loadVue(mainPage = false) {
 	addNormalComponent('column', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
-		template: template(`<div class="upgTable instant">
-			<div class="upgCol">
-				<template v-for="item in data">
-					<template v-if="item">
-						<component v-if="!Array.isArray(item)" :is="item" :layer="layer" :style="tmp[layer].componentStyles[item]"></component>
-						<component v-else-if="item.length == 2" :is="item[0]" :layer="layer" :data="item[1]" :style="tmp[layer].componentStyles[item[0]]"></component>
-						<component v-else-if="item.length == 3" :is="item[0]" :layer="layer" :data="item[1]" :style="[
-							tmp[layer].componentStyles[item[0]],
-							(item[2] ? item[2] : {}),
-						]"></component>
-					</template>
+		template: template(`<div class="upgCol instant">
+			<template v-for="item in data">
+				<template v-if="item">
+					<component v-if="!Array.isArray(item)" :is="item" :layer="layer" :style="tmp[layer].componentStyles[item]"></component>
+					<component v-else-if="item.length == 2" :is="item[0]" :layer="layer" :data="item[1]" :style="tmp[layer].componentStyles[item[0]]"></component>
+					<component v-else-if="item.length == 3" :is="item[0]" :layer="layer" :data="item[1]" :style="[
+						tmp[layer].componentStyles[item[0]],
+						(item[2] ? item[2] : {}),
+					]"></component>
 				</template>
-			</div>
+			</template>
 		</div>`),
 	});
 
@@ -189,7 +185,7 @@ function loadVue(mainPage = false) {
 			'border-color': tmp[layer].color,
 			'border-radius': (player.infoboxes[layer][data] ? 0 : '8px'),
 		}, tmp[layer].infoboxes[data].style]">
-			<button class="story-title" :style="[{'background-color': tmp[layer].color}, tmp[layer].infoboxes[data].titleStyle]" v-on:click="player.infoboxes[layer][data] = !player.infoboxes[layer][data]">
+			<button class="story-title" :style="[{'background-color': tmp[layer].color}, tmp[layer].infoboxes[data].titleStyle]" @click="player.infoboxes[layer][data] = !player.infoboxes[layer][data]">
 				<span class="story-toggle">{{player.infoboxes[layer][data] ? "+" : "-"}}</span>
 				<span v-html="tmp[layer].infoboxes[data].title ? tmp[layer].infoboxes[data].title : (tmp[layer].name)"></span>
 			</button>
@@ -202,24 +198,24 @@ function loadVue(mainPage = false) {
 	// data = width in px, by default fills the full area
 	addNormalComponent('h-line', {
 		props: ['layer', 'data'],
-		template: template(`<hr class="instant hl" :style="data ? {'width': data} : {}">`),
+		template: template(`<hr class="instant hl" :style="data ? {width: data} : {}">`),
 	});
 
 	// data = height in px, by default is bad
 	addNormalComponent('v-line', {
 		props: ['layer', 'data'],
-		template: template(`<div class="instant vl" :style="data ? {'height': data} : {}"></div>`),
+		template: template(`<div class="instant vl" :style="data ? {height: data} : {}"></div>`),
 	});
 
 	// data = array of rows to include, by default is all
 	addNormalComponent('challenges', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
-		template: template(`<div v-if="tmp[layer].challenges" class="upgTable">
+		template: template(`<div v-if="tmp[layer].challenges" class="upgCol">
 			<div v-for="row in (data === undefined ? tmp[layer].challenges.rows : data)" class="upgRow">
-				<div v-for="col in tmp[layer].challenges.cols">
+				<template v-for="col in tmp[layer].challenges.cols">
 					<challenge v-if="tmp[layer].challenges[row * 10 + col] !== undefined && tmp[layer].challenges[row * 10 + col].unlocked" :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.challenge"></challenge>
-				</div>
+				</template>
 			</div>
 		</div>`),
 	});
@@ -242,12 +238,12 @@ function loadVue(mainPage = false) {
 		]" :style="tmp[layer].challenges[data].style">
 			<br>
 			<h3 v-html="tmp[layer].challenges[data].name"></h3><br><br>
-			<button :class="{longUpg: true, can: canUseChallenge(layer, data), [layer]: true}" :style="{'background-color': tmp[layer].color}" v-on:click="startChallenge(layer, data)">{{challengeButtonText(layer, data)}}</button><br><br>
+			<button :class="{longUpg: true, can: canUseChallenge(layer, data), [layer]: true}" :style="{'background-color': tmp[layer].color}" @click="startChallenge(layer, data)">{{challengeButtonText(layer, data)}}</button><br><br>
 			<span v-if="layers[layer].challenges[data].fullDisplay" v-html="run(layers[layer].challenges[data].fullDisplay, layers[layer].challenges[data])"></span>
 			<span v-else>
 				<span v-html="tmp[layer].challenges[data].challengeDescription"></span><br>
 				Goal: <span v-if="tmp[layer].challenges[data].goalDescription" v-html="tmp[layer].challenges[data].goalDescription"></span>
-				<span v-else>{{format(tmp[layer].challenges[data].goal)}} {{tmp[layer].challenges[data].currencyDisplayName ? tmp[layer].challenges[data].currencyDisplayName : modInfo.pointsName}}</span><br>
+				<span v-else>{{format(tmp[layer].challenges[data].goal)}} {{tmp[layer].challenges[data].currencyDisplayName ? tmp[layer].challenges[data].currencyDisplayName : (modInfo.pointsName || "points")}}</span><br>
 				Reward: <span v-html="tmp[layer].challenges[data].rewardDescription"></span>
 				<span v-if="layers[layer].challenges[data].rewardDisplay !== undefined">
 					<br>
@@ -263,13 +259,11 @@ function loadVue(mainPage = false) {
 	addNormalComponent('upgrades', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
-		template: template(`<div v-if="tmp[layer].upgrades" class="upgTable">
+		template: template(`<div v-if="tmp[layer].upgrades" class="upgCol">
 			<div v-for="row in (data === undefined ? tmp[layer].upgrades.rows : data)" class="upgRow">
-				<div v-for="col in tmp[layer].upgrades.cols">
-					<div v-if="tmp[layer].upgrades[row * 10 + col] !== undefined && tmp[layer].upgrades[row * 10 + col].unlocked" class="upgAlign">
-						<upgrade :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.upgrade"></upgrade>
-					</div>
-				</div>
+				<template v-for="col in tmp[layer].upgrades.cols">
+					<upgrade v-if="tmp[layer].upgrades[row * 10 + col] !== undefined && tmp[layer].upgrades[row * 10 + col].unlocked" :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.upgrade"></upgrade>
+				</template>
 			</div><br>
 		</div>`),
 	});
@@ -285,7 +279,7 @@ function loadVue(mainPage = false) {
 				return "Currently: ";
 			},
 		},
-		template: template(`<button v-if="tmp[layer].upgrades && tmp[layer].upgrades[data] !== undefined && tmp[layer].upgrades[data].unlocked" :id='"upgrade-" + layer + "-" + data' v-on:click="buyUpg(layer, data)" :class="{
+		template: template(`<button v-if="tmp[layer].upgrades && tmp[layer].upgrades[data] !== undefined && tmp[layer].upgrades[data].unlocked" :id='"upgrade-" + layer + "-" + data' @click="buyUpg(layer, data)" :class="{
 			[layer]: true,
 			tooltipBox: true,
 			upg: true,
@@ -293,7 +287,7 @@ function loadVue(mainPage = false) {
 			locked: (!canAffordUpgrade(layer, data) && !hasUpgrade(layer, data)),
 			can: (canAffordUpgrade(layer, data) && !hasUpgrade(layer, data)),
 		}" :style="[
-			(!hasUpgrade(layer, data) && canAffordUpgrade(layer, data) ? {'background-color': tmp[layer].color} : {}),
+			(!hasUpgrade(layer, data) && canAffordUpgrade(layer, data) ? {'background-color': tmp[layer].upgrades[data].color ?? tmp[layer].color} : {}),
 			tmp[layer].upgrades[data].style
 		]">
 			<span v-if="layers[layer].upgrades[data].fullDisplay" v-html="run(layers[layer].upgrades[data].fullDisplay, layers[layer].upgrades[data])"></span>
@@ -350,7 +344,7 @@ function loadVue(mainPage = false) {
 	addNormalComponent('toggle', {
 		props: ['layer', 'data'],
 		data() {return {tmp, toggleAuto, formatOpt, player}},
-		template: template(`<button class="smallUpg can" :style="{'background-color': tmp[data[0]].color}" v-on:click="toggleAuto(data)">{{formatOpt(player[data[0]][data[1]])}}</button>`),
+		template: template(`<button class="smallUpg can" :style="{'background-color': tmp[data[0]].color}" @click="toggleAuto(data)">{{formatOpt(player[data[0]][data[1]])}}</button>`),
 	});
 
 	addNormalComponent('prestige-button', {
@@ -364,7 +358,7 @@ function loadVue(mainPage = false) {
 		}" :style="[
 			(tmp[layer].canReset ? {'background-color': tmp[layer].color} : {}),
 			tmp[layer].componentStyles['prestige-button'],
-		]" v-html="prestigeButtonText(layer)" v-on:click="doReset(layer)"></button>`),
+		]" v-html="prestigeButtonText(layer)" @click="doReset(layer)"></button>`),
 	});
 
 	// Displays the main resource for the layer
@@ -383,10 +377,10 @@ function loadVue(mainPage = false) {
 		},
 		template: template(`<div>
 			<span v-if="player[layer].points.lt('1e1000')">You have </span>
-			<h2 :style="{'color': tmp[layer].color, 'text-shadow': '0px 0px 10px' + tmp[layer].color}">{{data ? format(player[layer].points, data) : formatWhole(player[layer].points)}}</h2>&nbsp;
+			<h2 :style="{color: tmp[layer].color, 'text-shadow': tmp[layer].color + ' 0px 0px 10px'}">{{data ? format(player[layer].points, data) : formatWhole(player[layer].points)}}</h2>&nbsp;
 			<span v-if="extraMainDisplay" v-html="extraMainDisplay"></span>
 			{{tmp[layer].resource}}
-			<span v-if="effectDescription">, <span v-html="effectDescription"></span></span><br><br>
+			<span v-if="effectDescription" v-html="', ' + effectDescription"></span><br><br>
 		</div>`),
 	});
 
@@ -407,21 +401,15 @@ function loadVue(mainPage = false) {
 	addNormalComponent('buyables', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
-		template: template(`<div v-if="tmp[layer].buyables" class="upgTable">
+		template: template(`<div v-if="tmp[layer].buyables" class="upgCol">
 			<respec-button v-if="tmp[layer].buyables.respec && !(tmp[layer].buyables.showRespec !== undefined && tmp[layer].buyables.showRespec == false)" :layer="layer" :style="[
 				{'margin-bottom': '12px'},
 				tmp[layer].componentStyles['respec-button'],
 			]"></respec-button>
 			<div v-for="row in (data === undefined ? tmp[layer].buyables.rows : data)" class="upgRow">
-				<div v-for="col in tmp[layer].buyables.cols">
-					<div v-if="tmp[layer].buyables[row * 10 + col] !== undefined && tmp[layer].buyables[row * 10 + col].unlocked" class="upgAlign" :style="{
-						'margin-left': '7px',
-						'margin-right': '7px',
-						'height': (data ? data : 'inherit'),
-					}">
-						<buyable :layer="layer" :data="row * 10 + col"></buyable>
-					</div>
-				</div><br>
+				<template v-for="col in tmp[layer].buyables.cols">
+					<buyable v-if="tmp[layer].buyables[row * 10 + col] !== undefined && tmp[layer].buyables[row * 10 + col].unlocked" :layer="layer" :data="row * 10 + col" style="margin: 0 7px"></buyable>
+				</template><br>
 			</div>
 		</div>`),
 	});
@@ -453,10 +441,10 @@ function loadVue(mainPage = false) {
 				locked: !tmp[layer].buyables[data].canBuy,
 				bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit),
 			}" :style="[
-				(tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].color} : {}),
+				(tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].buyables[data].color ?? tmp[layer].color} : {}),
 				tmp[layer].componentStyles.buyable,
 				tmp[layer].buyables[data].style,
-			]" v-on:click="interval ? null : buyBuyable(layer, data)" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+			]" @click="interval ? null : buyBuyable(layer, data)" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart.passive="start" @touchend="stop" @touchcancel="stop">
 				<span v-if="tmp[layer].buyables[data].title">
 					<h2 v-html="tmp[layer].buyables[data].title"></h2><br>
 				</span>
@@ -478,7 +466,7 @@ function loadVue(mainPage = false) {
 				<input type="checkbox" v-model="player[layer].noRespecConfirm">
 				<tooltip :text="'Disable respec confirmation'"></tooltip>
 			</div>
-			<button v-on:click="respecBuyables(layer)" :class="{longUpg: true, can: player[layer].unlocked, locked: !player[layer].unlocked}" style="margin-right: 18px">{{tmp[layer].buyables.respecText ? tmp[layer].buyables.respecText : "Respec"}}</button>
+			<button @click="respecBuyables(layer)" :class="{longUpg: true, can: player[layer].unlocked, locked: !player[layer].unlocked}" style="margin-right: 18px">{{tmp[layer].buyables.respecText ? tmp[layer].buyables.respecText : "Respec"}}</button>
 		</div>`),
 	});
 
@@ -486,22 +474,15 @@ function loadVue(mainPage = false) {
 	addNormalComponent('clickables', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
-		template: template(`<div v-if="tmp[layer].clickables" class="upgTable">
+		template: template(`<div v-if="tmp[layer].clickables" class="upgCol">
 			<master-button v-if="tmp[layer].clickables.masterButtonPress && (tmp[layer].clickables.showMasterButton === undefined || tmp[layer].clickables.showMasterButton)" :layer="layer" :style="[
 				{'margin-bottom': '12px'},
 				tmp[layer].componentStyles['master-button'],
 			]"></master-button>
 			<div v-for="row in (data === undefined ? tmp[layer].clickables.rows : data)" class="upgRow">
-				<div v-for="col in tmp[layer].clickables.cols">
-					<div v-if="tmp[layer].clickables[row * 10 + col] !== undefined && tmp[layer].clickables[row * 10 + col].unlocked" class="upgAlign" :style="{
-						'margin-left': '7px',
-						'margin-right': '7px',
-						'height': (data ? data : 'inherit'),
-					}">
-						<clickable :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.clickable"></clickable>
-					</div>
-				</div>
-				<br>
+				<template v-for="col in tmp[layer].clickables.cols">
+					<clickable v-if="tmp[layer].clickables[row * 10 + col] !== undefined && tmp[layer].clickables[row * 10 + col].unlocked" :layer="layer" :data="row * 10 + col" :style="[{margin: '0 7px'}, tmp[layer].componentStyles.clickable]"></clickable>
+				</template><br>
 			</div>
 		</div>`),
 	});
@@ -514,10 +495,10 @@ function loadVue(mainPage = false) {
 			start() {
 				if (!this.interval && layers[this.layer].clickables[this.data].onHold) {
 					this.interval = setInterval((function() {
-						let c = layers[this.layer].clickables[this.data];
+						const c = layers[this.layer].clickables[this.data];
 						if (this.time >= 5 && run(c.canClick, c)) run(c.onHold, c);
 						this.time++;
-					}).bind(this), 50)
+					}).bind(this), 50);
 				};
 			},
 			stop() {
@@ -532,9 +513,9 @@ function loadVue(mainPage = false) {
 			can: tmp[layer].clickables[data].canClick,
 			locked: !tmp[layer].clickables[data].canClick,
 		}" :style="[
-			(tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].color} : {}),
+			(tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].clickables[data].color ?? tmp[layer].color} : {}),
 			tmp[layer].clickables[data].style,
-		]" v-on:click="interval ? null : clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+		]" @click="interval ? null : clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart.passive="start" @touchend="stop" @touchcancel="stop">
 			<span v-if="tmp[layer].clickables[data].title">
 				<h2 v-html="tmp[layer].clickables[data].title"></h2><br>
 			</span>
@@ -542,12 +523,12 @@ function loadVue(mainPage = false) {
 			<node-mark :layer="layer" :data='tmp[layer].clickables[data].marked'></node-mark>
 			<tooltip v-if="tmp[layer].clickables[data].tooltip" :text="tmp[layer].clickables[data].tooltip"></tooltip>
 		</button>`),
-	})
+	});
 
 	addNormalComponent('master-button', {
 		props: ['layer'],
 		data() {return {tmp, run, player}},
-		template: template(`<button v-if="tmp[layer].clickables && tmp[layer].clickables.masterButtonPress && (tmp[layer].clickables.showMasterButton === undefined || tmp[layer].clickables.showMasterButton)" v-on:click="run(tmp[layer].clickables.masterButtonPress, tmp[layer].clickables)" :class="{
+		template: template(`<button v-if="tmp[layer].clickables && tmp[layer].clickables.masterButtonPress && (tmp[layer].clickables.showMasterButton === undefined || tmp[layer].clickables.showMasterButton)" @click="run(tmp[layer].clickables.masterButtonPress, tmp[layer].clickables)" :class="{
 			longUpg: true,
 			can: player[layer].unlocked,
 			locked: !player[layer].unlocked,
@@ -558,13 +539,11 @@ function loadVue(mainPage = false) {
 	addNormalComponent('grid', {
 		props: ['layer', 'data'],
 		data() {return {tmp, run, layers}},
-		template: template(`<div v-if="tmp[layer].grid" class="upgTable">
+		template: template(`<div v-if="tmp[layer].grid" class="upgCol">
 			<div v-for="row in (data === undefined ? tmp[layer].grid.rows : data)" class="upgRow">
-				<div v-for="col in tmp[layer].grid.cols">
-					<div v-if="run(layers[layer].grid.getUnlocked, layers[layer].grid, row * 100 + col)" class="upgAlign" style="margin: 1px; height: inherit">
-						<gridable :layer="layer" :data="row * 100 + col" :style="tmp[layer].componentStyles.gridable"></gridable>
-					</div>
-				</div><br>
+				<template v-for="col in tmp[layer].grid.cols">
+					<gridable v-if="run(layers[layer].grid.getUnlocked, layers[layer].grid, row * 100 + col)" :layer="layer" :data="row * 100 + col" :style="[{margin: '1px'}, tmp[layer].componentStyles.gridable]"></gridable>
+				</template><br>
 			</div>
 		</div>`),
 	});
@@ -573,18 +552,16 @@ function loadVue(mainPage = false) {
 	addNormalComponent('contained-grid', {
 		props: ['layer', 'data'],
 		data() {return {tmp, run, layers}},
-		template: template(`<div v-if="tmp[layer].grid" class="upgTable" :style="{
-			'width': 'fit-content',
+		template: template(`<div v-if="tmp[layer].grid" class="upgCol" :style="{
+			width: 'fit-content',
 			'max-width': (Array.isArray(data) ? data[0] : data),
-			'overflow': 'auto',
+			overflow: 'auto',
 			'overscroll-behavior-x': 'none',
 		}">
 			<div v-for="row in (Array.isArray(data) ? data[1] : Math.min(tmp[layer].grid.rows, tmp[layer].grid.maxRows))" class="upgRow" style="max-width: none; flex-wrap: nowrap; justify-content: initial">
-				<div v-for="col in Math.min(tmp[layer].grid.cols, tmp[layer].grid.maxCols)">
-					<div v-if="run(layers[layer].grid.getUnlocked, layers[layer].grid, row * 100 + col)" class="upgAlign" style="margin: 1px; height: inherit">
-						<gridable :layer="layer" :data="row * 100 + col" :style="tmp[layer].componentStyles.gridable"></gridable>
-					</div>
-				</div><br>
+				<template v-for="col in Math.min(tmp[layer].grid.cols, tmp[layer].grid.maxCols)">
+					<gridable v-if="run(layers[layer].grid.getUnlocked, layers[layer].grid, row * 100 + col)" :layer="layer" :data="row * 100 + col" :style="[{margin: '1px'}, tmp[layer].componentStyles.gridable]"></gridable>
+				</template><br>
 			</div>
 		</div>`),
 	});
@@ -623,14 +600,14 @@ function loadVue(mainPage = false) {
 		}" :style="[
 			(canClick ? {'background-color': tmp[layer].color} : {}),
 			gridRun(layer, 'getStyle', player[this.layer].grid[this.data], this.data),
-		]" v-on:click="clickGrid(layer, data)" @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
+		]" @click="clickGrid(layer, data)" @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart.passive="start" @touchend="stop" @touchcancel="stop">
 			<span v-if="layers[layer].grid.getTitle">
 				<h3 v-html="gridRun(this.layer, 'getTitle', player[this.layer].grid[this.data], this.data)"></h3><br>
 			</span>
 			<span style="white-space: pre-line" v-html="gridRun(this.layer, 'getDisplay', player[this.layer].grid[this.data], this.data)"></span>
 			<tooltip v-if="layers[layer].grid.getTooltip" :text="gridRun(this.layer, 'getTooltip', player[this.layer].grid[this.data], this.data)"></tooltip>
 		</button>`),
-	})
+	});
 
 	// data = id of microtab family
 	addNormalComponent('microtabs', {
@@ -640,7 +617,7 @@ function loadVue(mainPage = false) {
 			currentTab() {return player.subtabs[layer][data]},
 		},
 		template: template(`<div v-if="tmp[layer].microtabs" style="border-style: solid">
-			<div class="upgTable instant">
+			<div class="upgCol instant">
 				<tab-buttons :layer="layer" :data="tmp[layer].microtabs[data]" :name="data" :style="tmp[layer].componentStyles['tab-buttons']"></tab-buttons>
 			</div>
 			<layer-tab v-if="tmp[layer].microtabs[data][player.subtabs[layer][data]].embedLayer" :layer="tmp[layer].microtabs[data][player.subtabs[layer][data]].embedLayer" :embedded="true"></layer-tab>
@@ -659,7 +636,7 @@ function loadVue(mainPage = false) {
 			<div :style="[
 				tmp[layer].bars[data].style,
 				style.dims,
-				{'display': 'table'},
+				{display: 'table'},
 			]">
 				<div class="overlayTextContainer barBorder" :style="[
 					tmp[layer].bars[data].borderStyle,
@@ -690,13 +667,11 @@ function loadVue(mainPage = false) {
 	addNormalComponent('achievements', {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
-		template: template(`<div v-if="tmp[layer].achievements" class="upgTable">
+		template: template(`<div v-if="tmp[layer].achievements" class="upgCol">
 			<div v-for="row in (data === undefined ? tmp[layer].achievements.rows : data)" class="upgRow">
-				<div v-for="col in tmp[layer].achievements.cols">
-					<div v-if="tmp[layer].achievements[row * 10 + col] !== undefined && tmp[layer].achievements[row * 10 + col].unlocked" class="upgAlign">
-						<achievement :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.achievement"></achievement>
-					</div>
-				</div>
+				<template v-for="col in tmp[layer].achievements.cols">
+					<achievement v-if="tmp[layer].achievements[row * 10 + col] !== undefined && tmp[layer].achievements[row * 10 + col].unlocked" :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.achievement"></achievement>
+				</template>
 			</div><br>
 		</div>`),
 	});
@@ -737,20 +712,12 @@ function loadVue(mainPage = false) {
 		props: ['layer', 'data'],
 		data() {return {tmp}},
 		template: template(`<div>
-			<span class="upgRow" v-for="row in data">
-				<table>
-					<span v-for="node in row" style="width: 0px">
-						<tree-node :layer='node' :prev='layer' :abb='tmp[node].symbol'></tree-node>
-					</span>
-					<tbody>
-						<tr>
-							<td>
-								<button class="treeNode hidden"></button>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</span>
+			<template v-for="row in data">
+				<div class="upgRow">
+					<tree-node v-for="node in row" :layer='node' :prev='layer' :abb='tmp[node].symbol'></tree-node>
+				</div>
+				<div class="hidden"></div>
+			</template>
 		</div>`),
 	});
 
@@ -758,39 +725,31 @@ function loadVue(mainPage = false) {
 	addNormalComponent('upgrade-tree', {
 		props: ['layer', 'data'],
 		template: template(`<thing-tree :layer="layer" :data="data" :type="'upgrade'"></thing-tree>`),
-	})
+	});
 
 	// data = an array with the structure of the tree
 	addNormalComponent('buyable-tree', {
 		props: ['layer', 'data'],
 		template: template(`<thing-tree :layer="layer" :data="data" :type="'buyable'"></thing-tree>`),
-	})
+	});
 
 	// data = an array with the structure of the tree
 	addNormalComponent('clickable-tree', {
 		props: ['layer', 'data'],
 		template: template(`<thing-tree :layer="layer" :data="data" :type="'clickable'"></thing-tree>`),
-	})
+	});
 
 	// data = an array with the structure of the tree
 	addNormalComponent('thing-tree', {
 		props: ['layer', 'data', 'type'],
 		data() {return {tmp}},
 		template: template(`<div>
-			<span class="upgRow" v-for="row in data">
-				<table>
-					<span v-for="id in row" style="width: 0; height: 0" class="upgAlign">
-						<component v-if="tmp[layer][type + 's'][id] !== undefined && tmp[layer][type + 's'][id].unlocked" :is="type" :layer="layer" :data="id" :style="tmp[layer].componentStyles[type]" class="treeThing"></component>
-					</span>
-					<tbody>
-						<tr>
-							<td>
-								<button class="treeNode hidden"></button>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</span>
+			<template v-for="row in data">
+				<template v-for="id in row">
+					<component v-if="tmp[layer][type + 's'][id] !== undefined && tmp[layer][type + 's'][id].unlocked" :is="type" :layer="layer" :data="id" :style="tmp[layer].componentStyles[type]" class="treeThing"></component>
+				</template>
+				<div class="hidden"></div>
+			</template>
 		</div>`),
 	});
 
@@ -798,10 +757,10 @@ function loadVue(mainPage = false) {
 	addNormalComponent('text-input', {
 		props: ['layer', 'data'],
 		data() {return {player, focused, toValue}},
-		template: template(`<input class="instant" :id="'input-' + layer + '-' + data" :value="player[layer][data].toString()" v-on:focus="focused = true" v-on:blur="focused = false" v-on:change="player[layer][data] = toValue(document.getElementById('input-' + layer + '-' + data).value, player[layer][data])">`),
+		template: template(`<input class="instant" :id="'input-' + layer + '-' + data" :value="player[layer][data].toString()" @focus="focused = true" @blur="focused = false" @change="player[layer][data] = toValue(document.getElementById('input-' + layer + '-' + data).value, player[layer][data])">`),
 	});
 
-	// Updates the value in player[layer][data][0]
+	// Updates the value in player[layer][data[0]] (min=data[1], max=data[2])
 	addNormalComponent('slider', {
 		props: ['layer', 'data'],
 		data() {return {player}},
@@ -824,7 +783,7 @@ function loadVue(mainPage = false) {
 	addNormalComponent('sell-one', {
 		props: ['layer', 'data'],
 		data() {return {tmp, run, player}},
-		template: template(`<button v-if="tmp[layer].buyables && tmp[layer].buyables[data].sellOne && (tmp[layer].buyables[data].canSellOne === undefined || tmp[layer].buyables[data].canSellOne)" v-on:click="run(tmp[layer].buyables[data].sellOne, tmp[layer].buyables[data])" :class="{
+		template: template(`<button v-if="tmp[layer].buyables && tmp[layer].buyables[data].sellOne && (tmp[layer].buyables[data].canSellOne === undefined || tmp[layer].buyables[data].canSellOne)" @click="run(tmp[layer].buyables[data].sellOne, tmp[layer].buyables[data])" :class="{
 			longUpg: true,
 			can: player[layer].unlocked,
 			locked: !player[layer].unlocked,
@@ -835,7 +794,7 @@ function loadVue(mainPage = false) {
 	addNormalComponent('sell-all', {
 		props: ['layer', 'data'],
 		data() {return {tmp, run, player}},
-		template: template(`<button v-if="tmp[layer].buyables && tmp[layer].buyables[data].sellAll && (tmp[layer].buyables[data].canSellAll === undefined || tmp[layer].buyables[data].canSellAll)" v-on:click="run(tmp[layer].buyables[data].sellAll, tmp[layer].buyables[data])" :class="{
+		template: template(`<button v-if="tmp[layer].buyables && tmp[layer].buyables[data].sellAll && (tmp[layer].buyables[data].canSellAll === undefined || tmp[layer].buyables[data].canSellAll)" @click="run(tmp[layer].buyables[data].sellAll, tmp[layer].buyables[data])" :class="{
 			longUpg: true,
 			can: player[layer].unlocked,
 			locked: !player[layer].unlocked,
@@ -851,13 +810,13 @@ function loadVue(mainPage = false) {
 				position: "absolute",
 				left: (offset - 10) + "px",
 				top: (offset - 10) + "px",
-				transform: "scale(" + (scale || 1) + "," + (scale || 1) + ")",
+				transform: "scale(" + (scale || 1) + ")",
 			}'></div>
 			<img v-else class='mark' :style='{
 				position: "absolute",
 				left: (offset - 22) + "px",
 				top: (offset - 15) + "px",
-				transform: "scale(" + (scale || 1) + "," + (scale || 1) + ")",
+				transform: "scale(" + (scale || 1) + ")",
 			}' :src="data">
 		</div>`),
 	});
@@ -878,7 +837,7 @@ function loadVue(mainPage = false) {
 							: {}),
 						tmp[layer].componentStyles['tab-button'],
 						data[tab].buttonStyle,
-					]" v-on:click="() => {
+					]" @click="() => {
 						player.subtabs[layer][name] = tab;
 						updateTabFormats();
 						needCanvasUpdate = true;
@@ -928,7 +887,7 @@ function loadVue(mainPage = false) {
 				};
 			},
 		},
-		template: template(`<button v-if="nodeShown(layer)" :id="layer" v-on:click="onClick" :class="{
+		template: template(`<button v-if="nodeShown(layer)" :id="layer" @click="onClick" :class="{
 			treeNode: tmp[layer].isLayer,
 			treeButton: !tmp[layer].isLayer,
 			smallNode: size == 'small',
@@ -960,16 +919,14 @@ function loadVue(mainPage = false) {
 				tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style
 				: {}
 		]" class="noBackground">
-			<div v-if="back">
-				<button :class="back == 'big' ? 'other-back' : 'back'" v-on:click="goBack(layer)">&#8592;</button>
-			</div>
+			<button v-if="back" :class="back == 'big' ? 'big back' : 'back'" @click="goBack(layer)">&#8592;</button>
 			<template v-if="tmp[layer].tabFormat">
-				<div v-if="Array.isArray(tmp[layer].tabFormat)">
+				<template v-if="Array.isArray(tmp[layer].tabFormat)">
 					<div v-if="spacing" :style="{height: spacing}"></div>
 					<column :layer="layer" :data="tmp[layer].tabFormat"></column>
-				</div>
-				<div v-else>
-					<div class="upgTable" :style="{
+				</template>
+				<template v-else>
+					<div class="upgCol" :style="{
 						'padding-top': (embedded ? '0' : '25px'),
 						'margin-top': (embedded ? '-10px' : '0'),
 						'margin-bottom': '24px',
@@ -978,9 +935,9 @@ function loadVue(mainPage = false) {
 					</div>
 					<layer-tab v-if="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].embedLayer" :layer="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].embedLayer" :embedded="true"></layer-tab>
 					<column v-else :layer="layer" :data="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].content"></column>
-				</div>
+				</template>
 			</template>
-			<div v-else>
+			<template v-else>
 				<div v-if="spacing" :style="{height: spacing}"></div>
 				<infobox v-if="tmp[layer].infoboxes" :layer="layer" :data="Object.keys(tmp[layer].infoboxes)[0]"></infobox>
 				<main-display :style="tmp[layer].componentStyles['main-display']" :layer="layer"></main-display>
@@ -999,7 +956,7 @@ function loadVue(mainPage = false) {
 				<challenges :style="tmp[layer].componentStyles.challenges" :layer="layer"></challenges>
 				<achievements :style="tmp[layer].componentStyles.achievements" :layer="layer"></achievements>
 				<br><br>
-			</div>
+			</template>
 		</div>`),
 	});
 
@@ -1022,32 +979,31 @@ function loadVue(mainPage = false) {
 		},
 		template: template(`<div class="overlayThing" style="
 			padding-bottom: 10px;
-			background-image: linear-gradient(#000, #000C, #0009, #0006, #0000);
+			background-image: linear-gradient(var(--background), color-mix(in srgb, var(--background) 80%, transparent), color-mix(in srgb, var(--background) 60%, transparent), color-mix(in srgb, var(--background) 40%, transparent), transparent);
 			z-index: 1000;
 			position: relative;
 		">
-			<span v-if="player.devSpeed && player.devSpeed !== 1" class="overlayThing">
+			<div v-if="player.devSpeed && player.devSpeed !== 1">
 				<br>Dev Speed: {{format(player.devSpeed)}}x<br>
-			</span>
-			<span v-if="player.offTime !== undefined" class="overlayThing">
+			</div>
+			<div v-if="player.offTime !== undefined">
 				<br>Offline Time: {{formatTime(player.offTime.remain)}}<br>
-			</span>
-			<br>
-			<span v-if="overridePointDisplay" v-html="overridePointDisplay" class="overlayThing"></span>
-			<span v-else>
-				<span v-if="player.points.lt('1e1000')" class="overlayThing">You have </span>
-				<h2 class="overlayThing" id="points">{{format(player.points)}}</h2>
-				<span v-if="player.points.lt('e1000000')" class="overlayThing">&nbsp;{{modInfo.pointsName}}</span><br>
-				<span v-if="canGenPoints" class="overlayThing">
+			</div><br>
+			<div v-if="overridePointDisplay" v-html="overridePointDisplay"></div>
+			<div v-else>
+				<template v-if="player.points.lt('1e1000')">You have </template>
+				<h2 id="points">{{format(player.points)}}</h2>
+				<template v-if="player.points.lt('e1000000')">&nbsp;{{modInfo.pointsName || "points"}}</template>
+				<div v-if="canGenPoints">
 					{{tmp.other.oompsMag !== 0 ?
 						format(tmp.other.oomps) + " OOM" + (tmp.other.oompsMag < 0 ? "^OOM" : (tmp.other.oompsMag > 1 ? "^" + tmp.other.oompsMag : "")) + "s"
 						: format(pointGen)
 					}}/sec
-				</span>
-			</span>
-			<div v-for="thing in tmp.displayThings" class="overlayThing">
-				<span v-if="thing" v-html="thing"></span>
+				</div>
 			</div>
+			<template v-for="thing in tmp.displayThings">
+				<div v-if="thing" v-html="thing"></div>
+			</template>
 		</div>`),
 	});
 
@@ -1059,9 +1015,9 @@ function loadVue(mainPage = false) {
 		template: template(`<div>
 			<h2>{{modInfo.name}}</h2><br>
 			<h3>{{VERSION.withName}}</h3><br>
-			<span v-if="modInfo.author">
+			<template v-if="modInfo.author">
 				Made by {{modInfo.author}}<br>
-			</span><br>
+			</template><br>
 			The Modding Tree <a href="https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md" target="_blank" class="link" style="font-size: 14px; display: inline">{{TMT_VERSION.tmtNum}}</a> by Acamaeda and FlamemasterNXF<br>
 			The Prestige Tree made by Jacorb and Aarex<br><br>
 			<div class="link" onclick="showTab('changelog-tab')">Changelog</div><br><br>
@@ -1070,17 +1026,17 @@ function loadVue(mainPage = false) {
 			</span>
 			<a class="link" href="https://discord.gg/F3xveHV" target="_blank" :style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br><br>
 			<a class="link" href="https://discord.gg/wwQfgPa" target="_blank" style="font-size: 16px">Main Prestige Tree server</a><br>
-			<div v-if="endPoints !== undefined">
-				<br>Current Endgame: {{format(endPoints) + " " + (modInfo.pointsName ? modInfo.pointsName : "points")}}<br>
-			</div><br>
+			<template v-if="endPoints !== undefined">
+				<br>Current Endgame: {{format(endPoints) + " " + (modInfo.pointsName || "points")}}<br>
+			</template><br>
 			Time Played: {{formatTime(player.timePlayed)}}<br><br>
 			<h3>Hotkeys</h3><br><br>
-			<span v-for="key in hotkeys">
-				<span v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked">
+			<template v-for="key in hotkeys">
+				<template v-if="player[key.layer].unlocked && tmp[key.layer].hotkeys[key.id].unlocked">
 					{{key.description}}<br>
-				</span>
-			</span>
-			` + (mainPage ? `` : `<br><a class="link" href="../index.html">Back to main page</a><br><br>`) + `
+				</template>
+			</template><br>
+			${mainPage ? `` : `<a class="link" href="../index.html">Back to main page</a><br><br>`}
 		</div>`),
 	});
 
@@ -1095,7 +1051,7 @@ function loadVue(mainPage = false) {
 					if (optionGrid[row][index].onClick === toggleOpt) template += `toggleOpt('` + optionGrid[row][index].opt + `')`;
 					else template += `optionGrid[` + row + `][` + index + `].onClick()`;
 					template += `">`;
-					if (typeof optionGrid[row][index].text === "function") template += `{{optionGrid[` + row + `][` + index + `].text()}}`;
+					if (optionGrid[row][index].text instanceof Function) template += `{{optionGrid[` + row + `][` + index + `].text()}}`;
 					else template += optionGrid[row][index].text;
 					template += `</button></td>`;
 				};
@@ -1111,20 +1067,18 @@ function loadVue(mainPage = false) {
 	});
 
 	addNormalComponent('particle', {
-		props: ['data', 'index'],
-		data() {return {constructParticleStyle, run}},
-		template: template(`<div>
-			<div class='particle instant' :style="[
-				constructParticleStyle(data),
-				data.style,
-			]" v-on:click="run(data.onClick, data)" v-on:mouseenter="run(data.onMouseOver, data)" v-on:mouseleave="run(data.onMouseLeave, data)">
-				<span v-html="data.text"></span>
-			</div>
-			<svg version="2" v-if="data.color">
+		props: ['data'],
+		data() {return {constructParticleStyle, run, getParticleImage}},
+		template: template(`<div class='particle instant' :style="[
+			constructParticleStyle(data, ${mainPage}),
+			data.style,
+		]" @click="run(data.onClick, data)" @mouseenter="run(data.onMouseOver, data)" @mouseleave="run(data.onMouseLeave, data)">
+			<svg v-if="data.color" style="display: none">
 				<mask :id="'pmask' + data.id">
-					<image id="img" :href="data.image" x="0" y="0" :height="data.width" :width="data.height"></image>
+					<image id="img" :href="getParticleImage(data, ${mainPage})" x="0" y="0" :width="data.width" :height="data.height"></image>
 				</mask>
 			</svg>
+			<span v-if="data.text" v-html="data.text"></span>
 		</div>`),
 	});
 
@@ -1144,9 +1098,7 @@ function loadVue(mainPage = false) {
 	// add custom components
 	if (typeof customComponents === "object" && isPlainObject(customComponents)) {
 		for (const name in customComponents) {
-			if (customComponents.hasOwnProperty(name)) {
-				app.component(name, customComponents[name]);
-			};
+			app.component(name, customComponents[name]);
 		};
 	};
 

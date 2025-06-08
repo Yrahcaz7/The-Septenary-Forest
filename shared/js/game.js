@@ -48,8 +48,8 @@ function getNextAt(layer, canMax = false, useType = null) {
 		return new Decimal(Infinity);
 	} else if (type == "static") {
 		if (!tmp[layer].canBuyMax) canMax = false;
-		let amt = player[layer].points.add(canMax && tmp[layer].baseAmount.gte(tmp[layer].nextAt) ? tmp[layer].resetGain : 0).div(tmp[layer].directMult);
-		let extraCost = Decimal.pow(tmp[layer].base, amt.pow(tmp[layer].exponent).div(tmp[layer].gainExp)).mul(tmp[layer].gainMult);
+		const amt = player[layer].points.add(canMax && tmp[layer].baseAmount.gte(tmp[layer].nextAt) ? tmp[layer].resetGain : 0).div(tmp[layer].directMult);
+		const extraCost = Decimal.pow(tmp[layer].base, amt.pow(tmp[layer].exponent).div(tmp[layer].gainExp)).mul(tmp[layer].gainMult);
 		let cost = extraCost.mul(tmp[layer].requires).max(tmp[layer].requires);
 		if (tmp[layer].roundUpCost) cost = cost.ceil();
 		return cost;
@@ -74,7 +74,7 @@ function softcap(value, cap, power = 0.5) {
 
 // Return true if the layer should be highlighted. By default checks for upgrades only.
 function shouldNotify(layer) {
-	for (id in tmp[layer].upgrades) {
+	for (const id in tmp[layer].upgrades) {
 		if (isPlainObject(layers[layer].upgrades[id])) {
 			if (canAffordUpgrade(layer, id) && !hasUpgrade(layer, id) && tmp[layer].upgrades[id].unlocked) return true;
 		};
@@ -82,15 +82,15 @@ function shouldNotify(layer) {
 	if (player[layer].activeChallenge && canCompleteChallenge(layer, player[layer].activeChallenge)) return true;
 	if (tmp[layer].shouldNotify) return true;
 	if (isPlainObject(tmp[layer].tabFormat)) {
-		for (subtab in tmp[layer].tabFormat) {
+		for (const subtab in tmp[layer].tabFormat) {
 			if (subtabShouldNotify(layer, "mainTabs", subtab)) {
 				tmp[layer].trueGlowColor = tmp[layer].tabFormat[subtab].glowColor || defaultGlow;
 				return true;
 			};
 		};
 	};
-	for (family in tmp[layer].microtabs) {
-		for (subtab in tmp[layer].microtabs[family]) {
+	for (const family in tmp[layer].microtabs) {
+		for (const subtab in tmp[layer].microtabs[family]) {
 			if (subtabShouldNotify(layer, family, subtab)) {
 				tmp[layer].trueGlowColor = tmp[layer].microtabs[family][subtab].glowColor;
 				return true;
@@ -109,7 +109,7 @@ function canReset(layer) {
 };
 
 function rowReset(row, layer) {
-	for (lr in ROW_LAYERS[row]) {
+	for (const lr in ROW_LAYERS[row]) {
 		if (layers[lr].doReset) {
 			if (!isNaN(row)) player[lr].activeChallenge = null; // Exit challenges on any row reset on an equal or higher row
 			run(layers[lr].doReset, layers[lr], layer);
@@ -119,31 +119,15 @@ function rowReset(row, layer) {
 	};
 };
 
-function layerDataReset(layer, keep = [], copyObjs = false) {
-	let storedData = {unlocked: player[layer].unlocked, forceTooltip: player[layer].forceTooltip, noRespecConfirm: player[layer].noRespecConfirm, prevTab: player[layer].prevTab} // Always keep these
-	for (thing in keep) {
-		if (typeof player[layer][keep[thing]] == "object" && !(player[layer][keep[thing]] instanceof Decimal) && copyObjs) {
-			storedData[keep[thing]] = {};
-			for (const key in player[layer][keep[thing]]) {
-				if (typeof player[layer][keep[thing]] == "object") {
-					storedData[keep[thing]][key] = Object.create(player[layer][keep[thing]][key]);
-				} else if (player[layer][keep[thing]][key] !== undefined) {
-					storedData[keep[thing]][key] = player[layer][keep[thing]][key];
-				};
-			};
-		} else if (player[layer][keep[thing]] !== undefined) {
+function layerDataReset(layer, keep = []) {
+	const storedData = {unlocked: player[layer].unlocked, forceTooltip: player[layer].forceTooltip, noRespecConfirm: player[layer].noRespecConfirm, prevTab: player[layer].prevTab} // Always keep these
+	for (const thing in keep) {
+		if (player[layer][keep[thing]] !== undefined) {
 			storedData[keep[thing]] = player[layer][keep[thing]];
 		};
 	};
-	player[layer].buyables = getStartBuyables(layer);
-	player[layer].clickables = getStartClickables(layer);
-	player[layer].challenges = getStartChallenges(layer);
-	player[layer].grid = getStartGrid(layer);
 	layOver(player[layer], getStartLayerData(layer));
-	player[layer].upgrades = [];
-	player[layer].milestones = [];
-	player[layer].achievements = [];
-	for (thing in storedData) {
+	for (const thing in storedData) {
 		player[layer][thing] = storedData[thing];
 	};
 };
@@ -160,7 +144,8 @@ function generatePoints(layer, diff) {
 
 function doReset(layer, force = false, overrideResetsNothing = false) {
 	if (tmp[layer].type == "none") return;
-	let row = tmp[layer].row, challenge = player[layer].activeChallenge;
+	const row = tmp[layer].row;
+	const challenge = player[layer].activeChallenge;
 	if (!force) {
 		if (tmp[layer].canReset === false) return;
 		if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return;
@@ -179,7 +164,7 @@ function doReset(layer, force = false, overrideResetsNothing = false) {
 			needCanvasUpdate = true;
 			if (tmp[layer].increaseUnlockOrder) {
 				lrs = tmp[layer].increaseUnlockOrder;
-				for (lr in lrs) {
+				for (const lr in lrs) {
 					if (!player[lrs[lr]].unlocked) player[lrs[lr]].unlockOrder++;
 				};
 			};
@@ -187,7 +172,7 @@ function doReset(layer, force = false, overrideResetsNothing = false) {
 	};
 	if (!overrideResetsNothing && run(layers[layer].resetsNothing, layers[layer])) return;
 	tmp[layer].baseAmount = newDecimalZero(); // quick fix
-	for (layerResetting in layers) {
+	for (const layerResetting in layers) {
 		if (row >= layers[layerResetting].row && (!force || layerResetting != layer)) completeChallenge(layerResetting);
 	};
 	player.points = (typeof getStartPoints == "function" ? getStartPoints() : newDecimalZero());
@@ -195,7 +180,7 @@ function doReset(layer, force = false, overrideResetsNothing = false) {
 	for (let x = row; x >= 0; x--) {
 		rowReset(x, layer);
 	};
-	for (r in OTHER_LAYERS) {
+	for (const r in OTHER_LAYERS) {
 		rowReset(r, layer);
 	};
 	player[layer].resetTime = 0;
@@ -205,13 +190,10 @@ function doReset(layer, force = false, overrideResetsNothing = false) {
 };
 
 function resetRow(row) {
-	if (prompt('Are you sure you want to reset this row? It is highly recommended that you wait until the end of your current run before doing this! Type "I WANT TO RESET THIS" to confirm') != "I WANT TO RESET THIS") return;
-	let pre_layers = ROW_LAYERS[row - 1];
-	let layers = ROW_LAYERS[row];
-	let post_layers = ROW_LAYERS[row + 1];
-	rowReset(row + 1, post_layers[0]);
-	doReset(pre_layers[0], true);
-	for (let layer in layers) {
+	if (prompt('Are you sure you want to reset this row? It is highly recommended that you wait until the end of your current run before doing this! Type "I WANT TO RESET THIS" to confirm') !== "I WANT TO RESET THIS") return;
+	rowReset(row + 1, ROW_LAYERS[row + 1][0]);
+	doReset(ROW_LAYERS[row - 1][0], true);
+	for (const layer in ROW_LAYERS[row]) {
 		player[layer].unlocked = false;
 		if (player[layer].unlockOrder) player[layer].unlockOrder = 0;
 	};
@@ -221,7 +203,7 @@ function resetRow(row) {
 };
 
 function startChallenge(layer, x) {
-	if (!player[layer].unlocked || !tmp[layer].challenges[x].unlocked) return;
+	if ((!player[layer].unlocked && tmp[layer].upgrades.needLayerUnlocked !== false) || !tmp[layer].challenges[x].unlocked) return;
 	if (player[layer].activeChallenge == x && canExitChallenge(layer, x)) {
 		completeChallenge(layer, x);
 		doReset(layer, true);
@@ -237,10 +219,10 @@ function startChallenge(layer, x) {
 
 function canCompleteChallenge(layer, x) {
 	if (x != player[layer].activeChallenge) return;
-	let challenge = tmp[layer].challenges[x];
+	const challenge = tmp[layer].challenges[x];
 	if (challenge.canComplete !== undefined) return challenge.canComplete;
 	if (challenge.currencyInternalName) {
-		let name = challenge.currencyInternalName;
+		const name = challenge.currencyInternalName;
 		if (challenge.currencyLocation) {
 			return !challenge.currencyLocation[name].lt(challenge.goal);
 		} else if (challenge.currencyLayer) {
@@ -255,7 +237,7 @@ function canCompleteChallenge(layer, x) {
 
 function completeChallenge(layer, x = player[layer].activeChallenge) {
 	if (!x) return;
-	let completions = canCompleteChallenge(layer, x);
+	const completions = canCompleteChallenge(layer, x);
 	if (!completions) {
 		player[layer].activeChallenge = null;
 		run(layers[layer].challenges[x].onExit, layers[layer].challenges[x]);
@@ -277,7 +259,7 @@ VERSION.withName = VERSION.withoutName + (VERSION.name ? ": " + VERSION.name : "
 
 function autobuyUpgrades(layer) {
 	if (!tmp[layer].upgrades) return;
-	for (id in tmp[layer].upgrades) {
+	for (const id in tmp[layer].upgrades) {
 		if (isPlainObject(tmp[layer].upgrades[id]) && (layers[layer].upgrades[id].canAfford === undefined || layers[layer].upgrades[id].canAfford() === true)) {
 			buyUpg(layer, id);
 		};
@@ -303,39 +285,39 @@ function gameLoop(diff) {
 	else player.points = player.points.add(tmp.pointGen.mul(diff)).max(0);
 	if (typeof update === "function") update(diff);
 	for (let x = 0; x <= maxRow; x++) {
-		for (item in TREE_LAYERS[x]) {
-			let layer = TREE_LAYERS[x][item];
+		for (const item in TREE_LAYERS[x]) {
+			const layer = TREE_LAYERS[x][item];
 			player[layer].resetTime += diff;
 			if (tmp[layer].passiveGeneration) generatePoints(layer, diff * tmp[layer].passiveGeneration);
 			if (layers[layer].update) layers[layer].update(diff);
 		};
 	};
-	for (row in OTHER_LAYERS) {
-		for (item in OTHER_LAYERS[row]) {
-			let layer = OTHER_LAYERS[row][item];
+	for (const row in OTHER_LAYERS) {
+		for (const item in OTHER_LAYERS[row]) {
+			const layer = OTHER_LAYERS[row][item];
 			player[layer].resetTime += diff;
 			if (tmp[layer].passiveGeneration) generatePoints(layer, diff * tmp[layer].passiveGeneration);
 			if (layers[layer].update) layers[layer].update(diff);
 		};
 	};
 	for (let x = maxRow; x >= 0; x--) {
-		for (item in TREE_LAYERS[x]) {
-			let layer = TREE_LAYERS[x][item];
+		for (const item in TREE_LAYERS[x]) {
+			const layer = TREE_LAYERS[x][item];
 			if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);
 			if (layers[layer].automate) layers[layer].automate();
 			if (tmp[layer].autoUpgrade) autobuyUpgrades(layer);
 		};
 	};
-	for (row in OTHER_LAYERS) {
-		for (item in OTHER_LAYERS[row]) {
-			let layer = OTHER_LAYERS[row][item];
+	for (const row in OTHER_LAYERS) {
+		for (const item in OTHER_LAYERS[row]) {
+			const layer = OTHER_LAYERS[row][item];
 			if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);
 			if (layers[layer].automate) layers[layer].automate();
-			player[layer].best = player[layer].best.max(player[layer].points);
+			if (player[layer].best instanceof Decimal) player[layer].best = player[layer].best.max(player[layer].points);
 			if (tmp[layer].autoUpgrade) autobuyUpgrades(layer);
 		};
 	};
-	for (layer in layers) {
+	for (const layer in layers) {
 		if (layers[layer].milestones) updateMilestones(layer);
 		if (layers[layer].achievements) updateAchievements(layer);
 	};
@@ -346,17 +328,17 @@ function hardReset(resetOptions = false) {
 	player = null;
 	if (resetOptions) options = null;
 	save(true);
-	window.location.reload();
+	location.reload();
 };
 
 let ticking = false;
 
-let interval = setInterval(() => {
+const INTERVAL = setInterval(() => {
 	if (player === undefined || tmp === undefined || ticking || (tmp.gameEnded && !player.keepGoing)) return;
 	ticking = true;
-	let now = Date.now();
+	const now = Date.now();
 	let diff = (now - player.time) / 1e3;
-	let trueDiff = diff;
+	const trueDiff = diff;
 	if (player.offTime !== undefined) {
 		if (player.offTime.remain > modInfo.offlineLimit * 3600) player.offTime.remain = modInfo.offlineLimit * 3600;
 		if (player.offTime.remain > 0) {

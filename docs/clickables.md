@@ -52,10 +52,18 @@ Features:
 
 - `branches`: **optional**. This is primarially useful for clickable trees. An array of clickable ids. A line will appear from this clickable to all of the clickables in the list. Alternatively, an entry in the array can be a 2-element array consisting of the clickable id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). A third element in the array optionally specifies line width.
 
-You can also use these features on the clickables object to add a button above all the clickables, for implementing a respec button or similar:
+Additional features:
+
+- `color`: **optional**. The background color of the clickable if it can be clicked. (A string in hex format with a `#`.) The default is the color of the layer the clickable belongs to. Can be a function.
+
+Master button features (you can use these features on the clickables object to add a button above all the clickables, for implementing a respec button or similar):
 
 - `masterButtonPress()`: **optional**. If present, an additional button will appear above the clickables. Pressing it will call this function.
 
 - `masterButtonText`: **optional**. Text to display on the Master Button.
 
 - `showMasterButton()`: **optional**. A function determining whether or not to show the button, if masterButtonPress is defined. Defaults to true if absent.
+
+Additional features on the main clickables object:
+
+- `needLayerUnlocked`: **optional**. If this is false, the layer need not be unlocked for the player to click clickables.

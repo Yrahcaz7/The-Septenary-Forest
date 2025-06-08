@@ -3,7 +3,6 @@ addLayer("s", {
 	symbol: "S",
 	position: 0,
 	startData() { return {
-		unlocked: true,
 		points: newDecimalZero(),
 		best: newDecimalZero(),
 		total: newDecimalZero(),
@@ -79,7 +78,7 @@ addLayer("s", {
 	}],
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = [];
+		const keep = [];
 		if (player.cy.unlocks[1] >= 2
 			|| player.l.points.gte(3)
 			|| player.ec.points.gte(6)
@@ -89,10 +88,12 @@ addLayer("s", {
 			|| (resettingLayer == "g" && hasMilestone("g", 8) && hasChallenge("e", 11))
 		) keep.push("upgrades");
 		if (!keep.includes("upgrades") && resettingLayer == "g" && ((hasMilestone("g", 8) && player.e.unlocked) || hasChallenge("e", 11))) {
-			let keepUpg = [];
-			if (resettingLayer == "g" && ((hasMilestone("g", 8) && player.e.unlocked) || (!hasMilestone("g", 8) && hasChallenge("e", 11))))
-				for (let index = 0; index < player.s.upgrades.length; index++)
+			const keepUpg = [];
+			if (resettingLayer == "g" && ((hasMilestone("g", 8) && player.e.unlocked) || (!hasMilestone("g", 8) && hasChallenge("e", 11)))) {
+				for (let index = 0; index < player.s.upgrades.length; index++) {
 					if (player.s.upgrades[index] < 40) keepUpg.push(player.s.upgrades[index]);
+				};
+			};
 			layerDataReset("s", keep);
 			player.s.upgrades = keepUpg;
 		} else {

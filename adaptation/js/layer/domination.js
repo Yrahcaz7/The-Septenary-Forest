@@ -79,7 +79,7 @@ addLayer("d", {
 	}],
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = ["autoFOC", "autoSPE", "autoCLI", "autoDOM"];
+		const keep = ["autoFOC", "autoSPE", "autoCLI", "autoDOM"];
 		if (player.em.unlocked
 			|| player.l.points.gte(4)
 			|| player.w.points.gte(3)
@@ -95,15 +95,15 @@ addLayer("d", {
 	},
 	automate() {
 		if (hasMilestone("r", 14) || player.l.unlocked) {
-			if (player.d.autoFOC && layers.d.buyables[11].canAfford()) layers.d.buyables[11].buy();
-			if (player.d.autoSPE && layers.d.buyables[12].canAfford()) layers.d.buyables[12].buy();
-			if (player.d.autoCLI && layers.d.buyables[13].canAfford()) layers.d.buyables[13].buy();
-			if (player.d.autoDOM && layers.d.buyables[14].canAfford()) layers.d.buyables[14].buy();
+			if (player.d.autoFOC) buyBuyable("d", 11);
+			if (player.d.autoSPE) buyBuyable("d", 12);
+			if (player.d.autoCLI) buyBuyable("d", 13);
+			if (player.d.autoDOM) buyBuyable("d", 14);
 		};
 	},
 	componentStyles: {
-		"buyable"() {return {"width": "210px", "height": "110px"}},
-		"clickable"() {return {"min-height": "30px", "transform": "none"}},
+		buyable: {width: "210px", height: "110px"},
+		clickable: {"min-height": "30px", transform: "none"},
 	},
 	buyables: {
 		11: {
@@ -130,7 +130,7 @@ addLayer("d", {
 				return "divide focus requirement by " + format(b.effectBase) + "<br><br>Effect: /" + format(b.effect) + "<br><br>Cost: " + formatWhole(b.cost) + " domination points<br><br>Progress: " + format(getBuyableAmount(this.layer, this.id) * 20) + "%";
 			},
 			purchaseLimit: 5,
-			canAfford() {return player.d.unlocks[0] && player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit)},
+			canAfford() {return player.d.unlocks[0] && player[this.layer].points.sub(player[this.layer].spent).gte(this.cost())},
 			buy() {
 				player[this.layer].spent = player[this.layer].spent.add(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -164,7 +164,7 @@ addLayer("d", {
 				return "divide species requirement by " + format(b.effectBase) + "<br><br>Effect: /" + format(b.effect) + "<br><br>Cost: " + formatWhole(b.cost) + " domination points<br><br>Progress: " + format(getBuyableAmount(this.layer, this.id) * 10) + "%";
 			},
 			purchaseLimit: 10,
-			canAfford() {return player.d.unlocks[1] && player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit)},
+			canAfford() {return player.d.unlocks[1] && player[this.layer].points.sub(player[this.layer].spent).gte(this.cost())},
 			buy() {
 				player[this.layer].spent = player[this.layer].spent.add(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -202,7 +202,7 @@ addLayer("d", {
 				return "divide acclimation requirement by " + format(b.effectBase) + "<br><br>Effect: /" + format(b.effect) + "<br><br>Cost: " + formatWhole(b.cost) + " domination points<br><br>Progress: " + format(getBuyableAmount(this.layer, this.id) * 20 / 3) + "%";
 			},
 			purchaseLimit: 15,
-			canAfford() {return player.d.unlocks[2] && player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit)},
+			canAfford() {return player.d.unlocks[2] && player[this.layer].points.sub(player[this.layer].spent).gte(this.cost())},
 			buy() {
 				player[this.layer].spent = player[this.layer].spent.add(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -228,8 +228,9 @@ addLayer("d", {
 			effect() {return getBuyableAmount(this.layer, this.id).add(this.extra()).pow_base(this.effectBase())},
 			completionEffect() {
 				let maxed = 0;
-				for (const key in player.d.buyables)
-					if (Object.hasOwnProperty.call(player.d.buyables, key) && player.d.buyables[key] >= tmp.d.buyables[key].purchaseLimit) maxed++;
+				for (const key in player.d.buyables) {
+					if (player.d.buyables[key] >= tmp.d.buyables[key].purchaseLimit) maxed++;
+				};
 				let base = new Decimal(1.88);
 				if (hasMilestone("d", 32)) base = base.add(milestoneEffect("d", 32));
 				if (hasMilestone("d", 43)) base = base.add(milestoneEffect("d", 43));
@@ -243,7 +244,7 @@ addLayer("d", {
 				return "divide domination requirement by " + format(b.effectBase) + "<br><br>Effect: /" + format(b.effect) + "<br><br>Cost: " + formatWhole(b.cost) + " domination points<br><br>Progress: " + format(getBuyableAmount(this.layer, this.id) * 5) + "%";
 			},
 			purchaseLimit: 20,
-			canAfford() {return player.d.unlocks[3] && player[this.layer].points.sub(player[this.layer].spent).gte(this.cost()) && getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit)},
+			canAfford() {return player.d.unlocks[3] && player[this.layer].points.sub(player[this.layer].spent).gte(this.cost())},
 			buy() {
 				player[this.layer].spent = player[this.layer].spent.add(this.cost());
 				addBuyables(this.layer, this.id, 1);
@@ -275,7 +276,7 @@ addLayer("d", {
 				setClickableState("d", 13, !getClickableState("d", 13));
 				if (getClickableState("d", 13)) setClickableState("d", 14, false);
 			},
-			style: {"width": "40px", "border-radius": "10px 0 0 10px"},
+			style: {width: "40px", "border-radius": "10px 0 0 10px"},
 		},
 		14: {
 			display() {return (getClickableState("d", 14) ? "Both" : "Only Extra")},
@@ -284,7 +285,7 @@ addLayer("d", {
 				setClickableState("d", 14, !getClickableState("d", 14));
 				if (getClickableState("d", 14)) setClickableState("d", 13, false);
 			},
-			style: {"width": "40px", "border-radius": "0 10px 10px 0"},
+			style: {width: "40px", "border-radius": "0 10px 10px 0"},
 		},
 	},
 	milestones: {

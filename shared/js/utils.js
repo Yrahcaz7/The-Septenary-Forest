@@ -9,20 +9,20 @@ function respecBuyables(layer, ...args) {
 };
 
 function canAffordUpgrade(layer, id) {
-	let upg = tmp[layer].upgrades[id];
+	const upg = tmp[layer].upgrades[id];
 	if (tmp[layer].deactivated || upg.canAfford === false) return false;
 	if (upg.cost !== undefined) return canAffordPurchase(layer, upg, upg.cost);
 	return true;
 };
 
 function canBuyBuyable(layer, id) {
-	let b = temp[layer].buyables[id];
-	return (b.unlocked && run(b.canAfford, b) && player[layer].buyables[id].lt(b.purchaseLimit) && !tmp[layer].deactivated);
+	const b = temp[layer].buyables[id];
+	return !tmp[layer].deactivated && b.unlocked && run(b.canAfford, b) && player[layer].buyables[id].lt(b.purchaseLimit);
 };
 
 function canAffordPurchase(layer, thing, cost) {
 	if (thing.currencyInternalName) {
-		let name = thing.currencyInternalName;
+		const name = thing.currencyInternalName;
 		if (thing.currencyLocation) {
 			return thing.currencyLocation[name].gte(cost);
 		} else if (thing.currencyLayer) {
@@ -41,20 +41,20 @@ function buyUpgrade(layer, id) {
 
 function buyUpg(layer, id) {
 	if (!tmp[layer].upgrades || !tmp[layer].upgrades[id]) return;
-	let upg = tmp[layer].upgrades[id];
-	if (!player[layer].unlocked || player[layer].deactivated || !upg.unlocked || player[layer].upgrades.includes(id) || upg.canAfford === false) return;
-	let pay = layers[layer].upgrades[id].pay;
+	const upg = tmp[layer].upgrades[id];
+	if ((!player[layer].unlocked && tmp[layer].upgrades.needLayerUnlocked !== false) || tmp[layer].deactivated || !upg.unlocked || player[layer].upgrades.includes(id) || upg.canAfford === false) return;
+	const pay = layers[layer].upgrades[id].pay;
 	if (pay !== undefined) {
 		run(pay, layers[layer].upgrades[id]);
 	} else {
-		let cost = upg.cost;
+		const cost = upg.cost;
 		if (upg.currencyInternalName) {
-			let name = upg.currencyInternalName;
+			const name = upg.currencyInternalName;
 			if (upg.currencyLocation) {
 				if (upg.currencyLocation[name].lt(cost)) return;
 				upg.currencyLocation[name] = upg.currencyLocation[name].sub(cost);
 			} else if (upg.currencyLayer) {
-				let lr = upg.currencyLayer;
+				const lr = upg.currencyLayer;
 				if (player[lr][name].lt(cost)) return;
 				player[lr][name] = player[lr][name].sub(cost);
 			} else {
@@ -70,35 +70,36 @@ function buyUpg(layer, id) {
 	if (upg.onPurchase !== undefined) {
 		run(upg.onPurchase, upg);
 	};
+	updateUpgradeTemp(layer);
 	needCanvasUpdate = true;
 };
 
 function buyMaxBuyable(layer, id) {
-	if (!player[layer].unlocked || tmp[layer].deactivated || !tmp[layer].buyables[id].unlocked || !tmp[layer].buyables[id].canBuy || !layers[layer].buyables[id].buyMax) return;
+	if ((!player[layer].unlocked && tmp[layer].buyables.needLayerUnlocked !== false) || tmp[layer].deactivated || !tmp[layer].buyables[id].unlocked || !tmp[layer].buyables[id].canBuy || !layers[layer].buyables[id].buyMax) return;
 	run(layers[layer].buyables[id].buyMax, layers[layer].buyables[id]);
 	updateBuyableTemp(layer);
 };
 
 function buyBuyable(layer, id) {
-	if (!player[layer].unlocked || tmp[layer].deactivated || !tmp[layer].buyables[id].unlocked || !tmp[layer].buyables[id].canBuy) return;
+	if ((!player[layer].unlocked && tmp[layer].buyables.needLayerUnlocked !== false) || tmp[layer].deactivated || !tmp[layer].buyables[id].unlocked || !tmp[layer].buyables[id].canBuy) return;
 	run(layers[layer].buyables[id].buy, layers[layer].buyables[id]);
 	updateBuyableTemp(layer);
 };
 
 function clickClickable(layer, id) {
-	if (!player[layer].unlocked || tmp[layer].deactivated || !tmp[layer].clickables[id].unlocked || !tmp[layer].clickables[id].canClick) return;
+	if ((!player[layer].unlocked && tmp[layer].clickables.needLayerUnlocked !== false) || tmp[layer].deactivated || !tmp[layer].clickables[id].unlocked || !tmp[layer].clickables[id].canClick) return;
 	run(layers[layer].clickables[id].onClick, layers[layer].clickables[id]);
 	updateClickableTemp(layer);
 };
 
 function clickGrid(layer, id) {
-	if (!player[layer].unlocked || tmp[layer].deactivated || !run(layers[layer].grid.getUnlocked, layers[layer].grid, id) || !gridRun(layer, 'getCanClick', player[layer].grid[id], id)) return;
+	if ((!player[layer].unlocked && tmp[layer].grid.needLayerUnlocked !== false) || tmp[layer].deactivated || !run(layers[layer].grid.getUnlocked, layers[layer].grid, id) || !gridRun(layer, 'getCanClick', player[layer].grid[id], id)) return;
 	gridRun(layer, 'onClick', player[layer].grid[id], id);
 };
 
 // Function to determine if the player is in a challenge
 function inChallenge(layer, id) {
-	let challenge = player[layer].activeChallenge;
+	const challenge = player[layer].activeChallenge;
 	if (!challenge) return false;
 	if (challenge == id) return true;
 	if (layers[layer].challenges[challenge].countsAs) {
@@ -146,9 +147,9 @@ function goBack(layer) {
 };
 
 function layOver(obj1, obj2) {
-	for (let x in obj2) {
+	for (const x in obj2) {
 		if (obj2[x] instanceof Decimal) obj1[x] = new Decimal(obj2[x]);
-		else if (obj2[x] instanceof Object) layOver(obj1[x], obj2[x]);
+		else if (obj2[x] instanceof Object && !(obj2[x] instanceof Array)) layOver(obj1[x], obj2[x]);
 		else obj1[x] = obj2[x];
 	};
 };
@@ -156,23 +157,23 @@ function layOver(obj1, obj2) {
 function prestigeNotify(layer) {
 	if (layers[layer].prestigeNotify) return layers[layer].prestigeNotify();
 	if (isPlainObject(tmp[layer].tabFormat)) {
-		for (subtab in tmp[layer].tabFormat) {
+		for (const subtab in tmp[layer].tabFormat) {
 			if (subtabResetNotify(layer, 'mainTabs', subtab)) return true;
 		};
 	};
-	for (family in tmp[layer].microtabs) {
-		for (subtab in tmp[layer].microtabs[family]) {
+	for (const family in tmp[layer].microtabs) {
+		for (const subtab in tmp[layer].microtabs[family]) {
 			if (subtabResetNotify(layer, family, subtab)) return true;
 		};
 	};
 	if (tmp[layer].autoPrestige || tmp[layer].passiveGeneration) return false;
-	else if (tmp[layer].type == 'static') return tmp[layer].canReset;
-	else if (tmp[layer].type == 'normal') return tmp[layer].canReset && tmp[layer].resetGain.gte(player[layer].points.div(10));
-	else return false;
+	if (tmp[layer].type === 'static') return tmp[layer].canReset;
+	if (tmp[layer].type === 'normal') return tmp[layer].canReset && tmp[layer].resetGain.gte(player[layer].points.div(10));
+	return false;
 };
 
 function notifyLayer(name) {
-	if (player.tab == name || !layerUnlocked(name)) return;
+	if (player.tab === name || !layerUnlocked(name)) return;
 	player.notify[name] = 1;
 };
 
@@ -215,7 +216,7 @@ function toNumber(x) {
 
 function updateMilestones(layer) {
 	if (tmp[layer].deactivated) return;
-	for (id in layers[layer].milestones) {
+	for (const id in layers[layer].milestones) {
 		if (layers[layer].milestones[id] === undefined) return;
 		if (layers[layer].milestones[id].done === undefined) {
 			layers[layer].milestones[id] = undefined;
@@ -226,7 +227,7 @@ function updateMilestones(layer) {
 			if (layers[layer].milestones[id].onComplete) layers[layer].milestones[id].onComplete();
 			let color = tmp[layer].color;
 			if (layers[layer].milestones[id].popupColor) color = layers[layer].milestones[id].popupColor;
-			let popupTitle = (tmp[layer].milestones[id].popupTitle !== undefined ? tmp[layer].milestones[id].popupTitle : '');
+			const popupTitle = (tmp[layer].milestones[id].popupTitle !== undefined ? tmp[layer].milestones[id].popupTitle : '');
 			if ((tmp[layer].milestonePopups || tmp[layer].milestonePopups === undefined) && !options.hideMilestonePopups) doPopup('milestone', tmp[layer].milestones[id].requirementDescription, popupTitle, 3, color);
 			player[layer].lastMilestone = id;
 		};
@@ -235,13 +236,13 @@ function updateMilestones(layer) {
 
 function updateAchievements(layer) {
 	if (tmp[layer].deactivated) return;
-	for (id in layers[layer].achievements) {
+	for (const id in layers[layer].achievements) {
 		if (isPlainObject(layers[layer].achievements[id]) && !hasAchievement(layer, id) && layers[layer].achievements[id].done()) {
 			player[layer].achievements.push(id);
 			if (layers[layer].achievements[id].onComplete) layers[layer].achievements[id].onComplete();
 			let color = tmp[layer].color;
 			if (layers[layer].achievements[id].popupColor) color = layers[layer].achievements[id].popupColor;
-			let popupTitle = (tmp[layer].achievements[id].popupTitle !== undefined ? tmp[layer].achievements[id].popupTitle : '');
+			const popupTitle = (tmp[layer].achievements[id].popupTitle !== undefined ? tmp[layer].achievements[id].popupTitle : '');
 			if (tmp[layer].achievementPopups || tmp[layer].achievementPopups === undefined) doPopup('achievement', tmp[layer].achievements[id].name, popupTitle, 3, color);
 		};
 	};
@@ -256,7 +257,7 @@ function addTime(diff, layer) {
 	};
 	// I am not that good to perfectly fix that leak. ~ DB Aarex
 	if (time + 0 !== time) {
-		console.log('Memory leak detected. Trying to fix...');
+		console.log("Memory leak detected. Trying to fix...");
 		time = toNumber(time);
 		if (isNaN(time) || time == 0) {
 			console.log("Couldn't fix! Resetting...");
@@ -284,7 +285,7 @@ document.onkeydown = e => {
 	if (focused) return;
 	if (ctrlDown && hotkeys[key]) e.preventDefault();
 	if (hotkeys[key]) {
-		let k = hotkeys[key];
+		const k = hotkeys[key];
 		if (player[k.layer].unlocked && tmp[k.layer].hotkeys[k.id].unlocked) k.onPress();
 	};
 };
@@ -332,13 +333,13 @@ function doPopup(type = 'none', text = 'This is a test popup.', title = '', time
 			break;
 	};
 	if (title != '') popupTitle = title;
-	activePopups.push({"time": timer, "type": popupType, "title": popupTitle, "message": text + "<br>", "id": popupID, "color": color});
+	activePopups.push({time: timer, type: popupType, title: popupTitle, message: text + "<br>", id: popupID, "color": color});
 	popupID++;
 };
 
 // Function to reduce time on active popups
 function adjustPopupTime(diff) {
-	for (popup in activePopups) {
+	for (const popup in activePopups) {
 		activePopups[popup].time -= diff;
 		if (activePopups[popup].time < 0) {
 			activePopups.splice(popup, 1); // Remove popup when time hits 0
@@ -347,16 +348,16 @@ function adjustPopupTime(diff) {
 };
 
 function run(func, target, ...args) {
-	if (typeof func == "function") {
-		let bound = func.bind(target);
+	if (func instanceof Function) {
+		const bound = func.bind(target);
 		return bound(...args);
 	};
 	return func;
 };
 
 function gridRun(layer, func, data, id) {
-	if (typeof layers[layer].grid[func] == "function") {
-		let bound = layers[layer].grid[func].bind(layers[layer].grid);
+	if (layers[layer].grid[func] instanceof Function) {
+		const bound = layers[layer].grid[func].bind(layers[layer].grid);
 		return bound(data, id);
 	};
 	return layers[layer].grid[func];

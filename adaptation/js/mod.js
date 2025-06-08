@@ -1,11 +1,12 @@
 const modInfo = {
-	name: "Adaptation Tree",
+	name: "The Adaptation Tree",
 	id: "adaptation-tree-yrahcaz7",
 	author: "Yrahcaz7",
 	pointsName: "power",
 	modFiles: ["tree.js", "options.js", "stats.js", "layer/stimulation.js", "layer/growth.js", "layer/evolution.js", "layer/acclimation.js", "layer/species.js", "layer/consciousness.js", "layer/domination.js", "layer/ecosystem.js", "layer/revolution.js", "layer/expansion.js", "layer/war.js", "layer/leader.js", "layer/continent.js", "layer/territory.js", "layer/cycle.js", "layer/empire.js"],
-	initialStartPoints: newDecimalZero(),
 	offlineLimit: 1,
+	useNewSaveSyntax: false,
+	friendlyErrors: false,
 };
 
 const VERSION = {
@@ -183,9 +184,7 @@ function maxTickLength() {
 function fixOldSave(oldVersion) {
 	// change vars to decimals
 	for (const key in layers.ex.buyables) {
-		if (layers.ex.buyables.hasOwnProperty(key) && key < 20) {
-			player.ex.extra[key - 11] = new Decimal(player.ex.extra[key - 11] || 0);
-		};
+		if (key < 20) player.ex.extra[key - 11] = new Decimal(player.ex.extra[key - 11] || 0);
 	};
 	for (let row = 1; row <= layers.t.grid.maxRows; row++) {
 		for (let col = 1; col <= layers.t.grid.cols; col++) {

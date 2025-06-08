@@ -108,7 +108,7 @@ addLayer("sp", {
 	}],
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = [];
+		const keep = [];
 		if (player.cy.unlocks[3] >= 6
 			|| player.l.points.gte(player.cy.unlocks[1] >= 4 ? 6 : 10)
 			|| resettingLayer == "co"
@@ -123,7 +123,7 @@ addLayer("sp", {
 		else if (player.r.unlocked && canCompleteChallenge("sp", 21) && player.sp.challenges[21] < tmp.sp.challenges[21].completionLimit) player.sp.challenges[21]++;
 	},
 	componentStyles: {
-		"challenge"() {return {"min-height": "360px", "height": "fit-content", "border-radius": "50px"}},
+		challenge: {"min-height": "360px", height: "fit-content", "border-radius": "50px"},
 	},
 	challenges: {
 		11: {
@@ -138,7 +138,7 @@ addLayer("sp", {
 			unlockReq: 8,
 			enterable() {return player.sp.points.gte(this.unlockReq) || hasChallenge("sp", this.id)},
 			overrideResetsNothing: true,
-			style: {"width": "250px"},
+			style: {width: "250px"},
 		},
 		12: {
 			name: "2nd Hybridization",
@@ -148,9 +148,9 @@ addLayer("sp", {
 			},
 			rewardEffect() {
 				let hybridizations = 0;
-				for (const id in player.sp.challenges)
-					if (Object.hasOwnProperty.call(player.sp.challenges, id))
-						hybridizations += player.sp.challenges[id];
+				for (const id in player.sp.challenges) {
+					hybridizations += player.sp.challenges[id];
+				};
 				return new Decimal(hybridizations).add(1).min(10);
 			},
 			goal: 1095,
@@ -159,7 +159,7 @@ addLayer("sp", {
 			unlockReq: 9,
 			enterable() {return player.sp.points.gte(this.unlockReq) || hasChallenge("sp", this.id)},
 			overrideResetsNothing: true,
-			style: {"width": "250px"},
+			style: {width: "250px"},
 		},
 		13: {
 			name: "3rd Hybridization",
@@ -174,7 +174,7 @@ addLayer("sp", {
 			unlockReq: 10,
 			enterable() {return player.sp.points.gte(this.unlockReq) || hasChallenge("sp", this.id)},
 			overrideResetsNothing: true,
-			style: {"width": "250px"},
+			style: {width: "250px"},
 		},
 		14: {
 			name: "4th Hybridization",
@@ -189,7 +189,7 @@ addLayer("sp", {
 			unlockReq: 12,
 			enterable() {return player.sp.points.gte(this.unlockReq) || hasChallenge("sp", this.id)},
 			overrideResetsNothing: true,
-			style: {"width": "250px"},
+			style: {width: "250px"},
 		},
 		15: {
 			name: "5th Hybridization",
@@ -205,7 +205,7 @@ addLayer("sp", {
 			enterable() {return player.sp.points.gte(this.unlockReq) || hasChallenge("sp", this.id)},
 			overrideResetsNothing: true,
 			countsAs: [11, 12, 13, 14],
-			style: {"width": "250px"},
+			style: {width: "250px"},
 		},
 		16: {
 			name: "6th Hybridization",
@@ -220,7 +220,7 @@ addLayer("sp", {
 			unlockReq: 15,
 			enterable() {return player.sp.points.gte(this.unlockReq) || hasChallenge("sp", this.id)},
 			overrideResetsNothing: true,
-			style: {"width": "250px"},
+			style: {width: "250px"},
 		},
 		17: {
 			name: "7th Hybridization",
@@ -230,9 +230,9 @@ addLayer("sp", {
 			},
 			rewardEffect() {
 				let hybridizations = 0;
-				for (const id in player.sp.challenges)
-					if (Object.hasOwnProperty.call(player.sp.challenges, id))
-						hybridizations += player.sp.challenges[id];
+				for (const id in player.sp.challenges) {
+					hybridizations += player.sp.challenges[id];
+				};
 				if (hasChallenge("sp", 18)) return new Decimal(hybridizations).div(100).add(1).pow(12.88888888888889);
 				return new Decimal(hybridizations).div(100).add(1).pow(6.555555555555555);
 			},
@@ -242,7 +242,7 @@ addLayer("sp", {
 			unlockReq: 16,
 			enterable() {return player.sp.points.gte(this.unlockReq) || hasChallenge("sp", this.id)},
 			overrideResetsNothing: true,
-			style: {"width": "250px"},
+			style: {width: "250px"},
 		},
 		18: {
 			name: "8th Hybridization",
@@ -256,7 +256,7 @@ addLayer("sp", {
 			unlockReq: 18,
 			enterable() {return player.sp.points.gte(this.unlockReq) || hasChallenge("sp", this.id)},
 			overrideResetsNothing: true,
-			style: {"width": "250px"},
+			style: {width: "250px"},
 		},
 		19: {
 			name: "9th Hybridization",
@@ -271,7 +271,7 @@ addLayer("sp", {
 			enterable() {return player.sp.points.gte(this.unlockReq) || hasChallenge("sp", this.id)},
 			overrideResetsNothing: true,
 			countsAs: [11, 12, 13, 14, 15, 16, 17, 18],
-			style: {"width": "250px"},
+			style: {width: "250px"},
 		},
 		21: {
 			name: "10th Hybridization",
@@ -316,7 +316,7 @@ addLayer("sp", {
 				return limit;
 			},
 			countsAs: [11, 12, 13, 14, 15, 16, 17, 18, 19],
-			style: {"width": "calc(100% - 8px)", "max-width": "600px"},
+			style: {width: "calc(100% - 8px)", "max-width": "600px"},
 		},
 	},
 });

@@ -47,7 +47,7 @@ function cycleUnlockText(tab) {
 		if (cycleUnlocks[tab][index][3] && player.cy.unlocks[tab] >= cycleUnlocks[tab][index][3]) continue;
 		if (index > 0) text += (index >= player.cy.unlocks[tab] ? "<br><br>" : "<br>");
 		if (index >= player.cy.unlocks[tab]) text += "At " + formatWhole(cycleUnlocks[tab][index][0]) + " revolutions:<br>";
-		text += (typeof cycleUnlocks[tab][index][1] == "function" ? cycleUnlocks[tab][index][1]() : cycleUnlocks[tab][index][1]);
+		text += (cycleUnlocks[tab][index][1] instanceof Function ? cycleUnlocks[tab][index][1]() : cycleUnlocks[tab][index][1]);
 	};
 	return text;
 };
@@ -79,7 +79,7 @@ addLayer("cy", {
 		cores: newDecimalZero(),
 	}},
 	color: "#EE7770",
-	nodeStyle() {if (tmp.cy.canReset || player.cy.unlocked) return {"background": "border-box linear-gradient(to right, #116022, #EE7770, #E03330)"}},
+	nodeStyle() {if (tmp.cy.canReset || player.cy.unlocked) return {background: "border-box linear-gradient(to right, #116022, #EE7770, #E03330)"}},
 	resource: "cycles",
 	row: 6,
 	baseResource: "revolutions",
@@ -131,7 +131,7 @@ addLayer("cy", {
 	}],
 	doReset(resettingLayer) {
 		if (layers[resettingLayer].row <= this.row) return;
-		let keep = [];
+		const keep = [];
 		layerDataReset("cy", keep);
 	},
 	update(diff) {
@@ -164,29 +164,29 @@ addLayer("cy", {
 	},
 	componentStyles: {
 		"prestige-button"() {if (tmp.cy.canReset && tmp.cy.nodeStyle) return tmp.cy.nodeStyle},
-		"microtabs"() {return {"box-sizing": "border-box", "width": "fit-content", "max-width": "calc(100% - 34px)", "border": "2px solid #EE7770", "padding": "8.5px"}},
-		"tab-button"() {return {"margin": "8.5px"}},
+		microtabs: {"box-sizing": "border-box", width: "fit-content", "max-width": "calc(100% - 34px)", border: "2px solid #EE7770", padding: "8.5px"},
+		"tab-button": {margin: "8.5px"},
 	},
 	microtabs: {
 		cycles: {
 			"The First Cycle": {
 				content: [["display-text", () => player.cy.points.gte(1) ? cycleUnlockText(0) : "Reach 1 cycle to unlock The First Cycle"]],
-				style: {"margin": "8.5px"},
+				style: {margin: "8.5px"},
 				unlocked() {return player.cy.points.gte(1)},
 			},
 			"The Second Cycle": {
 				content: [["display-text", () => player.cy.points.gte(2) ? cycleUnlockText(1) : "Reach 2 cycles to unlock The Second Cycle"]],
-				style: {"margin": "8.5px"},
+				style: {margin: "8.5px"},
 				unlocked() {return player.cy.points.gte(2)},
 			},
 			"The Third Cycle": {
 				content: [["display-text", () => player.cy.points.gte(3) ? cycleUnlockText(2) : "Reach 3 cycles to unlock The Third Cycle"]],
-				style: {"margin": "8.5px"},
+				style: {margin: "8.5px"},
 				unlocked() {return player.cy.points.gte(3)},
 			},
 			"The Fourth Cycle": {
 				content: [["display-text", () => player.cy.points.gte(4) ? cycleUnlockText(3) : "Reach 4 cycles to unlock The Fourth Cycle"]],
-				style: {"margin": "8.5px"},
+				style: {margin: "8.5px"},
 				unlocked() {return player.cy.points.gte(4)},
 			},
 			"The Cyclical Cycles": {
@@ -218,8 +218,8 @@ addLayer("cy", {
 						return "Reach 5 cycles to unlock The Cyclical Cycles";
 					};
 				}]],
-				style: {"margin": "8.5px"},
-				buttonStyle: {"border-color": "#D44C44", "background-color": "#EE7770", "color": "#0F0F0F", "text-shadow": "none"},
+				style: {margin: "8.5px"},
+				buttonStyle: {"border-color": "#D44C44", "background-color": "#EE7770", color: "#0F0F0F", "text-shadow": "none"},
 				unlocked() {return player.cy.points.gte(5)},
 			},
 		},

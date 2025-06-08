@@ -8,6 +8,7 @@ const modInfo = {
 	discordLink: "",
 	initialStartPoints: newDecimalZero(),
 	offlineLimit: 1, // in hours
+	useNewSaveSyntax: false,
 };
 
 const VERSION = {

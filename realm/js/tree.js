@@ -1,12 +1,10 @@
 const layoutInfo = {
-    startTab: "none",
-    startNavTab: "tree-tab",
+	startTab: "I",
+	startNavTab: "tree-tab",
 	showTree: true,
-    treeLayout: "",
 };
 
 addLayer("tree-tab", {
-    tabFormat: [["tree", () => layoutInfo.treeLayout ? layoutInfo.treeLayout : TREE_LAYERS]],
-    previousTab: "",
-    leftTab: true,
+	tabFormat: [["tree", () => layoutInfo.treeLayout ? layoutInfo.treeLayout : TREE_LAYERS]],
+	leftTab: true,
 });

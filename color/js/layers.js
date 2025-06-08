@@ -82,9 +82,9 @@ const COLOR_MILESTONES = [10, 25, 50, 100, 150, 200, 300, 400, 500, 600];
 const COLOR_MILESTONE_MULT = [2.5, 5, 10, 50, 200, 200, 400, 400, 800, 800];
 
 const COLOR_UPGRADE_STYLE = {
-	"background": "var(--rainbowline)",
+	background: "var(--rainbowline)",
 	"background-size": "200%",
-	"animation": "3s linear infinite rainbowline",
+	animation: "3s linear infinite rainbowline",
 };
 
 function registerColorCost(index, bulk) {
@@ -146,7 +146,7 @@ function getColorCost(index) {
 };
 
 function getColorTabContent() {
-	let content = [["display-text", "You have <h2 class='rainbowvalue-text'>" + formatWhole(player.c.colors) + "</h2> colors unlocked"]];
+	const content = [["display-text", "You have <h2 class='rainbowvalue-text'>" + formatWhole(player.c.colors) + "</h2> colors unlocked"]];
 	if (tmp.c.clickables[11].unlocked) {
 		content.push("blank");
 		content.push("clickables");
@@ -173,7 +173,7 @@ function getColorTabContent() {
 };
 
 function getColorBars() {
-	let bars = {};
+	const bars = {};
 	for (let index = 0; index < COLORS.length; index++) {
 		const NAME = COLORS[index].name;
 		const HEX = COLORS[index].hex;
@@ -186,7 +186,7 @@ function getColorBars() {
 			display() { if (getBuyableAmount("c", BUYNUM).gt(0) && player.c.earnings[index]) return "coins/cycle: " + illionFormat(player.c.earnings[index]) + "<br>(" + illionFormat(player.c.earnings[index].mul(getColorSpeed(index))) + "/sec)" },
 			fillStyle: {"background-color": HEX},
 			borderStyle: {"border-color": HEX},
-			style: {"color": (COLORS[index].dark ? "#888888" : "#ffffff")},
+			style: {color: (COLORS[index].dark ? "#888888" : "#ffffff")},
 			unlocked() { return player.c.colors >= index },
 		};
 		bars[NAME + "Buy"] = {
@@ -201,7 +201,7 @@ function getColorBars() {
 			display() { return format(this.progress().min(1).mul(100)) + "%" },
 			fillStyle: {"background-color": HEX},
 			borderStyle: {"border-color": HEX},
-			style: {"color": (COLORS[index].dark ? "#888888" : "#ffffff")},
+			style: {color: (COLORS[index].dark ? "#888888" : "#ffffff")},
 			unlocked() { return player.c.colors >= index },
 		};
 		bars[NAME + "Prog"] = {
@@ -213,12 +213,12 @@ function getColorBars() {
 				for (let index = 0; index < COLOR_MILESTONES.length; index++) {
 					if (AMOUNT.lt(COLOR_MILESTONES[index])) return AMOUNT.div(COLOR_MILESTONES[index]);
 				};
-				return AMOUNT.div(COLOR_MILESTONES[COLOR_MILESTONES.length - 1]);
+				return AMOUNT.div(COLOR_MILESTONES.at(-1));
 			},
 			display() { return "<h1 style='font-family: Flavors'>" + formatWhole(getBuyableAmount("c", BUYNUM)) },
 			fillStyle: {"background-color": HEX},
 			borderStyle: {"border-color": HEX},
-			style: {"color": (COLORS[index].dark ? "#888888" : "#ffffff"), "border-radius": "50%"},
+			style: {color: (COLORS[index].dark ? "#888888" : "#ffffff"), "border-radius": "50%"},
 			unlocked() { return player.c.colors >= index },
 		};
 	};
@@ -226,7 +226,7 @@ function getColorBars() {
 };
 
 function getColorBuyables() {
-	let buyables = {};
+	const buyables = {};
 	for (let index = 0; index < COLORS.length; index++) {
 		const HEX = COLORS[index].hex;
 		const BUYNUM = (index + 1) * 10 + 1;
@@ -241,7 +241,7 @@ function getColorBuyables() {
 				if (getGridData("m", DIVNUM)) divnum = divnum.mul(getGridData("m", DIVNUM));
 				return amt.div(2).pow(2).add(new Decimal(1.32).pow(amt.pow(0.9))).div(divnum);
 			},
-			canAfford() { return player.points.gte(getColorCost(index)) && getBuyableAmount("c", BUYNUM).lt(this.purchaseLimit) },
+			canAfford() { return player.points.gte(getColorCost(index)) },
 			buy() {
 				player.points = player.points.sub(getColorCost(index));
 				addBuyables("c", BUYNUM, getColorBulk(index));
@@ -252,7 +252,7 @@ function getColorBuyables() {
 				if (getBuyableAmount("c", BUYNUM).eq(0) && getColorBulk(index) === 1) buyText = "Unlock";
 				return "<h3 style='color:" + HEX + "'>" + buyText + ": " + illionFormat(getColorCost(index), true) + " coins";
 			},
-			purchaseLimit: COLOR_MILESTONES[COLOR_MILESTONES.length - 1],
+			purchaseLimit: COLOR_MILESTONES.at(-1),
 			style: {"background-color": (COLORS[index].dark ? "#888888" : "#ffffff")},
 			unlocked() { return player.c.colors >= index },
 		};
@@ -263,7 +263,6 @@ function getColorBuyables() {
 function getAverageCoinGain() {
 	let gain = newDecimalZero();
 	for (let index = 0; index < player.c.colors; index++) {
-		const NAME = COLORS[index].name;
 		if (player.c.earnings[index]) gain = gain.add(player.c.earnings[index].mul(getColorSpeed(index)));
 	};
 	return gain;
@@ -275,18 +274,16 @@ addLayer("c", {
 	row: 0,
 	position: 0,
 	startData() { return {
-		unlocked: true,
 		colors: 0,
 		colorBest: 0,
 		earnings: Array.from({length: COLORS.length}, () => newDecimalZero()),
 		time: Array.from({length: COLORS.length}, () => newDecimalZero()),
 	}},
 	color: "#ffffff",
-	nodeStyle: {"border": "0px transparent"},
+	nodeStyle: {border: "0px transparent"},
 	tooltip() { return formatWhole(player.c.colors) + " colors unlocked" },
-	layerShown() { return true },
 	doReset(resettingLayer) {
-		let keep = [];
+		const keep = [];
 		if (resettingLayer == "m") keep.push("colorBest", "clickables");
 		if (layers[resettingLayer].row > this.row) layerDataReset("c", keep);
 	},
@@ -332,10 +329,10 @@ addLayer("c", {
 		};
 	},
 	tabFormat: {
-		"Colors": {
+		Colors: {
 			content: getColorTabContent,
 		},
-		"Upgrades": {
+		Upgrades: {
 			content: [
 				["display-text", () => "You have <h2 class='rainbowvalue-text'>" + formatWhole(player.c.colors) + "</h2> colors unlocked"],
 				"blank",
@@ -345,7 +342,7 @@ addLayer("c", {
 		},
 	},
 	componentStyles: {
-		"buyable"() { return {"height": "25px", "width": "175px", "border-radius": "10px", "z-index": "99"} },
+		buyable: {height: "25px", width: "175px", "border-radius": "10px", "z-index": 99},
 	},
 	bars: getColorBars(),
 	buyables: getColorBuyables(),
@@ -379,7 +376,7 @@ addLayer("c", {
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect: 1.1,
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		12: {
 			coinCost: 1e9,
@@ -392,7 +389,7 @@ addLayer("c", {
 					registerColorCost(index, getColorBulk(index));
 				};
 			},
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		13: {
 			coinCost: 1e12,
@@ -400,7 +397,7 @@ addLayer("c", {
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return (player.c.colors) ** 2 / 100 + 1 },
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		14: {
 			coinCost: 1e15,
@@ -408,7 +405,7 @@ addLayer("c", {
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return player.m.points.add(1).log10().div(5).add(1) },
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		15: {
 			coinCost: 1e18,
@@ -421,7 +418,7 @@ addLayer("c", {
 					registerColorCost(index, getColorBulk(index));
 				};
 			},
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		21: {
 			coinCost: 1e21,
@@ -429,7 +426,7 @@ addLayer("c", {
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return player.m.points.add(1).log10().div(4).add(1) },
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		22: {
 			coinCost: 1e24,
@@ -442,7 +439,7 @@ addLayer("c", {
 					registerColorCost(index, getColorBulk(index));
 				};
 			},
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		23: {
 			coinCost: 1e27,
@@ -450,7 +447,7 @@ addLayer("c", {
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return (player.c.colors) ** 2 / 100 + 1 },
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		24: {
 			coinCost: 1e30,
@@ -458,14 +455,14 @@ addLayer("c", {
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return player.c.upgrades.length / 10 + 1 },
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 		25: {
 			coinCost: 1e33,
 			fullDisplay() { return "<h3>???</h3><br>coming soon!<br><br>Cost: " + illionFormat(this.coinCost) + " coins" },
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
-			style() { if (this.canAfford() && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
 		},
 	},
 });
@@ -502,7 +499,7 @@ addLayer("m", {
 		return mult;
 	},
 	getResetGain(x = 0) {
-		let num = player.c.colors + x;
+		const num = player.c.colors + x;
 		if (num < tmp.m.requires) return newDecimalZero();
 		let gain = new Decimal(2).pow(num + 1 - tmp.m.requires);
 		gain = gain.mul(tmp.m.gainMult);
@@ -536,23 +533,22 @@ addLayer("m", {
 		description: "Shift+M: Reset for multiplier",
 		onPress() { if (player.m.unlocked) doReset("m") },
 	}],
-	layerShown() { return true },
 	tabFormat: [
 		"main-display",
 		"prestige-button",
 		["custom-resource-display", () => "You have " + player.c.colors + " colors unlocked<br>Your best colors unlocked is " + player.c.colorBest],
 		"blank",
 		["column", [
-			["raw-html", "<button class='scrollButton can' onclick='this.parentElement.nextElementSibling.scrollBy(-92, 0)'>\<</button><h2 style='padding: 0 5px 0 5px'>Multiplier Distribution</h2><button class='scrollButton can' onclick='this.parentElement.nextElementSibling.scrollBy(92, 0)'>\></button>", {"display": "flex", "justify-content": "space-between", "padding": "0 5px 0 5px"}],
+			["raw-html", "<button class='scrollButton can' onclick='this.parentElement.nextElementSibling.scrollBy(-92, 0)'>\<</button><h2 style='padding: 0 5px 0 5px'>Multiplier Distribution</h2><button class='scrollButton can' onclick='this.parentElement.nextElementSibling.scrollBy(92, 0)'>\></button>", {display: "flex", width: "calc(100% - 10px)", padding: "0 5px 0 5px"}],
 			["contained-grid", "calc(100% - 10px)"],
-			["display-text", "Click one of the colored buttons at the bottom to select that multiplier color.", {"padding": "0 5px 0 5px"}],
+			["display-text", "Click one of the colored buttons at the bottom to select that multiplier color.", {padding: "0 5px 0 5px"}],
 		]],
 		"blank",
 		"milestones",
 	],
 	componentStyles: {
-		"column"() { return {"width": "fit-content", "max-width": "calc(100% - 14px)", "border": "2px solid #ffffff", "border-radius": "20px", "padding": "5px 0"} },
-		"contained-grid"() { return {"padding": "5px"} },
+		column: {width: "fit-content", "max-width": "calc(100% - 14px)", border: "2px solid #ffffff", "border-radius": "20px", padding: "5px 0"},
+		"contained-grid": {padding: "5px"},
 	},
 	grid: {
 		rows: 4,
@@ -571,20 +567,20 @@ addLayer("m", {
 		getStyle(data, id) {
 			const INDEX = id % 100 - 2;
 			return {
-				"width": "90px",
-				"height": (id >= 401 ? "30px" : "90px"),
+				width: "90px",
+				height: (id >= 401 ? "30px" : "90px"),
 				"border-color": (id >= 401 ? (INDEX >= 0 ? COLORS[INDEX].hex : "#888888") : "#00000020"),
 				"border-radius": "10px",
 				"background-color": (INDEX >= 0 ? (COLORS[INDEX].dark ? "#888888" : "#f0f0f0") : "#f0f0f0"),
-				"color": (INDEX >= 0 ? COLORS[INDEX].hex : "#000000"),
+				color: (INDEX >= 0 ? COLORS[INDEX].hex : "#000000"),
 			};
 		},
 		getCanClick(data, id) { return id >= 401 },
-		overrideNeedLayerUnlocked: true,
 		onClick(data, id) {
 			const INDEX = id % 100 - 2;
 			player.m.type = INDEX;
 		},
+		needLayerUnlocked: false,
 	},
 	milestones: {
 		0: {

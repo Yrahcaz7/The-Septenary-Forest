@@ -1,13 +1,13 @@
 function prestigeButtonText(layer) {
 	if (layers[layer].prestigeButtonText !== undefined) return run(layers[layer].prestigeButtonText(), layers[layer]);
-	if (tmp[layer].type == "normal") return (player[layer].points.lt(1e3) ? (tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "Reset for ") : "") + "+<b>" + formatWhole(tmp[layer].resetGain) + "</b> " + tmp[layer].resource + (tmp[layer].resetGain.lt(100) && player[layer].points.lt(1e3) ? "<br><br>Next at " + (tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAt) : format(tmp[layer].nextAt)) + " " + tmp[layer].baseResource : "");
-	if (tmp[layer].type == "static") return (tmp[layer].resetDescription !== undefined ? tmp[layer].resetDescription : "Reset for ") + "+<b>" + formatWhole(tmp[layer].resetGain) + "</b> " + tmp[layer].resource + "<br><br>" + (player[layer].points.lt(30) ? (tmp[layer].baseAmount.gte(tmp[layer].nextAt) && tmp[layer].canBuyMax ? "Next:" : "Req:") : "") + " " + formatWhole(tmp[layer].baseAmount) + " / " + (tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAtDisp) : format(tmp[layer].nextAtDisp)) + " " + tmp[layer].baseResource;
+	if (tmp[layer].type == "normal") return (player[layer].points.lt(1e3) ? (tmp[layer].resetDescription ?? "Reset for ") : "") + "+<b>" + formatWhole(tmp[layer].resetGain) + "</b> " + tmp[layer].resource + (tmp[layer].resetGain.lt(100) && player[layer].points.lt(1e3) ? "<br><br>Next at " + (tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAt) : format(tmp[layer].nextAt)) + " " + tmp[layer].baseResource : "");
+	if (tmp[layer].type == "static") return (tmp[layer].resetDescription ?? "Reset for ") + "+<b>" + formatWhole(tmp[layer].resetGain) + "</b> " + tmp[layer].resource + "<br><br>" + (player[layer].points.lt(30) ? (tmp[layer].baseAmount.gte(tmp[layer].nextAt) && tmp[layer].canBuyMax ? "Next:" : "Req:") : "") + " " + formatWhole(tmp[layer].baseAmount) + " / " + (tmp[layer].roundUpCost ? formatWhole(tmp[layer].nextAtDisp) : format(tmp[layer].nextAtDisp)) + " " + tmp[layer].baseResource;
 	if (tmp[layer].type == "none") return "";
 	return "You need prestige button text";
 };
 
 function constructNodeStyle(layer) {
-	let style = [];
+	const style = [];
 	if ((tmp[layer].isLayer && layerUnlocked(layer)) || (!tmp[layer].isLayer && tmp[layer].canClick)) style.push({"background-color": tmp[layer].color});
 	if (tmp[layer].image !== undefined) style.push({"background-image": "url('" + tmp[layer].image + "')"});
 	if (tmp[layer].notify && player[layer].unlocked) style.push({"box-shadow": "var(--hqProperty2a), 0 0 20px " + tmp[layer].trueGlowColor});
@@ -23,13 +23,11 @@ function challengeStyle(layer, id) {
 };
 
 function challengeButtonText(layer, id) {
-	let text = ["Finish", "Exit Early", "Completed", "Start", "Locked"];
+	const text = ["Finish", "Exit Early", "Completed", "Start", "Locked"];
 	if (tmp[layer].challenges[id].buttonText) {
-		let buttonText;
-		if (typeof tmp[layer].challenges[id].buttonText == "function" && typeof tmp[layer].challenges[id].buttonText() == "object") {
-			buttonText = tmp[layer].challenges[id].buttonText();
-		} else if (typeof tmp[layer].challenges[id].buttonText == "object") {
-			buttonText = tmp[layer].challenges[id].buttonText;
+		let buttonText = tmp[layer].challenges[id].buttonText;
+		if (buttonText instanceof Function) {
+			buttonText = buttonText();
 		};
 		if (buttonText) {
 			for (let index = 0; index < text.length; index++) {
@@ -38,26 +36,25 @@ function challengeButtonText(layer, id) {
 		};
 	};
 	if (!canUseChallenge(layer, id)) return text[4];
-	if (player[layer].activeChallenge == id) return text[canCompleteChallenge(layer, id) ? 0 : 1];
+	if (player[layer].activeChallenge === id) return text[canCompleteChallenge(layer, id) ? 0 : 1];
 	return text[maxedChallenge(layer, id) ? 2 : 3];
 };
 
 function achievementStyle(layer, id) {
-	let ach = tmp[layer].achievements[id];
-	let style = [];
+	const ach = tmp[layer].achievements[id];
+	const style = [];
 	if (ach.image) style.push({"background-image": "url('" + ach.image + "')"});
-	if (!ach.unlocked) style.push({"visibility": "hidden"});
+	if (!ach.unlocked) style.push({visibility: "hidden"});
 	style.push(ach.style);
 	return style;
 };
 
 function updateWidth() {
-	let screenWidth = window.innerWidth;
-	let splitScreen = screenWidth >= 1024;
+	let splitScreen = innerWidth >= 1024;
 	if (options.forceOneTab) splitScreen = false;
-	if (player.navTab == "none") splitScreen = true;
-	tmp.other.screenWidth = screenWidth;
-	tmp.other.screenHeight = window.innerHeight;
+	if (player.navTab === "none") splitScreen = true;
+	tmp.other.screenWidth = innerWidth;
+	tmp.other.screenHeight = innerHeight;
 	tmp.other.splitScreen = splitScreen;
 	tmp.other.lastPoints = player.points;
 };
@@ -85,30 +82,30 @@ function updateOomps(diff) {
 };
 
 function constructBarStyle(layer, id) {
-	let bar = tmp[layer].bars[id];
-	let style = {};
-	let tempProgress;
+	const bar = tmp[layer].bars[id];
+	const style = {};
+	let visualProgress = 0;
 	if (bar.progress instanceof Decimal) {
-		tempProgress = (1 - Math.min(Math.max(bar.progress.toNumber(), 0), 1)) * 100;
+		visualProgress = (1 - Math.min(Math.max(bar.progress.toNumber(), 0), 1)) * 100;
 	} else {
-		tempProgress = (1 - Math.min(Math.max(bar.progress, 0), 1)) * 100;
+		visualProgress = (1 - Math.min(Math.max(bar.progress, 0), 1)) * 100;
 	};
-	style.dims = {"width": bar.width + "px", "height": bar.height + "px"};
-	style.fillDims = {"width": (bar.width + 0.5) + "px", "height": (bar.height + 0.5) + "px"};
+	style.dims = {width: bar.width + "px", height: bar.height + "px"};
+	style.fillDims = {width: (bar.width + 0.5) + "px", height: (bar.height + 0.5) + "px"};
 	switch (bar.direction) {
 		case UP:
-			style.fillDims["clip-path"] = "inset(" + tempProgress + "% 0% 0% 0%)";
+			style.fillDims["clip-path"] = "inset(" + visualProgress + "% 0% 0% 0%)";
 			style.fillDims.width = (bar.width + 1) + "px";
 			break;
 		case DOWN:
-			style.fillDims["clip-path"] = "inset(0% 0% " + tempProgress + "% 0%)";
+			style.fillDims["clip-path"] = "inset(0% 0% " + visualProgress + "% 0%)";
 			style.fillDims.width = (bar.width + 1) + "px";
 			break;
 		case RIGHT:
-			style.fillDims["clip-path"] = "inset(0% " + tempProgress + "% 0% 0%)";
+			style.fillDims["clip-path"] = "inset(0% " + visualProgress + "% 0% 0%)";
 			break;
 		case LEFT:
-			style.fillDims["clip-path"] = "inset(0% 0% 0% " + tempProgress + "%)";
+			style.fillDims["clip-path"] = "inset(0% 0% 0% " + visualProgress + "%)";
 			break;
 		case DEFAULT:
 			style.fillDims["clip-path"] = "inset(0% 50% 0% 0%)";
@@ -135,7 +132,7 @@ function constructTabFormat(layer, id, family) {
 		tabFunc = funcs[layer].microtabs[family][id].content;
 		location = tmp[layer].microtabs[family][id];
 	};
-	if (typeof tabLayer == "function") return tabLayer.bind(location)();
+	if (tabLayer instanceof Function) return tabLayer.bind(location)();
 	updateTempData(tabLayer, tabTemp, tabFunc, {layer, id, family});
 	return tabTemp;
 };
@@ -148,7 +145,7 @@ function updateTabFormats() {
 function updateTabFormat(layer) {
 	if (layers[layer]?.tabFormat === undefined) return;
 	let tab = player.subtabs[layer]?.mainTabs;
-	if (typeof layers[layer].tabFormat == "function") {
+	if (layers[layer].tabFormat instanceof Function) {
 		temp[layer].tabFormat = layers[layer].tabFormat();
 	} else if (Array.isArray(layers[layer].tabFormat)) {
 		temp[layer].tabFormat = constructTabFormat(layer);
@@ -160,7 +157,7 @@ function updateTabFormat(layer) {
 		updateTabFormat(tmp[layer].tabFormat[tab].embedLayer);
 	};
 	// Update microtabs
-	for (family in layers[layer].microtabs) {
+	for (const family in layers[layer].microtabs) {
 		tab = player.subtabs[layer][family];
 		if (tmp[layer].microtabs[family][tab]) {
 			if (tmp[layer].microtabs[family][tab].embedLayer) updateTabFormat(tmp[layer].microtabs[family][tab].embedLayer);

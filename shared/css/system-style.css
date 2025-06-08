@@ -23,18 +23,8 @@ td {
 	padding: 0;
 }
 
-.upgTable {
+.upgCol, .upgRow {
 	display: flex !important;
-	flex-flow: column wrap;
-	justify-content: center;
-	align-items: center;
-	max-width: 100%;
-	margin: 0 auto;
-}
-
-.upgRow {
-	display: flex !important;
-	flex-flow: row wrap;
 	justify-content: center;
 	align-items: center;
 	max-width: 100%;
@@ -42,15 +32,11 @@ td {
 }
 
 .upgCol {
-	width: 100%;
+	flex-flow: column wrap;
 }
 
-.upgAlign {
-	vertical-align: 0;
-}
-
-.bigUpgAlign {
-	vertical-align: 0;
+.upgRow {
+	flex-flow: row wrap;
 }
 
 .treeThing {
@@ -58,38 +44,28 @@ td {
 	vertical-align: middle;
 }
 
-.can.upg:hover {
-	z-index: 2;
-}
-
-.can.buyable:hover {
+.can.upg:hover, .can.buyable:hover {
 	z-index: 2;
 }
 
 .back {
 	position: absolute;
 	top: 0;
-	left: 0;
-	background-color: transparent;
-	border: 1px solid transparent;
+	left: 10px;
+	background: none;
+	border: none;
 	color: var(--color);
 	font-size: 40px;
 	cursor: pointer;
 }
 
-.other-back {
-	position: absolute;
-	top: 0;
+.big.back {
 	left: 60px;
-	background-color: transparent;
-	border: 1px solid transparent;
-	color: var(--color);
 	font-size: 60px;
-	cursor: pointer;
 }
 
 .back:hover {
-	transform: scale(1.1, 1.1);
+	transform: scale(1.1);
 	text-shadow: 0 0 7px var(--color);
 }
 
@@ -121,9 +97,7 @@ td {
 }
 
 .col {
-	min-width: 49.5%;
-	max-width: 49.5%;
-	width: 49.5%;
+	width: calc(50% - 3px);
 	height: 100%;
 	min-height: 100%;
 	column-span: 1;
@@ -139,7 +113,7 @@ td {
 }
 
 .fast {
-	transition: color none;
+	transition: color 0s;
 }
 
 .col.right {
@@ -200,7 +174,7 @@ ul {
 }
 
 .front {
-	z-index: 30000
+	z-index: 30000;
 }
 
 .overlayThing {
@@ -215,9 +189,10 @@ ul {
 	right: 55px;
 	top: 65px;
 	background-color: transparent;
+	gap: 20px;
 }
 
-button > * {
+button>* {
 	pointer-events: none;
 }
 

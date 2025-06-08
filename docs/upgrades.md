@@ -51,6 +51,10 @@ Individual upgrades can have these features:
 
 - `branches`: **optional**. This is primarially useful for upgrade trees. An array of upgrade ids. A line will appear from this upgrade to all of the upgrades in the list. Alternatively, an entry in the array can be a 2-element array consisting of the upgrade id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). A third element in the array optionally specifies line width.
 
+Additional features:
+
+- `color`: **optional**. The background color of the upgrade if it can be purchased. (A string in hex format with a `#`.) The default is the color of the layer the upgrade belongs to. Can be a function.
+
 By default, upgrades use the main prestige currency for the layer. You can include these to change them (but it needs to be a Decimal):
 
 - `currencyDisplayName`: **optional**. The name to display for the currency for the upgrade.
@@ -66,3 +70,7 @@ If you want to do something more complicated like upgrades that cost two currenc
 - `canAfford()`: **OVERRIDE**. A function determining if you are able to buy the upgrade. (If you also have a cost, it will check both the cost and this function.)
 
 - `pay()`: **OVERRIDE**. A function that reduces your currencies when you buy the upgrade.
+
+Additional features on the main upgrades object:
+
+- `needLayerUnlocked`: **optional**. If this is false, the layer need not be unlocked for the player to purchase upgrades.
