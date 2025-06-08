@@ -2,7 +2,7 @@ const modInfo = {
 	name: "Realm Creator",
 	author: "Yrahcaz7",
 	pointsName: "coins",
-	modFiles: ["components.js", "tree.js", "options.js", "upgrades.js", "layer/factions.js", "layer/mana.js", "layer/creations.js", "layer/gems.js", "layer/stats.js"],
+	modFiles: ["components.js", "tree.js", "options.js", "upgrades.js", "layer/factions.js", "layer/mana.js", "layer/creations.js", "layer/gems.js", "layer/reincarnation.js", "layer/stats.js"],
 	offlineLimit: 1,
 };
 
@@ -157,6 +157,7 @@ function onReset(resettingLayer) {
 	player.FCchance = new Decimal(5);
 	player.FC = [newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero(), newDecimalZero()];
 	player.stats[0] = getPlayerStartingStats();
+	if (resettingLayer === "R") player.stats[1] = getPlayerStartingStats();
 };
 
 function update(diff) {

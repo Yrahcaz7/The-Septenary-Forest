@@ -1,6 +1,6 @@
 const manaUpgrades = [
-	["Magic Proficiency", "multiply max mana based on your mana generated this era", () => player.stats[0].manaTotal.add(1).pow(0.1), "", "x"],
-	["Mana Sight", "increase mana regen based on your mana generated this era", () => player.stats[0].manaTotal.add(1).pow(0.125), "+"],
+	["Magic Proficiency", "multiply max mana based on your mana generated in this realm", () => player.stats[0].manaTotal.add(1).pow(0.1), "", "x"],
+	["Mana Sight", "increase mana regen based on your mana generated in this realm", () => player.stats[0].manaTotal.add(1).pow(0.125), "+"],
 	["Mana Vessels", "multiply max mana based on your creations", () => player.C.points.add(1).pow(0.125), "", "x"],
 	["Magical Environment", "increase mana regen based on your creations", () => player.C.points.add(1).pow(0.225), "+"],
 	["Attunement", "multiply max mana based on your faction coins", () => player.F.points.add(1).pow(0.05), "", "x"],
@@ -30,7 +30,7 @@ const factionUpgrades = [[
 	["Enchanted Clicks", "multiply coins/click based on your mana regen", () => player.M.manaRegen.add(1).pow(0.5), "", "x"],
 	["All on One", "the 3rd creation's first effect now applies to coins/click instead of coins/sec"],
 ], [
-	["Angelic Capacity", "multiply max mana based on your mana generated this era", () => player.stats[0].manaTotal.add(1).pow(0.125), "", "x"],
+	["Angelic Capacity", "multiply max mana based on your mana generated in this realm", () => player.stats[0].manaTotal.add(1).pow(0.125), "", "x"],
 	["Road to Heaven", "multiply mana regen based on your angel coins", () => player.FC[2].add(1).pow(0.4), "", "x"],
 	["Angels Supreme", "multiply angel coin gain by 5"],
 	["Rainbows", "multiply max mana based on your faction coins", () => player.F.points.add(1).pow(0.25), "", "x"],
@@ -47,7 +47,7 @@ const factionUpgrades = [[
 	["Undending Cycle", "multiply coins/sec based on your coins", () => player.points.add(1).log10().div(2).add(1), "", "x"],
 	["Corpse Piles", "multiply coins/sec based on your undead coins", () => player.FC[4].add(1).pow(hasFactionUpgrade(1, 1, 4) ? 0.4 : 0.3), "", "x"],
 	["Stay no More", "multiply coins/sec based on your coins/click", () => player.clickValue.add(1).log10().div(2).add(1), "", "x"],
-	["Necromancy Manual", "multiply coins/sec based on your mana generated this era", () => player.stats[0].manaTotal.add(1).pow(0.075), "", "x"],
+	["Necromancy Manual", "multiply coins/sec based on your mana generated in this realm", () => player.stats[0].manaTotal.add(1).pow(0.075), "", "x"],
 	["Smarter Zombies", "improve the 'Corpse Piles' effect"],
 	["Page of the Necronomicon", "multiply coins/sec and undead coin gain by 2"],
 ], [

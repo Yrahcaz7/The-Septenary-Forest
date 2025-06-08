@@ -5,9 +5,9 @@ addLayer("S", {
 	position: 0,
 	color: "#60C060",
 	type: "none",
-	tooltip() { return "Stats" },
+	tooltip: "Stats",
 	tabFormat: (() => {
-		const statName = ["This Era", "This Reincarnation", "All Time"];
+		const statName = ["This Realm", "This Life", "All Time"];
 		let tabs = {};
 		for (let index = 0; index < statName.length; index++) {
 			tabs[statName[index]] = {content: [["display-text", `<h2>${statName[index].toUpperCase()}</h2>`], "blank", ["h-line", "calc(100% - 12px)"], "blank"]};

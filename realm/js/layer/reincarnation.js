@@ -1,0 +1,30 @@
+addLayer("R", {
+	name: "Reincarnation",
+	symbol: "R",
+	row: 2,
+	position: 0,
+	branches: ["G"],
+	startData() { return {
+		unlocked: false,
+		points: newDecimalZero(),
+	}},
+	color: "#FFD700",
+	requires: new Decimal(Number.MAX_VALUE),
+	resource: "gems",
+	baseResource: "total gems this life",
+	baseAmount() { return player.G.total },
+	type: "static",
+	base: 1e10,
+	exponent: 1.1,
+	gainMult() { return newDecimalOne() },
+	gainExp() { return newDecimalOne() },
+	hotkeys: [
+		{key: "R", description: "Shift+R: Reincarnate to grow stronger", onPress() {if (canReset(this.layer)) doReset(this.layer)}},
+	],
+	tabFormat: [
+		"main-display",
+		"prestige-button",
+		["custom-resource-display", () => `You have recieved ${format(player.G.total)} gems in this life`],
+		"blank",
+	],
+});
