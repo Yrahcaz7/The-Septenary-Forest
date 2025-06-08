@@ -2,7 +2,7 @@ const layoutInfo = {
 	startTab: "none",
 	startNavTab: "tree-tab",
 	showTree: true,
-	treeLayout: "",
+	// treeLayout: [["p"], ["b", "g"]],
 	orderBranches: false,
 };
 

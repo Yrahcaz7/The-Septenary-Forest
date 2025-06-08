@@ -45,11 +45,9 @@ function getRandInt(min, max) {
 
 const canGenPoints = false;
 
-function getPointGen() {
-	return newDecimalZero();
-};
+function getPointGen() { return newDecimalZero() };
 
-function addedPlayerData() {return {}};
+function addedPlayerData() { return {} };
 
 const displayThings = [
 	() => { if (tmp.gameEnded) return "You beat the game!<br>For now..." },
