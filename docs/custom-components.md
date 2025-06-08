@@ -10,7 +10,7 @@ I recommend creating a new `components.js` file to keep your custom components i
 const customComponents = {
     'assimilate-button': {
         props: ['layer', 'data'],
-        data() {return {canAssimilate, player, assimilationReq, tmp, completeAssimilation}},
+        data() {return {canAssimilate, player, assimilationReq, tmp, format, completeAssimilation}},
         template: template(`<button v-if="canAssimilate(layer) && player[data].assimilating === layer" :class="{
             [data]: true,
             reset: true,
