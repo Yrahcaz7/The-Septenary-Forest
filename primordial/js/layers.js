@@ -3095,7 +3095,7 @@ addLayer('p', {
 		14: {
 			fullDisplay() {
 				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Prayer Divination</h3><br>Req: 100 divinity with having 0 holiness';
-				if (tmp[this.layer].buyables[this.id].canBuy) text += '<br><br><b>Requirements met!';
+				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
 			canAfford() { return player.p.divinity.gte(100) && player.p.holiness.eq(0) },
@@ -3137,7 +3137,7 @@ addLayer('p', {
 		24: {
 			fullDisplay() {
 				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Holy Conversion</h3><br>Req: 75 holiness without owning <b class="layer-p' + getdark(this, "ref", true, true) + 'Church Relics</b>';
-				if (tmp[this.layer].buyables[this.id].canBuy) text += '<br><br><b>Requirements met!';
+				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
 			canAfford() { return player.p.holiness.gte(75) && !hasUpgrade('p', 31) },
@@ -3187,7 +3187,7 @@ addLayer('p', {
 		34: {
 			fullDisplay() {
 				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Holy Shift</h3><br>Req: 1,000 holiness with 0 hymns';
-				if (tmp[this.layer].buyables[this.id].canBuy) text += '<br><br><b>Requirements met!';
+				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
 			canAfford() { return player.p.holiness.gte(1000) && player.p.hymn.eq(0) },
@@ -3240,7 +3240,7 @@ addLayer('p', {
 		44: {
 			fullDisplay() {
 				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Hymn Divination</h3><br>Req: 10,000,000 hymns without owning <b class="layer-p' + getdark(this, "ref", true, true) + 'Shorter Hymns</b>';
-				if (tmp[this.layer].buyables[this.id].canBuy) text += '<br><br><b>Requirements met!';
+				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
 			canAfford() { return player.p.hymn.gte(10000000) && !hasUpgrade('p', 51) },
@@ -3274,7 +3274,7 @@ addLayer('p', {
 		54: {
 			fullDisplay() {
 				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Even Shorter</h3><br>Req: 1e10 hymns without owning <b class="layer-p' + getdark(this, "ref", true, true) + 'Holy Hymns</b>';
-				if (tmp[this.layer].buyables[this.id].canBuy) text += '<br><br><b>Requirements met!';
+				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
 			canAfford() { return player.p.hymn.gte(1e10) && !hasUpgrade('p', 61) },
@@ -3320,7 +3320,7 @@ addLayer('p', {
 		64: {
 			fullDisplay() {
 				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Silver Sanctums</h3><br>Req: 2.5e25 prayers, 2 sanctums, and all previous research';
-				if (tmp[this.layer].buyables[this.id].canBuy) text += '<br><br><b>Requirements met!';
+				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
 			canAfford() { return player.p.points.gte(2.5e25) && player.s.points.gte(2) && hasUpgrade('p', 15) && hasUpgrade('p', 25) && hasUpgrade('p', 35) && hasUpgrade('p', 45) && hasUpgrade('p', 55) },
