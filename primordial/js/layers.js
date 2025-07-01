@@ -2916,43 +2916,42 @@ addLayer('p', {
 		let gen = 0;
 		if (hasMilestone('s', 7)) {
 			gen += 0.005;
-			if (hasMilestone('s', 15)) gen = gen + 0.045;
+			if (hasMilestone('s', 15)) gen += 0.045;
 		};
 		return gen;
 	},
 	automate() {
 		if (hasMilestone('s', 5) && player.p.auto_upgrades) {
-			if (hasMilestone('s', 6)) notsmart = !player.p.smart_auto_upgrades;
-			else notsmart = true;
+			const notSmart = (hasMilestone('s', 6) ? !player.p.smart_auto_upgrades : true);
 			buyUpgrade('p', 11);
-			if (notsmart || player.p.points.gte(1000)) buyUpgrade('p', 12);
+			if (notSmart || player.p.points.gte(1000)) buyUpgrade('p', 12);
 			buyUpgrade('p', 13);
 			buyUpgrade('p', 14);
 			if (hasUpgrade('p', 14)) buyUpgrade('p', 15);
 			buyUpgrade('p', 21);
 			buyUpgrade('p', 33);
-			if (notsmart || hasUpgrade('p', 14)) buyUpgrade('p', 22);
+			if (notSmart || hasUpgrade('p', 14)) buyUpgrade('p', 22);
 			if (hasUpgrade('p', 22)) {
 				buyUpgrade('p', 23);
 				buyUpgrade('p', 24);
 				if (hasUpgrade('p', 24)) buyUpgrade('p', 25);
-				if (notsmart || hasUpgrade('p', 24)) buyUpgrade('p', 31);
+				if (notSmart || hasUpgrade('p', 24)) buyUpgrade('p', 31);
 				buyUpgrade('p', 32);
 				buyUpgrade('p', 34);
 				if (hasUpgrade('p', 34)) buyUpgrade('p', 35);
-				if (notsmart || hasUpgrade('p', 34)) buyUpgrade('p', 41);
+				if (notSmart || hasUpgrade('p', 34)) buyUpgrade('p', 41);
 			};
 			if (hasUpgrade('p', 41)) {
 				buyUpgrade('p', 42);
 				buyUpgrade('p', 43);
 				buyUpgrade('p', 44);
 				if (hasUpgrade('p', 44)) buyUpgrade('p', 45);
-				if (notsmart || hasUpgrade('p', 44)) buyUpgrade('p', 51);
+				if (notSmart || hasUpgrade('p', 44)) buyUpgrade('p', 51);
 				buyUpgrade('p', 52);
 				buyUpgrade('p', 53);
 				buyUpgrade('p', 54);
 				if (hasUpgrade('p', 54)) buyUpgrade('p', 55);
-				if (notsmart || hasUpgrade('p', 54)) buyUpgrade('p', 61);
+				if (notSmart || hasUpgrade('p', 54)) buyUpgrade('p', 61);
 				buyUpgrade('p', 62);
 				buyUpgrade('p', 63);
 				buyUpgrade('p', 64);
@@ -3881,9 +3880,8 @@ addLayer('d', {
 				if (challengeCompletions('r', 11) >= 17) work *= 2;
 				if (challengeCompletions('r', 11) >= 38) work *= 2;
 				if (hasMilestone('gi', 10)) work *= 2;
-				for (let index = 0; index < work; index++) {
-					if (!layers.d.buyables[11].canBuy()) break;
-					layers.d.buyables[11].buy();
+				for (let index = 0; index < work && canBuyBuyable("d", 11); index++) {
+					buyBuyable("d", 11);
 				};
 			};
 			if (hasMilestone('s', 38) && player.s.auto_sacrifice) {
@@ -3894,9 +3892,8 @@ addLayer('d', {
 				if (challengeCompletions('r', 11) >= 32) work *= 2;
 				if (challengeCompletions('r', 11) >= 38) work *= 2;
 				if (hasMilestone('gi', 10)) work *= 2;
-				for (let index = 0; index < work; index++) {
-					if (!layers.d.buyables[12].canBuy()) break;
-					layers.d.buyables[12].buy();
+				for (let index = 0; index < work && canBuyBuyable("d", 12); index++) {
+					buyBuyable("d", 12);
 				};
 			};
 			if (hasMilestone('s', 28) && player.s.auto_sacrificial_ceremony) {
@@ -3904,9 +3901,8 @@ addLayer('d', {
 				if (challengeCompletions('r', 11) >= 17) work *= 2;
 				if (challengeCompletions('r', 11) >= 38) work *= 2;
 				if (hasMilestone('gi', 10)) work *= 2;
-				for (let index = 0; index < work; index++) {
-					if (!layers.d.buyables[21].canBuy()) break;
-					layers.d.buyables[21].buy();
+				for (let index = 0; index < work && canBuyBuyable("d", 21); index++) {
+					buyBuyable("d", 21);
 				};
 			};
 		};
@@ -4239,9 +4235,7 @@ addLayer('r', {
 		if (challengeCompletions('r', 11) >= 20) mult0 = mult0.mul(1.01);
 		if (challengeCompletions('r', 11) >= 25) mult0 = mult0.mul(1.001);
 		player.r.relic_effects[0] = player.r.light.mul(10).add(1).pow(0.15).mul(mult0);
-		let eff1 = player.r.light.mul(1000).add(1).pow(0.05);
-		if (eff1.gte(100)) eff1 = new Decimal(100);
-		player.r.relic_effects[1] = eff1;
+		player.r.relic_effects[1] = player.r.light.mul(1000).add(1).pow(0.05).min(100);
 		let mult2 = newDecimalOne();
 		if (challengeCompletions('r', 11) >= 7) mult2 = mult2.mul(4);
 		if (challengeCompletions('r', 11) >= 8) mult2 = mult2.mul(2);
@@ -4253,7 +4247,15 @@ addLayer('r', {
 		if (player.r.light.gt(player.r.lightbest)) player.r.lightbest = player.r.light;
 		if (player.r.lightgain.gt(player.r.lightgainbest)) player.r.lightgainbest = player.r.lightgain;
 	},
-	tabFormat: getTab('r'),
+	tabFormat: {
+		Activation: {
+			content: getTab('r'),
+		},
+		"The Prism": {
+			content: getTab('r', "The Prism"),
+			unlocked() { return isAssimilated('r') || player.mo.assimilating === 'r' },
+		},
+	},
 	challenges: {
 		11: {
 			name() {
