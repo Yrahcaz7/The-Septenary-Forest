@@ -144,6 +144,7 @@ addLayer("co", {
 			},
 			canComplete() {return false},
 			unlocked() {return player.co.migrationUnlocked},
+			doReset: true,
 		},
 	},
 });

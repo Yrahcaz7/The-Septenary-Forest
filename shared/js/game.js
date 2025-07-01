@@ -206,12 +206,12 @@ function startChallenge(layer, x) {
 	if ((!player[layer].unlocked && tmp[layer].upgrades.needLayerUnlocked !== false) || !tmp[layer].challenges[x].unlocked) return;
 	if (player[layer].activeChallenge == x && canExitChallenge(layer, x)) {
 		completeChallenge(layer, x);
-		doReset(layer, true);
+		if (tmp[layer].challenges[x].doReset) doReset(layer, true, tmp[layer].challenges[x].overrideResetsNothing === true);
 		player[layer].activeChallenge = null;
 	} else if (canEnterChallenge(layer, x)) {
 		player[layer].activeChallenge = x;
 		run(layers[layer].challenges[x].onEnter, layers[layer].challenges[x]);
-		if (tmp[layer].challenges[x].doReset) doReset(layer, true);
+		if (tmp[layer].challenges[x].doReset) doReset(layer, true, tmp[layer].challenges[x].overrideResetsNothing === true);
 		player[layer].activeChallenge = x;
 	};
 	updateChallengeTemp(layer);

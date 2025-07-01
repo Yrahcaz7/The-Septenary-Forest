@@ -180,7 +180,6 @@ addLayer("ec", {
 			goal() {return [167098, 155454, 155040, 869153600, 2.874e9, 7.992e9, 3.082e11, 4.73e11, 1.228e12, 7.191e12, 9.733e12, 1.359e13, 5.222e13, 4.09e14, 3.783e15, 1.133e18, 2.975e18, 3.206e20, 7.087e21, 1.791e23, 4.166e23, 1.46e25, 5.956e25, 1.938e26, 2.89e27, 1.586e28, 1.266e29, 3.765e29, 7.092e31][Math.min(challengeCompletions("ec", 11), tmp.ec.challenges[11].completionLimit - 1)] || Infinity},
 			canComplete() {return player.g.points.gte(this.goal())},
 			enterable() {return challengeCompletions("sp", 21) >= 18 || hasChallenge("ec", 11)},
-			doReset: false,
 			completionLimit() {
 				let limit = 10;
 				if (hasMilestone("d", 31)) limit += milestoneEffect("d", 31);

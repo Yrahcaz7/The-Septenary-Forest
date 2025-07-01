@@ -30,11 +30,9 @@ Individual Challenges can have these features:
 
 - `challengeDescription`: A description of what makes the challenge a challenge. *You will need to implement these elsewhere.* It can also be a function that returns updating text. Can use basic HTML.
 
-- `goalDescription`: A description of the win condition for the challenge. It can also be a function that returns updating text.
-    Can use basic HTML. (Optional if using the old goal system)
+- `goalDescription`: A description of the win condition for the challenge. It can also be a function that returns updating text. Can use basic HTML. (Optional if using the old goal system.)
 
-- `canComplete()`: A function that returns true if you meet the win condition for the challenge. Returning a number will allow bulk completing the challenge.
-    (Optional if using the old goal system)
+- `canComplete()`: A function that returns true if you meet the win condition for the challenge. Returning a number will allow bulk completing the challenge. (Optional if using the old goal system).
 
 - `rewardDescription`: A description of the reward's effect. *You will also have to implement the effect where it is applied.* It can also be a function that returns updating text. Can use basic HTML.
 
@@ -69,6 +67,8 @@ Additional features:
 - `doReset`: **optional**. A boolean to determine if the challenge does a reset of its layer on enter and exit. Default is to not.
 
 - `noAutoExit`: **optional**. A boolean to determine if the challenge should stay active on resets. Default is to not.
+
+- `overrideResetsNothing`: **optional**. A boolean to determine if the challenge should still reset even if the layer's `resetsNothing` is true. Default is to not. This does not do anything unless `doReset` is true.
 
 - `canEnter()`: **optional**. A function returning a boolean to determine if the challenge is enterable. Default behavior is to always allow entering.
 
