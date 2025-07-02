@@ -16,7 +16,7 @@ const changelog = `<h1>Changelog:</h1><br>
 	<br><h3>v3.6: Even More Assimilation</h3><br>
 		- Added more to assimilation.<br>
 		- Added more to stories.<br>
-		- Added two milestones to chaos.<br>
+		- Added three milestones to chaos.<br>
 		- Removed one option.<br>
 		- Added two options.<br>
 		- Improved option style.<br>
@@ -336,7 +336,7 @@ const displayThings = [
 	() => {if (tmp.gameEnded) return 'You beat the game!<br>For now...'},
 ];
 
-const endPoints = new Decimal('e1e24');
+const endPoints = new Decimal('e2e25');
 
 function onLoad() {
 	calculateColorValue();

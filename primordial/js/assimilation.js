@@ -37,7 +37,7 @@ const assimilationReq = {
 	a: new Decimal(75000),
 	p: new Decimal('1e2000'),
 	s: new Decimal(52),
-	r: new Decimal(98),
+	r: new Decimal(95),
 	m: new Decimal(Infinity),
 	gi: new Decimal(Infinity),
 	ei: new Decimal(Infinity),

@@ -1131,7 +1131,7 @@ addLayer('q', {
 		},
 		61: {
 			title() { return '<b class="layer-q' + getdark(this, "title") + 'Purge the Mystery' },
-			description() { return 'unlocks the <b class="layer-q' + getdark(this, "ref") + 'Decipherer</b>,<br>a new tab' },
+			description() { return 'unlocks <b class="layer-q' + getdark(this, "ref") + 'The Decipherer</b>,<br>a new tab' },
 			cost: 'e8.325e10',
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 55) },
 		},
@@ -1920,7 +1920,7 @@ addLayer('h', {
 		},
 		81: {
 			title() { return '<b class="layer-h' + getdark(this, "title") + 'True Hexes' },
-			description() { return 'Unlocks the <b class="layer-h' + getdark(this, "ref") + 'Breaker</b>,<br>a new tab' },
+			description() { return 'Unlocks <b class="layer-h' + getdark(this, "ref") + 'The Breaker</b>,<br>a new tab' },
 			cost: new Decimal('e1.132e14'),
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 71) && hasUpgrade('h', 72) && hasUpgrade('h', 73) && hasUpgrade('h', 74) },
 		},
@@ -2054,17 +2054,17 @@ addLayer('ds', {
 		if (hasMilestone('m', 14) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 5) && resettingLayer == 'gi') return;
 		const keep = ['auto_upgrades', 'auto_buyables'];
-		const saveupg = [];
+		const saveUpg = [];
 		if (hasMilestone('m', 1) && (resettingLayer == 'm' || resettingLayer == 'gi' || resettingLayer == 'ei')) {
 			keep.push("challenges");
-			saveupg.push(22);
+			saveUpg.push(22);
 		};
 		if (hasMilestone('w', 4) && resettingLayer == 'w') keep.push("challenges");
 		if (hasMilestone('cl', 3) && resettingLayer == 'cl') keep.push("challenges");
 		if (hasMilestone('ch', 5) && resettingLayer == 'ch') keep.push("challenges");
 		if (layers[resettingLayer].row > this.row) {
 			layerDataReset('ds', keep);
-			player[this.layer].upgrades = saveupg;
+			player[this.layer].upgrades = saveUpg;
 		};
 	},
 	tabFormat: {
@@ -2518,8 +2518,8 @@ addLayer('a', {
 			},
 			cost: 1,
 			effect() {
-				let eff = player.a.points.add(1).pow(0.5);
-				let hardcap = new Decimal(1000);
+				const eff = player.a.points.add(1).pow(0.5);
+				const hardcap = new Decimal(1000);
 				if (eff.gt(hardcap) || hasMilestone('m', 11)) return hardcap;
 				return eff;
 			},
@@ -2556,8 +2556,8 @@ addLayer('a', {
 				if (getClickableState('a', 11) >= 2) {
 					return player.sp.points.add(1).pow(0.02).log10().add(1);
 				};
-				let eff = player.sp.points.add(1).pow(0.02);
-				let hardcap = new Decimal(2.5);
+				const eff = player.sp.points.add(1).pow(0.02);
+				const hardcap = new Decimal(2.5);
 				if (eff.gt(hardcap) || hasMilestone('m', 11)) return hardcap;
 				return eff;
 			},
@@ -2601,8 +2601,8 @@ addLayer('a', {
 				if (getClickableState('a', 11) >= 3) {
 					return player.a.total.add(1).pow(0.01);
 				};
-				let eff = player.a.total.add(1).pow(0.05);
-				let hardcap = new Decimal(2.25);
+				const eff = player.a.total.add(1).pow(0.05);
+				const hardcap = new Decimal(2.25);
 				if (eff.gt(hardcap) || hasMilestone('m', 11)) return hardcap;
 				return eff;
 			},
@@ -2633,8 +2633,8 @@ addLayer('a', {
 				if (getClickableState('a', 11) >= 1) {
 					return player.sp.points.add(1).pow(0.025).log10().add(1);
 				};
-				let eff = player.sp.points.add(1).pow(0.025);
-				let hardcap = new Decimal(3.15);
+				const eff = player.sp.points.add(1).pow(0.025);
+				const hardcap = new Decimal(3.15);
 				if (eff.gt(hardcap) || hasMilestone('m', 11)) return hardcap;
 				return eff;
 			},
@@ -2698,8 +2698,8 @@ addLayer('a', {
 			},
 			cost: 3,
 			effect() {
-				let eff = player.a.total.sub(player.a.best).add(1).pow(0.2);
-				let hardcap = new Decimal(15);
+				const eff = player.a.total.sub(player.a.best).add(1).pow(0.2);
+				const hardcap = new Decimal(15);
 				if (eff.gt(hardcap) || hasMilestone('m', 11)) return hardcap;
 				return eff;
 			},
@@ -2724,8 +2724,8 @@ addLayer('a', {
 				if (getClickableState('a', 11) >= 4) {
 					return player.a.total.mul(player.a.points).add(1).pow(0.013);
 				};
-				let eff = player.a.total.mul(player.a.points).pow(0.05).add(1);
-				let hardcap = new Decimal(6.66);
+				const eff = player.a.total.mul(player.a.points).pow(0.05).add(1);
+				const hardcap = new Decimal(6.66);
 				if (eff.gt(hardcap) || hasMilestone('m', 11)) return hardcap;
 				return eff;
 			},
@@ -2760,22 +2760,30 @@ addLayer('a', {
 		72: {
 			title() { return '<b class="layer-a' + getdark(this, "title") + 'Recurred, Recurring' },
 			description() {
-				if (hasMilestone('m', 11)) return 'multiplies atom gain by 5.00x';
+				if (hasMilestone('m', 11) && getClickableState('a', 11) < 5) return 'multiplies atom gain by 5.00x';
 				return 'multiplies atom gain based on your total atoms';
 			},
 			cost: 4,
 			effect() {
-				let eff = player.a.total.add(1).pow(0.1);
-				let hardcap = new Decimal(5);
+				if (getClickableState('a', 11) >= 5) {
+					return player.a.total.add(1).pow(0.025);
+				};
+				const eff = player.a.total.add(1).pow(0.1);
+				const hardcap = new Decimal(5);
 				if (eff.gt(hardcap) || hasMilestone('m', 11)) return hardcap;
 				return eff;
 			},
 			effectDisplay() {
 				let text = '';
+				if (getClickableState('a', 11) >= 5) {
+					text = format(this.effect()) + 'x';
+					if (options.nerdMode) text += '<br>formula: (x+1)^0.025';
+					return text;
+				};
 				if (hasMilestone('m', 11)) return 'max effect';
 				if (this.effect().gte(5)) text = format(this.effect()) + 'x<br>(hardcapped)';
 				else text = format(this.effect()) + 'x';
-				if (options.nerdMode) text += ' <br>formula: (x+1)^0.1';
+				if (options.nerdMode) text += '<br>formula: (x+1)^0.1';
 				return text;
 			},
 			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 71) && !hasUpgrade('a', 73)) },
@@ -2811,9 +2819,9 @@ addLayer('a', {
 				else text = text.replace(/layer-a-dark/g, 'layer-a');
 				return text;
 			},
-			upgrades: [33, 22, 32, 62],
+			upgrades: [33, 22, 32, 62, 72],
 			assimilationReq: [36000, 61000],
-			req: ['1e690', '1e728', '1e771', '1e912'],
+			req: ['1e690', '1e728', '1e771', '1e912', '1e1221'],
 			cost() {
 				const num = getClickableState('a', 11) || 0;
 				if (player.mo.assimilating === this.layer) {
@@ -3459,6 +3467,7 @@ addLayer('s', {
 		auto_worship: false,
 		auto_sacrifice: false,
 		auto_sacrificial_ceremony: false,
+		auto_glow: false,
 		no_speed_but_more_bulk: false,
 	}},
 	color: "#AAFF00",
@@ -3499,7 +3508,7 @@ addLayer('s', {
 		if (hasMilestone('s', 12) && resettingLayer == 'a') return;
 		if (hasMilestone('w', 11) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 7) && resettingLayer == 'cl') return;
-		const keep = ["auto_worship", "auto_sacrifice", "auto_sacrificial_ceremony", "no_speed_but_more_bulk"];
+		const keep = ["auto_worship", "auto_sacrifice", "auto_sacrificial_ceremony", "no_speed_but_more_bulk", "auto_glow"];
 		if (challengeCompletions('r', 11) >= 9 && resettingLayer == 'r') keep.push("milestones");
 		if (layers[resettingLayer].row > this.row) {
 			layerDataReset('s', keep);
@@ -4042,6 +4051,13 @@ addLayer('g', {
 	row: 2,
 	layerShown() { return false },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate('s')},
+	automate() {
+		if (hasMilestone('ch', 24) && player.s.auto_glow) {
+			buyBuyable("g", 11);
+			buyBuyable("g", 12);
+			buyBuyable("g", 21);
+		};
+	},
 	doReset(resettingLayer) {},
 	update(diff) {
 		player.s.glow_max = new Decimal(1000).mul(buyableEffect('g', 21)[1]);
@@ -4238,6 +4254,7 @@ addLayer('r', {
 	update(diff) {
 		let lightReqScale = new Decimal(5);
 		if (isAssimilated('r') || player.mo.assimilating === 'r') lightReqScale = lightReqScale.sub(2);
+		if (hasMilestone('r', 0)) lightReqScale = lightReqScale.sub(1);
 		player.r.lightreq = lightReqScale.pow(challengeCompletions('r', 11)).mul(20000);
 		let mult0 = newDecimalOne();
 		if (challengeCompletions('r', 11) >= 11) mult0 = mult0.mul(2);
@@ -4393,7 +4410,11 @@ addLayer('r', {
 	},
 	buyables: {
 		11: {
-			cost() { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)).mul(10) },
+			cost() {
+				let cost = new Decimal(2).pow(getBuyableAmount(this.layer, this.id)).mul(10);
+				if (hasMilestone('r', 2)) cost = cost.div(milestoneEffect('r', 2));
+				return cost.add(1e-10).floor();
+			},
 			title() {
 				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-r-dark">Glowing Relics';
 				return '<h3>Glowing Relics';
@@ -4409,7 +4430,11 @@ addLayer('r', {
 			},
 		},
 		12: {
-			cost() { return new Decimal(2.5).pow(getBuyableAmount(this.layer, this.id)).add(49).floor() },
+			cost() {
+				let cost = new Decimal(hasMilestone('r', 1) ? 2 : 2.5).pow(getBuyableAmount(this.layer, this.id)).add(49);
+				if (hasMilestone('r', 2)) cost = cost.div(milestoneEffect('r', 2));
+				return cost.add(1e-10).floor();
+			},
 			title() {
 				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-r-dark">Gleaming Relics';
 				return '<h3>Gleaming Relics';
@@ -4425,7 +4450,11 @@ addLayer('r', {
 			},
 		},
 		21: {
-			cost() { return new Decimal(5).pow(getBuyableAmount(this.layer, this.id)).mul(75) },
+			cost() {
+				let cost = new Decimal(hasMilestone('r', 1) ? 2 : 4).pow(getBuyableAmount(this.layer, this.id)).mul(75);
+				if (hasMilestone('r', 2)) cost = cost.div(milestoneEffect('r', 2));
+				return cost.add(1e-10).floor();
+			},
 			title() {
 				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-r-dark">Prismatic Relics';
 				return '<h3>Prismatic Relics';
@@ -4440,6 +4469,30 @@ addLayer('r', {
 				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'gives extra levels to <b class="layer-r-dark">Glowing Relics</b> and <b class="layer-r-dark">Gleaming Relics</b> based on the amount of this upgrade bought.<br>Currently: +' + formatWhole(buyableEffect(this.layer, this.id)) + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' activated relics<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + formatWhole(this.purchaseLimit);
 				return 'gives extra levels to <b>Glowing Relics</b> and <b>Gleaming Relics</b> based on the amount of this upgrade bought.<br>Currently: +' + formatWhole(buyableEffect(this.layer, this.id)) + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' activated relics<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
+		},
+	},
+	milestones: {
+		0: {
+			requirementDescription: '1e12 relics',
+			effectDescription: 'reduce relic activation requirement scaling (3 --> 2)',
+			done() { return player.r.points.gte(1e12) && isAssimilated('r') && hasMilestone('ch', 25) },
+		},
+		1: {
+			requirementDescription: '6e12 relics',
+			effectDescription: 'reduce requirement scaling of <b class="layer-r-dark">Gleaming Relics</b> (2.5 --> 2) and <b class="layer-r-dark">Prismatic Relics</b> (4 --> 2)',
+			done() { return player.r.points.gte(6e12) && isAssimilated('r') && hasMilestone('ch', 25) },
+		},
+		2: {
+			requirementDescription: '1e13 relics',
+			effect() { return player.ch.points.sub(70).add(1).max(1) },
+			effectDescription() { return 'divide relic rebuyable requirements based on your chaos after 70 (currently /' + format(milestoneEffect(this.layer, this.id)) + ')' },
+			done() { return player.r.points.gte(1e13) && isAssimilated('r') && hasMilestone('ch', 25) },
+		},
+		3: {
+			requirementDescription: '2e13 relics',
+			effect() { return new Decimal(challengeCompletions('r', 11)).add(1).pow(0.0252) },
+			effectDescription() { return 'multiply multicellular organism gain based on your activated relics (currently ' + format(milestoneEffect(this.layer, this.id)) + 'x)' },
+			done() { return player.r.points.gte(2e13) && isAssimilated('r') && hasMilestone('ch', 25) },
 		},
 	},
 });
@@ -6728,14 +6781,24 @@ addLayer('ch', {
 			unlocked() { return player.mo.unlocked },
 		},
 		23: {
-			requirementDescription: '64 chaos',
+			requirementDescription: '63 chaos',
 			effectDescription: 'the 8th row of hex upgrades and the 8th row of prayer upgrades can be autobought',
-			done() { return player.ch.points.gte(64) },
+			done() { return player.ch.points.gte(63) },
 			unlocked() { return player.mo.unlocked },
 		},
 		24: {
+			requirementDescription: '67 chaos',
+			effectDescription: 'you can autobuy glow rebuyables',
+			done() { return player.ch.points.gte(67) },
+			toggles: [['s', 'auto_glow']],
+			unlocked() { return player.mo.unlocked },
+		},
+		25: {
 			requirementDescription: '70 chaos',
-			effectDescription: 'coming soon...',
+			effectDescription() {
+				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'if you have <b class="layer-mo-dark">Assimilated</b> relics, unlock relic milestones';
+				else return 'if you have <b>Assimilated</b> relics, unlock relic milestones';
+			},
 			done() { return player.ch.points.gte(70) },
 			unlocked() { return player.mo.unlocked },
 		},
@@ -6749,7 +6812,10 @@ addLayer('ch', {
 			challengeDescription: "- Forces a chaos reset<br>- Disables good influence<br>- Multiplies demon soul gain by 1e3200<br>- Multiplies evil influence gain by 1.1",
 			goalLayers: [17, 18, 60, 70, 80, 100, 120, 140, 64175, 64500, 64888, 65250, 70750, 71250, 71750, 94250, 95250, 96750, 98000, 99500],
 			goal() { return this.goalLayers[challengeCompletions('ch', this.id)] || Infinity },
-			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' evil influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit },
+			goalDescription() {
+				const c = tmp.ch.challenges[this.id];
+				return formatWhole(c.goal) + " evil influence<br>Completions: " + formatWhole(challengeCompletions('ch', this.id)) + "/" + formatWhole(c.completionLimit) + (c.completionLimit >= 20 ? " (maxed)" : "");
+			},
 			canComplete() { return player.ei.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
 			completionLimit() { return player.ch.points.div(2).floor().max(1).min(20).toNumber() },
 			onEnter() { player.gi.unlocked = false },
@@ -6776,7 +6842,10 @@ addLayer('ch', {
 				if (challengeCompletions('ch', this.id) < 32) return challengeCompletions('ch', this.id) * 500;
 				return Infinity;
 			},
-			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' good influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit + '<br>' },
+			goalDescription() {
+				const c = tmp.ch.challenges[this.id];
+				return formatWhole(c.goal) + " good influence<br>Completions: " + formatWhole(challengeCompletions('ch', this.id)) + "/" + c.completionLimit + (c.completionLimit >= 32 ? " (maxed)" : "") + "<br>";
+			},
 			canComplete() { return player.gi.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
 			completionLimit() { return player.ch.points.div(2).floor().max(1).min(32).toNumber() },
 			onEnter() { player.ei.unlocked = false },
@@ -6830,6 +6899,7 @@ addLayer('mo', {
 	gainExp() {
 		let gain = newDecimalOne();
 		if (hasMilestone('ch', 16)) gain = gain.mul(milestoneEffect('ch', 16));
+		if (hasMilestone('r', 3)) gain = gain.mul(milestoneEffect('r', 3));
 		return gain;
 	},
 	row: 6,
@@ -6860,7 +6930,7 @@ addLayer('mo', {
 				else if (getClickableState('mo', 11)) return '<br>You are in an Assimilation Search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click here to exit the search.';
 				else return '<br>Begin an Assimilation search.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
 			},
-			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, 57][player.mo.assimilated.length] || Infinity },
+			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, 57][player.mo.assimilated.length] || Infinity }, // next: molecules at 77
 			canClick() { return getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req) },
 			onClick() {
 				if (player.mo.assimilating !== null) {

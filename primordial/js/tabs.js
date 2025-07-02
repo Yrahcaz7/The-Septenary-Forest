@@ -116,6 +116,10 @@ function getRawTabContent(layer, name = "") {
 		content.push("blank");
 		if (name == "The Prism") {
 			content.push("buyables");
+			content.push("blank");
+			if (hasMilestone('ch', 25)) {
+				content.push("milestones");
+			};
 		} else {
 			content.push("challenges");
 			content.push("blank");

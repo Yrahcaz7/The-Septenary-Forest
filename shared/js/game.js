@@ -120,13 +120,15 @@ function rowReset(row, layer) {
 };
 
 function layerDataReset(layer, keep = []) {
+	const startData = getStartLayerData(layer);
 	const storedData = {unlocked: player[layer].unlocked, forceTooltip: player[layer].forceTooltip, noRespecConfirm: player[layer].noRespecConfirm, prevTab: player[layer].prevTab} // Always keep these
 	for (const thing in keep) {
 		if (player[layer][keep[thing]] !== undefined) {
+			delete startData[keep[thing]];
 			storedData[keep[thing]] = player[layer][keep[thing]];
 		};
 	};
-	layOver(player[layer], getStartLayerData(layer));
+	layOver(player[layer], startData);
 	for (const thing in storedData) {
 		player[layer][thing] = storedData[thing];
 	};
