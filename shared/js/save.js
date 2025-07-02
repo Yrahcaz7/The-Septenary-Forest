@@ -254,7 +254,7 @@ function exportSave() {
 function importSave(imported = undefined, forced = false) {
 	if (imported === undefined) imported = prompt("Paste your save here");
 	try {
-		const tempPlr = Object.assign(getStartPlayer(), JSON.parse(atob(imported)));
+		const tempPlr = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(atob(imported))));
 		if (tempPlr.versionType !== getModID() && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")) {
 			return; // Wrong save. Use "Forced" to force it to accept.
 		};
@@ -265,6 +265,7 @@ function importSave(imported = undefined, forced = false) {
 		save();
 		location.reload();
 	} catch (e) {
+		console.warn("Invalid save import was attempted.");
 		return;
 	};
 };
