@@ -1,9 +1,10 @@
 // checks if a layer is assimilated
 function isAssimilated(layer) { return player.mo.assimilated.includes(layer) };
 
-// checks if a layer can be assimilated
+// order of layers to be assimilated
 const assimilationOrder = ['e', 'c', 'q', 'sp', 'h', 'ds', 'a', 'p', 's', 'r', 'm', 'gi', 'ei', 'w', 'cl', 'ch'];
 
+// checks if a layer can be assimilated
 function canAssimilate(layer) { return getClickableState('mo', 11) && (isAssimilated(layer) || assimilationOrder[player.mo.assimilated.length] === layer) };
 
 // enters an assimilation run
@@ -36,7 +37,7 @@ const assimilationReq = {
 	a: new Decimal(75000),
 	p: new Decimal('1e2000'),
 	s: new Decimal(52),
-	r: new Decimal(Infinity),
+	r: new Decimal(98),
 	m: new Decimal(Infinity),
 	gi: new Decimal(Infinity),
 	ei: new Decimal(Infinity),
@@ -97,9 +98,10 @@ function overridePointDisplay() {
 function overrideTreeNodeClick(layer) {
 	if (getClickableState('mo', 11) && assimilationOrder.includes(layer) && !(isAssimilated(layer) && player.mo.assimilating)) {
 		if (assimilationOrder[player.mo.assimilated.length] === layer) {
-			if (player.mo.assimilating === null) return () => {if (startAssimilation(layer)) showTab(layer)};
-			else return undefined;
-		} else return () => {};
+			if (player.mo.assimilating === null) return () => { if (startAssimilation(layer)) showTab(layer) };
+		} else {
+			return () => {};
+		};
 	};
 };
 
@@ -121,8 +123,8 @@ function getAssimilationRewards() {
 	};
 	if (isAssimilated('q')) {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-q">Quarks</h2><br><br>';
-		if (colorValue[1] !== 'none') text += 'Unlocks unlocking the <b class="layer-q">Decipherer</b>, a new tab<br>Unlocks three new quark rebuyables: <b class="layer-q">Sample Quarks</b>, <b class="layer-q">Atomic Insight</b>, and <b class="layer-q">Analyze Essence</b><br>Makes all previous quark upgrades always unlockable<br>Unlocks ten new quark upgrades: <b class="layer-q">Quark of the Flow</b>, <b class="layer-q">Mystery Quark</b>, <b class="layer-q">Valued Mystery</b>, <b class="layer-q">Bigger Mystery</b>, <b class="layer-q">What\'s the Point?</b>, and <b class="layer-q">Purge the Mystery</b>';
-		else text += 'Unlocks unlocking the <b>Decipherer</b>, a new tab<br>Unlocks three new quark rebuyables: <b>Sample Quarks</b>, <b>Atomic Insight</b>, and <b>Analyze Essence</b><br>Makes all previous quark upgrades always unlockable<br>Unlocks six new quark upgrades: <b>Quark of the Flow</b>, <b>Mystery Quark</b>, <b>Valued Mystery</b>, <b>Bigger Mystery</b>, <b>What\'s the Point?</b>, and <b>Purge the Mystery</b>>';
+		if (colorValue[1] !== 'none') text += 'Unlocks unlocking <b class="layer-q">The Decipherer</b>, a new tab<br>Unlocks three new quark rebuyables: <b class="layer-q">Sample Quarks</b>, <b class="layer-q">Atomic Insight</b>, and <b class="layer-q">Analyze Essence</b><br>Makes all previous quark upgrades always unlockable<br>Unlocks ten new quark upgrades: <b class="layer-q">Quark of the Flow</b>, <b class="layer-q">Mystery Quark</b>, <b class="layer-q">Valued Mystery</b>, <b class="layer-q">Bigger Mystery</b>, <b class="layer-q">What\'s the Point?</b>, and <b class="layer-q">Purge the Mystery</b>';
+		else text += 'Unlocks unlocking <b>The Decipherer</b>, a new tab<br>Unlocks three new quark rebuyables: <b>Sample Quarks</b>, <b>Atomic Insight</b>, and <b>Analyze Essence</b><br>Makes all previous quark upgrades always unlockable<br>Unlocks six new quark upgrades: <b>Quark of the Flow</b>, <b>Mystery Quark</b>, <b>Valued Mystery</b>, <b>Bigger Mystery</b>, <b>What\'s the Point?</b>, and <b>Purge the Mystery</b>>';
 	};
 	if (isAssimilated('sp')) {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-sp">Subatomic Particles</h2><br><br>';
@@ -131,8 +133,8 @@ function getAssimilationRewards() {
 	};
 	if (isAssimilated('h')) {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-h">Hexes</h2><br><br>';
-		if (colorValue[1] !== 'none') text += 'Unlocks unlocking the <b class="layer-h">Breaker</b>, a new tab<br>Makes all previous hex upgrades always unlockable<br>Unlocks five new hex upgrades: <b class="layer-h">Hex the Hex</b>, <b class="layer-h">Hex the Core</b>, <b class="layer-h">Hexes are the Point</b>, <b class="layer-h">Hex of the Flow</b>, and <b class="layer-h">True Hexes</b><br>Makes the hex gain softcap start sooner (1e1000 --> 1e100)<br>Makes the hex gain softcap weaker (^0.5 --> ^0.51)';
-		else text += 'Unlocks unlocking the <b>Breaker</b>, a new tab<br>Makes all previous hex upgrades always unlockable<br>Unlocks five new hex upgrades: <b>Hex the Hex</b>, <b>Hex the Core</b>, <b>Hexes are the Point</b>, <b>Hex of the Flow</b>, and <b>True Hexes</b><br>Makes the hex gain softcap start sooner (1e1000 --> 1e100)<br>Makes the hex gain softcap weaker (^0.5 --> ^0.51)';
+		if (colorValue[1] !== 'none') text += 'Unlocks unlocking <b class="layer-h">The Breaker</b>, a new tab<br>Makes all previous hex upgrades always unlockable<br>Unlocks five new hex upgrades: <b class="layer-h">Hex the Hex</b>, <b class="layer-h">Hex the Core</b>, <b class="layer-h">Hexes are the Point</b>, <b class="layer-h">Hex of the Flow</b>, and <b class="layer-h">True Hexes</b><br>Makes the hex gain softcap start sooner (1e1000 --> 1e100)<br>Makes the hex gain softcap weaker (^0.5 --> ^0.51)';
+		else text += 'Unlocks unlocking <b>The Breaker</b>, a new tab<br>Makes all previous hex upgrades always unlockable<br>Unlocks five new hex upgrades: <b>Hex the Hex</b>, <b>Hex the Core</b>, <b>Hexes are the Point</b>, <b>Hex of the Flow</b>, and <b>True Hexes</b><br>Makes the hex gain softcap start sooner (1e1000 --> 1e100)<br>Makes the hex gain softcap weaker (^0.5 --> ^0.51)';
 	};
 	if (isAssimilated('ds')) {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-ds">Demon Souls</h2><br><br>';
@@ -141,8 +143,8 @@ function getAssimilationRewards() {
 	};
 	if (isAssimilated('a')) {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-a">Atoms</h2><br><br>';
-		if (colorValue[1] !== 'none') text += 'Unlocks the <b class="layer-a">Atomic Reactor</b>, a new tab<br>Removes all <b class="layer-a">Atomic Tree</b> limitations<br>Unlocks <b class="layer-mo">Synergism</b>, a new tab<br>Unlocks the first <b class="layer-mo">Synergy</b>';
-		else text += 'Unlocks the <b>Atomic Reactor</b>, a new tab<br>Removes all <b>Atomic Tree</b> limitations<br>Unlocks <b>Synergism</b>, a new tab<br>Unlocks the first <b>Synergy</b>';
+		if (colorValue[1] !== 'none') text += 'Unlocks <b class="layer-a">Atomic Reactor</b>, a new tab<br>Removes all <b class="layer-a">Atomic Tree</b> limitations<br>Unlocks <b class="layer-mo">Synergism</b>, a new tab<br>Unlocks the first <b class="layer-mo">Synergy</b>';
+		else text += 'Unlocks <b>Atomic Reactor</b>, a new tab<br>Removes all <b>Atomic Tree</b> limitations<br>Unlocks <b>Synergism</b>, a new tab<br>Unlocks the first <b>Synergy</b>';
 	};
 	if (isAssimilated('p')) {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-p">Prayers</h2><br><br>';
@@ -153,6 +155,11 @@ function getAssimilationRewards() {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-s">Sanctums</h2><br><br>';
 		if (colorValue[1] !== 'none') text += 'Unlocks <b class="layer-s">Glow</b>, a new tab<br>Unlocks three new sanctum rebuyables: <b class="layer-s">Glowing Worship</b>, <b class="layer-s">Glowing Sacrifice</b>, and <b class="layer-s">Glowing Sacrificial Ceremony</b><br>all <b class="layer-s">Devotion</b> autobuyers can bulk buy 10x<br>Unlocks the second <b class="layer-mo">Synergy</b>';
 		else text += 'Unlocks <b>Glow</b>, a new tab<br>Unlocks three new sanctum rebuyables: <b>Glowing Worship</b>, <b>Glowing Sacrifice</b>, and <b>Glowing Sacrificial Ceremony</b><br>all <b>Devotion</b> autobuyers can bulk buy 10x<br>Unlocks the second <b>Synergy</b>';
+	};
+	if (isAssimilated('r')) {
+		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-r">Relics</h2><br><br>';
+		if (colorValue[1] !== 'none') text += 'Unlocks <b class="layer-r">The Prism</b>, a new tab<br>Unlocks three new relic rebuyables: <b class="layer-r">Glowing Relics</b>, <b class="layer-r">Gleaming Relics</b>, and <b class="layer-r">Prismatic Relics</b><br>Reduces relic activation requirement scaling (5 --> 3)<br>Removes the softcap on relic\'s first effect';
+		else text += 'Unlocks <b>The Prism</b>, a new tab<br>Unlocks three new relic rebuyables: <b>Glowing Relics</b>, <b>Gleaming Relics</b>, and <b>Prismatic Relics</b><br>Reduces relic activation requirement scaling (5 --> 3)<br>Removes the softcap on relic\'s first effect';
 	};
 	return text.replace("<br><br>", "");
 };

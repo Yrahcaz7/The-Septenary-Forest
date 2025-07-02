@@ -24,7 +24,7 @@ function getRawTabContent(layer, name = "") {
 		content.push("upgrades");
 	} else if (layer == "q") {
 		if (name == "The Decipherer") {
-			content.push(["display-text", 'Your ' + randomStr(9) + ' is currently <h2 class="layer-q">' + format(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + '</h2> insight<br><br>Deciphered rate decays over time with a decay factor of ' + (hasUpgrade('q', 65) ? 0.1 : 0.001)]);
+			content.push(["display-text", 'Your ' + randomStr(9) + ' is currently <h2 class="layer-q">' + format(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + '</h2> insight<br><br>Deciphered amount decays over time with a decay factor of ' + (hasUpgrade('q', 65) ? 0.1 : 0.001)]);
 			content.push("blank");
 			content.push("buyables");
 			content.push("blank");
@@ -114,9 +114,13 @@ function getRawTabContent(layer, name = "") {
 	} else if (layer == "r") {
 		content.push(["display-text", 'You have <h2 class="layer-r">' + formatWhole(player.r.points.sub(challengeCompletions('r', 11)).max(0)) + '</h2> unactivated relics and <h2 class="layer-r">' + formatWhole(challengeCompletions('r', 11)) + '</h2> activated relics']);
 		content.push("blank");
-		content.push("challenges");
-		content.push("blank");
-		content.push("upgrades");
+		if (name == "The Prism") {
+			content.push("buyables");
+		} else {
+			content.push("challenges");
+			content.push("blank");
+			content.push("upgrades");
+		};
 	} else if (layer == "m") {
 		if (name == "Constructor") {
 			let text = 'You have <h2 class="layer-m">' + formatWhole(player.m.unique_nonextra) + '</h2>';

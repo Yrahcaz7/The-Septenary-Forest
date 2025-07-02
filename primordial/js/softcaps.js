@@ -30,14 +30,30 @@ addLayer('SC', {
 	tooltip() { return player.SC.points + ' softcaps' },
 	update(diff) {
 		player.SC.softcaps = [];
-		if (player.points.gte(softcaps.points[0])) player.SC.softcaps.push("points");
-		if (player.c.points.gte(tmp.c.softcap) && !tmp.c.deactivated) player.SC.softcaps.push("c");
-		if (player.q.points.gte(tmp.q.softcap) && !tmp.q.deactivated) player.SC.softcaps.push("q");
-		if (player.h.points.gte(tmp.h.softcap) && !tmp.h.deactivated) player.SC.softcaps.push("h");
-		if (player.ds.points.gte(tmp.ds.softcap) && !tmp.ds.deactivated) player.SC.softcaps.push("ds");
-		if (tmp.p.effect.gte(softcaps.p_eff[0]()) && !tmp.p.deactivated) player.SC.softcaps.push("p-eff");
-		if (tmp.r.effect[0].gte(softcaps.r_eff1[0]) && !tmp.r.deactivated) player.SC.softcaps.push("r-eff1");
-		if (tmp.m.effect.gte(softcaps.m_eff[0]) && !tmp.m.deactivated) player.SC.softcaps.push("m-eff");
+		if (player.points.gte(softcaps.points[0])) {
+			player.SC.softcaps.push("points");
+		};
+		if (player.c.points.gte(tmp.c.softcap) && !tmp.c.deactivated) {
+			player.SC.softcaps.push("c");
+		};
+		if (player.q.points.gte(tmp.q.softcap) && !tmp.q.deactivated) {
+			player.SC.softcaps.push("q");
+		};
+		if (player.h.points.gte(tmp.h.softcap) && !tmp.h.deactivated) {
+			player.SC.softcaps.push("h");
+		};
+		if (player.ds.points.gte(tmp.ds.softcap) && !tmp.ds.deactivated) {
+			player.SC.softcaps.push("ds");
+		};
+		if (tmp.p.effect.gte(softcaps.p_eff[0]()) && !tmp.p.deactivated) {
+			player.SC.softcaps.push("p-eff");
+		};
+		if (tmp.r.effect[0].gte(softcaps.r_eff1[0]) && !(isAssimilated('r') || player.mo.assimilating === 'r') && !tmp.r.deactivated) {
+			player.SC.softcaps.push("r-eff1");
+		};
+		if (tmp.m.effect.gte(softcaps.m_eff[0]) && !tmp.m.deactivated) {
+			player.SC.softcaps.push("m-eff");
+		};
 		if (tmp.gi.effect.gte(softcaps.gi_eff[0]) && !tmp.gi.deactivated && !(hasMilestone('gi', 18) && player.h.limitsBroken >= 4)) {
 			player.SC.softcaps.push("gi-eff");
 		};
@@ -45,7 +61,7 @@ addLayer('SC', {
 	},
 	tabFormat: [
 		"main-display",
-		["display-text", function() {
+		["display-text", () => {
 			let text = '';
 			if (player.SC.softcaps.includes("points")) text += '<br><h2 class="pointSoftcap">Point Gain Softcap</h2><br>starts at ' + format(softcaps.points[0]) + ', gain to ^' + format(softcaps.points[1]()) + '<br>';
 			if (player.SC.softcaps.includes("c")) text += '<br><h2 class="layer-c">Core Gain Softcap</h2><br>starts at ' + format(tmp.c.softcap) + ', gain to ^' + format(tmp.c.softcapPower) + '<br>';

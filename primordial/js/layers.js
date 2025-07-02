@@ -1569,7 +1569,7 @@ addLayer('h', {
 	automate() {
 		if (hasMilestone('m', 1) && player[this.layer].auto_upgrades) {
 			for (const id in tmp[this.layer].upgrades) {
-				if (id < 80) buyUpgrade(this.layer, id);
+				if (id < (hasMilestone('ch', 23) ? 90 : 80)) buyUpgrade(this.layer, id);
 			};
 		};
 	},
@@ -2200,7 +2200,7 @@ addLayer('ds', {
 				player.ds.points = player.ds.points.sub(this.cost());
 				addBuyables(this.layer, this.id, 1);
 			},
-			effect() { return  [new Decimal(2).pow(getBuyableAmount('ds', this.id)), getBuyableAmount('ds', this.id).mul(5).add(1)] },
+			effect() { return [new Decimal(2).pow(getBuyableAmount('ds', this.id)), getBuyableAmount('ds', this.id).mul(5).add(1)] },
 			display() {
 				let text = '';
 				if (options.nerdMode) text = '<br>formulas: 2^x<br>and x*5+1';
@@ -2960,6 +2960,12 @@ addLayer('p', {
 				buyUpgrade('p', 72);
 				buyUpgrade('p', 73);
 				buyUpgrade('p', 74);
+				if (hasMilestone('ch', 23)) {
+					buyUpgrade('p', 81);
+					buyUpgrade('p', 82);
+					buyUpgrade('p', 83);
+					buyUpgrade('p', 84);
+				};
 			};
 		};
 	},
@@ -4044,6 +4050,10 @@ addLayer('g', {
 		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated && hasMilestone('gi', 19) && player.h.limitsBroken >= 4 && tmp.gi.effect.lte(1e100)) {
 			player.s.glow_gain = player.s.glow_gain.mul(tmp.gi.effect);
 		};
+		if (hasBuyable('r', 11)) {
+			player.s.glow_max = player.s.glow_max.mul(buyableEffect('r', 11));
+			player.s.glow_gain = player.s.glow_gain.mul(buyableEffect('r', 11));
+		};
 		player.s.glow = player.s.glow.add(player.s.glow_gain.mul(diff));
 		if (player.s.glow.gt(player.s.glow_max)) player.s.glow = player.s.glow_max;
 		player.s.glow_effect = player.s.glow.mul(1000).add(1).pow(0.1);
@@ -4191,12 +4201,14 @@ addLayer('r', {
 			effBoost3 = effBoost3.mul(player.r.relic_effects[0]);
 		};
 		let eff1 = player.r.points.mul(effBoost1).add(1).pow(1.1).pow(effex1);
-		if (eff1.gt(softcaps.r_eff1[0])) eff1 = eff1.div(softcaps.r_eff1[0]).pow(softcaps.r_eff1[1]).mul(softcaps.r_eff1[0]);
+		if (eff1.gt(softcaps.r_eff1[0]) && !(isAssimilated('r') || player.mo.assimilating === 'r')) {
+			eff1 = eff1.div(softcaps.r_eff1[0]).pow(softcaps.r_eff1[1]).mul(softcaps.r_eff1[0]);
+		};
 		return [eff1, player.r.points.add(1).pow(0.5).mul(effBoost2), player.r.points.mul(100).add(1).pow(0.25).mul(effBoost3)];
 	},
 	effectDescription() {
 		let text = ['', ''];
-		if (tmp.r.effect[0].gte(softcaps.r_eff1[0])) text[0] = ' (softcapped)';
+		if (tmp.r.effect[0].gte(softcaps.r_eff1[0]) && !(isAssimilated('r') || player.mo.assimilating === 'r')) text[0] = ' (softcapped)';
 		if (challengeCompletions('r', 11) >= 2) text[1] = 'point and ';
 		if (colorValue[1] == 'none') return 'which makes Essence Influence\'s hardcap start ' + format(tmp.r.effect[0]) + 'x later' + text[0] + ', multiplies sanctum gain by ' + format(tmp.r.effect[1]) + 'x, and also multiplies ' + text[1] + 'essence gain by ' + format(tmp.r.effect[2]) + 'x';
 		if (!colorValue[0][1]) return 'which makes <h3>Essence Influence\'s</h3> hardcap start <h2 class="layer-r">' + format(tmp.r.effect[0]) + '</h2>x later' + text[0] + ', multiplies sanctum gain by <h2 class="layer-r">' + format(tmp.r.effect[1]) + '</h2>x, and also multiplies ' + text[1] + 'essence gain by <h2 class="layer-r">' + format(tmp.r.effect[2]) + '</h2>x';
@@ -4224,7 +4236,9 @@ addLayer('r', {
 	},
 	resetsNothing() { return hasMilestone('w', 4) },
 	update(diff) {
-		player.r.lightreq = new Decimal(20000).mul(new Decimal(5).pow(challengeCompletions('r', 11)));
+		let lightReqScale = new Decimal(5);
+		if (isAssimilated('r') || player.mo.assimilating === 'r') lightReqScale = lightReqScale.sub(2);
+		player.r.lightreq = lightReqScale.pow(challengeCompletions('r', 11)).mul(20000);
 		let mult0 = newDecimalOne();
 		if (challengeCompletions('r', 11) >= 11) mult0 = mult0.mul(2);
 		if (challengeCompletions('r', 11) >= 14) mult0 = mult0.mul(2);
@@ -4280,14 +4294,16 @@ addLayer('r', {
 				let text = '';
 				// current rewards
 				if (completions >= 13) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, multiply Sacrificial Ceremony\'s last effect, and also multiply relic gain (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '') + ',<br>' + format(player.r.relic_effects[2]) + 'x,<br>and ' + format(player.r.relic_effects[3]) + 'x<br>';
+				else if (completions >= 12) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '') + ',<br>and ' + format(player.r.relic_effects[2]) + 'x<br>';
 				else if (completions >= 5) text += 'multiply relic\'s second and third effects, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '') + ',<br>and ' + format(player.r.relic_effects[2]) + 'x<br>';
+				else if (completions >= 4) text += 'multiply relic\'s second and third effects based on your light, and also exponentiate relic\'s first effect based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x<br>and ^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '') + '<br>';
 				else if (completions >= 1) text += 'multiply relic\'s second and third effects based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x<br>';
 				// next reward
 				if (completions == 0) text += 'nothing currently<br><br>Next reward: multiply relic\'s second and third effects based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x';
 				else if (completions == 1) text += '<br>Next reward: relic\'s third effect also effects point gain';
 				else if (completions == 2) text += '<br>Next reward: multiply relic\'s first effect by 10,000 and raise it to ^3.5';
 				else if (completions == 3) text += '<br>Next reward: exponentiate relic\'s first effect based on your light<br>Currently: ^' + format(player.r.relic_effects[1]);
-				else if (completions == 4) text += 'multiply relic\'s second and third effects based on your light, and also exponentiate relic\'s first effect based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x<br>and ^' + format(player.r.relic_effects[1]) + '<br><br>Next reward: multiply Sacrificial Ceremony\'s last effect based on your light<br>Currently: ' + format(player.r.relic_effects[2]) + 'x';
+				else if (completions == 4) text += '<br>Next reward: multiply Sacrificial Ceremony\'s last effect based on your light<br>Currently: ' + format(player.r.relic_effects[2]) + 'x';
 				else if (completions == 5) text += '<br>Next reward: raise relic\'s first effect to ^5';
 				else if (completions == 6) text += '<br>Next reward: quadruple the third activated relic effect';
 				else if (completions == 7) text += '<br>Next reward: double the third activated relic effect';
@@ -4297,7 +4313,7 @@ addLayer('r', {
 					if (player.m.unlocked) text += ' (already unlocked)';
 				} else if (completions == 10) text += '<br>Next reward: double the first activated relic effect';
 				else if (completions == 11) text += '<br>Next reward: the first activated relic effect also applies to molecule gain';
-				else if (completions == 12) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + ',<br>and ' + format(player.r.relic_effects[2]) + 'x<br><br>Next reward: multiply relic gain based on your light<br>Currently: ' + format(player.r.relic_effects[3]) + 'x';
+				else if (completions == 12) text += '<br>Next reward: multiply relic gain based on your light<br>Currently: ' + format(player.r.relic_effects[3]) + 'x';
 				else if (completions == 13) text += '<br>Next reward: double the first activated relic effect';
 				else if (completions == 14) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.2';
 				else if (completions == 15) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.1';
@@ -4333,8 +4349,8 @@ addLayer('r', {
 			completionLimit() { return player.r.points.toNumber() },
 			style() {
 				const num = player.r.light.add(1).log(2).div(player.r.lightreq.add(1).log(2)).mul(100).floor();
-				let bgcolor = 'rgb(' + num + ',' + num + ',' + (num + 50) + ')';
-				if (num.gt(205)) bgcolor = 'rgb(205,205,255)';
+				let bgcolor = 'rgb(' + num + ',' + num + ',' + (num + 100) + ')';
+				if (num.gt(100)) bgcolor = 'rgb(100,100,200)';
 				let textcolor = '#B9A975';
 				if (colorValue[1] == 'none') textcolor = '#DFDFDF';
 				return {'background-color':bgcolor, color:textcolor, 'border-radius':'70px', height:'450px', width:'450px'};
@@ -4373,6 +4389,57 @@ addLayer('r', {
 			canAfford() { return true },
 			effect() { return  player.gi.points.mul(36).add(1).pow(10) },
 			unlocked() { return hasMilestone('gi', 0) && player.r.lightbest.gte(1e20) },
+		},
+	},
+	buyables: {
+		11: {
+			cost() { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)).mul(10) },
+			title() {
+				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-r-dark">Glowing Relics';
+				return '<h3>Glowing Relics';
+			},
+			canAfford() { return new Decimal(challengeCompletions('r', 11)).gte(this.cost()) },
+			purchaseLimit: 99,
+			buy() { addBuyables(this.layer, this.id, 1) },
+			effect() { return new Decimal(5).pow(getBuyableAmount(this.layer, this.id).add(buyableEffect('r', 21))) },
+			display() {
+				let text = '';
+				if (options.nerdMode) text = '<br>formula: 5^x';
+				return 'multiplies glow gain and maximum glow based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' activated relics<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + formatWhole(this.purchaseLimit) + (hasBuyable('r', 21) ? ' + ' + formatWhole(buyableEffect('r', 21)) : '');
+			},
+		},
+		12: {
+			cost() { return new Decimal(2.5).pow(getBuyableAmount(this.layer, this.id)).add(49).floor() },
+			title() {
+				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-r-dark">Gleaming Relics';
+				return '<h3>Gleaming Relics';
+			},
+			canAfford() { return new Decimal(challengeCompletions('r', 11)).gte(this.cost()) },
+			purchaseLimit: 99,
+			buy() { addBuyables(this.layer, this.id, 1) },
+			effect() { return new Decimal(1000).pow(getBuyableAmount(this.layer, this.id).add(buyableEffect('r', 21))) },
+			display() {
+				let text = '';
+				if (options.nerdMode) text = '<br>formula: 1,000^x';
+				return 'multiplies light gain after hardcap based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect(this.layer, this.id)) + 'x' + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' activated relics<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + formatWhole(this.purchaseLimit) + (hasBuyable('r', 21) ? ' + ' + formatWhole(buyableEffect('r', 21)) : '');
+			},
+		},
+		21: {
+			cost() { return new Decimal(5).pow(getBuyableAmount(this.layer, this.id)).mul(75) },
+			title() {
+				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-r-dark">Prismatic Relics';
+				return '<h3>Prismatic Relics';
+			},
+			canAfford() { return new Decimal(challengeCompletions('r', 11)).gte(this.cost()) },
+			purchaseLimit: 99,
+			buy() { addBuyables(this.layer, this.id, 1) },
+			effect() { return getBuyableAmount(this.layer, this.id) },
+			display() {
+				let text = '';
+				if (options.nerdMode) text = '<br>formula: x';
+				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'gives extra levels to <b class="layer-r-dark">Glowing Relics</b> and <b class="layer-r-dark">Gleaming Relics</b> based on the amount of this upgrade bought.<br>Currently: +' + formatWhole(buyableEffect(this.layer, this.id)) + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' activated relics<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + formatWhole(this.purchaseLimit);
+				return 'gives extra levels to <b>Glowing Relics</b> and <b>Gleaming Relics</b> based on the amount of this upgrade bought.<br>Currently: +' + formatWhole(buyableEffect(this.layer, this.id)) + text + '<br><br>Req: ' + formatWhole(this.cost()) + ' activated relics<br><br>Bought: ' + formatWhole(getBuyableAmount(this.layer, this.id)) + '/' + formatWhole(this.purchaseLimit);
+			},
 		},
 	},
 });
@@ -6441,13 +6508,15 @@ addLayer('ch', {
 	getResetGain() {
 		if (tmp.ch.baseAmount.lt(tmp.ch.requires)) return newDecimalZero();
 		let gain = tmp.ch.baseAmount.sub(tmp.ch.requires).div(5).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
-		if (player.ch.points.gte(49)) gain = tmp.ch.baseAmount.sub(tmp.ch.requires).add(1190).div(40).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
+		if (player.ch.points.gte(68)) gain = tmp.ch.baseAmount.sub(tmp.ch.requires).add(5270).div(100).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
+		else if (player.ch.points.gte(49)) gain = tmp.ch.baseAmount.sub(tmp.ch.requires).add(1190).div(40).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
 		else if (player.ch.points.gte(20)) gain = tmp.ch.baseAmount.sub(tmp.ch.requires).add(230).div(20).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
 		else if (player.ch.points.gte(9)) gain = tmp.ch.baseAmount.sub(tmp.ch.requires).add(40).div(10).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
 		return gain.max(0).min(1);
 	},
 	getNextAt() {
-		if (player.ch.points.gte(49)) return player.ch.points.div(this.gainExp()).mul(40).add(tmp.ch.requires).sub(1190);
+		if (player.ch.points.gte(68)) return player.ch.points.div(this.gainExp()).mul(100).add(tmp.ch.requires).sub(5270);
+		else if (player.ch.points.gte(49)) return player.ch.points.div(this.gainExp()).mul(40).add(tmp.ch.requires).sub(1190);
 		else if (player.ch.points.gte(20)) return player.ch.points.div(this.gainExp()).mul(20).add(tmp.ch.requires).sub(230);
 		else if (player.ch.points.gte(9)) return player.ch.points.div(this.gainExp()).mul(10).add(tmp.ch.requires).sub(40);
 		else return player.ch.points.div(this.gainExp()).mul(5).add(tmp.ch.requires);
@@ -6658,6 +6727,18 @@ addLayer('ch', {
 			toggles: [['q', 'auto_buyable_13'], ['q', 'auto_buyable_21']],
 			unlocked() { return player.mo.unlocked },
 		},
+		23: {
+			requirementDescription: '64 chaos',
+			effectDescription: 'the 8th row of hex upgrades and the 8th row of prayer upgrades can be autobought',
+			done() { return player.ch.points.gte(64) },
+			unlocked() { return player.mo.unlocked },
+		},
+		24: {
+			requirementDescription: '70 chaos',
+			effectDescription: 'coming soon...',
+			done() { return player.ch.points.gte(70) },
+			unlocked() { return player.mo.unlocked },
+		},
 	},
 	challenges: {
 		11: {
@@ -6670,7 +6751,7 @@ addLayer('ch', {
 			goal() { return this.goalLayers[challengeCompletions('ch', this.id)] || Infinity },
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' evil influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit },
 			canComplete() { return player.ei.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
-			completionLimit() { return player.ch.points.div(2).floor().max(1).toNumber() },
+			completionLimit() { return player.ch.points.div(2).floor().max(1).min(20).toNumber() },
 			onEnter() { player.gi.unlocked = false },
 			onExit() { player.gi.unlocked = true },
 			rewardDescription: "exponentiates point gain and demon soul gain multiplier based on completions",
@@ -6692,11 +6773,12 @@ addLayer('ch', {
 				if (challengeCompletions('ch', this.id) < 3) return challengeCompletions('ch', this.id) * 25 + 85;
 				if (challengeCompletions('ch', this.id) < 14) return challengeCompletions('ch', this.id) * 50 + 600;
 				if (challengeCompletions('ch', this.id) < 27) return challengeCompletions('ch', this.id) * 400 + 400;
-				return challengeCompletions('ch', this.id) * 500;
+				if (challengeCompletions('ch', this.id) < 32) return challengeCompletions('ch', this.id) * 500;
+				return Infinity;
 			},
 			goalDescription() { return formatWhole(tmp.ch.challenges[this.id].goal) + ' good influence<br>Completions: ' + formatWhole(challengeCompletions('ch', this.id)) + '/' + tmp.ch.challenges[this.id].completionLimit + '<br>' },
 			canComplete() { return player.gi.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
-			completionLimit() { return player.ch.points.div(2).floor().max(1).toNumber() },
+			completionLimit() { return player.ch.points.div(2).floor().max(1).min(32).toNumber() },
 			onEnter() { player.ei.unlocked = false },
 			onExit() { player.ei.unlocked = true },
 			rewardDescription: "exponentiates point gain and prayer gain multiplier based on completions",
@@ -6778,7 +6860,7 @@ addLayer('mo', {
 				else if (getClickableState('mo', 11)) return '<br>You are in an Assimilation Search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click here to exit the search.';
 				else return '<br>Begin an Assimilation search.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
 			},
-			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, Infinity][player.mo.assimilated.length] }, // Next: relics at 57
+			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, 57][player.mo.assimilated.length] || Infinity },
 			canClick() { return getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req) },
 			onClick() {
 				if (player.mo.assimilating !== null) {

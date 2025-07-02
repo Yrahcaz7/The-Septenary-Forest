@@ -9,12 +9,13 @@ const modInfo = {
 
 const VERSION = {
 	num: '3.6',
-	beta: '1',
-	name: 'UNIFICATION',
+	name: 'Even More Assimilation',
 };
 
 const changelog = `<h1>Changelog:</h1><br>
-	<br><h3>v3.6 Beta: UNIFICATION</h3><br>
+	<br><h3>v3.6: Even More Assimilation</h3><br>
+		- Added more to assimilation.<br>
+		- Added two milestones to chaos.<br>
 		- Removed one option.<br>
 		- Added two options.<br>
 		- Improved option style.<br>
@@ -251,6 +252,7 @@ function getLightGain() {
 	if (player.s.glow_effect.gt(1)) gain = gain.mul(player.s.glow_effect);
 	if (hasBuyable('g', 21)) gain = gain.mul(buyableEffect('g', 21)[2]);
 	if (new Decimal(tmp.w.effect[2]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[2]);
+	if (hasBuyable('r', 12)) gain = gain.mul(buyableEffect('r', 12));
 	gain = gain.add(getLightBoost());
 	return gain;
 };
@@ -333,7 +335,7 @@ const displayThings = [
 	() => {if (tmp.gameEnded) return 'You beat the game!<br>For now...'},
 ];
 
-const endPoints = new Decimal('e6e17');
+const endPoints = new Decimal('e1e24');
 
 function onLoad() {
 	calculateColorValue();
