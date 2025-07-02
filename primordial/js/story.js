@@ -1,5 +1,5 @@
 const story = [
-	[`
+    [`
 	"Where am I?"
 	"What am I?"
 	The Being became aware of its existence.
@@ -77,11 +77,12 @@ const story = [
 	"Oh, so <i>that's</i> where I put the arthropod!"
 	The scientist picked up what looked like a mass of goo and teeth, and began staring at it.
 	"What was it called again? A septenagipoda?"
+	...
 	By the time the scientist had put everything in the spacecraft in neat piles, it had arrived at the Comittee.
 `, `
 	"Well, here goes nothing!"
 	The scientist opened the door, and jumped out of the spacecraft.
-	"It's been a long time since i've been here..."
+	"It's been a long time since I've been here..."
 	The scientist started walking across the floating metal platform, towards the towering structure in the center, having no idea what would come next...
 	Building: "Do you have an appointment?"
 	Scientist: "No. LS14H is here to report his findings."
@@ -108,7 +109,7 @@ const story = [
 	Suddenly, the scientist's sample broke its container, as something similar to an explosion seemed to occur.
 `, `
 	The scientist dissapeared in an instant upon contact, and then the strange explosion shrank back down again.
-	The comittee barely had any time to wonder what just happened, as black light broke through the side of the building...
+	The Comittee barely had any time to wonder what just happened, as black light broke through the side of the building...
 	<br><br>And then everything was gone.
 `], [`
 	The Being remembered.
@@ -386,6 +387,57 @@ const story = [
 	Peering into the demon realm time and time again...
 	Until...
 `], [`
+	Deep in the void between worlds, the Wanderer that now had a destination was searching...
+	Searching for the light of hope, their reason to live.
+	The Wanderer glanced at countless worlds, quickly moving on to check another.
+	Time did not pass in the void, but the Wanderer was filled with a sense of urgency nonetheless.
+`, `
+	The Wanderer knew that their pursuit of him was likely futile.
+	After all, how could they find the correct world out of practically infinite ones?
+	However, the Wanderer was used to meandering with no goal in sight.
+	The only difference now was that there was no scenery... and there was an unbearable sense of loss within them.
+`, `
+	Then, before the Wanderer knew it, in the 18,324th world they checked, they saw an ever-bright Sun.
+	The Sun lighting up their life, that had entered the cycle of reincarnation far too soon.
+	The Wanderer quickly entered that world, the world of their hopes and dreams.
+	They flowed through the endless cosmos, flying past countless stars...
+	Until they arrived at their star.
+`, `
+	The Sun was confused, with his memories gradually seeping away.
+	He no longer remembered the Wanderer, only having a vauge sense of familiarity.
+	But the Wanderer calmly chatted with the Sun, easing their anxiety.
+	Internally, however, the Wanderer's heart was constantly tearing apart and healing.
+`, `
+	Soon, the Sun had forgotten everything from before, and his soul fell downwards...
+	Ever downwards, merging into a fetus awaiting a soul.
+	The Wanderer, now a Planet, kept orbiting the soulless sun.
+	The sun that had lost the Sun.
+`, `
+	...
+	Eventually, the Wanderer felt a distubance.
+	They had a nagging feeling that the Sun was about to be born.
+	The Wanderer starting heading towards the origin of that feeling, but then they stopped.
+	They realised that if they fused with that space, they would be stealing time from the Sun.
+	Thus, the Wanderer quickly diverted their path to an empty space nearby.
+`, `
+	As the Wanderer descended, the forces of the world tried to repel them.
+	The world instinctively pushed back against the foreign entity.
+	The Wanderer quickly shed their shell, revealing a different identity.
+	The world paused for a moment, but then quickly resumed its efforts.
+	As the Wanderer shed shell after shell, identity after identity...
+`, `
+	In their last, original form, they finally fell into the material world.
+	This newly-revealed form was of a child of around four years of age.
+	It was from right before the Wanderer was forced to abandon their first identity, creating a shell around themself.
+	The Wanderer didn't mind this, as the shells were of no use now.
+	They wanted to present themself to the Sun, their true self.
+	Of course, the Wanderer knew they would still be unable to say what they truly wanted to.
+`, `
+	However, the Wanderer put that thought at the back of their mind and started seeking a place to live.
+	Perhaps some adoptive parents too; it had been a while since they last had those.
+	Then, the Wanderer whispered a line to themself that resonated deep within their soul:
+	"O Sun, the ever-bright Sun of my life, this Wandering Planet shall return to your side soon."
+`], [`
 	More story coming soon!
 `]];
 
@@ -398,6 +450,7 @@ const storyNames = [
 	["Records of the Founder", () => randomStr(7) + " " + randomStr(2) + " " + randomStr(3) + " " + randomStr(7)],
 	["Magnificent Structures", () => randomStr(11) + " " + randomStr(10)],
 	["Influence of Knowledge", () => randomStr(9) + " " + randomStr(2) + " " + randomStr(9)],
+	["The Wanderer's Pursuit", () => randomStr(3) + " " + randomStr(10) + " " + randomStr(7)],
 	["Coming Soon", () => "Coming Soon"],
 ];
 
@@ -410,6 +463,7 @@ const storyColors = [
 	[],
 	["#AAFF00", "#B9A975"],
 	["#00CCCC", "#08FF87"],
+	[],
 ];
 
 for (let index = 0; index < story.length; index++) {
@@ -437,6 +491,7 @@ function filterStory(string) {
 	if (player.ch.best.toNumber() < storyLength(5)) string = string.replace(/human|home|lead|chief/gi, match => randomStr(match.length));
 	if (player.ch.best.toNumber() < storyLength(6)) string = string.replace(/structure|warmpth/gi, match => randomStr(match.length));
 	if (player.ch.best.toNumber() < storyLength(7)) string = string.replace(/combination|construct|force/gi, match => randomStr(match.length));
+	if (player.ch.best.toNumber() < storyLength(8)) string = string.replace(/wanderer|sun|soul|planet/gi, match => randomStr(match.length));
 	return string;
 };
 

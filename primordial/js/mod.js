@@ -15,6 +15,7 @@ const VERSION = {
 const changelog = `<h1>Changelog:</h1><br>
 	<br><h3>v3.6: Even More Assimilation</h3><br>
 		- Added more to assimilation.<br>
+		- Added more to stories.<br>
 		- Added two milestones to chaos.<br>
 		- Removed one option.<br>
 		- Added two options.<br>
