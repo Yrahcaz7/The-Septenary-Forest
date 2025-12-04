@@ -6622,6 +6622,7 @@ addLayer('ch', {
 		points: newDecimalZero(),
 		best: newDecimalZero(),
 		total: newDecimalZero(),
+		deciphering: true,
 	}},
 	color: '#FFFFFF',
 	nodeStyle() {
@@ -6638,19 +6639,22 @@ addLayer('ch', {
 	type: 'custom',
 	getResetGain() {
 		if (tmp.ch.baseAmount.lt(tmp.ch.requires)) return newDecimalZero();
-		let gain = tmp.ch.baseAmount.sub(tmp.ch.requires).div(5).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
-		if (player.ch.points.gte(68)) gain = tmp.ch.baseAmount.sub(tmp.ch.requires).add(5270).div(100).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
-		else if (player.ch.points.gte(49)) gain = tmp.ch.baseAmount.sub(tmp.ch.requires).add(1190).div(40).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
-		else if (player.ch.points.gte(20)) gain = tmp.ch.baseAmount.sub(tmp.ch.requires).add(230).div(20).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
-		else if (player.ch.points.gte(9)) gain = tmp.ch.baseAmount.sub(tmp.ch.requires).add(40).div(10).mul(this.gainExp()).floor().sub(player.ch.points).add(1);
-		return gain.max(0).min(1);
+		let gain = tmp.ch.baseAmount.sub(tmp.ch.requires);
+		if (player.ch.points.gte(68)) gain = gain.add(5270).div(100);
+		else if (player.ch.points.gte(49)) gain = gain.add(1190).div(40);
+		else if (player.ch.points.gte(20)) gain = gain.add(230).div(20);
+		else if (player.ch.points.gte(9)) gain = gain.add(40).div(10);
+		else gain = gain.div(5);
+		return gain.mul(this.gainExp()).floor().sub(player.ch.points).add(1).max(0).min(1);
 	},
 	getNextAt() {
-		if (player.ch.points.gte(68)) return player.ch.points.div(this.gainExp()).mul(100).add(tmp.ch.requires).sub(5270);
-		else if (player.ch.points.gte(49)) return player.ch.points.div(this.gainExp()).mul(40).add(tmp.ch.requires).sub(1190);
-		else if (player.ch.points.gte(20)) return player.ch.points.div(this.gainExp()).mul(20).add(tmp.ch.requires).sub(230);
-		else if (player.ch.points.gte(9)) return player.ch.points.div(this.gainExp()).mul(10).add(tmp.ch.requires).sub(40);
-		else return player.ch.points.div(this.gainExp()).mul(5).add(tmp.ch.requires);
+		var next = player.ch.points.div(this.gainExp());
+		if (player.ch.points.gte(68)) next = next.mul(100).sub(5270);
+		else if (player.ch.points.gte(49)) next = next.mul(40).sub(1190);
+		else if (player.ch.points.gte(20)) next = next.mul(20).sub(230);
+		else if (player.ch.points.gte(9)) next = next.mul(10).sub(40);
+		else next = next.mul(5);
+		return next.add(tmp.ch.requires);
 	},
 	canReset() { return this.getResetGain().gt(0) },
 	prestigeNotify() { return this.getResetGain().gt(0) },
@@ -6673,7 +6677,7 @@ addLayer('ch', {
 	]},
 	effectDescription() { return 'which multiplies essence gain by <h2 class="layer-ch">' + format(tmp.ch.effect[0]) + '</h2>x, multiplies war gain by <h2 class="layer-ch">' + format(tmp.ch.effect[1]) + '</h2>x, and multiplies protein found from cellular life by <h2 class="layer-ch">' + format(tmp.ch.effect[2]) + '</h2>x' },
 	doReset(resettingLayer) {
-		const keep = [];
+		const keep = ["deciphering"];
 		if (layers[resettingLayer].row > this.row) layerDataReset('ch', keep);
 	},
 	tabFormat: {
@@ -6686,6 +6690,9 @@ addLayer('ch', {
 		},
 		Story: {
 			content: getTab('ch', "Story"),
+		},
+		Keywords: {
+			content: getTab('ch', "Keywords"),
 		},
 	},
 	milestones: {

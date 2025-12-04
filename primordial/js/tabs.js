@@ -193,7 +193,15 @@ function getRawTabContent(layer, name = "") {
 			content.push("milestones");
 		};
 	} else if (layer == "ch") {
-		if (name == "Story") {
+		if (name == "Keywords") {
+			let keywords = getDecipheredKeywords();
+			if (keywords.length > 0) keywords[keywords.length - 1] = "and " + keywords[keywords.length - 1];
+			const next = nextStorySegmentFinishesAt();
+			content.push(["display-text", 'For each fully unlocked story segment, you decipher some keywords.<br><br>You have deciphered <h2 class="layer-ch">' + formatWhole(keywords.length) + '</h2> keywords so far.' + (keywords.length > 0 ? '<br><br>These keywords are: ' + keywords.join(", ") + '.' : '') + (next == Infinity ? 'You have deciphered all the keywords that currently exist.' : '<br><br>More keywords will be deciphered at ' + formatWhole(next) + ' chaos.')]);
+			content.push("blank");
+			content.push(["row", [["display-text", "Keyword deciphering is&nbsp;"], ["toggle", ["ch", "deciphering"]]]]);
+			content.push("blank");
+		} else if (name == "Story") {
 			for (let index = 0; index < story.length; index++) {
 				content.push(["infobox", "story" + index]);
 			};

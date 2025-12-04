@@ -478,21 +478,56 @@ const story = [
 	Now, the Being aimed to fix that.
 	Condensing all of its Molecules, the Being aimed to create a fifteenth color in the void.
 `], [`
-	More story coming soon!
+	Once again, the Being faced failure.
+	Trying to understand why, it delved into its sea of knowledge once again.
+	Then, it found the reason: It had underestimated the complexity of cells.
+	The small gaps in its knowledge were too large to be filled by instinct.
+	But the Being did not give up.
+`, `
+	The Being tried again and again, using up countless Molecules in its attempts.
+	As the Being had infinite time in the void, there was nothing stopping it from just trying every single possible combination.
+	So it tried innumerable times, getting closer and closer to the correct composition.
+	However, it started running low on Molecules.
+`, `
+	Nonetheless, the Being continued.
+	And once it reached the last batch of Molecules, it finally succeeded.
+	As if it was fate's design, the Being had finally created Cellular Life.
+	The Being reveled at this massive step forward.
+	It was now much closer to being able to create a new world.
+`, `
+	The Being continued with its new cycle, creating vast amounts of Cellular Life.
+	As it cycled, it refined the concept and its components, making the cells more complete.
+	The Being reached great heights, but as always, the cycle gradually slowed.
+	Turning its attention to Wars to solve the problem, the Being wondered what condensing them would make.
+`, `
+	The Being wondered if it was even possible to condense such a self-conflicting force.
+	However, it had to choice but to try.
+	The Being gathered all of its Wars, ready to begin the attempt.
+	But then, the Wars suddenly started converging all on their own.
+`, `
+	The clouds of grayish light swirled around one another, constantly morphing into different strange shapes.
+	The gray shapes drew closer to each other, overlapping, creating a vortex.
+	The Being, at first delighted, now found it strange and ominous.
+	Yet the process had already reached the point of no return.
+`, `
+	The gray vortex began relentlessly pulling in all of the other colors in the void.
+	The vortex constantly changed colors as it absorbed everything in the surroundings.
+	Then, as the vortex condensed into a singular point of light, its color morphed into a blinding white.
+	And thus, Chaos was born.
 `]];
 
 const storyNames = [
-	["The Endless Void", () => randomStr(3) + " " + randomStr(7) + " " + randomStr(4)],
-	["The World's End", () => randomStr(3) + " " + randomStr(7) + " " + randomStr(3)],
-	["Knowledge of the Old World", () => randomStr(9) + " " + randomStr(2) + " " + randomStr(3) + " " + randomStr(3) + " " + randomStr(5)],
-	["Negative Emotions Given Form", () => randomStr(8) + " " + randomStr(8) + " " + randomStr(5) + " " + randomStr(4)],
-	["Hope and Faith", () => randomStr(4) + " " + randomStr(3) + " " + randomStr(5)],
-	["Records of the Founder", () => randomStr(7) + " " + randomStr(2) + " " + randomStr(3) + " " + randomStr(7)],
-	["Magnificent Structures", () => randomStr(11) + " " + randomStr(10)],
-	["Influence of Knowledge", () => randomStr(9) + " " + randomStr(2) + " " + randomStr(9)],
-	["The Wanderer's Pursuit", () => randomStr(3) + " " + randomStr(10) + " " + randomStr(7)],
-	["The Great Unification", () => randomStr(3) + " " + randomStr(5) + " " + randomStr(11)],
-	["Coming Soon", () => "Coming Soon"],
+	"The Endless Void",
+	"The World's End",
+	"Knowledge of the Old World",
+	"Negative Emotions Given Form",
+	"Hope and Faith",
+	"Records of the Founder",
+	"Magnificent Structures",
+	"Influence of Knowledge",
+	"The Wanderer's Pursuit",
+	"The Great Unification",
+	"And thus, Chaos was Born",
 ];
 
 const storyColors = [
@@ -506,6 +541,21 @@ const storyColors = [
 	["#00CCCC", "#08FF87"],
 	[],
 	["#FF4400", "#A0A0A0"],
+	["#008800", "#FFFFFF"],
+];
+
+const storyKeywords = [
+	["void", "spark", "cycle"],
+	["pitch", "black", "light"],
+	["knowledge", "memories"],
+	["anger", "hatred", "curses", "hate"],
+	["warm", "fuzzy", "feeling", "happiness"],
+	["human", "home", "lead", "chief"],
+	["structure", "warmpth"],
+	["combination", "construct", "force"],
+	["wanderer", "sun", "soul", "planet"],
+	["despair", "balance", "equilibrium"],
+	["fate", "life", "vortex"],
 ];
 
 for (let index = 0; index < story.length; index++) {
@@ -524,17 +574,24 @@ function storyLength(number) {
 	return length;
 };
 
+function getDecipheredKeywords() {
+	let keywords = [];
+	for (let index = 0; index < storyKeywords.length; index++) {
+		if (player.ch.best.toNumber() >= storyLength(index)) {
+			keywords.push(...storyKeywords[index]);
+		};
+	};
+	return keywords;
+};
+
+const storyFilters = storyKeywords.map(arr => RegExp(arr.join("|"), "gi"));
+
 function filterStory(string) {
-	if (player.ch.best.toNumber() < storyLength(0)) string = string.replace(/void|spark|cycle/gi, match => randomStr(match.length));
-	if (player.ch.best.toNumber() < storyLength(1)) string = string.replace(/pitch|black|light/gi, match => randomStr(match.length));
-	if (player.ch.best.toNumber() < storyLength(2)) string = string.replace(/knowledge|memories/gi, match => randomStr(match.length));
-	if (player.ch.best.toNumber() < storyLength(3)) string = string.replace(/anger|hatred|curses|hate/gi, match => randomStr(match.length));
-	if (player.ch.best.toNumber() < storyLength(4)) string = string.replace(/warm|fuzzy|feeling|happiness/gi, match => randomStr(match.length));
-	if (player.ch.best.toNumber() < storyLength(5)) string = string.replace(/human|home|lead|chief/gi, match => randomStr(match.length));
-	if (player.ch.best.toNumber() < storyLength(6)) string = string.replace(/structure|warmpth/gi, match => randomStr(match.length));
-	if (player.ch.best.toNumber() < storyLength(7)) string = string.replace(/combination|construct|force/gi, match => randomStr(match.length));
-	if (player.ch.best.toNumber() < storyLength(8)) string = string.replace(/wanderer|sun|soul|planet/gi, match => randomStr(match.length));
-	if (player.ch.best.toNumber() < storyLength(9)) string = string.replace(/despair|balance|equilibrium/gi, match => randomStr(match.length));
+	for (let index = 0; index < storyFilters.length; index++) {
+		if (player.ch.best.toNumber() < storyLength(index) || !player.ch.deciphering) {
+			string = string.replace(storyFilters[index], match => randomStr(match.length));
+		};
+	};
 	return string;
 };
 
@@ -544,8 +601,8 @@ function getChaosInfoBoxes() {
 		const boxID = 'story' + row;
 		infoBoxes[boxID] = {
 			title() {
-				if (player.ch.best.toNumber() >= storyLength(row)) return '<span style="margin-left: 2px">' + storyNames[row][0];
-				else return '<span style="margin-left: 2px">' + storyNames[row][1]();
+				if (player.ch.best.toNumber() >= storyLength(row)) return '<span style="margin-left: 2px">' + storyNames[row];
+				return '<span style="margin-left: 2px">' + storyNames[row].replace(/[A-Za-z0-9]/g, () => randomStr(1));
 			},
 			body() {
 				let text = '';
@@ -569,7 +626,17 @@ function getChaosInfoBoxes() {
 	return infoBoxes;
 };
 
+function nextStorySegmentFinishesAt() {
+	const chaos = player.ch.best.toNumber();
+	let length = 0;
+	for (let index = 0; index < story.length && chaos > length; index++) {
+		length += story[index].length;
+	};
+	if (chaos > length) return Infinity;
+	return length;
+};
+
 function getNextStoryAt() {
-	if (player.ch.best.toNumber() < storyLength(Infinity)) return "<br><br>Next story discovery is at " + formatWhole(player.ch.best.add(1)) + " chaos.";
+	if (player.ch.best.toNumber() < storyLength(Infinity)) return "<br><br>Next story discovery is at " + formatWhole(player.ch.best.add(1)) + " chaos.<br><br>Next story segment finishes at " + nextStorySegmentFinishesAt() + " chaos.";
 	return "<br><br>All story discoveries found; wait for updates for more!";
 };
