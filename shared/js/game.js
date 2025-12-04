@@ -20,12 +20,13 @@ function getResetGain(layer, useType = null) {
 	if (type == "static") {
 		if ((!tmp[layer].canBuyMax) || tmp[layer].baseAmount.lt(tmp[layer].requires)) return newDecimalOne();
 		let gain = tmp[layer].baseAmount.div(tmp[layer].requires).div(tmp[layer].gainMult).max(1).log(tmp[layer].base).mul(tmp[layer].gainExp).pow(Decimal.pow(tmp[layer].exponent, -1));
+		gain = softcap(gain, tmp[layer].softcap, tmp[layer].softcapPower);
 		gain = gain.mul(tmp[layer].directMult);
 		return gain.floor().sub(player[layer].points).add(1).max(1);
 	} else if (type == "normal") {
 		if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return newDecimalZero();
 		let gain = tmp[layer].baseAmount.div(tmp[layer].requires).pow(tmp[layer].exponent).mul(tmp[layer].gainMult).pow(tmp[layer].gainExp);
-		if (gain.gte(tmp[layer].softcap)) gain = gain.pow(tmp[layer].softcapPower).mul(tmp[layer].softcap.pow(newDecimalOne().sub(tmp[layer].softcapPower)));
+		gain = softcap(gain, tmp[layer].softcap, tmp[layer].softcapPower);
 		if (tmp[layer].logged) gain = gain.add(1).log(tmp[layer].logged === true ? 10 : tmp[layer].logged);
 		gain = gain.mul(tmp[layer].directMult);
 		return gain.floor().max(0);
@@ -45,31 +46,37 @@ function getNextAt(layer, canMax = false, useType = null) {
 		};
 	};
 	if (tmp[layer].type == "none" || tmp[layer].gainMult.lte(0) || tmp[layer].gainExp.lte(0)) {
-		return new Decimal(Infinity);
+		return newDecimalInf();
 	} else if (type == "static") {
 		if (!tmp[layer].canBuyMax) canMax = false;
-		const amt = player[layer].points.add(canMax && tmp[layer].baseAmount.gte(tmp[layer].nextAt) ? tmp[layer].resetGain : 0).div(tmp[layer].directMult);
-		const extraCost = Decimal.pow(tmp[layer].base, amt.pow(tmp[layer].exponent).div(tmp[layer].gainExp)).mul(tmp[layer].gainMult);
+		let next = player[layer].points.add(canMax && tmp[layer].baseAmount.gte(tmp[layer].nextAt) ? tmp[layer].resetGain : 0).div(tmp[layer].directMult);
+		next = inverseSoftcap(next, tmp[layer].softcap, tmp[layer].softcapPower);
+		const extraCost = Decimal.pow(tmp[layer].base, next.pow(tmp[layer].exponent).div(tmp[layer].gainExp)).mul(tmp[layer].gainMult);
 		let cost = extraCost.mul(tmp[layer].requires).max(tmp[layer].requires);
 		if (tmp[layer].roundUpCost) cost = cost.ceil();
 		return cost;
 	} else if (type == "normal") {
 		let next = tmp[layer].resetGain.add(1).div(tmp[layer].directMult);
 		if (tmp[layer].logged) next = next.pow_base(tmp[layer].logged === true ? 10 : tmp[layer].logged).sub(1);
-		if (next.gte(tmp[layer].softcap)) next = next.div(tmp[layer].softcap.pow(newDecimalOne().sub(tmp[layer].softcapPower))).pow(newDecimalOne().div(tmp[layer].softcapPower));
+		next = inverseSoftcap(next, tmp[layer].softcap, tmp[layer].softcapPower);
 		next = next.root(tmp[layer].gainExp).div(tmp[layer].gainMult).root(tmp[layer].exponent).mul(tmp[layer].requires).max(tmp[layer].requires);
 		if (tmp[layer].roundUpCost) next = next.ceil();
 		return next;
 	} else if (type == "custom") {
 		return layers[layer].getNextAt(canMax);
 	} else {
-		return newDecimalZero();
+		return newDecimalInf();
 	};
 };
 
 function softcap(value, cap, power = 0.5) {
 	if (value.lte(cap)) return value;
 	return value.pow(power).mul(cap.pow(newDecimalOne().sub(power)));
+};
+
+function inverseSoftcap(value, cap, power = 0.5) {
+	if (value.lte(cap)) return value;
+	return value.mul(cap.pow(new Decimal(power).sub(1))).pow(newDecimalOne().div(power));
 };
 
 // Return true if the layer should be highlighted. By default checks for upgrades only.

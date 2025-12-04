@@ -16,7 +16,8 @@ const changelog = `<h1>Changelog:</h1><br>
 	<br><h3>v3.6: Even More Assimilation</h3><br>
 		- Added more to assimilation.<br>
 		- Added more to story.<br>
-		- Added three milestones to chaos.<br>
+		- Added five milestones to chaos.<br>
+		- Added one achievement.<br>
 		- Removed one option.<br>
 		- Added two options.<br>
 		- Improved option style.<br>
@@ -194,7 +195,7 @@ function getdark(darkthis, type, special = false, research = false) {
 				else darkcanafford = player[darkthis.layer].points.gte(darkthis.cost);
 				if ((darkcanafford && !hasUpgrade(darkthis.layer, darkthis.id)) || (type == 'title-hasend' && hasUpgrade(darkthis.layer, darkthis.id))) return '-dark">';
 			};
-		} else if (type == 'title-light' && colorValue[0][0]) {
+		} else if ((type == 'title-light' && colorValue[0][0]) || (type == 'ref-light' && colorValue[0][1])) {
 			let darkcanafford = false;
 			if (special) darkcanafford = darkthis.canAfford();
 			else darkcanafford = player[darkthis.layer].points.gte(darkthis.cost);
@@ -254,6 +255,7 @@ function getLightGain() {
 	if (hasBuyable('g', 21)) gain = gain.mul(buyableEffect('g', 21)[2]);
 	if (new Decimal(tmp.w.effect[2]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[2]);
 	if (hasBuyable('r', 12)) gain = gain.mul(buyableEffect('r', 12));
+	if (hasUpgrade('m', 61)) gain = gain.mul(upgradeEffect('m', 61));
 	gain = gain.add(getLightBoost());
 	return gain;
 };
@@ -330,21 +332,17 @@ function getPointGen() {
 	return gain;
 };
 
-function addedPlayerData() {return {}};
+function addedPlayerData() { return {} };
 
 const displayThings = [
-	() => {if (tmp.gameEnded) return 'You beat the game!<br>For now...'},
+	() => { if (tmp.gameEnded) return 'You beat the game!<br>For now...' },
 ];
 
-const endPoints = new Decimal('e2e25');
+const endPoints = new Decimal('e1e33');
 
-function onLoad() {
-	calculateColorValue();
-};
+function onLoad() { calculateColorValue() };
 
-function maxTickLength() {
-	return 1;
-};
+function maxTickLength() { return 1 };
 
 function removeAchievement(id = NaN) {
 	for (var i = 0; i < player.A.achievements.length; i++) {

@@ -10,7 +10,13 @@ const softcaps = {
 		if (isAssimilated('p') || player.mo.assimilating === 'p') return 0.96;
 		return 0.95;
 	}],
-	m_eff: [15000, 0.5],
+	m_eff: [() => {
+		if (isAssimilated('m') || player.mo.assimilating === 'm') return 1e9;
+		return 15000;
+	}, () => {
+		if (isAssimilated('m') || player.mo.assimilating === 'm') return 0.51;
+		return 0.5;
+	}],
 	r_eff1: ['e1000000', 0.2],
 	gi_eff: ['1e2500', 0.6666666666666666],
 };
@@ -57,6 +63,9 @@ addLayer('SC', {
 		if (tmp.gi.effect.gte(softcaps.gi_eff[0]) && !tmp.gi.deactivated && !(hasMilestone('gi', 18) && player.h.limitsBroken >= 4)) {
 			player.SC.softcaps.push("gi-eff");
 		};
+		if (player.ei.points.gte(tmp.ei.softcap) && !tmp.ei.deactivated) {
+			player.SC.softcaps.push("ei");
+		};
 		player.SC.points = new Decimal(player.SC.softcaps.length);
 	},
 	tabFormat: [
@@ -70,8 +79,9 @@ addLayer('SC', {
 			if (player.SC.softcaps.includes("ds")) text += '<br><h2 class="layer-ds">Demon Soul Gain Softcap</h2><br>starts at ' + format(tmp.ds.softcap) + ', gain to ^' + format(tmp.ds.softcapPower) + '<br>';
 			if (player.SC.softcaps.includes("p-eff")) text += '<br><h2 class="layer-p">Prayer Effect Softcap</h2><br>starts at ' + format(softcaps.p_eff[0]()) + ', effect to ^' + format(softcaps.p_eff[1]()) + '<br>';
 			if (player.SC.softcaps.includes("r-eff1")) text += '<br><h2 class="layer-r">Relic\'s First Effect Softcap</h2><br>starts at ' + format(softcaps.r_eff1[0]) + ', effect to ^' + format(softcaps.r_eff1[1]) + '<br>';
-			if (player.SC.softcaps.includes("m-eff")) text += '<br><h2 class="layer-m">Molecule Effect Softcap</h2><br>starts at ' + format(softcaps.m_eff[0]) + ', effect to ^' + format(softcaps.m_eff[1]) + '<br>';
+			if (player.SC.softcaps.includes("m-eff")) text += '<br><h2 class="layer-m">Molecule Effect Softcap</h2><br>starts at ' + format(softcaps.m_eff[0]()) + ', effect to ^' + format(softcaps.m_eff[1]()) + '<br>';
 			if (player.SC.softcaps.includes("gi-eff")) text += '<br><h2 class="layer-gi">Good Influence Effect Softcap</h2><br>starts at ' + format(softcaps.gi_eff[0]) + ', effect to ^' + format(softcaps.gi_eff[1]) + '<br>';
+			if (player.SC.softcaps.includes("ei")) text += '<br><h2 class="layer-ei">Evil Influence Gain Softcap</h2><br>starts at ' + format(tmp.ei.softcap) + ', gain to ^' + format(tmp.ei.softcapPower) + '<br>';
 			return text;
 		}],
 	],

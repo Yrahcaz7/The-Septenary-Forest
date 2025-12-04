@@ -8,6 +8,10 @@ function newDecimalOne() {
 	return new Decimal(Decimal.dOne);
 };
 
+function newDecimalInf() {
+	return new Decimal(Decimal.dInf);
+};
+
 const defaultGlow = "#ff0000";
 
 function layerShown(layer) {
@@ -133,7 +137,7 @@ function setupLayer(layer) {
 				};
 				layers[layer].buyables[thing].canBuy = function() {return canBuyBuyable(this.layer, this.id)};
 				if (layers[layer].buyables[thing].purchaseLimit === undefined) {
-					layers[layer].buyables[thing].purchaseLimit = new Decimal(Infinity);
+					layers[layer].buyables[thing].purchaseLimit = newDecimalInf();
 				};
 			};
 		};
@@ -194,7 +198,10 @@ function setupLayer(layer) {
 	if (layers[layer].directMult === undefined) layers[layer].directMult = newDecimalOne();
 	if (layers[layer].type === undefined) layers[layer].type = "none";
 	if (layers[layer].base === undefined || layers[layer].base <= 1) layers[layer].base = 2;
-	if (layers[layer].softcap === undefined) layers[layer].softcap = new Decimal("e1e7");
+	if (layers[layer].softcap === undefined) {
+		if (layers[layer].type == "normal") layers[layer].softcap = new Decimal("e1e7");
+		else layers[layer].softcap = newDecimalInf();
+	};
 	if (layers[layer].softcapPower === undefined) layers[layer].softcapPower = new Decimal(0.5);
 	if (layers[layer].displayRow === undefined) layers[layer].displayRow = layers[layer].row;
 	if (layers[layer].name === undefined) layers[layer].name = layer;

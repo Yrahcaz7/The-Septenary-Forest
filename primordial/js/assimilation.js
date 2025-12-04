@@ -38,12 +38,12 @@ const assimilationReq = {
 	p: new Decimal('1e2000'),
 	s: new Decimal(52),
 	r: new Decimal(95),
-	m: new Decimal(Infinity),
-	gi: new Decimal(Infinity),
-	ei: new Decimal(Infinity),
-	w: new Decimal(Infinity),
-	cl: new Decimal(Infinity),
-	ch: new Decimal(Infinity),
+	m: new Decimal(1e64),
+	gi: newDecimalInf(),
+	ei: newDecimalInf(),
+	w: newDecimalInf(),
+	cl: newDecimalInf(),
+	ch: newDecimalInf(),
 };
 
 // completes an assimilation run
@@ -183,6 +183,13 @@ function getAssimilationRewards() {
 		text += 'Unlocks three new relic rebuyables: <b class="layer-r">Glowing Relics</b>, <b class="layer-r">Gleaming Relics</b>, and <b class="layer-r">Prismatic Relics</b><br>';
 		text += 'Reduces relic activation requirement scaling (5 --> 3)<br>';
 		text += 'Removes the softcap on relic\'s first effect';
+	};
+	if (isAssimilated('m')) {
+		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-m">Molecules</h2><br><br>';
+		text += 'Makes all previous molecule upgrades always unlockable<br>';
+		text += 'Unlocks three new molecule upgrades: <b class="layer-m">Ne<span style="font-size: 0.8em">2</span>, Neon</b>, <b class="layer-m">C<span style="font-size: 0.8em">6</span>H<span style="font-size: 0.8em">5</span>NH<span style="font-size: 0.8em">2</span>, Aniline</b>, and <b class="layer-m">[Ru(NH<span style="font-size: 0.8em">3</span>)<span style="font-size: 0.8em">5</span>(N<span style="font-size: 0.8em">2</span>)]Cl<span style="font-size: 0.8em">2</span></b><br>';
+		text += 'Makes the molecule effect softcap start later (15,000 --> 1e9)<br>';
+		text += 'Makes the molecule effect softcap weaker (^0.5 --> ^0.51)';
 	};
 	text = text.replace("<br><br>", "");
 	if (colorValue[1] === 'none') text = text.replace(/<b class="layer-.{1,2}">/g, "<b>");

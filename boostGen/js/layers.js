@@ -1092,7 +1092,7 @@ addLayer("sg", {
 				return 1.25;
 			},
 			cost() {
-				if (getBuyableAmount("sg", this.id).gte(10)) return new Decimal(Infinity);
+				if (getBuyableAmount("sg", this.id).gte(10)) return newDecimalInf();
 				return new Decimal("1e420").mul(new Decimal(1e141).pow(getBuyableAmount("sg", this.id).pow(this.exponent()).add(1)));
 			},
 			canAfford() {return player.g.points.gte(this.cost()) && player.sg.capacity.gte(getBoughtSuperGenerators().add(1))},

@@ -102,12 +102,13 @@ You can make almost any value dynamic by using a function in its place, includin
 - `roundUpCost`: **optional**. A boolean, which is true if the resource cost needs to be rounded up. (Use if the base resource is a "static" currency.)
 
 - `gainMult()`, `gainExp()`: **optional**. For normal layers, these functions calculate the multiplier and exponent on resource gain from upgrades and boosts and such. Plug in most bonuses here.
-    For static layers, they instead multiply and roots the cost of the resource. (So to make a boost you want to make gainMult smaller and gainExp larger.)
+    For static layers, they instead multiply and root the cost of the resource. (So to make a boost you want to make gainMult smaller and gainExp larger.)
 
 - `directMult()`: **optional**. Directly multiplies the resource gain, after exponents and softcaps. For static layers, actually multiplies resource gain instead of reducing the cost.
 
-- `softcap`, `softcapPower`: **optional**. For normal layers, gain beyond [softcap] points is put to the [softcapPower]th power
-    Default for softcap is e1e7, and for power is 0.5.
+- `softcap`, `softcapPower`: **optional**. Gain beyond `softcap` points is put to the `softcapPower`th power.
+    For normal layers, the default for `softcap` is `e1e7`, and for other types of layers, the default for `softcap` is `Infinity`.
+    The default for `softcapPower` is always `0.5`.
 
 ## Other prestige-related features
 

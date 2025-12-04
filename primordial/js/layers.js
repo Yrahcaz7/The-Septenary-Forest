@@ -2693,17 +2693,26 @@ addLayer('a', {
 		61: {
 			title() { return '<b class="layer-a' + getdark(this, "title") + 'Unpeaked' },
 			description() {
+				if (getClickableState('a', 11) >= 6) return 'multiplies atom gain based on your total atoms';
 				if (hasMilestone('m', 11)) return 'multiplies atom gain by 15.00x';
 				return 'multiplies atom gain based on your total atoms minus your best atoms';
 			},
 			cost: 3,
 			effect() {
+				if (getClickableState('a', 11) >= 6) {
+					return player.a.total.add(1).pow(0.02);
+				};
 				const eff = player.a.total.sub(player.a.best).add(1).pow(0.2);
 				const hardcap = new Decimal(15);
 				if (eff.gt(hardcap) || hasMilestone('m', 11)) return hardcap;
 				return eff;
 			},
 			effectDisplay() {
+				if (getClickableState('a', 11) >= 6) {
+					text = format(this.effect()) + 'x';
+					if (options.nerdMode) text += '<br>formula: (x+1)^0.02';
+					return text;
+				};
 				if (hasMilestone('m', 11)) return 'max effect';
 				if (this.effect().gte(15)) text = format(this.effect()) + 'x<br>(hardcapped)';
 				else text = format(this.effect()) + 'x';
@@ -2806,7 +2815,9 @@ addLayer('a', {
 			title() { return '<b class="layer-a' + getdark(this, "clickable") + 'Atomic Reactor' },
 			display() {
 				const num = getClickableState('a', 11) || 0;
-				let text = 'Removes maximums on the effects of atom upgrades, but worsens the respective effect formulas.<br><br>Next Effect: ' + (this.upgrades[num] ? 'Removes the maximum of ' + tmp.a.upgrades[this.upgrades[num]].title + '</b>\'s effect, but worsen its effect formula.' : 'You have all the effects!') + '<br><br>Upgrades Affected:';
+				let text = 'Removes maximums on the effects of atom upgrades, but worsens the respective effect formulas.<br><br>';
+				text += 'Next Effect: ' + (this.upgrades[num] ? 'Removes the maximum of ' + tmp.a.upgrades[this.upgrades[num]].title + '</b>\'s effect, but ' + (this.upgrades[num] == 61 ? 'change' : 'worsen') + ' its effect formula.' : 'You have all the effects!');
+				text += '<br><br>Upgrades Affected:';
 				if (num > 0) {
 					for (let index = 0; index < num; index++) {
 						text += '<br>' + tmp.a.upgrades[this.upgrades[index]].title + '</b>';
@@ -2819,9 +2830,9 @@ addLayer('a', {
 				else text = text.replace(/layer-a-dark/g, 'layer-a');
 				return text;
 			},
-			upgrades: [33, 22, 32, 62, 72],
+			upgrades: [33, 22, 32, 62, 72, 61],
 			assimilationReq: [36000, 61000],
-			req: ['1e690', '1e728', '1e771', '1e912', '1e1221'],
+			req: ['1e690', '1e728', '1e771', '1e912', '1e1221', '1e1500'],
 			cost() {
 				const num = getClickableState('a', 11) || 0;
 				if (player.mo.assimilating === this.layer) {
@@ -4411,7 +4422,7 @@ addLayer('r', {
 	buyables: {
 		11: {
 			cost() {
-				let cost = new Decimal(2).pow(getBuyableAmount(this.layer, this.id)).mul(10);
+				let cost = new Decimal(hasMilestone('r', 4) ? 1.75 : 2).pow(getBuyableAmount(this.layer, this.id)).mul(10);
 				if (hasMilestone('r', 2)) cost = cost.div(milestoneEffect('r', 2));
 				return cost.add(1e-10).floor();
 			},
@@ -4451,7 +4462,7 @@ addLayer('r', {
 		},
 		21: {
 			cost() {
-				let cost = new Decimal(hasMilestone('r', 1) ? 2 : 4).pow(getBuyableAmount(this.layer, this.id)).mul(75);
+				let cost = new Decimal(hasMilestone('r', 1) ? (hasMilestone('r', 5) ? 1.5 : 2) : 4).pow(getBuyableAmount(this.layer, this.id)).mul(75);
 				if (hasMilestone('r', 2)) cost = cost.div(milestoneEffect('r', 2));
 				return cost.add(1e-10).floor();
 			},
@@ -4493,6 +4504,25 @@ addLayer('r', {
 			effect() { return new Decimal(challengeCompletions('r', 11)).add(1).pow(0.0252) },
 			effectDescription() { return 'multiply multicellular organism gain based on your activated relics (currently ' + format(milestoneEffect(this.layer, this.id)) + 'x)' },
 			done() { return player.r.points.gte(2e13) && isAssimilated('r') && hasMilestone('ch', 25) },
+		},
+		4: {
+			requirementDescription: '1e14 relics',
+			effectDescription: 'reduce requirement scaling of <b class="layer-r-dark">Glowing Relics</b> (2 --> 1.75)',
+			done() { return player.r.points.gte(1e14) && isAssimilated('r') && hasMilestone('ch', 25) && hasMilestone('ch', 26) },
+			unlocked() { return hasMilestone('ch', 26) },
+		},
+		5: {
+			requirementDescription: '1e15 relics',
+			effectDescription: 'reduce requirement scaling of <b class="layer-r-dark">Prismatic Relics</b> (2 --> 1.5)',
+			done() { return player.r.points.gte(1e15) && isAssimilated('r') && hasMilestone('ch', 25) && hasMilestone('ch', 26) },
+			unlocked() { return hasMilestone('ch', 26) },
+		},
+		6: {
+			requirementDescription: '1e16 relics',
+			effect() { return player.r.points.add(1).pow(0.0045) },
+			effectDescription() { return 'multiply multicellular organism gain based on your relics (currently ' + format(milestoneEffect(this.layer, this.id)) + 'x)' },
+			done() { return player.r.points.gte(1e16) && isAssimilated('r') && hasMilestone('ch', 25) && hasMilestone('ch', 26) },
+			unlocked() { return hasMilestone('ch', 26) },
 		},
 	},
 });
@@ -4546,19 +4576,19 @@ addLayer('m', {
 	automate() {
 		if (hasMilestone('w', 2) && player[this.layer].auto_upgrades) {
 			for (const id in tmp[this.layer].upgrades) {
-				buyUpgrade(this.layer, id);
+				if (id < (hasMilestone('ch', 27) ? 70 : 60)) buyUpgrade(this.layer, id);
 			};
 		};
 	},
 	effect() {
 		let eff = player.m.best.mul(0.5).add(1).pow(0.99);
-		const sc_start = softcaps.m_eff[0];
-		if (eff.gt(sc_start)) eff = eff.div(sc_start).pow(softcaps.m_eff[1]).mul(sc_start);
+		const sc_start = softcaps.m_eff[0]();
+		if (eff.gt(sc_start)) eff = eff.div(sc_start).pow(softcaps.m_eff[1]()).mul(sc_start);
 		return eff;
 	},
 	effectDescription() {
 		let softcap = '';
-		if (tmp.m.effect.gt(softcaps.m_eff[0])) softcap = ' (softcapped)';
+		if (tmp.m.effect.gt(softcaps.m_eff[0]())) softcap = ' (softcapped)';
 		return 'which multiplies atom gain by <h2 class="layer-m">' + format(tmp.m.effect) + '</h2>x (based on best)' + softcap;
 	},
 	doReset(resettingLayer) {
@@ -4570,16 +4600,17 @@ addLayer('m', {
 		if (layers[resettingLayer].row > this.row) layerDataReset('m', keep);
 	},
 	update(diff) {
-		let effnon = new Decimal(player.m.upgrades.length);
-		if (hasUpgrade('m', 42)) effnon = effnon.mul(upgradeEffect('m', 42));
-		player.m.unique_nonextra = effnon;
-		let effex = newDecimalZero();
-		if (hasUpgrade('m', 31) && upgradeEffect('m', 31).gt(0)) effex = effex.add(upgradeEffect('m', 31));
-		if (hasUpgrade('m', 32) && upgradeEffect('m', 32).gt(0)) effex = effex.add(upgradeEffect('m', 32));
-		if (hasUpgrade('m', 41) && upgradeEffect('m', 41).gt(0)) effex = effex.add(upgradeEffect('m', 41));
-		if (hasUpgrade('m', 51) && upgradeEffect('m', 51).gt(0)) effex = effex.add(upgradeEffect('m', 51));
-		if (hasUpgrade('m', 53) && upgradeEffect('m', 53).gt(0)) effex = effex.add(upgradeEffect('m', 53));
-		player.m.unique_extra = effex;
+		let eff_nonextra = new Decimal(player.m.upgrades.length);
+		if (hasUpgrade('m', 42)) eff_nonextra = eff_nonextra.mul(upgradeEffect('m', 42));
+		player.m.unique_nonextra = eff_nonextra;
+		let eff_extra = newDecimalZero();
+		if (hasUpgrade('m', 31) && upgradeEffect('m', 31).gt(0)) eff_extra = eff_extra.add(upgradeEffect('m', 31));
+		if (hasUpgrade('m', 32) && upgradeEffect('m', 32).gt(0)) eff_extra = eff_extra.add(upgradeEffect('m', 32));
+		if (hasUpgrade('m', 41) && upgradeEffect('m', 41).gt(0)) eff_extra = eff_extra.add(upgradeEffect('m', 41));
+		if (hasUpgrade('m', 51) && upgradeEffect('m', 51).gt(0)) eff_extra = eff_extra.add(upgradeEffect('m', 51));
+		if (hasUpgrade('m', 53) && upgradeEffect('m', 53).gt(0)) eff_extra = eff_extra.add(upgradeEffect('m', 53));
+		if (hasUpgrade('m', 63)) eff_extra = eff_extra.mul(upgradeEffect('m', 63));
+		player.m.unique_extra = eff_extra;
 		player.m.unique_total = player.m.unique_nonextra.add(player.m.unique_extra);
 	},
 	tabFormat: {
@@ -4710,7 +4741,7 @@ addLayer('m', {
 	},
 	upgrades: {
 		11: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Oxygen Gas' },
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'O<span style="font-size: 0.8em">2</span>, Oxygen' },
 			description: 'multiplies essence gain based on your best molecules',
 			cost: 1,
 			effect() { return player.m.best.mul(100).add(1).pow(0.5) },
@@ -4721,7 +4752,7 @@ addLayer('m', {
 			},
 		},
 		12: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Carbon Monoxide' },
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'CO, Carbon Monoxide' },
 			description: 'multiplies demon soul gain based on your best molecules',
 			cost: 5,
 			effect() { return player.m.best.mul(10).add(1).pow(0.2) },
@@ -4732,7 +4763,7 @@ addLayer('m', {
 			},
 		},
 		13: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Carbon Dioxide' },
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'CO<span style="font-size: 0.8em">2</span>, Carbon Dioxide' },
 			description: 'multiplies quark gain based on your best molecules',
 			cost: 10,
 			effect() { return player.m.best.mul(50).add(1).pow(0.4) },
@@ -4746,14 +4777,14 @@ addLayer('m', {
 			fullDisplay() {
 				let text = '';
 				if (options.nerdMode) text += ' <br>formula: (x*25+1)^0.3';
-				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'Hydrogen Gas</h3><br>multiplies core gain based on your best molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: 360,000 atoms';
+				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'CO<span style="font-size: 0.8em">3</span>, Carbon Trioxide</h3><br>multiplies core gain based on your best molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: 360,000 atoms';
 			},
 			canAfford() { return player.a.points.gte(360000) },
 			pay() { player.a.points = player.a.points.sub(360000) },
 			effect() { return player.m.best.mul(25).add(1).pow(0.3) },
 		},
 		22: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'H<span style="font-size:0.8em">2</span>O, aka Water' },
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'H<span style="font-size:0.8em">2</span>O, Water' },
 			description: 'multiplies essence gain based on your total unique molecules',
 			cost: 125,
 			effect() { return player.m.unique_total.add(1).mul(5) },
@@ -4767,14 +4798,14 @@ addLayer('m', {
 			fullDisplay() {
 				let text = '';
 				if (options.nerdMode) text += ' <br>formula: (x*250+1)^0.1';
-				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'Ammonia</h3><br>multiplies hex gain based on your best molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: 4,600,000 atoms';
+				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'NH<span style="font-size: 0.8em">3</span>, Ammonia</h3><br>multiplies hex gain based on your best molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: 4,600,000 atoms';
 			},
 			canAfford() { return player.a.points.gte(4600000) },
 			pay() { player.a.points = player.a.points.sub(4600000) },
 			effect() { return player.m.best.mul(250).add(1).pow(0.1) },
 		},
 		31: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Nitrogen Gas' },
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'H<span style="font-size: 0.8em">2</span>, Hydrogen' },
 			description: 'gives extra unique molecules based on your non-extra ones\' amount and worth',
 			cost: 250,
 			effect() { return player.m.unique_nonextra.div(2).add(1).floor() },
@@ -4789,7 +4820,7 @@ addLayer('m', {
 			fullDisplay() {
 				let text = '';
 				if (options.nerdMode) text += ' <br>formula: (x+1)^0.2';
-				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'NaCl, aka Salt</h3><br>gives extra unique molecules based on your atoms<br>Currently: +' + formatWhole(this.effect()) + text + '<br><br>Cost: 7,777,777 atoms';
+				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'NaCl, Salt</h3><br>gives extra unique molecules based on your atoms<br>Currently: +' + formatWhole(this.effect()) + text + '<br><br>Cost: 7,777,777 atoms';
 			},
 			canAfford() { return player.a.points.gte(7777777) },
 			pay() { player.a.points = player.a.points.sub(7777777) },
@@ -4800,7 +4831,7 @@ addLayer('m', {
 			fullDisplay() {
 				let text = '';
 				if (options.nerdMode) text += ' <br>formula: x*1000';
-				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'O<span style="font-size:0.8em">3</span>, aka Ozone</h3><br>multiplies demon soul gain based on your total unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e10) + ' atoms';
+				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'O<span style="font-size:0.8em">3</span>, Ozone</h3><br>multiplies demon soul gain based on your total unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e10) + ' atoms';
 			},
 			canAfford() { return player.a.points.gte(1e10) },
 			pay() { player.a.points = player.a.points.sub(1e10) },
@@ -4808,10 +4839,10 @@ addLayer('m', {
 			unlocked() { return hasUpgrade('m', 21) && hasUpgrade('m', 22) && hasUpgrade('m', 23) },
 		},
 		41: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Methane Gas' },
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'CH<span style="font-size: 0.8em">4</span>, Methane' },
 			description: 'gives extra unique molecules based on your demon souls',
 			cost: 25000000,
-			effect() { return player.ds.points.pow(10).log(10).add(1).floor() },
+			effect() { return player.ds.points.pow(10).log10().add(1).floor() },
 			effectDisplay() {
 				let text = '+' + formatWhole(this.effect());
 				if (options.nerdMode) text += ' <br>formula: log(x^10)+1';
@@ -4820,7 +4851,7 @@ addLayer('m', {
 			unlocked() { return hasUpgrade('m', 31) && hasUpgrade('m', 32) && hasUpgrade('m', 33) },
 		},
 		42: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Calcium Oxide' },
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'CaO, Calcium Oxide' },
 			description: 'non-extra unique molecules are worth more based on your relics',
 			cost: 50000000,
 			effect() { return player.r.points.mul(5).add(1).pow(2) },
@@ -4835,7 +4866,7 @@ addLayer('m', {
 			fullDisplay() {
 				let text = '';
 				if (options.nerdMode) text += ' <br>formula: (x+1)^0.01';
-				return'<h3 class="layer-m' + getdark(this, "title-light", true) + 'Calcium Hydroxide</h3><br>multiplies relic gain based on your extra unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1.61e10) + ' atoms';
+				return'<h3 class="layer-m' + getdark(this, "title-light", true) + 'Ca(OH)<span style="font-size: 0.8em">2</span>, Calcium Hydroxide</h3><br>multiplies relic gain based on your extra unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1.61e10) + ' atoms';
 			},
 			canAfford() { return player.a.points.gte(1.61e10) },
 			pay() { player.a.points = player.a.points.sub(1.61e10) },
@@ -4843,19 +4874,19 @@ addLayer('m', {
 			unlocked() { return hasUpgrade('m', 31) && hasUpgrade('m', 32) && hasUpgrade('m', 33) },
 		},
 		51: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Neon Gas' },
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'N<span style="font-size: 0.8em">2</span>, Nitrogen' },
 			description: 'gives extra unique molecules based on your total good influence',
 			cost: 1e13,
-			effect() { return player.gi.total.add(1).pow(2.5).floor() },
+			effect() { return (tmp.gi.deactivated ? new Decimal(0) : player.gi.total).add(1).pow(2.5).floor() },
 			effectDisplay() {
 				let text = '+' + formatWhole(this.effect());
 				if (options.nerdMode) text += ' <br>formula: (x+1)^2.5';
 				return text;
 			},
-			unlocked() { return hasMilestone('gi', 11) },
+			unlocked() { return (hasMilestone('gi', 11) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('m', 41) && hasUpgrade('m', 42) && hasUpgrade('m', 43) },
 		},
 		52: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Sodium Oxide' },
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Na<span style="font-size: 0.8em">2</span>O, Sodium Oxide' },
 			description: 'multiplies point gain based on your total unique molecules',
 			cost: 1e14,
 			effect() { return player.m.unique_total.add(1).pow(25) },
@@ -4864,10 +4895,10 @@ addLayer('m', {
 				if (options.nerdMode) text += ' <br>formula: (x+1)^25';
 				return text;
 			},
-			unlocked() { return hasMilestone('gi', 11) },
+			unlocked() { return (hasMilestone('gi', 11) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('m', 41) && hasUpgrade('m', 42) && hasUpgrade('m', 43) },
 		},
 		53: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'F<span style="font-size:0.8em">2</span>, Fluorine' },
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'F<span style="font-size: 0.8em">2</span>, Fluorine' },
 			description: 'gives extra unique molecules based on your atoms',
 			cost: 1e13,
 			effect() { return player.a.points.add(1).pow(0.45).floor() },
@@ -4876,7 +4907,40 @@ addLayer('m', {
 				if (options.nerdMode) text += ' <br>formula: (x+1)^0.45';
 				return text;
 			},
-			unlocked() { return hasMilestone('gi', 11) },
+			unlocked() { return (hasMilestone('gi', 11) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('m', 41) && hasUpgrade('m', 42) && hasUpgrade('m', 43) },
+		},
+		61: {
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Ne<span style="font-size: 0.8em">2</span>, Neon' },
+			description: 'multiplies light gain after hardcap based on your total unique molecules',
+			cost: 1e62,
+			effect() { return player.m.unique_total.add(1).log10().add(1).pow(hasUpgrade('m', 61) ? 10 : 0.5) },
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (options.nerdMode) {
+					if (hasUpgrade('m', 61)) text += ' <br>formula: (log10(x+1)+1)^10';
+					else text += ' <br>formula: (log10(x+1)+1)^0.5';
+				};
+				return text;
+			},
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('m', 51) && hasUpgrade('m', 52) && hasUpgrade('m', 53) },
+		},
+		62: {
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'C<span style="font-size: 0.8em">6</span>H<span style="font-size: 0.8em">5</span>NH<span style="font-size: 0.8em">2</span>, Aniline' },
+			description() { return 'improves <b class="layer-m' + getdark(this, "ref-light") + 'Ne<span style="font-size: 0.8em">2</span>, Neon</b>\'s effect exponent <br>(0.5 --> 10)' },
+			cost: '1e1400',
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('m', 51) && hasUpgrade('m', 52) && hasUpgrade('m', 53) },
+		},
+		63: {
+			title() { return '<b class="layer-m' + getdark(this, "title-light") + '[Ru(NH<span style="font-size: 0.8em">3</span>)<span style="font-size: 0.8em">5</span>(N<span style="font-size: 0.8em">2</span>)]Cl<span style="font-size: 0.8em">2</span>' },
+			description: 'multiplies extra unique molecules based on your molecules',
+			cost: '1e1575',
+			effect() { return player.m.points.add(1).log10().add(1).pow(10) },
+			effectDisplay() {
+				let text = format(this.effect()) + 'x';
+				if (options.nerdMode) text += ' <br>formula: (log10(x+1)+1)^10';
+				return text;
+			},
+			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('m', 51) && hasUpgrade('m', 52) && hasUpgrade('m', 53) },
 		},
 	},
 });
@@ -4929,13 +4993,13 @@ addLayer('gi', {
 			if (hasMilestone('ch', 14)) work *= 2;
 			if (hasMilestone('ch', 16)) work *= 2;
 			for (let index = 0; index < work; index++) {
-				if (!layers.gi.buyables[11].canBuy()) break;
-				layers.gi.buyables[11].buy();
+				if (!canBuyBuyable('gi', 11)) break;
+				buyBuyable('gi', 11);
 			};
 			if (layers.gi.buyables[12].unlocked()) {
 				for (let index = 0; index < work; index++) {
-					if (!layers.gi.buyables[12].canBuy()) break;
-					layers.gi.buyables[12].buy();
+					if (!canBuyBuyable('gi', 12)) break;
+					buyBuyable('gi', 12);
 				};
 			};
 		};
@@ -5114,9 +5178,15 @@ addLayer('gi', {
 				return 8;
 			},
 			buy() {
-				if (hasMilestone('ch', 2)) player.gi.total = player.gi.total.add(this.cost());
-				else player.gi.points = player.gi.points.sub(this.cost());
-				addBuyables(this.layer, this.id, 1);
+				if (hasMilestone('ch', 27)) {
+					const bulk = 10;
+					player.gi.total = player.gi.total.add(this.cost().mul(bulk ** 1.1));
+					addBuyables(this.layer, this.id, bulk);
+				} else {
+					if (hasMilestone('ch', 2)) player.gi.total = player.gi.total.add(this.cost());
+					else player.gi.points = player.gi.points.sub(this.cost());
+					addBuyables(this.layer, this.id, 1);
+				};
 			},
 			effect() { return getBuyableAmount('gi', this.id) },
 			display() { return 'increases the good influence effect base by 1 per this upgrade bought.<br>Currently: +' + format(buyableEffect('gi', this.id)) + '<br><br>Cost: ' + formatWhole(this.cost()) + ' good influence<br><br>Bought: ' + formatWhole(getBuyableAmount('gi', this.id)) + '/' + formatWhole(this.purchaseLimit()) },
@@ -5125,11 +5195,17 @@ addLayer('gi', {
 			cost() { return getBuyableAmount('gi', this.id).div(5).add(1).floor() },
 			title() { return '<h3 class="layer-gi' + getdark(this, "title-buyable") + 'Drive out Evil' },
 			canAfford() { return player.gi.points.gte(this.cost()) },
-			purchaseLimit() { return player.ds.points.add(1).log(10).div(12.5).floor().min(1e9) },
+			purchaseLimit() { return player.ds.points.add(1).log10().div(12.5).floor().min(1e9) },
 			buy() {
-				if (hasMilestone('ch', 2)) player.gi.total = player.gi.total.add(this.cost());
-				else player.gi.points = player.gi.points.sub(this.cost());
-				addBuyables(this.layer, this.id, 1);
+				if (hasMilestone('ch', 27)) {
+					const bulk = 10;
+					player.gi.total = player.gi.total.add(this.cost().mul(bulk ** 1.1));
+					addBuyables(this.layer, this.id, bulk);
+				} else {
+					if (hasMilestone('ch', 2)) player.gi.total = player.gi.total.add(this.cost());
+					else player.gi.points = player.gi.points.sub(this.cost());
+					addBuyables(this.layer, this.id, 1);
+				};
 			},
 			effect() { return new Decimal(10).pow(getBuyableAmount('gi', this.id).pow(1.5)) },
 			display() {
@@ -5194,6 +5270,8 @@ addLayer('ei', {
 		if (player.h.limitsBroken > 0) gain = gain.div(tmp.h.clickables[11].nerf);
 		return gain;
 	},
+	softcap: new Decimal(25_000_000),
+	softcapPower: 0.1,
 	autoPrestige() { return hasMilestone('w', 3) && (!hasMilestone('cl', 0) || player.ei.auto_prestige) },
 	row: 4,
 	hotkeys: [{key: 'E', description: 'Shift-E: Reset for evil influence', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
@@ -6802,6 +6880,21 @@ addLayer('ch', {
 			done() { return player.ch.points.gte(70) },
 			unlocked() { return player.mo.unlocked },
 		},
+		26: {
+			requirementDescription: '75 chaos',
+			effectDescription() {
+				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'if you have <b class="layer-mo-dark">Assimilated</b> relics, unlock more relic milestones';
+				else return 'if you have <b>Assimilated</b> relics, unlock more relic milestones';
+			},
+			done() { return player.ch.points.gte(75) },
+			unlocked() { return player.mo.unlocked },
+		},
+		27: {
+			requirementDescription: '78 chaos',
+			effectDescription: 'the 6th row of molecule upgrades can be autobought, the good influence rebuyable autobuyer can bulk buy 10x, and you gain more total good influence from buying rebuyables based on bulk',
+			done() { return player.ch.points.gte(78) },
+			unlocked() { return player.mo.unlocked },
+		},
 	},
 	challenges: {
 		11: {
@@ -6900,6 +6993,7 @@ addLayer('mo', {
 		let gain = newDecimalOne();
 		if (hasMilestone('ch', 16)) gain = gain.mul(milestoneEffect('ch', 16));
 		if (hasMilestone('r', 3)) gain = gain.mul(milestoneEffect('r', 3));
+		if (hasMilestone('r', 6)) gain = gain.mul(milestoneEffect('r', 6));
 		return gain;
 	},
 	row: 6,
@@ -6930,7 +7024,7 @@ addLayer('mo', {
 				else if (getClickableState('mo', 11)) return '<br>You are in an Assimilation Search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click here to exit the search.';
 				else return '<br>Begin an Assimilation search.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
 			},
-			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, 57][player.mo.assimilated.length] || Infinity }, // next: molecules at 77
+			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, 57, 77][player.mo.assimilated.length] || Infinity }, // next: good influence at 101
 			canClick() { return getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req) },
 			onClick() {
 				if (player.mo.assimilating !== null) {
@@ -6965,9 +7059,10 @@ addLayer('mo', {
 			display() {
 				let text = '';
 				if (options.nerdMode) text = '<br>formula: 1000^x';
-				return 'multiplies atom gain based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('mo', this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' multicellular organisms<br><br>Bought: ' + formatWhole(getBuyableAmount('mo', this.id));
+				return 'multiplies atom gain based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('mo', this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' multicellular organisms<br><br>Bought: ' + formatWhole(getBuyableAmount('mo', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			canAfford() { return player.mo.points.gte(this.cost()) },
+			purchaseLimit: 99,
 			buy() {
 				player.mo.points = player.mo.points.sub(this.cost());
 				addBuyables('mo', this.id, 1);
@@ -6984,9 +7079,10 @@ addLayer('mo', {
 			display() {
 				let text = '';
 				if (options.nerdMode) text = '<br>formula: 2^x';
-				return 'multiplies sanctum gain based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('mo', this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' multicellular organisms<br><br>Bought: ' + formatWhole(getBuyableAmount('mo', this.id));
+				return 'multiplies sanctum gain based on the amount of this upgrade bought.<br>Currently: ' + format(buyableEffect('mo', this.id)) + 'x' + text + '<br><br>Cost: ' + formatWhole(this.cost()) + ' multicellular organisms<br><br>Bought: ' + formatWhole(getBuyableAmount('mo', this.id)) + '/' + formatWhole(this.purchaseLimit);
 			},
 			canAfford() { return player.mo.points.gte(this.cost()) },
+			purchaseLimit: 99,
 			buy() {
 				player.mo.points = player.mo.points.sub(this.cost());
 				addBuyables('mo', this.id, 1);

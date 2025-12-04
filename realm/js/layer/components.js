@@ -127,7 +127,7 @@ addLayer("C", {
 			data[index + 111] = {
 				title() { return "Uptier " + getCreationName(index) },
 				cost() {
-					if (!creationTierEff[index][getBuyableAmount("C", index + 111).toNumber()]) return new Decimal(Infinity);
+					if (!creationTierEff[index][getBuyableAmount("C", index + 111).toNumber()]) return newDecimalInf();
 					if (getBuyableAmount("C", index + 111).gte(4)) return getBuyableAmount("C", index + 111).pow_base(1_000).div(10_000).mul(getCreationCost(index));
 					return getBuyableAmount("C", index + 111).pow_base(20).mul(50 * getCreationCost(index));
 				},
