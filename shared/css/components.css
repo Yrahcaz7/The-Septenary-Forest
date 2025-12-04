@@ -9,7 +9,7 @@
 }
 
 .achievement {
-	height: 90px;
+	min-height: 90px;
 	width: 90px;
 	border-radius: 25%;
 	border: 2px solid;
@@ -25,7 +25,7 @@
 }
 
 .buyable {
-	height: 200px;
+	min-height: 200px;
 	width: 200px;
 	border-radius: 25%;
 	border: 2px solid;
@@ -57,7 +57,7 @@
 	border-color: rgba(0, 0, 0, 0.125);
 	color: rgba(0, 0, 0, 0.5);
 	width: 300px;
-	height: 300px;
+	min-height: 300px;
 	font-size: 15px;
 	border-radius: 33.33333333333333%;
 }
@@ -111,7 +111,7 @@
 
 /* Tiles are gridables */
 .tile {
-	height: 80px;
+	min-height: 80px;
 	width: 80px;
 	border-radius: 15%;
 	border: 2px solid;
@@ -127,7 +127,7 @@
 }
 
 .upgBig {
-	height: 200px;
+	min-height: 200px;
 	width: 200px;
 	border-radius: 25%;
 	border: 2px solid;
@@ -136,7 +136,7 @@
 
 /* Used for respec button and similar */
 .longUpg {
-	height: 50px;
+	min-height: 50px;
 	width: 120px;
 	background: var(--points);
 	border-radius: 50%;
@@ -146,7 +146,7 @@
 }
 
 .smallUpg {
-	height: 40px;
+	min-height: 40px;
 	width: 40px;
 	border-radius: 25%;
 	border: 2px solid;

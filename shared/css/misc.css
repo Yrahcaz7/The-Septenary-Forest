@@ -1,6 +1,6 @@
 /* Prestige button */
 .reset {
-	height: 120px;
+	min-height: 120px;
 	width: 180px;
 	border-radius: 25%;
 	border: 4px solid;
