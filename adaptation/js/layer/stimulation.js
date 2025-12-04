@@ -62,6 +62,7 @@ addLayer("s", {
 		"resource-display",
 		"blank",
 		"upgrades",
+		"blank",
 	],
 	layerShown() {return player.s.unlocked},
 	passiveGeneration() {

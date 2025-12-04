@@ -4484,7 +4484,7 @@ addLayer('r', {
 		},
 		2: {
 			requirementDescription: '1e13 relics',
-			effect() { return player.ch.points.sub(70).add(1).max(1) },
+			effect() { return player.ch.points.sub(70).max(0).add(1) },
 			effectDescription() { return 'divide relic rebuyable requirements based on your chaos after 70 (currently /' + format(milestoneEffect(this.layer, this.id)) + ')' },
 			done() { return player.r.points.gte(1e13) && isAssimilated('r') && hasMilestone('ch', 25) },
 		},

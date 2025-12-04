@@ -131,7 +131,9 @@ addLayer("M", {
 		content.push(["row", row]);
 		content.push("blank");
 		content.push(["upgrades", [1, 2]]);
+		content.push("blank");
 		content.push(["upgrades", [10]]);
+		content.push("blank");
 		return content;
 	},
 	componentStyles: {

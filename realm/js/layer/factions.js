@@ -149,6 +149,7 @@ addLayer("F", {
 		["row", [["upgrade", 21, {margin: "0 7px"}], ["upgrade", 22, {margin: "0 7px"}], ["upgrade", 23, {margin: "0 7px"}]]],
 		"blank",
 		["upgrades", [11, 12, 13]],
+		"blank",
 	],
 	componentStyles: {
 		upgrade: {height: "120px", "border-radius": "25px"},

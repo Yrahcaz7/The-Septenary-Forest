@@ -55,6 +55,7 @@ addLayer("G", {
 		["custom-resource-display", () => `You have generated ${format(player.stats[0].total)} coins in this realm<br><br>Your best gems this life is ${format(player.G.best)}<br>You have recieved a total of ${format(player.G.total)} gems this life`],
 		"blank",
 		"upgrades",
+		"blank",
 	],
 	componentStyles: {
 		upgrade: {height: "120px", "border-radius": "25px"},

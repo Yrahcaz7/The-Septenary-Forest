@@ -17,11 +17,13 @@ function getRawTabContent(layer, name = "") {
 		content.push("buyables");
 		content.push("blank");
 		content.push("upgrades");
+		content.push("blank");
 	} else if (layer == "c") {
 		content.push("milestones");
 		content.push("buyables");
 		content.push("blank");
 		content.push("upgrades");
+		content.push("blank");
 	} else if (layer == "q") {
 		if (name == "The Decipherer") {
 			content.push(["display-text", 'Your ' + randomStr(9) + ' is currently <h2 class="layer-q">' + format(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + '</h2> insight<br><br>Deciphered amount decays over time with a decay factor of ' + (hasUpgrade('q', 65) ? 0.1 : 0.001)]);
@@ -31,12 +33,14 @@ function getRawTabContent(layer, name = "") {
 		} else {
 			content.push("milestones");
 			content.push("upgrades");
+			content.push("blank");
 		};
 	} else if (layer == "sp") {
 		content.push("milestones");
 		content.push("buyables");
 		content.push("blank");
 		content.push("upgrades");
+		content.push("blank");
 	} else if (layer == "h") {
 		if (name == "The Breaker") {
 			content.push(["clickable", "11"]);
@@ -46,6 +50,7 @@ function getRawTabContent(layer, name = "") {
 		} else {
 			content.push("milestones");
 			content.push("upgrades");
+			content.push("blank");
 		};
 	} else if (layer == "ds") {
 		if (name == "Demon Gateway") {
@@ -56,6 +61,7 @@ function getRawTabContent(layer, name = "") {
 			content.push("buyables");
 			content.push("blank");
 			content.push("upgrades");
+			content.push("blank");
 		};
 	} else if (layer == "a") {
 		if (name == "Atomic Reactor") {
@@ -91,6 +97,7 @@ function getRawTabContent(layer, name = "") {
 		content.push("blank");
 		content.push("milestones");
 		content.push("upgrades");
+		content.push("blank");
 		if (tmp.p.clickables[11].unlocked) {
 			content.push("clickables");
 			content.push("blank");
@@ -124,6 +131,7 @@ function getRawTabContent(layer, name = "") {
 			content.push("challenges");
 			content.push("blank");
 			content.push("upgrades");
+			content.push("blank");
 		};
 	} else if (layer == "m") {
 		if (name == "Constructor") {
@@ -133,6 +141,7 @@ function getRawTabContent(layer, name = "") {
 			content.push(["display-text", text]);
 			content.push("blank");
 			content.push("upgrades");
+			content.push("blank");
 		} else {
 			content.push("milestones");
 		};
@@ -151,6 +160,7 @@ function getRawTabContent(layer, name = "") {
 		} else {
 			content.push("milestones");
 			content.push("upgrades");
+			content.push("blank");
 		};
 	} else if (layer == "w") {
 		content.push(["display-text", "After unlocking War, you can always buy max on all resources before this row."]);

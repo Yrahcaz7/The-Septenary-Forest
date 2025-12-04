@@ -118,6 +118,7 @@ addLayer("g", {
 		"grid",
 		"blank",
 		"upgrades",
+		"blank",
 	],
 	doReset(resettingLayer) {
 		const keep = ["autoBasic", "auto1and2", "autoLCR", "autoBBFE"];
@@ -499,6 +500,7 @@ addLayer("b", {
 		"blank",
 		"milestones",
 		"upgrades",
+		"blank",
 	],
 	layerShown() {return hasUpgrade("g", 15) || player.b.unlocked},
 	hotkeys: [{
@@ -905,6 +907,7 @@ addLayer("sg", {
 		"buyables",
 		"blank",
 		"upgrades",
+		"blank",
 	],
 	layerShown() {return hasMilestone("b", 8)},
 	doReset(resettingLayer) {

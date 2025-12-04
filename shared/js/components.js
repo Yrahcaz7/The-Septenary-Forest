@@ -264,7 +264,7 @@ function loadVue(mainPage = false) {
 				<template v-for="col in tmp[layer].upgrades.cols">
 					<upgrade v-if="tmp[layer].upgrades[row * 10 + col] !== undefined && tmp[layer].upgrades[row * 10 + col].unlocked" :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.upgrade"></upgrade>
 				</template>
-			</div><br>
+			</div>
 		</div>`),
 	});
 
@@ -672,7 +672,7 @@ function loadVue(mainPage = false) {
 				<template v-for="col in tmp[layer].achievements.cols">
 					<achievement v-if="tmp[layer].achievements[row * 10 + col] !== undefined && tmp[layer].achievements[row * 10 + col].unlocked" :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.achievement"></achievement>
 				</template>
-			</div><br>
+			</div>
 		</div>`),
 	});
 

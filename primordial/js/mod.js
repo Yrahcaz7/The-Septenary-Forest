@@ -15,14 +15,14 @@ const VERSION = {
 const changelog = `<h1>Changelog:</h1><br>
 	<br><h3>v3.6: Even More Assimilation</h3><br>
 		- Added more to assimilation.<br>
-		- Added more to stories.<br>
+		- Added more to story.<br>
 		- Added three milestones to chaos.<br>
 		- Removed one option.<br>
 		- Added two options.<br>
 		- Improved option style.<br>
 	<br><h3>v3.5: More Assimilation</h3><br>
 		- Added more to assimilation.<br>
-		- Added more to stories.<br>
+		- Added more to story.<br>
 		- Added six milestones to chaos.<br>
 		- Added two achievements.<br>
 		- Added six achievement images.<br>
@@ -30,14 +30,14 @@ const changelog = `<h1>Changelog:</h1><br>
 	<br><h3>v3.4: Organisms Emerge</h3><br>
 		- Added multicellular organisms.<br>
 		- Added assimilation.<br>
-		- Added more to stories.<br>
+		- Added more to story.<br>
 		- Added ten milestones to chaos.<br>
 		- Added three achievements.<br>
 	<br><h3>v3.3: Chaos Rises</h3><br>
 		- Added chaos.<br>
 		- Added seven milestones to chaos.<br>
 		- Added two challenges to chaos.<br>
-		- Added stories.<br>
+		- Added story.<br>
 		- Added seven achievements.<br>
 		- Added six achievement images.<br>
 		- Added one option.<br>

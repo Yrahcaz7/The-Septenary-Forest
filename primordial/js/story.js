@@ -405,7 +405,7 @@ const story = [
 `, `
 	The Sun was confused, with his memories gradually seeping away.
 	He no longer remembered the Wanderer, only having a vauge sense of familiarity.
-	But the Wanderer calmly chatted with the Sun, easing their anxiety.
+	But the Wanderer calmly chatted with the Sun, easing his anxiety.
 	Internally, however, the Wanderer's heart was constantly tearing apart and healing.
 `, `
 	Soon, the Sun had forgotten everything from before, and his soul fell downwards...
@@ -438,6 +438,46 @@ const story = [
 	Then, the Wanderer whispered a line to themself that resonated deep within their soul:
 	"O Sun, the ever-bright Sun of my life, this Wandering Planet shall return to your side soon."
 `], [`
+	The Being unearthed a completely new feeling from its depths.
+	A crushing feeling that seemed to swallow all hope.
+	A feeling that seemed to squeeze the Being's very soul.
+	Waves of despair reached out, attempting to crush every other sensation.
+	However, the previously created Good Influence held it at bay.
+`, `
+	Once the situation stabilized, the Being had a realization.
+	Its concept of evil was missing this fundamental aspect to it before, making it incomplete.
+	Then, the Being knew what to do.
+	The Being took all of its Hexes and Demon Souls, combining them with every negative emotion it knew of.
+	And thus, Evil Influence was born.
+`, `
+	The Being then accumulated more Hexes and Demon Souls, combining everything once again.
+	Quickly adapting to the new cycle, the Being lit up the void brighter than ever before.
+	As the Being formed more Evil Influence, it kept an eye on its Good Influence as well, waiting for when they could balance.
+	As the forces of Good Influence and Evil Influence neared each other in intensity, the Being resolved to try fusing them again.
+`, `
+	Once good and evil reached an equilibrium of power, the Being pushed them together.
+	However, the forces swirled around one another, refusing to combine.
+	But the Being did not give up.
+	It tried again and again, attempting to force the good and evil to fuse.
+	Then suddenly, the two meshed together, forming a dull gray.
+`, `
+	After countless attempts, the influences fused.
+	However, the grayness still constantly conflicted with itself, never calming.
+	This new concept seemed to be the embodiment of conflict.
+	Searching through its knowledge, the Being attempted to find a name suitable for this new force.
+	Eventually, it found a certain word that seemed to fit perfectly: War.
+`, `
+	Using this new ever-conflicting force, the Being amassed more influences and combined them once again.
+	The Wars began accumulating, speeding up every cycle that comprised the cycle of War.
+	Fourteen different colors glowed brightly in the void, harmonizing, yet conflicting.
+	Yet the Being eventually hit another wall.
+`, `
+	Contemplating what it could do, the Being got an idea.
+	Within the depths of its knowledge, it saw that molecules could form cells.
+	It was the most basic form of life, yet it was not present within the void.
+	Now, the Being aimed to fix that.
+	Condensing all of its Molecules, the Being aimed to create a fifteenth color in the void.
+`], [`
 	More story coming soon!
 `]];
 
@@ -451,6 +491,7 @@ const storyNames = [
 	["Magnificent Structures", () => randomStr(11) + " " + randomStr(10)],
 	["Influence of Knowledge", () => randomStr(9) + " " + randomStr(2) + " " + randomStr(9)],
 	["The Wanderer's Pursuit", () => randomStr(3) + " " + randomStr(10) + " " + randomStr(7)],
+	["The Great Unification", () => randomStr(3) + " " + randomStr(5) + " " + randomStr(11)],
 	["Coming Soon", () => "Coming Soon"],
 ];
 
@@ -464,6 +505,7 @@ const storyColors = [
 	["#AAFF00", "#B9A975"],
 	["#00CCCC", "#08FF87"],
 	[],
+	["#FF4400", "#A0A0A0"],
 ];
 
 for (let index = 0; index < story.length; index++) {
@@ -492,13 +534,15 @@ function filterStory(string) {
 	if (player.ch.best.toNumber() < storyLength(6)) string = string.replace(/structure|warmpth/gi, match => randomStr(match.length));
 	if (player.ch.best.toNumber() < storyLength(7)) string = string.replace(/combination|construct|force/gi, match => randomStr(match.length));
 	if (player.ch.best.toNumber() < storyLength(8)) string = string.replace(/wanderer|sun|soul|planet/gi, match => randomStr(match.length));
+	if (player.ch.best.toNumber() < storyLength(9)) string = string.replace(/despair|balance|equilibrium/gi, match => randomStr(match.length));
 	return string;
 };
 
 function getChaosInfoBoxes() {
 	let infoBoxes = {};
 	for (let row = 0; row < story.length; row++) {
-		infoBoxes['story' + row] = {
+		const boxID = 'story' + row;
+		infoBoxes[boxID] = {
 			title() {
 				if (player.ch.best.toNumber() >= storyLength(row)) return '<span style="margin-left: 2px">' + storyNames[row][0];
 				else return '<span style="margin-left: 2px">' + storyNames[row][1]();
@@ -513,13 +557,13 @@ function getChaosInfoBoxes() {
 			unlocked() { return player.ch.best.toNumber() > storyLength(row - 1) },
 		};
 		if (storyColors[row] && storyColors[row].length > 0) {
-			infoBoxes['story' + row].style = {'border-color': storyColors[row][0], 'border-radius': '0px'};
-			infoBoxes['story' + row].titleStyle = {'background-color': storyColors[row][0], 'border-radius': '0px'};
-			infoBoxes['story' + row].bodyStyle = {'margin-bottom': '0px', 'border-image-source': 'linear-gradient(' + storyColors[row][0] + ', ' + storyColors[row][1] + ')', 'border-image-slice': '4', 'border-radius': '0px'};
+			infoBoxes[boxID].style = {'border-color': storyColors[row][0], 'border-radius': '0px'};
+			infoBoxes[boxID].titleStyle = {'background-color': storyColors[row][0], 'border-radius': '0px'};
+			infoBoxes[boxID].bodyStyle = {'margin-bottom': '0px', 'border-image-source': 'linear-gradient(' + storyColors[row].join(', ') + ')', 'border-image-slice': '4', 'border-radius': '0px'};
 		} else {
-			infoBoxes['story' + row].style = {'border-radius': '0px'};
-			infoBoxes['story' + row].titleStyle = {'border-radius': '0px'};
-			infoBoxes['story' + row].bodyStyle = {'margin-bottom': '0px', 'border-radius': '0px'};
+			infoBoxes[boxID].style = {'border-radius': '0px'};
+			infoBoxes[boxID].titleStyle = {'border-radius': '0px'};
+			infoBoxes[boxID].bodyStyle = {'margin-bottom': '0px', 'border-radius': '0px'};
 		};
 	};
 	return infoBoxes;

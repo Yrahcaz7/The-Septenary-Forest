@@ -16,8 +16,8 @@ tabFormat: [
     ["toggle", ["c", "beep"]],
     "milestones",
     "blank",
-    "blank",
     "upgrades",
+    "blank",
 ]
 ```
 

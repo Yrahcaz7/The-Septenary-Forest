@@ -337,6 +337,7 @@ addLayer("c", {
 				["display-text", () => "You have <h2 class='rainbowvalue-text'>" + formatWhole(player.c.colors) + "</h2> colors unlocked"],
 				"blank",
 				"upgrades",
+				"blank",
 			],
 			unlocked() { return hasMilestone("m", 1) },
 		},

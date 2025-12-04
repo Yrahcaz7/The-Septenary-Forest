@@ -45,6 +45,7 @@ addLayer('A', {
 	tabFormat: [
 		"main-display",
 		"achievements",
+		"blank",
 	],
 	achievements: {
 		11: {
