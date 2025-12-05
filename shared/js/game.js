@@ -20,13 +20,13 @@ function getResetGain(layer, useType = null) {
 	if (type == "static") {
 		if ((!tmp[layer].canBuyMax) || tmp[layer].baseAmount.lt(tmp[layer].requires)) return newDecimalOne();
 		let gain = tmp[layer].baseAmount.div(tmp[layer].requires).div(tmp[layer].gainMult).max(1).log(tmp[layer].base).mul(tmp[layer].gainExp).pow(Decimal.pow(tmp[layer].exponent, -1));
-		gain = softcap(gain, tmp[layer].softcap, tmp[layer].softcapPower);
+		gain = applySoftcapstoResetGain(layer, gain);
 		gain = gain.mul(tmp[layer].directMult);
 		return gain.floor().sub(player[layer].points).add(1).max(1);
 	} else if (type == "normal") {
 		if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return newDecimalZero();
 		let gain = tmp[layer].baseAmount.div(tmp[layer].requires).pow(tmp[layer].exponent).mul(tmp[layer].gainMult).pow(tmp[layer].gainExp);
-		gain = softcap(gain, tmp[layer].softcap, tmp[layer].softcapPower);
+		gain = applySoftcapstoResetGain(layer, gain);
 		if (tmp[layer].logged) gain = gain.add(1).log(tmp[layer].logged === true ? 10 : tmp[layer].logged);
 		gain = gain.mul(tmp[layer].directMult);
 		return gain.floor().max(0);
@@ -50,7 +50,7 @@ function getNextAt(layer, canMax = false, useType = null) {
 	} else if (type == "static") {
 		if (!tmp[layer].canBuyMax) canMax = false;
 		let next = player[layer].points.add(canMax && tmp[layer].baseAmount.gte(tmp[layer].nextAt) ? tmp[layer].resetGain : 0).div(tmp[layer].directMult);
-		next = inverseSoftcap(next, tmp[layer].softcap, tmp[layer].softcapPower);
+		next = applyInverseSoftcapstoNextAt(layer, next);
 		const extraCost = Decimal.pow(tmp[layer].base, next.pow(tmp[layer].exponent).div(tmp[layer].gainExp)).mul(tmp[layer].gainMult);
 		let cost = extraCost.mul(tmp[layer].requires).max(tmp[layer].requires);
 		if (tmp[layer].roundUpCost) cost = cost.ceil();
@@ -58,7 +58,7 @@ function getNextAt(layer, canMax = false, useType = null) {
 	} else if (type == "normal") {
 		let next = tmp[layer].resetGain.add(1).div(tmp[layer].directMult);
 		if (tmp[layer].logged) next = next.pow_base(tmp[layer].logged === true ? 10 : tmp[layer].logged).sub(1);
-		next = inverseSoftcap(next, tmp[layer].softcap, tmp[layer].softcapPower);
+		next = applyInverseSoftcapstoNextAt(layer, next);
 		next = next.root(tmp[layer].gainExp).div(tmp[layer].gainMult).root(tmp[layer].exponent).mul(tmp[layer].requires).max(tmp[layer].requires);
 		if (tmp[layer].roundUpCost) next = next.ceil();
 		return next;
@@ -67,6 +67,30 @@ function getNextAt(layer, canMax = false, useType = null) {
 	} else {
 		return newDecimalInf();
 	};
+};
+
+function applySoftcapstoResetGain(layer, gain) {
+	if (tmp[layer].softcaps.length > 0 && tmp[layer].softcapPowers.length > 0) {
+		const length = Math.min(tmp[layer].softcaps.length, tmp[layer].softcapPowers.length);
+		for (let index = 0; index < length; index++) {
+			gain = softcap(gain, tmp[layer].softcaps[index], tmp[layer].softcapPowers[index]);
+		};
+	} else {
+		gain = softcap(gain, tmp[layer].softcap, tmp[layer].softcapPower);
+	};
+	return gain;
+};
+
+function applyInverseSoftcapstoNextAt(layer, next) {
+	if (tmp[layer].softcaps.length > 0 && tmp[layer].softcapPowers.length > 0) {
+		const length = Math.min(tmp[layer].softcaps.length, tmp[layer].softcapPowers.length);
+		for (let index = length - 1; index >= 0; index--) {
+			next = inverseSoftcap(next, tmp[layer].softcaps[index], tmp[layer].softcapPowers[index]);
+		};
+	} else {
+		next = inverseSoftcap(next, tmp[layer].softcap, tmp[layer].softcapPower);
+	};
+	return next;
 };
 
 function softcap(value, cap, power = 0.5) {

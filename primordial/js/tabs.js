@@ -151,6 +151,10 @@ function getRawTabContent(layer, name = "") {
 		content.push("milestones");
 		content.push("buyables");
 		content.push("blank");
+		if (isAssimilated('gi') || player.mo.assimilating === 'gi') {
+			content.push("upgrades");
+			content.push("blank");
+		};
 	} else if (layer == "ei") {
 		content.push(["display-text", 'You have <h2 class="layer-ei">' + format(player.ei.power) + '</h2> evil power']);
 		content.push("blank");
@@ -197,7 +201,7 @@ function getRawTabContent(layer, name = "") {
 			let keywords = getDecipheredKeywords();
 			if (keywords.length > 0) keywords[keywords.length - 1] = "and " + keywords[keywords.length - 1];
 			const next = nextStorySegmentFinishesAt();
-			content.push(["display-text", 'For each fully unlocked story segment, you decipher some keywords.<br><br>You have deciphered <h2 class="layer-ch">' + formatWhole(keywords.length) + '</h2> keywords so far.' + (keywords.length > 0 ? '<br><br>These keywords are: ' + keywords.join(", ") + '.' : '') + (next == Infinity ? 'You have deciphered all the keywords that currently exist.' : '<br><br>More keywords will be deciphered at ' + formatWhole(next) + ' chaos.')]);
+			content.push(["display-text", 'For each fully unlocked story segment, you decipher some keywords.<br><br>You have deciphered <h2 class="layer-ch">' + formatWhole(keywords.length) + '</h2> keywords so far.' + (keywords.length > 0 ? '<br><br>These keywords are: ' + keywords.join(", ") + '.' : '') + '<br><br>' + (next == Infinity ? 'You have deciphered all the keywords that currently exist.' : 'More keywords will be deciphered at ' + formatWhole(next) + ' chaos.')]);
 			content.push("blank");
 			content.push(["row", [["display-text", "Keyword deciphering is&nbsp;"], ["toggle", ["ch", "deciphering"]]]]);
 			content.push("blank");

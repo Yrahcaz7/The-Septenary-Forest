@@ -39,7 +39,7 @@ const assimilationReq = {
 	s: new Decimal(52),
 	r: new Decimal(95),
 	m: new Decimal(1e64),
-	gi: newDecimalInf(),
+	gi: new Decimal(725),
 	ei: newDecimalInf(),
 	w: newDecimalInf(),
 	cl: newDecimalInf(),
@@ -190,6 +190,13 @@ function getAssimilationRewards() {
 		text += 'Unlocks three new molecule upgrades: <b class="layer-m">Ne<span style="font-size: 0.8em">2</span>, Neon</b>, <b class="layer-m">C<span style="font-size: 0.8em">6</span>H<span style="font-size: 0.8em">5</span>NH<span style="font-size: 0.8em">2</span>, Aniline</b>, and <b class="layer-m">[Ru(NH<span style="font-size: 0.8em">3</span>)<span style="font-size: 0.8em">5</span>(N<span style="font-size: 0.8em">2</span>)]Cl<span style="font-size: 0.8em">2</span></b><br>';
 		text += 'Makes the molecule effect softcap start later (15,000 --> 1e9)<br>';
 		text += 'Makes the molecule effect softcap weaker (^0.5 --> ^0.51)';
+	};
+	if (isAssimilated('gi')) {
+		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-gi">Good Influence</h2><br><br>';
+		text += 'Makes the 17th good influence milestone perform good influence resets automatically<br>';
+		text += 'Unlocks four new good influence upgrades: <b class="layer-gi">Devotion to Good</b>, <b class="layer-gi">Sacrifice for Good</b>, <b class="layer-gi">Glowing Goodness</b>, and <b class="layer-gi">Greater Good</b><br>';
+		text += 'Reduces the good influence cost base (2 --> 1.99)<br>';
+		text += 'Unlocks the third <b class="layer-mo">Synergy</b>';
 	};
 	text = text.replace("<br><br>", "");
 	if (colorValue[1] === 'none') text = text.replace(/<b class="layer-.{1,2}">/g, "<b>");

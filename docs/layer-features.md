@@ -110,6 +110,10 @@ You can make almost any value dynamic by using a function in its place, includin
     For normal layers, the default for `softcap` is `e1e7`, and for other types of layers, the default for `softcap` is `Infinity`.
     The default for `softcapPower` is always `0.5`.
 
+Additional features:
+
+- `softcaps`, `softcapPowers`: **OVERRIDE**. These are just like `softcap` and `softcapPower`, except they are arrays of values, allowing for multiple softcaps instead of just one. If either of these are missing or are an empty array, `softcap` and `softcapPower` are used instead. Both can also be functions that return an array, rather than an array itself.
+
 ## Other prestige-related features
 
 - `canBuyMax()`: **sometimes required**. Required for static layers. Function used to determine if buying max is permitted.
@@ -134,7 +138,7 @@ Additional features:
 
 - `symbol`: **optional**. The text that appears on this layer's node. Default is the layer id with the first letter capitalized.
 
-- `image`: **override**. The url (local or global) of an image that goes on the node. (Overrides symbol)
+- `image`: **OVERRIDE**. The url (local or global) of an image that goes on the node. (Overrides symbol)
 
 - `position`: **optional**. Determines the horizontal position of the layer in its row in a standard tree. By default, it uses the layer id, and layers are sorted in alphabetical order.
 

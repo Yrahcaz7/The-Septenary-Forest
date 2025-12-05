@@ -16,7 +16,7 @@ const changelog = `<h1>Changelog:</h1><br>
 	<br><h3>v3.6: Even More Assimilation</h3><br>
 		- Added more to assimilation.<br>
 		- Added more to story.<br>
-		- Added five milestones to chaos.<br>
+		- Added seven milestones to chaos.<br>
 		- Added one achievement.<br>
 		- Removed one option.<br>
 		- Added two options.<br>
@@ -216,6 +216,7 @@ function getDevotionBulk() {
 	let bulk = 1;
 	if (challengeCompletions('r', 11) >= 41) bulk *= 10;
 	if (hasMilestone('gi', 17)) bulk *= 2;
+	if (hasUpgrade('gi', 11)) bulk *= 100;
 	if (hasChallenge('ei', 12)) bulk *= 5;
 	if (hasMilestone('w', 2)) bulk *= 2;
 	if (hasMilestone('w', 15)) bulk *= 5;
@@ -338,7 +339,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return 'You beat the game!<br>For now...' },
 ];
 
-const endPoints = new Decimal('e1e33');
+const endPoints = new Decimal('e1e40');
 
 function onLoad() { calculateColorValue() };
 
@@ -372,6 +373,7 @@ function fixOldSave(oldVersion) {
 	// remove unused vars
 	delete player.ghost0;
 	delete player.blank;
+	delete player.SC.softcaps
 	delete player.r.sanctummult;
 	delete player.r.essencemult;
 	delete options.css;

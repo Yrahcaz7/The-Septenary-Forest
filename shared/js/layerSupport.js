@@ -203,6 +203,8 @@ function setupLayer(layer) {
 		else layers[layer].softcap = newDecimalInf();
 	};
 	if (layers[layer].softcapPower === undefined) layers[layer].softcapPower = new Decimal(0.5);
+	if (layers[layer].softcaps === undefined) layers[layer].softcaps = [];
+	if (layers[layer].softcapPowers === undefined) layers[layer].softcapPowers = [];
 	if (layers[layer].displayRow === undefined) layers[layer].displayRow = layers[layer].row;
 	if (layers[layer].name === undefined) layers[layer].name = layer;
 	if (layers[layer].layerShown === undefined) layers[layer].layerShown = true;

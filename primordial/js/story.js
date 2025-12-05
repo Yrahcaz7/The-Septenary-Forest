@@ -234,14 +234,14 @@ const story = [
 	The Being was filled with happiness.
 	It began filling the void with divinity and holiness.
 	All the colors in the void swirled in a marvelous spiral.
-	The being then used their knowledge to go even further...
+	The Being then used its knowledge to go even further...
 	And the Prayers started transforming into hymns.
 `, `
 	However, the feelings of anger and hatred would not fully subside.
 	The Being tried to make the dark and light work together...
 	But none of its countless attempts succeeded.
 	The darkness was still too much stronger than the light.
-	So the Being tried to condense all of their prayers...
+	So the Being tried to condense all of its Prayers...
 `], [`
 	<b>--- 37th sunset ---</b>
 	Today, I found some ruins of human structures.
@@ -527,7 +527,7 @@ const storyNames = [
 	"Influence of Knowledge",
 	"The Wanderer's Pursuit",
 	"The Great Unification",
-	"And thus, Chaos was Born",
+	"And Thus, Chaos was Born",
 ];
 
 const storyColors = [
@@ -632,7 +632,7 @@ function nextStorySegmentFinishesAt() {
 	for (let index = 0; index < story.length && chaos > length; index++) {
 		length += story[index].length;
 	};
-	if (chaos > length) return Infinity;
+	if (chaos >= length) return Infinity;
 	return length;
 };
 

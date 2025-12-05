@@ -14,6 +14,16 @@ h1, h2, h3, b, s, input {
 	font-family: "Lucida Console", "Courier New", monospace;
 }
 
+/* Lists */
+ol, ul {
+	width: max-content;
+}
+
+ul {
+	padding: 0;
+	list-style-type: none;
+}
+
 /* These are styles for different states of components. You can make layer-specific versions with .c.locked, for example */
 .locked {
 	background-color: var(--locked);
