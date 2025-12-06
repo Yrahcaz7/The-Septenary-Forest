@@ -7,9 +7,9 @@ The amount of a buyable owned is a `Decimal`.
 Useful functions for dealing with buyables and implementing their effects:
 
 - `getBuyableAmount(layer, id)`: get the amount of the buyable the player has.
-- `addBuyables(layer, id, amount)`: add to the amount of the buyable.
 - `setBuyableAmount(layer, id, amount)`: set the amount of the buyable the player has.
-- `hasBuyable(layer, id)`: returns true if the player has more than one of the buyable.
+- `addBuyables(layer, id, amount)`: add to the amount of the buyable.
+- `hasBuyable(layer, id)`: returns true if the player has one or more of the buyable.
 - `buyableEffect(layer, id)`: returns the current effects of the buyable, if any.
 
 Buyables should be formatted like this:
@@ -21,14 +21,42 @@ buyables: {
         display() { return "Blah" },
         canAfford() { return player[this.layer].points.gte(this.cost()) },
         buy() {
-            player[this.layer].points = player[this.layer].points.sub(this.cost())
-            setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))
+            player[this.layer].points = player[this.layer].points.sub(this.cost());
+            addBuyables(this.layer, this.id, 1);
         },
         etc
     },
     etc
 }
 ```
+
+> Additional functions for implementing `buy()` easier:
+>
+> - `buyStandardBuyable(obj, currencyLayer = obj.layer, currencyName = "points", bulk = 1)`: Buys a standard buyable that costs one currency. The default currency is "points" from the layer the buyable is in (this can be overriden with the `currencyLayer` and `currencyName` parameters). If `currencyLayer` is an empty string, no layer is used (e.g. just `player[currencyName]` instead of `player[currencyLayer][currencyName]`).
+> - `buyMultiCurrencyBuyable(obj, currencyLayers = [], costless = false, bulk = 1)`: Buys a standard multi-currency buyable. The currencies all have to be "points" of different layers (the layer ids should be provided as an array for the `currencyLayers` argument). If the `costless` argument is true, the cost is not subtracted from each "points", instead the cost is added to the respective "total" values.
+>
+> **WARNING: The `bulk` parameter for these functions only changes the amount of the buyable gotten from the purchase, it does NOT increase the cost accordingly. Use `bulk` with care (or not at all).**
+>
+> Example usage:
+>
+> ```js
+> buyables: {
+>     11: {
+>         cost(x) { return new Decimal(5).pow(x.add(1).pow(1.5).add(2)) },
+>         title: "More Prestige Points",
+>         display() {
+>             return "multiplies prestige point gain.<br>"
+>                 + "Currently: " + format(buyableEffect(this.layer, this.id)) + "x<br><br>"
+>                 + "Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " points<br><br>"
+>                 + "Bought: " + formatWhole(getBuyableAmount(this.layer, this.id));
+>         },
+>         canAfford() { return player.points.gte(this.cost()) },
+>         buy() { buyStandardBuyable(this, "") },
+>         effect(x) { return x.add(1).pow(0.5) },
+>     },
+> }
+> ```
+>
 
 Features:
 

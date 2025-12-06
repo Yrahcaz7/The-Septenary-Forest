@@ -113,10 +113,11 @@ function getAssimilationRewards() {
 	let text = '';
 	if (isAssimilated('e')) {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-e">Essence</h2><br><br>';
+		text += 'Makes all previous essence rebuyables and upgrades always unlockable<br>';
 		text += 'Increases the cap of <b class="layer-e">Purer Essence</b> by 85<br>';
 		text += 'Improves the effect formulas of <b class="layer-e">Radiant Essence</b><br>';
 		text += 'Unlocks a new essence rebuyable, <b class="layer-e">Exponential Essence</b><br>';
-		text += 'Makes all previous essence upgrades always unlockable<br>Unlocks a new essence upgrade, <b class="layer-e">Essence of the Flow</b>';
+		text += 'Unlocks a new essence upgrade, <b class="layer-e">Essence of the Flow</b>';
 	};
 	if (isAssimilated('c')) {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-c">Cores</h2><br><br>';

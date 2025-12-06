@@ -1,3 +1,5 @@
+//#region state
+
 function hasUpgrade(layer, id) {
 	if ((modInfo.friendlyErrors === undefined || modInfo.friendlyErrors) && (!layers[layer]?.upgrades || !layers[layer].upgrades[id])) {
 		console.warn("There was an attempt to check if the player has an upgrade with id '" + id + "' in layer '" + layer + "', but that " + (layers[layer] ? (layers[layer].upgrades ? "upgrade does not exist" : "layer does not have any upgrades") : "layer does not exist") + ".");
@@ -147,6 +149,8 @@ function setGridData(layer, id, data) {
 	player[layer].grid[id] = data;
 };
 
+//#region effects
+
 function upgradeEffect(layer, id) {
 	if ((modInfo.friendlyErrors === undefined || modInfo.friendlyErrors) && (!layers[layer]?.upgrades || !layers[layer].upgrades[id])) {
 		console.error("There was an attempt to get the effect of an upgrade with id '" + id + "' in layer '" + layer + "', but that " + (layers[layer] ? (layers[layer].upgrades ? "upgrade does not exist" : "layer does not have any upgrades") : "layer does not exist") + ".");
@@ -201,4 +205,26 @@ function gridEffect(layer, id) {
 		return undefined;
 	};
 	return gridRun(layer, "getEffect", player[layer].grid[id], id);
+};
+
+//#region buying
+
+function buyStandardBuyable(obj, currencyLayer = obj.layer, currencyName = "points", bulk = 1) {
+	if (currencyLayer === "") player[currencyName] = player[currencyName].sub(obj.cost instanceof Function ? obj.cost() : obj.cost);
+	else player[currencyLayer][currencyName] = player[currencyLayer][currencyName].sub(obj.cost instanceof Function ? obj.cost() : obj.cost);
+	addBuyables(obj.layer, obj.id, bulk);
+};
+
+function buyMultiCurrencyBuyable(obj, currencyLayers = [], costless = false, bulk = 1) {
+	const cost = (obj.cost instanceof Function ? obj.cost() : obj.cost);
+	if (costless) {
+		for (const layer of currencyLayers) {
+			player[layer].total = player[layer].total.add(cost);
+		};
+	} else {
+		for (const layer of currencyLayers) {
+			player[layer].points = player[layer].points.sub(cost);
+		};
+	};
+	addBuyables(obj.layer, obj.id, bulk);
 };

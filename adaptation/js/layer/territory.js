@@ -268,10 +268,7 @@ addLayer("t", {
 			display() {return "unlock another tier of control nodes<br><br>on first buy, also improves the first control effect" + (getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) ? "<br><br>Cost: " + format(this.cost()) + " control" : "") + "<br><br>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + this.purchaseLimit()},
 			purchaseLimit() {return getControlImprovementLimit(2)},
 			canAfford() {return player.t.control.gte(this.cost())},
-			buy() {
-				player.t.control = player.t.control.sub(this.cost());
-				addBuyables(this.layer, this.id, 1);
-			},
+			buy() { buyStandardBuyable(this, 't', 'control') },
 			style() {if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) return {"border-color": "#E03330"}},
 		},
 		12: {
@@ -285,10 +282,7 @@ addLayer("t", {
 			},
 			purchaseLimit() {return getControlImprovementLimit(3)},
 			canAfford() {return player.t.control.gte(this.cost())},
-			buy() {
-				player.t.control = player.t.control.sub(this.cost());
-				addBuyables(this.layer, this.id, 1);
-			},
+			buy() { buyStandardBuyable(this, 't', 'control') },
 			style() {if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) return {"border-color": "#E03330"}},
 		},
 		13: {
@@ -298,10 +292,7 @@ addLayer("t", {
 			effect() {return getBuyableAmount(this.layer, this.id).toNumber()},
 			purchaseLimit() {return getControlImprovementLimit(4)},
 			canAfford() {return player.t.control.gte(this.cost())},
-			buy() {
-				player.t.control = player.t.control.sub(this.cost());
-				addBuyables(this.layer, this.id, 1);
-			},
+			buy() { buyStandardBuyable(this, 't', 'control') },
 			style() {if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) return {"border-color": "#E03330"}},
 		},
 	},

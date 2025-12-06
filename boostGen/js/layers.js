@@ -962,10 +962,7 @@ addLayer("sg", {
 			},
 			cost() {return new Decimal(1e160).mul(new Decimal(100).pow(getBuyableAmount("sg", this.id).pow(1.25).add(1)))},
 			canAfford() {return player.g.points.gte(this.cost()) && player.sg.capacity.gte(getBoughtSuperGenerators().add(1))},
-			buy() {
-				player.g.points = player.g.points.sub(this.cost());
-				setBuyableAmount("sg", this.id, getBuyableAmount("sg", this.id).add(1));
-			},
+			buy() { buyStandardBuyable(this, "g") },
 			effectBase() {
 				let base = newDecimalOne();
 				base = base.add(buyableEffect("sg", 14));
@@ -986,10 +983,7 @@ addLayer("sg", {
 			},
 			cost() {return new Decimal(1e168).mul(new Decimal(1e8).pow(getBuyableAmount("sg", this.id).pow(1.25).add(1)))},
 			canAfford() {return player.g.points.gte(this.cost()) && player.sg.capacity.gte(getBoughtSuperGenerators().add(1))},
-			buy() {
-				player.g.points = player.g.points.sub(this.cost());
-				setBuyableAmount("sg", this.id, getBuyableAmount("sg", this.id).add(1));
-			},
+			buy() { buyStandardBuyable(this, "g") },
 			effectBase() {
 				let base = new Decimal(2);
 				base = base.add(buyableEffect("sg", 13));
@@ -1006,10 +1000,7 @@ addLayer("sg", {
 			},
 			cost() {return new Decimal(1e180).mul(new Decimal(1e6).pow(getBuyableAmount("sg", this.id).pow(1.25).add(1)))},
 			canAfford() {return player.g.points.gte(this.cost()) && player.sg.capacity.gte(getBoughtSuperGenerators().add(1))},
-			buy() {
-				player.g.points = player.g.points.sub(this.cost());
-				setBuyableAmount("sg", this.id, getBuyableAmount("sg", this.id).add(1));
-			},
+			buy() { buyStandardBuyable(this, "g") },
 			extra() {return buyableEffect("sg", 15).add(buyableEffect("sg", 19))},
 			effect() {return getBuyableAmount("sg", this.id).add(this.extra()).mul(2)},
 		},
@@ -1023,10 +1014,7 @@ addLayer("sg", {
 			},
 			cost() {return new Decimal(1e181).mul(new Decimal(1e10).pow(getBuyableAmount("sg", this.id).pow(1.25).add(1)))},
 			canAfford() {return player.g.points.gte(this.cost()) && player.sg.capacity.gte(getBoughtSuperGenerators().add(1))},
-			buy() {
-				player.g.points = player.g.points.sub(this.cost());
-				setBuyableAmount("sg", this.id, getBuyableAmount("sg", this.id).add(1));
-			},
+			buy() { buyStandardBuyable(this, "g") },
 			extra() {
 				let extra = buyableEffect("sg", 15).add(buyableEffect("sg", 19));
 				if (hasUpgrade("sg", 13)) extra = extra.add(upgradeEffect("sg", 13));
@@ -1052,10 +1040,7 @@ addLayer("sg", {
 			},
 			cost() {return new Decimal(1e187).mul(new Decimal(1e30).pow(getBuyableAmount("sg", this.id).pow(this.exponent()).add(1)))},
 			canAfford() {return player.g.points.gte(this.cost()) && player.sg.capacity.gte(getBoughtSuperGenerators().add(1))},
-			buy() {
-				player.g.points = player.g.points.sub(this.cost());
-				setBuyableAmount("sg", this.id, getBuyableAmount("sg", this.id).add(1));
-			},
+			buy() { buyStandardBuyable(this, "g") },
 			effectBase() {
 				let base = newDecimalOne();
 				base = base.add(buyableEffect("sg", 16));
@@ -1072,10 +1057,7 @@ addLayer("sg", {
 			},
 			cost() {return new Decimal("1e500").mul(new Decimal(1e43).pow(getBuyableAmount("sg", this.id).pow(1.25).add(1)))},
 			canAfford() {return player.g.points.gte(this.cost()) && player.sg.capacity.gte(getBoughtSuperGenerators().add(1))},
-			buy() {
-				player.g.points = player.g.points.sub(this.cost());
-				setBuyableAmount("sg", this.id, getBuyableAmount("sg", this.id).add(1));
-			},
+			buy() { buyStandardBuyable(this, "g") },
 			extra() {return buyableEffect("sg", 19)},
 			effect() {return getBuyableAmount("sg", this.id).add(this.extra()).mul(0.1)},
 			unlocked() {return hasMilestone("b", 11)},
@@ -1096,10 +1078,7 @@ addLayer("sg", {
 				return new Decimal("1e420").mul(new Decimal(1e141).pow(getBuyableAmount("sg", this.id).pow(this.exponent()).add(1)));
 			},
 			canAfford() {return player.g.points.gte(this.cost()) && player.sg.capacity.gte(getBoughtSuperGenerators().add(1))},
-			buy() {
-				player.g.points = player.g.points.sub(this.cost());
-				setBuyableAmount("sg", this.id, getBuyableAmount("sg", this.id).add(1));
-			},
+			buy() { buyStandardBuyable(this, "g") },
 			extra() {return buyableEffect("sg", 19)},
 			effect() {return player.g.points.pow(0.0077).pow(getBuyableAmount("sg", this.id).add(this.extra()))},
 			unlocked() {return hasMilestone("b", 11)},
@@ -1112,10 +1091,7 @@ addLayer("sg", {
 			},
 			cost() {return new Decimal("1e460").mul(new Decimal(1e145).pow(getBuyableAmount("sg", this.id).pow(1.25).add(1)))},
 			canAfford() {return player.g.points.gte(this.cost()) && player.sg.capacity.gte(getBoughtSuperGenerators().add(1))},
-			buy() {
-				player.g.points = player.g.points.sub(this.cost());
-				setBuyableAmount("sg", this.id, getBuyableAmount("sg", this.id).add(1));
-			},
+			buy() { buyStandardBuyable(this, "g") },
 			extra() {return buyableEffect("sg", 19)},
 			effect() {return player.b.points.mul(1.12).pow(getBuyableAmount("sg", this.id).add(this.extra()))},
 			unlocked() {return hasMilestone("b", 11)},
@@ -1132,10 +1108,7 @@ addLayer("sg", {
 			},
 			cost() {return new Decimal("1e1500").mul(new Decimal("1e343").pow(getBuyableAmount("sg", this.id).pow(this.exponent()).add(1)))},
 			canAfford() {return player.g.points.gte(this.cost()) && player.sg.capacity.gte(getBoughtSuperGenerators().add(1))},
-			buy() {
-				player.g.points = player.g.points.sub(this.cost());
-				setBuyableAmount("sg", this.id, getBuyableAmount("sg", this.id).add(1));
-			},
+			buy() { buyStandardBuyable(this, "g") },
 			effectBase() {return new Decimal(0.32)},
 			extra() {return newDecimalZero()},
 			effect() {return getBuyableAmount("sg", this.id).add(this.extra()).mul(this.effectBase())},
@@ -1313,10 +1286,7 @@ addLayer("hg", {
 			},
 			cost() {return new Decimal("1e750").mul(new Decimal(1e50).pow(getBuyableAmount("hg", this.id).pow(1.1).add(1)))},
 			canAfford() {return player.sg.points.gte(this.cost())},
-			buy() {
-				player.sg.points = player.sg.points.sub(this.cost());
-				setBuyableAmount("hg", this.id, getBuyableAmount("hg", this.id).add(1));
-			},
+			buy() { buyStandardBuyable(this, "sg") },
 			effectBase() {return newDecimalOne()},
 			effect() {return getBuyableAmount("hg", this.id).mul(this.effectBase())},
 		},
@@ -1327,10 +1297,7 @@ addLayer("hg", {
 			},
 			cost() {return newDecimalOne().mul(new Decimal(5).pow(getBuyableAmount("hg", this.id).pow(1.1).add(1)))},
 			canAfford() {return player.hg.points.gte(this.cost())},
-			buy() {
-				player.hg.points = player.hg.points.sub(this.cost());
-				setBuyableAmount("hg", this.id, getBuyableAmount("hg", this.id).add(1));
-			},
+			buy() { buyStandardBuyable(this, "hg") },
 			effectBase() {return new Decimal(2)},
 			effect() {return this.effectBase().pow(getBuyableAmount("hg", this.id))},
 		},
@@ -1341,10 +1308,7 @@ addLayer("hg", {
 			},
 			cost() {return new Decimal(100).mul(new Decimal(100).pow(getBuyableAmount("hg", this.id).pow(1.1).add(1)))},
 			canAfford() {return player.hg.points.gte(this.cost())},
-			buy() {
-				player.hg.points = player.hg.points.sub(this.cost());
-				setBuyableAmount("hg", this.id, getBuyableAmount("hg", this.id).add(1));
-			},
+			buy() { buyStandardBuyable(this, "hg") },
 			effect() {return new Decimal(1.001).pow(player.b.points).pow(getBuyableAmount("hg", this.id))},
 		},
 	},
