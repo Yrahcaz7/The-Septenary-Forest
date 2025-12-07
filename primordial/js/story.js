@@ -514,6 +514,55 @@ const story = [
 	The vortex constantly changed colors as it absorbed everything in the surroundings.
 	Then, as the vortex condensed into a singular point of light, its color morphed into a blinding white.
 	And thus, Chaos was born.
+`], [`
+	Near the end of a long workday, Nisp finally returned from their mission.
+	Though they had always disliked the base's charcoal-colored walls, seeing them now brough Nisp a sense of what they called "relief."
+	"I'm finally back... That mission sure was hellish. This time, I'm going to demand more hazard pay."
+	The corridor was eerily silent, the only noises being Nisp's mumbling and footsteps.
+`, `
+	As Nisp trodded along, the straight accordion hallway suddenly bent leftwards.
+	Unsuprised, Nisp continued walking as if it was a normal, daily occurence.
+	After a while, Nisp finally reached a bright green door with no handle.
+	At around head height on the door, there was a strange gray circle affixed.
+`, `
+	Nisp quickly walked up to the door, pressing the back of their metallic head to the circle.
+	In response, the door clicked and swung open.
+	Walking through the doorway, Nisp entered the bright green room beyond.
+	The room was filled with strange contraptions of all colors, but the most eye-catching thing was the imposing dark-blue figure sitting at a bright yellow desk.
+	The large desk was completely empty, save for a test tube rack holding three seemingly empty tubes.
+`, `
+	Nisp instantly bowed the moment they saw the imposing figure, courtesy of their inferior model.
+	Figure: "Has the mission failed?"
+	What they called "confusion" instantly spread throughout Nisp's circuits.
+	Nisp: "The mission was a success. The sample has been retrieved."
+	Figure: "A pleasant surprise. How much did your repairs cost?"
+`, `
+	Nisp: "1,403 points, boss."
+	Figure: "Alright. After confirming the amount, you shall recieve 51,403 points."
+	Nisp: "Fi- Fifty thousand?"
+	Figure: "Correct. The previously offered reward of 10,000 did not properly account for the danger the mission contained. In accordance with this, regardless of the mission's success, all participating units shall receive the inital offer, and succeeding units will recieve five times as much."
+`, `
+	The sudden influx of wealth made Nisp feel what they called "giddy."
+	Nisp quickly opened the hatch in their head, took out the sample, and handed it to the dark-blue figure.
+	The figure looked at the sample contained in the test tube for a few seconds, then put it in the rack on the desk.
+	Figure: "This is indeed genuine. Nisp, you may just have a promotion in your future."
+	Nisp: "Th- Thank you for your kind words, boss!"
+`, `
+	The figure quickly dismissed Nisp after the handover was complete.
+	Stepping back out of the door they used to enter, Nisp found that it was no connected to the residential building.
+	Walking though the pink acordion hallway, Nisp was filled with what they called "hope."
+	With their savings so far plus the reward from the mission they just completed, they could now afford to transfer their core into a new vessel, completely escaping the restrictions that came from being lower-class.
+`, `
+	Now, Nisp truly thought that joining the Worldwalkers was the right choice.
+	The missions were almost insufferable, but the earnings far outshadowed any other job someone of their model could obtain.
+	However, a feeling they called "doubt" lingered.
+	Nisp wondered what hidden dangers the mission had contained for them to be so generous.
+`, `
+	Really, ransacking some human scientist's house and retrieving an item from it wasn't that hard.
+	Its difficulty paled in comparison to some of the missions they took on previously.
+	No matter how much Nisp thought about it, they couldn't figure it out.
+	Thus, Nisp decided to trust their intuition and quit their job, going into hiding as soon as they got their pay.
+	After all, their intuition for danger was the one thing about them that had ever recieved any praise.
 `]];
 
 const storyNames = [
@@ -528,6 +577,7 @@ const storyNames = [
 	"The Wanderer's Pursuit",
 	"The Great Unification",
 	"And Thus, Chaos was Born",
+	'What They Called "Intuition"',
 ];
 
 const storyColors = [
@@ -542,6 +592,7 @@ const storyColors = [
 	[],
 	["#FF4400", "#A0A0A0"],
 	["#008800", "#FFFFFF"],
+	[],
 ];
 
 const storyKeywords = [
@@ -556,6 +607,7 @@ const storyKeywords = [
 	["wanderer", "sun", "soul", "planet"],
 	["despair", "balance", "equilibrium"],
 	["fate", "life", "vortex"],
+	["metallic", "model", "circuit", "repair"],
 ];
 
 for (let index = 0; index < story.length; index++) {
