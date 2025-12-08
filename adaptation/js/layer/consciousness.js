@@ -152,7 +152,7 @@ addLayer("cb", {
 	},
 	componentStyles: {
 		"prestige-button"() {if (tmp.cb.canReset && tmp.cb.nodeStyle) return tmp.cb.nodeStyle},
-		clickable: {"min-height": "58px", border: "solid 4px #E5B55A", "border-radius": "0px", color: "#DFDFDF", transform: "none"},
+		clickable: {"min-height": "58px", border: "solid 4px #E5B55A", "border-radius": 0, color: "#DFDFDF", transform: "none"},
 	},
 	clickables: {
 		11: {

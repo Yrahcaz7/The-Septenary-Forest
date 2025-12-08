@@ -172,7 +172,7 @@ addLayer("w", {
 	},
 	componentStyles: {
 		"contained-grid": {"box-sizing": "border-box", border: "2px solid #C77055", padding: "16px"},
-		gridable: {width: "120px", height: "120px", "border-radius": "0px"},
+		gridable: {width: "120px", height: "120px", "border-radius": 0},
 		"master-button": {"margin-right": "18px"},
 	},
 	grid: {

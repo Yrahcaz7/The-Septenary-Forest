@@ -243,7 +243,7 @@ addLayer("ex", {
 	},
 	componentStyles: {
 		"prestige-button"() {if (tmp.ex.canReset && tmp.ex.nodeStyle) return tmp.ex.nodeStyle},
-		"buyable"() {return {width: "500px", height: "60px", "border-radius": "0px"}},
+		"buyable"() {return {width: "500px", height: "60px", "border-radius": 0}},
 	},
 	buyables: {
 		11: {

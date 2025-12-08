@@ -515,9 +515,9 @@ const story = [
 	Then, as the vortex condensed into a singular point of light, its color morphed into a blinding white.
 	And thus, Chaos was born.
 `], [`
-	Near the end of a long workday, Nisp finally returned from their mission.
+	After the end of a long workday, Nisp finally returned from their mission.
 	Though they had always disliked the base's charcoal-colored walls, seeing them now brough Nisp a sense of what they called "relief."
-	"I'm finally back... That mission sure was hellish. This time, I'm going to demand more hazard pay."
+	"I'm finally back... That mission sure was annoying. I wish they paid more for overtime..."
 	The corridor was eerily silent, the only noises being Nisp's mumbling and footsteps.
 `, `
 	As Nisp trodded along, the straight accordion hallway suddenly bent leftwards.
@@ -617,10 +617,10 @@ for (let index = 0; index < story.length; index++) {
 
 story[0][0] = '...<br>' + story[0][0].replace(/<br><br>/g, '<br>...<br>');
 
-function storyLength(number) {
-	if (number < 0) return 0;
+function storyLengthUpTo(num) {
+	if (num < 0) return 0;
 	let length = 0;
-	for (let index = 0; index < story.length && index <= number; index++) {
+	for (let index = 0; index < story.length && index <= num; index++) {
 		length += story[index].length;
 	};
 	return length;
@@ -628,19 +628,44 @@ function storyLength(number) {
 
 function getDecipheredKeywords() {
 	let keywords = [];
+	const chaos = player.ch.best.toNumber();
+	let length = 0;
 	for (let index = 0; index < storyKeywords.length; index++) {
-		if (player.ch.best.toNumber() >= storyLength(index)) {
+		length += story[index].length;
+		if (chaos >= length) {
 			keywords.push(...storyKeywords[index]);
 		};
 	};
 	return keywords;
 };
 
+function storySegmentIsFullyDeciphered(num) {
+	if (!player.ch.deciphering) return false;
+	const chaos = player.ch.best.toNumber();
+	let length = storyLengthUpTo(num);
+	for (let index = num + 1; index < storyKeywords.length; index++) {
+		length += story[index].length;
+		if (chaos < length) {
+			for (const str of story[num]) {
+				for (const keyword of storyKeywords[index]) {
+					if (str.includes(keyword)) {
+						return false;
+					};
+				};
+			};
+		};
+	};
+	return true;
+};
+
 const storyFilters = storyKeywords.map(arr => RegExp(arr.join("|"), "gi"));
 
 function filterStory(string) {
+	const chaos = player.ch.best.toNumber();
+	let length = 0;
 	for (let index = 0; index < storyFilters.length; index++) {
-		if (player.ch.best.toNumber() < storyLength(index) || !player.ch.deciphering) {
+		length += story[index].length;
+		if (chaos < length || !player.ch.deciphering) {
 			string = string.replace(storyFilters[index], match => randomStr(match.length));
 		};
 	};
@@ -653,26 +678,32 @@ function getChaosInfoBoxes() {
 		const boxID = 'story' + row;
 		infoBoxes[boxID] = {
 			title() {
-				if (player.ch.best.toNumber() >= storyLength(row)) return '<span style="margin-left: 2px">' + storyNames[row];
-				return '<span style="margin-left: 2px">' + storyNames[row].replace(/[A-Za-z0-9]/g, () => randomStr(1));
+				let text = '';
+				if (player.ch.best.toNumber() >= storyLengthUpTo(row)) {
+					text += storyNames[row];
+					if (storySegmentIsFullyDeciphered(row)) text += ' [<span style="display: inline-block; margin-top: -1em; height: 0">&check;</span>]';
+				} else {
+					text += storyNames[row].replace(/[A-Za-z0-9]/g, () => randomStr(1));
+				};
+				return text;
 			},
 			body() {
 				let text = '';
-				for (let index = 0; index < story[row].length && index < player.ch.best.toNumber() - storyLength(row - 1); index++) {
+				for (let index = 0; index < story[row].length && index < player.ch.best.toNumber() - storyLengthUpTo(row - 1); index++) {
 					text += story[row][index];
 				};
 				return filterStory(text);
 			},
-			unlocked() { return player.ch.best.toNumber() > storyLength(row - 1) },
+			unlocked() { return player.ch.best.toNumber() > storyLengthUpTo(row - 1) },
 		};
 		if (storyColors[row] && storyColors[row].length > 0) {
-			infoBoxes[boxID].style = {'border-color': storyColors[row][0], 'border-radius': '0px'};
-			infoBoxes[boxID].titleStyle = {'background-color': storyColors[row][0], 'border-radius': '0px'};
-			infoBoxes[boxID].bodyStyle = {'margin-bottom': '0px', 'border-image-source': 'linear-gradient(' + storyColors[row].join(', ') + ')', 'border-image-slice': '4', 'border-radius': '0px'};
+			infoBoxes[boxID].style = {'border-color': storyColors[row][0], 'border-radius': 0};
+			infoBoxes[boxID].titleStyle = {'background-color': storyColors[row][0], 'border-radius': 0};
+			infoBoxes[boxID].bodyStyle = {'margin-bottom': 0, 'border-image-source': 'linear-gradient(' + storyColors[row].join(', ') + ')', 'border-image-slice': '4', 'border-radius': 0};
 		} else {
-			infoBoxes[boxID].style = {'border-radius': '0px'};
-			infoBoxes[boxID].titleStyle = {'border-radius': '0px'};
-			infoBoxes[boxID].bodyStyle = {'margin-bottom': '0px', 'border-radius': '0px'};
+			infoBoxes[boxID].style = {'border-radius': 0};
+			infoBoxes[boxID].titleStyle = {'border-radius': 0};
+			infoBoxes[boxID].bodyStyle = {'margin-bottom': 0, 'border-radius': 0};
 		};
 	};
 	return infoBoxes;
@@ -681,7 +712,7 @@ function getChaosInfoBoxes() {
 function nextStorySegmentFinishesAt() {
 	const chaos = player.ch.best.toNumber();
 	let length = 0;
-	for (let index = 0; index < story.length && chaos > length; index++) {
+	for (let index = 0; index < story.length && chaos >= length; index++) {
 		length += story[index].length;
 	};
 	if (chaos >= length) return Infinity;
@@ -689,6 +720,6 @@ function nextStorySegmentFinishesAt() {
 };
 
 function getNextStoryAt() {
-	if (player.ch.best.toNumber() < storyLength(Infinity)) return "<br><br>Next story discovery is at " + formatWhole(player.ch.best.add(1)) + " chaos.<br><br>Next story segment finishes at " + nextStorySegmentFinishesAt() + " chaos.";
+	if (player.ch.best.toNumber() < storyLengthUpTo(Infinity)) return "<br><br>Next story discovery is at " + formatWhole(player.ch.best.add(1)) + " chaos.<br><br>Next story segment finishes at " + nextStorySegmentFinishesAt() + " chaos.";
 	return "<br><br>All story discoveries found; wait for updates for more!";
 };

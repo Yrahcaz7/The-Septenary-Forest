@@ -214,7 +214,7 @@ addLayer("t", {
 	componentStyles: {
 		"prestige-button"() {if (tmp.t.canReset && tmp.t.nodeStyle) return tmp.t.nodeStyle},
 		"contained-grid"() {return {"box-sizing": "border-box", border: "2px solid #E03330", padding: "16px"}},
-		"gridable"() {return {width: "120px", height: "120px", "border-radius": "0px"}},
+		"gridable"() {return {width: "120px", height: "120px", "border-radius": 0}},
 	},
 	grid: {
 		rows() {return 2 + getBuyableAmount("t", 11).toNumber()},

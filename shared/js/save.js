@@ -256,7 +256,7 @@ function importSave(imported = undefined, forced = false) {
 	try {
 		const tempPlr = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(atob(imported))));
 		if (tempPlr.versionType !== getModID() && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")) {
-			return; // Wrong save. Use "Forced" to force it to accept.
+			return; // Wrong save. Use "forced" to force it to accept.
 		};
 		player = tempPlr;
 		player.versionType = getModID();

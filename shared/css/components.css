@@ -87,7 +87,6 @@
 	cursor: pointer;
 	border: none;
 	padding: 0 4px;
-	border-radius: 8px 8px 0 0;
 }
 
 .story-toggle {
@@ -97,7 +96,7 @@
 	font-size: 20px;
 	pointer-events: none;
 	width: 1em;
-	margin-right: 2px;
+	margin: 4px 4px 0 0;
 }
 
 .story-text {

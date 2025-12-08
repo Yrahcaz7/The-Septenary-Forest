@@ -183,11 +183,10 @@ function loadVue(mainPage = false) {
 		template: template(`<div class="story instant" v-if="tmp[layer].infoboxes && tmp[layer].infoboxes[data] !== undefined && tmp[layer].infoboxes[data].unlocked" :style="[{
 			'border-bottom-style': (player.infoboxes[layer][data] ? 'solid' : 'none'),
 			'border-color': tmp[layer].color,
-			'border-radius': (player.infoboxes[layer][data] ? 0 : '8px'),
 		}, tmp[layer].infoboxes[data].style]">
 			<button class="story-title" :style="[{'background-color': tmp[layer].color}, tmp[layer].infoboxes[data].titleStyle]" @click="player.infoboxes[layer][data] = !player.infoboxes[layer][data]">
 				<span class="story-toggle">{{player.infoboxes[layer][data] ? "+" : "-"}}</span>
-				<span v-html="tmp[layer].infoboxes[data].title ? tmp[layer].infoboxes[data].title : (tmp[layer].name)"></span>
+				<span v-html="tmp[layer].infoboxes[data].title ? tmp[layer].infoboxes[data].title : tmp[layer].name"></span>
 			</button>
 			<div v-if="!player.infoboxes[layer][data]" class="story-text" :style="tmp[layer].infoboxes[data].bodyStyle">
 				<span v-html="tmp[layer].infoboxes[data].body ? tmp[layer].infoboxes[data].body : 'Blah'"></span>
@@ -928,7 +927,7 @@ function loadVue(mainPage = false) {
 				<template v-else>
 					<div class="upgCol" :style="{
 						'padding-top': (embedded ? '0' : '25px'),
-						'margin-top': (embedded ? '-10px' : '0'),
+						'margin-top': (embedded ? '-10px' : 0),
 						'margin-bottom': '24px',
 					}">
 						<tab-buttons :style="tmp[layer].componentStyles['tab-buttons']" :layer="layer" :data="tmp[layer].tabFormat" :name="'mainTabs'"></tab-buttons>

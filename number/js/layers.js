@@ -762,9 +762,9 @@ addLayer('d', {
 			return '<h2>' + data;
 		},
 		getStyle(data, id) {
-			if (buyableEffect('d', 51).gte(10) && id == 101) return {height:'30px',width:'170px','border-radius':'0'};
-			if (hasUpgrade('d', 11) && id == 102) return {height:'30px',width:'130px','border-radius':'0'};
-			if (player.d.points.gt(99) && id == 101) return {height:'30px',width:'120px','border-radius':'0'};
+			if (buyableEffect('d', 51).gte(10) && id == 101) return {height:'30px',width:'170px','border-radius':0};
+			if (hasUpgrade('d', 11) && id == 102) return {height:'30px',width:'130px','border-radius':0};
+			if (player.d.points.gt(99) && id == 101) return {height:'30px',width:'120px','border-radius':0};
 			return {height:'30px',width:'30px','border-radius':'50%'};
 		},
 	},

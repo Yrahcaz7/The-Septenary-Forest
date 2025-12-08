@@ -28,7 +28,7 @@ const customComponents = {
 			spellCasts() { return player[this.layer].mana.div(getSpellCost(this.data - 11)).floor() },
 		},
 		template: template(`<button :class="'upg tooltipBox ' + (tmp[layer].clickables[data].canClick ? 'can' : 'locked')" :style="[(tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].clickables[data].color} : {}), {
-			'border-radius': '0',
+			'border-radius': 0,
 			width: '125px',
 			'min-height': '25px',
 			transform: 'none',

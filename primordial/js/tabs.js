@@ -205,6 +205,8 @@ function getRawTabContent(layer, name = "") {
 			content.push("blank");
 			content.push(["row", [["display-text", "Keyword deciphering is&nbsp;"], ["toggle", ["ch", "deciphering"]]]]);
 			content.push("blank");
+			content.push(["display-text", 'Fully deciphered story segments are marked with <h2>[&check;]</h2>']);
+			content.push("blank");
 		} else if (name == "Story") {
 			for (let index = 0; index < story.length; index++) {
 				content.push(["infobox", "story" + index]);
