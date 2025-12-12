@@ -296,7 +296,7 @@ function loadVue(mainPage = false) {
 				<span v-if="layers[layer].upgrades[data].effectDisplay">
 					<br>
 					<span v-html="currentlyText"></span>
-					<span v-html="run(layers[layer].upgrades[data].effectDisplay, layers[layer].upgrades[data])"></span>
+					<span v-html="run(layers[layer].upgrades[data].effectDisplay, layers[layer].upgrades[data], tmp[layer].upgrades[data].effect)"></span>
 				</span><br><br>
 				Cost: {{formatWhole(tmp[layer].upgrades[data].cost)}} {{(tmp[layer].upgrades[data].currencyDisplayName ? tmp[layer].upgrades[data].currencyDisplayName : tmp[layer].resource)}}
 			</span>
@@ -416,7 +416,14 @@ function loadVue(mainPage = false) {
 	// data = the id of the buyable
 	addNormalComponent('buyable', {
 		props: ['layer', 'data'],
-		data() {return {tmp, player, interval: false, buyBuyable, run, layers, time: 0}},
+		data() {return {tmp, player, interval: false, buyBuyable, layers, run, formatWhole, time: 0}},
+		computed: {
+			currentlyText() {
+				if (typeof currentlyText === "function") return currentlyText();
+				if (typeof currentlyText === "string") return currentlyText;
+				return "Currently: ";
+			},
+		},
 		methods: {
 			start() {
 				if (!this.interval) {
@@ -447,7 +454,19 @@ function loadVue(mainPage = false) {
 				<span v-if="tmp[layer].buyables[data].title">
 					<h2 v-html="tmp[layer].buyables[data].title"></h2><br>
 				</span>
-				<span :style="{'white-space': 'pre-line'}" v-html="run(layers[layer].buyables[data].display, layers[layer].buyables[data])"></span>
+				<span v-if="layers[layer].buyables[data].fullDisplay" style="white-space: pre-line" v-html="run(layers[layer].buyables[data].fullDisplay, layers[layer].buyables[data])"></span>
+				<span v-else>
+					<span v-html="tmp[layer].buyables[data].description"></span>
+					<span v-if="layers[layer].buyables[data].effectDisplay">
+						<br><br>
+						<span v-html="currentlyText"></span>
+						<span v-html="run(layers[layer].buyables[data].effectDisplay, layers[layer].buyables[data], tmp[layer].buyables[data].effect)"></span>
+					</span><br><br>
+					<span v-if="layers[layer].buyables[data].costDisplay" v-html="run(layers[layer].buyables[data].costDisplay, layers[layer].buyables[data], tmp[layer].buyables[data].cost)"></span>
+					<span v-else>Cost: {{formatWhole(tmp[layer].buyables[data].cost)}} {{(tmp[layer].buyables[data].currencyDisplayName || tmp[layer].resource)}}</span><br><br>
+					<span v-if="layers[layer].buyables[data].boughtDisplay" v-html="run(layers[layer].buyables[data].boughtDisplay, layers[layer].buyables[data], player[layer].buyables[data])"></span>
+					<span v-else>Bought: {{formatWhole(player[layer].buyables[data])}}{{tmp[layer].buyables[data].purchaseLimit ? "/" + formatWhole(tmp[layer].buyables[data].purchaseLimit) : ""}}</span>
+				</span>
 				<node-mark :layer="layer" :data='tmp[layer].buyables[data].marked'></node-mark>
 				<tooltip v-if="tmp[layer].buyables[data].tooltip" :text="tmp[layer].buyables[data].tooltip"></tooltip>
 			</button>

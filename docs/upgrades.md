@@ -31,7 +31,7 @@ Individual upgrades can have these features:
 
 - `effect()`: **optional**. A function that calculates and returns the current values of any bonuses from the upgrade. Can return a value or an object containing multiple values.
 
-- `effectDisplay()`: **optional**. A function that returns a display of the current effects of the upgrade with formatting. Default displays nothing. Can use basic HTML.
+- `effectDisplay()`: **optional**. A function that returns a display of the current effects of the upgrade with formatting. Default displays nothing. Can use basic HTML. (Additional feature: Can have an argument `eff`, which holds the current effect of the upgrade.)
 
 - `fullDisplay()`: **OVERRIDE**. Overrides the other displays and descriptions, and lets you set the full text for the upgrade. Can use basic HTML.
 
@@ -47,13 +47,11 @@ Individual upgrades can have these features:
 
 - `layer`: **assigned automagically**. It's the same value as the name of this layer, so you can do `player[this.layer].points` or similar.
 
-- `id`: **assigned automagically**. It's the "key" which the upgrade was stored under, for convenient access. The upgrade in the example's id is 11.
+- `id`: **assigned automagically**. It's the "key" which the upgrade was stored under, for convenient access. The upgrade in the example's id is `11`.
 
 - `branches`: **optional**. This is primarially useful for upgrade trees. An array of upgrade ids. A line will appear from this upgrade to all of the upgrades in the list. Alternatively, an entry in the array can be a 2-element array consisting of the upgrade id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). A third element in the array optionally specifies line width.
 
-Additional features:
-
-- `color`: **optional**. The background color of the upgrade if it can be purchased. (A string in hex format with a `#`.) The default is the color of the layer the upgrade belongs to. Can be a function.
+> - `color` (additional feature): **optional**. The background color of the upgrade if it can be purchased. (A string in hex format with a `#`.) The default is the color of the layer the upgrade belongs to. Can be a function.
 
 By default, upgrades use the main prestige currency for the layer. You can include these to change them (but it needs to be a Decimal):
 
@@ -71,6 +69,6 @@ If you want to do something more complicated like upgrades that cost two currenc
 
 - `pay()`: **OVERRIDE**. A function that reduces your currencies when you buy the upgrade.
 
-Additional features on the main upgrades object:
-
-- `needLayerUnlocked`: **optional**. If this is false, the layer need not be unlocked for the player to purchase upgrades.
+> Additional features on the main upgrades object:
+>
+> - `needLayerUnlocked`: **optional**. If this is false, the layer need not be unlocked for the player to purchase upgrades.

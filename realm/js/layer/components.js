@@ -101,7 +101,7 @@ addLayer("C", {
 					cost = cost.add(a.pow(6).mul(-2).add(a.pow(5).mul(6)).sub(a.pow(4).mul(5)).add(a.pow(2)).add(b.pow(6).mul(2)).add(b.pow(5).mul(6)).add(b.pow(4).mul(5)).sub(b.pow(2)).div(scale.pow(5).mul(12))); // ∑n=a→b (n/scale)^5
 					return cost.mul(getCreationCost(index));
 				},
-				display() {
+				fullDisplay() {
 					const b = tmp.C.buyables[index + 11];
 					const amount = getBuyableAmount("C", index + 11);
 					const text = `\nCost: ${format(b.cost)} coin${b.cost.eq(1) ? "" : "s"}\n\nAmount: ${formatWhole(amount)}\n\n`;
@@ -131,7 +131,7 @@ addLayer("C", {
 					if (getBuyableAmount("C", index + 111).gte(4)) return getBuyableAmount("C", index + 111).pow_base(1_000).div(10_000).mul(getCreationCost(index));
 					return getBuyableAmount("C", index + 111).pow_base(20).mul(50 * getCreationCost(index));
 				},
-				display() {
+				fullDisplay() {
 					const tier = getBuyableAmount("C", index + 111).toNumber();
 					const name = getCreationName(index).toLowerCase();
 					const eff = creationTierEff[index][tier + 1];

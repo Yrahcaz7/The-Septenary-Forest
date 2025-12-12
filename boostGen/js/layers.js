@@ -956,7 +956,7 @@ addLayer("sg", {
 		respecMessage: "Are you sure you want to respec capacity? This will reset all Super Generators, but refund all capacity.",
 		11: {
 			title: "1st Super Generator",
-			display() {
+			fullDisplay() {
 				const extra = this.extra();
 				return "Increase super generator power gain by " + format(this.effectBase()) + ".<br><br>Effect: +" + format(buyableEffect("sg", this.id)) + "<br><br>Cost: " + format(this.cost()) + " generator power<br><br>Bought: " + formatWhole(getBuyableAmount("sg", this.id)) + (extra.gt(0) ? " + " + format(extra) : "");
 			},
@@ -977,7 +977,7 @@ addLayer("sg", {
 		},
 		12: {
 			title: "2nd Super Generator",
-			display() {
+			fullDisplay() {
 				const extra = this.extra();
 				return "Multiply super generator power gain by " + format(this.effectBase()) + ".<br><br>Effect: " + format(buyableEffect("sg", this.id)) + "x<br><br>Cost: " + format(this.cost()) + " generator power<br><br>Bought: " + formatWhole(getBuyableAmount("sg", this.id)) + (extra.gt(0) ? " + " + format(extra) : "");
 			},
@@ -994,7 +994,7 @@ addLayer("sg", {
 		},
 		13: {
 			title: "3rd Super Generator",
-			display() {
+			fullDisplay() {
 				const extra = this.extra();
 				return "Increase 2nd Super Generator effect base by " + format(2) + ".<br><br>Effect: +" + format(buyableEffect("sg", this.id)) + "<br><br>Cost: " + format(this.cost()) + " generator power<br><br>Bought: " + formatWhole(getBuyableAmount("sg", this.id)) + (extra.gt(0) ? " + " + format(extra) : "");
 			},
@@ -1006,7 +1006,7 @@ addLayer("sg", {
 		},
 		14: {
 			title: "4th Super Generator",
-			display() {
+			fullDisplay() {
 				const extra = this.extra();
 				if (hasUpgrade("sg", 34)) return "[1st Super Generators ^ 1.77] increases the 1st Super Generator effect base.<br><br>Effect: +" + format(buyableEffect("sg", this.id)) + "<br><br>Cost: " + format(this.cost()) + " generator power<br><br>Bought: " + formatWhole(getBuyableAmount("sg", this.id)) + (extra.gt(0) ? " + " + format(extra) : "");
 				if (hasUpgrade("sg", 11)) return "[1st Super Generators ^ 1.55] increases the 1st Super Generator effect base.<br><br>Effect: +" + format(buyableEffect("sg", this.id)) + "<br><br>Cost: " + format(this.cost()) + " generator power<br><br>Bought: " + formatWhole(getBuyableAmount("sg", this.id)) + (extra.gt(0) ? " + " + format(extra) : "");
@@ -1028,7 +1028,7 @@ addLayer("sg", {
 		},
 		15: {
 			title: "5th Super Generator",
-			display() {
+			fullDisplay() {
 				const extra = this.extra();
 				return "Get " + format(this.effectBase()) + " extra super generators of all the previous types.<br><br>Effect: +" + format(buyableEffect("sg", this.id)) + "<br><br>Cost: " + format(this.cost()) + " generator power<br><br>Bought: " + formatWhole(getBuyableAmount("sg", this.id)) + (extra.gt(0) ? " + " + format(extra) : "");
 			},
@@ -1051,7 +1051,7 @@ addLayer("sg", {
 		},
 		16: {
 			title: "6th Super Generator",
-			display() {
+			fullDisplay() {
 				const extra = this.extra();
 				return "Increase 5th Super Generator effect base by " + format(0.1) + ".<br><br>Effect: +" + format(buyableEffect("sg", this.id)) + "<br><br>Cost: " + format(this.cost()) + " generator power<br><br>Bought: " + formatWhole(getBuyableAmount("sg", this.id)) + (extra.gt(0) ? " + " + format(extra) : "");
 			},
@@ -1064,7 +1064,7 @@ addLayer("sg", {
 		},
 		17: {
 			title: "7th Super Generator",
-			display() {
+			fullDisplay() {
 				const extra = this.extra();
 				return "[Generator Power ^ 0.0077] multiplies super generator power gain.<br><br>Effect: " + format(buyableEffect("sg", this.id)) + "x<br><br>Cost: " + format(this.cost()) + " generator power<br><br>Bought: " + formatWhole(getBuyableAmount("sg", this.id)) + (extra.gt(0) ? " + " + format(extra) : "");
 			},
@@ -1085,7 +1085,7 @@ addLayer("sg", {
 		},
 		18: {
 			title: "8th Super Generator",
-			display() {
+			fullDisplay() {
 				const extra = this.extra();
 				return "[Boosters * 1.12] multiplies super generator power gain.<br><br>Effect: " + format(buyableEffect("sg", this.id)) + "x<br><br>Cost: " + format(this.cost()) + " generator power<br><br>Bought: " + formatWhole(getBuyableAmount("sg", this.id)) + (extra.gt(0) ? " + " + format(extra) : "");
 			},
@@ -1098,7 +1098,7 @@ addLayer("sg", {
 		},
 		19: {
 			title: "9th Super Generator",
-			display() {
+			fullDisplay() {
 				const extra = this.extra();
 				return "Get " + format(this.effectBase()) + " extra super generators of all the previous types.<br><br>Effect: +" + format(buyableEffect("sg", this.id)) + "<br><br>Cost: " + format(this.cost()) + " generator power<br><br>Bought: " + formatWhole(getBuyableAmount("sg", this.id)) + (extra.gt(0) ? " + " + format(extra) : "");
 			},
@@ -1281,7 +1281,7 @@ addLayer("hg", {
 	buyables: {
 		11: {
 			title: "1st Hyper Generator",
-			display() {
+			fullDisplay() {
 				return "Increase hyper generator power gain by " + format(this.effectBase()) + ".<br><br>Effect: +" + format(buyableEffect("hg", this.id)) + "<br><br>Cost: " + format(this.cost()) + " super generator power<br><br>Bought: " + formatWhole(getBuyableAmount("hg", this.id));
 			},
 			cost() {return new Decimal("1e750").mul(new Decimal(1e50).pow(getBuyableAmount("hg", this.id).pow(1.1).add(1)))},
@@ -1292,7 +1292,7 @@ addLayer("hg", {
 		},
 		12: {
 			title: "2nd Hyper Generator",
-			display() {
+			fullDisplay() {
 				return "Multiply hyper generator power gain by " + format(this.effectBase()) + ".<br><br>Effect: " + format(buyableEffect("hg", this.id)) + "x<br><br>Cost: " + format(this.cost()) + " hyper generator power<br><br>Bought: " + formatWhole(getBuyableAmount("hg", this.id));
 			},
 			cost() {return newDecimalOne().mul(new Decimal(5).pow(getBuyableAmount("hg", this.id).pow(1.1).add(1)))},
@@ -1303,7 +1303,7 @@ addLayer("hg", {
 		},
 		13: {
 			title: "3rd Hyper Generator",
-			display() {
+			fullDisplay() {
 				return "[1.001 ^ Boosters] multiplies hyper generator power gain.<br><br>Effect: " + format(buyableEffect("hg", this.id)) + "x<br><br>Cost: " + format(this.cost()) + " hyper generator power<br><br>Bought: " + formatWhole(getBuyableAmount("hg", this.id));
 			},
 			cost() {return new Decimal(100).mul(new Decimal(100).pow(getBuyableAmount("hg", this.id).pow(1.1).add(1)))},

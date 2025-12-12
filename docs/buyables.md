@@ -18,7 +18,7 @@ Buyables should be formatted like this:
 buyables: {
     11: {
         cost(x) { return new Decimal(2).mul(x) },
-        display() { return "Blah" },
+        fullDisplay() { return "Blah" },
         canAfford() { return player[this.layer].points.gte(this.cost()) },
         buy() {
             player[this.layer].points = player[this.layer].points.sub(this.cost());
@@ -44,15 +44,12 @@ buyables: {
 >     11: {
 >         cost(x) { return new Decimal(5).pow(x.add(1).pow(1.5).add(2)) },
 >         title: "More Prestige Points",
->         display() {
->             return "multiplies prestige point gain.<br>"
->                 + "Currently: " + format(buyableEffect(this.layer, this.id)) + "x<br><br>"
->                 + "Cost: " + formatWhole(tmp[this.layer].buyables[this.id].cost) + " points<br><br>"
->                 + "Bought: " + formatWhole(getBuyableAmount(this.layer, this.id));
->         },
+>         description: "multiplies prestige point gain.",
+>         effect(x) { return x.add(1).pow(0.5) },
+>         effectDisplay(eff) { return format(eff) + "x" },
+>         currencyDisplayName: "points",
 >         canAfford() { return player.points.gte(this.cost()) },
 >         buy() { buyStandardBuyable(this, "") },
->         effect(x) { return x.add(1).pow(0.5) },
 >     },
 > }
 > ```
@@ -60,15 +57,25 @@ buyables: {
 
 Features:
 
-- `title`: **optional**. Displayed at the top in a larger font. It can also be a function that returns updating text.
+- `title`: **optional**. Displayed at the top in a larger font. It can also be a function that returns updating text. Can use basic HTML.
 
-- `cost()`: Cost for buying the next buyable. Can have an optional argument "x" to calculate the cost of the x+1th purchase. (x is a `Decimal`).
-    Can return an object if there are multiple currencies.
+> - `description` (additional feature): A description of the buyable's effect. *You will also have to implement the effect where it is applied.* It can also be a function that returns updating text. Can use basic HTML.
 
-- `effect()`: **optional**. A function that calculates and returns the current values of bonuses of this buyable. Can have an optional argument "x" to calculate the effect of having x of the buyable.
+- `effect()`: **optional**. A function that calculates and returns the current values of bonuses of this buyable. Can have an optional argument `x` to calculate the effect of having x of the buyable.
     Can return a value or an object containing multiple values.
 
-- `display()`: A function returning everything that should be displayed on the buyable after the title, likely including the description, amount bought, cost, and current effect. Can use basic HTML.
+> - `effectDisplay(eff)` (additional feature): **optional**. A function that returns a display of the current effects of the buyable with formatting. The `eff` argument holds the current effect of the buyable. Default displays nothing. Can use basic HTML.
+
+- `cost()`: Cost for buying the next buyable. Can have an optional argument `x` to calculate the cost of the `x+1`th purchase. (`x` is a `Decimal`).
+    Can return an object if there are multiple currencies.
+
+> - `currencyDisplayName` (additional feature): **optional**. The name to display for the currency for the buyable.
+>
+> - `costDisplay(cost)` (additional feature): **OVERRIDE**. Overrides the cost display. The `cost` argument holds the current cost of the buyable. If you use this, `currencyDisplayName` does nothing.
+>
+> - `boughtDisplay(x)` (additional feature): **OVERRIDE**. Overrides the bought display. The `x` argument holds the amount of the buyable the player has.
+
+- `fullDisplay()` (formerly `display()`): **OVERRIDE**. Overrides the other displays and descriptions (besides `title`), and lets you set the full text for the buyable. Can use basic HTML.
 
 - `unlocked()`: **optional**. A function returning a bool to determine if the buyable is visible or not. Default is unlocked.
 
@@ -88,13 +95,11 @@ Features:
 
 - `layer`: **assigned automagically**. It's the same value as the name of this layer, so you can do `player[this.layer].points` or similar.
 
-- `id`: **assigned automagically**. It's the "key" which the buyable was stored under, for convenient access. The buyable in the example's id is 11.
+- `id`: **assigned automagically**. It's the "key" which the buyable was stored under, for convenient access. The buyable in the example's id is `11`.
 
 - `branches`: **optional**. This is primarially useful for buyable trees. An array of buyable ids. A line will appear from this buyable to all of the buyables in the list. Alternatively, an entry in the array can be a 2-element array consisting of the buyable id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). A third element in the array optionally specifies line width.
 
-Additional features:
-
-- `color`: **optional**. The background color of the buyable if it can be purchased. (A string in hex format with a `#`.) The default is the color of the layer the buyable belongs to. Can be a function.
+> - `color` (additional feature): **optional**. The background color of the buyable if it can be purchased. (A string in hex format with a `#`.) The default is the color of the layer the buyable belongs to. Can be a function.
 
 Sell One/Sell All:
 
@@ -115,6 +120,6 @@ You can use these features along with it:
 
 - `respecMessage`: **optional**. A custom confirmation message on respec, in place of the default one.
 
-Additional features on the main buyables object:
-
-- `needLayerUnlocked`: **optional**. If this is false, the layer need not be unlocked for the player to purchase buyables.
+> Additional features on the main buyables object:
+>
+> - `needLayerUnlocked`: **optional**. If this is false, the layer need not be unlocked for the player to purchase buyables.

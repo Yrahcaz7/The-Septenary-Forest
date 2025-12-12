@@ -209,7 +209,7 @@ addLayer("a", {
 			},
 			effect(amt) {return amt.add(this.extra()).pow_base(this.effectBase())},
 			title: "(CRA)FTSMANSHIP",
-			display() {
+			fullDisplay() {
 				const b = tmp[this.layer].buyables[this.id];
 				return "multiply population maximum by " + format(b.effectBase) + (b.effectBase.gte(1000000) ? "" : "<br>(population max also influences gain)") + "<br><br>Effect: " + format(b.effect) + "x<br><br>Cost: " + formatWhole(b.cost) + " acclimation points<br><br>Level: " + (getBuyableAmount(this.layer, this.id).gte(b.purchaseLimit) ? "1e10/1e10" : formatWhole(getBuyableAmount(this.layer, this.id))) + (b.extra.eq(0) ? "" : " + " + formatWhole(b.extra));
 			},
@@ -242,7 +242,7 @@ addLayer("a", {
 			},
 			effect(amt) {return amt.add(this.extra()).pow_base(this.effectBase())},
 			title: "(FER)TILITY",
-			display() {
+			fullDisplay() {
 				const b = tmp[this.layer].buyables[this.id];
 				return "multiply population gain by " + format(b.effectBase) + "<br><br>Effect: " + format(b.effect) + "x<br><br>Cost: " + formatWhole(b.cost) + " acclimation points<br><br>Level: " + (getBuyableAmount(this.layer, this.id).gte(b.purchaseLimit) ? "1e10/1e10" : formatWhole(getBuyableAmount(this.layer, this.id))) + (b.extra.eq(0) ? "" : " + " + formatWhole(b.extra));
 			},
@@ -280,7 +280,7 @@ addLayer("a", {
 			},
 			effect(amt) {return amt.add(this.extra()).pow_base(this.effectBase())},
 			title: "(ANA)LYTICITY",
-			display() {
+			fullDisplay() {
 				const b = tmp[this.layer].buyables[this.id];
 				return "divide acclimation requirement by " + format(b.effectBase) + "<br><br>Effect: /" + format(b.effect) + "<br><br>Cost: " + formatWhole(b.cost) + " acclimation points<br><br>Level: " + (getBuyableAmount(this.layer, this.id).gte(b.purchaseLimit) ? "1e10/1e10" : formatWhole(getBuyableAmount(this.layer, this.id))) + (b.extra.eq(0) ? "" : " + " + formatWhole(b.extra));
 			},
@@ -315,7 +315,7 @@ addLayer("a", {
 			},
 			effect(amt) {return amt.add(this.extra()).pow_base(this.effectBase())},
 			title: "(SOV)EREIGNTY",
-			display() {
+			fullDisplay() {
 				const b = tmp[this.layer].buyables[this.id];
 				return "multiply population amount in population effects by " + format(b.effectBase) + "<br><br>Effect: " + format(b.effect) + "x<br><br>Cost: " + formatWhole(b.cost) + " acclimation points<br><br>Level: " + (getBuyableAmount(this.layer, this.id).gte(b.purchaseLimit) ? "1e10/1e10" : formatWhole(getBuyableAmount(this.layer, this.id))) + (b.extra.eq(0) ? "" : " + " + formatWhole(b.extra));
 			},

@@ -250,7 +250,7 @@ addLayer("ex", {
 			cost(amt) {return getExpansionGenCost(this.id, amt)},
 			effect(amt) {return expansionGenEffect(this.id, amt)},
 			title: "1st influence generator",
-			display() {
+			fullDisplay() {
 				const g = tmp[this.layer].buyables[this.id];
 				return "these generators are producing " + format(g.effect) + " influence per second<br><br><div style='display: flex'><div>Req: " + formatWhole(g.cost) + " expansion points</div><div>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + (player[this.layer].extra[this.id - 11].gte(1) ? " + " + formatWhole(player[this.layer].extra[this.id - 11].floor()) : "") + "</div></div>";
 			},
@@ -262,7 +262,7 @@ addLayer("ex", {
 			cost(amt) {return getExpansionGenCost(this.id, amt)},
 			effect(amt) {return expansionGenEffect(this.id, amt)},
 			title: "2nd influence generator",
-			display() {
+			fullDisplay() {
 				const g = tmp[this.layer].buyables[this.id];
 				return "these generators are producing " + format(g.effect) + " 1st influence generators per second<br><br><div style='display: flex'><div>Req: " + formatWhole(g.cost) + " expansion points</div><div>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + (player[this.layer].extra[this.id - 11].gte(1) ? " + " + formatWhole(player[this.layer].extra[this.id - 11].floor()) : "") + "</div></div>";
 			},
@@ -274,7 +274,7 @@ addLayer("ex", {
 			cost(amt) {return getExpansionGenCost(this.id, amt)},
 			effect(amt) {return expansionGenEffect(this.id, amt)},
 			title: "3rd influence generator",
-			display() {
+			fullDisplay() {
 				const g = tmp[this.layer].buyables[this.id];
 				return "these generators are producing " + format(g.effect) + " 2nd influence generators per second<br><br><div style='display: flex'><div>Req: " + formatWhole(g.cost) + " expansion points</div><div>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + (player[this.layer].extra[this.id - 11].gte(1) ? " + " + formatWhole(player[this.layer].extra[this.id - 11].floor()) : "") + "</div></div>";
 			},
@@ -286,7 +286,7 @@ addLayer("ex", {
 			cost(amt) {return getExpansionGenCost(this.id, amt)},
 			effect(amt) {return expansionGenEffect(this.id, amt)},
 			title: "4th influence generator",
-			display() {
+			fullDisplay() {
 				const g = tmp[this.layer].buyables[this.id];
 				return "these generators are producing " + format(g.effect) + " 3rd influence generators per second<br><br><div style='display: flex'><div>Req: " + formatWhole(g.cost) + " expansion points</div><div>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + (player[this.layer].extra[this.id - 11].gte(1) ? " + " + formatWhole(player[this.layer].extra[this.id - 11].floor()) : "") + "</div></div>";
 			},
@@ -299,7 +299,7 @@ addLayer("ex", {
 			cost(amt) {return getExpansionGenCost(this.id, amt)},
 			effect(amt) {return expansionGenEffect(this.id, amt)},
 			title: "5th influence generator",
-			display() {
+			fullDisplay() {
 				const g = tmp[this.layer].buyables[this.id];
 				return "these generators are producing " + format(g.effect) + " 4th influence generators per second<br><br><div style='display: flex'><div>Req: " + formatWhole(g.cost) + " expansion points</div><div>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + (player[this.layer].extra[this.id - 11].gte(1) ? " + " + formatWhole(player[this.layer].extra[this.id - 11].floor()) : "") + "</div></div>";
 			},
@@ -312,7 +312,7 @@ addLayer("ex", {
 			cost(amt) {return getExpansionGenCost(this.id, amt)},
 			effect(amt) {return expansionGenEffect(this.id, amt)},
 			title: "6th influence generator",
-			display() {
+			fullDisplay() {
 				const g = tmp[this.layer].buyables[this.id];
 				return "these generators are producing " + format(g.effect) + " 5th influence generators per second<br><br><div style='display: flex'><div>Req: " + formatWhole(g.cost) + " expansion points</div><div>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + (player[this.layer].extra[this.id - 11].gte(1) ? " + " + formatWhole(player[this.layer].extra[this.id - 11].floor()) : "") + "</div></div>";
 			},
@@ -325,7 +325,7 @@ addLayer("ex", {
 			cost(amt) {return getExpansionGenCost(this.id, amt)},
 			effect(amt) {return expansionGenEffect(this.id, amt)},
 			title: "7th influence generator",
-			display() {
+			fullDisplay() {
 				const g = tmp[this.layer].buyables[this.id];
 				return "these generators are producing " + format(g.effect) + " 6th influence generators per second<br><br><div style='display: flex'><div>Req: " + formatWhole(g.cost) + " expansion points</div><div>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + (player[this.layer].extra[this.id - 11].gte(1) ? " + " + formatWhole(player[this.layer].extra[this.id - 11].floor()) : "") + "</div></div>";
 			},
@@ -338,7 +338,7 @@ addLayer("ex", {
 			cost(amt) {return getExpansionGenCost(this.id, amt)},
 			effect(amt) {return expansionGenEffect(this.id, amt)},
 			title: "8th influence generator",
-			display() {
+			fullDisplay() {
 				const g = tmp[this.layer].buyables[this.id];
 				return "these generators are producing " + format(g.effect) + " 7th influence generators per second<br><br><div style='display: flex'><div>Req: " + formatWhole(g.cost) + " expansion points</div><div>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + (player[this.layer].extra[this.id - 11].gte(1) ? " + " + formatWhole(player[this.layer].extra[this.id - 11].floor()) : "") + "</div></div>";
 			},
@@ -351,7 +351,7 @@ addLayer("ex", {
 			cost(amt) {return getExpansionGenCost(this.id, amt)},
 			effect(amt) {return expansionGenEffect(this.id, amt)},
 			title: "9th influence generator",
-			display() {
+			fullDisplay() {
 				const g = tmp[this.layer].buyables[this.id];
 				return "these generators are producing " + format(g.effect) + " 8th influence generators per second<br><br><div style='display: flex'><div>Req: " + formatWhole(g.cost) + " expansion points</div><div>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + (player[this.layer].extra[this.id - 11].gte(1) ? " + " + formatWhole(player[this.layer].extra[this.id - 11].floor()) : "") + "</div></div>";
 			},
@@ -377,7 +377,7 @@ addLayer("ex", {
 			},
 			effect(amt) {return amt.add(this.extra()).pow_base(this.effectBase())},
 			title: "Influence tickspeed",
-			display() {
+			fullDisplay() {
 				const IT = tmp[this.layer].buyables[this.id];
 				return "all generators produce " + format(IT.effectBase) + " times as much<br><br>Effect: " + format(IT.effect) + "x<br><br>Cost: " + format(IT.cost) + " influence<br><br>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + (IT.extra.eq(0) ? "" : " + " + formatWhole(IT.extra));
 			},
@@ -406,7 +406,7 @@ addLayer("ex", {
 			effectBase() {return 0.5},
 			effect(amt) {return amt.mul(this.effectBase())},
 			title: "Influence empowerment",
-			display() {
+			fullDisplay() {
 				const IE = tmp[this.layer].buyables[this.id];
 				return "each tickspeed gives " + format(IE.effectBase) + " more multiplier<br><br>Effect: +" + format(IE.effect) + "<br><br>Cost: " + format(IE.cost) + " influence<br><br>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id));
 			},
@@ -428,7 +428,7 @@ addLayer("ex", {
 			cost(amt) {return new Decimal([7.7e77, 1.11e111, 2.02e202, "3.45e345", "6.6e660", "1.055e1055", "2.211e2211", "5e5000", "9e9000", "e1000000"][amt] || Infinity)},
 			effect(amt) {return amt.toNumber() + 1},
 			title: "Generator improvement",
-			display() {
+			fullDisplay() {
 				const GI = tmp[this.layer].buyables[this.id];
 				const amt = getBuyableAmount(this.layer, this.id).toNumber();
 				if (GENERATOR_IMPROVEMENTS[amt + 1]) return "improve the generator formulas and time for generators goes faster, but reset influence and all non-bought generators<br><br>Next: " + GENERATOR_IMPROVEMENTS[amt] + " --> " + GENERATOR_IMPROVEMENTS[amt + 1] + " and " + formatWhole(GI.effect) + "x --> " + formatWhole(GI.effect + 1) + "x<br><br>Cost: " + format(GI.cost) + " influence<br><br>Bought: " + formatWhole(amt) + "/" + formatWhole(GI.purchaseLimit);

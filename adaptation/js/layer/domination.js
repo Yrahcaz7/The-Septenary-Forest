@@ -123,7 +123,7 @@ addLayer("d", {
 				return eff;
 			},
 			title: "DOMINATE (FOC)US",
-			display() {
+			fullDisplay() {
 				if (!player.d.unlocks[0]) return "<br>requires 11 conscious beings to unlock";
 				const b = tmp[this.layer].buyables[this.id];
 				if (getBuyableAmount(this.layer, this.id).gte(b.purchaseLimit)) return "Normal effect: divides focus requirement by " + format(b.effect) + "<br><br>Complete domination effect: decreases the focus requirement base by " + format(b.completionEffect) + "<br><br>Progress: " + format(100) + "%";
@@ -157,7 +157,7 @@ addLayer("d", {
 				return eff;
 			},
 			title: "DOMINATE (SPE)CIES",
-			display() {
+			fullDisplay() {
 				if (!player.d.unlocks[1]) return "<br>requires 14 species to unlock";
 				const b = tmp[this.layer].buyables[this.id];
 				if (getBuyableAmount(this.layer, this.id).gte(b.purchaseLimit)) return "Normal effect: divides species requirement by " + format(b.effect) + "<br><br>Complete domination effect: decreases the species requirement base by " + format(b.completionEffect) + "<br><br>Progress: " + format(100) + "%";
@@ -195,7 +195,7 @@ addLayer("d", {
 				return eff;
 			},
 			title: "DOMINATE (CLI)MATE",
-			display() {
+			fullDisplay() {
 				if (!player.d.unlocks[2]) return "<br>requires 270 acclimation points to unlock";
 				const b = tmp[this.layer].buyables[this.id];
 				if (getBuyableAmount(this.layer, this.id).gte(b.purchaseLimit)) return "Normal effect: divides acclimation requirement by " + format(b.effect) + "<br><br>Complete domination effect: decreases the expansion requirement base by " + format(b.completionEffect) + "<br><br>Progress: " + format(100) + "%";
@@ -237,7 +237,7 @@ addLayer("d", {
 				return base.pow(maxed);
 			},
 			title: "TOTAL (DOM)INATION",
-			display() {
+			fullDisplay() {
 				if (!player.d.unlocks[3]) return "<br>requires 12 conscious beings, 16 species, 325 acclimation points, and 1 domination point to unlock";
 				const b = tmp[this.layer].buyables[this.id];
 				if (getBuyableAmount(this.layer, this.id).gte(b.purchaseLimit)) return "Normal effect: divides domination requirement by " + format(b.effect) + "<br><br>Complete domination effect: divides the war requirement based on stats at 100% (currently&nbsp;/" + format(b.completionEffect) + ")<br><br>Progress: " + format(100) + "%";

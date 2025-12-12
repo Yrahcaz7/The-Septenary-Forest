@@ -783,7 +783,7 @@ addLayer('d', {
 				if (getBuyableAmount('d', 21).gt(0)) eff = eff.mul(buyableEffect('d', 21));
 				return eff;
 			},
-			display() {
+			fullDisplay() {
 				return `<h3>One Up</h3><br>`
 					+ `Increase the effect of the button to the right by 1<br>`
 					+ `Currently: +` + formatWhole(buyableEffect(this.layer, this.id)) + `<br><br>`
@@ -807,7 +807,7 @@ addLayer('d', {
 				return costing;
 			},
 			effect() { return new Decimal(3).pow(getBuyableAmount(this.layer, this.id)) },
-			display() {
+			fullDisplay() {
 				return `<h3>Triple</h3><br>`
 					+ `multiply the effect of the button to the left by 3<br>`
 					+ `Currently: ` + formatWhole(buyableEffect(this.layer, this.id)) + `x<br><br>`
@@ -830,7 +830,7 @@ addLayer('d', {
 				if (getBuyableAmount('d', 23).gt(0)) eff = eff.mul(buyableEffect('d', 23));
 				return eff;
 			},
-			display() {
+			fullDisplay() {
 				return `<h3>Lazing</h3><br>`
 					+ `passively increase your number by +1.5 (rounded down) every ` + formatTime(newDecimalOne().div(buyableEffect('d', 32))) + `<br>`
 					+ `Currently: +` + formatWhole(buyableEffect(this.layer, this.id)) + `<br><br>`
@@ -845,7 +845,7 @@ addLayer('d', {
 		32: {
 			cost() { return new Decimal(1e10).pow(getBuyableAmount(this.layer, this.id).add(1)).mul(1e20) },
 			effect() { return getBuyableAmount(this.layer, this.id).mul(20).div(100).add(1) },
-			display() {
+			fullDisplay() {
 				return `<h3>Rapid Idle</h3><br>`
 					+ `Increase the speed of the upgrade above by +20%<br>`
 					+ `Currently: +` + formatWhole(getBuyableAmount(this.layer, this.id).mul(20)) + `%<br><br>`
@@ -864,7 +864,7 @@ addLayer('d', {
 				if (getBuyableAmount('d', 41).gt(0)) effBase = effBase.mul(buyableEffect('d', 41));
 				return effBase.pow(getBuyableAmount(this.layer, this.id));
 			},
-			display() {
+			fullDisplay() {
 				let text = `<h3>Up the Up</h3><br>`
 					+ `Multiply the effect of the upgrade above by `;
 				if (getBuyableAmount('d', 41).gt(0)) text += format(buyableEffect('d', 41).mul(2));
@@ -893,7 +893,7 @@ addLayer('d', {
 				return costing;
 			},
 			effect() { return new Decimal(5).pow(getBuyableAmount(this.layer, this.id)) },
-			display() {
+			fullDisplay() {
 				return `<h3>Worth the Time</h3><br>`
 					+ `Multiply the effect of the upgrade to the left by 5<br>`
 					+ `Currently: ` + formatWhole(buyableEffect(this.layer, this.id)) + `x<br><br>`
@@ -908,7 +908,7 @@ addLayer('d', {
 		31: {
 			cost() { return new Decimal(1e10).pow(getBuyableAmount(this.layer, this.id).add(1)).mul(1e240) },
 			effect() { return getBuyableAmount(this.layer, this.id).mul(15) },
-			display() {
+			fullDisplay() {
 				return `<h3>Higher!</h3><br>`
 					+ `increase the cap of <b>One Up</b> by 15<br>`
 					+ `Currently: +` + formatWhole(buyableEffect(this.layer, this.id)) + `<br><br>`
@@ -928,7 +928,7 @@ addLayer('d', {
 				return costing;
 			},
 			effect() { return new Decimal(1e10).pow(getBuyableAmount(this.layer, this.id)) },
-			display() {
+			fullDisplay() {
 				return `<h3>Cheap</h3><br>`
 					+ `divide the cost of all of the upgrades above by 1e10<br>`
 					+ `Currently: /` + formatWhole(buyableEffect(this.layer, this.id)) + `<br><br>`
@@ -953,7 +953,7 @@ addLayer('d', {
 				return new Decimal(1e99);
 			},
 			effect() { return getBuyableAmount(this.layer, this.id).add(2) },
-			display() {
+			fullDisplay() {
 				return `<h1>Base Up</h1><br><br><h3>`
 					+ `Upgrade your numbers to the next base (allowing for higher numbers) and multiply the number effect by 2<br><br>`
 					+ `Currently: base ` + formatWhole(buyableEffect(this.layer, this.id)) + ` and ` + formatWhole(new Decimal(2).pow(getBuyableAmount(this.layer, this.id))) + `x<br><br>`
@@ -976,7 +976,7 @@ addLayer('d', {
 				return costing;
 			},
 			effect() { return new Decimal(1.25).pow(getBuyableAmount(this.layer, this.id)) },
-			display() {
+			fullDisplay() {
 				return `<h3>Up Even More</h3><br>`
 					+ `Multiply the base effect of <b>Up the Up</b> by 1.25<br>`
 					+ `Currently: ` + format(buyableEffect(this.layer, this.id)) + `x<br><br>`
@@ -996,7 +996,7 @@ addLayer('d', {
 		42: {
 			cost() { return new Decimal(1e75).pow(getBuyableAmount(this.layer, this.id).add(1)).mul('1e925') },
 			effect() { return new Decimal(750).pow(getBuyableAmount(this.layer, this.id)) },
-			display() {
+			fullDisplay() {
 				return `<h3>Weaken Chains</h3><br>`
 					+ `Divide the logarithm base above 1 in the number effect formula by 750<br>`
 					+ `Currently: /` + formatWhole(buyableEffect(this.layer, this.id)) + `<br><br>`
@@ -1016,7 +1016,7 @@ addLayer('d', {
 				if (hasUpgrade('d', 53)) eff = eff.mul(upgradeEffect('d', 53));
 				return eff;
 			},
-			display() {
+			fullDisplay() {
 				return `<h3>Cheapest</h3><br>`
 					+ `divide the cost of the upgrades above by 1e20<br>`
 					+ `Currently: /` + formatWhole(buyableEffect(this.layer, this.id)) + `<br><br>`
@@ -1980,7 +1980,7 @@ addLayer('i', {
 		11: {
 			cost() { return new Decimal('1e1000').pow(getBuyableAmount(this.layer, this.id)).mul('1e2000') },
 			effect() { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
-			display() {
+			fullDisplay() {
 				return `<h3>Again</h3><br>`
 					+ `Multiply the effect of the button to the right by 2<br>`
 					+ `Currently: ` + formatWhole(buyableEffect(this.layer, this.id)) + `x<br><br>`
@@ -1995,7 +1995,7 @@ addLayer('i', {
 		12: {
 			cost() { return new Decimal('1e200').pow(getBuyableAmount(this.layer, this.id)).mul('1e2000') },
 			effect() { return getBuyableAmount(this.layer, this.id).mul(0.075) },
-			display() {
+			fullDisplay() {
 				return `<h3>More Effective</h3><br>`
 					+ `Increase the unit effect exponent by 0.075<br>`
 					+ `Currently: +` + format(buyableEffect(this.layer, this.id)) + `<br><br>`
@@ -2010,7 +2010,7 @@ addLayer('i', {
 		31: {
 			cost() { return new Decimal('1e500').pow(getBuyableAmount(this.layer, this.id)).mul('1e2500') },
 			effect() { return new Decimal(1.1).pow(getBuyableAmount(this.layer, this.id)) },
-			display() {
+			fullDisplay() {
 				return `<h3>Power</h3><br>`
 					+ `Multiply replication power by 1.1<br>`
 					+ `Currently: ` + format(buyableEffect(this.layer, this.id)) + `x<br><br>`
@@ -2024,7 +2024,7 @@ addLayer('i', {
 		32: {
 			cost() { return new Decimal('1e5900') },
 			effect() { return new Decimal(1.1).pow(getBuyableAmount(this.layer, this.id)) },
-			display() {
+			fullDisplay() {
 				return `<h3>Galaxies</h3><br>`
 					+ `Unlock 5 more Limit Break upgrades<br><br>`
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
@@ -2038,7 +2038,7 @@ addLayer('i', {
 		33: {
 			cost() { return new Decimal('1e250').pow(getBuyableAmount(this.layer, this.id)).mul('1e3000') },
 			effect() { return getBuyableAmount(this.layer, this.id).mul(0.25) },
-			display() {
+			fullDisplay() {
 				return `<h3>Efficiency</h3><br>`
 					+ `Increase the unit effect exponent by 0.25<br>`
 					+ `Currently: +` + format(buyableEffect(this.layer, this.id)) + `<br><br>`
@@ -2056,7 +2056,7 @@ addLayer('i', {
 				return new Decimal(7.5).add(getBuyableAmount(this.layer, this.id).mul(2.5)).mul(mult);
 			},
 			effect() { return getBuyableAmount(this.layer, this.id).mul(0.1) },
-			display() {
+			fullDisplay() {
 				return `<h3>Pickaxe Upgrade</h3><br>`
 					+ `Increase the effect of the button above by 0.1<br>`
 					+ `Currently: +` + format(buyableEffect(this.layer, this.id)) + `<br><br>`
@@ -2076,7 +2076,7 @@ addLayer('i', {
 				return new Decimal(7.5).add(getBuyableAmount(this.layer, this.id).mul(2.5)).mul(mult);
 			},
 			effect() { return getBuyableAmount(this.layer, this.id).mul(0.2) },
-			display() {
+			fullDisplay() {
 				return `<h3>Hotter Forges</h3><br>`
 					+ `Increase the effect of the button above by 0.2<br>`
 					+ `Currently: +` + format(buyableEffect(this.layer, this.id)) + `<br><br>`
@@ -2096,7 +2096,7 @@ addLayer('i', {
 				return new Decimal(7.5).add(getBuyableAmount(this.layer, this.id).mul(2.5)).mul(mult);
 			},
 			effect() { return getBuyableAmount(this.layer, this.id).mul(4.5) },
-			display() {
+			fullDisplay() {
 				return `<h3>Bulk Crafting</h3><br>`
 					+ `Increase the capacity of the button above by 4.5 (and increase eff slightly)<br>`
 					+ `Currently: +` + format(buyableEffect(this.layer, this.id)) + `<br><br>`
@@ -2116,7 +2116,7 @@ addLayer('i', {
 				return new Decimal(7.5).add(getBuyableAmount(this.layer, this.id).mul(2.5)).mul(mult);
 			},
 			effect() { return getBuyableAmount(this.layer, this.id) },
-			display() {
+			fullDisplay() {
 				return `<h3>Marketing</h3><br>`
 					+ `Increase the capacity of the button above by 1 (and increase eff slightly)<br>`
 					+ `Currently: +` + format(buyableEffect(this.layer, this.id)) + `<br><br>`
@@ -2132,7 +2132,7 @@ addLayer('i', {
 		51: {
 			cost() { return new Decimal(50).add(getBuyableAmount(this.layer, this.id).mul(10)) },
 			effect() { return 5 / (1.5 ** getBuyableAmount(this.layer, this.id).toNumber()) },
-			display() {
+			fullDisplay() {
 				if (getBuyableAmount(this.layer, this.id).eq(0)) {
 					return `<h3>Buy Excavator</h3><br>`
 						+ `Unlock auto for the button above<br>`
@@ -2155,7 +2155,7 @@ addLayer('i', {
 		52: {
 			cost() { return new Decimal(50).add(getBuyableAmount(this.layer, this.id).mul(10)) },
 			effect() { return 5 / (1.5 ** getBuyableAmount(this.layer, this.id).toNumber()) },
-			display() {
+			fullDisplay() {
 				if (getBuyableAmount(this.layer, this.id).eq(0)) {
 					return `<h3>Hire Blacksmith</h3><br>`
 						+ `Unlock auto for the button above<br>`
@@ -2178,7 +2178,7 @@ addLayer('i', {
 		53: {
 			cost() { return new Decimal(50).add(getBuyableAmount(this.layer, this.id).mul(10)) },
 			effect() { return 30 / (1.5 ** getBuyableAmount(this.layer, this.id).toNumber()) },
-			display() {
+			fullDisplay() {
 				if (getBuyableAmount(this.layer, this.id).eq(0)) {
 					return `<h3>Buy Robot V2.0</h3><br>`
 						+ `Unlock auto for the button above<br>`
@@ -2201,7 +2201,7 @@ addLayer('i', {
 		54: {
 			cost() { return new Decimal(50).add(getBuyableAmount(this.layer, this.id).mul(10)) },
 			effect() { return 30 / (1.5 ** getBuyableAmount(this.layer, this.id).toNumber()) },
-			display() {
+			fullDisplay() {
 				if (getBuyableAmount(this.layer, this.id).eq(0)) {
 					return `<h3>Hire Merchant</h3><br>`
 						+ `Unlock auto for the button above<br>`
@@ -2224,7 +2224,7 @@ addLayer('i', {
 		61: {
 			cost() { return new Decimal(10).pow(getBuyableAmount(this.layer, this.id)).mul(1000000) },
 			effect() { return new Decimal(2).pow(getBuyableAmount(this.layer, this.id)) },
-			display() {
+			fullDisplay() {
 				return `<h3>Buy Dig Site</h3><br>`
 					+ `Multiply the effect of the button above by 2<br>`
 					+ `Currently: ` + format(buyableEffect(this.layer, this.id)) + `x<br><br>`
@@ -2240,7 +2240,7 @@ addLayer('i', {
 		62: {
 			cost() { return new Decimal(10).pow(getBuyableAmount(this.layer, this.id)).mul(1000000) },
 			effect() { return new Decimal(1.75).pow(getBuyableAmount(this.layer, this.id)) },
-			display() {
+			fullDisplay() {
 				return `<h3>More Forges</h3><br>`
 					+ `Multiply the effect of the button above by 1.75<br>`
 					+ `Currently: ` + format(buyableEffect(this.layer, this.id)) + `x<br><br>`
@@ -2256,7 +2256,7 @@ addLayer('i', {
 		63: {
 			cost() { return new Decimal(10).pow(getBuyableAmount(this.layer, this.id)).mul(1000000) },
 			effect() { return new Decimal(1.25).pow(getBuyableAmount(this.layer, this.id)) },
-			display() {
+			fullDisplay() {
 				return `<h3>Better Formula</h3><br>`
 					+ `Multiply the capacity of the button above and the score worth of finished products by 1.25<br>`
 					+ `Currently: ` + format(buyableEffect(this.layer, this.id)) + `x<br><br>`
@@ -2272,7 +2272,7 @@ addLayer('i', {
 		64: {
 			cost() { return new Decimal(10).pow(getBuyableAmount(this.layer, this.id)).mul(1000000) },
 			effect() { return new Decimal(2.25).pow(getBuyableAmount(this.layer, this.id)) },
-			display() {
+			fullDisplay() {
 				return `<h3>Advertising</h3><br>`
 					+ `Multiply the capacity of the button above by 2.25<br>`
 					+ `Currently: ` + format(buyableEffect(this.layer, this.id)) + `x<br><br>`
@@ -2288,7 +2288,7 @@ addLayer('i', {
 		71: {
 			cost() { return new Decimal('1e1000').pow(getBuyableAmount(this.layer, this.id)).mul('1e5000') },
 			effect() { return new Decimal(1.5).pow(getBuyableAmount(this.layer, this.id)) },
-			display() {
+			fullDisplay() {
 				return `<h3>Exponential</h3><br>`
 					+ `Multiply replication power by 1.5<br>`
 					+ `Currently: ` + format(buyableEffect(this.layer, this.id)) + `x<br><br>`
@@ -2303,7 +2303,7 @@ addLayer('i', {
 		72: {
 			cost() { return new Decimal('1e6200') },
 			effect() { return new Decimal(1.1).pow(getBuyableAmount(this.layer, this.id)) },
-			display() {
+			fullDisplay() {
 				return `<h3>Dimensions</h3><br>`
 					+ `Unlock 5 more Limit Break upgrades<br><br>`
 					+ `Cost: ` + format(this.cost()) + ` arabic numerals<br>`
@@ -2318,7 +2318,7 @@ addLayer('i', {
 		73: {
 			cost() { return new Decimal(1e250).pow(getBuyableAmount(this.layer, this.id)).mul('1e5000') },
 			effect() { return new Decimal(10).pow(getBuyableAmount(this.layer, this.id)) },
-			display() {
+			fullDisplay() {
 				return `<h3>Passivity</h3><br>`
 					+ `Multiply your units by 10x every ` + formatTime(1) + `<br>`
 					+ `Currently: ` + format(buyableEffect(this.layer, this.id)) + `x<br><br>`
@@ -2921,7 +2921,7 @@ addLayer('gn', {
 				let eff = getBuyableAmount(this.layer, this.id).mul(1.1);
 				return eff;
 			},
-			display() {
+			fullDisplay() {
 				return `<h3>Addition</h3><br>`
 					+ `Increase the addition factor in the translation formula by 1.1<br>`
 					+ `Currently: +` + format(buyableEffect(this.layer, this.id)) + `<br><br>`
@@ -2940,7 +2940,7 @@ addLayer('gn', {
 				let eff = getBuyableAmount(this.layer, this.id).mul(0.75);
 				return eff;
 			},
-			display() {
+			fullDisplay() {
 				return `<h3>Multiplication</h3><br>`
 					+ `Increase the multiplication factor in the translation formula by 0.75<br>`
 					+ `Currently: +` + format(buyableEffect(this.layer, this.id)) + `<br><br>`
@@ -2959,7 +2959,7 @@ addLayer('gn', {
 				let eff = getBuyableAmount(this.layer, this.id).mul(0.2);
 				return eff;
 			},
-			display() {
+			fullDisplay() {
 				return `<h3>Exponential</h3><br>`
 					+ `Increase the exponential factor in the translation formula by 0.2<br>`
 					+ `Currently: +` + format(buyableEffect(this.layer, this.id)) + `<br><br>`
@@ -2978,7 +2978,7 @@ addLayer('gn', {
 				let eff = new Decimal(1.2).pow(getBuyableAmount(this.layer, this.id));
 				return eff;
 			},
-			display() {
+			fullDisplay() {
 				return `<h3>Time Path</h3><br>`
 					+ `Multiply the cap of Feat of Time by 1.2<br>`
 					+ `Currently: ` + format(buyableEffect(this.layer, this.id)) + `x<br><br>`

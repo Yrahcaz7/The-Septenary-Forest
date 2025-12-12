@@ -144,7 +144,7 @@ addLayer("g", {
 			},
 			effect(amt) {return amt.add(this.extra()).pow_base(this.effectBase())},
 			title: "(STR)ENGTH",
-			display() {
+			fullDisplay() {
 				const b = tmp[this.layer].buyables[this.id];
 				return "multiply power gain by " + format(b.effectBase) + "<br><br>Effect: " + format(b.effect) + "x<br><br>Cost: " + formatWhole(b.cost) + " growth points<br><br>Level: " + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(b.purchaseLimit) + (b.extra.eq(0) ? "" : " + " + formatWhole(b.extra));
 			},
@@ -187,7 +187,7 @@ addLayer("g", {
 			},
 			effect(amt) {return amt.add(this.extra()).pow_base(this.effectBase())},
 			title: "(WIS)DOM",
-			display() {
+			fullDisplay() {
 				const b = tmp[this.layer].buyables[this.id];
 				return "multiply stimulation gain by " + format(b.effectBase) + "<br><br>Effect: " + format(b.effect) + "x<br><br>Cost: " + formatWhole(b.cost) + " growth points<br><br>Level: " + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(b.purchaseLimit) + (b.extra.eq(0) ? "" : " + " + formatWhole(b.extra));
 			},
@@ -232,7 +232,7 @@ addLayer("g", {
 			},
 			effect(amt) {return amt.add(this.extra()).pow_base(this.effectBase())},
 			title: "(AGI)LITY",
-			display() {
+			fullDisplay() {
 				const b = tmp[this.layer].buyables[this.id];
 				return "divide growth requirement by " + formatWhole(b.effectBase) + " (minimum requirement: 100,000,000)<br><br>Effect: /" + format(b.effect) + "<br><br>Cost: " + formatWhole(b.cost) + " growth points<br><br>Level: " + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(b.purchaseLimit) + (b.extra.eq(0) ? "" : " + " + formatWhole(b.extra));
 			},
@@ -291,7 +291,7 @@ addLayer("g", {
 				return amt.add(this.extra()).pow_base(this.effectBase());
 			},
 			title: "(INT)ELLECT",
-			display() {
+			fullDisplay() {
 				const b = tmp[this.layer].buyables[this.id];
 				if (hasChallenge("e", 11)) {
 					if (b.effect.eq(b.effectMax)) return "increase the stimulation effect exponent by " + format(b.effectBase) + "<br><br>Effect: +" + format(b.effect) + " (maxed)<br><br>Cost: " + formatWhole(b.cost) + " growth points<br><br>Level: " + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + formatWhole(b.purchaseLimit) + (b.extra.eq(0) ? "" : " + " + formatWhole(b.extra));

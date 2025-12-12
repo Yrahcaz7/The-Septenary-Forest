@@ -246,7 +246,7 @@ function getColorBuyables() {
 				player.points = player.points.sub(getColorCost(index));
 				addBuyables("c", BUYNUM, getColorBulk(index));
 			},
-			display() {
+			fullDisplay() {
 				if (getBuyableAmount("c", BUYNUM).gte(this.purchaseLimit)) return "<h3 style='color:" + HEX + "'>MAXED";
 				let buyText = "Cost";
 				if (getBuyableAmount("c", BUYNUM).eq(0) && getColorBulk(index) === 1) buyText = "Unlock";

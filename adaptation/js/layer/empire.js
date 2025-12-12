@@ -169,7 +169,7 @@ addLayer("em", {
 				return eff;
 			},
 			title: "(ECO)SYSTEM ASPECT",
-			display() {
+			fullDisplay() {
 				const b = tmp[this.layer].buyables[this.id];
 				return "unlock 1 more ANACHRONISM tier<br><br>Effect: +" + formatWhole(b.effect) + "<br><br>Req: " + formatWhole(b.cost) + " ecosystems<br><br>Level: " + formatWhole(getBuyableAmount(this.layer, this.id));
 			},
@@ -198,7 +198,7 @@ addLayer("em", {
 				return eff;
 			},
 			title: "(REV)OLUTION ASPECT",
-			display() {
+			fullDisplay() {
 				const b = tmp[this.layer].buyables[this.id];
 				return "increase change gain exponent by " + format(b.effectBase) + " (also influence limit)<br><br>Effect: +" + format(b.effect) + (b.effect.gte(0.5) ? " (softcapped)" : "") + "<br><br>Req: " + formatWhole(b.cost) + " revolutions<br><br>Level: " + formatWhole(getBuyableAmount(this.layer, this.id));
 			},
@@ -229,7 +229,7 @@ addLayer("em", {
 				return eff;
 			},
 			title: "(EXP)ANSION ASPECT",
-			display() {
+			fullDisplay() {
 				const b = tmp[this.layer].buyables[this.id];
 				return "increase influence gain exponent by " + format(b.effectBase) + "<br><br>Effect: +" + format(b.effect) + (b.effect.gte(1) ? " (softcapped)" : "") + "<br><br>Req: " + formatWhole(b.cost) + " expansion points<br><br>Level: " + formatWhole(getBuyableAmount(this.layer, this.id));
 			},
@@ -259,7 +259,7 @@ addLayer("em", {
 				return eff.floor();
 			},
 			title: "(WAR) ASPECT",
-			display() {
+			fullDisplay() {
 				const b = tmp[this.layer].buyables[this.id];
 				return "decrease the battle enhancement costs by " + formatWhole(b.effectBase) + "<br><br>Effect: -" + formatWhole(b.effect) + (b.effect.gte(20) ? " (softcapped)" : "") + "<br><br>Req: " + formatWhole(b.cost) + " wars<br><br>Level: " + formatWhole(getBuyableAmount(this.layer, this.id));
 			},
@@ -279,7 +279,7 @@ addLayer("em", {
 			},
 			effect(amt) {return amt},
 			title: "Political Manipulation",
-			display() {
+			fullDisplay() {
 				const b = tmp[this.layer].buyables[this.id];
 				return "manipulate some politics to make 1 leader to join your faction<br><br>Effect: +" + formatWhole(b.effect) + (getBuyableAmount(this.layer, this.id).lt(b.purchaseLimit) ? "<br><br>Cost: " + format(b.cost) + " control" : "") + "<br><br>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + b.purchaseLimit;
 			},
@@ -300,7 +300,7 @@ addLayer("em", {
 			cost(amt) {return new Decimal("e1000000").pow(amt.add(1).pow(2))},
 			effect(amt) {return amt},
 			title: "Reputation Inflation",
-			display() {
+			fullDisplay() {
 				const b = tmp[this.layer].buyables[this.id];
 				return "take advantage of your reputation to make 1 leader to join your faction<br><br>Effect: +" + formatWhole(b.effect) + "<br><br>Cost: " + format(b.cost) + " influence<br><br>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id));
 			},
@@ -317,7 +317,7 @@ addLayer("em", {
 			effectBase() {return buyableEffect("em", 32).add(2)},
 			effect(amt) {return this.effectBase().pow(amt)},
 			title: "Political Pressure",
-			display() {
+			fullDisplay() {
 				const b = tmp[this.layer].buyables[this.id];
 				return "apply pressure by using your faction to multiply claim amount by " + format(b.effectBase) + "<br><br>Effect: " + format(b.effect) + "x<br><br>Req: " + formatWhole(b.cost) + " leaders in your faction<br><br>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id));
 			},
@@ -330,7 +330,7 @@ addLayer("em", {
 			cost(amt) {return amt.pow(1.5).pow_base(2).div(tmp.em.effect[6]).mul(0.1).toNumber()},
 			effect(amt) {return amt.div(2)},
 			title: "Grand Schemes",
-			display() {
+			fullDisplay() {
 				const b = tmp[this.layer].buyables[this.id];
 				return "conduct some insidious schemes to increase the base effect of <b>Political Pressure</b><br><br>Effect: +" + format(b.effect) + "<br><br>Cost: " + format(b.cost * 100) + "% progress<br><br>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id));
 			},
@@ -346,7 +346,7 @@ addLayer("em", {
 			cost(amt) {return amt.pow_base(1000).div(tmp.em.effect[6]).mul(0.99).toNumber()},
 			effect(amt) {return amt.pow_base(2.5)},
 			title: "Begin the Hunt",
-			display() {
+			fullDisplay() {
 				const b = tmp[this.layer].buyables[this.id];
 				return "hire skilled hounds using the majority of your resources to multiply claim amount by " + format(2.5) + "<br><br>Effect: " + format(b.effect) + "x<br><br>Cost: " + format(b.cost * 100) + "% progress<br><br>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id));
 			},

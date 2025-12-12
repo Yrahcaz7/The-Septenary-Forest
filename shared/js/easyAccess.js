@@ -210,13 +210,13 @@ function gridEffect(layer, id) {
 //#region buying
 
 function buyStandardBuyable(obj, currencyLayer = obj.layer, currencyName = "points", bulk = 1) {
-	if (currencyLayer === "") player[currencyName] = player[currencyName].sub(obj.cost instanceof Function ? obj.cost() : obj.cost);
-	else player[currencyLayer][currencyName] = player[currencyLayer][currencyName].sub(obj.cost instanceof Function ? obj.cost() : obj.cost);
+	if (currencyLayer === "") player[currencyName] = player[currencyName].sub(run(obj.cost, obj, getBuyableAmount(obj.layer, obj.id)));
+	else player[currencyLayer][currencyName] = player[currencyLayer][currencyName].sub(run(obj.cost, obj, getBuyableAmount(obj.layer, obj.id)));
 	addBuyables(obj.layer, obj.id, bulk);
 };
 
 function buyMultiCurrencyBuyable(obj, currencyLayers = [], costless = false, bulk = 1) {
-	const cost = (obj.cost instanceof Function ? obj.cost() : obj.cost);
+	const cost = run(obj.cost, obj, getBuyableAmount(obj.layer, obj.id));
 	if (costless) {
 		for (const layer of currencyLayers) {
 			player[layer].total = player[layer].total.add(cost);

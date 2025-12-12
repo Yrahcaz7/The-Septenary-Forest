@@ -265,7 +265,7 @@ addLayer("t", {
 		11: {
 			cost() {return [1e80, "1e498", "1e1920", "1e11777"][getBuyableAmount(this.layer, this.id).toNumber()] || Infinity},
 			title: "Greater Control",
-			display() {return "unlock another tier of control nodes<br><br>on first buy, also improves the first control effect" + (getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) ? "<br><br>Cost: " + format(this.cost()) + " control" : "") + "<br><br>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + this.purchaseLimit()},
+			fullDisplay() {return "unlock another tier of control nodes<br><br>on first buy, also improves the first control effect" + (getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) ? "<br><br>Cost: " + format(this.cost()) + " control" : "") + "<br><br>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + this.purchaseLimit()},
 			purchaseLimit() {return getControlImprovementLimit(2)},
 			canAfford() {return player.t.control.gte(this.cost())},
 			buy() { buyStandardBuyable(this, 't', 'control') },
@@ -274,7 +274,7 @@ addLayer("t", {
 		12: {
 			cost() {return [1e136, 1e207, 1e280, "1e2211", "1e10899"][getBuyableAmount(this.layer, this.id).toNumber()] || Infinity},
 			title: "Cheaper Policies",
-			display() {return "reduce the cost scaling of all tiers of <b>Politics</b>, <b>Commitment</b>, and <b>Structure</b><br><br>on second buy, also improves the second control effect" + (getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) ? "<br><br>Cost: " + format(this.cost()) + " control" : "") + "<br><br>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + this.purchaseLimit()},
+			fullDisplay() {return "reduce the cost scaling of all tiers of <b>Politics</b>, <b>Commitment</b>, and <b>Structure</b><br><br>on second buy, also improves the second control effect" + (getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) ? "<br><br>Cost: " + format(this.cost()) + " control" : "") + "<br><br>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + this.purchaseLimit()},
 			effect() {
 				let amt = getBuyableAmount(this.layer, this.id).toNumber();
 				if (amt >= 4) amt = (amt - 4) / 8 + 4;
@@ -288,7 +288,7 @@ addLayer("t", {
 		13: {
 			cost() {return ["1e346", "1e400", "1e447", "1e548", "1e2000", "1e10000"][getBuyableAmount(this.layer, this.id).toNumber()] || Infinity},
 			title: "Propaganda Waves",
-			display() {return "reduce the cost of all tiers of <b>Assimilation</b>, <b>Leadership</b>, and <b>Capacity</b><br><br>on third buy, also improves the third control effect" + (getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) ? "<br><br>Cost: " + format(this.cost()) + " control" : "") + "<br><br>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + this.purchaseLimit()},
+			fullDisplay() {return "reduce the cost of all tiers of <b>Assimilation</b>, <b>Leadership</b>, and <b>Capacity</b><br><br>on third buy, also improves the third control effect" + (getBuyableAmount(this.layer, this.id).lt(this.purchaseLimit()) ? "<br><br>Cost: " + format(this.cost()) + " control" : "") + "<br><br>Bought: " + formatWhole(getBuyableAmount(this.layer, this.id)) + "/" + this.purchaseLimit()},
 			effect() {return getBuyableAmount(this.layer, this.id).toNumber()},
 			purchaseLimit() {return getControlImprovementLimit(4)},
 			canAfford() {return player.t.control.gte(this.cost())},
