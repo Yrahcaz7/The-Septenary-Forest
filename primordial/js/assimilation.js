@@ -200,7 +200,7 @@ function getAssimilationRewards() {
 		text += 'Unlocks the third <b class="layer-mo">Synergy</b>';
 	};
 	text = text.replace("<br><br>", "");
-	if (colorValue[1] === 'none') text = text.replace(/<b class="layer-.{1,2}">/g, "<b>");
+	if (!colorValue[0][1] || colorValue[1] === 'none') text = text.replace(/<b class="layer-.{1,2}">/g, "<b>");
 	return text;
 };
 

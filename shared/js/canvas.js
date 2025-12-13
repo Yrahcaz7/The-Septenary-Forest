@@ -56,7 +56,7 @@ function drawComponentBranches(layer, data, prefix) {
 	};
 };
 
-function drawTreeBranch(num1, data, prefix) { // taken from Antimatter Dimensions & adjusted slightly
+function drawTreeBranch(num1, data, prefix) { // taken from Antimatter Dimensions and adjusted slightly
 	let num2 = data;
 	let colorID = 1;
 	let width = 15;

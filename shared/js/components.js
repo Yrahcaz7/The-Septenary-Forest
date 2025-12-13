@@ -465,7 +465,7 @@ function loadVue(mainPage = false) {
 					<span v-if="layers[layer].buyables[data].costDisplay" v-html="run(layers[layer].buyables[data].costDisplay, layers[layer].buyables[data], tmp[layer].buyables[data].cost)"></span>
 					<span v-else>Cost: {{formatWhole(tmp[layer].buyables[data].cost)}} {{(tmp[layer].buyables[data].currencyDisplayName || tmp[layer].resource)}}</span><br><br>
 					<span v-if="layers[layer].buyables[data].boughtDisplay" v-html="run(layers[layer].buyables[data].boughtDisplay, layers[layer].buyables[data], player[layer].buyables[data])"></span>
-					<span v-else>Bought: {{formatWhole(player[layer].buyables[data])}}{{tmp[layer].buyables[data].purchaseLimit ? "/" + formatWhole(tmp[layer].buyables[data].purchaseLimit) : ""}}</span>
+					<span v-else>Bought: {{formatWhole(player[layer].buyables[data])}}{{layers[layer].buyables[data].purchaseLimit !== undefined ? "/" + formatWhole(tmp[layer].buyables[data].purchaseLimit) : ""}}</span>
 				</span>
 				<node-mark :layer="layer" :data='tmp[layer].buyables[data].marked'></node-mark>
 				<tooltip v-if="tmp[layer].buyables[data].tooltip" :text="tmp[layer].buyables[data].tooltip"></tooltip>

@@ -115,12 +115,12 @@ addLayer('e', {
 	tabFormat: getTab('e'),
 	upgrades: {
 		11: {
-			title() { return '<b class="layer-e' + getdark(this, "title") + 'Faster Points' },
+			title() { return '<b' + getColorClass(this, "e", TITLE) + 'Faster Points' },
 			description: 'multiplies point gain by 1.5',
 			cost: 1,
 		},
 		12: {
-			title() { return '<b class="layer-e' + getdark(this, "title") + 'Essence Influence' },
+			title() { return '<b' + getColorClass(this, "e", TITLE) + 'Essence Influence' },
 			description: 'multiplies point gain based on your essence',
 			cost: 2,
 			hardcap() {
@@ -138,7 +138,7 @@ addLayer('e', {
 			unlocked() { return hasUpgrade('e', 11) },
 		},
 		13: {
-			title() { return '<b class="layer-e' + getdark(this, "title") + 'Influenced Essence' },
+			title() { return '<b' + getColorClass(this, "e", TITLE) + 'Influenced Essence' },
 			description: 'multiplies essence gain based on your points',
 			cost: 5,
 			effect() { return player.points.add(1).pow(0.15) },
@@ -150,7 +150,7 @@ addLayer('e', {
 			unlocked() { return hasUpgrade('e', 12) },
 		},
 		21: {
-			title() { return '<b class="layer-e' + getdark(this, "title") + 'Point Recursion' },
+			title() { return '<b' + getColorClass(this, "e", TITLE) + 'Point Recursion' },
 			description: 'multiplies point gain based on your points',
 			cost: 500,
 			effect() { return player.points.add(1).pow(0.075) },
@@ -162,7 +162,7 @@ addLayer('e', {
 			unlocked() { return hasUpgrade('e', 13) },
 		},
 		22: {
-			title() { return '<b class="layer-e' + getdark(this, "title") + 'Essence of Essence' },
+			title() { return '<b' + getColorClass(this, "e", TITLE) + 'Essence of Essence' },
 			description: 'multiplies essence gain based on your essence',
 			cost: 1250,
 			effect() { return player.e.points.add(1).pow(0.11111111111) },
@@ -174,8 +174,8 @@ addLayer('e', {
 			unlocked() { return hasUpgrade('e', 21) },
 		},
 		23: {
-			title() { return '<b class="layer-e' + getdark(this, "title") + 'Recurring Recursion' },
-			description() { return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Point Recursion</b> based on your points' },
+			title() { return '<b' + getColorClass(this, "e", TITLE) + 'Recurring Recursion' },
+			description() { return 'boosts the effect of <b' + getColorClass(this, "e", REF) + 'Point Recursion</b> based on your points' },
 			cost: 3500,
 			effect() { return player.points.add(1).pow(0.25) },
 			effectDisplay(eff) {
@@ -186,8 +186,8 @@ addLayer('e', {
 			unlocked() { return hasUpgrade('e', 22) },
 		},
 		31: {
-			title() { return '<b class="layer-e' + getdark(this, "title") + 'Infinite Recursion' },
-			description() { return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Recurring Recursion</b> based on your points' },
+			title() { return '<b' + getColorClass(this, "e", TITLE) + 'Infinite Recursion' },
+			description() { return 'boosts the effect of <b' + getColorClass(this, "e", REF) + 'Recurring Recursion</b> based on your points' },
 			cost: 1e11,
 			effect() { return player.points.add(1).pow(0.01) },
 			effectDisplay(eff) {
@@ -198,8 +198,8 @@ addLayer('e', {
 			unlocked() { return (hasMilestone('q', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 23) },
 		},
 		32: {
-			title() { return '<b class="layer-e' + getdark(this, "title") + 'Brilliance' },
-			description() { return 'some of the effect of <b class="layer-e' + getdark(this, "ref") + 'Radiant Essence</b> is applied to point gain (based on essence)' },
+			title() { return '<b' + getColorClass(this, "e", TITLE) + 'Brilliance' },
+			description() { return 'some of the effect of <b' + getColorClass(this, "e", REF) + 'Radiant Essence</b> is applied to point gain (based on essence)' },
 			cost: 3e33,
 			effect() { return (buyableEffect('e', 12)[0] || newDecimalOne()).pow(0.1).mul(player.e.points).add(1).pow(0.001) },
 			effectDisplay(eff) {
@@ -210,8 +210,8 @@ addLayer('e', {
 			unlocked() { return (hasMilestone('q', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 31) },
 		},
 		33: {
-			title() { return '<b class="layer-e' + getdark(this, "title") + 'Essence Network' },
-			description() { return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Essence Influence</b> based on your essence' },
+			title() { return '<b' + getColorClass(this, "e", TITLE) + 'Essence Network' },
+			description() { return 'boosts the effect of <b' + getColorClass(this, "e", REF) + 'Essence Influence</b> based on your essence' },
 			cost: 5e55,
 			effect() { return player.e.points.add(1).pow(0.025) },
 			effectDisplay(eff) {
@@ -222,8 +222,8 @@ addLayer('e', {
 			unlocked() { return (hasMilestone('q', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 32) },
 		},
 		41: {
-			title() { return '<b class="layer-e' + getdark(this, "title") + 'Essence Recursion' },
-			description() { return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Essence of Essence</b> based on your essence' },
+			title() { return '<b' + getColorClass(this, "e", TITLE) + 'Essence Recursion' },
+			description() { return 'boosts the effect of <b' + getColorClass(this, "e", REF) + 'Essence of Essence</b> based on your essence' },
 			cost: 7e77,
 			effect() { return player.e.points.add(1).pow(0.001) },
 			effectDisplay(eff) {
@@ -234,8 +234,8 @@ addLayer('e', {
 			unlocked() { return (hasMilestone('q', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 33) },
 		},
 		42: {
-			title() { return '<b class="layer-e' + getdark(this, "title") + 'Essences to Infinity' },
-			description() { return 'boosts the effect of <b class="layer-e' + getdark(this, "ref") + 'Essence Recursion</b> based on your essence' },
+			title() { return '<b' + getColorClass(this, "e", TITLE) + 'Essences to Infinity' },
+			description() { return 'boosts the effect of <b' + getColorClass(this, "e", REF) + 'Essence Recursion</b> based on your essence' },
 			cost: 9e99,
 			effect() { return player.e.points.add(1).pow(0.01) },
 			effectDisplay(eff) {
@@ -246,7 +246,7 @@ addLayer('e', {
 			unlocked() { return (hasMilestone('q', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 41) },
 		},
 		43: {
-			title() { return '<b class="layer-e' + getdark(this, "title") + 'Essence of the Flow' },
+			title() { return '<b' + getColorClass(this, "e", TITLE) + 'Essence of the Flow' },
 			description: 'gain +2e22% of your essence gain per second',
 			cost: '1e1111',
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('e', 42) },
@@ -255,7 +255,7 @@ addLayer('e', {
 	buyables: {
 		11: {
 			cost(x) { return new Decimal(12).pow(x).add(20) },
-			title() { return '<b class="layer-e' + getdark(this, "title-buyable") + 'Purer Essence' },
+			title() { return '<b' + getColorClass(this, "e", TITLE) + 'Purer Essence' },
 			description: 'multiplies essence gain based on the amount of this upgrade bought.',
 			canAfford() { return player.e.points.gte(this.cost()) },
 			purchaseLimit() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer ? 99 : 14 },
@@ -269,7 +269,7 @@ addLayer('e', {
 		},
 		12: {
 			cost(x) { return new Decimal(44).pow(x).mul(10).add(85184) },
-			title() { return '<b class="layer-e' + getdark(this, "title-buyable") + 'Radiant Essence' },
+			title() { return '<b' + getColorClass(this, "e", TITLE) + 'Radiant Essence' },
 			description: 'multiplies core gain (and essence gain at a reduced rate) based on the amount of this upgrade bought.',
 			canAfford() { return player.e.points.gte(this.cost()) },
 			purchaseLimit: 99,
@@ -293,7 +293,7 @@ addLayer('e', {
 				if (player.mo.assimilating === this.layer) return new Decimal(10).pow(x.add(2));
 				return new Decimal('e10000000').pow(x).mul('e750000000');
 			},
-			title() { return '<b class="layer-e' + getdark(this, "title-buyable") + 'Exponential Essence' },
+			title() { return '<b' + getColorClass(this, "e", TITLE) + 'Exponential Essence' },
 			description: 'exponentiates essence gain multiplier based on the amount of this upgrade bought.',
 			canAfford() { return player.e.points.gte(this.cost()) },
 			purchaseLimit: 99,
@@ -454,7 +454,7 @@ addLayer('c', {
 	},
 	upgrades: {
 		11: {
-			title() { return '<b class="layer-c' + getdark(this, "title") + 'Heat Emission' },
+			title() { return '<b' + getColorClass(this, "c", TITLE) + 'Heat Emission' },
 			description: 'multiplies essence gain based on your cores',
 			cost: 25,
 			effect() { return player.c.points.add(1).pow(0.2) },
@@ -466,7 +466,7 @@ addLayer('c', {
 			unlocked() { return hasMilestone('c', 1) },
 		},
 		12: {
-			title() { return '<b class="layer-c' + getdark(this, "title") + 'Core Countdown' },
+			title() { return '<b' + getColorClass(this, "c", TITLE) + 'Core Countdown' },
 			description: 'multiplies core gain based on your points',
 			cost: 100,
 			effect() { return player.points.add(1).pow(0.01) },
@@ -478,7 +478,7 @@ addLayer('c', {
 			unlocked() { return hasUpgrade('c', 11) },
 		},
 		13: {
-			title() { return '<b class="layer-c' + getdark(this, "title") + 'The Quarks\' Core' },
+			title() { return '<b' + getColorClass(this, "c", TITLE) + 'The Quarks\' Core' },
 			description: 'multiplies quark gain based on your cores',
 			cost: 750,
 			effect() { return player.c.points.add(1).pow(0.1) },
@@ -490,8 +490,8 @@ addLayer('c', {
 			unlocked() { return hasUpgrade('c', 12) },
 		},
 		21: {
-			title() { return '<b class="layer-c' + getdark(this, "title") + 'Quarky Core' },
-			description() { return 'multiplies the effect of <b class="layer-c' + getdark(this, "ref") + 'The Quarks\' Core</b> based on your cores' },
+			title() { return '<b' + getColorClass(this, "c", TITLE) + 'Quarky Core' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "c", REF) + 'The Quarks\' Core</b> based on your cores' },
 			cost: 1e69,
 			effect() { return player.c.points.add(1).pow(0.005) },
 			effectDisplay(eff) {
@@ -502,8 +502,8 @@ addLayer('c', {
 			unlocked() { return (hasMilestone('h', 8) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 13) },
 		},
 		22: {
-			title() { return '<b class="layer-c' + getdark(this, "title") + 'Quirky Core' },
-			description() { return 'multiplies the effect of <b class="layer-c' + getdark(this, "ref") + 'Quarky Core</b> based on your cores' },
+			title() { return '<b' + getColorClass(this, "c", TITLE) + 'Quirky Core' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "c", REF) + 'Quarky Core</b> based on your cores' },
 			cost: 1e71,
 			effect() { return player.c.points.add(1).pow(0.002) },
 			effectDisplay(eff) {
@@ -514,7 +514,7 @@ addLayer('c', {
 			unlocked() { return (hasMilestone('h', 8) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 21) },
 		},
 		23: {
-			title() { return '<b class="layer-c' + getdark(this, "title") + 'Super Core' },
+			title() { return '<b' + getColorClass(this, "c", TITLE) + 'Super Core' },
 			description: 'multiplies core gain based on your cores',
 			cost: 1e73,
 			effect() { return player.c.points.add(1).pow(0.01) },
@@ -526,8 +526,8 @@ addLayer('c', {
 			unlocked() { return (hasMilestone('h', 8) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 22) },
 		},
 		31: {
-			title() { return '<b class="layer-c' + getdark(this, "title") + 'Ultra Core' },
-			description() { return 'multiplies the effect of <b class="layer-c' + getdark(this, "ref") + 'Super Core</b> based on your cores' },
+			title() { return '<b' + getColorClass(this, "c", TITLE) + 'Ultra Core' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "c", REF) + 'Super Core</b> based on your cores' },
 			cost: 1e75,
 			effect() { return player.c.points.add(1).pow(0.0025) },
 			effectDisplay(eff) {
@@ -538,8 +538,8 @@ addLayer('c', {
 			unlocked() { return (hasUpgrade('h', 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 23) },
 		},
 		32: {
-			title() { return '<b class="layer-c' + getdark(this, "title") + 'Core of Cores' },
-			description() { return 'multiplies the effect of <b class="layer-c' + getdark(this, "ref") + 'Ultra Core</b> based on your cores' },
+			title() { return '<b' + getColorClass(this, "c", TITLE) + 'Core of Cores' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "c", REF) + 'Ultra Core</b> based on your cores' },
 			cost: 1e77,
 			effect() { return player.c.points.add(1).pow(0.001) },
 			effectDisplay(eff) {
@@ -550,13 +550,13 @@ addLayer('c', {
 			unlocked() { return (hasUpgrade('h', 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 31) },
 		},
 		33: {
-			title() { return '<b class="layer-c' + getdark(this, "title") + 'Core Liberation' },
-			description() { return 'if you own <b class="layer-h' + getdark(this, "ref") + 'Core Production Line</b> and all subsequent upgrades, gain +25% of your core gain per second' },
+			title() { return '<b' + getColorClass(this, "c", TITLE) + 'Core Liberation' },
+			description() { return 'if you own <b' + getColorClass(this, "h", REF) + 'Core Production Line</b> and all subsequent upgrades, gain +25% of your core gain per second' },
 			cost: 1e80,
 			unlocked() { return (hasUpgrade('h', 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 32) },
 		},
 		41: {
-			title() { return '<b class="layer-c' + getdark(this, "title") + 'Core of the Flow' },
+			title() { return '<b' + getColorClass(this, "c", TITLE) + 'Core of the Flow' },
 			description: 'gain more of your core gain per second based on your cores',
 			cost: 1e145,
 			effect() { return player.c.points.add(1).log10().add(1).pow(13.3).min(1e36) },
@@ -569,7 +569,7 @@ addLayer('c', {
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 33) },
 		},
 		42: {
-			title() { return '<b class="layer-c' + getdark(this, "title") + 'Core of Recursion' },
+			title() { return '<b' + getColorClass(this, "c", TITLE) + 'Core of Recursion' },
 			description: 'multiplies core gain based on your cores',
 			effect() { return  player.c.points.add(1).log10().add(1).pow(80) },
 			effectDisplay(eff) {
@@ -581,7 +581,7 @@ addLayer('c', {
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('c', 41) },
 		},
 		43: {
-			title() { return '<b class="layer-c' + getdark(this, "title") + 'Exponential Core' },
+			title() { return '<b' + getColorClass(this, "c", TITLE) + 'Exponential Core' },
 			description() {
 				if (player.mo.assimilating === this.layer) return 'exponentiates core gain multiplier by ^1.25';
 				return 'exponentiates core gain multiplier by ^1.005';
@@ -600,7 +600,7 @@ addLayer('c', {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return new Decimal(6).pow(x);
 				return x.mul(2).add(1);
 			},
-			title() { return '<b class="layer-c' + getdark(this, "title-buyable") + 'Empowered Points' },
+			title() { return '<b' + getColorClass(this, "c", TITLE) + 'Empowered Points' },
 			description: 'multiplies point gain based on the amount of this upgrade bought.',
 			canAfford() { return player.c.points.gte(this.cost()) },
 			purchaseLimit: 99,
@@ -620,7 +620,7 @@ addLayer('c', {
 		},
 		12: {
 			cost(x) { return new Decimal(6).pow(x) },
-			title() { return '<b class="layer-c' + getdark(this, "title-buyable") + 'Empowered Essence' },
+			title() { return '<b' + getColorClass(this, "c", TITLE) + 'Empowered Essence' },
 			description: 'multiplies essence gain based on the amount of this upgrade bought.',
 			canAfford() { return player.c.points.gte(this.cost()) },
 			purchaseLimit() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer ? 99 : 49 },
@@ -637,7 +637,7 @@ addLayer('c', {
 				if (player.mo.assimilating === this.layer) return new Decimal(1e5).pow(x.div(2).add(2));
 				return new Decimal(1e20).pow(x.add(1));
 			},
-			title() { return '<b class="layer-c' + getdark(this, "title-buyable") + 'Empowered Cores' },
+			title() { return '<b' + getColorClass(this, "c", TITLE) + 'Empowered Cores' },
 			description: 'increases the base of the previous two rebuyables based on the amount of this upgrade bought.',
 			canAfford() { return player.c.points.gte(this.cost()) },
 			purchaseLimit: 99,
@@ -816,7 +816,7 @@ addLayer('q', {
 	},
 	upgrades: {
 		11: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'The Point of Quarks' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'The Point of Quarks' },
 			description: 'multiplies quark gain based on your points',
 			cost: 1,
 			effect() { return player.points.add(1).pow(0.01) },
@@ -827,7 +827,7 @@ addLayer('q', {
 			},
 		},
 		12: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quark Power' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Quark Power' },
 			description: 'multiplies point gain based on your quarks',
 			cost: 2,
 			effect() { return player.q.points.add(1).pow(0.09) },
@@ -839,8 +839,8 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 11) },
 		},
 		13: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Super Quarks' },
-			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Quark Power</b> based on your points' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Super Quarks' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "q", REF) + 'Quark Power</b> based on your points' },
 			cost: 25,
 			effect() { return player.points.add(1).pow(0.0025) },
 			effectDisplay(eff) {
@@ -851,8 +851,8 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 12) },
 		},
 		14: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Essence of Quarks' },
-			description() { return '<b class="layer-q' + getdark(this, "ref") + 'Quark Power</b> also affects essence gain at a reduced rate (<b class="layer-q' + getdark(this, "ref") + 'Super Quarks</b> does not affect this)' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Essence of Quarks' },
+			description() { return '<b' + getColorClass(this, "q", REF) + 'Quark Power</b> also affects essence gain at a reduced rate (<b' + getColorClass(this, "q", REF) + 'Super Quarks</b> does not affect this)' },
 			cost: 100,
 			effect() { return player.q.points.add(1).pow(0.2) },
 			effectDisplay(eff) {
@@ -863,8 +863,8 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 13) },
 		},
 		15: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quark Fusion' },
-			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Essence of Quarks</b> based on your cores' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Quark Fusion' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "q", REF) + 'Essence of Quarks</b> based on your cores' },
 			cost: 750,
 			effect() { return player.c.points.add(1).pow(0.02) },
 			effectDisplay(eff) {
@@ -875,7 +875,7 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 14) },
 		},
 		21: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quirky Quarks' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Quirky Quarks' },
 			description: 'multiplies core gain and quark gain based on your quarks',
 			cost: 2500,
 			effect() { return player.q.points.add(1).pow(0.05) },
@@ -887,8 +887,8 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 15) },
 		},
 		22: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Very Quirky' },
-			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Quirky Quarks</b> based on your points' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Very Quirky' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "q", REF) + 'Quirky Quarks</b> based on your points' },
 			cost: 7500,
 			effect() { return player.points.add(1).pow(0.02) },
 			effectDisplay(eff) {
@@ -899,8 +899,8 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 21) },
 		},
 		23: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quark Extreme' },
-			description() { return '<b class="layer-q' + getdark(this, "ref") + 'Quark Power</b> also affects quark gain at a reduced rate (<b class="layer-q' + getdark(this, "ref") + 'Super Quarks</b> does not affect this)' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Quark Extreme' },
+			description() { return '<b' + getColorClass(this, "q", REF) + 'Quark Power</b> also affects quark gain at a reduced rate (<b' + getColorClass(this, "q", REF) + 'Super Quarks</b> does not affect this)' },
 			cost: 25000,
 			effect() { return player.q.points.add(1).pow(0.1) },
 			effectDisplay(eff) {
@@ -911,8 +911,8 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 22) },
 		},
 		24: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Recurring Quarks' },
-			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Quark Extreme</b> based on your quarks' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Recurring Quarks' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "q", REF) + 'Quark Extreme</b> based on your quarks' },
 			cost: 100000,
 			effect() { return player.q.points.add(1).pow(0.2) },
 			effectDisplay(eff) {
@@ -923,8 +923,8 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 23) },
 		},
 		25: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Recurring More' },
-			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Recurring Quarks</b> based on your quarks' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Recurring More' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "q", REF) + 'Recurring Quarks</b> based on your quarks' },
 			cost: 1500000,
 			effect() { return player.q.points.add(1).pow(0.05) },
 			effectDisplay(eff) {
@@ -935,8 +935,8 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 24) },
 		},
 		31: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Infinite Recur' },
-			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Recurring More</b> based on your quarks' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Infinite Recur' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "q", REF) + 'Recurring More</b> based on your quarks' },
 			cost: 50000000,
 			effect() { return player.q.points.add(1).pow(0.01) },
 			effectDisplay(eff) {
@@ -947,7 +947,7 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 25) },
 		},
 		32: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Compact Quarks' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Compact Quarks' },
 			description: 'multiplies essence gain based on your quarks',
 			cost: 1e9,
 			effect() { return player.q.points.add(1).pow(0.15) },
@@ -959,7 +959,7 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 31) },
 		},
 		33: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quark Fission' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Quark Fission' },
 			description: 'multiplies core gain based on your quarks',
 			cost: 1e10,
 			effect() { return player.q.points.add(1).pow(0.075) },
@@ -971,7 +971,7 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 32) },
 		},
 		34: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'The Quark Count' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'The Quark Count' },
 			description: 'multiplies point gain based on your quarks',
 			cost: 2.5e11,
 			effect() { return player.q.points.add(1).pow(0.01) },
@@ -983,8 +983,8 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 33) },
 		},
 		35: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quark Counting' },
-			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'The Quark Count</b> based on your quarks' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Quark Counting' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "q", REF) + 'The Quark Count</b> based on your quarks' },
 			cost: 1e13,
 			effect() { return player.q.points.add(1).pow(0.015) },
 			effectDisplay(eff) {
@@ -995,8 +995,8 @@ addLayer('q', {
 			unlocked() { return hasUpgrade('q', 34) },
 		},
 		41: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Ticking Quarks' },
-			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Quark Counting</b> based on your quarks' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Ticking Quarks' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "q", REF) + 'Quark Counting</b> based on your quarks' },
 			cost: 1e14,
 			effect() { return player.q.points.add(1).pow(0.005) },
 			effectDisplay(eff) {
@@ -1007,7 +1007,7 @@ addLayer('q', {
 			unlocked() { return (hasMilestone('sp', 2) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 35) },
 		},
 		42: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Subatomic Quarks' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Subatomic Quarks' },
 			description: 'multiplies quark gain based on your subatomic particles',
 			cost: 1e16,
 			effect() {
@@ -1022,7 +1022,7 @@ addLayer('q', {
 			unlocked() { return (hasMilestone('sp', 2) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 41) },
 		},
 		43: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quirky Particles' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Quirky Particles' },
 			description: 'multiplies subatomic particle gain based on your quarks',
 			cost: 1e18,
 			effect() { return player.q.points.add(1).pow(0.01) },
@@ -1034,8 +1034,8 @@ addLayer('q', {
 			unlocked() { return (hasMilestone('sp', 2) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 42) },
 		},
 		44: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Particle Quarks' },
-			description() { return 'multiplies the effect of <b class="layer-q' + getdark(this, "ref") + 'Subatomic Quarks</b> based on your quarks' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Particle Quarks' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "q", REF) + 'Subatomic Quarks</b> based on your quarks' },
 			cost: 1e20,
 			effect() { return player.q.points.add(1).pow(0.005) },
 			effectDisplay(eff) {
@@ -1046,7 +1046,7 @@ addLayer('q', {
 			unlocked() { return (hasMilestone('sp', 2) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 43) },
 		},
 		45: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'The Ultra Quark' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'The Ultra Quark' },
 			description: 'multiplies quark gain based on your quarks',
 			cost: 1e22,
 			effect() { return player.q.points.add(1).pow(0.125) },
@@ -1058,13 +1058,13 @@ addLayer('q', {
 			unlocked() { return (hasMilestone('sp', 2) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 44) },
 		},
 		51: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Quark of the Flow' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Quark of the Flow' },
 			description: 'gain +1e30% of your quark gain per second',
 			cost: '1e825',
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 45) },
 		},
 		52: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Mystery Quark' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Mystery Quark' },
 			description() { return 'multiplies quark gain based on your ' + randomStr(9) },
 			cost: '1e1048',
 			effect() {
@@ -1079,19 +1079,19 @@ addLayer('q', {
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 51) },
 		},
 		53: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Valued Mystery' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Valued Mystery' },
 			description() { return 'multiplies ' + randomStr(9) + ' value by 10 and frequency by 2' },
 			cost: '1e1145',
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 52) },
 		},
 		54: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Bigger Mystery' },
-			description() { return 'multiplies <b class="layer-q' + getdark(this, "ref") + 'Mystery Quark</b> effect exponent by 2.5 and divides ' + randomStr(9) + ' frequency by 2' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Bigger Mystery' },
+			description() { return 'multiplies <b' + getColorClass(this, "q", REF) + 'Mystery Quark</b> effect exponent by 2.5 and divides ' + randomStr(9) + ' frequency by 2' },
 			cost: '1e1171',
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 53) },
 		},
 		55: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'What\'s the Point?' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'What\'s the Point?' },
 			description() { return 'multiplies point gain based on your ' + randomStr(9) },
 			cost: '1e1295',
 			effect() { return getGlitch().pow(21) },
@@ -1103,19 +1103,19 @@ addLayer('q', {
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 54) },
 		},
 		61: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Purge the Mystery' },
-			description() { return 'unlocks <b class="layer-q' + getdark(this, "ref") + 'The Decipherer</b>,<br>a new tab' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Purge the Mystery' },
+			description() { return 'unlocks <b' + getColorClass(this, "q", REF) + 'The Decipherer</b>,<br>a new tab' },
 			cost: 'e8.325e10',
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('q', 55) },
 		},
 		62: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Optimizing' },
-			description() { return 'increases the ' + randomStr(9) + ' rounding element by 2.5, and improves the <b class="layer-q' + getdark(this, "ref") + 'Sample Quarks</b> effect formula' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Optimizing' },
+			description() { return 'increases the ' + randomStr(9) + ' rounding element by 2.5, and improves the <b' + getColorClass(this, "q", REF) + 'Sample Quarks</b> effect formula' },
 			cost: 'e8.333e10',
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 61) },
 		},
 		63: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Estimation on Point' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Estimation on Point' },
 			description() { return 'exponentiates point gain multiplier based on your ' + randomStr(9) },
 			cost: 'e8.34e10',
 			effect() { return getGlitch().log10().add(1).pow(0.05) },
@@ -1127,13 +1127,13 @@ addLayer('q', {
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 62) },
 		},
 		64: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'More Optimal' },
-			description() { return 'multiplies ' + randomStr(9) + ' value by 2.5, and improves the <b class="layer-q' + getdark(this, "ref") + 'Sample Quarks</b> effect formula' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'More Optimal' },
+			description() { return 'multiplies ' + randomStr(9) + ' value by 2.5, and improves the <b' + getColorClass(this, "q", REF) + 'Sample Quarks</b> effect formula' },
 			cost: 'e1.091e11',
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 63) },
 		},
 		65: {
-			title() { return '<b class="layer-q' + getdark(this, "title") + 'Mystery Surge' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Mystery Surge' },
 			description() { return 'multiplies ' + randomStr(9) + ' frequency by 2, increases the ' + randomStr(9) + ' rounding element by 2.5, and increases decay factor to 0.1' },
 			cost: 'e1.0945e11',
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('ch', 11) && hasUpgrade('q', 64) },
@@ -1145,7 +1145,7 @@ addLayer('q', {
 				if (player.h.limitsBroken >= 3) return new Decimal(2).pow(new Decimal(1.3).pow(x));
 				return new Decimal('e2.5e9').pow(x).mul('e1e10');
 			},
-			title() { return '<b class="layer-q' + getdark(this, "title-buyable") + 'Sample Quarks' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Sample Quarks' },
 			description() { return 'increases deciphering based on the amount of this upgrade bought. becomes less effective based on your ' + randomStr(9) + '.' },
 			canAfford() { return player.q.points.gte(this.cost()) },
 			purchaseLimit() { return player.h.limitsBroken >= 3 ? 1e9 : 99 },
@@ -1168,7 +1168,7 @@ addLayer('q', {
 				if (x.eq(29)) div = div.mul(1.8);
 				return new Decimal(2).pow(x).div(div);
 			},
-			title() { return '<b class="layer-q' + getdark(this, "title-buyable") + 'Atomic Insight' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Atomic Insight' },
 			description: 'multiplies atom gain based on your insight and the amount of this upgrade bought.',
 			canAfford() { return player.q.insight.gte(this.cost()) },
 			purchaseLimit: 99,
@@ -1187,7 +1187,7 @@ addLayer('q', {
 		},
 		13: {
 			cost(x) { return new Decimal(10).pow(new Decimal(10).pow(x)) },
-			title() { return '<b class="layer-q' + getdark(this, "title-buyable") + 'Analyze Essence' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Analyze Essence' },
 			description: 'multiplies deciphering based on the amount of this upgrade bought.',
 			canAfford() { return player.e.points.gte(this.cost()) },
 			purchaseLimit: 99,
@@ -1203,7 +1203,7 @@ addLayer('q', {
 		},
 		21: {
 			cost(x) { return new Decimal(5).pow(x) },
-			title() { return '<b class="layer-q' + getdark(this, "title-buyable") + 'Insight Into Insight' },
+			title() { return '<b' + getColorClass(this, "q", TITLE) + 'Insight Into Insight' },
 			description: 'multiplies insight gain based on the amount of this upgrade bought.',
 			canAfford() { return player.q.insight.gte(this.cost()) },
 			purchaseLimit: 99,
@@ -1331,43 +1331,43 @@ addLayer('sp', {
 	},
 	upgrades: {
 		11: {
-			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Positrons' },
-			description() { return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Protons' },
+			title() { return '<b' + getColorClass(this, "sp", TITLE) + 'Positrons' },
+			description() { return 'squares the positive effect of <b' + getColorClass(this, "sp", REF) + 'Protons' },
 			cost: 6,
 			unlocked() { return hasUpgrade('h', 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 		12: {
-			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Beta Particles' },
-			description() { return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Neutrons' },
+			title() { return '<b' + getColorClass(this, "sp", TITLE) + 'Beta Particles' },
+			description() { return 'squares the positive effect of <b' + getColorClass(this, "sp", REF) + 'Neutrons' },
 			cost: 6,
 			unlocked() { return hasUpgrade('h', 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 		13: {
-			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Gamma Particles' },
-			description() { return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Electrons' },
+			title() { return '<b' + getColorClass(this, "sp", TITLE) + 'Gamma Particles' },
+			description() { return 'squares the positive effect of <b' + getColorClass(this, "sp", REF) + 'Electrons' },
 			cost: 6,
 			unlocked() { return hasUpgrade('h', 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 		21: {
-			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Proton Decay' },
-			description() { return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Protons</b>, and keep core rebuyables on subatomic particle resets' },
+			title() { return '<b' + getColorClass(this, "sp", TITLE) + 'Proton Decay' },
+			description() { return 'squares the positive effect of <b' + getColorClass(this, "sp", REF) + 'Protons</b>, and keep core rebuyables on subatomic particle resets' },
 			cost: 32000,
 			unlocked() { return hasUpgrade('sp', 11) && (isAssimilated(this.layer) || player.mo.assimilating === this.layer) },
 		},
 		22: {
-			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Neutron Decay' },
-			description() { return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Neutrons</b>, and keep core upgrades on subatomic particle resets' },
+			title() { return '<b' + getColorClass(this, "sp", TITLE) + 'Neutron Decay' },
+			description() { return 'squares the positive effect of <b' + getColorClass(this, "sp", REF) + 'Neutrons</b>, and keep core upgrades on subatomic particle resets' },
 			cost: 68000,
 			unlocked() { return hasUpgrade('sp', 12) && (isAssimilated(this.layer) || player.mo.assimilating === this.layer) },
 		},
 		23: {
-			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Electron Decay' },
-			description() { return 'squares the positive effect of <b class="layer-sp' + getdark(this, "ref") + 'Electrons</b>, and keep core milestones on subatomic particle resets' },
+			title() { return '<b' + getColorClass(this, "sp", TITLE) + 'Electron Decay' },
+			description() { return 'squares the positive effect of <b' + getColorClass(this, "sp", REF) + 'Electrons</b>, and keep core milestones on subatomic particle resets' },
 			cost: 76000,
 			unlocked() { return hasUpgrade('sp', 13) && (isAssimilated(this.layer) || player.mo.assimilating === this.layer) },
 		},
 		31: {
-			title() { return '<b class="layer-sp' + getdark(this, "title") + 'Particle of the Flow' },
+			title() { return '<b' + getColorClass(this, "sp", TITLE) + 'Particle of the Flow' },
 			description() {
 				if (player.mo.assimilating === this.layer) return 'multiplies subatomic particle gain by 2.5x and subatomic particles reset nothing';
 				else return 'multiplies subatomic particle gain by 2.5x, exponentiates subatomic particle gain multiplier by ^3.36, and subatomic particles reset nothing';
@@ -1383,7 +1383,7 @@ addLayer('sp', {
 	buyables: {
 		11: {
 			cost(x) { return x.add(1) },
-			title() { return '<b class="layer-sp' + getdark(this, "title-buyable") + 'Protons' },
+			title() { return '<b' + getColorClass(this, "sp", TITLE) + 'Protons' },
 			description: 'multiplies quark gain (but also decreases essence gain at a reduced rate) based on the amount of this upgrade bought.',
 			canAfford() { return player.sp.points.gte(this.cost()) },
 			purchaseLimit() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer ? 99 : 9 },
@@ -1405,7 +1405,7 @@ addLayer('sp', {
 		},
 		12: {
 			cost(x) { return x.add(1) },
-			title() { return '<b class="layer-sp' + getdark(this, "title-buyable") + 'Neutrons' },
+			title() { return '<b' + getColorClass(this, "sp", TITLE) + 'Neutrons' },
 			description: 'multiplies essence gain (but also decreases point gain at a reduced rate) based on the amount of this upgrade bought.',
 			canAfford() { return player.sp.points.gte(this.cost()) },
 			purchaseLimit() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer ? 99 : 9 },
@@ -1427,7 +1427,7 @@ addLayer('sp', {
 		},
 		21: {
 			cost(x) { return x.add(1) },
-			title() { return '<b class="layer-sp' + getdark(this, "title-buyable") + 'Electrons' },
+			title() { return '<b' + getColorClass(this, "sp", TITLE) + 'Electrons' },
 			description: 'multiplies point gain (but also decreases quark gain at a reduced rate) based on the amount of this upgrade bought.',
 			canAfford() { return player.sp.points.gte(this.cost()) },
 			purchaseLimit() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer ? 99 : 9 },
@@ -1601,7 +1601,7 @@ addLayer('h', {
 	},
 	upgrades: {
 		11: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hex Leak' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Hex Leak' },
 			description() {
 				if (hasUpgrade('ds', 11)) return 'multiplies point and hex gain based on your hexes';
 				return 'multiplies point gain based on your hexes';            
@@ -1619,12 +1619,12 @@ addLayer('h', {
 			},
 		},
 		12: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Stronger Hexes' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Stronger Hexes' },
 			description: 'multiplies hex gain based on your hexes',
 			cost: 5,
 			effect() {
 				if (hasUpgrade('ds', 12)) return player.h.points.add(1).pow(0.1).pow(2);
-				else return player.h.points.add(1).pow(0.1);
+				return player.h.points.add(1).pow(0.1);
 			},
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
@@ -1636,10 +1636,10 @@ addLayer('h', {
 			},
 		},
 		13: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hex Fusion' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Hex Fusion' },
 			description: 'multiplies core gain based on your hexes',
 			cost: 10,
-			effect() { return  player.h.points.add(1).pow(0.09) },
+			effect() { return player.h.points.add(1).pow(0.09) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.09';
@@ -1647,18 +1647,18 @@ addLayer('h', {
 			},
 		},
 		14: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Boost Hexes' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Boost Hexes' },
 			description: 'quadruples hex gain',
 			cost: 25,
 		},
 		21: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Numerical Hexes' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Numerical Hexes' },
 			description() {
-				if (hasUpgrade('ds', 11)) return 'multiplies the first effect of <b class="layer-h' + getdark(this, "ref") + 'Hex Leak</b> based on your hexes';
-				return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Hex Leak</b> based on your hexes';
+				if (hasUpgrade('ds', 11)) return 'multiplies the first effect of <b' + getColorClass(this, "h", REF) + 'Hex Leak</b> based on your hexes';
+				return 'multiplies the effect of <b' + getColorClass(this, "h", REF) + 'Hex Leak</b> based on your hexes';
 			},
 			cost: 1000,
-			effect() { return  player.h.points.add(1).pow(0.025) },
+			effect() { return player.h.points.add(1).pow(0.025) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.025';
@@ -1667,10 +1667,10 @@ addLayer('h', {
 			unlocked() { return hasUpgrade('h', 11) && hasUpgrade('h', 12) && hasUpgrade('h', 13) && hasUpgrade('h', 14) },
 		},
 		22: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Super Strong Hexes' },
-			description() { return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Stronger Hexes</b> based on your hexes' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Super Strong Hexes' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "h", REF) + 'Stronger Hexes</b> based on your hexes' },
 			cost: 5000,
-			effect() { return  player.h.points.add(1).pow(0.05) },
+			effect() { return player.h.points.add(1).pow(0.05) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.05';
@@ -1679,10 +1679,10 @@ addLayer('h', {
 			unlocked() { return hasUpgrade('h', 11) && hasUpgrade('h', 12) && hasUpgrade('h', 13) && hasUpgrade('h', 14) },
 		},
 		23: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hex Fission' },
-			description() { return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Hex Fusion</b> based on your hexes' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Hex Fission' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "h", REF) + 'Hex Fusion</b> based on your hexes' },
 			cost: 10000,
-			effect() { return  player.h.points.add(1).pow(0.15) },
+			effect() { return player.h.points.add(1).pow(0.15) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.15';
@@ -1691,16 +1691,16 @@ addLayer('h', {
 			unlocked() { return hasUpgrade('h', 11) && hasUpgrade('h', 12) && hasUpgrade('h', 13) && hasUpgrade('h', 14) },
 		},
 		24: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Boost Cores' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Boost Cores' },
 			description: 'triples core gain',
 			cost: 25000,
 			unlocked() { return hasUpgrade('h', 11) && hasUpgrade('h', 12) && hasUpgrade('h', 13) && hasUpgrade('h', 14) },
 		},
 		31: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hex Numerals' },
-			description() { return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Numerical Hexes</b> based on your points' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Hex Numerals' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "h", REF) + 'Numerical Hexes</b> based on your points' },
 			cost: 100000,
-			effect() { return  player.points.add(1).pow(0.002) },
+			effect() { return player.points.add(1).pow(0.002) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.002';
@@ -1709,10 +1709,10 @@ addLayer('h', {
 			unlocked() { return hasUpgrade('h', 21) && hasUpgrade('h', 22) && hasUpgrade('h', 23) && hasUpgrade('h', 24) },
 		},
 		32: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Extreme Hexes' },
-			description() { return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Super Strong Hexes</b> based on your hexes' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Extreme Hexes' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "h", REF) + 'Super Strong Hexes</b> based on your hexes' },
 			cost: 500000,
-			effect() { return  player.h.points.add(1).pow(0.01) },
+			effect() { return player.h.points.add(1).pow(0.01) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.01';
@@ -1721,10 +1721,10 @@ addLayer('h', {
 			unlocked() { return hasUpgrade('h', 21) && hasUpgrade('h', 22) && hasUpgrade('h', 23) && hasUpgrade('h', 24) },
 		},
 		33: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Core of Hexes' },
-			description() { return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Hex Fission</b> based on your cores' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Core of Hexes' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "h", REF) + 'Hex Fission</b> based on your cores' },
 			cost: 1000000,
-			effect() { return  player.h.points.add(1).pow(0.025) },
+			effect() { return player.h.points.add(1).pow(0.025) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.025';
@@ -1733,14 +1733,14 @@ addLayer('h', {
 			unlocked() { return hasUpgrade('h', 21) && hasUpgrade('h', 22) && hasUpgrade('h', 23) && hasUpgrade('h', 24) },
 		},
 		34: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Boost Quarks' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Boost Quarks' },
 			description: 'doubles quark gain',
 			cost: 2500000,
 			unlocked() { return hasUpgrade('h', 21) && hasUpgrade('h', 22) && hasUpgrade('h', 23) && hasUpgrade('h', 24) },
 		},
 		41: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Numero Hex' },
-			description() { return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Hex Numerals</b> based on your hexes' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Numero Hex' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "h", REF) + 'Hex Numerals</b> based on your hexes' },
 			cost: 7500000,
 			effect() { return  player.points.add(1).pow(0.0001) },
 			effectDisplay(eff) {
@@ -1751,8 +1751,8 @@ addLayer('h', {
 			unlocked() { return hasUpgrade('h', 31) && hasUpgrade('h', 32) && hasUpgrade('h', 33) && hasUpgrade('h', 34) },
 		},
 		42: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Ultra Hexes' },
-			description() { return 'multiplies the effect of <b class="layer-h' + getdark(this, "ref") + 'Extreme Hexes</b> based on your hexes' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Ultra Hexes' },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, "h", REF) + 'Extreme Hexes</b> based on your hexes' },
 			cost: 15000000,
 			effect() { return  player.h.points.add(1).pow(0.001) },
 			effectDisplay(eff) {
@@ -1763,52 +1763,52 @@ addLayer('h', {
 			unlocked() { return hasUpgrade('h', 31) && hasUpgrade('h', 32) && hasUpgrade('h', 33) && hasUpgrade('h', 34) },
 		},
 		43: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Core Continuation' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Core Continuation' },
 			description: 'gains 1% of core gain per second',
 			cost: 45000000,
 			unlocked() { return hasUpgrade('h', 31) && hasUpgrade('h', 32) && hasUpgrade('h', 33) && hasUpgrade('h', 34) },
 		},
 		44: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Rapid Cores' },
-			description() { return 'increases the effect of <b class="layer-h' + getdark(this, "ref") + 'Core Continuation</b> by 9% (total: 10%)' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Rapid Cores' },
+			description() { return 'increases the effect of <b' + getColorClass(this, "h", REF) + 'Core Continuation</b> by 9% (total: 10%)' },
 			cost: 75000000,
 			unlocked() { return hasUpgrade('h', 31) && hasUpgrade('h', 32) && hasUpgrade('h', 33) && hasUpgrade('h', 34) },
 		},
 		51: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Faster Essence' },
-			description() { return 'increases essence gain per second by 25% if you have the <b class="layer-c' + getdark(this, "ref") + '4th core milestone</b> (total: 75%)' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Faster Essence' },
+			description() { return 'increases essence gain per second by 25% if you have the <b' + getColorClass(this, "c", REF) + '4th core milestone</b> (total: 75%)' },
 			cost: 9e90,
 			unlocked() { return (hasUpgrade('ds', 11) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 41) && hasUpgrade('h', 42) && hasUpgrade('h', 43) && hasUpgrade('h', 44) },
 		},
 		52: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Core Production Line' },
-			description() { return 'increases the effect of <b class="layer-h' + getdark(this, "ref") + 'Rapid Cores</b> by 15% (total: 25%)' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Core Production Line' },
+			description() { return 'increases the effect of <b' + getColorClass(this, "h", REF) + 'Rapid Cores</b> by 15% (total: 25%)' },
 			cost: 250000000,
 			unlocked() { return hasUpgrade('h', 41) && hasUpgrade('h', 42) && hasUpgrade('h', 43) && hasUpgrade('h', 44) },
 		},
 		53: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Sub Core Particle Fusion' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Sub Core Particle Fusion' },
 			description: 'you can explore 3 new core upgrades and 3 new subatomic particle upgrades',
 			cost: 7.5e9,
 			unlocked() { return hasUpgrade('h', 41) && hasUpgrade('h', 42) && hasUpgrade('h', 43) && hasUpgrade('h', 44) },
 		},
 		54: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Fastest Essence' },
-			description() { return 'increases the effect of <b class="layer-h' + getdark(this, "ref") + 'Faster Essence</b> by 25% (total: 100%)' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Fastest Essence' },
+			description() { return 'increases the effect of <b' + getColorClass(this, "h", REF) + 'Faster Essence</b> by 25% (total: 100%)' },
 			cost: 9.5e95,
 			unlocked() { return (hasUpgrade('ds', 11) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 41) && hasUpgrade('h', 42) && hasUpgrade('h', 43) && hasUpgrade('h', 44) },
 		},
 		61: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Essence Overdrive' },
-			description() { return 'increases the effect of <b class="layer-h' + getdark(this, "ref") + 'Fastest Essence</b> by 25% (total: 125%)' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Essence Overdrive' },
+			description() { return 'increases the effect of <b' + getColorClass(this, "h", REF) + 'Fastest Essence</b> by 25% (total: 125%)' },
 			cost: 1e100,
 			unlocked() { return (hasUpgrade('ds', 12) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 51) && hasUpgrade('h', 52) && hasUpgrade('h', 53) && hasUpgrade('h', 54) },
 		},
 		62: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Sub Hex Particle' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Sub Hex Particle' },
 			description: 'multiplies hex gain based on your subatomic particles',
 			cost: 1e50,
-			effect() { return  player.sp.points.add(1).pow(2.5) },
+			effect() { return player.sp.points.add(1).pow(2.5) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (x+1)^2.5';
@@ -1817,10 +1817,10 @@ addLayer('h', {
 			unlocked() { return hasUpgrade('h', 52) && hasUpgrade('h', 53) },
 		},
 		63: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hexed Subatomic Particle' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Hexed Subatomic Particle' },
 			description: 'multiplies subatomic particle gain based on your hexes',
 			cost: 6.66e66,
-			effect() { return  player.h.points.add(1).pow(0.02) },
+			effect() { return player.h.points.add(1).pow(0.02) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.02';
@@ -1829,16 +1829,16 @@ addLayer('h', {
 			unlocked() { return hasUpgrade('h', 52) && hasUpgrade('h', 53) },
 		},
 		64: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Potential Essence Potential' },
-			description() { return 'increases the effect of <b class="layer-h' + getdark(this, "ref") + 'Essence Overdrive</b> by 25% (total: 150%)' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Potential Essence Potential' },
+			description() { return 'increases the effect of <b' + getColorClass(this, "h", REF) + 'Essence Overdrive</b> by 25% (total: 150%)' },
 			cost: 1.11e111,
 			unlocked() { return (hasUpgrade('ds', 12) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 51) && hasUpgrade('h', 52) && hasUpgrade('h', 53) && hasUpgrade('h', 54) },
 		},
 		71: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hex the Hex' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Hex the Hex' },
 			description: 'multiplies hex gain based on your hexes',
 			cost: '1e570',
-			effect() { return  player.h.points.add(1).log10().add(1).pow(75) },
+			effect() { return player.h.points.add(1).log10().add(1).pow(75) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^75';
@@ -1847,10 +1847,10 @@ addLayer('h', {
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 61) && hasUpgrade('h', 62) && hasUpgrade('h', 63) && hasUpgrade('h', 64) },
 		},
 		72: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hex the Core' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Hex the Core' },
 			description: 'multiplies core gain based on your hexes',
 			cost: '1e696',
-			effect() { return  player.h.points.add(1).log10().add(1).pow(250) },
+			effect() { return player.h.points.add(1).log10().add(1).pow(250) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^250';
@@ -1859,10 +1859,10 @@ addLayer('h', {
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 61) && hasUpgrade('h', 62) && hasUpgrade('h', 63) && hasUpgrade('h', 64) },
 		},
 		73: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hexes are the Point' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Hexes are the Point' },
 			description: 'multiplies point gain based on your hexes',
 			cost: '1e870',
-			effect() { return  player.h.points.add(1).log10().add(1).pow(336) },
+			effect() { return player.h.points.add(1).log10().add(1).pow(336) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^336';
@@ -1871,21 +1871,21 @@ addLayer('h', {
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 61) && hasUpgrade('h', 62) && hasUpgrade('h', 63) && hasUpgrade('h', 64) },
 		},
 		74: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'Hex of the Flow' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Hex of the Flow' },
 			description: 'gain +6e66% of your hex gain per second',
 			cost: '1e977',
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 61) && hasUpgrade('h', 62) && hasUpgrade('h', 63) && hasUpgrade('h', 64) },
 		},
 		81: {
-			title() { return '<b class="layer-h' + getdark(this, "title") + 'True Hexes' },
-			description() { return 'Unlocks <b class="layer-h' + getdark(this, "ref") + 'The Breaker</b>,<br>a new tab' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'True Hexes' },
+			description() { return 'Unlocks <b' + getColorClass(this, "h", REF) + 'The Breaker</b>,<br>a new tab' },
 			cost: new Decimal('e1.132e14'),
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 71) && hasUpgrade('h', 72) && hasUpgrade('h', 73) && hasUpgrade('h', 74) },
 		},
 	},
 	clickables: {
 		11: {
-			title() { return '<b class="layer-h' + getdark(this, "clickable") + 'The Breaker' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'The Breaker' },
 			display() {
 				const nextNerf = format(this.nerfLayers[player.h.limitsBroken]);
 				let text = 'Use to break a new limit. Using this will reset your evil influence, evil power, and evil influence upgrades. Additionally, it will divide evil influence gain.<br><br>';
@@ -1929,7 +1929,7 @@ addLayer('h', {
 			style: {height: '300px', width: '300px'},
 		},
 		21: {
-			title() { return '<b class="layer-h' + getdark(this, "clickable") + 'Reset Breaking' },
+			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Reset Breaking' },
 			display() { return 'Breaking only resets on Assimilation and row 7+ resets. Click to reset Breaking and force a chaos reset.' },
 			canClick() { return player.h.limitsBroken > 0 },
 			onClick() {
@@ -2083,17 +2083,17 @@ addLayer('ds', {
 	},
 	upgrades: {
 		11: {
-			title() { return '<b class="layer-ds' + getdark(this, "title") + 'Mad Hexes' },
-			description() { return 'you can explore 2 further hex upgrades, and <b class="layer-h' + getdark(this, "ref", true, true) + 'Hex Leak</b> also applies to hex gain (and not any other upgrades in the chain)' },
+			title() { return '<b' + getColorClass(this, "ds", TITLE) + 'Mad Hexes' },
+			description() { return 'you can explore 2 further hex upgrades, and <b' + getColorClass(this, "h", REF) + 'Hex Leak</b> also applies to hex gain (and not any other upgrades in the chain)' },
 			cost: 10,
 		},
 		12: {
-			title() { return '<b class="layer-ds' + getdark(this, "title") + 'Hex Mania' },
-			description() { return 'you can explore 2 further hex upgrades, and <b class="layer-h' + getdark(this, "ref", true, true) + 'Stronger Hexes</b>\' effect is squared' },
+			title() { return '<b' + getColorClass(this, "ds", TITLE) + 'Hex Mania' },
+			description() { return 'you can explore 2 further hex upgrades, and <b' + getColorClass(this, "h", REF) + 'Stronger Hexes</b>\' effect is squared' },
 			cost: 75,
 		},
 		21: {
-			title() { return '<b class="layer-ds' + getdark(this, "title") + 'Hall of Fame' },
+			title() { return '<b' + getColorClass(this, "ds", TITLE) + 'Hall of Fame' },
 			description() {
 				let text = 'achievements also multiply essence gain';
 				if (options.nerdMode) text += '<br>formula: 0.2x';
@@ -2103,15 +2103,15 @@ addLayer('ds', {
 			unlocked() { return hasUpgrade('ds', 11) && hasUpgrade('ds', 12) }
 		},
 		22: {
-			title() { return '<b class="layer-ds' + getdark(this, "title") + 'Demonic Key' },
-			description() { return 'unlocks the <b class="layer-ds' + getdark(this, "ref") + 'Demon Gateway</b>, a new tab' },
+			title() { return '<b' + getColorClass(this, "ds", TITLE) + 'Demonic Key' },
+			description() { return 'unlocks the <b' + getColorClass(this, "ds", REF) + 'Demon Gateway</b>, a new tab' },
 			cost: 100000,
 			unlocked() { return hasUpgrade('ds', 11) && hasUpgrade('ds', 12) }
 		},
 		23: {
-			title() { return '<b class="layer-ds' + getdark(this, "title") + 'Trophy of Glory' },
+			title() { return '<b' + getColorClass(this, "ds", TITLE) + 'Trophy of Glory' },
 			description() {
-				let text = 'achievements also multiply core and quark gain if you own <b class="layer-ds' + getdark(this, "ref") + 'Hall of Fame';
+				let text = 'achievements also multiply core and quark gain if you own <b' + getColorClass(this, "ds", REF) + 'Hall of Fame';
 				if (options.nerdMode) text += '</b><br>formula: x^2/100';
 				return text;
 			},
@@ -2119,9 +2119,9 @@ addLayer('ds', {
 			unlocked() { return hasUpgrade('ds', 21) }
 		},
 		24: {
-			title() { return '<b class="layer-ds' + getdark(this, "title") + 'Buried History' },
+			title() { return '<b' + getColorClass(this, "ds", TITLE) + 'Buried History' },
 			description() {
-				let text = 'achievements boosting point gain uses a better formula if you own <b class="layer-ds' + getdark(this, "ref") + 'Hall of Fame';
+				let text = 'achievements boosting point gain uses a better formula if you own <b' + getColorClass(this, "ds", REF) + 'Hall of Fame';
 				if (options.nerdMode) text += '</b><br>formula: 0.2x';
 				return text;
 			},
@@ -2129,14 +2129,14 @@ addLayer('ds', {
 			unlocked() { return hasUpgrade('ds', 23) }
 		},
 		31: {
-			title() { return '<b class="layer-ds' + getdark(this, "title") + 'Demonic Hexes' },
+			title() { return '<b' + getColorClass(this, "ds", TITLE) + 'Demonic Hexes' },
 			description() { return 'makes hex gain softcap weaker (^0.51 --> ^0.52) and multiplies demon soul gain by 1e10' },
 			cost: 1e105,
 			effect() { return 1e10 },
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('ds', 24) }
 		},
 		32: {
-			title() { return '<b class="layer-ds' + getdark(this, "title") + 'Wider Gate' },
+			title() { return '<b' + getColorClass(this, "ds", TITLE) + 'Wider Gate' },
 			description: 'unlocks 2 new demon soul challenges',
 			cost: 'e1.132e13',
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('ds', 31) }
@@ -2148,7 +2148,7 @@ addLayer('ds', {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return new Decimal(10).pow(x.add(50));
 				return new Decimal(2).pow(x);
 			},
-			title() { return '<h3 class="layer-ds' + getdark(this, "title-buyable") + 'Demonic Energy' },
+			title() { return '<h3' + getColorClass(this, "ds", TITLE) + 'Demonic Energy' },
 			description: 'multiplies hex gain (and also subatomic particle gain at a reduced rate) based on the amount of this upgrade bought.',
 			canAfford() { return player.ds.points.gte(this.cost()) },
 			purchaseLimit() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer ? 99 : 22 },
@@ -2421,27 +2421,27 @@ addLayer('a', {
 			done() { return player.a.points.gte(7) }
 		},
 		7: {
-			requirementDescription: '8 atoms & 45 total atoms',
+			requirementDescription: '8 atoms and 45 total atoms',
 			effectDescription: 'unlock a new demon soul challenge',
 			done() { return player.a.points.gte(8) && player.a.total.gte(45) }
 		},
 		8: {
-			requirementDescription: '10 atoms &  75 total atoms',
+			requirementDescription: '10 atoms and 75 total atoms',
 			effectDescription: 'gain 1% of quark gain per second',
 			done() { return player.a.points.gte(10) && player.a.total.gte(75) }
 		},
 		9: {
-			requirementDescription: '25 atoms &  125 total atoms',
+			requirementDescription: '25 atoms and 125 total atoms',
 			effectDescription: 'gain +9% of quark gain per second (total: 10%)',
 			done() { return player.a.points.gte(25) && player.a.total.gte(125) }
 		},
 		10: {
-			requirementDescription: '40 atoms & 175 total atoms',
+			requirementDescription: '40 atoms and 175 total atoms',
 			effectDescription: 'you can buy upgrades that are not on the other\'s paths',
 			done() { return player.a.points.gte(40) && player.a.total.gte(175) }
 		},
 		11: {
-			requirementDescription: '200 atoms & 500 total atoms',
+			requirementDescription: '200 atoms and 500 total atoms',
 			effectDescription: 'keep hex upgrades on row 4 resets',
 			done() { return player.a.points.gte(200) && player.a.total.gte(500) }
 		},
@@ -2470,7 +2470,7 @@ addLayer('a', {
 	},
 	upgrades: {
 		11: {
-			title() { return '<b class="layer-a' + getdark(this, "title") + 'The Demon of the Atom' },
+			title() { return '<b' + getColorClass(this, "a", TITLE) + 'The Demon of the Atom' },
 			description() {
 				if (hasMilestone('m', 11)) return 'multiplies demon soul gain by 1,000x';
 				return 'multiplies demon soul gain based on your atoms';
@@ -2492,7 +2492,7 @@ addLayer('a', {
 			branches: [21, 22],
 		},
 		21: {
-			title() { return '<b class="layer-a' + getdark(this, "title") + 'Decaying Atoms' },
+			title() { return '<b' + getColorClass(this, "a", TITLE) + 'Decaying Atoms' },
 			description: 'multiplies subatomic particle gain based on your best atoms',
 			cost: 1,
 			effect() { return player.a.best.add(1).pow(1.25) },
@@ -2505,7 +2505,7 @@ addLayer('a', {
 			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 22) && !hasUpgrade('a', 33)) },
 		},
 		22: {
-			title() { return '<b class="layer-a' + getdark(this, "title") + 'Atom Construction' },
+			title() { return '<b' + getColorClass(this, "a", TITLE) + 'Atom Construction' },
 			description() {
 				if (hasMilestone('m', 11) && getClickableState('a', 11) < 2) return 'multiplies atom gain by 2.50x';
 				return 'multiplies atom gain based on your subatomic particles';
@@ -2535,7 +2535,7 @@ addLayer('a', {
 			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 21) && !hasUpgrade('a', 31)) },
 		},
 		31: {
-			title() { return '<b class="layer-a' + getdark(this, "title") + 'Decayed Atoms' },
+			title() { return '<b' + getColorClass(this, "a", TITLE) + 'Decayed Atoms' },
 			description: 'multiplies subatomic particle gain based on your total atoms',
 			cost: 2,
 			effect() { return player.a.total.add(1).pow(1.05) },
@@ -2548,7 +2548,7 @@ addLayer('a', {
 			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 22) && !hasUpgrade('a', 32) && !hasUpgrade('a', 33) && !hasUpgrade('a', 42)) },
 		},
 		32: {
-			title() { return '<b class="layer-a' + getdark(this, "title") + 'Atomic Recursion' },
+			title() { return '<b' + getColorClass(this, "a", TITLE) + 'Atomic Recursion' },
 			description() {
 				if (hasMilestone('m', 11) && getClickableState('a', 11) < 3) return 'multiplies atom gain by 2.25x';
 				return 'multiplies atom gain based on your total atoms';
@@ -2578,7 +2578,7 @@ addLayer('a', {
 			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 31) && !hasUpgrade('a', 33)) },
 		},
 		33: {
-			title() { return '<b class="layer-a' + getdark(this, "title") + 'Atom Production' },
+			title() { return '<b' + getColorClass(this, "a", TITLE) + 'Atom Production' },
 			description() {
 				if (hasMilestone('m', 11) && getClickableState('a', 11) < 1) return 'multiplies atom gain by 3.15x';
 				return 'multiplies atom gain based on your subatomic particles';
@@ -2608,7 +2608,7 @@ addLayer('a', {
 			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 21) && !hasUpgrade('a', 31) && !hasUpgrade('a', 32) && !hasUpgrade('a', 41)) },
 		},
 		41: {
-			title() { return '<b class="layer-a' + getdark(this, "title") + 'Atom Revenants' },
+			title() { return '<b' + getColorClass(this, "a", TITLE) + 'Atom Revenants' },
 			description: 'multiplies quark gain based on your total atoms minus your current atoms',
 			cost: 2,
 			effect() { return player.a.total.sub(player.a.points).add(1).pow(0.75) },
@@ -2621,7 +2621,7 @@ addLayer('a', {
 			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 33) && !hasUpgrade('a', 42)) },
 		},
 		42: {
-			title() { return '<b class="layer-a' + getdark(this, "title") + 'The Fallen' },
+			title() { return '<b' + getColorClass(this, "a", TITLE) + 'The Fallen' },
 			description: 'multiplies demon soul gain based on your best atoms minus your current atoms',
 			cost: 2,
 			effect() { return player.a.best.mul(1.5).sub(player.a.points).pow(1.05) },
@@ -2634,7 +2634,7 @@ addLayer('a', {
 			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 31) && !hasUpgrade('a', 41)) },
 		},
 		51: {
-			title() { return '<b class="layer-a' + getdark(this, "title") + 'Famed Atoms\' Donations' },
+			title() { return '<b' + getColorClass(this, "a", TITLE) + 'Famed Atoms\' Donations' },
 			description() {
 				let text = 'multiplies subatomic particle gain based on your number of achievements';
 				if (options.nerdMode) text += '<br>formula: x^1.25';
@@ -2644,7 +2644,7 @@ addLayer('a', {
 			branches: [61, 62],
 		},
 		61: {
-			title() { return '<b class="layer-a' + getdark(this, "title") + 'Unpeaked' },
+			title() { return '<b' + getColorClass(this, "a", TITLE) + 'Unpeaked' },
 			description() {
 				if (getClickableState('a', 11) >= 6) return 'multiplies atom gain based on your total atoms';
 				if (hasMilestone('m', 11)) return 'multiplies atom gain by 15.00x';
@@ -2675,7 +2675,7 @@ addLayer('a', {
 			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 62) && !hasUpgrade('a', 73)) },
 		},
 		62: {
-			title() { return '<b class="layer-a' + getdark(this, "title") + 'Higher Peak' },
+			title() { return '<b' + getColorClass(this, "a", TITLE) + 'Higher Peak' },
 			description() {
 				if (hasMilestone('m', 11) && getClickableState('a', 11) < 4) return 'multiplies atom gain by 6.66x';
 				return 'multiplies atom gain based on your total atoms times your current atoms';
@@ -2705,7 +2705,7 @@ addLayer('a', {
 			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 61) && !hasUpgrade('a', 71)) },
 		},
 		71: {
-			title() { return '<b class="layer-a' + getdark(this, "title") + 'Demons Inside' },
+			title() { return '<b' + getColorClass(this, "a", TITLE) + 'Demons Inside' },
 			description: 'multiplies demon soul gain based on your best atoms times your current atoms',
 			cost: 4,
 			effect() { return player.a.best.mul(player.a.points).mul(2.5).pow(0.15) },
@@ -2717,7 +2717,7 @@ addLayer('a', {
 			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 62) && !hasUpgrade('a', 72) && !hasUpgrade('a', 73)) },
 		},
 		72: {
-			title() { return '<b class="layer-a' + getdark(this, "title") + 'Recurred, Recurring' },
+			title() { return '<b' + getColorClass(this, "a", TITLE) + 'Recurred, Recurring' },
 			description() {
 				if (hasMilestone('m', 11) && getClickableState('a', 11) < 5) return 'multiplies atom gain by 5.00x';
 				return 'multiplies atom gain based on your total atoms';
@@ -2746,7 +2746,7 @@ addLayer('a', {
 			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 71) && !hasUpgrade('a', 73)) },
 		},
 		73: {
-			title() { return '<b class="layer-a' + getdark(this, "title") + 'Atomic Essence' },
+			title() { return '<b' + getColorClass(this, "a", TITLE) + 'Atomic Essence' },
 			description: 'multiplies essence gain based on your atoms',
 			cost: 4,
 			effect() { return player.a.points.add(1).pow(1.75) },
@@ -2760,7 +2760,7 @@ addLayer('a', {
 	},
 	clickables: {
 		11: {
-			title() { return '<b class="layer-a' + getdark(this, "clickable") + 'Atomic Reactor' },
+			title() { return '<b' + getColorClass(this, "a", TITLE) + 'Atomic Reactor' },
 			display() {
 				const num = getClickableState('a', 11) || 0;
 				let text = 'Removes maximums on the effects of atom upgrades, but worsens the respective effect formulas.<br><br>';
@@ -2774,7 +2774,7 @@ addLayer('a', {
 					text += '<br>none so far';
 				};
 				text += '<br><br>Cost: ' + formatWhole(this.cost()) + ' atoms<br><br>Bought: ' + formatWhole(num) + '/' + formatWhole(this.upgrades.length);
-				if (this.canClick()) text = text.replace(/layer-a/g, 'layer-a-dark');
+				if (tmp[this.layer].clickables[this.id].canClick) text = text.replace(/layer-a/g, 'layer-a-dark');
 				else text = text.replace(/layer-a-dark/g, 'layer-a');
 				return text;
 			},
@@ -2785,9 +2785,8 @@ addLayer('a', {
 				const num = getClickableState('a', 11) || 0;
 				if (player.mo.assimilating === this.layer) {
 					return this.assimilationReq[num] || Infinity;
-				} else {
-					return this.req[num] || Infinity;
 				};
+				return this.req[num] || Infinity;
 			},
 			canClick() {
 				const num = getClickableState('a', 11) || 0;
@@ -2802,16 +2801,16 @@ addLayer('a', {
 		},
 		21: {
 			title() {
-				if (getClickableState('a', 11) >= 2) return '<b class="layer-a' + getdark(this, "clickable") + 'Increase Total Atoms';
-				return '<b class="layer-a' + getdark(this, "clickable") + 'Reset Atom Upgrades';
+				if (getClickableState('a', 11) >= 2) return '<b' + getColorClass(this, "a", TITLE) + 'Increase Total Atoms';
+				return '<b' + getColorClass(this, "a", TITLE) + 'Reset Atom Upgrades';
 			},
 			display() {
 				if (getClickableState('a', 11) >= 2) {
-					let text = 'Click to increase your total atoms by +' + formatWhole(this.effect()) + ' (based on your atoms and <b class="layer-a' + getdark(this, "clickable") + 'Atomic Reactor</b>s)';
+					let text = 'Click to increase your total atoms by +' + formatWhole(this.effect()) + ' (based on your atoms and <b' + getColorClass(this, "a", REF) + 'Atomic Reactor</b>s)';
 					if (options.nerdMode) text += '<br>formula: x^0.5 * 2.5^y';
 					return text;
 				};
-				return 'Click to reset your atom upgrades. You need to have completed <b class="layer-ds' + getdark(this, "clickable") + 'Dreaded Science</b> to use this. Get 2 <b class="layer-a' + getdark(this, "clickable") + 'Atomic Reactor</b>s to improve this.';
+				return 'Click to reset your atom upgrades. You need to have completed <b' + getColorClass(this, "ds", REF) + 'Dreaded Science</b> to use this. Get 2 <b' + getColorClass(this, "a", REF) + 'Atomic Reactor</b>s to improve this.';
 			},
 			effect() { return player.a.points.pow(0.5).mul(2.5 ** getClickableState('a', 11)).floor() },
 			canClick() { return player.a.upgrades.length > 0 && player.ds.challenges[22] > 0 },
@@ -3024,7 +3023,7 @@ addLayer('p', {
 			done() { return player.p.points.gte(20) },
 		},
 		2: {
-			requirementDescription: '2,500 prayers & 250 hymns',
+			requirementDescription: '2,500 prayers and 250 hymns',
 			effectDescription: 'divinity gain is raised to the power of 1.5',
 			done() { return player.p.points.gte(2500) && player.p.hymn.gte(250)},
 			unlocked() { return hasUpgrade('p', 41) || player.s.unlocked },
@@ -3038,7 +3037,7 @@ addLayer('p', {
 	},
 	upgrades: {
 		11: {
-			title() { return '<b class="layer-p' + getdark(this, "title") + 'Prayer Influence' },
+			title() { return '<b' + getColorClass(this, "p", TITLE) + 'Prayer Influence' },
 			description: 'multiplies essence gain based on your prayers',
 			cost: 1,
 			effect() { return player.p.points.add(1).pow(0.075) },
@@ -3049,12 +3048,12 @@ addLayer('p', {
 			},
 		},
 		12: {
-			title() { return '<b class="layer-p' + getdark(this, "title") + 'Heretic Leniency' },
+			title() { return '<b' + getColorClass(this, "p", TITLE) + 'Heretic Leniency' },
 			description: 'multiplies hex gain by 1.05',
 			cost: 10,
 		},
 		13: {
-			title() { return '<b class="layer-p' + getdark(this, "title") + 'Essence of Divinity' },
+			title() { return '<b' + getColorClass(this, "p", TITLE) + 'Essence of Divinity' },
 			description: 'multiplies divinity gain based on your essence',
 			cost: 25,
 			effect() { return player.e.points.add(1).pow(0.0001) },
@@ -3066,7 +3065,7 @@ addLayer('p', {
 		},
 		14: {
 			fullDisplay() {
-				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Prayer Divination</h3><br>Req: 100 divinity with having 0 holiness';
+				let text = '<h3' + getColorClass(this, "p", TITLE, true) + 'Prayer Divination</h3><br>Req: 100 divinity with having 0 holiness';
 				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
@@ -3076,8 +3075,8 @@ addLayer('p', {
 		},
 		15: {
 			fullDisplay() {
-				if (options.nerdMode) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Prayer Divination</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.02<br><br>Cost: 75 divinity';
-				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Prayer Divination</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 75 divinity';
+				if (options.nerdMode) return '<h3' + getColorClass(this, "p", TITLE) + 'Prayer Divination</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.02<br><br>Cost: 75 divinity';
+				return '<h3' + getColorClass(this, "p", TITLE) + 'Prayer Divination</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 75 divinity';
 			},
 			canAfford() { return player.p.divinity.gte(75) },
 			pay() { player.p.divinity = player.p.divinity.sub(75) },
@@ -3086,20 +3085,20 @@ addLayer('p', {
 		},
 		21: {
 			fullDisplay() {
-				if (options.nerdMode) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine Prayers</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.01<br><br>Cost: 20 divinity';
-				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine Prayers</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 20 divinity';
+				if (options.nerdMode) return '<h3' + getColorClass(this, "p", TITLE) + 'Divine Prayers</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.01<br><br>Cost: 20 divinity';
+				return '<h3' + getColorClass(this, "p", TITLE) + 'Divine Prayers</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 20 divinity';
 			},
 			canAfford() { return player.p.divinity.gte(20) },
 			pay() { player.p.divinity = player.p.divinity.sub(20) },
 			effect() { return player.p.divinity.add(1).pow(0.01) },
 		},
 		22: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Light</h3><br>unlocks <b class="layer-p' + getdark(this, "ref", true) + 'holiness</b><br><br>Cost: 45 divinity' },
+			fullDisplay() { return '<h3' + getColorClass(this, "p", TITLE) + 'Holy Light</h3><br>unlocks <b' + getColorClass(this, "p", REF) + 'holiness</b><br><br>Cost: 45 divinity' },
 			canAfford() { return player.p.divinity.gte(45) },
 			pay() { player.p.divinity = player.p.divinity.sub(45) },
 		},
 		23: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Channeling</h3><br>increases efficiency of holiness conversion<br>0.04x --> 0.06x<br><br>Cost: 10 holiness' },
+			fullDisplay() { return '<h3' + getColorClass(this, "p", TITLE) + 'Holy Channeling</h3><br>increases efficiency of holiness conversion<br>0.04x --> 0.06x<br><br>Cost: 10 holiness' },
 			canAfford() { return player.p.holiness.gte(10) },
 			pay() {
 				player.p.holiness = player.p.holiness.sub(10);
@@ -3108,7 +3107,7 @@ addLayer('p', {
 		},
 		24: {
 			fullDisplay() {
-				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Holy Conversion</h3><br>Req: 75 holiness without owning <b class="layer-p' + getdark(this, "ref", true, true) + 'Church Relics</b>';
+				let text = '<h3' + getColorClass(this, "p", TITLE, true) + 'Holy Conversion</h3><br>Req: 75 holiness without owning <b' + getColorClass(this, "p", REF, true) + 'Church Relics</b>';
 				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
@@ -3117,13 +3116,13 @@ addLayer('p', {
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 22) && !hasUpgrade('p', 24) },
 		},
 		25: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Conversion</h3><br>increases efficiency of holiness conversion if you own <b class="layer-p' + getdark(this, "ref", true) + 'Holy Channeling</b><br>0.06x --> 0.08x<br><br>Cost: 50 holiness' },
+			fullDisplay() { return '<h3' + getColorClass(this, "p", TITLE) + 'Holy Conversion</h3><br>increases efficiency of holiness conversion if you own <b' + getColorClass(this, "p", REF) + 'Holy Channeling</b><br>0.06x --> 0.08x<br><br>Cost: 50 holiness' },
 			canAfford() { return player.p.holiness.gte(50) },
 			pay() { player.p.holiness = player.p.holiness.sub(50) },
 			unlocked() { return hasUpgrade('p', 24) },
 		},
 		31: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Church Relics</h3><br>achievements also multiply prayer gain if you have all subsequent achievement upgrades<br><br>Cost: 175 divinity,<br>40 holiness' },
+			fullDisplay() { return '<h3' + getColorClass(this, "p", TITLE) + 'Church Relics</h3><br>achievements also multiply prayer gain if you have all subsequent achievement upgrades<br><br>Cost: 175 divinity,<br>40 holiness' },
 			canAfford() { return player.p.divinity.gte(175) && player.p.holiness.gte(40) },
 			pay() {
 				player.p.divinity = player.p.divinity.sub(175);
@@ -3134,8 +3133,8 @@ addLayer('p', {
 		},
 		32: {
 			fullDisplay() {
-				if (options.nerdMode) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine Synergy</h3><br>multiplies divinity gain based on your holiness<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.025<br><br>Cost: 750 divinity,<br>50 holiness';
-				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine Synergy</h3><br>multiplies divinity gain based on your holiness<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 750 divinity,<br>50 holiness';
+				if (options.nerdMode) return '<h3' + getColorClass(this, "p", TITLE) + 'Divine Synergy</h3><br>multiplies divinity gain based on your holiness<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.025<br><br>Cost: 750 divinity,<br>50 holiness';
+				return '<h3' + getColorClass(this, "p", TITLE) + 'Divine Synergy</h3><br>multiplies divinity gain based on your holiness<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 750 divinity,<br>50 holiness';
 			},
 			canAfford() { return player.p.divinity.gte(750) && player.p.holiness.gte(50) },
 			pay() {
@@ -3146,7 +3145,7 @@ addLayer('p', {
 			unlocked() { return hasUpgrade('p', 22) },
 		},
 		33: {
-			title() { return '<b class="layer-p' + getdark(this, "title") + 'Divine Recursion' },
+			title() { return '<b' + getColorClass(this, "p", TITLE) + 'Divine Recursion' },
 			description: 'multiplies divinity gain based on your divinity',
 			cost: 1000,
 			effect() { return player.p.divinity.add(1).pow(0.2) },
@@ -3158,7 +3157,7 @@ addLayer('p', {
 		},
 		34: {
 			fullDisplay() {
-				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Holy Shift</h3><br>Req: 1,000 holiness with 0 hymns';
+				let text = '<h3' + getColorClass(this, "p", TITLE, true) + 'Holy Shift</h3><br>Req: 1,000 holiness with 0 hymns';
 				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
@@ -3167,13 +3166,13 @@ addLayer('p', {
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 22) && !hasUpgrade('p', 34) },
 		},
 		35: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Shift</h3><br>increases efficiency of holiness conversion if you own <b class="layer-p' + getdark(this, "ref", true) + 'Holy Conversion</b> and all subsequent upgrades<br>0.08x --> 0.11x<br><br>Cost: 500 holiness' },
+			fullDisplay() { return '<h3' + getColorClass(this, "p", TITLE) + 'Holy Shift</h3><br>increases efficiency of holiness conversion if you own <b' + getColorClass(this, "p", REF) + 'Holy Conversion</b> and all subsequent upgrades<br>0.08x --> 0.11x<br><br>Cost: 500 holiness' },
 			canAfford() { return player.p.holiness.gte(500) },
 			pay() { player.p.holiness = player.p.holiness.sub(500) },
 			unlocked() { return hasUpgrade('p', 34) },
 		},
 		41: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Written hymns</h3><br>unlocks <b class="layer-p' + getdark(this, "ref", true) + 'hymns</b><br><br>Cost: 2,000 divinity,<br>450 holiness' },
+			fullDisplay() { return '<h3' + getColorClass(this, "p", TITLE) + 'Written hymns</h3><br>unlocks <b' + getColorClass(this, "p", REF) + 'hymns</b><br><br>Cost: 2,000 divinity,<br>450 holiness' },
 			canAfford() { return player.p.divinity.gte(2000) && player.p.holiness.gte(450) },
 			pay() {
 				player.p.divinity = player.p.divinity.sub(2000);
@@ -3184,10 +3183,10 @@ addLayer('p', {
 		42: {
 			fullDisplay() {
 				if (options.nerdMode) {
-					if (hasUpgrade('p', 45)) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine hymns</h3><br>multiplies divinity gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.125<br><br>Cost: 1,000 holiness,<br>75 hymns';
-					return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine hymns</h3><br>multiplies divinity gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.1<br><br>Cost: 1,000 holiness,<br>75 hymns';
+					if (hasUpgrade('p', 45)) return '<h3' + getColorClass(this, "p", TITLE) + 'Divine hymns</h3><br>multiplies divinity gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.125<br><br>Cost: 1,000 holiness,<br>75 hymns';
+					return '<h3' + getColorClass(this, "p", TITLE) + 'Divine hymns</h3><br>multiplies divinity gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.1<br><br>Cost: 1,000 holiness,<br>75 hymns';
 				};
-				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Divine hymns</h3><br>multiplies divinity gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 1,000 holiness,<br>75 hymns';
+				return '<h3' + getColorClass(this, "p", TITLE) + 'Divine hymns</h3><br>multiplies divinity gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 1,000 holiness,<br>75 hymns';
 			},
 			canAfford() { return player.p.holiness.gte(1000) && player.p.hymn.gte(75) },
 			pay() {
@@ -3201,7 +3200,7 @@ addLayer('p', {
 			unlocked() { return hasUpgrade('p', 41) },
 		},
 		43: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Singing</h3><br>increases hymn effect exponent<br>0.15 --> 0.2<br><br>Cost: 1,000,000 holiness,<br>50,000 hymns' },
+			fullDisplay() { return '<h3' + getColorClass(this, "p", TITLE) + 'Hymn Singing</h3><br>increases hymn effect exponent<br>0.15 --> 0.2<br><br>Cost: 1,000,000 holiness,<br>50,000 hymns' },
 			canAfford() { return player.p.holiness.gte(1000000) && player.p.hymn.gte(50000) },
 			pay() {
 				player.p.holiness = player.p.holiness.sub(1000000);
@@ -3211,7 +3210,7 @@ addLayer('p', {
 		},
 		44: {
 			fullDisplay() {
-				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Hymn Divination</h3><br>Req: 10,000,000 hymns without owning <b class="layer-p' + getdark(this, "ref", true, true) + 'Shorter Hymns</b>';
+				let text = '<h3' + getColorClass(this, "p", TITLE, true) + 'Hymn Divination</h3><br>Req: 10,000,000 hymns without owning <b' + getColorClass(this, "p", REF, true) + 'Shorter Hymns</b>';
 				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
@@ -3220,32 +3219,32 @@ addLayer('p', {
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) && !hasUpgrade('p', 44) },
 		},
 		45: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Divination</h3><br>increases the exponent of <b class="layer-p' + getdark(this, "ref", true) + 'Divine Hymns</b><br>^0.1 --> ^0.125<br><br>Cost: 2,500,000 hymns' },
+			fullDisplay() { return '<h3' + getColorClass(this, "p", TITLE) + 'Hymn Divination</h3><br>increases the exponent of <b' + getColorClass(this, "p", REF) + 'Divine Hymns</b><br>^0.1 --> ^0.125<br><br>Cost: 2,500,000 hymns' },
 			canAfford() { return player.p.hymn.gte(2500000) },
 			pay() { player.p.hymn = player.p.hymn.sub(2500000) },
 			unlocked() { return hasUpgrade('p', 44) },
 		},
 		51: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Shorter Hymns</h3><br>decreases hymn requirement<br>250 --> 200<br><br>Cost: 1,000,000 hymns' },
+			fullDisplay() { return '<h3' + getColorClass(this, "p", TITLE) + 'Shorter Hymns</h3><br>decreases hymn requirement<br>250 --> 200<br><br>Cost: 1,000,000 hymns' },
 			canAfford() { return player.p.hymn.gte(1000000) },
 			pay() { player.p.hymn = player.p.hymn.sub(1000000) },
 			unlocked() { return hasUpgrade('p', 41) },
 		},
 		52: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Stronger Hymns</h3><br>increases hymn effect exponent if you have <b class="layer-p' + getdark(this, "ref", true) + 'Hymn Singing</b><br>0.2 --> 0.225<br><br>Cost: 10,000,000 hymns' },
+			fullDisplay() { return '<h3' + getColorClass(this, "p", TITLE) + 'Stronger Hymns</h3><br>increases hymn effect exponent if you have <b' + getColorClass(this, "p", REF) + 'Hymn Singing</b><br>0.2 --> 0.225<br><br>Cost: 10,000,000 hymns' },
 			canAfford() { return player.p.hymn.gte(10000000) },
 			pay() { player.p.hymn = player.p.hymn.sub(10000000) },
 			unlocked() { return hasUpgrade('p', 41) },
 		},
 		53: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Strongest Hymns</h3><br>increases hymn effect exponent if you have all subsequent upgrades<br>0.225 --> 0.25<br><br>Cost: 100,000,000 hymns' },
+			fullDisplay() { return '<h3' + getColorClass(this, "p", TITLE) + 'Strongest Hymns</h3><br>increases hymn effect exponent if you have all subsequent upgrades<br>0.225 --> 0.25<br><br>Cost: 100,000,000 hymns' },
 			canAfford() { return player.p.hymn.gte(100000000) },
 			pay() { player.p.hymn = player.p.hymn.sub(100000000) },
 			unlocked() { return hasUpgrade('p', 41) },
 		},
 		54: {
 			fullDisplay() {
-				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Even Shorter</h3><br>Req: 1e10 hymns without owning <b class="layer-p' + getdark(this, "ref", true, true) + 'Holy Hymns</b>';
+				let text = '<h3' + getColorClass(this, "p", TITLE, true) + 'Even Shorter</h3><br>Req: 1e10 hymns without owning <b' + getColorClass(this, "p", REF, true) + 'Holy Hymns</b>';
 				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
@@ -3254,15 +3253,15 @@ addLayer('p', {
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) && !hasUpgrade('p', 54) },
 		},
 		55: {
-			fullDisplay() { return '<h3 class="layer-p' + getdark(this, "title", true) + 'Even Shorter</h3><br>decreases hymn requirement if you own <b class="layer-p' + getdark(this, "ref", true) + 'Shorter Hymns</b><br>200 --> 175<br><br>Cost: ' + format(2.5e9) + ' hymns' },
+			fullDisplay() { return '<h3' + getColorClass(this, "p", TITLE) + 'Even Shorter</h3><br>decreases hymn requirement if you own <b' + getColorClass(this, "p", REF) + 'Shorter Hymns</b><br>200 --> 175<br><br>Cost: ' + format(2.5e9) + ' hymns' },
 			canAfford() { return player.p.hymn.gte(2.5e9) },
 			pay() { player.p.hymn = player.p.hymn.sub(2.5e9) },
 			unlocked() { return hasUpgrade('p', 54) },
 		},
 		61: {
 			fullDisplay() {
-				if (options.nerdMode) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Hymns</h3><br>multiplies holiness gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.02<br><br>Cost: ' + format(1e9) + ' hymns';
-				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Holy Hymns</h3><br>multiplies holiness gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: ' + format(1e9) + ' hymns';
+				if (options.nerdMode) return '<h3' + getColorClass(this, "p", TITLE) + 'Holy Hymns</h3><br>multiplies holiness gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.02<br><br>Cost: ' + format(1e9) + ' hymns';
+				return '<h3' + getColorClass(this, "p", TITLE) + 'Holy Hymns</h3><br>multiplies holiness gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: ' + format(1e9) + ' hymns';
 			},
 			canAfford() { return player.p.hymn.gte(1e9) },
 			pay() { player.p.hymn = player.p.hymn.sub(1e9) },
@@ -3271,8 +3270,8 @@ addLayer('p', {
 		},
 		62: {
 			fullDisplay() {
-				if (options.nerdMode) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Deconstruction</h3><br>multiplies prayer gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br>formula: log5(x+10)<br><br>Cost: ' + format(1e11) + ' hymns';
-				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Deconstruction</h3><br>multiplies prayer gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: ' + format(1e11) + ' hymns';
+				if (options.nerdMode) return '<h3' + getColorClass(this, "p", TITLE) + 'Hymn Deconstruction</h3><br>multiplies prayer gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br>formula: log5(x+10)<br><br>Cost: ' + format(1e11) + ' hymns';
+				return '<h3' + getColorClass(this, "p", TITLE) + 'Hymn Deconstruction</h3><br>multiplies prayer gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: ' + format(1e11) + ' hymns';
 			},
 			canAfford() { return player.p.hymn.gte(1e11) },
 			pay() { player.p.hymn = player.p.hymn.sub(1e11) },
@@ -3281,8 +3280,8 @@ addLayer('p', {
 		},
 		63: {
 			fullDisplay() {
-				if (options.nerdMode) return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Resolve</h3><br>multiplies the effect of <b class="layer-p' + getdark(this, "ref", true) + 'Hymn Deconstruction</b> based on your essence<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.0015<br><br>Cost: ' + format(1e15) + ' hymns';
-				return '<h3 class="layer-p' + getdark(this, "title", true) + 'Hymn Resolve</h3><br>multiplies the effect of <b class="layer-p' + getdark(this, "ref", true) + 'Hymn Deconstruction</b> based on your essence<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: ' + format(1e15) + ' hymns';
+				if (options.nerdMode) return '<h3' + getColorClass(this, "p", TITLE) + 'Hymn Resolve</h3><br>multiplies the effect of <b' + getColorClass(this, "p", REF) + 'Hymn Deconstruction</b> based on your essence<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.0015<br><br>Cost: ' + format(1e15) + ' hymns';
+				return '<h3' + getColorClass(this, "p", TITLE) + 'Hymn Resolve</h3><br>multiplies the effect of <b' + getColorClass(this, "p", REF) + 'Hymn Deconstruction</b> based on your essence<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: ' + format(1e15) + ' hymns';
 			},
 			canAfford() { return player.p.hymn.gte(1e15) },
 			pay() { player.p.hymn = player.p.hymn.sub(1e15) },
@@ -3291,7 +3290,7 @@ addLayer('p', {
 		},
 		64: {
 			fullDisplay() {
-				let text = '<h3 class="layer-p' + getdark(this, "title", true, true) + 'Silver Sanctums</h3><br>Req: 2.5e25 prayers, 2 sanctums, and all previous research';
+				let text = '<h3' + getColorClass(this, "p", TITLE, true) + 'Silver Sanctums</h3><br>Req: 2.5e25 prayers, 2 sanctums, and all previous research';
 				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
@@ -3300,13 +3299,13 @@ addLayer('p', {
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) && !hasUpgrade('p', 64) },
 		},
 		65: {
-			title() { return '<b class="layer-p' + getdark(this, "title") + 'Silver Sanctums' },
+			title() { return '<b' + getColorClass(this, "p", TITLE) + 'Silver Sanctums' },
 			description: 'reduces sanctum cost scaling<br>5 --> 4',
 			cost: 1e25,
 			unlocked() { return hasUpgrade('p', 64) },
 		},
 		71: {
-			title() { return '<b class="layer-p' + getdark(this, "title") + 'Divine Sanctums' },
+			title() { return '<b' + getColorClass(this, "p", TITLE) + 'Divine Sanctums' },
 			description: 'multiplies divinity gain after the softcap based on your sanctums',
 			cost: 1e30,
 			effect() { return player.s.points.mul(30).add(1).pow(0.95) },
@@ -3318,7 +3317,7 @@ addLayer('p', {
 			unlocked() { return (hasMilestone('s', 3) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) },
 		},
 		72: {
-			title() { return '<b class="layer-p' + getdark(this, "title") + 'Sanctum Sanctions' },
+			title() { return '<b' + getColorClass(this, "p", TITLE) + 'Sanctum Sanctions' },
 			description: 'multiplies point gain based on your sanctums',
 			cost: 1e75,
 			effect() { return player.s.points.mul(25).add(1).pow(0.5) },
@@ -3330,7 +3329,7 @@ addLayer('p', {
 			unlocked() { return (hasMilestone('s', 3) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) },
 		},
 		73: {
-			title() { return '<b class="layer-p' + getdark(this, "title") + 'Sanctum Prayers' },
+			title() { return '<b' + getColorClass(this, "p", TITLE) + 'Sanctum Prayers' },
 			description: 'multiplies prayer gain based on your sanctums',
 			cost: 1e125,
 			effect() { return player.s.points.mul(2).add(1).pow(1.5) },
@@ -3342,13 +3341,13 @@ addLayer('p', {
 			unlocked() { return (hasMilestone('s', 3) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) },
 		},
 		74: {
-			title() { return '<b class="layer-p' + getdark(this, "title") + 'Gold Sanctums' },
-			description() { return 'reduces sanctum cost scaling if you have <b class="layer-p' + getdark(this, "ref") + 'Silver Sanctums</b><br>4 --> 3.48' },
+			title() { return '<b' + getColorClass(this, "p", TITLE) + 'Gold Sanctums' },
+			description() { return 'reduces sanctum cost scaling if you have <b' + getColorClass(this, "p", REF) + 'Silver Sanctums</b><br>4 --> 3.48' },
 			cost: 1e175,
 			unlocked() { return (hasMilestone('s', 3) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) },
 		},
 		81: {
-			title() { return '<b class="layer-p' + getdark(this, "title") + 'Sanctum Prayers+' },
+			title() { return '<b' + getColorClass(this, "p", TITLE) + 'Sanctum Prayers+' },
 			description: 'multiplies prayer gain based on your sanctums',
 			cost: 'e3.75e13',
 			effect() { return new Decimal(1e10).pow(player.s.points) },
@@ -3360,7 +3359,7 @@ addLayer('p', {
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) },
 		},
 		82: {
-			title() { return '<b class="layer-p' + getdark(this, "title") + 'The Point of Prayers' },
+			title() { return '<b' + getColorClass(this, "p", TITLE) + 'The Point of Prayers' },
 			description: 'multiplies point gain based on your prayers',
 			cost: 'e3.94e13',
 			effect() { return player.p.points.pow(0.25) },
@@ -3372,7 +3371,7 @@ addLayer('p', {
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) },
 		},
 		83: {
-			title() { return '<b class="layer-p' + getdark(this, "title") + 'Prayer Influence+' },
+			title() { return '<b' + getColorClass(this, "p", TITLE) + 'Prayer Influence+' },
 			description: 'multiplies essence gain based on your prayers',
 			cost: 'e4.38e13',
 			effect() { return player.p.points.pow(0.333) },
@@ -3384,8 +3383,8 @@ addLayer('p', {
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) },
 		},
 		84: {
-			title() { return '<b class="layer-p' + getdark(this, "title") + 'Prismatic Sanctums' },
-			description() { return 'reduces sanctum cost scaling if you have <b class="layer-p' + getdark(this, "ref") + 'Gold Sanctums</b><br>3.48 --> 3.3' },
+			title() { return '<b' + getColorClass(this, "p", TITLE) + 'Prismatic Sanctums' },
+			description() { return 'reduces sanctum cost scaling if you have <b' + getColorClass(this, "p", REF) + 'Gold Sanctums</b><br>3.48 --> 3.3' },
 			cost: 'e5.01e13',
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) },
 		},
@@ -3558,7 +3557,7 @@ addLayer('s', {
 		},
 		8: {
 			requirementDescription: '9 sanctums',
-			effectDescription: 'gain 0.2% of your holiness & hymn gain per second',
+			effectDescription: 'gain 0.2% of your holiness and hymn gain per second',
 			done() { return player.s.points.gte(9) },
 		},
 		9: {
@@ -3578,17 +3577,17 @@ addLayer('s', {
 		},
 		12: {
 			requirementDescription: '18 sanctums',
-			effectDescription: 'atom resets don\'t reset sanctums',
+			effectDescription: "atom resets don't reset sanctums",
 			done() { return player.s.points.gte(18) },
 		},
 		13: {
 			requirementDescription: '19 sanctums',
-			effectDescription() { return 'unlock <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion' },
+			effectDescription() { return 'unlock <b' + getColorClass(this, "s", REF) + 'Devotion' },
 			done() { return player.s.points.gte(19) },
 		},
 		14: {
 			requirementDescription: '22 sanctums',
-			effectDescription() { return 'unlock <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrificial Ceremonies' },
+			effectDescription() { return 'unlock <b' + getColorClass(this, "s", REF) + 'Sacrificial Ceremonies' },
 			done() { return player.s.points.gte(22) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -3600,56 +3599,56 @@ addLayer('s', {
 		},
 		16: {
 			requirementDescription: '25 sanctums',
-			effectDescription: 'gain +2.3% of holiness & hymn gain per second',
+			effectDescription: 'gain +2.3% of holiness and hymn gain per second',
 			done() { return player.s.points.gte(25) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		17: {
 			requirementDescription: '26 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> cost scaling by 15' },
+			effectDescription() { return 'divide <b' + getColorClass(this, "s", REF) + 'Worship</b> cost scaling by 15' },
 			done() { return player.s.points.gte(26) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		18: {
 			requirementDescription: '27 sanctums',
-			effectDescription() { return 'increase <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> effect exponent<br>0.3 --> 0.375' },
+			effectDescription() { return 'increase <b' + getColorClass(this, "s", REF) + 'Devotion</b> effect exponent<br>0.3 --> 0.375' },
 			done() { return player.s.points.gte(27) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		19: {
 			requirementDescription: '30 sanctums',
-			effectDescription() { return 'you can auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship' },
+			effectDescription() { return 'you can auto <b' + getColorClass(this, "s", REF) + 'Worship' },
 			done() { return player.s.points.gte(30) },
 			toggles: [['s', "auto_worship"]],
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		20: {
 			requirementDescription: '31 sanctums',
-			effectDescription: 'sanctum resets don\'t reset essence',
+			effectDescription: "sanctum resets don't reset essence",
 			done() { return player.s.points.gte(31) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		21: {
 			requirementDescription: '32 sanctums',
-			effectDescription() { return 'increase <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> effect exponent<br>0.375 --> 0.45' },
+			effectDescription() { return 'increase <b' + getColorClass(this, "s", REF) + 'Devotion</b> effect exponent<br>0.375 --> 0.45' },
 			done() { return player.s.points.gte(32) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		22: {
 			requirementDescription: '35 sanctums',
-			effectDescription() { return 'increase <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> effect exponent<br>0.45 --> 0.55' },
+			effectDescription() { return 'increase <b' + getColorClass(this, "s", REF) + 'Devotion</b> effect exponent<br>0.45 --> 0.55' },
 			done() { return player.s.points.gte(35) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		23: {
 			requirementDescription: '39 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> cost scaling by 2' },
+			effectDescription() { return 'divide <b' + getColorClass(this, "s", REF) + 'Worship</b> cost scaling by 2' },
 			done() { return player.s.points.gte(39) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		24: {
 			requirementDescription: '42 sanctums',
-			effectDescription() { return 'double <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b>\'s effect' },
+			effectDescription() { return "double <b" + getColorClass(this, "s", REF) + "Sacrifice</b>'s effect" },
 			done() { return player.s.points.gte(42) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -3661,26 +3660,26 @@ addLayer('s', {
 		},
 		26: {
 			requirementDescription: '44 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> cost scaling by 2' },
+			effectDescription() { return 'divide <b' + getColorClass(this, "s", REF) + 'Sacrifice</b> cost scaling by 2' },
 			done() { return player.s.points.gte(44) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		27: {
 			requirementDescription: '46 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrificial Ceremony</b><br>cost scaling by 2' },
+			effectDescription() { return 'divide <b' + getColorClass(this, "s", REF) + 'Sacrificial Ceremony</b><br>cost scaling by 2' },
 			done() { return player.s.points.gte(46) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		28: {
 			requirementDescription: '49 sanctums',
-			effectDescription() { return 'you can auto perform<br><b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrificial Ceremonies' },
+			effectDescription() { return 'you can auto perform<br><b' + getColorClass(this, "s", REF) + 'Sacrificial Ceremonies' },
 			done() { return player.s.points.gte(49) },
 			toggles: [['s', "auto_sacrificial_ceremony"]],
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		29: {
 			requirementDescription: '50 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrificial Ceremony</b><br>cost scaling by 1.5' },
+			effectDescription() { return 'divide <b' + getColorClass(this, "s", REF) + 'Sacrificial Ceremony</b><br>cost scaling by 1.5' },
 			done() { return player.s.points.gte(50) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -3692,62 +3691,62 @@ addLayer('s', {
 		},
 		31: {
 			requirementDescription: '66 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrificial Ceremony</b><br>cost scaling by 1.2' },
+			effectDescription() { return 'divide <b' + getColorClass(this, "s", REF) + 'Sacrificial Ceremony</b><br>cost scaling by 1.2' },
 			done() { return player.s.points.gte(66) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		32: {
 			requirementDescription: '69 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> cost by 1e100' },
+			effectDescription() { return 'divide <b' + getColorClass(this, "s", REF) + 'Worship</b> cost by 1e100' },
 			done() { return player.s.points.gte(69) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		33: {
 			requirementDescription: '70 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> cost scaling by 1.6' },
+			effectDescription() { return 'divide <b' + getColorClass(this, "s", REF) + 'Sacrifice</b> cost scaling by 1.6' },
 			done() { return player.s.points.gte(70) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		34: {
 			requirementDescription: '71 sanctums',
-			effectDescription() { return 'change <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b>\'s cost to a requirement' },
+			effectDescription() { return "change <b" + getColorClass(this, "s", REF) + "Sacrifice</b>'s cost to a requirement" },
 			done() { return player.s.points.gte(71) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		35: {
 			requirementDescription: '72 sanctums',
-			effectDescription() { return 'increase <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> effect exponent<br>0.55 --> 0.575' },
+			effectDescription() { return 'increase <b' + getColorClass(this, "s", REF) + 'Devotion</b> effect exponent<br>0.55 --> 0.575' },
 			done() { return player.s.points.gte(72) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		36: {
 			requirementDescription: '77 sanctums',
-			effectDescription() { return 'increase <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> effect exponent<br>0.575 --> 0.6' },
+			effectDescription() { return 'increase <b' + getColorClass(this, "s", REF) + 'Devotion</b> effect exponent<br>0.575 --> 0.6' },
 			done() { return player.s.points.gte(77) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		37: {
 			requirementDescription: '80 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> cost scaling by 2' },
+			effectDescription() { return 'divide <b' + getColorClass(this, "s", REF) + 'Sacrifice</b> cost scaling by 2' },
 			done() { return player.s.points.gte(80) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		38: {
 			requirementDescription: '85 sanctums',
-			effectDescription() { return 'you can auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice' },
+			effectDescription() { return 'you can auto <b' + getColorClass(this, "s", REF) + 'Sacrifice' },
 			done() { return player.s.points.gte(85) },
 			toggles: [['s', "auto_sacrifice"]],
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		39: {
 			requirementDescription: '87 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> cost scaling by 2' },
+			effectDescription() { return 'divide <b' + getColorClass(this, "s", REF) + 'Sacrifice</b> cost scaling by 2' },
 			done() { return player.s.points.gte(87) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		40: {
 			requirementDescription: '96 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> cost scaling by 1.5' },
+			effectDescription() { return 'divide <b' + getColorClass(this, "s", REF) + 'Worship</b> cost scaling by 1.5' },
 			done() { return player.s.points.gte(96) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -3759,31 +3758,31 @@ addLayer('s', {
 		},
 		42: {
 			requirementDescription: '110 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrificial Ceremony</b><br>cost scaling by 1.5' },
+			effectDescription() { return 'divide <b' + getColorClass(this, "s", REF) + 'Sacrificial Ceremony</b><br>cost scaling by 1.5' },
 			done() { return player.s.points.gte(110) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		43: {
 			requirementDescription: '112 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrificial Ceremony</b><br>hex cost scaling by 3' },
+			effectDescription() { return 'divide <b' + getColorClass(this, "s", REF) + 'Sacrificial Ceremony</b><br>hex cost scaling by 3' },
 			done() { return player.s.points.gte(112) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		44: {
 			requirementDescription: '120 sanctums',
-			effectDescription() { return 'auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> works twice as fast' },
+			effectDescription() { return 'auto <b' + getColorClass(this, "s", REF) + 'Worship</b> works twice as fast' },
 			done() { return player.s.points.gte(120) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		45: {
 			requirementDescription: '125 sanctums',
-			effectDescription() { return 'divide <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrificial Ceremony</b><br>hex cost scaling by 4' },
+			effectDescription() { return 'divide <b' + getColorClass(this, "s", REF) + 'Sacrificial Ceremony</b><br>hex cost scaling by 4' },
 			done() { return player.s.points.gte(125) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
 		46: {
 			requirementDescription: '140 sanctums',
-			effectDescription() { return 'auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> works twice as fast (4x total)' },
+			effectDescription() { return 'auto <b' + getColorClass(this, "s", REF) + 'Worship</b> works twice as fast (4x total)' },
 			done() { return player.s.points.gte(140) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -3801,7 +3800,7 @@ addLayer('s', {
 		},
 		49: {
 			requirementDescription: '175 sanctums',
-			effectDescription() { return 'increase <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> effect exponent<br>0.6 --> 0.625' },
+			effectDescription() { return 'increase <b' + getColorClass(this, "s", REF) + 'Devotion</b> effect exponent<br>0.6 --> 0.625' },
 			done() { return player.s.points.gte(175) },
 			unlocked() { return hasMilestone('s', 13) },
 		},
@@ -3813,7 +3812,7 @@ addLayer('s', {
 		},
 		51: {
 			requirementDescription: '200 sanctums',
-			effectDescription() { return 'auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Worship</b> works thrice as fast (12x total)' },
+			effectDescription() { return 'auto <b' + getColorClass(this, "s", REF) + 'Worship</b> works thrice as fast (12x total)' },
 			done() { return player.s.points.gte(200) && hasMilestone('m', 8) },
 			unlocked() { return hasMilestone('s', 13) && hasMilestone('m', 8) },
 		},
@@ -3825,7 +3824,7 @@ addLayer('s', {
 		},
 		53: {
 			requirementDescription: '215 sanctums',
-			effectDescription() { return 'increase <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> effect exponent<br>0.625 --> 0.666' },
+			effectDescription() { return 'increase <b' + getColorClass(this, "s", REF) + 'Devotion</b> effect exponent<br>0.625 --> 0.666' },
 			done() { return player.s.points.gte(215) && hasMilestone('m', 8) },
 			unlocked() { return hasMilestone('s', 13) && hasMilestone('m', 8) },
 		},
@@ -3911,7 +3910,7 @@ addLayer('d', {
 				if (hasMilestone('s', 40)) scale = scale.div(1.5);
 				return new Decimal(10).pow(x.add(1).mul(scale)).mul(1e50).div(div);
 			},
-			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Worship<br>' },
+			title() { return '<h3' + getColorClass(this, "s", TITLE) + 'Worship<br>' },
 			description: 'use prayers to worship the gods. you will gain 0.1 devotion per worship.',
 			canAfford() { return player.p.points.gte(this.cost()) },
 			purchaseLimit: 1e9,
@@ -3937,7 +3936,7 @@ addLayer('d', {
 				if (hasMilestone('s', 39)) scale = scale.div(2);
 				return x.mul(scale).add(20).floor();
 			},
-			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Sacrifice<br>' },
+			title() { return '<h3' + getColorClass(this, "s", TITLE) + 'Sacrifice<br>' },
 			description() { return "use sanctums as a sacrifice to worship the gods. you will gain<br>" + (hasMilestone('s', 24) ? "1" : "0.5") + " devotion per sacrifice.<br>each sacrifice also multiplies relic's first effect by " + (hasMilestone('s', 24) ? "2" : "1.5") + "." },
 			canAfford() { return player.s.points.gte(this.cost()) },
 			purchaseLimit: 1e9,
@@ -3981,7 +3980,7 @@ addLayer('d', {
 				if (hasMilestone('s', 42)) scale = scale.div(1.5);
 				return getBuyableAmount(this.layer, this.id).mul(scale).add(1).mul(1e15).floor();
 			},
-			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Sacrificial Ceremony<br>' },
+			title() { return '<h3' + getColorClass(this, "s", TITLE) + 'Sacrificial Ceremony<br>' },
 			description: 'use hexes and subatomic particles in a sacrificial ceremony to worship the gods. you will gain 0.75 devotion per sacrificial ceremony. each sacrificial ceremony also multiplies subatomic particle gain by 1 (additive), light gain by 1 (additive), and divides worship cost by 1e25 (multiplicative, like normal).',
 			canAfford() { return player.h.points.gte(this.cost_h()) && player.sp.points.gte(this.cost_sp()) },
 			purchaseLimit: 1e9,
@@ -4052,7 +4051,7 @@ addLayer('g', {
 	buyables: {
 		11: {
 			cost(x) { return new Decimal(10).pow(new Decimal(10).pow(x.div(3).add(3))) },
-			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Glowing<br>Worship<br>' },
+			title() { return '<h3' + getColorClass(this, "s", TITLE) + 'Glowing<br>Worship<br>' },
 			description: 'use prayers to worship the gods. each worship increases your glow gain by 1.',
 			canAfford() { return player.p.points.gte(this.cost()) },
 			purchaseLimit: 99,
@@ -4072,7 +4071,7 @@ addLayer('g', {
 		},
 		12: {
 			cost(x) { return new Decimal(5).pow(x.add(3)) },
-			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Glowing<br>Sacrifice<br>' },
+			title() { return '<h3' + getColorClass(this, "s", TITLE) + 'Glowing<br>Sacrifice<br>' },
 			description: 'use glow as a sacrifice to worship the gods. each sacrifice multiplies your glow gain by 2.',
 			canAfford() { return player.s.glow.gte(this.cost()) },
 			purchaseLimit: 99,
@@ -4098,7 +4097,7 @@ addLayer('g', {
 				if (x.gte(12)) return new Decimal('e1e11').pow(x.add(1).pow(5)).pow(exp);
 				return new Decimal('e1e14').pow(x.add(1).pow(2)).pow(exp);
 			},
-			title() { return '<h3 class="layer-s' + getdark(this, "title-buyable") + 'Glowing Sacrificial Ceremony<br>' },
+			title() { return '<h3' + getColorClass(this, "s", TITLE) + 'Glowing Sacrificial Ceremony<br>' },
 			description: 'use essence in a sacrificial ceremony to worship the gods. each sacrifice multiplies your glow gain by 2.5, your maximum glow by 10, and your light gain after hardcap by the amount of your glowing worships plus 1.',
 			canAfford() { return player.e.points.gte(this.cost()) },
 			purchaseLimit: 99,
@@ -4287,56 +4286,56 @@ addLayer('r', {
 				const completions = challengeCompletions('r', this.id);
 				let text = '';
 				// current rewards
-				if (completions >= 13) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, multiply Sacrificial Ceremony\'s last effect, and also multiply relic gain (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '') + ',<br>' + format(player.r.relic_effects[2]) + 'x,<br>and ' + format(player.r.relic_effects[3]) + 'x<br>';
-				else if (completions >= 12) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '') + ',<br>and ' + format(player.r.relic_effects[2]) + 'x<br>';
-				else if (completions >= 5) text += 'multiply relic\'s second and third effects, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '') + ',<br>and ' + format(player.r.relic_effects[2]) + 'x<br>';
-				else if (completions >= 4) text += 'multiply relic\'s second and third effects based on your light, and also exponentiate relic\'s first effect based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x<br>and ^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '') + '<br>';
-				else if (completions >= 1) text += 'multiply relic\'s second and third effects based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x<br>';
+				if (completions >= 13) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, multiply Sacrificial Ceremony\'s last effect, and also multiply relic gain (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '') + ',<br>' + format(player.r.relic_effects[2]) + 'x,<br>and ' + format(player.r.relic_effects[3]) + 'x';
+				else if (completions >= 12) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '') + ',<br>and ' + format(player.r.relic_effects[2]) + 'x';
+				else if (completions >= 5) text += 'multiply relic\'s second and third effects, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '') + ',<br>and ' + format(player.r.relic_effects[2]) + 'x';
+				else if (completions >= 4) text += 'multiply relic\'s second and third effects based on your light, and also exponentiate relic\'s first effect based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x<br>and ^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '');
+				else if (completions >= 1) text += 'multiply relic\'s second and third effects based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x';
+				else text += 'nothing currently';
 				// next reward
-				if (completions == 0) text += 'nothing currently<br><br>Next reward: multiply relic\'s second and third effects based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x';
-				else if (completions == 1) text += '<br>Next reward: relic\'s third effect also effects point gain';
-				else if (completions == 2) text += '<br>Next reward: multiply relic\'s first effect by 10,000 and raise it to ^3.5';
-				else if (completions == 3) text += '<br>Next reward: exponentiate relic\'s first effect based on your light<br>Currently: ^' + format(player.r.relic_effects[1]);
-				else if (completions == 4) text += '<br>Next reward: multiply Sacrificial Ceremony\'s last effect based on your light<br>Currently: ' + format(player.r.relic_effects[2]) + 'x';
-				else if (completions == 5) text += '<br>Next reward: raise relic\'s first effect to ^5';
-				else if (completions == 6) text += '<br>Next reward: quadruple the third activated relic effect';
-				else if (completions == 7) text += '<br>Next reward: double the third activated relic effect';
-				else if (completions == 8) text += '<br>Next reward: keep sanctum milestones on relic resets';
-				else if (completions == 9) {
-					text += '<br>Next reward: unlock Molecules';
-					if (player.m.unlocked) text += ' (already unlocked)';
-				} else if (completions == 10) text += '<br>Next reward: double the first activated relic effect';
-				else if (completions == 11) text += '<br>Next reward: the first activated relic effect also applies to molecule gain';
-				else if (completions == 12) text += '<br>Next reward: multiply relic gain based on your light<br>Currently: ' + format(player.r.relic_effects[3]) + 'x';
-				else if (completions == 13) text += '<br>Next reward: double the first activated relic effect';
-				else if (completions == 14) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.2';
-				else if (completions == 15) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.1';
-				else if (completions == 16) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work<br>twice as fast';
-				else if (completions == 17) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.05';
-				else if (completions == 18) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.02';
-				else if (completions == 19) text += '<br>Next reward: multiply the first activated relic<br>effect by 1.01';
-				else if (completions == 20) text += '<br>Next reward: essence is never reset';
-				else if (completions == 21) text += '<br>Next reward: auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> works thrice as fast';
-				else if (completions == 22) text += '<br>Next reward: auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> works twice as fast';
-				else if (completions == 23) text += '<br>Next reward: nothing';
-				else if (completions == 24) text += '<br>Next reward: relic resets don\'t reset cores';
-				else if (completions == 25) text += '<br>Next reward: nothing';
-				else if (completions == 26) text += '<br>Next reward: relic resets don\'t reset hexes';
-				else if (completions == 27) text += '<br>Next reward: nothing';
-				else if (completions == 28) text += '<br>Next reward: still nothing';
-				else if (completions == 29) text += '<br>Next reward: relic resets don\'t reset quarks';
-				else if (completions == 30) text += '<br>Next reward: nothing';
-				else if (completions == 31) text += '<br>Next reward: auto <b class="layer-s' + getdark(this, "ref", true, true) + 'Sacrifice</b> works twice as fast';
-				else if (completions == 32) text += '<br>Next reward: nothing';
-				else if (completions == 33) text += '<br>Next reward: still nothing';
-				else if (completions == 34) text += '<br>Next reward: relic resets don\'t reset subatomic particles';
-				else if (completions == 35) text += '<br>Next reward: nothing';
-				else if (completions == 36) text += '<br>Next reward: still nothing';
-				else if (completions == 37) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work<br>twice as fast';
-				else if (completions == 38) text += '<br>Next reward: nothing';
-				else if (completions == 39) text += '<br>Next reward: still nothing';
-				else if (completions == 40) text += '<br>Next reward: all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers<br>can bulk buy 10x';
-				else text += '<br>Next reward: you have gotten all the rewards!';
+				text += '<br><br>Next reward: ';
+				if (completions == 0) text += "multiply relic's second and third effects based on your light<br>Currently: " + format(player.r.relic_effects[0]) + "x";
+				else if (completions == 1) text += "relic's third effect also effects point gain";
+				else if (completions == 2) text += "multiply relic's first effect by 10,000 and raise it to ^3.5";
+				else if (completions == 3) text += "exponentiate relic's first effect based on your light<br>Currently: ^" + format(player.r.relic_effects[1]);
+				else if (completions == 4) text += "multiply Sacrificial Ceremony's last effect based on your light<br>Currently: " + format(player.r.relic_effects[2]) + "x";
+				else if (completions == 5) text += "raise relic's first effect to ^5";
+				else if (completions == 6) text += 'quadruple the third activated relic effect';
+				else if (completions == 7) text += 'double the third activated relic effect';
+				else if (completions == 8) text += 'keep sanctum milestones on relic resets';
+				else if (completions == 9) text += 'unlock Molecules' + (player.m.unlocked ? ' (already unlocked)' : '');
+				else if (completions == 10) text += 'double the first activated relic effect';
+				else if (completions == 11) text += 'the first activated relic effect also applies to molecule gain';
+				else if (completions == 12) text += 'multiply relic gain based on your light<br>Currently: ' + format(player.r.relic_effects[3]) + 'x';
+				else if (completions == 13) text += 'double the first activated relic effect';
+				else if (completions == 14) text += 'multiply the first activated relic<br>effect by 1.2';
+				else if (completions == 15) text += 'multiply the first activated relic<br>effect by 1.1';
+				else if (completions == 16) text += 'all <b' + getColorClass(this, "s", REF) + 'Devotion</b> autobuyers work<br>twice as fast';
+				else if (completions == 17) text += 'multiply the first activated relic<br>effect by 1.05';
+				else if (completions == 18) text += 'multiply the first activated relic<br>effect by 1.02';
+				else if (completions == 19) text += 'multiply the first activated relic<br>effect by 1.01';
+				else if (completions == 20) text += 'essence is never reset';
+				else if (completions == 21) text += 'auto <b' + getColorClass(this, "s", REF) + 'Sacrifice</b> works thrice as fast';
+				else if (completions == 22) text += 'auto <b' + getColorClass(this, "s", REF) + 'Sacrifice</b> works twice as fast';
+				else if (completions == 23) text += 'nothing';
+				else if (completions == 24) text += "relic resets don't reset cores";
+				else if (completions == 25) text += 'nothing';
+				else if (completions == 26) text += "relic resets don't reset hexes";
+				else if (completions == 27) text += 'nothing';
+				else if (completions == 28) text += 'still nothing';
+				else if (completions == 29) text += "relic resets don't reset quarks";
+				else if (completions == 30) text += 'nothing';
+				else if (completions == 31) text += 'auto <b' + getColorClass(this, "s", REF) + 'Sacrifice</b> works twice as fast';
+				else if (completions == 32) text += 'nothing';
+				else if (completions == 33) text += 'still nothing';
+				else if (completions == 34) text += "relic resets don't reset subatomic particles";
+				else if (completions == 35) text += 'nothing';
+				else if (completions == 36) text += 'still nothing';
+				else if (completions == 37) text += 'all <b' + getColorClass(this, "s", REF) + 'Devotion</b> autobuyers work<br>twice as fast';
+				else if (completions == 38) text += 'nothing';
+				else if (completions == 39) text += 'still nothing';
+				else if (completions == 40) text += 'all <b' + getColorClass(this, "s", REF) + 'Devotion</b> autobuyers<br>can bulk buy 10x';
+				else text += 'you have gotten all the rewards!';
 				return text;
 			},
 			canComplete() { return player.r.light.gte(player.r.lightreq) && challengeCompletions('r', this.id) < tmp.r.challenges[this.id].completionLimit },
@@ -4356,7 +4355,7 @@ addLayer('r', {
 			fullDisplay() {
 				let text = '';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.3';
-				return '<h3 class="layer-r' + getdark(this, "title-hasend") + 'Brighter Light</h3><br>multiplies light gain based on your sanctums<br>Currently: ' + format(tmp[this.layer].upgrades[this.id].effect) + 'x' + text + '<br><br>Cost: ' + format(1e12) + ' light';
+				return '<h3' + getColorClass(this, "r", TITLE) + 'Brighter Light</h3><br>multiplies light gain based on your sanctums<br>Currently: ' + format(tmp[this.layer].upgrades[this.id].effect) + 'x' + text + '<br><br>Cost: ' + format(1e12) + ' light';
 			},
 			canAfford() { return player.r.light.gte(1e12) },
 			pay() { player.r.light = player.r.light.sub(1e12) },
@@ -4367,7 +4366,7 @@ addLayer('r', {
 			fullDisplay() {
 				let text = '';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.1';
-				return '<h3 class="layer-r' + getdark(this, "title-hasend") + 'Light of Light</h3><br>multiplies light gain based on your light<br>Currently: ' + format(tmp[this.layer].upgrades[this.id].effect) + 'x' + text + '<br><br>Cost: ' + format(1e13) + ' light';
+				return '<h3' + getColorClass(this, "r", TITLE) + 'Light of Light</h3><br>multiplies light gain based on your light<br>Currently: ' + format(tmp[this.layer].upgrades[this.id].effect) + 'x' + text + '<br><br>Cost: ' + format(1e13) + ' light';
 			},
 			canAfford() { return player.r.light.gte(1e13) },
 			pay() { player.r.light = player.r.light.sub(1e13) },
@@ -4378,7 +4377,7 @@ addLayer('r', {
 			fullDisplay() {
 				let text = '';
 				if (options.nerdMode) text += '<br>formula: (36x+1)^10';
-				return '<h3 class="layer-r' + getdark(this, "title-hasend") + 'Good Light</h3><br>makes base light gain based on your good influence (ignoring hardcap)<br>Currently: ' + format(tmp[this.layer].upgrades[this.id].effect) + '/sec' + text + '<br><br>Req: effect must be at least 1e25';
+				return '<h3' + getColorClass(this, "r", TITLE) + 'Good Light</h3><br>makes base light gain based on your good influence (ignoring hardcap)<br>Currently: ' + format(tmp[this.layer].upgrades[this.id].effect) + '/sec' + text + '<br><br>Req: effect must be at least 1e25';
 			},
 			canAfford() { return this.effect().gte(1e25) },
 			effect() { return player.gi.points.mul(36).add(1).pow(10) },
@@ -4620,7 +4619,7 @@ addLayer('m', {
 		},
 		1: {
 			requirementDescription: '2 total molecules',
-			effectDescription: 'keep demon soul challenges and<br><b class="layer-ds' + getdark(this, "ref", true, true) + 'Demonic Key</b> on row 5 resets,<br>and you can autobuy hex upgrades',
+			effectDescription: 'keep demon soul challenges and<br><b' + getColorClass(this, "ds", REF) + 'Demonic Key</b> on row 5 resets,<br>and you can autobuy hex upgrades',
 			done() { return player.m.total.gte(2) },
 			toggles: [['h', 'auto_upgrades']],
 		},
@@ -4665,7 +4664,7 @@ addLayer('m', {
 		},
 		9: {
 			requirementDescription: '50 total molecules',
-			effectDescription() { return 'keep the <b class="layer-s' + getdark(this, "ref", true, true) + '1st sanctum milestone</b><br>on molecule resets' },
+			effectDescription() { return 'keep the <b' + getColorClass(this, "s", REF) + '1st sanctum milestone</b><br>on molecule resets' },
 			done() { return player.m.total.gte(50) },
 		},
 		10: {
@@ -4731,7 +4730,7 @@ addLayer('m', {
 	},
 	upgrades: {
 		11: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'O<span style="font-size: 0.8em">2</span>, Oxygen' },
+			title() { return '<b' + getColorClass(this, "m", TITLE) + 'O<span style="font-size: 0.8em">2</span>, Oxygen' },
 			description: 'multiplies essence gain based on your best molecules',
 			cost: 1,
 			effect() { return player.m.best.mul(100).add(1).pow(0.5) },
@@ -4742,7 +4741,7 @@ addLayer('m', {
 			},
 		},
 		12: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'CO, Carbon Monoxide' },
+			title() { return '<b' + getColorClass(this, "m", TITLE) + 'CO, Carbon Monoxide' },
 			description: 'multiplies demon soul gain based on your best molecules',
 			cost: 5,
 			effect() { return player.m.best.mul(10).add(1).pow(0.2) },
@@ -4753,7 +4752,7 @@ addLayer('m', {
 			},
 		},
 		13: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'CO<span style="font-size: 0.8em">2</span>, Carbon Dioxide' },
+			title() { return '<b' + getColorClass(this, "m", TITLE) + 'CO<span style="font-size: 0.8em">2</span>, Carbon Dioxide' },
 			description: 'multiplies quark gain based on your best molecules',
 			cost: 10,
 			effect() { return player.m.best.mul(50).add(1).pow(0.4) },
@@ -4767,14 +4766,14 @@ addLayer('m', {
 			fullDisplay() {
 				let text = '';
 				if (options.nerdMode) text += '<br>formula: (25x+1)^0.3';
-				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'CO<span style="font-size: 0.8em">3</span>, Carbon Trioxide</h3><br>multiplies core gain based on your best molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: 360,000 atoms';
+				return '<h3' + getColorClass(this, "m", TITLE) + 'CO<span style="font-size: 0.8em">3</span>, Carbon Trioxide</h3><br>multiplies core gain based on your best molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: 360,000 atoms';
 			},
 			canAfford() { return player.a.points.gte(360000) },
 			pay() { player.a.points = player.a.points.sub(360000) },
 			effect() { return player.m.best.mul(25).add(1).pow(0.3) },
 		},
 		22: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'H<span style="font-size: 0.8em">2</span>O, Water' },
+			title() { return '<b' + getColorClass(this, "m", TITLE) + 'H<span style="font-size: 0.8em">2</span>O, Water' },
 			description: 'multiplies essence gain based on your total unique molecules',
 			cost: 125,
 			effect() { return player.m.unique_total.add(1).mul(5) },
@@ -4788,14 +4787,14 @@ addLayer('m', {
 			fullDisplay() {
 				let text = '';
 				if (options.nerdMode) text += '<br>formula: (250x+1)^0.1';
-				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'NH<span style="font-size: 0.8em">3</span>, Ammonia</h3><br>multiplies hex gain based on your best molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: 4,600,000 atoms';
+				return '<h3' + getColorClass(this, "m", TITLE) + 'NH<span style="font-size: 0.8em">3</span>, Ammonia</h3><br>multiplies hex gain based on your best molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: 4,600,000 atoms';
 			},
 			canAfford() { return player.a.points.gte(4600000) },
 			pay() { player.a.points = player.a.points.sub(4600000) },
 			effect() { return player.m.best.mul(250).add(1).pow(0.1) },
 		},
 		31: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'H<span style="font-size: 0.8em">2</span>, Hydrogen' },
+			title() { return '<b' + getColorClass(this, "m", TITLE) + 'H<span style="font-size: 0.8em">2</span>, Hydrogen' },
 			description: "gives extra unique molecules based on your non-extra ones' amount and worth",
 			cost: 250,
 			effect() { return player.m.unique_nonextra.div(2).add(1).floor() },
@@ -4810,7 +4809,7 @@ addLayer('m', {
 			fullDisplay() {
 				let text = '';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.2';
-				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'NaCl, Salt</h3><br>gives extra unique molecules based on your atoms<br>Currently: +' + formatWhole(this.effect()) + text + '<br><br>Cost: 7,777,777 atoms';
+				return '<h3' + getColorClass(this, "m", TITLE) + 'NaCl, Salt</h3><br>gives extra unique molecules based on your atoms<br>Currently: +' + formatWhole(this.effect()) + text + '<br><br>Cost: 7,777,777 atoms';
 			},
 			canAfford() { return player.a.points.gte(7777777) },
 			pay() { player.a.points = player.a.points.sub(7777777) },
@@ -4821,7 +4820,7 @@ addLayer('m', {
 			fullDisplay() {
 				let text = '';
 				if (options.nerdMode) text += '<br>formula: 1000x';
-				return '<h3 class="layer-m' + getdark(this, "title-light", true) + 'O<span style="font-size:0.8em">3</span>, Ozone</h3><br>multiplies demon soul gain based on your total unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e10) + ' atoms';
+				return '<h3' + getColorClass(this, "m", TITLE) + 'O<span style="font-size:0.8em">3</span>, Ozone</h3><br>multiplies demon soul gain based on your total unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e10) + ' atoms';
 			},
 			canAfford() { return player.a.points.gte(1e10) },
 			pay() { player.a.points = player.a.points.sub(1e10) },
@@ -4829,7 +4828,7 @@ addLayer('m', {
 			unlocked() { return hasUpgrade('m', 21) && hasUpgrade('m', 22) && hasUpgrade('m', 23) },
 		},
 		41: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'CH<span style="font-size: 0.8em">4</span>, Methane' },
+			title() { return '<b' + getColorClass(this, "m", TITLE) + 'CH<span style="font-size: 0.8em">4</span>, Methane' },
 			description: 'gives extra unique molecules based on your demon souls',
 			cost: 25000000,
 			effect() { return player.ds.points.pow(10).log10().add(1).floor() },
@@ -4841,7 +4840,7 @@ addLayer('m', {
 			unlocked() { return hasUpgrade('m', 31) && hasUpgrade('m', 32) && hasUpgrade('m', 33) },
 		},
 		42: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'CaO, Calcium Oxide' },
+			title() { return '<b' + getColorClass(this, "m", TITLE) + 'CaO, Calcium Oxide' },
 			description: 'non-extra unique molecules are worth more based on your relics',
 			cost: 50000000,
 			effect() { return player.r.points.mul(5).add(1).pow(2) },
@@ -4856,7 +4855,7 @@ addLayer('m', {
 			fullDisplay() {
 				let text = '';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.01';
-				return'<h3 class="layer-m' + getdark(this, "title-light", true) + 'Ca(OH)<span style="font-size: 0.8em">2</span>, Calcium Hydroxide</h3><br>multiplies relic gain based on your extra unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1.61e10) + ' atoms';
+				return'<h3' + getColorClass(this, "m", TITLE) + 'Ca(OH)<span style="font-size: 0.8em">2</span>, Calcium Hydroxide</h3><br>multiplies relic gain based on your extra unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1.61e10) + ' atoms';
 			},
 			canAfford() { return player.a.points.gte(1.61e10) },
 			pay() { player.a.points = player.a.points.sub(1.61e10) },
@@ -4864,7 +4863,7 @@ addLayer('m', {
 			unlocked() { return hasUpgrade('m', 31) && hasUpgrade('m', 32) && hasUpgrade('m', 33) },
 		},
 		51: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'N<span style="font-size: 0.8em">2</span>, Nitrogen' },
+			title() { return '<b' + getColorClass(this, "m", TITLE) + 'N<span style="font-size: 0.8em">2</span>, Nitrogen' },
 			description: 'gives extra unique molecules based on your total good influence',
 			cost: 1e13,
 			effect() { return (tmp.gi.deactivated ? new Decimal(0) : player.gi.total).add(1).pow(2.5).floor() },
@@ -4876,7 +4875,7 @@ addLayer('m', {
 			unlocked() { return (hasMilestone('gi', 11) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('m', 41) && hasUpgrade('m', 42) && hasUpgrade('m', 43) },
 		},
 		52: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Na<span style="font-size: 0.8em">2</span>O, Sodium Oxide' },
+			title() { return '<b' + getColorClass(this, "m", TITLE) + 'Na<span style="font-size: 0.8em">2</span>O, Sodium Oxide' },
 			description: 'multiplies point gain based on your total unique molecules',
 			cost: 1e14,
 			effect() { return player.m.unique_total.add(1).pow(25) },
@@ -4888,7 +4887,7 @@ addLayer('m', {
 			unlocked() { return (hasMilestone('gi', 11) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('m', 41) && hasUpgrade('m', 42) && hasUpgrade('m', 43) },
 		},
 		53: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'F<span style="font-size: 0.8em">2</span>, Fluorine' },
+			title() { return '<b' + getColorClass(this, "m", TITLE) + 'F<span style="font-size: 0.8em">2</span>, Fluorine' },
 			description: 'gives extra unique molecules based on your atoms',
 			cost: 1e13,
 			effect() { return player.a.points.add(1).pow(0.45).floor() },
@@ -4900,7 +4899,7 @@ addLayer('m', {
 			unlocked() { return (hasMilestone('gi', 11) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('m', 41) && hasUpgrade('m', 42) && hasUpgrade('m', 43) },
 		},
 		61: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'Ne<span style="font-size: 0.8em">2</span>, Neon' },
+			title() { return '<b' + getColorClass(this, "m", TITLE) + 'Ne<span style="font-size: 0.8em">2</span>, Neon' },
 			description: 'multiplies light gain after hardcap based on your total unique molecules',
 			cost: 1e62,
 			effect() { return player.m.unique_total.add(1).log10().add(1).pow(hasUpgrade('m', 61) ? 10 : 0.5) },
@@ -4915,13 +4914,13 @@ addLayer('m', {
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('m', 51) && hasUpgrade('m', 52) && hasUpgrade('m', 53) },
 		},
 		62: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + 'C<span style="font-size: 0.8em">6</span>H<span style="font-size: 0.8em">5</span>NH<span style="font-size: 0.8em">2</span>, Aniline' },
-			description() { return 'improves <b class="layer-m' + getdark(this, "ref-light") + 'Ne<span style="font-size: 0.8em">2</span>, Neon</b>\'s effect exponent<br>(0.5 --> 10)' },
+			title() { return '<b' + getColorClass(this, "m", TITLE) + 'C<span style="font-size: 0.8em">6</span>H<span style="font-size: 0.8em">5</span>NH<span style="font-size: 0.8em">2</span>, Aniline' },
+			description() { return 'improves <b' + getColorClass(this, "m", "ref-light") + 'Ne<span style="font-size: 0.8em">2</span>, Neon</b>\'s effect exponent<br>(0.5 --> 10)' },
 			cost: '1e1400',
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('m', 51) && hasUpgrade('m', 52) && hasUpgrade('m', 53) },
 		},
 		63: {
-			title() { return '<b class="layer-m' + getdark(this, "title-light") + '[Ru(NH<span style="font-size: 0.8em">3</span>)<span style="font-size: 0.8em">5</span>(N<span style="font-size: 0.8em">2</span>)]Cl<span style="font-size: 0.8em">2</span>' },
+			title() { return '<b' + getColorClass(this, "m", TITLE) + '[Ru(NH<span style="font-size: 0.8em">3</span>)<span style="font-size: 0.8em">5</span>(N<span style="font-size: 0.8em">2</span>)]Cl<span style="font-size: 0.8em">2</span>' },
 			description: 'multiplies extra unique molecules based on your molecules',
 			cost: '1e1575',
 			effect() { return player.m.points.add(1).log10().add(1).pow(10) },
@@ -5106,7 +5105,7 @@ addLayer('gi', {
 		},
 		10: {
 			requirementDescription: '18 good influence',
-			effectDescription() { return 'all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers work twice as fast' },
+			effectDescription() { return 'all <b' + getColorClass(this, "s", REF) + 'Devotion</b> autobuyers work twice as fast' },
 			done() { return player.gi.points.gte(18) },
 			unlocked() { return hasMilestone('gi', 8) },
 		},
@@ -5119,7 +5118,7 @@ addLayer('gi', {
 		},
 		12: {
 			requirementDescription: '22 good influence and<br>555 total good influence',
-			effectDescription() { return 'increase <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b>\'s effect exponent<br>on good influence gain<br>0.2 --> 0.22' },
+			effectDescription() { return 'increase <b' + getColorClass(this, "s", REF) + 'Devotion</b>\'s effect exponent<br>on good influence gain<br>0.2 --> 0.22' },
 			done() { return player.gi.points.gte(22) && player.gi.total.gte(555) },
 			unlocked() { return hasMilestone('gi', 10) },
 		},
@@ -5153,7 +5152,7 @@ addLayer('gi', {
 		},
 		17: {
 			requirementDescription: '50 good influence and<br>6,400 total good influence',
-			effectDescription() { return 'all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk buy 2x' },
+			effectDescription() { return 'all <b' + getColorClass(this, "s", REF) + 'Devotion</b> autobuyers can bulk buy 2x' },
 			done() { return player.gi.points.gte(50) && player.gi.total.gte(6400) },
 			unlocked() { return hasMilestone('gi', 16) },
 		},
@@ -5176,7 +5175,7 @@ addLayer('gi', {
 				if (player.h.limitsBroken >= 4 && x.gte(8)) return x.add(1).pow(2);
 				return x.add(1);
 			},
-			title() { return '<h3 class="layer-gi' + getdark(this, "title-buyable") + 'Better Good' },
+			title() { return '<h3' + getColorClass(this, "gi", TITLE) + 'Better Good' },
 			description: 'increases the good influence effect base by 1 per this upgrade bought.',
 			canAfford() { return player.gi.points.gte(this.cost()) },
 			purchaseLimit() { return player.h.limitsBroken >= 4 ? 1e9 : 8 },
@@ -5196,7 +5195,7 @@ addLayer('gi', {
 		},
 		12: {
 			cost(x) { return x.div(5).add(1).floor() },
-			title() { return '<h3 class="layer-gi' + getdark(this, "title-buyable") + 'Drive out Evil' },
+			title() { return '<h3' + getColorClass(this, "gi", TITLE) + 'Drive out Evil' },
 			description: 'multiplies essence gain based on the amount of this upgrade bought.',
 			canAfford() { return player.gi.points.gte(this.cost()) },
 			purchaseLimit() { return player.ds.points.add(1).log10().div(12.5).floor().min(1e9) },
@@ -5227,20 +5226,20 @@ addLayer('gi', {
 	},
 	upgrades: {
 		11: {
-			title() { return '<b class="layer-gi' + getdark(this, "title") + 'Devotion to Good' },
-			description() { return 'makes all <b class="layer-s' + getdark(this, "ref") + 'Devotion</b> autobuyers bulk buy 100x and good influence rebuyables are autobought' },
+			title() { return '<b' + getColorClass(this, "gi", TITLE) + 'Devotion to Good' },
+			description() { return 'makes all <b' + getColorClass(this, "s", REF) + 'Devotion</b> autobuyers bulk buy 100x and good influence rebuyables are autobought' },
 			cost: 200,
 			unlocked() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 		12: {
-			title() { return '<b class="layer-gi' + getdark(this, "title") + 'Sacrifice for Good' },
-			description() { return 'exponentiate <b class="layer-s' + getdark(this, "ref") + 'Glowing Sacrificial Ceremony</b>\'s cost by ^' + format(this.effect) },
+			title() { return '<b' + getColorClass(this, "gi", TITLE) + 'Sacrifice for Good' },
+			description() { return 'exponentiate <b' + getColorClass(this, "s", REF) + 'Glowing Sacrificial Ceremony</b>\'s cost by ^' + format(this.effect) },
 			cost: 500,
 			effect: 1e-7,
 			unlocked() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 		13: {
-			title() { return '<b class="layer-gi' + getdark(this, "title") + 'Glowing Goodness' },
+			title() { return '<b' + getColorClass(this, "gi", TITLE) + 'Glowing Goodness' },
 			description: 'multiply glow gain based on total good influence',
 			cost: 40_000,
 			effect() { return player.gi.total.add(1).pow(1.5) },
@@ -5252,7 +5251,7 @@ addLayer('gi', {
 			unlocked() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 		14: {
-			title() { return '<b class="layer-gi' + getdark(this, "title") + 'Greater Good' },
+			title() { return '<b' + getColorClass(this, "gi", TITLE) + 'Greater Good' },
 			description: 'reduce the good influence cost base (1.99 --> 1.98)',
 			cost: 44_444,
 			unlocked() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer },
@@ -5411,14 +5410,14 @@ addLayer('ei', {
 		},
 		5: {
 			requirementDescription: '348 total evil influence and 1e245 evil power',
-			effectDescription() { return 'unlock the <b class="layer-ei' + getdark(this, "ref", true, true) + 'Gate of Evil' },
+			effectDescription() { return 'unlock the <b' + getColorClass(this, "ei", REF) + 'Gate of Evil' },
 			done() { return player.ei.total.gte(348) && player.ei.power.gte(1e245) },
 			unlocked() { return hasMilestone('ei', 4) },
 		},
 	},
 	upgrades: {
 		11: {
-			title() { return '<b class="layer-ei' + getdark(this, "title") + 'Cycle of Evil' },
+			title() { return '<b' + getColorClass(this, "ei", TITLE) + 'Cycle of Evil' },
 			description: 'multiplies evil influence gain based on your evil power',
 			cost: 2,
 			effect() { return player.ei.power.add(1).log10().add(1) },
@@ -5429,7 +5428,7 @@ addLayer('ei', {
 			},
 		},
 		12: {
-			title() { return '<b class="layer-ei' + getdark(this, "title") + 'Evil Power Up' },
+			title() { return '<b' + getColorClass(this, "ei", TITLE) + 'Evil Power Up' },
 			description: 'multiplies evil power gain based on your evil power',
 			cost: 3,
 			effect() { return player.ei.power.add(1).pow(0.1) },
@@ -5441,13 +5440,13 @@ addLayer('ei', {
 			unlocked() { return hasUpgrade('ei', 11) },
 		},
 		13: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'More Evil' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'More Evil' },
 			description: 'reduces evil influence cost scaling<br>12 --> 7.75',
 			cost: 3,
 			unlocked() { return hasUpgrade('ei', 12) },
 		},
 		14: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Rising Conflict' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Rising Conflict' },
 			description: 'multiplies evil power gain based on your good influence',
 			cost: 4,
 			effect() { return  player.gi.points.add(1).pow(0.75) },
@@ -5459,14 +5458,14 @@ addLayer('ei', {
 			unlocked() { return hasUpgrade('ei', 13) },
 		},
 		15: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Evil Laughter' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Evil Laughter' },
 			description: 'increases evil power\'s base gain<br>2 --> 4',
 			cost: 4,
 			unlocked() { return hasUpgrade('ei', 14) },
 		},
 		21: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'The Cycle Continues' },
-			description() { return  'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Cycle of Evil</b> based on your evil power' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'The Cycle Continues' },
+			description() { return  'multiplies the effect of <b' + getColorClass(this, "ei", REF) + 'Cycle of Evil</b> based on your evil power' },
 			cost: 4,
 			effect() { return  player.ei.power.add(1).log10().add(1) },
 			effectDisplay(eff) {
@@ -5477,8 +5476,8 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		22: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Stronger Evil' },
-			description() { return  'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Evil Power Up</b> based on your evil power' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Stronger Evil' },
+			description() { return  'multiplies the effect of <b' + getColorClass(this, "ei", REF) + 'Evil Power Up</b> based on your evil power' },
 			cost: 5,
 			effect() { return  player.ei.power.add(1).pow(0.2) },
 			effectDisplay(eff) {
@@ -5489,13 +5488,13 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		23: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Even More Evil' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Even More Evil' },
 			description: 'reduces evil influence cost scaling<br>7.75 --> 7.25',
 			cost: 5,
 			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		24: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Daredevil' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Daredevil' },
 			description: 'multiplies good influence gain based on your evil power',
 			cost: 6,
 			effect() { return  player.ei.power.add(1).log10().add(1).pow(0.0175) },
@@ -5507,14 +5506,14 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		25: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'The Evil Eye' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'The Evil Eye' },
 			description: 'increases evil power\'s base gain<br>4 --> 6',
 			cost: 6,
 			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		31: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Demonic Cycle' },
-			description() { return  'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'The Cycle Continues</b> based on your demon souls' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Demonic Cycle' },
+			description() { return  'multiplies the effect of <b' + getColorClass(this, "ei", REF) + 'The Cycle Continues</b> based on your demon souls' },
 			cost: 6,
 			effect() { return  player.ds.points.add(1).log10().add(1).pow(0.02) },
 			effectDisplay(eff) {
@@ -5525,8 +5524,8 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 10 },
 		},
 		32: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Demonic Evil' },
-			description() { return  'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Stronger Evil</b> based on your demon souls' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Demonic Evil' },
+			description() { return  'multiplies the effect of <b' + getColorClass(this, "ei", REF) + 'Stronger Evil</b> based on your demon souls' },
 			cost: 7,
 			effect() { return  player.ds.points.add(1).log10().add(1).pow(0.9) },
 			effectDisplay(eff) {
@@ -5537,13 +5536,13 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 10 },
 		},
 		33: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Evil Gathering' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Evil Gathering' },
 			description: 'reduces evil influence cost scaling<br>7.25 --> 7',
 			cost: 7,
 			unlocked() { return player.ei.upgrades.length >= 10 },
 		},
 		34: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Greedy Evil' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Greedy Evil' },
 			description: 'multiplies relic gain based on your evil power',
 			cost: 8,
 			effect() { return  player.ei.power.add(1).log10().add(1).pow(0.01) },
@@ -5555,14 +5554,14 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 10 },
 		},
 		35: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Innate Evil' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Innate Evil' },
 			description: 'increases evil power\'s base gain<br>6 --> 8',
 			cost: 8,
 			unlocked() { return player.ei.upgrades.length >= 10 },
 		},
 		41: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Longer Cycle' },
-			description() { return  'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Demonic Cycle</b> based on your evil power' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Longer Cycle' },
+			description() { return  'multiplies the effect of <b' + getColorClass(this, "ei", REF) + 'Demonic Cycle</b> based on your evil power' },
 			cost: 8,
 			effect() { return  player.ei.power.add(1).log10().add(1).pow(0.06) },
 			effectDisplay(eff) {
@@ -5573,8 +5572,8 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 15 },
 		},
 		42: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Crimson Evil' },
-			description() { return  'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Demonic Evil</b> based on your demon souls' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Crimson Evil' },
+			description() { return  'multiplies the effect of <b' + getColorClass(this, "ei", REF) + 'Demonic Evil</b> based on your demon souls' },
 			cost: 9,
 			effect() { return  player.ds.points.add(1).log10().add(1).pow(0.5) },
 			effectDisplay(eff) {
@@ -5585,13 +5584,13 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 15 },
 		},
 		43: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Evil Condensing' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Evil Condensing' },
 			description: 'reduces evil influence cost scaling<br>7 --> 6.75',
 			cost: 9,
 			unlocked() { return player.ei.upgrades.length >= 15 },
 		},
 		44: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Evil Infiltration' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Evil Infiltration' },
 			description: 'multiplies evil power gain based on your sanctums',
 			cost: 10,
 			effect() { return  player.s.points.add(1).log10().add(1).pow(4) },
@@ -5603,14 +5602,14 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 15 },
 		},
 		45: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Evil Schemes' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Evil Schemes' },
 			description: 'increases evil power\'s base gain<br>8 --> 10',
 			cost: 10,
 			unlocked() { return player.ei.upgrades.length >= 15 },
 		},
 		52: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Bloody Evil' },
-			description() { return  'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Crimson Evil</b> based on your evil power' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Bloody Evil' },
+			description() { return  'multiplies the effect of <b' + getColorClass(this, "ei", REF) + 'Crimson Evil</b> based on your evil power' },
 			cost: 11,
 			effect() { return  player.ei.power.add(1).pow(0.15) },
 			effectDisplay(eff) {
@@ -5621,13 +5620,13 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 20 },
 		},
 		53: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Amassing Evil' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Amassing Evil' },
 			description: 'reduces evil influence cost scaling<br>6.75 --> 6.55',
 			cost: 12,
 			unlocked() { return player.ei.upgrades.length >= 20 },
 		},
 		54: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Determination' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Determination' },
 			description: 'multiplies evil influence gain based on your good influence',
 			cost: 13,
 			effect() { return  player.gi.points.add(1).log10().add(1).pow(0.8) },
@@ -5639,8 +5638,8 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 20 },
 		},
 		62: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Empower Evil' },
-			description() { return  'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Bloody Evil</b> based on your evil power' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Empower Evil' },
+			description() { return  'multiplies the effect of <b' + getColorClass(this, "ei", REF) + 'Bloody Evil</b> based on your evil power' },
 			cost: 15,
 			effect() { return  player.ei.power.add(1).pow(0.1) },
 			effectDisplay(eff) {
@@ -5651,13 +5650,13 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 23 },
 		},
 		63: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Army of Evil' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Army of Evil' },
 			description: 'reduces evil influence cost scaling<br>6.55 --> 6.45',
 			cost: 16,
 			unlocked() { return player.ei.upgrades.length >= 23 },
 		},
 		64: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Evil Rituals' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Evil Rituals' },
 			description: 'multiplies evil influence gain based on your sanctums',
 			cost: 17,
 			effect() { return  player.gi.points.add(1).log10().add(1).pow(0.55) },
@@ -5669,8 +5668,8 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 23 },
 		},
 		72: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Powerful Evil' },
-			description() { return  'multiplies the effect of <b class="layer-ei' + getdark(this, "ref") + 'Empower Evil</b> based on your evil power' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Powerful Evil' },
+			description() { return  'multiplies the effect of <b' + getColorClass(this, "ei", REF) + 'Empower Evil</b> based on your evil power' },
 			cost: 19,
 			effect() { return  player.ei.power.add(1).pow(0.145) },
 			effectDisplay(eff) {
@@ -5681,13 +5680,13 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 26 },
 		},
 		73: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Evil Kingdom' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Evil Kingdom' },
 			description: 'reduces evil influence cost scaling<br>6.45 --> 6.25',
 			cost: 22,
 			unlocked() { return player.ei.upgrades.length >= 26 },
 		},
 		74: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Evil Prayers' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Evil Prayers' },
 			description: 'multiplies evil power gain based on your prayers',
 			cost: 25,
 			effect() { return  player.p.points.add(1).log10().add(1).pow(3.6) },
@@ -5699,7 +5698,7 @@ addLayer('ei', {
 			unlocked() { return player.ei.upgrades.length >= 26 },
 		},
 		83: {
-			title() { return  '<b class="layer-ei' + getdark(this, "title") + 'Infinite Evil' },
+			title() { return  '<b' + getColorClass(this, "ei", TITLE) + 'Infinite Evil' },
 			description: 'reduces evil influence cost scaling<br>6.25 --> 5.75',
 			cost: 30,
 			unlocked() { return player.ei.upgrades.length >= 29 },
@@ -5736,7 +5735,7 @@ addLayer('ei', {
 				player.ei.power = newDecimalZero();
 			},
 			rewardDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'evil influence resets nothing, all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>power gain by ^1.075'
+				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'evil influence resets nothing, all <b' + getColorClass(this, "s", REF) + 'Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>power gain by ^1.075'
 				return 'evil influence resets nothing, all <b>Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>power gain by ^1.075'
 			},
 			doReset: true,
@@ -5768,7 +5767,7 @@ addLayer('ei', {
 				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-ei">And Repeat';
 				return '<h3>And Repeat';
 			},
-			challengeDescription() { return 'Endure the negative effects of all the other <b class="layer-ei' + getdark(this, "ref", true, true) + 'Gate of Evil</b> challenges. It is recommended to turn the evil influence upgrade autobuyer off.<br>' },
+			challengeDescription() { return 'Endure the negative effects of all the other <b' + getColorClass(this, "ei", REF) + 'Gate of Evil</b> challenges. It is recommended to turn the evil influence upgrade autobuyer off.<br>' },
 			goalDescription: '1e500 evil power and 144 relics<br>',
 			canComplete() { return player.ei.power.gte('1e500') && player.r.points.gte(144) },
 			onEnter() {
@@ -5900,13 +5899,13 @@ addLayer('w', {
 		},
 		1: {
 			requirementDescription: '2 wars',
-			effectDescription() { return 'keep good influence milestones on war resets, you can autobuy evil influence upgrades, perform good influence resets automatically, and unlock a new <b class="layer-ei' + getdark(this, "ref", true, true) + 'Gate of Evil</b> challenge' },
+			effectDescription() { return 'keep good influence milestones on war resets, you can autobuy evil influence upgrades, perform good influence resets automatically, and unlock a new <b' + getColorClass(this, "ei", REF) + 'Gate of Evil</b> challenge' },
 			done() { return player.w.points.gte(2) },
 			toggles: [['ei', 'auto_upgrades']],
 		},
 		2: {
 			requirementDescription: '3 wars',
-			effectDescription() { return 'keep evil influence milestones and activated relics on war resets, you can autobuy molecule upgrades, and all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk buy 2x' },
+			effectDescription() { return 'keep evil influence milestones and activated relics on war resets, you can autobuy molecule upgrades, and all <b' + getColorClass(this, "s", REF) + 'Devotion</b> autobuyers can bulk buy 2x' },
 			done() { return player.w.points.gte(3) },
 			toggles: [['m', 'auto_upgrades']],
 		},
@@ -5991,7 +5990,7 @@ addLayer('w', {
 		14: {
 			requirementDescription: '18 wars',
 			effectDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 3 and you can autobuy <b class="layer-cl' + getdark(this, "ref", true, true) + 'Tissues</b>';
+				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 3 and you can autobuy <b' + getColorClass(this, "cl", REF) + 'Tissues</b>';
 				return 'increase the maximum bought of <b>Power of Good</b> by 3, and you can autobuy <b>Tissues</b>';
 			},
 			done() { return player.w.points.gte(18) },
@@ -6000,7 +5999,7 @@ addLayer('w', {
 		15: {
 			requirementDescription: '22 wars',
 			effectDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 12, and all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk buy 5x';
+				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 12, and all <b' + getColorClass(this, "s", REF) + 'Devotion</b> autobuyers can bulk buy 5x';
 				return 'increase the maximum bought of <b>Power of Good</b> by 12, and all <b>Devotion</b> autobuyers can bulk buy 5x';
 			},
 			done() { return player.w.points.gte(22) },
@@ -6008,7 +6007,7 @@ addLayer('w', {
 		16: {
 			requirementDescription: '24 wars',
 			effectDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 28, reduce <b class="layer-w-dark">Power of Good</b> scaling, and unlock <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b>';
+				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 28, reduce <b class="layer-w-dark">Power of Good</b> scaling, and unlock <b' + getColorClass(this, "cl", REF) + 'Protein</b>';
 				return 'increase the maximum bought of <b>Power of Good</b> by 28, reduce <b>Power of Good</b> scaling, and unlock <b>Protein</b>';
 			},
 			done() { return player.w.points.gte(24) },
@@ -6029,13 +6028,13 @@ addLayer('w', {
 		},
 		19: {
 			requirementDescription: '64 wars',
-			effectDescription() { return 'increase passive protein gain by 10%, multiply passive protein gain by 100x, improve <b class="layer-cl' + getdark(this, "ref", true, true) + 'Passive Discovery</b>\'s effect formulas, and disable manual protein gain';
+			effectDescription() { return 'increase passive protein gain by 10%, multiply passive protein gain by 100x, improve <b' + getColorClass(this, "cl", REF) + 'Passive Discovery</b>\'s effect formulas, and disable manual protein gain';
 			},
 			done() { return player.w.points.gte(64) },
 		},
 		20: {
 			requirementDescription: '67 wars',
-			effectDescription() { return 'improve <b class="layer-cl' + getdark(this, "ref", true, true) + 'Passive Discovery</b>\'s effect formulas and <b class="layer-cl' + getdark(this, "ref", true, true) + 'Innate Evil</b>\'s effect formula';
+			effectDescription() { return 'improve <b' + getColorClass(this, "cl", REF) + 'Passive Discovery</b>\'s effect formulas and <b' + getColorClass(this, "cl", REF) + 'Innate Evil</b>\'s effect formula';
 			},
 			done() { return player.w.points.gte(67) },
 		},
@@ -6317,18 +6316,18 @@ addLayer('cl', {
 		},
 		1: {
 			requirementDescription: '2 total cellular life',
-			effectDescription() { return 'cellular life doesn\'t reset relics, unlock option to disable exta <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyer speed, but make all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers bulk buy 100x, and unlock another <b class="layer-cl' + getdark(this, "ref", true, true) + 'Tissue</b>' },
+			effectDescription() { return 'cellular life doesn\'t reset relics, unlock option to disable exta <b' + getColorClass(this, "s", REF) + 'Devotion</b> autobuyer speed, but make all <b' + getColorClass(this, "s", REF) + 'Devotion</b> autobuyers bulk buy 100x, and unlock another <b' + getColorClass(this, "cl", REF) + 'Tissue</b>' },
 			done() { return player.cl.total.gte(2) },
 			toggles: [['s', 'no_speed_but_more_bulk']],
 		},
 		2: {
 			requirementDescription: '4 total cellular life',
-			effectDescription() { return 'cellular life doesn\'t reset cores, and all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk buy 2x' },
+			effectDescription() { return 'cellular life doesn\'t reset cores, and all <b' + getColorClass(this, "s", REF) + 'Devotion</b> autobuyers can bulk buy 2x' },
 			done() { return player.cl.total.gte(4) },
 		},
 		3: {
 			requirementDescription: '6 total cellular life',
-			effectDescription() { return 'cellular life doesn\'t reset evil influence, keep demon soul challenge completions on cellular life resets, and unlock another <b class="layer-cl' + getdark(this, "ref", true, true) + 'Tissue</b>' },
+			effectDescription() { return 'cellular life doesn\'t reset evil influence, keep demon soul challenge completions on cellular life resets, and unlock another <b' + getColorClass(this, "cl", REF) + 'Tissue</b>' },
 			done() { return player.cl.total.gte(6) },
 		},
 		4: {
@@ -6358,7 +6357,7 @@ addLayer('cl', {
 		},
 		9: {
 			requirementDescription: '214 total cellular life',
-			effectDescription() { return 'unlock another <b class="layer-cl' + getdark(this, "ref", true, true) + 'Tissue</b>' },
+			effectDescription() { return 'unlock another <b' + getColorClass(this, "cl", REF) + 'Tissue</b>' },
 			done() { return player.cl.total.gte(214) },
 		},
 		10: {
@@ -6383,7 +6382,7 @@ addLayer('cl', {
 				if (x.gte(10)) return x.mul(2).sub(8);
 				return x.add(1);
 			},
-			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Nervous Tissue' },
+			title() { return '<b' + getColorClass(this, "cl", TITLE) + 'Nervous Tissue' },
 			description: 'exponentiates core gain multiplier and multiplies atom gain based on the amount of this upgrade bought.',
 			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 750,
@@ -6400,7 +6399,7 @@ addLayer('cl', {
 				if (x.gte(10)) return x.mul(2).sub(8);
 				return x.add(1);
 			},
-			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Muscle Tissue' },
+			title() { return '<b' + getColorClass(this, "cl", TITLE) + 'Muscle Tissue' },
 			description: 'exponentiates demon soul gain multiplier and multiplies cellular life gain based on the amount of this upgrade bought.',
 			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 750,
@@ -6418,7 +6417,7 @@ addLayer('cl', {
 				if (x.gte(10)) return x.mul(2).sub(8);
 				return x.add(1);
 			},
-			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Epithelial Tissue' },
+			title() { return '<b' + getColorClass(this, "cl", TITLE) + 'Epithelial Tissue' },
 			description: 'exponentiates subatomic particle gain multiplier and multiplies cellular life gain based on the amount of this upgrade bought.',
 			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 750,
@@ -6433,7 +6432,7 @@ addLayer('cl', {
 		},
 		21: {
 			cost(x) { return x.mul(10).add(10) },
-			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Connective Tissue' },
+			title() { return '<b' + getColorClass(this, "cl", TITLE) + 'Connective Tissue' },
 			description: 'exponentiates essence gain multiplier and exponentiates core gain multiplier based on the amount of this upgrade bought.',
 			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 400,
@@ -6448,7 +6447,7 @@ addLayer('cl', {
 		},
 		31: {
 			cost(x) { return x.mul(100).add(1000) },
-			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Practice Makes Perfect' },
+			title() { return '<b' + getColorClass(this, "cl", TITLE) + 'Practice Makes Perfect' },
 			description: 'increases protein found from cellular life based on your best cellular life and the amount of this upgrade bought.',
 			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 1e9,
@@ -6462,7 +6461,7 @@ addLayer('cl', {
 		},
 		32: {
 			cost(x) { return new Decimal(1.5).pow(x).mul(10000) },
-			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Result Analyzing' },
+			title() { return '<b' + getColorClass(this, "cl", TITLE) + 'Result Analyzing' },
 			description: 'multiplies protein found from cellular life based on your wars and the amount of this upgrade bought.',
 			canAfford() { return player.cl.protein.gte(this.cost()) },
 			purchaseLimit: 1e9,
@@ -6477,7 +6476,7 @@ addLayer('cl', {
 		},
 		33: {
 			cost(x) { return new Decimal(10).pow(x).mul(1000000) },
-			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Synergizing' },
+			title() { return '<b' + getColorClass(this, "cl", TITLE) + 'Synergizing' },
 			description: 'multiplies atom gain based on the amount of this upgrade bought.',
 			canAfford() { return player.cl.protein.gte(this.cost()) },
 			purchaseLimit: 1e9,
@@ -6495,7 +6494,7 @@ addLayer('cl', {
 				if (player.h.limitsBroken >= 2) return new Decimal(1e10).pow(x);
 				return new Decimal(10).pow(x).mul(1e45);
 			},
-			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Deeper Comprehension' },
+			title() { return '<b' + getColorClass(this, "cl", TITLE) + 'Deeper Comprehension' },
 			description: 'multiplies protein found from cellular life based on the amount of this upgrade bought.',
 			canAfford() { return player.m.points.gte(this.cost()) },
 			purchaseLimit() { return player.h.limitsBroken >= 2 ? 1e9 : 30 },
@@ -6510,7 +6509,7 @@ addLayer('cl', {
 		},
 		42: {
 			cost(x) { return new Decimal(100).pow(x).mul(1e14) },
-			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Intensive Research' },
+			title() { return '<b' + getColorClass(this, "cl", TITLE) + 'Intensive Research' },
 			description: 'multiplies protein found from cellular life based on the amount of this upgrade bought.',
 			canAfford() { return player.cl.protein.gte(this.cost()) },
 			purchaseLimit: 1e9,
@@ -6525,7 +6524,7 @@ addLayer('cl', {
 		},
 		43: {
 			cost(x) { return new Decimal(10).pow(x).mul(1e33) },
-			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Passive Discovery' },
+			title() { return '<b' + getColorClass(this, "cl", TITLE) + 'Passive Discovery' },
 			description: 'increases passive protein gain and multiplies protein found from cellular life based on the amount of this upgrade bought.',
 			canAfford() { return player.cl.protein.gte(this.cost()) },
 			purchaseLimit: 1e9,
@@ -6548,7 +6547,7 @@ addLayer('cl', {
 		},
 		51: {
 			cost(x) { return x.mul(500).add(4000) },
-			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'More Perfection' },
+			title() { return '<b' + getColorClass(this, "cl", TITLE) + 'More Perfection' },
 			description: 'multiplies protein found from cellular life based the amount of this upgrade bought.',
 			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 1e9,
@@ -6563,7 +6562,7 @@ addLayer('cl', {
 		},
 		52: {
 			cost(x) { return new Decimal(1e5).pow(x).mul(1e40) },
-			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'More Synergy' },
+			title() { return '<b' + getColorClass(this, "cl", TITLE) + 'More Synergy' },
 			description: 'multiplies atom gain based on the amount of this upgrade bought.',
 			canAfford() { return player.cl.protein.gte(this.cost()) },
 			purchaseLimit: 1e9,
@@ -6582,7 +6581,7 @@ addLayer('cl', {
 				if (hasMilestone('ch', 0)) return new Decimal(1e5).pow(x.div(2)).mul(1e50);
 				return new Decimal(1e5).pow(x).mul(1e50);
 			},
-			title() { return '<b class="layer-cl' + getdark(this, "title-buyable") + 'Innate Evil' },
+			title() { return '<b' + getColorClass(this, "cl", TITLE) + 'Innate Evil' },
 			description: 'multiplies evil influence gain based on the amount of this upgrade bought.',
 			canAfford() { return player.cl.protein.gte(this.cost()) },
 			purchaseLimit: 60,
@@ -6700,13 +6699,13 @@ addLayer('ch', {
 	milestones: {
 		0: {
 			requirementDescription: '1 chaos',
-			effectDescription() { return 'keep wars equal to your chaos on chaos resets, keep cellular life milestones on chaos resets, you can buy max wars, and reduce <b class="layer-cl' + getdark(this, "ref", true, true) + 'Innate Evil</b> cost scaling' },
+			effectDescription() { return 'keep wars equal to your chaos on chaos resets, keep cellular life milestones on chaos resets, you can buy max wars, and reduce <b' + getColorClass(this, "cl", REF) + 'Innate Evil</b> cost scaling' },
 			done() { return player.ch.points.gte(1) },
 		},
 		1: {
 			requirementDescription: '2 chaos',
 			effectDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'keep war milestones on chaos resets, unlock <b class="layer-ch">The Tides</b>, and you can autobuy the first three <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b> rebuyables individually';
+				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'keep war milestones on chaos resets, unlock <b class="layer-ch">The Tides</b>, and you can autobuy the first three <b' + getColorClass(this, "cl", REF) + 'Protein</b> rebuyables individually';
 				return 'keep war milestones on chaos resets, unlock <b>The Tides</b>, and you can autobuy the first three <b>Protein</b> rebuyables individually';
 			},
 			done() { return player.ch.points.gte(2) },
@@ -6737,7 +6736,7 @@ addLayer('ch', {
 		},
 		6: {
 			requirementDescription: '9 chaos',
-			effectDescription() { return 'the good influence rebuyable autobuyer is 2x faster, and you can autobuy the fourth to sixth <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b> rebuyables individually' },
+			effectDescription() { return 'the good influence rebuyable autobuyer is 2x faster, and you can autobuy the fourth to sixth <b' + getColorClass(this, "cl", REF) + 'Protein</b> rebuyables individually' },
 			done() { return player.ch.points.gte(9) },
 			toggles: [['cl', 'auto_buyable_41'], ['cl', 'auto_buyable_42'], ['cl', 'auto_buyable_43']],
 		},
@@ -6745,7 +6744,7 @@ addLayer('ch', {
 			requirementDescription: '13 chaos',
 			effect() { return player.ch.points.sub(10).max(0).mul(2.25).floor() },
 			effectDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'you can autobuy the seventh to ninth <b class="layer-cl' + getdark(this, "ref", true, true) + 'Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b class="layer-w-dark">Race for Knowledge</b> by 2.25, rounded down (currently +' + formatWhole(milestoneEffect('ch', 7)) + ')';
+				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'you can autobuy the seventh to ninth <b' + getColorClass(this, "cl", REF) + 'Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b class="layer-w-dark">Race for Knowledge</b> by 2.25, rounded down (currently +' + formatWhole(milestoneEffect('ch', 7)) + ')';
 				else return 'you can autobuy the seventh to ninth <b>Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b>Race for Knowledge</b> by 2.25, rounded down (currently +' + formatWhole(milestoneEffect('ch', 7)) + ')';
 			},
 			done() { return player.ch.points.gte(13) },
@@ -6761,13 +6760,13 @@ addLayer('ch', {
 		},
 		9: {
 			requirementDescription: '19 chaos',
-			effectDescription() { return 'keep wars equal to five times your chaos on chaos resets, all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk buy 5x, and the good influence rebuyable autobuyer is 2x faster' },
+			effectDescription() { return 'keep wars equal to five times your chaos on chaos resets, all <b' + getColorClass(this, "s", REF) + 'Devotion</b> autobuyers can bulk buy 5x, and the good influence rebuyable autobuyer is 2x faster' },
 			done() { return player.ch.points.gte(19) },
 		},
 		10: {
 			requirementDescription: '24 chaos',
 			effectDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'keep wars equal to ten times your chaos on chaos resets, all <b class="layer-s' + getdark(this, "ref", true, true) + 'Devotion</b> autobuyers can bulk buy 2x, and when you buy an <b class="layer-w-dark">Influence</b>, you do not spend any currency, instead you gain total amount(s) of the kind(s) of currency spent equal to its cost';
+				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'keep wars equal to ten times your chaos on chaos resets, all <b' + getColorClass(this, "s", REF) + 'Devotion</b> autobuyers can bulk buy 2x, and when you buy an <b class="layer-w-dark">Influence</b>, you do not spend any currency, instead you gain total amount(s) of the kind(s) of currency spent equal to its cost';
 				else return 'keep wars equal to ten times your chaos on chaos resets, all <b>Devotion</b> autobuyers can bulk buy 2x, and when you buy an <b>Influence</b>, you do not spend any currency, instead you gain total amount(s) of the kind(s) of currency spent equal to its cost';
 			},
 			done() { return player.ch.points.gte(24) },
@@ -6862,7 +6861,7 @@ addLayer('ch', {
 		},
 		22: {
 			requirementDescription: '59 chaos',
-			effectDescription() { return 'you can autobuy the third and fourth quark rebuyables and the <b class="layer-cl' + getdark(this, "ref", true, true) + 'Result Analyzing</b> autobuyer is 2x faster' },
+			effectDescription() { return 'you can autobuy the third and fourth quark rebuyables and the <b' + getColorClass(this, "cl", REF) + 'Result Analyzing</b> autobuyer is 2x faster' },
 			done() { return player.ch.points.gte(59) },
 			toggles: [['q', 'auto_buyable_13'], ['q', 'auto_buyable_21']],
 			unlocked() { return player.mo.unlocked },
@@ -6906,7 +6905,7 @@ addLayer('ch', {
 		},
 		28: {
 			requirementDescription: '82 chaos',
-			effectDescription() { return 'you can autobuy <b class="layer-a' + getdark(this, "ref", true, true) + 'Atomic Reactor</b>s and good influence upgrades' },
+			effectDescription() { return 'you can autobuy <b' + getColorClass(this, "a", REF) + 'Atomic Reactor</b>s and good influence upgrades' },
 			done() { return player.ch.points.gte(82) },
 			toggles: [['a', 'auto_reactor'], ['gi', 'auto_upgrades']],
 			unlocked() { return player.mo.unlocked },
@@ -6939,7 +6938,7 @@ addLayer('ch', {
 			rewardEffect() { return challengeCompletions('ch', this.id) / 100 + 1 },
 			rewardDisplay(eff) {
 				let text = '^' + format(eff);
-				if (options.nerdMode) text += '<br>formula: (x/100)+1';
+				if (options.nerdMode) text += '<br>formula: x/100+1';
 				return text;
 			},
 			doReset: true,
@@ -7042,7 +7041,7 @@ addLayer('mo', {
 	},
 	clickables: {
 		11: {
-			title() { return '<b class="layer-mo' + getdark(this, "clickable") + 'Assimilation' },
+			title() { return '<b' + getColorClass(this, "mo", TITLE) + 'Assimilation' },
 			display() {
 				if (player.mo.assimilating !== null) return '<br>Currently Assimilating: ' + tmp[player.mo.assimilating].name + '.<br><br>Click to exit the run.';
 				else if (getClickableState('mo', 11)) return '<br>You are in an Assimilation Search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click here to exit the search.';
@@ -7077,7 +7076,7 @@ addLayer('mo', {
 			cost(x) { return x.div(2).add(1).mul(18) },
 			effect(x) { return new Decimal(1000).pow(x) },
 			title() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<b class="layer-a">Atom</b> <b class="layer-mo' + getdark(this, "title-buyable") + 'Synergy';
+				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<b class="layer-a">Atom</b> <b' + getColorClass(this, "mo", TITLE) + 'Synergy';
 				return '<b>Atom</b> <b>Synergy';
 			},
 			description: 'multiplies atom gain based on the amount of this upgrade bought.',
@@ -7095,7 +7094,7 @@ addLayer('mo', {
 			cost(x) { return x.add(1).pow(2).add(50) },
 			effect(x) { return new Decimal(2).pow(x) },
 			title() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<b class="layer-s">Sanctum</b> <b class="layer-mo' + getdark(this, "title-buyable") + 'Synergy';
+				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<b class="layer-s">Sanctum</b> <b' + getColorClass(this, "mo", TITLE) + 'Synergy';
 				return '<b>Sanctum</b> <b>Synergy';
 			},
 			description: 'multiplies sanctum gain based on the amount of this upgrade bought.',
@@ -7113,7 +7112,7 @@ addLayer('mo', {
 			cost(x) { return x.add(1).pow(3).add(106) },
 			effect(x) { return new Decimal(1.1).pow(x) },
 			title() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<b class="layer-gi">Good Influence</b> <b class="layer-mo' + getdark(this, "title-buyable") + 'Synergy';
+				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<b class="layer-gi">Good Influence</b> <b' + getColorClass(this, "mo", TITLE) + 'Synergy';
 				return '<b>Sanctum</b> <b>Synergy';
 			},
 			description: 'multiplies good influence gain based on the amount of this upgrade bought.',

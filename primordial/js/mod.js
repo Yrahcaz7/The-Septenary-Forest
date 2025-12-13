@@ -183,33 +183,42 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added a rebuyable.<br>
 <br>`;
 
-function getdark(darkthis, type, special = false, research = false) {
-	if (darkthis.layer !== undefined) {
-		if (colorValue[1] == 'dark') return '-dark">';
-		if (colorValue[1] == 'none') return '-OFF">';
-		if (((type == 'title' || type == 'title-hasend') && colorValue[0][0]) || (type == 'ref' && colorValue[0][1])) {
-			if (research) return '">';
-			else {
-				let darkcanafford = false;
-				if (special) darkcanafford = darkthis.canAfford();
-				else darkcanafford = player[darkthis.layer].points.gte(darkthis.cost);
-				if ((darkcanafford && !hasUpgrade(darkthis.layer, darkthis.id)) || (type == 'title-hasend' && hasUpgrade(darkthis.layer, darkthis.id))) return '-dark">';
-			};
-		} else if ((type == 'title-light' && colorValue[0][0]) || (type == 'ref-light' && colorValue[0][1])) {
-			let darkcanafford = false;
-			if (special) darkcanafford = darkthis.canAfford();
-			else darkcanafford = player[darkthis.layer].points.gte(darkthis.cost);
-			if (darkcanafford && !hasUpgrade(darkthis.layer, darkthis.id)) return '-dark">';
-			return '-light">';
-		} else if (type == 'title-buyable' && colorValue[0][0]) {
-			if (darkthis.canBuy()) return '-dark">';
-		} else if (type == 'clickable' && colorValue[0][0]) {
-			if (darkthis.canClick()) return '-dark">';
-		} else {
-			return '-OFF">';
-		};
+const TITLE = 0;
+const REF = 1;
+
+/**
+ * Gets the class HTML attribute for a colored text element.
+ * @param {{}} obj - The TMT object that the element belongs to.
+ * @param {string} layer - The layer to apply the color of to the element.
+ * @param {TITLE | REF} type - The type of the element (title or reference).
+ * @param {boolean} plain - If `true`, does not consider the darker version of the layer color.
+ */
+function getColorClass(obj, layer, type, plain = false) {
+	if (!colorValue[0][type] || colorValue[1] == "none" || obj.layer === undefined || obj.id === undefined) {
+		return ">";
 	};
-	return '">';
+	if (colorValue[1] == "dark" || layer == "h" || layer == "w") {
+		return ` class="layer-${layer}-dark">`;
+	};
+	const darkMax = (layer == "r");
+	let isDark = false;
+	if (plain) {
+		isDark = false;
+	} else if (obj.canBuy !== undefined) { // buyables
+		const maxedBuyable = player[obj.layer].buyables[obj.id].gte(tmp[obj.layer].buyables[obj.id].purchaseLimit);
+		isDark = (tmp[obj.layer].buyables[obj.id].canBuy && !maxedBuyable || (darkMax && maxedBuyable));
+	} else if (obj.challengeDescription !== undefined) { // challenges
+		isDark = (darkMax && maxedChallenge(obj.layer, obj.id));
+	} else if (obj.canClick !== undefined) { // clickables
+		isDark = (tmp[obj.layer].clickables[obj.id].canClick);
+	} else if (obj.requirementDescription !== undefined) { // milestones
+		isDark = (darkMax && hasMilestone(obj.layer, obj.id));
+	} else { // upgrades
+		isDark = ((canAffordUpgrade(obj.layer, obj.id) && !hasUpgrade(obj.layer, obj.id)) || (darkMax && hasUpgrade(obj.layer, obj.id)));
+	};
+	if (isDark) return ` class="layer-${layer}-dark">`;
+	if (layer == "m") return ` class="layer-${layer}-light">`;
+	return ` class="layer-${layer}">`;
 };
 
 function getDevotionBulk() {
