@@ -3,12 +3,12 @@ let temp = tmp; // Proxy for tmp
 let funcs = {};
 let NaNalert = false;
 
-// Tmp will not call these
+// `tmp` will not call these
 let activeFunctions = [
 	"startData", "onPrestige", "doReset", "update", "automate",
 	"buy", "buyMax", "respec", "onPress", "onClick", "onHold", "masterButtonPress",
 	"sellOne", "sellAll", "pay", "actualCostFunction", "actualEffectFunction",
-	"effectDescription", "display", "fullDisplay", "effectDisplay", "rewardDisplay",
+	"effectDescription", "effectDisplay", "costDisplay", "boughtDisplay", "rewardDisplay", "display", "fullDisplay",
 	"tabFormat", "content",
 	"onComplete", "onPurchase", "onEnter", "onExit", "done",
 	"getUnlocked", "getStyle", "getCanClick", "getTitle", "getDisplay", "getEffect",

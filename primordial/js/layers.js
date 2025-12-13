@@ -1905,7 +1905,10 @@ addLayer('h', {
 					if (colorValue[1] !== 'none' && colorValue[0][1]) text += 'Next effect: you have broken all the limits!<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b><br><b class="layer-cl-dark">Deeper Comprehension</b><br><b class="layer-q-dark">Sample Quarks</b><br><b class="layer-gi">Better Good</b>';
 					else text += 'Next effect: you have broken all the limits!<br><br>Limits broken:<br><b>Power of Good</b><br><b>Deeper Comprehension</b><br><b>Sample Quarks</b><br><b>Better Good</b>';
 				};
-				return text + '<br><br>Effect on evil influence gain: /' + format(tmp.h.clickables[11].nerf) + '<br><br>Req: ' + formatWhole(tmp.h.clickables[11].req[0]) + ' achievements and ' + formatWhole(tmp.h.clickables[11].req[1]) + ' evil influence';
+				text += '<br><br>Effect on evil influence gain: /' + format(tmp.h.clickables[11].nerf);
+				text += '<br><br>Req: ' + formatWhole(tmp.h.clickables[11].req[0]) + ' achievements and ' + formatWhole(tmp.h.clickables[11].req[1]) + ' evil influence';
+				text += '<br><br>Bought: ' + formatWhole(player.h.limitsBroken) + '/' + formatWhole(this.reqLayers.length);
+				return text;
 			},
 			reqLayers: [79900, 33133, 20900, 22888],
 			req() { return [92 + player.h.limitsBroken, this.reqLayers[player.h.limitsBroken] || Infinity] },
@@ -1926,7 +1929,14 @@ addLayer('h', {
 				player.ei.upgrades = [];
 				player.h.limitsBroken++;
 			},
-			style: {height: '300px', width: '300px'},
+			style() {
+				let obj = {width: "300px", height: "300px"};
+				if (getClickableState('a', 11) >= this.reqLayers.length) {
+					obj["background-color"] = "#77bf5f";
+					obj.cursor = "default";
+				};
+				return obj;
+			},
 		},
 		21: {
 			title() { return '<b' + getColorClass(this, "h", TITLE) + 'Reset Breaking' },
@@ -2797,7 +2807,14 @@ addLayer('a', {
 				player.a.points = player.a.points.sub(this.cost());
 				setClickableState('a', 11, (getClickableState('a', 11) || 0) + 1);
 			},
-			style: {height: '300px', width: '300px'},
+			style() {
+				let obj = {width: "300px", height: "300px"};
+				if (getClickableState('a', 11) >= this.upgrades.length) {
+					obj["background-color"] = "#77bf5f";
+					obj.cursor = "default";
+				};
+				return obj;
+			},
 		},
 		21: {
 			title() {
@@ -4342,11 +4359,11 @@ addLayer('r', {
 			completionLimit() { return player.r.points.toNumber() },
 			style() {
 				const num = player.r.light.add(1).log(2).div(player.r.lightreq.add(1).log(2)).mul(100).floor();
-				let bgcolor = 'rgb(' + num + ',' + num + ',' + (num + 100) + ')';
-				if (num.gt(100)) bgcolor = 'rgb(100,100,200)';
+				let BGcolor = 'rgb(' + num + ',' + num + ',' + (num + 100) + ')';
+				if (num.gt(100)) BGcolor = 'rgb(100,100,200)';
 				let textColor = '#B9A975';
 				if (colorValue[1] == 'none') textColor = '#DFDFDF';
-				return {'background-color':bgcolor, color:textColor, 'border-radius':'70px', height:'450px', width:'450px'};
+				return {width: '450px', height: '450px', 'background-color': BGcolor, color: textColor, 'border-radius': '70px'};
 			},
 		},
 	},
