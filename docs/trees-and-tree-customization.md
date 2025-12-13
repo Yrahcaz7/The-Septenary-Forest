@@ -2,7 +2,7 @@
 
 If you want to have something beyond the standard tree on the left tab, you can do that in [tree.js](/js/tree.js). You can change the layout of the tree, including making non-layer nodes, change it into something other than a tree, or hide the left tab altogether. This also introduces the "tree" component, which can be used in your layers as well.
 
-## layoutInfo
+## `layoutInfo`
 
 The most important part is `layoutInfo`, containing:
 
@@ -14,11 +14,9 @@ The most important part is `layoutInfo`, containing:
 
 - `treeLayout`: If present, overrides the tree layout and places nodes as you describe instead (explained in the next section).
 
+> - `orderBranches` (additional feature): If `true`, the branch drawing is done in order according to their colors. (The theme colors are drawn first, in order: 0, then 1, then 2. Custom colors are drawn last and thus are always on top).
+
 Additionally, if you want the main layout to not be a tree, you can edit the "tree-tab" layer at the bottom of tree.js to modify it just like a normal layer's tab. You can even switch between left tabs, using `showNavTab(layer)` to make that layer appear on the left.
-
-Additional features:
-
-- `orderBranches`: True if the branch drawing should be done in order according to their colors. (The theme colors are drawn first, in order: 0, then 1, then 2. Custom colors are drawn last and thus are always on top).
 
 ## Trees
 
@@ -56,8 +54,7 @@ Features:
 
 - `row`: **optional**. The row that this node appears in (for the default tree).
 
-- `position`: **optional**. Determines the horizontal position of the layer in its row in a default tree. By default, it uses the id,
-and layers/nodes are sorted in alphabetical order.
+- `position`: **optional**. Determines the horizontal position of the layer in its row in a default tree. By default, it uses the id, and layers/nodes are sorted in alphabetical order.
 
 ## Overriding functions (additional features)
 

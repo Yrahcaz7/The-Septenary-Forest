@@ -50,7 +50,7 @@ Normal subtabs and microtab subtabs both use the same features:
 
 - `unlocked()`: **optional**. A function to determine if the button for this subtab should be visible. By default, a subtab is always unlocked. You can't use the "this" keyword in this function.
 
-- `shouldNotify()` / `prestigeNotify()`: **optional**. If true, the tab button will be highlighted to notify the player that there is something there.
+- `shouldNotify()`, `prestigeNotify()`: **optional**. If true, the tab button will be highlighted to notify the player that there is something there.
 
 - `glowColor`: **optional**. Specifies the color that the subtab glows. If this subtab is causing the main layer to node glow (and it wouldn't otherwise) the node also glows this color. Is NOT overridden by embedding a layer.
 

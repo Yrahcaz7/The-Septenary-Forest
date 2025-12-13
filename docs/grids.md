@@ -10,9 +10,9 @@ Grids are an easier way of making a group of similar clickables. They all have t
 
 Useful functions for dealing with grids:
 
-- `getGridData(layer, id)`: get the data for the chosen gridable
-- `setGridData(layer, id, state)`: set the data for the chosen gridable
-- `gridEffect(layer, id)`: get the effect for the chosen gridable
+- `getGridData(layer, id)`: Gets the data for the chosen gridable
+- `setGridData(layer, id, state)`: Sets the data for the chosen gridable
+- `gridEffect(layer, id)`: Gets the effect for the chosen gridable
 
 The grid should be formatted like this:
 
@@ -67,6 +67,4 @@ Features:
 
 - `layer`: **assigned automagically**. It's the same value as the name of this layer, so you can do `player[this.layer].points` or similar.
 
-Additional features:
-
-- `needLayerUnlocked`: **optional**. If this is false, the layer need not be unlocked for the player to click gridables.
+> - `needLayerUnlocked` (additional feature): **optional**. If this is false, the layer need not be unlocked for the player to click gridables.

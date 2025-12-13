@@ -6,7 +6,7 @@ You can make global achievements by putting them in a side layer by making its r
 
 Useful functions for dealing with achievements and implementing their effects:
 
-- `hasAchievement(layer, id)`: determine if the player has the Achievement.
+- `hasAchievement(layer, id)`: Determines if the player has the achievement.
 - `achievementEffect(layer, id)`: Returns the current effects of the achievement, if any.
 
 Achievements should be formatted like this:
@@ -15,7 +15,8 @@ Achievements should be formatted like this:
 achievements: {
     11: {
         name: "Blah",
-        more features
+        tooltip: "Do things. Reward: stuff",
+        etc
     },
     etc
 }
@@ -23,7 +24,7 @@ achievements: {
 
 Usually, each achievement should have an id where the first digit is the row and the second digit is the column.
 
-Individual achievement can have these features:
+Achievement features:
 
 - `name`: **optional**. displayed at the top of the achievement. The only visible text. It can also be a function that returns updating text. Can use basic HTML.
 
@@ -51,10 +52,10 @@ Individual achievement can have these features:
 
 - `doneTooltip`: **optional, deprecated**. Appears when the achievement is hovered over and completed, overrides the basic tooltip. This can display what the player achieved (the goal), and the rewards, if any. It can also be a function that returns updating text. Can use basic HTML.
 
-Disable achievement popups by adding `achievementsPopups: false` to the layer.
+Popup features:
 
-Additional features:
+> - `popupTitle` (additional feature): **optional**. The title of the popup generated when the achievement is gotten. If not present, the popup's title is "Achievement Unlocked!"
+>
+> - `popupColor` (additional feature): **optional**. The color of the popup generated when the achievement is gotten. If not present, the popup's color is the layer's color.
 
-- `popupTitle`: **optional**. The title of the popup generated when the achievement is gotten. If not present, the popup's title is "Achievement Unlocked!"
-
-- `popupColor`: **optional**. The color of the popup generated when the achievement is gotten. If not present, the popup's color is the layer's color.
+You can disable achievement popups by adding `achievementsPopups: false` to the layer.

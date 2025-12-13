@@ -312,11 +312,12 @@ function getPointGen() {
 	if (challengeCompletions('r', 11) >= 2) gain = gain.mul(tmp.r.effect[2]);
 	if (hasUpgrade('ds', 21) && hasUpgrade('ds', 24)) gain = gain.mul(player.A.points.mul(0.2));
 	else gain = gain.mul(player.A.points.mul(0.1).add(1));
-	if (inChallenge('ds', 11)) gain = gain.mul(0.0001);
-	if (inChallenge('ds', 12)) gain = gain.mul(0.000001);
-	if (inChallenge('ds', 21)) gain = gain.mul(0.0000000001);
-	if (inChallenge('ds', 22)) gain = gain.mul(0.0000000001);
 	if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[0]);
+	// div
+	if (inChallenge('ds', 11)) gain = gain.div(10_000);
+	if (inChallenge('ds', 12)) gain = gain.div(1_000_000);
+	if (inChallenge('ds', 21)) gain = gain.div(1e10);
+	if (inChallenge('ds', 22)) gain = gain.div(1e10);
 	// pow
 	if (hasUpgrade('q', 63)) gain = gain.pow(upgradeEffect('q', 63));
 	if (challengeCompletions('ch', 11) > 0) gain = gain.pow(challengeEffect('ch', 11));

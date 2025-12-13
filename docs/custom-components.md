@@ -1,4 +1,4 @@
-# Custom components
+# Custom components (additional feature)
 
 You can create custom components to use in [custom tab layouts](custom-tab-layouts.md) by adding the `customComponents` constant to your code.
 
@@ -8,9 +8,9 @@ I recommend creating a new `components.js` file to keep your custom components i
 
 ```js
 const customComponents = {
-    'assimilate-button': {
-        props: ['layer', 'data'],
-        data() {return {canAssimilate, player, assimilationReq, tmp, format, completeAssimilation}},
+    "assimilate-button": {
+        props: ["layer", "data"],
+        data() { return {canAssimilate, player, assimilationReq, tmp, format, completeAssimilation} },
         template: template(`<button v-if="canAssimilate(layer) && player[data].assimilating === layer" :class="{
             [data]: true,
             reset: true,

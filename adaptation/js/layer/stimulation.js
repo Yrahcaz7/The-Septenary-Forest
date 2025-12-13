@@ -139,7 +139,7 @@ addLayer("s", {
 			title: "Calculation",
 			description: "increase base power gain based on the number of upgrades",
 			effect() {return player.s.upgrades.length * 3},
-			effectDisplay() {return "+" + format(this.effect())},
+			effectDisplay(eff) {return "+" + format(eff)},
 			cost() {
 				let cost = new Decimal(250);
 				if (!hasMilestone("g", 3) && !hasChallenge("e", 11)) cost = cost.div(buyableEffect("g", 14));
@@ -151,7 +151,7 @@ addLayer("s", {
 			title: "Intelligence",
 			description: "increase base power gain based on stimulations",
 			effect() {return player.s.points.add(1).log10().mul(100)},
-			effectDisplay() {return "+" + format(this.effect())},
+			effectDisplay(eff) {return "+" + format(eff)},
 			cost() {
 				let cost = new Decimal(1000);
 				if (!hasMilestone("g", 3) && !hasChallenge("e", 11)) cost = cost.div(buyableEffect("g", 14));
@@ -215,7 +215,7 @@ addLayer("s", {
 			title: "Hunting",
 			description: "multiply stimulation gain based on the number of upgrades",
 			effect() {return Math.max(player.s.upgrades.length ** 0.5, 1) },
-			effectDisplay() {return format(this.effect()) + "x"},
+			effectDisplay(eff) {return format(eff) + "x"},
 			currencyDisplayName: modInfo.pointsName,
 			currencyInternalName: "points",
 			cost() {
@@ -288,7 +288,7 @@ addLayer("s", {
 			title: "Calmness",
 			description: "multiply stimulation gain based on stimulations",
 			effect() {return player.s.points.add(1).log10().mul(0.5).add(1)},
-			effectDisplay() {return format(this.effect()) + "x"},
+			effectDisplay(eff) {return format(eff) + "x"},
 			currencyDisplayName: modInfo.pointsName,
 			currencyInternalName: "points",
 			cost: new Decimal(1e15),
@@ -298,7 +298,7 @@ addLayer("s", {
 			title: "Consumption",
 			description: "multiply power gain based on power",
 			effect() {return player.points.add(1).log10().mul(0.75).add(1)},
-			effectDisplay() {return format(this.effect()) + "x"},
+			effectDisplay(eff) {return format(eff) + "x"},
 			currencyDisplayName: modInfo.pointsName,
 			currencyInternalName: "points",
 			cost: new Decimal(2.5e16),
@@ -309,9 +309,9 @@ addLayer("s", {
 			description: "multiply stimulation gain based on power",
 			effect() {
 				if (hasUpgrade("s", 63)) return player.points.add(1).pow(0.05);
-				else return player.points.add(1).log10().mul(0.45).add(1);
+				return player.points.add(1).log10().mul(0.45).add(1);
 			},
-			effectDisplay() {return format(this.effect()) + "x"},
+			effectDisplay(eff) {return format(eff) + "x"},
 			currencyDisplayName: modInfo.pointsName,
 			currencyInternalName: "points",
 			cost: new Decimal(1e18),
@@ -322,9 +322,9 @@ addLayer("s", {
 			description: "multiply power gain based on stimulations",
 			effect() {
 				if (hasUpgrade("s", 64)) return player.s.points.add(1).pow(0.088);
-				else return player.s.points.add(1).log10().mul(1.5).add(1);
+				return player.s.points.add(1).log10().mul(1.5).add(1);
 			},
-			effectDisplay() {return format(this.effect()) + "x"},
+			effectDisplay(eff) {return format(eff) + "x"},
 			currencyDisplayName: modInfo.pointsName,
 			currencyInternalName: "points",
 			cost: new Decimal(5e19),
@@ -358,9 +358,9 @@ addLayer("s", {
 			description: "divide growth requirement based on your power",
 			effect() {
 				if (hasUpgrade("s", 62)) return player.points.mul(1e10).add(1).pow(0.05);
-				else return player.points.add(1).log10().mul(0.5).add(1);
+				return player.points.add(1).log10().mul(0.5).add(1);
 			},
-			effectDisplay() {return "/" + format(this.effect())},
+			effectDisplay(eff) {return "/" + format(eff)},
 			cost: new Decimal(2.5e23),
 			unlocked() {return ((hasMilestone("g", 3) && buyableEffect("g", 14).gte(8)) || hasChallenge("e", 11)) && !inChallenge("e", 13)},
 		},
@@ -379,9 +379,9 @@ addLayer("s", {
 				if (hasUpgrade("s", 61)) eff = player.g.points.add(1).pow(0.1).div(10);
 				else eff = player.g.points.add(1).log10().mul(0.036);
 				if (eff.gte(0.5)) return new Decimal(0.5);
-				else return eff;
+				return eff;
 			},
-			effectDisplay() {return "+" + format(this.effect()) + (this.effect().eq(0.5) ? " (max)" : "")},
+			effectDisplay(eff) {return "+" + format(eff) + (eff.gte(0.5) ? " (max)" : "")},
 			cost: new Decimal(2.5e28),
 			unlocked() {return ((hasMilestone("g", 3) && buyableEffect("g", 14).gte(10)) || hasChallenge("e", 11)) && !inChallenge("e", 13)},
 		},

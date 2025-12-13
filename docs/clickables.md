@@ -8,8 +8,8 @@ There are several differences between the two. One is that a buyable's saved dat
 
 Useful functions for dealing with clickables and implementing their effects:
 
-- `getClickableState(layer, id)`: get the state of the clickable the player has.
-- `setClickableState(layer, id, state)`: set the state of the clickable the player has.
+- `getClickableState(layer, id)`: Gets the state of the clickable the player has.
+- `setClickableState(layer, id, state)`: Sets the state of the clickable the player has.
 - `clickableEffect(layer, id)`: Returns the current effects of the clickable, if any.
 
 Clickables should be formatted like this:
@@ -52,9 +52,7 @@ Features:
 
 - `branches`: **optional**. This is primarially useful for clickable trees. An array of clickable ids. A line will appear from this clickable to all of the clickables in the list. Alternatively, an entry in the array can be a 2-element array consisting of the clickable id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). A third element in the array optionally specifies line width.
 
-Additional features:
-
-- `color`: **optional**. The background color of the clickable if it can be clicked. (A string in hex format with a `#`.) The default is the color of the layer the clickable belongs to. Can be a function.
+> - `color` (additional feature): **optional**. The background color of the clickable if it can be clicked. (A string in hex format with a `#`.) The default is the color of the layer the clickable belongs to. Can be a function.
 
 Master button features (you can use these features on the clickables object to add a button above all the clickables, for implementing a respec button or similar):
 
@@ -64,6 +62,6 @@ Master button features (you can use these features on the clickables object to a
 
 - `showMasterButton()`: **optional**. A function determining whether or not to show the button, if masterButtonPress is defined. Defaults to true if absent.
 
-Additional features on the main clickables object:
-
-- `needLayerUnlocked`: **optional**. If this is false, the layer need not be unlocked for the player to click clickables.
+> Additional features on the main clickables object:
+>
+> - `needLayerUnlocked`: **optional**. If this is false, the layer need not be unlocked for the player to click clickables.

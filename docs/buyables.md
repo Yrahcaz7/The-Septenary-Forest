@@ -6,11 +6,11 @@ The amount of a buyable owned is a `Decimal`.
 
 Useful functions for dealing with buyables and implementing their effects:
 
-- `getBuyableAmount(layer, id)`: get the amount of the buyable the player has.
-- `setBuyableAmount(layer, id, amount)`: set the amount of the buyable the player has.
-- `addBuyables(layer, id, amount)`: add to the amount of the buyable.
-- `hasBuyable(layer, id)`: returns true if the player has one or more of the buyable.
-- `buyableEffect(layer, id)`: returns the current effects of the buyable, if any.
+- `getBuyableAmount(layer, id)`: Gets the amount of the buyable the player has.
+- `setBuyableAmount(layer, id, amount)`: Sets the amount of the buyable the player has.
+- `addBuyables(layer, id, amount)`: Adds to the amount of the buyable.
+- `hasBuyable(layer, id)`: Returns `true` if the player has one or more of the buyable.
+- `buyableEffect(layer, id)`: Returns the current effects of the buyable, if any.
 
 Buyables should be formatted like this:
 

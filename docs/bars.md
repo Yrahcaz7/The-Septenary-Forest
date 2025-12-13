@@ -19,7 +19,7 @@ bars: {
 
 Features:
 
-- `direction`: UP, DOWN, LEFT, or RIGHT (not strings). Determines the direction that the bar is filled as it progresses. RIGHT means from left to right.
+- `direction`: `UP`, `DOWN`, `LEFT`, or `RIGHT` (not strings). Determines the direction that the bar is filled as it progresses. `RIGHT` means from left to right.
 
 - `width`, `height`: The size in pixels of the bar, but as numbers (no "px" at the end).
 

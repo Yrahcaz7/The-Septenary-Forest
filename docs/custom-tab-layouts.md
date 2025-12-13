@@ -10,7 +10,7 @@ tabFormat: [
     ["prestige-button"],
     "blank",
     ["display-text",
-        () => 'I have ' + format(player.points) + ' pointy points!',
+        () => "I have " + format(player.points) + " pointy points!",
         {color: "red", "font-size": "32px", "font-family": "Comic Sans MS"}],
     "blank",
     ["toggle", ["c", "beep"]],
@@ -41,14 +41,16 @@ These are the existing components, but you can [create more with `customComponen
 
 - `resource-display`: The text that displays the currency that this layer is based on, as well as the best and/or total values for this layer's prestige currency (if they are put in `startData` for this layer).
 
+> - `custom-resource-display` (additional feature): The same as `display-text`, but uses the formatting of `resource-display`.
+
 - `prestige-button`: The button to reset for a currency in this layer.
 
 - `text-input`: A text input box. The argument is the name of the variable in `player[layer]` that the input is for.
-    (Works with strings, numbers, and Decimals!)
+    (Works with strings, numbers, and `Decimal`s!)
 
 - `slider`: Lets the user input a value with a slider. The argument a 3-element array: `[name, min, max]`.
     The name is the name of the variable in `player[layer]` that the input is for, and min and max are the limits of the slider.
-    (Does not work for Decimal values)
+    (Does not work for `Decimal` values)
 
 - `drop-down`: Lets the user input a value with a dropdown menu. The argument a 2-element array: `[name, options]`.
     The name is the name of the variable in `player[layer]` that the input is for, and options is an array of strings for options you can use.
@@ -70,14 +72,10 @@ These are the existing components, but you can [create more with `customComponen
 
 - `grid`: Displays the gridable grid for the layer. If you need more than one grid, use a layer proxy. The argument is optional, and is a the list of rows this component should include, if it doesn't have all of them.
 
+> - `contained-grid` (additional feature): Displays the gridable grid for the layer in a contained div. The argument is required. The argument can either be the max width of the containing div or an array: `[max width, list of rows]`. If the argument only indicates the component's max width, the component includes all of the layer's grid rows.
+
 - `layer-proxy`: Lets you use components from another layer. The argument is a pair, `[layer, data]`, consisting of the id of the layer to proxy from, and the tabFormat for the components to show.
     (Note: you cannot use a microtab within a layer proxy)
-
-Additional components:
-
-- `custom-resource-display`: The same as `display-text`, but uses the formatting of `resource-display`.
-
-- `contained-grid`: Displays the gridable grid for the layer in a contained div. The argument is required. The argument can either be the max width of the containing div or an array: `[max width, list of rows]`. If the argument only indicates the component's max width, the component includes all of the layer's grid rows.
 
 ## Sub-componentss
 

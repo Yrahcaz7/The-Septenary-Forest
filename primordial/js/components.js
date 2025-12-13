@@ -1,7 +1,7 @@
 const customComponents = {
 	'assimilate-button': {
 		props: ['layer'],
-		data() {return {canAssimilate, player, assimilationReq, tmp, formatWhole, completeAssimilation}},
+		data() { return {canAssimilate, player, assimilationReq, tmp, formatWhole, completeAssimilation} },
 		template: template(`<button v-if="canAssimilate(layer) && player.mo.assimilating === layer" :class="{
 			mo: true,
 			reset: true,

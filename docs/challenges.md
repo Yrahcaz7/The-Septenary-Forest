@@ -2,10 +2,10 @@
 
 Challenges can have fully customizable win conditions. Useful functions for dealing with Challenges and implementing their effects:
 
-- `inChallenge(layer, id)`: determine if the player is in a given challenge (or another challenge on the same layer that counts as this one).
-- `hasChallenge(layer, id)`: determine if the player has completed the challenge.
-- `challengeCompletions(layer, id)`: determine how many times the player completed the challenge.
-- `maxedChallenge(layer, id)`: determines if the player has reached the maximum completions.
+- `inChallenge(layer, id)`: Determines if the player is in a given challenge (or another challenge on the same layer that counts as this one).
+- `hasChallenge(layer, id)`: Determines if the player has completed the challenge.
+- `challengeCompletions(layer, id)`: Determines how many times the player completed the challenge.
+- `maxedChallenge(layer, id)`: Determines if the player has reached the maximum completions.
 - `challengeEffect(layer, id)`: Returns the current effects of the challenge, if any.
 
 Challenges are stored in the following format:
@@ -38,7 +38,7 @@ Individual Challenges can have these features:
 
 - `rewardEffect()`: **optional**. A function that calculates and returns the current values of any bonuses from the reward. Can return a value or an object containing multiple values. Can use basic HTML.
 
-- `rewardDisplay()`: **optional**. A function that returns a display of the current effects of the reward with formatting. Default behavior is to just display the a number appropriately formatted.
+- `rewardDisplay()`: **optional**. A function that returns a display of the current effects of the reward with formatting. Default behavior is to just display the number appropriately formatted. (Additional feature: Can have an argument `eff`, which holds the current reward effect of the challenge.)
 
 - `fullDisplay()`: **OVERRIDE**. Overrides the other displays and descriptions, and lets you set the full text for the challenge. Can use basic HTML.
 
@@ -62,23 +62,23 @@ Individual Challenges can have these features:
 
 - `id`: **assigned automagically**. It's the "key" which the challenge was stored under, for convenient access. The challenge in the example's id is 11.
 
-Additional features:
-
-- `doReset`: **optional**. A boolean to determine if the challenge does a reset of its layer on enter and exit. Default is to not.
-
-- `noAutoExit`: **optional**. A boolean to determine if the challenge should stay active on resets. Default is to not.
-
-- `overrideResetsNothing`: **optional**. A boolean to determine if the challenge should still reset even if the layer's `resetsNothing` is true. Default is to not. This does not do anything unless `doReset` is true.
-
-- `canEnter()`: **optional**. A function returning a boolean to determine if the challenge is enterable. Default behavior is to always allow entering.
-
-- `canExit()`: **optional**. A function returning a boolean to determine if the challenge is exitable. Default behavior is to always allow exiting.
-
-- `buttonText`: **optional**. An array that replaces the default button text. It has the following syntax: [`replace "Finish"`, `replace "Exit Early"`, `replace "Completed"`, `replace "Start"`, `replace "Locked"`]. [Falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) values will be taken as you want the default for that value.
+> Additional features:
+>
+> - `doReset`: **optional**. A boolean to determine if the challenge does a reset of its layer on enter and exit. Default is to not.
+>
+> - `noAutoExit`: **optional**. A boolean to determine if the challenge should stay active on resets. Default is to not.
+>
+> - `overrideResetsNothing`: **optional**. A boolean to determine if the challenge should still reset even if the layer's `resetsNothing` is true. Default is to not. This does not do anything unless `doReset` is true.
+>
+> - `canEnter()`: **optional**. A function returning a boolean to determine if the challenge is enterable. Default behavior is to always allow entering.
+>
+> - `canExit()`: **optional**. A function returning a boolean to determine if the challenge is exitable. Default behavior is to always allow exiting.
+>
+> - `buttonText`: **optional**. An array that replaces the default button text. It has the following syntax: [`replace "Finish"`, `replace "Exit Early"`, `replace "Completed"`, `replace "Start"`, `replace "Locked"`]. [Falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) values will be taken as you want the default for that value.
 
 The old goal system uses these features:
 
-- `goal`: **deprecated**. A Decimal for the amount of currency required to beat the challenge. By default, the goal is in basic Points. The goal can also be a function if its value changes.
+- `goal`: **deprecated**. A `Decimal` for the amount of currency required to beat the challenge. By default, the goal is in basic points. The goal can also be a function if its value changes.
 
 - `currencyDisplayName`: **deprecated**. The name to display for the currency for the goal
 
@@ -88,6 +88,6 @@ The old goal system uses these features:
 
 - `currencyLocation()`: **deprecated**. If your currency is stored in something inside a layer (e.g. a buyable's amount), you can access it this way. This is a function returning the object in "player" that contains the value (like `player[this.layer].buyables`)
 
-Additional features on the main challenges object:
-
-- `needLayerUnlocked`: **optional**. If this is false, the layer need not be unlocked for the player to enter challenges.
+> Additional features on the main challenges object:
+>
+> - `needLayerUnlocked`: **optional**. If this is false, the layer need not be unlocked for the player to enter and exit challenges.

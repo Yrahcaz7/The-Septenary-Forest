@@ -2,7 +2,7 @@
 
 Useful functions for dealing with Upgrades and implementing their effects:
 
-- `hasUpgrade(layer, id)`: determine if the player has the upgrade.
+- `hasUpgrade(layer, id)`: Determines if the player has the upgrade.
 - `upgradeEffect(layer, id)`: Returns the current effects of the upgrade, if any.
 - `buyUpgrade(layer, id)`: Buys an upgrade directly (if affordable).
 
@@ -35,7 +35,7 @@ Individual upgrades can have these features:
 
 - `fullDisplay()`: **OVERRIDE**. Overrides the other displays and descriptions, and lets you set the full text for the upgrade. Can use basic HTML.
 
-- `cost`: **sort of optional** A Decimal for the cost of the upgrade. By default, upgrades cost the main prestige currency for the layer.
+- `cost`: **sort of optional** A `Decimal` for the cost of the upgrade. By default, upgrades cost the main prestige currency for the layer.
 
 - `unlocked()`: **optional**. A function returning a bool to determine if the upgrade is visible or not. Default is unlocked.
 
@@ -53,7 +53,7 @@ Individual upgrades can have these features:
 
 > - `color` (additional feature): **optional**. The background color of the upgrade if it can be purchased. (A string in hex format with a `#`.) The default is the color of the layer the upgrade belongs to. Can be a function.
 
-By default, upgrades use the main prestige currency for the layer. You can include these to change them (but it needs to be a Decimal):
+By default, upgrades use the main prestige currency for the layer. You can include these to change them (but it needs to be a `Decimal`):
 
 - `currencyDisplayName`: **optional**. The name to display for the currency for the upgrade.
 
@@ -63,7 +63,7 @@ By default, upgrades use the main prestige currency for the layer. You can inclu
 
 - `currencyLocation`: **optional**. If your currency is stored in something inside a layer (e.g. a buyable's amount), you can access it this way. This is a function returning the object in "player" that contains the value (like `player[this.layer].buyables`).
 
-If you want to do something more complicated like upgrades that cost two currencies, or have extra requirements, you can override the purchase system with these (and you need to use fullDisplay if you don't use "cost").
+If you want to do something more complicated like upgrades that cost two currencies, or have extra requirements, you can override the purchase system with these (and you need to use `fullDisplay()` if you don't use `cost`).
 
 - `canAfford()`: **OVERRIDE**. A function determining if you are able to buy the upgrade. (If you also have a cost, it will check both the cost and this function.)
 

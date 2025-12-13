@@ -247,7 +247,7 @@ function loadVue(mainPage = false) {
 				<span v-if="layers[layer].challenges[data].rewardDisplay !== undefined">
 					<br>
 					<span v-html="currentlyText"></span>
-					<span v-html="tmp[layer].challenges[data].rewardDisplay ? run(layers[layer].challenges[data].rewardDisplay, layers[layer].challenges[data]) : format(tmp[layer].challenges[data].rewardEffect)"></span>
+					<span v-html="tmp[layer].challenges[data].rewardDisplay ? run(layers[layer].challenges[data].rewardDisplay, layers[layer].challenges[data], tmp[layer].challenges[data].rewardEffect) : format(tmp[layer].challenges[data].rewardEffect)"></span>
 				</span>
 			</span>
 			<node-mark :layer="layer" :data='tmp[layer].challenges[data].marked' :offset="20" :scale="1.5"></node-mark>
@@ -331,7 +331,7 @@ function loadVue(mainPage = false) {
 			done: hasMilestone(layer, data),
 		}">
 			<h3 v-html="tmp[layer].milestones[data].requirementDescription"></h3><br>
-			<span v-html="run(layers[layer].milestones[data].effectDescription, layers[layer].milestones[data])"></span><br>
+			<span v-html="run(layers[layer].milestones[data].effectDescription, layers[layer].milestones[data], tmp[layer].milestones[data].effect)"></span><br>
 			<tooltip v-if="tmp[layer].milestones[data].tooltip" :text="tmp[layer].milestones[data].tooltip"></tooltip>
 			<span v-if="tmp[layer].milestones[data].toggles && hasMilestone(layer, data)" v-for="toggle in tmp[layer].milestones[data].toggles">
 				<toggle :layer="layer" :data="toggle" :style="tmp[layer].componentStyles.toggle"></toggle>&nbsp;

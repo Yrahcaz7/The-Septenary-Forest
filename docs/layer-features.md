@@ -15,9 +15,9 @@ You can make almost any value dynamic by using a function in its place, includin
     Standard values:
 
     - `unlocked`: **optional**. A boolean determining if this layer is unlocked or not. Defaults to true.
-    - `points`: A Decimal, the main currency for the layer. (Can be omitted if the layer does not have a main currency and its presige type is `none`.)
-    - `total`: **optional**. A Decimal, tracks total amount of main prestige currency. Always tracked if you use `points`, but only shown if you add it here.
-    - `best`: **optional**. A Decimal, tracks highest amount of main prestige currency. Always tracked if you use `points`, but only shown if you add it here.
+    - `points`: A `Decimal`, the main currency for the layer. (Can be omitted if the layer does not have a main currency and its presige type is `none`.)
+    - `total`: **optional**. A `Decimal`, tracks total amount of main prestige currency. Always tracked if you use `points`, but only shown if you add it here.
+    - `best`: **optional**. A `Decimal`, tracks highest amount of main prestige currency. Always tracked if you use `points`, but only shown if you add it here.
     - `unlockOrder`: **optional**. Used to keep track of relevant layers unlocked before this one.
     - `resetTime`: **optional**. A number, time since this layer was last prestiged (or reset by another layer).
 
@@ -93,7 +93,7 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `baseAmount()`: A function that gets the current value of the base resource.
 
-- `requires`: A Decimal, the amount of the base needed to gain 1 of the prestige currency. Also the amount required to unlock the layer. You can instead make this a function, to make it harder if another layer was unlocked first (based on unlockOrder).
+- `requires`: A `Decimal`, the amount of the base needed to gain 1 of the prestige currency. Also the amount required to unlock the layer. You can instead make this a function, to make it harder if another layer was unlocked first (based on unlockOrder).
 
 - `exponent`: Used as described above.
 
@@ -110,15 +110,15 @@ You can make almost any value dynamic by using a function in its place, includin
     For normal layers, the default for `softcap` is `e1e7`, and for other types of layers, the default for `softcap` is `Infinity`.
     The default for `softcapPower` is always `0.5`.
 
-Additional features:
-
-- `softcaps`, `softcapPowers`: **OVERRIDE**. These are just like `softcap` and `softcapPower`, except they are arrays of values, allowing for multiple softcaps instead of just one. If either of these are missing or are an empty array, `softcap` and `softcapPower` are used instead. Both can also be functions that return an array, rather than an array itself.
+- `softcaps`, `softcapPowers` (additional features): **OVERRIDE**. These are just like `softcap` and `softcapPower`, except they are arrays of values, allowing for multiple softcaps instead of just one. If either of these are missing or is an empty array, `softcap` and `softcapPower` are used instead. Both can also be functions that return an array, rather than an array itself.
 
 ## Other prestige-related features
 
 - `canBuyMax()`: **sometimes required**. Required for static layers. Function used to determine if buying max is permitted.
 
 - `onPrestige(gain)`: **optional**. A function that triggers when this layer prestiges, just before you gain the currency. Can be used to have secondary resource gain on prestige, or to recalculate things or whatnot.
+
+- `onPrestigeIsAfterGain` (additional feature): **optional**. A boolean indicating whether this layer's `onPrestige()` function triggers after prestige resource gain but before resetting anything (this also means that any relevant milestones and achievements will be updated to reflect the gain). By default is false, which makes `onPrestige()` trigger before both gain and reset.
 
 - `resetDescription`: **optional**. Use this to replace "Reset for " on the Prestige button with something else.
 
@@ -128,11 +128,7 @@ Additional features:
 
 - `autoPrestige()`: **optional**. Returns a boolean. If it is true, the layer will always automatically do a prestige if it can. This is good for automating static layers.
 
-Additional features:
-
-- `onPrestigeIsAfterGain`: **optional**. A boolean indicating whether this layer's `onPrestige()` function triggers after prestige resource gain but before resetting anything (this also means that any relevant milestones and achievements will be updated to reflect the gain). By default is false, which makes `onPrestige()` trigger before both gain and reset.
-
-- `logged`: **optional**. For normal layers, if this is a [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) value, the resource gain becomes the log of the previous gain plus one. If it is exactly `true`, the log base is `10`, otherwise the log base is `new Decimal(logged)`. Can also be a function. Has no effect on static layers.
+- `logged` (additional feature): **optional**. For normal layers, if this is a [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) value, the resource gain becomes the log of the previous gain plus one. If it is exactly `true`, the log base is `10`, otherwise the log base is `new Decimal(logged)`. Can also be a function. Has no effect on static layers.
 
 ## Tree/node features
 
@@ -147,9 +143,9 @@ Additional features:
 - `nodeStyle`: **optional**. A CSS object, where the keys are CSS attributes, which styles this layer's node on the tree.
 
 - `tooltip()` / `tooltipLocked()`: **optional**. Functions that return text, which is the tooltip for the node when the layer is unlocked or locked, respectively. By default the tooltips behave the same as in the original Prestige Tree.
-    If the value is "", the tooltip will be disabled.
+    If the value is `""`, the tooltip will be disabled.
 
-- `marked`: **optional**. Adds a mark to the corner of the node. If it's "true" it will be a star, but it can also be an image URL.
+- `marked`: **optional**. Adds a mark to the corner of the node. If it's `true` it will be a star, but it can also be an image URL.
 
 ## Other features
 

@@ -1,6 +1,13 @@
 # Milestones
 
-Milestones are awarded to the player when they meet a certain goal, and give some benefit. Milestones should be formatted like this:
+Milestones are awarded to the player when they meet a certain goal, and give some benefit.
+
+Useful functions for dealing with milestones and implementing their effects:
+
+- `hasMilestone(layer, id)`: Determines if the player has the milestone.
+- `milestoneEffect(layer, id)` (additional feature): Returns the current effects of the milestone, if any.
+
+Milestones should be formatted like this:
 
 ```js
 milestones: {
@@ -8,26 +15,27 @@ milestones: {
         requirementDescription: "123 waffles",
         effectDescription: "blah",
         done() { return player.w.points.gte(123) },
+        etc
     },
     etc
 }
 ```
 
-You can use `hasMilestone(layer, id)` to determine if the player has a given milestone.
-
 Milestone features:
 
 - `requirementDescription`: A string describing the requirement for unlocking this milestone. Suggestion: Use a "total". It can also be a function that returns updating text. Can use basic HTML.
 
-- `effectDescription`: A string describing the reward for having the milestone. *You will have to implement the reward elsewhere.* It can also be a function that returns updating text. Can use basic HTML.
+- `effectDescription`: A string describing the reward for having the milestone. *You will have to implement the reward elsewhere.* It can also be a function that returns updating text. Can use basic HTML. (Additional feature: When `effectDescription` is a function, it can have an argument `eff`, which holds the current effect of the milestone.)
 
 - `done()`: A function returning a boolean to determine if the milestone should be awarded.
 
 - `onComplete()`: **optional**. This function will be called when the milestone is completed.
 
+> - `effect()` (additional feature): **optional**. A function that calculates and returns the current values of any bonuses from the milestone. Can return a value or an object containing multiple values.
+
 - `toggles`: **optional**. Creates toggle buttons that appear on the milestone when it is unlocked. The toggles can toggle a given boolean value in a layer. It is defined as an array of paired items, one pair per toggle. The first is the internal name of the layer the value being toggled is stored in, and the second is the internal name of the variable to toggle. (e.g. `[["b", "auto"], ["g", "auto"]]`)
 
-   **Tip:** Toggles are not de-set if the milestone becomes locked! In this case, you should also check if the player has the milestone.
+    **Tip:** Toggles are not de-set if the milestone becomes locked! In this case, you should also check if the player has the milestone.
 
 - `style`: **optional**. Applies CSS to this milestone, in the form of an object where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
 
@@ -39,12 +47,10 @@ Milestone features:
 
 - `id`: **assigned automagically**. It's the "key" which the milestone was stored under, for convenient access. The milestone in the example's id is 0.
 
-Disable milestone popups by adding `milestonePopups: false` to the layer.
+Popup features:
 
-Additional features:
+> - `popupTitle` (additional feature): **optional**. The title of the popup generated when the milestone is gotten. If not present, the popup's title is "Milestone Achieved!"
+>
+> - `popupColor` (additional feature): **optional**. The color of the popup generated when the milestone is gotten. If not present, the popup's color is the layer's color.
 
-- `effect()`: **optional**. A function that calculates and returns the current values of any bonuses from the milestone. Can return a value or an object containing multiple values. Use this along with `milestoneEffect(layer, id)`.
-
-- `popupTitle`: **optional**. The title of the popup generated when the milestone is gotten. If not present, the popup's title is "Milestone Achieved!"
-
-- `popupColor`: **optional**. The color of the popup generated when the milestone is gotten. If not present, the popup's color is the layer's color.
+You can disable milestone popups by adding `milestonePopups: false` to the layer.
