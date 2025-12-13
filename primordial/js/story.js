@@ -516,7 +516,7 @@ const story = [
 	And thus, Chaos was born.
 `], [`
 	After the end of a long workday, Nisp finally returned from their mission.
-	Though they had always disliked the base's charcoal-colored walls, seeing them now brough Nisp a sense of what they called "relief."
+	Though they had always disliked the base's charcoal-colored walls, seeing them now brought Nisp a sense of what they called "relief."
 	"I'm finally back... That mission sure was annoying. I wish they paid more for overtime..."
 	The corridor was eerily silent, the only noises being Nisp's mumbling and footsteps.
 `, `

@@ -1870,7 +1870,7 @@ addLayer('h', {
 		81: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'True Hexes' },
 			description() { return 'Unlocks <b' + getColorClass(this, REF) + 'The Breaker</b>,<br>a new tab' },
-			cost: new Decimal('e1.132e14'),
+			cost: 'e1.132e14',
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('h', 71) && hasUpgrade('h', 72) && hasUpgrade('h', 73) && hasUpgrade('h', 74) },
 		},
 	},
@@ -4322,38 +4322,44 @@ addLayer('r', {
 	},
 	upgrades: {
 		11: {
-			fullDisplay() {
-				let text = '<h3' + getColorClass(this, TITLE) + 'Brighter Light</h3><br>multiplies light gain based on your sanctums<br>Currently: ' + format(tmp[this.layer].upgrades[this.id].effect) + 'x';
+			title() { return '<b' + getColorClass(this, TITLE) + 'Brighter Light</b>' },
+			description: 'multiplies light gain based on your sanctums',
+			effect() { return player.s.points.add(1).pow(0.3) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.3';
-				text += '<br><br>Cost: ' + format(1e12) + ' light';
 				return text;
 			},
-			canAfford() { return player.r.light.gte(1e12) },
-			pay() { player.r.light = player.r.light.sub(1e12) },
-			effect() { return  player.s.points.add(1).pow(0.3) },
+			cost: 1e12,
+			currencyInternalName: "light",
+			currencyLayer: "r",
 			unlocked() { return hasMilestone('gi', 0) },
 		},
 		12: {
-			fullDisplay() {
-				let text = '<h3' + getColorClass(this, TITLE) + 'Light of Light</h3><br>multiplies light gain based on your light<br>Currently: ' + format(tmp[this.layer].upgrades[this.id].effect) + 'x';
+			title() { return '<b' + getColorClass(this, TITLE) + 'Light of Light</b>' },
+			description: 'multiplies light gain based on your light',
+			effect() { return player.r.light.add(1).pow(0.1) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.1';
-				text += '<br><br>Cost: ' + format(1e13) + ' light';
 				return text;
 			},
-			canAfford() { return player.r.light.gte(1e13) },
-			pay() { player.r.light = player.r.light.sub(1e13) },
-			effect() { return  player.r.light.add(1).pow(0.1) },
+			cost: 1e13,
+			currencyInternalName: "light",
+			currencyLayer: "r",
 			unlocked() { return hasMilestone('gi', 0) },
 		},
 		13: {
-			fullDisplay() {
-				let text = '<h3' + getColorClass(this, TITLE) + 'Good Light</h3><br>makes base light gain based on your good influence (ignoring hardcap)<br>Currently: ' + format(tmp[this.layer].upgrades[this.id].effect) + '/sec';
+			title() { return '<b' + getColorClass(this, TITLE) + 'Good Light</b>' },
+			description: 'makes base light gain based on your good influence, ignoring hardcap',
+			effect() { return player.gi.points.mul(36).add(1).pow(10) },
+			effectDisplay(eff) {
+				let text = format(eff) + '/sec';
 				if (options.nerdMode) text += '<br>formula: (36x+1)^10';
-				text += '<br><br>Req: effect must be at least 1e25';
 				return text;
 			},
 			canAfford() { return this.effect().gte(1e25) },
-			effect() { return player.gi.points.mul(36).add(1).pow(10) },
+			costDisplay: "Req: effect must be at least 1e25",
 			unlocked() { return hasMilestone('gi', 0) && player.r.lightbest.gte(1e20) },
 		},
 	},
@@ -5008,35 +5014,35 @@ addLayer('gi', {
 	milestones: {
 		0: {
 			requirementDescription: '1 good influence',
-			effectDescription: 'unlock relic upgrades and<br>good influence resets don\'t reset relics',
+			effectDescription: "unlock relic upgrades and<br>good influence resets don't reset relics",
 			done() { return player.gi.points.gte(1) },
 		},
 		1: {
 			requirementDescription: '2 good influence',
-			effectDescription: 'good influence resets don\'t reset essence',
+			effectDescription: "good influence resets don't reset essence",
 			done() { return player.gi.points.gte(2) },
 		},
 		2: {
 			requirementDescription: '3 good influence',
-			effectDescription: 'good influence resets don\'t reset cores',
+			effectDescription: "good influence resets don't reset cores",
 			done() { return player.gi.points.gte(3) },
 			unlocked() { return hasMilestone('gi', 0) },
 		},
 		3: {
 			requirementDescription: '4 good influence',
-			effectDescription: 'good influence resets don\'t reset quarks',
+			effectDescription: "good influence resets don't reset quarks",
 			done() { return player.gi.points.gte(4) },
 			unlocked() { return hasMilestone('gi', 1) },
 		},
 		4: {
 			requirementDescription: '5 good influence',
-			effectDescription: 'good influence resets don\'t reset hexes',
+			effectDescription: "good influence resets don't reset hexes",
 			done() { return player.gi.points.gte(5) },
 			unlocked() { return hasMilestone('gi', 2) },
 		},
 		5: {
 			requirementDescription: '6 good influence',
-			effectDescription: 'good influence resets don\'t reset demon souls',
+			effectDescription: "good influence resets don't reset demon souls",
 			done() { return player.gi.points.gte(6) },
 			unlocked() { return hasMilestone('gi', 3) },
 		},
@@ -5079,7 +5085,7 @@ addLayer('gi', {
 		},
 		12: {
 			requirementDescription: '22 good influence and<br>555 total good influence',
-			effectDescription() { return 'increase <b' + getColorClass(this, REF, "s") + 'Devotion</b>\'s effect exponent<br>on good influence gain<br>0.2 --> 0.22' },
+			effectDescription() { return "increase <b" + getColorClass(this, REF, "s") + "Devotion</b>'s effect exponent<br>on good influence gain<br>0.2 --> 0.22" },
 			done() { return player.gi.points.gte(22) && player.gi.total.gte(555) },
 			unlocked() { return hasMilestone('gi', 10) },
 		},
