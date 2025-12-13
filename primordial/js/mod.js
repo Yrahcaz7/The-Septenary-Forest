@@ -194,13 +194,14 @@ const REF = 1;
  * @param {boolean} plain - If `true`, does not consider the darker version of the layer color.
  */
 function getColorClass(obj, type, layer = obj.layer, plain = false) {
-	if (!colorValue[0][type] || colorValue[1] == "none" || obj.layer === undefined || obj.id === undefined) {
+	if (!colorValue[0][type] || colorValue[1] == "none" || obj.layer === undefined) {
 		return ">";
 	};
-	if (colorValue[1] == "dark" || layer == "h" || layer == "w" || layer == "mo") {
+	if (colorValue[1] == "dark" || layer == "h" || layer == "r" || layer == "w" || layer == "mo") {
+		if (plain) return ` class="layer-${layer}">`;
 		return ` class="layer-${layer}-dark">`;
 	};
-	const darkMax = (layer == "r");
+	const darkMax = false;
 	let isDark = false;
 	if (plain) {
 		isDark = false;

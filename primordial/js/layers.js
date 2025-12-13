@@ -1881,20 +1881,15 @@ addLayer('h', {
 				const nextNerf = format(this.nerfLayers[player.h.limitsBroken]);
 				let text = 'Use to break a new limit. Using this will reset your evil influence, evil power, and evil influence upgrades. Additionally, it will divide evil influence gain.<br><br>';
 				if (player.h.limitsBroken === 0) {
-					if (colorValue[1] !== 'none' && colorValue[0][1]) text += 'Next effect: break the limit of <b class="layer-w-dark">Power of Good</b> and improve its effect formula, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br>none so far';
-					else text += 'Next effect: break the limit of <b>Power of Good</b> and improve its effect formula, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br>none so far';
+					text += 'Next effect: break the limit of <b' + getColorClass(this, REF, "w") + 'Power of Good</b> and improve its effect formula, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br>none so far';
 				} else if (player.h.limitsBroken === 1) {
-					if (colorValue[1] !== 'none' && colorValue[0][1]) text += 'Next effect: break the limit of <b class="layer-cl-dark">Deeper Comprehension</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b>';
-					else text += 'Next effect: break the limit of <b>Deeper Comprehension</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b>Power of Good</b>';
+					text += 'Next effect: break the limit of <b' + getColorClass(this, REF, "cl") + 'Deeper Comprehension</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b' + getColorClass(this, REF, "w") + 'Power of Good</b>';
 				} else if (player.h.limitsBroken === 2) {
-					if (colorValue[1] !== 'none' && colorValue[0][1]) text += 'Next effect: break the limit of <b class="layer-q-dark">Sample Quarks</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b><br><b class="layer-cl-dark">Deeper Comprehension</b>';
-					else text += 'Next effect: break the limit of <b>Sample Quarks</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b>Power of Good</b><br><b>Deeper Comprehension</b>';
+					text += 'Next effect: break the limit of <b' + getColorClass(this, REF, "q") + 'Sample Quarks</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b' + getColorClass(this, REF, "w") + 'Power of Good</b><br><b' + getColorClass(this, REF, "cl") + 'Deeper Comprehension</b>';
 				} else if (player.h.limitsBroken === 3) {
-					if (colorValue[1] !== 'none' && colorValue[0][1]) text += 'Next effect: break the limit of <b class="layer-gi">Better Good</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b><br><b class="layer-cl-dark">Deeper Comprehension</b><br><b class="layer-q-dark">Sample Quarks</b>';
-					else text += 'Next effect: break the limit of <b>Better Good</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b>Power of Good</b><br><b>Deeper Comprehension</b><br><b>Sample Quarks</b>';
+					text += 'Next effect: break the limit of <b' + getColorClass(this, REF, "gi") + 'Better Good</b>, but its cost scales much faster. Also divide evil influence gain by /' + nextNerf + '.<br><br>Limits broken:<br><b' + getColorClass(this, REF, "w") + 'Power of Good</b><br><b' + getColorClass(this, REF, "cl") + 'Deeper Comprehension</b><br><b' + getColorClass(this, REF, "q") + 'Sample Quarks</b>';
 				} else {
-					if (colorValue[1] !== 'none' && colorValue[0][1]) text += 'Next effect: you have broken all the limits!<br><br>Limits broken:<br><b class="layer-w-dark">Power of Good</b><br><b class="layer-cl-dark">Deeper Comprehension</b><br><b class="layer-q-dark">Sample Quarks</b><br><b class="layer-gi">Better Good</b>';
-					else text += 'Next effect: you have broken all the limits!<br><br>Limits broken:<br><b>Power of Good</b><br><b>Deeper Comprehension</b><br><b>Sample Quarks</b><br><b>Better Good</b>';
+					text += 'Next effect: you have broken all the limits!<br><br>Limits broken:<br><b' + getColorClass(this, REF, "w") + 'Power of Good</b><br><b' + getColorClass(this, REF, "cl") + 'Deeper Comprehension</b><br><b' + getColorClass(this, REF, "q") + 'Sample Quarks</b><br><b' + getColorClass(this, REF, "gi") + 'Better Good</b>';
 				};
 				text += '<br><br>Effect on evil influence gain: /' + format(tmp.h.clickables[11].nerf);
 				text += '<br><br>Req: ' + formatWhole(tmp.h.clickables[11].req[0]) + ' achievements and ' + formatWhole(tmp.h.clickables[11].req[1]) + ' evil influence';
@@ -2149,7 +2144,7 @@ addLayer('ds', {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return new Decimal(10).pow(x.add(50));
 				return new Decimal(2).pow(x);
 			},
-			title() { return '<h3' + getColorClass(this, TITLE) + 'Demonic Energy' },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Demonic Energy' },
 			description: 'multiplies hex gain (and also subatomic particle gain at a reduced rate) based on the amount of this upgrade bought.',
 			canAfford() { return player.ds.points.gte(this.cost()) },
 			purchaseLimit() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer ? 99 : 22 },
@@ -2164,10 +2159,7 @@ addLayer('ds', {
 	},
 	challenges: {
 		11: {
-			name() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-ds">Blazing Curse';
-				return '<h3>Blazing Curse';
-			},
+			name() { return '<h3' + getColorClass(this, REF) + 'Blazing Curse' },
 			challengeDescription: " - Forces a Demon Soul reset<br> - Quark gain is divided by 100,000<br> - Point gain is divided by 10,000<br> - Hex gain is divided by 1,000<br> - Core gain is divided by 100<br> - Quark gain is divided by 10",
 			goalDescription() {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) {
@@ -2189,10 +2181,7 @@ addLayer('ds', {
 			doReset: true,
 		},
 		12: {
-			name() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-ds">Hellfire';
-				return '<h3>Hellfire';
-			},
+			name() { return '<h3' + getColorClass(this, REF) + 'Hellfire' },
 			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1,000,000<br> - Hex gain is divided by 1e10<br> - Subatomic Particle gain is divided by the number of Quarks",
 			goalDescription() {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) {
@@ -2215,10 +2204,7 @@ addLayer('ds', {
 			unlocked() { return hasChallenge('ds', 11) },
 		},
 		21: {
-			name() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-ds">Opposite Polarity';
-				return '<h3>Opposite Polarity';
-			},
+			name() { return '<h3' + getColorClass(this, REF) + 'Opposite Polarity' },
 			challengeDescription: " - Forces a Demon Soul reset<br> - Hex gain is divided by 100,000<br> - Point gain is divided by 1e10<br> - Core gain is divided by 1e15<br> - Essence gain is divided by 1e20",
 			goalDescription() {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) {
@@ -2241,10 +2227,7 @@ addLayer('ds', {
 			unlocked() { return hasChallenge('ds', 12) },
 		},
 		22: {
-			name() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-ds">Dreaded Science';
-				return '<h3>Dreaded Science';
-			},
+			name() { return '<h3' + getColorClass(this, REF) + 'Dreaded Science' },
 			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1e10<br> - Quark and Subatomic Particle gain is divided by 1e40<br>",
 			goalDescription() {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) {
@@ -2261,10 +2244,7 @@ addLayer('ds', {
 			unlocked() { return hasMilestone('a', 7) && hasChallenge('ds', 21) },
 		},
 		31: {
-			name() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-ds">Reversed Hexes';
-				return '<h3>Reversed Hexes';
-			},
+			name() { return '<h3' + getColorClass(this, REF) + 'Reversed Hexes' },
 			challengeDescription: " - Forces a Demon Soul reset<br> - Hex gain multiplier divides hex gain instead of multipling it<br>",
 			goalDescription() { return format('e3.88e13') + ' hexes<br>' },
 			canComplete() { return player.h.points.gte('e3.88e13') },
@@ -2273,10 +2253,7 @@ addLayer('ds', {
 			unlocked() { return hasUpgrade('ds', 32) && hasChallenge('ds', 22) },
 		},
 		32: {
-			name() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-ds">Point Deficiency';
-				return '<h3>Point Deficiency';
-			},
+			name() { return '<h3' + getColorClass(this, REF) + 'Point Deficiency' },
 			challengeDescription: "- Applies all previous demon soul challenge effects at once<br> - Point gain is log10(log10(gain+1)+1)<br>",
 			countsAs: [11, 12, 21, 22, 31],
 			goalDescription() { return format('e5.29e13') + ' hexes and ' + format(1000) + ' points<br>' },
@@ -3907,7 +3884,7 @@ addLayer('d', {
 				if (hasMilestone('s', 40)) scale = scale.div(1.5);
 				return new Decimal(10).pow(x.add(1).mul(scale)).mul(1e50).div(div);
 			},
-			title() { return '<h3' + getColorClass(this, TITLE, "s") + 'Worship<br>' },
+			title() { return '<b' + getColorClass(this, TITLE, "s") + 'Worship<br>' },
 			description: 'use prayers to worship the gods. you will gain 0.1 devotion per worship.',
 			canAfford() { return player.p.points.gte(this.cost()) },
 			purchaseLimit: 1e9,
@@ -3933,7 +3910,7 @@ addLayer('d', {
 				if (hasMilestone('s', 39)) scale = scale.div(2);
 				return x.mul(scale).add(20).floor();
 			},
-			title() { return '<h3' + getColorClass(this, TITLE, "s") + 'Sacrifice<br>' },
+			title() { return '<b' + getColorClass(this, TITLE, "s") + 'Sacrifice<br>' },
 			description() { return "use sanctums as a sacrifice to worship the gods. you will gain<br>" + (hasMilestone('s', 24) ? "1" : "0.5") + " devotion per sacrifice.<br>each sacrifice also multiplies relic's first effect by " + (hasMilestone('s', 24) ? "2" : "1.5") + "." },
 			canAfford() { return player.s.points.gte(this.cost()) },
 			purchaseLimit: 1e9,
@@ -3977,7 +3954,7 @@ addLayer('d', {
 				if (hasMilestone('s', 42)) scale = scale.div(1.5);
 				return getBuyableAmount(this.layer, this.id).mul(scale).add(1).mul(1e15).floor();
 			},
-			title() { return '<h3' + getColorClass(this, TITLE, "s") + 'Sacrificial Ceremony<br>' },
+			title() { return '<b' + getColorClass(this, TITLE, "s") + 'Sacrificial Ceremony<br>' },
 			description: 'use hexes and subatomic particles in a sacrificial ceremony to worship the gods. you will gain 0.75 devotion per sacrificial ceremony. each sacrificial ceremony also multiplies subatomic particle gain by 1 (additive), light gain by 1 (additive), and divides worship cost by 1e25 (multiplicative, like normal).',
 			canAfford() { return player.h.points.gte(this.cost_h()) && player.sp.points.gte(this.cost_sp()) },
 			purchaseLimit: 1e9,
@@ -4048,7 +4025,7 @@ addLayer('g', {
 	buyables: {
 		11: {
 			cost(x) { return new Decimal(10).pow(new Decimal(10).pow(x.div(3).add(3))) },
-			title() { return '<h3' + getColorClass(this, TITLE, "s") + 'Glowing<br>Worship<br>' },
+			title() { return '<b' + getColorClass(this, TITLE, "s") + 'Glowing<br>Worship<br>' },
 			description: 'use prayers to worship the gods. each worship increases your glow gain by 1.',
 			canAfford() { return player.p.points.gte(this.cost()) },
 			purchaseLimit: 99,
@@ -4068,7 +4045,7 @@ addLayer('g', {
 		},
 		12: {
 			cost(x) { return new Decimal(5).pow(x.add(3)) },
-			title() { return '<h3' + getColorClass(this, TITLE, "s") + 'Glowing<br>Sacrifice<br>' },
+			title() { return '<b' + getColorClass(this, TITLE, "s") + 'Glowing<br>Sacrifice<br>' },
 			description: 'use glow as a sacrifice to worship the gods. each sacrifice multiplies your glow gain by 2.',
 			canAfford() { return player.s.glow.gte(this.cost()) },
 			purchaseLimit: 99,
@@ -4094,7 +4071,7 @@ addLayer('g', {
 				if (x.gte(12)) return new Decimal('e1e11').pow(x.add(1).pow(5)).pow(exp);
 				return new Decimal('e1e14').pow(x.add(1).pow(2)).pow(exp);
 			},
-			title() { return '<h3' + getColorClass(this, TITLE, "s") + 'Glowing Sacrificial Ceremony<br>' },
+			title() { return '<b' + getColorClass(this, TITLE, "s") + 'Glowing Sacrificial Ceremony<br>' },
 			description: 'use essence in a sacrificial ceremony to worship the gods. each sacrifice multiplies your glow gain by 2.5, your maximum glow by 10, and your light gain after hardcap by the amount of your glowing worships plus 1.',
 			canAfford() { return player.e.points.gte(this.cost()) },
 			purchaseLimit: 99,
@@ -4199,9 +4176,7 @@ addLayer('r', {
 		let text = ['', ''];
 		if (tmp.r.effect[0].gte(softcaps.r_eff1[0]) && !(isAssimilated('r') || player.mo.assimilating === 'r')) text[0] = ' (softcapped)';
 		if (challengeCompletions('r', 11) >= 2) text[1] = 'point and ';
-		if (colorValue[1] == 'none') return 'which makes Essence Influence\'s hardcap start ' + format(tmp.r.effect[0]) + 'x later' + text[0] + ', multiplies sanctum gain by ' + format(tmp.r.effect[1]) + 'x, and also multiplies ' + text[1] + 'essence gain by ' + format(tmp.r.effect[2]) + 'x';
-		if (!colorValue[0][1]) return 'which makes <h3>Essence Influence\'s</h3> hardcap start <h2 class="layer-r">' + format(tmp.r.effect[0]) + '</h2>x later' + text[0] + ', multiplies sanctum gain by <h2 class="layer-r">' + format(tmp.r.effect[1]) + '</h2>x, and also multiplies ' + text[1] + 'essence gain by <h2 class="layer-r">' + format(tmp.r.effect[2]) + '</h2>x';
-		return 'which makes <h3 class="layer-e">Essence Influence\'s</h3> hardcap start <h2 class="layer-r">' + format(tmp.r.effect[0]) + '</h2>x later' + text[0] + ', multiplies sanctum gain by <h2 class="layer-r">' + format(tmp.r.effect[1]) + '</h2>x, and also multiplies ' + text[1] + 'essence gain by <h2 class="layer-r">' + format(tmp.r.effect[2]) + '</h2>x';
+		return 'which makes <b' + getColorClass(this, REF, "e", true) + 'Essence Influence\'s</b> hardcap start <h2 class="layer-r">' + format(tmp.r.effect[0]) + '</h2>x later' + text[0] + ', multiplies sanctum gain by <h2 class="layer-r">' + format(tmp.r.effect[1]) + '</h2>x, and also multiplies ' + text[1] + 'essence gain by <h2 class="layer-r">' + format(tmp.r.effect[2]) + '</h2>x';
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone('m', 0) && resettingLayer == 'm') return;
@@ -4262,10 +4237,7 @@ addLayer('r', {
 	},
 	challenges: {
 		11: {
-			name() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-r">Activate Relics';
-				return '<h3>Activate Relics';
-			},
+			name() { return '<h3' + getColorClass(this, TITLE, "r", true) + 'Activate Relics' },
 			buttonText: ["Activate", "Cannot activate", "Enter activation", "Enter activation"],
 			challengeDescription: 'Temporarily converts all your point production into light production. Get enough light, and you can activate your relics for rewards.<br>',
 			goalDescription() {
@@ -4350,9 +4322,10 @@ addLayer('r', {
 	upgrades: {
 		11: {
 			fullDisplay() {
-				let text = '';
+				let text = '<h3' + getColorClass(this, TITLE) + 'Brighter Light</h3><br>multiplies light gain based on your sanctums<br>Currently: ' + format(tmp[this.layer].upgrades[this.id].effect) + 'x';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.3';
-				return '<h3' + getColorClass(this, TITLE) + 'Brighter Light</h3><br>multiplies light gain based on your sanctums<br>Currently: ' + format(tmp[this.layer].upgrades[this.id].effect) + 'x' + text + '<br><br>Cost: ' + format(1e12) + ' light';
+				text += '<br><br>Cost: ' + format(1e12) + ' light';
+				return text;
 			},
 			canAfford() { return player.r.light.gte(1e12) },
 			pay() { player.r.light = player.r.light.sub(1e12) },
@@ -4361,9 +4334,10 @@ addLayer('r', {
 		},
 		12: {
 			fullDisplay() {
-				let text = '';
+				let text = '<h3' + getColorClass(this, TITLE) + 'Light of Light</h3><br>multiplies light gain based on your light<br>Currently: ' + format(tmp[this.layer].upgrades[this.id].effect) + 'x';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.1';
-				return '<h3' + getColorClass(this, TITLE) + 'Light of Light</h3><br>multiplies light gain based on your light<br>Currently: ' + format(tmp[this.layer].upgrades[this.id].effect) + 'x' + text + '<br><br>Cost: ' + format(1e13) + ' light';
+				text += '<br><br>Cost: ' + format(1e13) + ' light';
+				return text;
 			},
 			canAfford() { return player.r.light.gte(1e13) },
 			pay() { player.r.light = player.r.light.sub(1e13) },
@@ -4372,9 +4346,10 @@ addLayer('r', {
 		},
 		13: {
 			fullDisplay() {
-				let text = '';
+				let text = '<h3' + getColorClass(this, TITLE) + 'Good Light</h3><br>makes base light gain based on your good influence (ignoring hardcap)<br>Currently: ' + format(tmp[this.layer].upgrades[this.id].effect) + '/sec';
 				if (options.nerdMode) text += '<br>formula: (36x+1)^10';
-				return '<h3' + getColorClass(this, TITLE) + 'Good Light</h3><br>makes base light gain based on your good influence (ignoring hardcap)<br>Currently: ' + format(tmp[this.layer].upgrades[this.id].effect) + '/sec' + text + '<br><br>Req: effect must be at least 1e25';
+				text += '<br><br>Req: effect must be at least 1e25';
+				return text;
 			},
 			canAfford() { return this.effect().gte(1e25) },
 			effect() { return player.gi.points.mul(36).add(1).pow(10) },
@@ -4388,10 +4363,7 @@ addLayer('r', {
 				if (hasMilestone('r', 2)) cost = cost.div(milestoneEffect('r', 2));
 				return cost.add(1e-10).floor();
 			},
-			title() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-r-dark">Glowing Relics';
-				return '<h3>Glowing Relics';
-			},
+			title() { return '<b' + getColorClass(this, TITLE) + 'Glowing Relics' },
 			description: 'multiplies glow gain and maximum glow based on the amount of this upgrade bought.',
 			canAfford() { return new Decimal(challengeCompletions('r', 11)).gte(this.cost()) },
 			purchaseLimit: 99,
@@ -4399,7 +4371,7 @@ addLayer('r', {
 			effect(x) { return new Decimal(5).pow(x.add(buyableEffect('r', 21))) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
-				if (options.nerdMode) text = '<br>formula: 5^x';
+				if (options.nerdMode) text += '<br>formula: 5^x';
 				return text;
 			},
 			costDisplay(cost) { return 'Req: ' + formatWhole(cost) + ' activated relics' },
@@ -4411,10 +4383,7 @@ addLayer('r', {
 				if (hasMilestone('r', 2)) cost = cost.div(milestoneEffect('r', 2));
 				return cost.add(1e-10).floor();
 			},
-			title() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-r-dark">Gleaming Relics';
-				return '<h3>Gleaming Relics';
-			},
+			title() { return '<b' + getColorClass(this, TITLE) + 'Gleaming Relics' },
 			description: 'multiplies light gain after hardcap based on the amount of this upgrade bought.',
 			canAfford() { return new Decimal(challengeCompletions('r', 11)).gte(this.cost()) },
 			purchaseLimit: 99,
@@ -4422,7 +4391,7 @@ addLayer('r', {
 			effect(x) { return new Decimal(1000).pow(x.add(buyableEffect('r', 21))) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
-				if (options.nerdMode) text = '<br>formula: 1,000^x';
+				if (options.nerdMode) text += '<br>formula: 1,000^x';
 				return text;
 			},
 			costDisplay(cost) { return 'Req: ' + formatWhole(cost) + ' activated relics' },
@@ -4434,21 +4403,15 @@ addLayer('r', {
 				if (hasMilestone('r', 2)) cost = cost.div(milestoneEffect('r', 2));
 				return cost.add(1e-10).floor();
 			},
-			title() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-r-dark">Prismatic Relics';
-				return '<h3>Prismatic Relics';
-			},
-			description() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'gives extra levels to <b class="layer-r-dark">Glowing Relics</b> and <b class="layer-r-dark">Gleaming Relics</b> based on the amount of this upgrade bought.';
-				return 'gives extra levels to <b>Glowing Relics</b> and <b>Gleaming Relics</b> based on the amount of this upgrade bought.';
-			},
+			title() { return '<b' + getColorClass(this, TITLE) + 'Prismatic Relics' },
+			description() { return 'gives extra levels to <b' + getColorClass(this, REF) + 'Glowing Relics</b> and <b' + getColorClass(this, REF) + 'Gleaming Relics</b> based on the amount of this upgrade bought.' },
 			canAfford() { return new Decimal(challengeCompletions('r', 11)).gte(this.cost()) },
 			purchaseLimit: 99,
 			buy() { addBuyables(this.layer, this.id, 1) },
 			effect(x) { return x },
 			effectDisplay(eff) {
 				let text = '+' + formatWhole(eff);
-				if (options.nerdMode) text = '<br>formula: x';
+				if (options.nerdMode) text += '<br>formula: x';
 				return text;
 			},
 			costDisplay(cost) { return 'Req: ' + formatWhole(cost) + ' activated relics' },
@@ -5172,7 +5135,7 @@ addLayer('gi', {
 				if (player.h.limitsBroken >= 4 && x.gte(8)) return x.add(1).pow(2);
 				return x.add(1);
 			},
-			title() { return '<h3' + getColorClass(this, TITLE) + 'Better Good' },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Better Good' },
 			description: 'increases the good influence effect base by 1 per this upgrade bought.',
 			canAfford() { return player.gi.points.gte(this.cost()) },
 			purchaseLimit() { return player.h.limitsBroken >= 4 ? 1e9 : 8 },
@@ -5192,7 +5155,7 @@ addLayer('gi', {
 		},
 		12: {
 			cost(x) { return x.div(5).add(1).floor() },
-			title() { return '<h3' + getColorClass(this, TITLE) + 'Drive out Evil' },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Drive out Evil' },
 			description: 'multiplies essence gain based on the amount of this upgrade bought.',
 			canAfford() { return player.gi.points.gte(this.cost()) },
 			purchaseLimit() { return player.ds.points.add(1).log10().div(12.5).floor().min(1e9) },
@@ -5703,10 +5666,7 @@ addLayer('ei', {
 	},
 	challenges: {
 		11: {
-			name() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-ei">Build the Gate';
-				return '<h3>Build the Gate';
-			},
+			name() { return '<h3' + getColorClass(this, TITLE) + 'Build the Gate' },
 			challengeDescription: ' - Resets evil influence milestones<br> - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Forces an evil influence reset<br> - Divides evil power gain by 1,000<br>',
 			goalDescription: '1e230 evil power<br>',
 			canComplete() { return player.ei.power.gte(1e230) },
@@ -5720,10 +5680,7 @@ addLayer('ei', {
 			noAutoExit: true,
 		},
 		12: {
-			name() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-ei">Power the Gate';
-				return '<h3>Power the Gate';
-			},
+			name() { return '<h3' + getColorClass(this, TITLE) + 'Power the Gate' },
 			challengeDescription: " - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Forces an evil influence reset<br> - Divides evil power gain by 1e8<br>",
 			goalDescription: '1e21 evil power<br>',
 			canComplete() { return player.ei.power.gte(1e21) },
@@ -5731,19 +5688,13 @@ addLayer('ei', {
 				player.ei.upgrades = [];
 				player.ei.power = newDecimalZero();
 			},
-			rewardDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'evil influence resets nothing, all <b' + getColorClass(this, REF, "s") + 'Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>power gain by ^1.075'
-				return 'evil influence resets nothing, all <b>Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>power gain by ^1.075'
-			},
+			rewardDescription() { return 'evil influence resets nothing, all <b' + getColorClass(this, REF, "s") + 'Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>power gain by ^1.075' },
 			doReset: true,
 			noAutoExit: true,
 			unlocked() { return hasChallenge('ei', 11) },
 		},
 		21: {
-			name() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-ei">Enter the Gate';
-				return '<h3>Enter the Gate';
-			},
+			name() { return '<h3' + getColorClass(this, TITLE) + 'Enter the Gate' },
 			challengeDescription: " - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Resets your relics to 0<br> - Divides evil power gain by 1e15<br>",
 			goalDescription: '1e18 evil power and 93 relics<br>',
 			canComplete() { return player.ei.power.gte(1e18) && player.r.points.gte(93) },
@@ -5760,10 +5711,7 @@ addLayer('ei', {
 			unlocked() { return hasChallenge('ei', 12) },
 		},
 		22: {
-			name() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-ei">And Repeat';
-				return '<h3>And Repeat';
-			},
+			name() { return '<h3' + getColorClass(this, TITLE) + 'And Repeat' },
 			challengeDescription() { return 'Endure the negative effects of all the other <b' + getColorClass(this, REF) + 'Gate of Evil</b> challenges. It is recommended to turn the evil influence upgrade autobuyer off.<br>' },
 			goalDescription: '1e500 evil power and 144 relics<br>',
 			canComplete() { return player.ei.power.gte('1e500') && player.r.points.gte(144) },
@@ -5908,19 +5856,13 @@ addLayer('w', {
 		},
 		3: {
 			requirementDescription: '4 wars',
-			effectDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'keep evil influence challenge completions on war resets, you can automatically activate relics, perform evil influence resets automatically, and unlock another <b class="layer-w-dark">Influence</b>';
-				return 'keep evil influence challenge completions on war resets, you can automatically activate relics, perform evil influence resets automatically, and unlock another <b>Influence</b>';
-			},
+			effectDescription() { return 'keep evil influence challenge completions on war resets, you can automatically activate relics, perform evil influence resets automatically, and unlock another <b' + getColorClass(this, REF) + 'Influence</b>' },
 			done() { return player.w.points.gte(4) },
 			toggles: [['r', 'auto_activate']],
 		},
 		4: {
 			requirementDescription: '5 wars',
-			effectDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'keep demon soul challenge completions on war resets, you can autobuy individual relic upgrades, relics reset nothing, perform relic resets automatically, and unlock another <b class="layer-w-dark">Influence</b>';
-				return 'keep demon soul challenge completions on war resets, you can autobuy individual relic upgrades, relics reset nothing, perform relic resets automatically, and unlock another <b>Influence</b>';
-			},
+			effectDescription() { return 'keep demon soul challenge completions on war resets, you can autobuy individual relic upgrades, relics reset nothing, perform relic resets automatically, and unlock another <b' + getColorClass(this, REF) + 'Influence</b>' },
 			done() { return player.w.points.gte(5) },
 			toggles: [['r', 'auto_upgrade_1'], ['r', 'auto_upgrade_2'], ['r', 'auto_upgrade_3']],
 		},
@@ -5941,10 +5883,7 @@ addLayer('w', {
 		},
 		8: {
 			requirementDescription: '9 wars',
-			effectDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'war resets don\'t reset good influence, and unlock another <b class="layer-w-dark">Influence</b>';
-				return 'war resets don\'t reset good influence, and unlock another <b>Influence</b>';
-			},
+			effectDescription() { return "war resets don't reset good influence, and unlock another <b" + getColorClass(this, REF) + "Influence</b>" },
 			done() { return player.w.points.gte(9) },
 		},
 		9: {
@@ -5954,59 +5893,38 @@ addLayer('w', {
 		},
 		10: {
 			requirementDescription: '11 wars',
-			effectDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'war resets don\'t reset prayers, and reduce <b class="layer-w-dark">Relic Hoarding</b> cost scaling past 6 of them';
-				return 'war resets don\'t reset prayers, and reduce <b>Relic Hoarding</b> cost scaling past 6 of them';
-			},
+			effectDescription() { return "war resets don't reset prayers, and reduce <b" + getColorClass(this, REF) + "Relic Hoarding</b> cost scaling past 6 of them" },
 			done() { return player.w.points.gte(11) },
 		},
 		11: {
 			requirementDescription: '12 wars',
-			effectDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'war resets don\'t reset sanctums, and increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 1';
-				return 'war resets don\'t reset sanctums, and increase the maximum bought of <b>Power of Good</b> by 1'
-			},
+			effectDescription() { return "war resets don't reset sanctums, and increase the maximum bought of <b" + getColorClass(this, REF) + "Power of Good</b> by 1" },
 			done() { return player.w.points.gte(12) },
 		},
 		12: {
 			requirementDescription: '13 wars',
-			effectDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 1';
-				return 'increase the maximum bought of <b>Power of Good</b> by 1';
-			},
+			effectDescription() { return 'increase the maximum bought of <b' + getColorClass(this, REF) + 'Power of Good</b> by 1' },
 			done() { return player.w.points.gte(13) },
 		},
 		13: {
 			requirementDescription: '15 wars',
-			effectDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 2';
-				return 'increase the maximum bought of <b>Power of Good</b> by 2';
-			},
+			effectDescription() { return 'increase the maximum bought of <b' + getColorClass(this, REF) + 'Power of Good</b> by 2' },
 			done() { return player.w.points.gte(15) },
 		},
 		14: {
 			requirementDescription: '18 wars',
-			effectDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 3 and you can autobuy <b' + getColorClass(this, REF, "cl") + 'Tissues</b>';
-				return 'increase the maximum bought of <b>Power of Good</b> by 3, and you can autobuy <b>Tissues</b>';
-			},
+			effectDescription() { return 'increase the maximum bought of <b' + getColorClass(this, REF) + 'Power of Good</b> by 3 and you can autobuy <b' + getColorClass(this, REF, "cl") + 'Tissues</b>' },
 			done() { return player.w.points.gte(18) },
 			toggles: [['cl', 'auto_tissues']],
 		},
 		15: {
 			requirementDescription: '22 wars',
-			effectDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 12, and all <b' + getColorClass(this, REF, "s") + 'Devotion</b> autobuyers can bulk buy 5x';
-				return 'increase the maximum bought of <b>Power of Good</b> by 12, and all <b>Devotion</b> autobuyers can bulk buy 5x';
-			},
+			effectDescription() { return 'increase the maximum bought of <b' + getColorClass(this, REF) + 'Power of Good</b> by 12, and all <b' + getColorClass(this, REF, "s") + 'Devotion</b> autobuyers can bulk buy 5x' },
 			done() { return player.w.points.gte(22) },
 		},
 		16: {
 			requirementDescription: '24 wars',
-			effectDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'increase the maximum bought of <b class="layer-w-dark">Power of Good</b> by 28, reduce <b class="layer-w-dark">Power of Good</b> scaling, and unlock <b' + getColorClass(this, REF, "cl") + 'Protein</b>';
-				return 'increase the maximum bought of <b>Power of Good</b> by 28, reduce <b>Power of Good</b> scaling, and unlock <b>Protein</b>';
-			},
+			effectDescription() { return 'increase the maximum bought of <b' + getColorClass(this, REF) + 'Power of Good</b> by 28, reduce <b' + getColorClass(this, REF) + 'Power of Good</b> cost scaling, and unlock <b' + getColorClass(this, REF, "cl") + 'Protein</b>' },
 			done() { return player.w.points.gte(24) },
 		},
 		17: {
@@ -6016,10 +5934,7 @@ addLayer('w', {
 		},
 		18: {
 			requirementDescription: '60 wars',
-			effectDescription() {
-				if (colorValue[1] !== 'none' && colorValue[0][1]) return 'unlock 3 more protein buyables, and you can autobuy <b class="layer-w-dark">Influences</b>';
-				return 'unlock 3 more protein buyables, and you can autobuy <b>Influences</b>';
-			},
+			effectDescription() { return 'unlock 3 more protein buyables, and you can autobuy <b' + getColorClass(this, REF) + 'Influences</b>' },
 			done() { return player.w.points.gte(60) },
 			toggles: [['w', 'auto_influence']],
 		},
@@ -6066,10 +5981,7 @@ addLayer('w', {
 				if (x.eq(6)) return new Decimal(194);
 				return x.mul(5).add(163);
 			},
-			title() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-w-dark">Rivalry';
-				return '<h3>Rivalry';
-			},
+			title() { return '<b' + getColorClass(this, TITLE) + 'Rivalry' },
 			description: 'multiplies good influence and evil influence gain based on the amount of this upgrade bought.',
 			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) },
 			purchaseLimit: 5000,
@@ -6093,10 +6005,7 @@ addLayer('w', {
 				if (hasMilestone('w', 10)) return x.mul(7).add(170);
 				return x.mul(8).add(170);
 			},
-			title() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-w-dark">Relic Hoarding';
-				return '<h3>Relic Hoarding';
-			},
+			title() { return '<b' + getColorClass(this, TITLE) + 'Relic Hoarding' },
 			description: 'multiplies evil influence gain based on your relics and the amount of this upgrade bought.',
 			canAfford() { return player.r.points.gte(this.cost()) },
 			purchaseLimit: 15,
@@ -6116,10 +6025,7 @@ addLayer('w', {
 				if (hasMilestone('w', 16)) return x.mul(50000).add(320000);
 				return x.mul(70000).add(320000);
 			},
-			title() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-w-dark">Power of Good';
-				return '<h3>Power of Good';
-			},
+			title() { return '<b' + getColorClass(this, TITLE) + 'Power of Good' },
 			description: 'multiplies good influence gain based on your sanctums and the amount of this upgrade bought.',
 			canAfford() { return player.s.points.gte(this.cost()) },
 			purchaseLimit() {
@@ -6151,10 +6057,7 @@ addLayer('w', {
 		},
 		21: {
 			cost(x) { return x.mul(5).add(235) },
-			title() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-w-dark">Race for Knowledge';
-				return '<h3>Race for Knowledge';
-			},
+			title() { return '<b' + getColorClass(this, TITLE) + 'Race for Knowledge' },
 			description: 'multiplies molecule gain based on the amount of this upgrade bought.',
 			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) },
 			purchaseLimit() {
@@ -6883,10 +6786,7 @@ addLayer('ch', {
 	},
 	challenges: {
 		11: {
-			name() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-ch">Tide of Evil';
-				return '<h3>Tide of Evil';
-			},
+			name() { return '<h3' + getColorClass(this, TITLE) + 'Tide of Evil' },
 			challengeDescription: "- Forces a chaos reset<br>- Disables good influence<br>- Multiplies demon soul gain by 1e3200<br>- Multiplies evil influence gain by 1.1",
 			goalLayers: [17, 18, 60, 70, 80, 100, 120, 140, 64175, 64500, 64888, 65250, 70750, 71250, 71750, 94250, 95250, 96750, 98000, 99500],
 			goal() { return this.goalLayers[challengeCompletions('ch', this.id)] || Infinity },
@@ -6908,10 +6808,7 @@ addLayer('ch', {
 			doReset: true,
 		},
 		12: {
-			name() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<h3 class="layer-ch">Tide of Good';
-				return '<h3>Tide of Good';
-			},
+			name() { return '<h3' + getColorClass(this, TITLE) + 'Tide of Good' },
 			challengeDescription: "- Forces a chaos reset<br>- Disables evil influence<br>",
 			goal() {
 				if (challengeCompletions('ch', this.id) < 3) return challengeCompletions('ch', this.id) * 25 + 85;
@@ -7039,10 +6936,7 @@ addLayer('mo', {
 		11: {
 			cost(x) { return x.div(2).add(1).mul(18) },
 			effect(x) { return new Decimal(1000).pow(x) },
-			title() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<b class="layer-a">Atom</b> <b' + getColorClass(this, TITLE) + 'Synergy';
-				return '<b>Atom</b> <b>Synergy';
-			},
+			title() { return '<b' + getColorClass(this, TITLE, "a") + 'Atom</b> <b' + getColorClass(this, TITLE) + 'Synergy' },
 			description: 'multiplies atom gain based on the amount of this upgrade bought.',
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
@@ -7057,10 +6951,7 @@ addLayer('mo', {
 		12: {
 			cost(x) { return x.add(1).pow(2).add(50) },
 			effect(x) { return new Decimal(2).pow(x) },
-			title() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<b class="layer-s">Sanctum</b> <b' + getColorClass(this, TITLE) + 'Synergy';
-				return '<b>Sanctum</b> <b>Synergy';
-			},
+			title() { return '<b' + getColorClass(this, TITLE, "s") + 'Sanctum</b> <b' + getColorClass(this, TITLE) + 'Synergy' },
 			description: 'multiplies sanctum gain based on the amount of this upgrade bought.',
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
@@ -7075,10 +6966,7 @@ addLayer('mo', {
 		13: {
 			cost(x) { return x.add(1).pow(3).add(106) },
 			effect(x) { return new Decimal(1.1).pow(x) },
-			title() {
-				if (colorValue[1] !== 'none' && colorValue[0][0]) return '<b class="layer-gi">Good Influence</b> <b' + getColorClass(this, TITLE) + 'Synergy';
-				return '<b>Sanctum</b> <b>Synergy';
-			},
+			title() { return '<b' + getColorClass(this, TITLE, "gi") + 'Good Influence</b> <b' + getColorClass(this, TITLE) + 'Synergy' },
 			description: 'multiplies good influence gain based on the amount of this upgrade bought.',
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
