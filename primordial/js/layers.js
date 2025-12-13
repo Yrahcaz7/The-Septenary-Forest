@@ -4241,6 +4241,7 @@ addLayer('r', {
 			buttonText: ["Activate", "Cannot activate", "Enter activation", "Enter activation"],
 			challengeDescription: 'Temporarily converts all your point production into light production. Get enough light, and you can activate your relics for rewards.<br>',
 			goalDescription() {
+				let text = "";
 				if (getLightGain().gte(1e25) && !hasUpgrade('r', 13)) {
 					if (maxedChallenge('r', this.id)) text = 'You have ' + format(player.r.light) + ' light.<br>(' + format(player.r.lightgain) + '/sec - hardcapped at 1e25)<br>';
 					else text = 'You have ' + format(player.r.light) + '/' + format(player.r.lightreq) + ' light.<br>(' + format(player.r.lightgain) + '/sec - hardcapped at 1e25)<br>';

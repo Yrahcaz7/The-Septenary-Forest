@@ -1,8 +1,17 @@
 let app;
 
-// removes newlines and tabs from a string to allow formatting templates
+/**
+ * Removes newlines and tabs from a string to allow formatting templates
+ * @param {string} str 
+ */
 function template(str) {
-	return ("" + str).replace(/[\n\t]/g, "");
+	return str.replace(/[\n\t]/g, "");
+};
+
+function getCurrentlyText() {
+	if (typeof currentlyText === "function") return currentlyText();
+	if (typeof currentlyText === "string") return currentlyText;
+	return "Currently: ";
 };
 
 function loadVue(mainPage = false) {
@@ -222,14 +231,7 @@ function loadVue(mainPage = false) {
 	// data = the id of the challenge
 	addNormalComponent('challenge', {
 		props: ['layer', 'data'],
-		data() {return {tmp, options, maxedChallenge, inChallenge, challengeStyle, player, canUseChallenge, startChallenge, challengeButtonText, layers, run, format, modInfo}},
-		computed: {
-			currentlyText() {
-				if (typeof currentlyText === "function") return currentlyText();
-				if (typeof currentlyText === "string") return currentlyText;
-				return "Currently: ";
-			},
-		},
+		data() {return {tmp, options, maxedChallenge, inChallenge, challengeStyle, player, canUseChallenge, startChallenge, challengeButtonText, layers, run, format, modInfo, getCurrentlyText}},
 		template: template(`<div v-if="tmp[layer].challenges && tmp[layer].challenges[data] !== undefined && tmp[layer].challenges[data].unlocked && !(options.hideChallenges && maxedChallenge(layer, data) && !inChallenge(layer, data))" :class="[
 			'challenge',
 			challengeStyle(layer, data),
@@ -246,7 +248,7 @@ function loadVue(mainPage = false) {
 				Reward: <span v-html="tmp[layer].challenges[data].rewardDescription"></span>
 				<span v-if="layers[layer].challenges[data].rewardDisplay !== undefined">
 					<br>
-					<span v-html="currentlyText"></span>
+					<span v-html="getCurrentlyText()"></span>
 					<span v-html="tmp[layer].challenges[data].rewardDisplay ? run(layers[layer].challenges[data].rewardDisplay, layers[layer].challenges[data], tmp[layer].challenges[data].rewardEffect) : format(tmp[layer].challenges[data].rewardEffect)"></span>
 				</span>
 			</span>
@@ -270,14 +272,7 @@ function loadVue(mainPage = false) {
 	// data = the id of the upgrade
 	addNormalComponent('upgrade', {
 		props: ['layer', 'data'],
-		data() {return {tmp, buyUpg, hasUpgrade, canAffordUpgrade, layers, run, formatWhole}},
-		computed: {
-			currentlyText() {
-				if (typeof currentlyText === "function") return currentlyText();
-				if (typeof currentlyText === "string") return currentlyText;
-				return "Currently: ";
-			},
-		},
+		data() {return {tmp, buyUpg, hasUpgrade, canAffordUpgrade, layers, run, getCurrentlyText, formatWhole}},
 		template: template(`<button v-if="tmp[layer].upgrades && tmp[layer].upgrades[data] !== undefined && tmp[layer].upgrades[data].unlocked" :id='"upgrade-" + layer + "-" + data' @click="buyUpg(layer, data)" :class="{
 			[layer]: true,
 			tooltipBox: true,
@@ -295,7 +290,7 @@ function loadVue(mainPage = false) {
 				<span v-html="tmp[layer].upgrades[data].description"></span>
 				<span v-if="layers[layer].upgrades[data].effectDisplay">
 					<br>
-					<span v-html="currentlyText"></span>
+					<span v-html="getCurrentlyText()"></span>
 					<span v-html="run(layers[layer].upgrades[data].effectDisplay, layers[layer].upgrades[data], tmp[layer].upgrades[data].effect)"></span>
 				</span><br><br>
 				Cost: {{formatWhole(tmp[layer].upgrades[data].cost)}} {{(tmp[layer].upgrades[data].currencyDisplayName ? tmp[layer].upgrades[data].currencyDisplayName : tmp[layer].resource)}}
@@ -416,14 +411,7 @@ function loadVue(mainPage = false) {
 	// data = the id of the buyable
 	addNormalComponent('buyable', {
 		props: ['layer', 'data'],
-		data() {return {tmp, player, interval: false, buyBuyable, layers, run, formatWhole, time: 0}},
-		computed: {
-			currentlyText() {
-				if (typeof currentlyText === "function") return currentlyText();
-				if (typeof currentlyText === "string") return currentlyText;
-				return "Currently: ";
-			},
-		},
+		data() {return {tmp, player, interval: false, buyBuyable, layers, run, getCurrentlyText, formatWhole, time: 0}},
 		methods: {
 			start() {
 				if (!this.interval) {
@@ -459,7 +447,7 @@ function loadVue(mainPage = false) {
 					<span v-html="tmp[layer].buyables[data].description"></span>
 					<span v-if="layers[layer].buyables[data].effectDisplay">
 						<br><br>
-						<span v-html="currentlyText"></span>
+						<span v-html="getCurrentlyText()"></span>
 						<span v-html="run(layers[layer].buyables[data].effectDisplay, layers[layer].buyables[data], tmp[layer].buyables[data].effect)"></span>
 					</span><br><br>
 					<span v-if="layers[layer].buyables[data].costDisplay" v-html="run(layers[layer].buyables[data].costDisplay, layers[layer].buyables[data], tmp[layer].buyables[data].cost)"></span>
