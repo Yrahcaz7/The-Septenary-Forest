@@ -29,12 +29,11 @@ function getRawTabContent(layer, name = "") {
 			content.push(["display-text", 'Your ' + randomStr(9) + ' is currently <h2 class="layer-q">' + format(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + '</h2> insight<br><br>Deciphered amount decays over time with a decay factor of ' + (hasUpgrade('q', 65) ? 0.1 : 0.001)]);
 			content.push("blank");
 			content.push("buyables");
-			content.push("blank");
 		} else {
 			content.push("milestones");
 			content.push("upgrades");
-			content.push("blank");
 		};
+		content.push("blank");
 	} else if (layer == "sp") {
 		content.push("milestones");
 		content.push("buyables");
@@ -43,31 +42,29 @@ function getRawTabContent(layer, name = "") {
 		content.push("blank");
 	} else if (layer == "h") {
 		if (name == "The Breaker") {
-			content.push(["clickable", "11"]);
+			content.push(["clickable", 11]);
 			content.push("blank");
-			content.push(["clickable", "21"]);
-			content.push("blank");
+			content.push(["clickable", 21]);
 		} else {
 			content.push("milestones");
 			content.push("upgrades");
-			content.push("blank");
 		};
+		content.push("blank");
 	} else if (layer == "ds") {
 		if (name == "Demon Gateway") {
 			content.push("challenges");
-			content.push("blank");
 		} else {
 			content.push("milestones");
 			content.push("buyables");
 			content.push("blank");
 			content.push("upgrades");
-			content.push("blank");
 		};
+		content.push("blank");
 	} else if (layer == "a") {
 		if (name == "Atomic Reactor") {
-			content.push(["clickables", "1"]);
+			content.push(["clickable", 11]);
 			content.push("blank");
-			content.push(["clickables", "2"]);
+			content.push(["clickable", 21]);
 			content.push("blank");
 		} else if (name == "Atomic Tree") {
 			let text = "";
@@ -160,12 +157,11 @@ function getRawTabContent(layer, name = "") {
 		content.push("blank");
 		if (name == "Gate of Evil") {
 			content.push("challenges");
-			content.push("blank");
 		} else {
 			content.push("milestones");
 			content.push("upgrades");
-			content.push("blank");
 		};
+		content.push("blank");
 	} else if (layer == "w") {
 		content.push(["display-text", "After unlocking War, you can always buy max on all resources before this row."]);
 		content.push("blank");
@@ -226,13 +222,12 @@ function getRawTabContent(layer, name = "") {
 			content.push("buyables");
 		} else if (name == "Rewards") {
 			content.push(["display-text", getAssimilationRewards()]);
-			content.push("blank");
 		} else {
-			content.push(["display-text", "Multicellular organism resets do not reset anything."]);
+			content.push(["display-text", "Multicellular organisms reset nothing."]);
 			content.push("blank");
-			content.push("clickables");
-			content.push("blank");
+			content.push(["clickable", 11]);
 		};
+		content.push("blank");
 	};
 	return content;
 };

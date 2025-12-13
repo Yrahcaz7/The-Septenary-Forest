@@ -49,7 +49,7 @@ function loadVue(mainPage = false) {
 				<div id="version" onclick="showTab('changelog-tab')" class="overlayThing" style="margin-right: 13px">{{VERSION.withoutName}}</div>
 				<button v-if="((player.navTab == 'none' && (tmp[player.tab].row == 'side' || tmp[player.tab].row == 'otherside' || player[player.tab].prevTab)) || player[player.navTab]?.prevTab)" class="big back overlayThing" onclick="goBack(player.navTab === 'none' ? player.tab : player.navTab)">&#8592;</button>
 				<img id="optionWheel" class="overlayThing" v-if="player.tab != 'options-tab'" src="${mainPage ? "" : "../"}shared/images/options_wheel.png" onclick="showTab('options-tab')">
-				<div id="info" v-if="player.tab != 'info-tab'" class="overlayThing" onclick="showTab('info-tab')"><br>i</div>
+				<div id="info" v-if="player.tab != 'info-tab'" class="overlayThing" onclick="showTab('info-tab')">i</div>
 				<div id="discord" class="overlayThing" style="z-index: 30001">
 					<img src="${mainPage ? "" : "../"}shared/images/discord.png">
 					<ul id="discordLinks">
@@ -241,17 +241,17 @@ function loadVue(mainPage = false) {
 			<h3 v-html="tmp[layer].challenges[data].name"></h3><br><br>
 			<button :class="{longUpg: true, can: canUseChallenge(layer, data), [layer]: true}" :style="{'background-color': tmp[layer].color}" @click="startChallenge(layer, data)">{{challengeButtonText(layer, data)}}</button><br><br>
 			<span v-if="layers[layer].challenges[data].fullDisplay" v-html="run(layers[layer].challenges[data].fullDisplay, layers[layer].challenges[data])"></span>
-			<span v-else>
+			<template v-else>
 				<span v-html="tmp[layer].challenges[data].challengeDescription"></span><br>
 				Goal: <span v-if="tmp[layer].challenges[data].goalDescription" v-html="tmp[layer].challenges[data].goalDescription"></span>
-				<span v-else>{{format(tmp[layer].challenges[data].goal)}} {{tmp[layer].challenges[data].currencyDisplayName ? tmp[layer].challenges[data].currencyDisplayName : (modInfo.pointsName || "points")}}</span><br>
+				<template v-else>{{format(tmp[layer].challenges[data].goal)}} {{tmp[layer].challenges[data].currencyDisplayName || (modInfo.pointsName || "points")}}</template><br>
 				Reward: <span v-html="tmp[layer].challenges[data].rewardDescription"></span>
-				<span v-if="layers[layer].challenges[data].rewardDisplay !== undefined">
+				<template v-if="layers[layer].challenges[data].rewardDisplay !== undefined">
 					<br>
 					<span v-html="getCurrentlyText()"></span>
 					<span v-html="tmp[layer].challenges[data].rewardDisplay ? run(layers[layer].challenges[data].rewardDisplay, layers[layer].challenges[data], tmp[layer].challenges[data].rewardEffect) : format(tmp[layer].challenges[data].rewardEffect)"></span>
-				</span>
-			</span>
+				</template>
+			</template>
 			<node-mark :layer="layer" :data='tmp[layer].challenges[data].marked' :offset="20" :scale="1.5"></node-mark>
 		</div>`),
 	});
@@ -285,17 +285,19 @@ function loadVue(mainPage = false) {
 			tmp[layer].upgrades[data].style
 		]">
 			<span v-if="layers[layer].upgrades[data].fullDisplay" v-html="run(layers[layer].upgrades[data].fullDisplay, layers[layer].upgrades[data])"></span>
-			<span v-else>
-				<span v-if="tmp[layer].upgrades[data].title"><h3 v-html="tmp[layer].upgrades[data].title"></h3><br></span>
+			<template v-else>
+				<template v-if="tmp[layer].upgrades[data].title">
+					<h3 v-html="tmp[layer].upgrades[data].title"></h3><br>
+				</template>
 				<span v-html="tmp[layer].upgrades[data].description"></span>
-				<span v-if="layers[layer].upgrades[data].effectDisplay">
+				<template v-if="layers[layer].upgrades[data].effectDisplay">
 					<br>
 					<span v-html="getCurrentlyText()"></span>
 					<span v-html="run(layers[layer].upgrades[data].effectDisplay, layers[layer].upgrades[data], tmp[layer].upgrades[data].effect)"></span>
-				</span><br><br>
+				</template><br><br>
 				<span v-if="layers[layer].upgrades[data].costDisplay" v-html="run(layers[layer].upgrades[data].costDisplay, layers[layer].upgrades[data], tmp[layer].upgrades[data].cost)"></span>
-				<span v-else>Cost: {{formatWhole(tmp[layer].upgrades[data].cost)}} {{(tmp[layer].upgrades[data].currencyDisplayName || tmp[layer].upgrades[data].currencyInternalName || tmp[layer].resource)}}</span>
-			</span>
+				<template v-else>Cost: {{formatWhole(tmp[layer].upgrades[data].cost)}} {{(tmp[layer].upgrades[data].currencyDisplayName || tmp[layer].upgrades[data].currencyInternalName || tmp[layer].resource)}}</template>
+			</template>
 			<tooltip v-if="tmp[layer].upgrades[data].tooltip" :text="tmp[layer].upgrades[data].tooltip"></tooltip>
 		</button>`),
 	});
@@ -329,9 +331,9 @@ function loadVue(mainPage = false) {
 			<h3 v-html="tmp[layer].milestones[data].requirementDescription"></h3><br>
 			<span v-html="run(layers[layer].milestones[data].effectDescription, layers[layer].milestones[data], tmp[layer].milestones[data].effect)"></span><br>
 			<tooltip v-if="tmp[layer].milestones[data].tooltip" :text="tmp[layer].milestones[data].tooltip"></tooltip>
-			<span v-if="tmp[layer].milestones[data].toggles && hasMilestone(layer, data)" v-for="toggle in tmp[layer].milestones[data].toggles">
+			<template v-if="tmp[layer].milestones[data].toggles && hasMilestone(layer, data)" v-for="toggle in tmp[layer].milestones[data].toggles">
 				<toggle :layer="layer" :data="toggle" :style="tmp[layer].componentStyles.toggle"></toggle>&nbsp;
-			</span>
+			</template>
 		</td>`),
 	});
 
@@ -362,7 +364,7 @@ function loadVue(mainPage = false) {
 		data() {return {player, tmp, format, formatWhole, layers, run}},
 		computed: {
 			extraMainDisplay() {
-				if (typeof extraMainDisplay === 'function') return extraMainDisplay(this.layer) || "";
+				if (typeof extraMainDisplay === 'function') return extraMainDisplay(this.layer);
 				return "";
 			},
 			effectDescription() {
@@ -371,7 +373,7 @@ function loadVue(mainPage = false) {
 			},
 		},
 		template: template(`<div>
-			<span v-if="player[layer].points.lt('1e1000')">You have </span>
+			<template v-if="player[layer].points.lt('1e1000')">You have </template>
 			<h2 :style="{color: tmp[layer].color, 'text-shadow': tmp[layer].color + ' 0px 0px 10px'}">{{data ? format(player[layer].points, data) : formatWhole(player[layer].points)}}</h2>&nbsp;
 			<span v-if="extraMainDisplay" v-html="extraMainDisplay"></span>
 			{{tmp[layer].resource}}
@@ -384,11 +386,11 @@ function loadVue(mainPage = false) {
 		props: ['layer'],
 		data() {return {tmp, formatWhole, format, player}},
 		template: template(`<div style="margin-top: -13px">
-			<span v-if="tmp[layer].baseAmount"><br>You have {{formatWhole(tmp[layer].baseAmount)}} {{tmp[layer].baseResource}}</span>
-			<span v-if="tmp[layer].passiveGeneration"><br>You are gaining {{format(tmp[layer].resetGain.times(tmp[layer].passiveGeneration))}} {{tmp[layer].resource}} per second</span>
+			<template v-if="tmp[layer].baseAmount"><br>You have {{formatWhole(tmp[layer].baseAmount)}} {{tmp[layer].baseResource}}</template>
+			<template v-if="tmp[layer].passiveGeneration"><br>You are gaining {{format(tmp[layer].resetGain.times(tmp[layer].passiveGeneration))}} {{tmp[layer].resource}} per second</template>
 			<br><br>
-			<span v-if="tmp[layer].showBest">Your best {{tmp[layer].resource}} is {{formatWhole(player[layer].best)}}<br></span>
-			<span v-if="tmp[layer].showTotal">You have made a total of {{formatWhole(player[layer].total)}} {{tmp[layer].resource}}<br></span>
+			<template v-if="tmp[layer].showBest">Your best {{tmp[layer].resource}} is {{formatWhole(player[layer].best)}}<br></template>
+			<template v-if="tmp[layer].showTotal">You have made a total of {{formatWhole(player[layer].total)}} {{tmp[layer].resource}}<br></template>
 		</div>`),
 	});
 
@@ -440,22 +442,22 @@ function loadVue(mainPage = false) {
 				tmp[layer].componentStyles.buyable,
 				tmp[layer].buyables[data].style,
 			]" @click="interval ? null : buyBuyable(layer, data)" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart.passive="start" @touchend="stop" @touchcancel="stop">
-				<span v-if="tmp[layer].buyables[data].title">
+				<template v-if="tmp[layer].buyables[data].title">
 					<h2 v-html="tmp[layer].buyables[data].title"></h2><br>
-				</span>
+				</template>
 				<span v-if="layers[layer].buyables[data].fullDisplay" style="white-space: pre-line" v-html="run(layers[layer].buyables[data].fullDisplay, layers[layer].buyables[data])"></span>
-				<span v-else>
+				<template v-else>
 					<span v-html="tmp[layer].buyables[data].description"></span>
-					<span v-if="layers[layer].buyables[data].effectDisplay">
+					<template v-if="layers[layer].buyables[data].effectDisplay">
 						<br><br>
 						<span v-html="getCurrentlyText()"></span>
 						<span v-html="run(layers[layer].buyables[data].effectDisplay, layers[layer].buyables[data], tmp[layer].buyables[data].effect)"></span>
-					</span><br><br>
+					</template><br><br>
 					<span v-if="layers[layer].buyables[data].costDisplay" v-html="run(layers[layer].buyables[data].costDisplay, layers[layer].buyables[data], tmp[layer].buyables[data].cost)"></span>
-					<span v-else>Cost: {{formatWhole(tmp[layer].buyables[data].cost)}} {{(tmp[layer].buyables[data].currencyDisplayName || tmp[layer].resource)}}</span><br><br>
+					<template v-else>Cost: {{formatWhole(tmp[layer].buyables[data].cost)}} {{(tmp[layer].buyables[data].currencyDisplayName || tmp[layer].resource)}}</template><br><br>
 					<span v-if="layers[layer].buyables[data].boughtDisplay" v-html="run(layers[layer].buyables[data].boughtDisplay, layers[layer].buyables[data], player[layer].buyables[data])"></span>
-					<span v-else>Bought: {{formatWhole(player[layer].buyables[data])}}{{newDecimalInf().neq(tmp[layer].buyables[data].purchaseLimit) ? "/" + formatWhole(tmp[layer].buyables[data].purchaseLimit) : ""}}</span>
-				</span>
+					<template v-else>Bought: {{formatWhole(player[layer].buyables[data])}}{{newDecimalInf().neq(tmp[layer].buyables[data].purchaseLimit) ? "/" + formatWhole(tmp[layer].buyables[data].purchaseLimit) : ""}}</template>
+				</template>
 				<node-mark :layer="layer" :data='tmp[layer].buyables[data].marked'></node-mark>
 				<tooltip v-if="tmp[layer].buyables[data].tooltip" :text="tmp[layer].buyables[data].tooltip"></tooltip>
 			</button>
@@ -523,9 +525,9 @@ function loadVue(mainPage = false) {
 			(tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].clickables[data].color ?? tmp[layer].color} : {}),
 			tmp[layer].clickables[data].style,
 		]" @click="interval ? null : clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart.passive="start" @touchend="stop" @touchcancel="stop">
-			<span v-if="tmp[layer].clickables[data].title">
+			<template v-if="tmp[layer].clickables[data].title">
 				<h2 v-html="tmp[layer].clickables[data].title"></h2><br>
-			</span>
+			</template>
 			<span style="white-space: pre-line" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
 			<node-mark :layer="layer" :data='tmp[layer].clickables[data].marked'></node-mark>
 			<tooltip v-if="tmp[layer].clickables[data].tooltip" :text="tmp[layer].clickables[data].tooltip"></tooltip>
