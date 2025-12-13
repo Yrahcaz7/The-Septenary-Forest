@@ -189,15 +189,15 @@ const REF = 1;
 /**
  * Gets the class HTML attribute for a colored text element.
  * @param {{}} obj - The TMT object that the element belongs to.
- * @param {string} layer - The layer to apply the color of to the element.
  * @param {TITLE | REF} type - The type of the element (title or reference).
+ * @param {string} layer - The layer to apply the color of to the element.
  * @param {boolean} plain - If `true`, does not consider the darker version of the layer color.
  */
-function getColorClass(obj, layer, type, plain = false) {
+function getColorClass(obj, type, layer = obj.layer, plain = false) {
 	if (!colorValue[0][type] || colorValue[1] == "none" || obj.layer === undefined || obj.id === undefined) {
 		return ">";
 	};
-	if (colorValue[1] == "dark" || layer == "h" || layer == "w") {
+	if (colorValue[1] == "dark" || layer == "h" || layer == "w" || layer == "mo") {
 		return ` class="layer-${layer}-dark">`;
 	};
 	const darkMax = (layer == "r");

@@ -194,7 +194,7 @@ function getAssimilationRewards() {
 	};
 	if (isAssimilated('gi')) {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-gi">Good Influence</h2><br><br>';
-		text += 'Makes the 17th good influence milestone perform good influence resets automatically<br>';
+		text += 'Makes the <b class="layer-gi">17th good influence milestone</b> perform good influence resets automatically<br>';
 		text += 'Unlocks four new good influence upgrades: <b class="layer-gi">Devotion to Good</b>, <b class="layer-gi">Sacrifice for Good</b>, <b class="layer-gi">Glowing Goodness</b>, and <b class="layer-gi">Greater Good</b><br>';
 		text += 'Reduces the good influence cost base (2 --> 1.99)<br>';
 		text += 'Unlocks the third <b class="layer-mo">Synergy</b>';
