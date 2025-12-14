@@ -33,7 +33,7 @@ Individual upgrades can have these features:
 
 - `effectDisplay()`: **optional**. A function that returns a display of the current effects of the upgrade with formatting. Default displays nothing. Can use basic HTML. (Additional feature: Can have an argument `eff`, which holds the current effect of the upgrade.)
 
-- `fullDisplay()`: **OVERRIDE**. Overrides the other displays and descriptions, and lets you set the full text for the upgrade. Can use basic HTML.
+- `fullDisplay()`: **OVERRIDE**. Overrides the other displays and descriptions (except `title`), and lets you set the full text for the upgrade. Can use basic HTML.
 
 - `cost`: **sort of optional** A `Decimal` for the cost of the upgrade. Can be a function. By default, upgrades cost the main prestige currency for the layer.
 

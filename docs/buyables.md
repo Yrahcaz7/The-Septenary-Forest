@@ -9,7 +9,7 @@ Useful functions for dealing with buyables and implementing their effects:
 - `getBuyableAmount(layer, id)`: Gets the amount of the buyable the player has.
 - `setBuyableAmount(layer, id, amount)`: Sets the amount of the buyable the player has.
 - `addBuyables(layer, id, amount)`: Adds to the amount of the buyable.
-- `hasBuyable(layer, id)`: Returns `true` if the player has one or more of the buyable.
+- `hasBuyable(layer, id)` (additional feature): Returns `true` if the player has one or more of the buyable.
 - `buyableEffect(layer, id)`: Returns the current effects of the buyable, if any.
 
 Buyables should be formatted like this:
@@ -75,7 +75,7 @@ Features:
 >
 > - `boughtDisplay(x)` (additional feature): **OVERRIDE**. Overrides the bought display. The `x` argument holds the amount of the buyable the player has.
 
-- `fullDisplay()` (formerly `display()`): **OVERRIDE**. Overrides the other displays and descriptions (besides `title`), and lets you set the full text for the buyable. Can use basic HTML.
+- `fullDisplay()` (formerly `display()`): **OVERRIDE**. Overrides the other displays and descriptions (except `title`), and lets you set the full text for the buyable. Can use basic HTML.
 
 - `unlocked()`: **optional**. A function returning a bool to determine if the buyable is visible or not. Default is unlocked.
 

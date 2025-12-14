@@ -284,11 +284,11 @@ function loadVue(mainPage = false) {
 			(!hasUpgrade(layer, data) && canAffordUpgrade(layer, data) ? {'background-color': tmp[layer].upgrades[data].color ?? tmp[layer].color} : {}),
 			tmp[layer].upgrades[data].style
 		]">
+			<template v-if="tmp[layer].upgrades[data].title">
+				<h3 v-html="tmp[layer].upgrades[data].title"></h3><br>
+			</template>
 			<span v-if="layers[layer].upgrades[data].fullDisplay" v-html="run(layers[layer].upgrades[data].fullDisplay, layers[layer].upgrades[data])"></span>
 			<template v-else>
-				<template v-if="tmp[layer].upgrades[data].title">
-					<h3 v-html="tmp[layer].upgrades[data].title"></h3><br>
-				</template>
 				<span v-html="tmp[layer].upgrades[data].description"></span>
 				<template v-if="layers[layer].upgrades[data].effectDisplay">
 					<br>

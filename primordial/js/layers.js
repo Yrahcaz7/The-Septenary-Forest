@@ -3036,65 +3036,81 @@ addLayer('p', {
 			},
 		},
 		14: {
+			title() { return '<b' + getColorClass(this, TITLE, "p", true) + 'Prayer Divination' },
 			fullDisplay() {
-				let text = '<h3' + getColorClass(this, TITLE, "p", true) + 'Prayer Divination</h3><br>Req: 100 divinity with having 0 holiness';
+				let text = 'Req: 100 divinity with having 0 holiness';
 				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
 			canAfford() { return player.p.divinity.gte(100) && player.p.holiness.eq(0) },
-			style: {height:'120px',border:'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
+			style: {height: '120px', border: '2px dashed', 'border-color': '#FF8800', 'background-color': '#0088FF'},
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && !hasUpgrade('p', 14) },
 		},
 		15: {
-			fullDisplay() {
-				if (options.nerdMode) return '<h3' + getColorClass(this, TITLE) + 'Prayer Divination</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.02<br><br>Cost: 75 divinity';
-				return '<h3' + getColorClass(this, TITLE) + 'Prayer Divination</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 75 divinity';
-			},
-			canAfford() { return player.p.divinity.gte(75) },
-			pay() { player.p.divinity = player.p.divinity.sub(75) },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Prayer Divination' },
+			description: 'multiplies prayer gain based on your divinity',
 			effect() { return player.p.divinity.add(1).pow(0.02) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (x+1)^0.02';
+				return text;
+			},
+			cost: 75,
+			currencyInternalName: "divinity",
+			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 14) },
 		},
 		21: {
-			fullDisplay() {
-				if (options.nerdMode) return '<h3' + getColorClass(this, TITLE) + 'Divine Prayers</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.01<br><br>Cost: 20 divinity';
-				return '<h3' + getColorClass(this, TITLE) + 'Divine Prayers</h3><br>multiplies prayer gain based on your divinity<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 20 divinity';
-			},
-			canAfford() { return player.p.divinity.gte(20) },
-			pay() { player.p.divinity = player.p.divinity.sub(20) },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Divine Prayers' },
+			description: 'multiplies prayer gain based on your divinity',
 			effect() { return player.p.divinity.add(1).pow(0.01) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (x+1)^0.01';
+				return text;
+			},
+			cost: 20,
+			currencyInternalName: "divinity",
+			currencyLayer: "p",
 		},
 		22: {
-			fullDisplay() { return '<h3' + getColorClass(this, TITLE) + 'Holy Light</h3><br>unlocks <b' + getColorClass(this, REF) + 'holiness</b><br><br>Cost: 45 divinity' },
-			canAfford() { return player.p.divinity.gte(45) },
-			pay() { player.p.divinity = player.p.divinity.sub(45) },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Holy Light' },
+			description() { return 'unlocks <b' + getColorClass(this, REF) + 'holiness</b>' },
+			cost: 45,
+			currencyInternalName: "divinity",
+			currencyLayer: "p",
 		},
 		23: {
-			fullDisplay() { return '<h3' + getColorClass(this, TITLE) + 'Holy Channeling</h3><br>increases efficiency of holiness conversion<br>0.04x --> 0.06x<br><br>Cost: 10 holiness' },
-			canAfford() { return player.p.holiness.gte(10) },
-			pay() {
-				player.p.holiness = player.p.holiness.sub(10);
-			},
+			title() { return '<b' + getColorClass(this, TITLE) + 'Holy Channeling' },
+			description: 'increases efficiency of holiness conversion<br>(0.04x --> 0.06x)',
+			cost: 10,
+			currencyInternalName: "holiness",
+			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 22) },
 		},
 		24: {
+			title() { return '<b' + getColorClass(this, TITLE, "p", true) + 'Holy Conversion' },
 			fullDisplay() {
-				let text = '<h3' + getColorClass(this, TITLE, "p", true) + 'Holy Conversion</h3><br>Req: 75 holiness without owning <b' + getColorClass(this, REF, "p", true) + 'Church Relics</b>';
+				let text = 'Req: 75 holiness without owning <b' + getColorClass(this, REF, "p", true) + 'Church Relics</b>';
 				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
 			canAfford() { return player.p.holiness.gte(75) && !hasUpgrade('p', 31) },
-			style: {height:'120px',border:'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
+			style: {height: '120px', border: '2px dashed', 'border-color': '#FF8800', 'background-color': '#0088FF'},
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 22) && !hasUpgrade('p', 24) },
 		},
 		25: {
-			fullDisplay() { return '<h3' + getColorClass(this, TITLE) + 'Holy Conversion</h3><br>increases efficiency of holiness conversion if you own <b' + getColorClass(this, REF) + 'Holy Channeling</b><br>0.06x --> 0.08x<br><br>Cost: 50 holiness' },
-			canAfford() { return player.p.holiness.gte(50) },
-			pay() { player.p.holiness = player.p.holiness.sub(50) },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Holy Conversion' },
+			description() { return 'increases efficiency of holiness conversion if you own <b' + getColorClass(this, REF) + 'Holy Channeling</b><br>(0.06x --> 0.08x)' },
+			cost: 50,
+			currencyInternalName: "holiness",
+			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 24) },
 		},
 		31: {
-			fullDisplay() { return '<h3' + getColorClass(this, TITLE) + 'Church Relics</h3><br>achievements also multiply prayer gain if you have all subsequent achievement upgrades<br><br>Cost: 175 divinity,<br>40 holiness' },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Church Relics' },
+			description: 'achievements also multiply prayer gain if you have all subsequent achievement upgrades',
+			costDisplay: "Cost: 175 divinity<br>and 40 holiness",
 			canAfford() { return player.p.divinity.gte(175) && player.p.holiness.gte(40) },
 			pay() {
 				player.p.divinity = player.p.divinity.sub(175);
@@ -3104,16 +3120,20 @@ addLayer('p', {
 
 		},
 		32: {
-			fullDisplay() {
-				if (options.nerdMode) return '<h3' + getColorClass(this, TITLE) + 'Divine Synergy</h3><br>multiplies divinity gain based on your holiness<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.025<br><br>Cost: 750 divinity,<br>50 holiness';
-				return '<h3' + getColorClass(this, TITLE) + 'Divine Synergy</h3><br>multiplies divinity gain based on your holiness<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 750 divinity,<br>50 holiness';
+			title() { return '<b' + getColorClass(this, TITLE) + 'Divine Synergy' },
+			description: 'multiplies divinity gain based on your holiness',
+			effect() { return player.p.holiness.add(1).pow(0.025) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (x+1)^0.025';
+				return text;
 			},
+			costDisplay: "Cost: 750 divinity<br>and 50 holiness",
 			canAfford() { return player.p.divinity.gte(750) && player.p.holiness.gte(50) },
 			pay() {
 				player.p.divinity = player.p.divinity.sub(750);
 				player.p.holiness = player.p.holiness.sub(50);
 			},
-			effect() { return player.p.holiness.add(1).pow(0.025) },
 			unlocked() { return hasUpgrade('p', 22) },
 		},
 		33: {
@@ -3128,23 +3148,28 @@ addLayer('p', {
 			},
 		},
 		34: {
+			title() { return '<b' + getColorClass(this, TITLE, "p", true) + 'Holy Shift' },
 			fullDisplay() {
-				let text = '<h3' + getColorClass(this, TITLE, "p", true) + 'Holy Shift</h3><br>Req: 1,000 holiness with 0 hymns';
+				let text = 'Req: 1,000 holiness with 0 hymns';
 				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
 			canAfford() { return player.p.holiness.gte(1000) && player.p.hymn.eq(0) },
-			style: {height:'120px',border:'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
+			style: {height: '120px', border: '2px dashed', 'border-color': '#FF8800', 'background-color': '#0088FF'},
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 22) && !hasUpgrade('p', 34) },
 		},
 		35: {
-			fullDisplay() { return '<h3' + getColorClass(this, TITLE) + 'Holy Shift</h3><br>increases efficiency of holiness conversion if you own <b' + getColorClass(this, REF) + 'Holy Conversion</b> and all subsequent upgrades<br>0.08x --> 0.11x<br><br>Cost: 500 holiness' },
-			canAfford() { return player.p.holiness.gte(500) },
-			pay() { player.p.holiness = player.p.holiness.sub(500) },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Holy Shift' },
+			description() { return 'increases efficiency of holiness conversion if you own <b' + getColorClass(this, REF) + 'Holy Conversion</b> and all subsequent upgrades<br>(0.08x --> 0.11x)' },
+			cost: 500,
+			currencyInternalName: "holiness",
+			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 34) },
 		},
 		41: {
-			fullDisplay() { return '<h3' + getColorClass(this, TITLE) + 'Written hymns</h3><br>unlocks <b' + getColorClass(this, REF) + 'hymns</b><br><br>Cost: 2,000 divinity,<br>450 holiness' },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Written Hymns' },
+			description() { return 'unlocks <b' + getColorClass(this, REF) + 'hymns</b>' },
+			costDisplay: "Cost: 2,000 divinity<br>and 450 holiness",
 			canAfford() { return player.p.divinity.gte(2000) && player.p.holiness.gte(450) },
 			pay() {
 				player.p.divinity = player.p.divinity.sub(2000);
@@ -3153,26 +3178,26 @@ addLayer('p', {
 			unlocked() { return hasUpgrade('p', 22) },
 		},
 		42: {
-			fullDisplay() {
-				if (options.nerdMode) {
-					if (hasUpgrade('p', 45)) return '<h3' + getColorClass(this, TITLE) + 'Divine hymns</h3><br>multiplies divinity gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.125<br><br>Cost: 1,000 holiness,<br>75 hymns';
-					return '<h3' + getColorClass(this, TITLE) + 'Divine hymns</h3><br>multiplies divinity gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.1<br><br>Cost: 1,000 holiness,<br>75 hymns';
-				};
-				return '<h3' + getColorClass(this, TITLE) + 'Divine hymns</h3><br>multiplies divinity gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: 1,000 holiness,<br>75 hymns';
+			title() { return '<b' + getColorClass(this, TITLE) + 'Divine Hymns' },
+			description: 'multiplies divinity gain based on your hymns',
+			effect() { return player.p.hymn.add(1).pow(hasUpgrade('p', 45) ? 0.125 : 0.1) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (x+1)^' + (hasUpgrade('p', 45) ? 0.125 : 0.1);
+				return text;
 			},
+			costDisplay: "Cost: 1,000 holiness<br>and 75 hymns",
 			canAfford() { return player.p.holiness.gte(1000) && player.p.hymn.gte(75) },
 			pay() {
 				player.p.holiness = player.p.holiness.sub(1000);
 				player.p.hymn = player.p.hymn.sub(75);
 			},
-			effect() {
-				if (hasUpgrade('p', 45)) return player.p.hymn.add(1).pow(0.125);
-				return player.p.hymn.add(1).pow(0.1);
-			},
 			unlocked() { return hasUpgrade('p', 41) },
 		},
 		43: {
-			fullDisplay() { return '<h3' + getColorClass(this, TITLE) + 'Hymn Singing</h3><br>increases hymn effect exponent<br>0.15 --> 0.2<br><br>Cost: 1,000,000 holiness,<br>50,000 hymns' },
+			title() { return "<b" + getColorClass(this, TITLE) + "Hymn Singing" },
+			description: "increases hymn effect exponent<br>(0.15 --> 0.2)",
+			costDisplay: "Cost: 1,000,000 holiness<br>and 50,000 hymns",
 			canAfford() { return player.p.holiness.gte(1000000) && player.p.hymn.gte(50000) },
 			pay() {
 				player.p.holiness = player.p.holiness.sub(1000000);
@@ -3181,100 +3206,131 @@ addLayer('p', {
 			unlocked() { return hasUpgrade('p', 41) },
 		},
 		44: {
+			title() { return "<b" + getColorClass(this, TITLE, "p", true) + "Hymn Divination" },
 			fullDisplay() {
-				let text = '<h3' + getColorClass(this, TITLE, "p", true) + 'Hymn Divination</h3><br>Req: 10,000,000 hymns without owning <b' + getColorClass(this, REF, "p", true) + 'Shorter Hymns</b>';
+				let text = 'Req: 10,000,000 hymns without owning <b' + getColorClass(this, REF, "p", true) + 'Concise Hymns</b>';
 				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
 			canAfford() { return player.p.hymn.gte(10000000) && !hasUpgrade('p', 51) },
-			style: {height:'120px',border:'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
+			style: {height: '120px', border: '2px dashed', 'border-color': '#FF8800', 'background-color': '#0088FF'},
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) && !hasUpgrade('p', 44) },
 		},
 		45: {
-			fullDisplay() { return '<h3' + getColorClass(this, TITLE) + 'Hymn Divination</h3><br>increases the exponent of <b' + getColorClass(this, REF) + 'Divine Hymns</b><br>^0.1 --> ^0.125<br><br>Cost: 2,500,000 hymns' },
-			canAfford() { return player.p.hymn.gte(2500000) },
-			pay() { player.p.hymn = player.p.hymn.sub(2500000) },
+			title() { return "<b" + getColorClass(this, TITLE) + "Hymn Divination" },
+			description() { return 'increases the exponent of <b' + getColorClass(this, REF) + 'Divine Hymns</b><br>(^0.1 --> ^0.125)' },
+			cost: 2_500_000,
+			currencyDisplayName: "hymns",
+			currencyInternalName: "hymn",
+			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 44) },
 		},
 		51: {
-			fullDisplay() { return '<h3' + getColorClass(this, TITLE) + 'Shorter Hymns</h3><br>decreases hymn requirement<br>250 --> 200<br><br>Cost: 1,000,000 hymns' },
-			canAfford() { return player.p.hymn.gte(1000000) },
-			pay() { player.p.hymn = player.p.hymn.sub(1000000) },
+			title() { return "<b" + getColorClass(this, TITLE) + "Concise Hymns" },
+			description: "decreases hymn requirement<br>(250 --> 200)",
+			cost: 1_000_000,
+			currencyDisplayName: "hymns",
+			currencyInternalName: "hymn",
+			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 41) },
 		},
 		52: {
-			fullDisplay() { return '<h3' + getColorClass(this, TITLE) + 'Stronger Hymns</h3><br>increases hymn effect exponent if you have <b' + getColorClass(this, REF) + 'Hymn Singing</b><br>0.2 --> 0.225<br><br>Cost: 10,000,000 hymns' },
-			canAfford() { return player.p.hymn.gte(10000000) },
-			pay() { player.p.hymn = player.p.hymn.sub(10000000) },
+			title() { return "<b" + getColorClass(this, TITLE) + "Stronger Hymns" },
+			description() { return 'increases hymn effect exponent if you have <b' + getColorClass(this, REF) + 'Hymn Singing</b><br>(0.2 --> 0.225)' },
+			cost: 10_000_000,
+			currencyDisplayName: "hymns",
+			currencyInternalName: "hymn",
+			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 41) },
 		},
 		53: {
-			fullDisplay() { return '<h3' + getColorClass(this, TITLE) + 'Strongest Hymns</h3><br>increases hymn effect exponent if you have all subsequent upgrades<br>0.225 --> 0.25<br><br>Cost: 100,000,000 hymns' },
-			canAfford() { return player.p.hymn.gte(100000000) },
-			pay() { player.p.hymn = player.p.hymn.sub(100000000) },
+			title() { return "<b" + getColorClass(this, TITLE) + "Strongest Hymns" },
+			description() { return 'increases hymn effect exponent if you have all subsequent upgrades<br>(0.225 --> 0.25)' },
+			cost: 100_000_000,
+			currencyDisplayName: "hymns",
+			currencyInternalName: "hymn",
+			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 41) },
 		},
 		54: {
+			title() { return "<b" + getColorClass(this, TITLE, "p", true) + "Hymn Compression" },
 			fullDisplay() {
-				let text = '<h3' + getColorClass(this, TITLE, "p", true) + 'Even Shorter</h3><br>Req: 1e10 hymns without owning <b' + getColorClass(this, REF, "p", true) + 'Holy Hymns</b>';
+				let text = 'Req: 1e10 hymns without owning <b' + getColorClass(this, REF, "p", true) + 'Holy Hymns</b>';
 				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
 			canAfford() { return player.p.hymn.gte(1e10) && !hasUpgrade('p', 61) },
-			style: {height:'120px',border:'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
+			style: {height: '120px', border: '2px dashed', 'border-color': '#FF8800', 'background-color': '#0088FF'},
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) && !hasUpgrade('p', 54) },
 		},
 		55: {
-			fullDisplay() { return '<h3' + getColorClass(this, TITLE) + 'Even Shorter</h3><br>decreases hymn requirement if you own <b' + getColorClass(this, REF) + 'Shorter Hymns</b><br>200 --> 175<br><br>Cost: ' + format(2.5e9) + ' hymns' },
-			canAfford() { return player.p.hymn.gte(2.5e9) },
-			pay() { player.p.hymn = player.p.hymn.sub(2.5e9) },
+			title() { return "<b" + getColorClass(this, TITLE) + "Hymn Compression" },
+			description() { return 'decreases hymn requirement if you own <b' + getColorClass(this, REF) + 'Concise Hymns</b><br>(200 --> 175)' },
+			cost: 2.5e9,
+			currencyDisplayName: "hymns",
+			currencyInternalName: "hymn",
+			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 54) },
 		},
 		61: {
-			fullDisplay() {
-				if (options.nerdMode) return '<h3' + getColorClass(this, TITLE) + 'Holy Hymns</h3><br>multiplies holiness gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br>formula: (x+1)^0.02<br><br>Cost: ' + format(1e9) + ' hymns';
-				return '<h3' + getColorClass(this, TITLE) + 'Holy Hymns</h3><br>multiplies holiness gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: ' + format(1e9) + ' hymns';
-			},
-			canAfford() { return player.p.hymn.gte(1e9) },
-			pay() { player.p.hymn = player.p.hymn.sub(1e9) },
+			title() { return "<b" + getColorClass(this, TITLE) + "Holy Hymns" },
+			description: "multiplies holiness gain based on your hymns",
 			effect() { return player.p.hymn.add(1).pow(0.02) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (x+1)^0.02';
+				return text;
+			},
+			cost: 1e9,
+			currencyDisplayName: "hymns",
+			currencyInternalName: "hymn",
+			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 41) },
 		},
 		62: {
-			fullDisplay() {
-				if (options.nerdMode) return '<h3' + getColorClass(this, TITLE) + 'Hymn Deconstruction</h3><br>multiplies prayer gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br>formula: log5(x+10)<br><br>Cost: ' + format(1e11) + ' hymns';
-				return '<h3' + getColorClass(this, TITLE) + 'Hymn Deconstruction</h3><br>multiplies prayer gain based on your hymns<br>Currently: ' + format(this.effect()) + 'x<br><br>Cost: ' + format(1e11) + ' hymns';
-			},
-			canAfford() { return player.p.hymn.gte(1e11) },
-			pay() { player.p.hymn = player.p.hymn.sub(1e11) },
+			title() { return "<b" + getColorClass(this, TITLE) + "Hymn Deconstruction" },
+			description: "multiplies prayer gain based on your hymns",
 			effect() { return player.p.hymn.add(10).log(5) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: log5(x+10)';
+				return text;
+			},
+			cost: 1e11,
+			currencyDisplayName: "hymns",
+			currencyInternalName: "hymn",
+			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 41) },
 		},
 		63: {
-			fullDisplay() {
-				let text = '<h3' + getColorClass(this, TITLE) + 'Hymn Resolve</h3><br>multiplies the effect of <b' + getColorClass(this, REF) + 'Hymn Deconstruction</b> based on your essence<br>Currently: ' + format(this.effect()) + 'x';
+			title() { return "<b" + getColorClass(this, TITLE) + "Hymn Resolve" },
+			description() { return 'multiplies the effect of <b' + getColorClass(this, REF) + 'Hymn Deconstruction</b> based on your essence' },
+			effect() { return player.e.points.add(1).pow(0.0015) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.0015';
-				text += '<br><br>Cost: ' + format(1e15) + ' hymns';
 				return text;
 			},
-			canAfford() { return player.p.hymn.gte(1e15) },
-			pay() { player.p.hymn = player.p.hymn.sub(1e15) },
-			effect() { return player.e.points.add(1).pow(0.0015) },
+			cost: 1e15,
+			currencyDisplayName: "hymns",
+			currencyInternalName: "hymn",
+			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 41) },
 		},
 		64: {
+			title() { return "<b" + getColorClass(this, TITLE) + "Silver Sanctums" },
 			fullDisplay() {
-				let text = '<h3' + getColorClass(this, TITLE, "p", true) + 'Silver Sanctums</h3><br>Req: 2.5e25 prayers, 2 sanctums, and all previous research';
+				let text = 'Req: 2.5e25 prayers, 2 sanctums, and all previous research';
 				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
 			canAfford() { return player.p.points.gte(2.5e25) && player.s.points.gte(2) && hasUpgrade('p', 15) && hasUpgrade('p', 25) && hasUpgrade('p', 35) && hasUpgrade('p', 45) && hasUpgrade('p', 55) },
-			style: {height:'120px',border:'2px dashed','border-color':'#FF8800','background-color':'#0088FF'},
+			style: {height: '120px', border: '2px dashed', 'border-color': '#FF8800', 'background-color': '#0088FF'},
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) && !hasUpgrade('p', 64) },
 		},
 		65: {
-			title() { return '<b' + getColorClass(this, TITLE) + 'Silver Sanctums' },
-			description: 'reduces sanctum cost scaling<br>5 --> 4',
+			title() { return "<b" + getColorClass(this, TITLE) + "Silver Sanctums" },
+			description: "reduces sanctum cost scaling<br>(5 --> 4)",
 			cost: 1e25,
 			unlocked() { return hasUpgrade('p', 64) },
 		},
@@ -3316,7 +3372,7 @@ addLayer('p', {
 		},
 		74: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Gold Sanctums' },
-			description() { return 'reduces sanctum cost scaling if you have <b' + getColorClass(this, REF) + 'Silver Sanctums</b><br>4 --> 3.48' },
+			description() { return 'reduces sanctum cost scaling if you have <b' + getColorClass(this, REF) + 'Silver Sanctums</b><br>(4 --> 3.48)' },
 			cost: 1e175,
 			unlocked() { return (hasMilestone('s', 3) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) },
 		},
@@ -3358,7 +3414,7 @@ addLayer('p', {
 		},
 		84: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Prismatic Sanctums' },
-			description() { return 'reduces sanctum cost scaling if you have <b' + getColorClass(this, REF) + 'Gold Sanctums</b><br>3.48 --> 3.3' },
+			description() { return 'reduces sanctum cost scaling if you have <b' + getColorClass(this, REF) + 'Gold Sanctums</b><br>(3.48 --> 3.3)' },
 			cost: 'e5.01e13',
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) },
 		},
@@ -5688,8 +5744,8 @@ addLayer('ei', {
 		},
 		12: {
 			name() { return '<h3' + getColorClass(this, TITLE) + 'Power the Gate' },
-			challengeDescription: " - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Forces an evil influence reset<br> - Divides evil power gain by 1e8<br>",
-			goalDescription: '1e21 evil power<br>',
+			challengeDescription: " - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Forces an evil influence reset<br> - Divides evil power gain by 1e8",
+			goalDescription: '1e21 evil power',
 			canComplete() { return player.ei.power.gte(1e21) },
 			onEnter() {
 				player.ei.upgrades = [];
@@ -5731,7 +5787,7 @@ addLayer('ei', {
 				player.r.total = newDecimalZero();
 				player.r.challenges[11] = 0;
 			},
-			rewardDescription: 'multiply evil influence gain<br>by 1.75x',
+			rewardDescription: 'multiply evil influence<br>gain by 1.75x',
 			countsAs: [11, 12, 21],
 			noAutoExit: true,
 			unlocked() { return hasChallenge('ei', 21) && hasMilestone('w', 1) },
