@@ -45,7 +45,6 @@ addLayer('e', {
 		if (hasBuyable('e', 12)) mult = mult.mul(buyableEffect('e', 12)[1]);
 		if (hasBuyable('c', 12)) mult = mult.mul(buyableEffect('c', 12));
 		if (hasBuyable('sp', 12)) mult = mult.mul(buyableEffect('sp', 12)[0]);
-		if (hasBuyable('sp', 11)) mult = mult.mul(buyableEffect('sp', 11)[1]);
 		if (hasBuyable('gi', 12)) mult = mult.mul(buyableEffect('gi', 12));
 		if (hasUpgrade('p', 22)) mult = mult.mul(player.p.holiness.add(1).pow(0.055));
 		if (hasUpgrade('p', 83)) mult = mult.mul(upgradeEffect('p', 83));
@@ -55,6 +54,7 @@ addLayer('e', {
 		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
 		if (new Decimal(tmp.ch.effect[0]).gt(1) && !tmp.ch.deactivated) mult = mult.mul(tmp.ch.effect[0]);
 		// div
+		if (hasBuyable('sp', 11)) mult = mult.mul(buyableEffect('sp', 11)[1]);
 		if (inChallenge('ds', 21)) mult = mult.div(1e20);
 		// pow
 		if (hasBuyable('e', 13)) mult = mult.pow(buyableEffect('e', 13));
@@ -702,10 +702,10 @@ addLayer('q', {
 		if (hasUpgrade('a', 41)) mult = mult.mul(upgradeEffect('a', 41));
 		if (hasUpgrade('m', 13)) mult = mult.mul(upgradeEffect('m', 13));
 		if (hasBuyable('sp', 11)) mult = mult.mul(buyableEffect('sp', 11)[0]);
-		if (hasBuyable('sp', 21)) mult = mult.mul(buyableEffect('sp', 21)[1]);
 		if (hasUpgrade('ds', 21) && hasUpgrade('ds', 23)) mult = mult.mul(player.A.points.pow(2).div(100));
 		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
 		// div
+		if (hasBuyable('sp', 13)) mult = mult.mul(buyableEffect('sp', 13)[1]);
 		if (inChallenge('ds', 11)) mult = mult.div(10);
 		if (inChallenge('ds', 22)) mult = mult.div(1e40);
 		// return
@@ -1416,7 +1416,7 @@ addLayer('sp', {
 				return text;
 			},
 		},
-		21: {
+		13: {
 			cost(x) { return x.add(1) },
 			title() { return '<b' + getColorClass(this, TITLE) + 'Electrons' },
 			description: 'multiplies point gain (but also decreases quark gain at a reduced rate) based on the amount of this upgrade bought.',

@@ -315,8 +315,7 @@ function getPointGen() {
 	if (hasUpgrade('p', 72)) gain = gain.mul(upgradeEffect('p', 72));
 	if (hasUpgrade('m', 52)) gain = gain.mul(upgradeEffect('m', 52));
 	if (hasBuyable('c', 11)) gain = gain.mul(buyableEffect('c', 11));
-	if (hasBuyable('sp', 21)) gain = gain.mul(buyableEffect('sp', 21)[0]);
-	if (hasBuyable('sp', 12)) gain = gain.mul(buyableEffect('sp', 12)[1]);
+	if (hasBuyable('sp', 13)) gain = gain.mul(buyableEffect('sp', 13)[0]);
 	if (player.p.unlocked && !tmp.p.deactivated) gain = gain.mul(player.p.divinity.add(1).pow(0.1));
 	if (hasUpgrade('p', 82)) gain = gain.mul(upgradeEffect('p', 82));
 	if (challengeCompletions('r', 11) >= 2) gain = gain.mul(tmp.r.effect[2]);
@@ -324,6 +323,7 @@ function getPointGen() {
 	else gain = gain.mul(player.A.points.mul(0.1).add(1));
 	if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[0]);
 	// div
+	if (hasBuyable('sp', 12)) gain = gain.mul(buyableEffect('sp', 12)[1]);
 	if (inChallenge('ds', 11)) gain = gain.div(10_000);
 	if (inChallenge('ds', 12)) gain = gain.div(1_000_000);
 	if (inChallenge('ds', 21)) gain = gain.div(1e10);
@@ -374,7 +374,7 @@ function fixOldSave(oldVersion) {
 	if ((oldVersion == '3.4' || oldVersion == '3.4.1') && (player.points.gte('e1.51e14') || player.ch.points.gt(50))) {
 		setTimeout(() => {
 			doReset('ch', true);
-			if (player.ch.points.gt(50) || player.ch.best.gt(50) || player.ch.total.gt(50)) {
+			if (player.ch.points.gt(50)) {
 				player.ch.points = new Decimal(50);
 				player.ch.best = new Decimal(50);
 				player.ch.total = new Decimal(50);
@@ -400,6 +400,11 @@ function fixOldSave(oldVersion) {
 	if (options.extendplaces !== undefined) {
 		options.extendPlaces = options.extendplaces;
 		delete options.extendplaces;
+	};
+	// relocate buyables
+	if (player.sp.buyables[21] !== undefined) {
+		player.sp.buyables[13] = player.sp.buyables[21];
+		delete player.sp.buyables[21];
 	};
 };
 

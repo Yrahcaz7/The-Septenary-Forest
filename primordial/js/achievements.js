@@ -281,7 +281,7 @@ addLayer('A', {
 		},
 		56: {
 			name: 'Hollow Particles',
-			done() { return player.sp.points.gte(10) && getBuyableAmount('sp', 11).eq(0) && getBuyableAmount('sp', 12).eq(0) && getBuyableAmount('sp', 21).eq(0) && player.h.total.eq(0) },
+			done() { return player.sp.points.gte(10) && getBuyableAmount('sp', 11).eq(0) && getBuyableAmount('sp', 12).eq(0) && getBuyableAmount('sp', 13).eq(0) && player.h.total.eq(0) },
 			tooltip: 'obtain 10 subatomic particles with no subatomic particle rebuyables and hexes.',
 			unlocked() { return hasAchievement('A', 52) && hasAchievement('A', 61) },
 			image() { if (hasAchievement('A', 56)) return "images/achievements/56.png" },
