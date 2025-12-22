@@ -16,7 +16,7 @@ const changelog = `<h1>Changelog:</h1><br>
 	<br><h3>v3.6: Even More Assimilation</h3><br>
 		- Added more to assimilation.<br>
 		- Added more to story.<br>
-		- Added nine milestones to chaos.<br>
+		- Added ten milestones to chaos.<br>
 		- Added one achievement.<br>
 		- Removed one option.<br>
 		- Added two options.<br>
@@ -275,6 +275,12 @@ function getActivatedRelics() {
 	return Math.min(challengeCompletions('r', 11), player.r.points.toNumber());
 };
 
+function getRelicActivationBulk() {
+	let bulk = 1;
+	if (hasMilestone('ch', 32)) bulk *= 10;
+	return bulk;
+};
+
 function buyGoodInfluenceBuyable(obj) {
 	if (hasMilestone('ch', 27)) {
 		let bulk = 10;
@@ -379,7 +385,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return 'You beat the game!<br>For now...' },
 ];
 
-const endPoints = new Decimal('e1e43');
+const endPoints = new Decimal('e1e45');
 
 function onLoad() { calculateColorValue() };
 

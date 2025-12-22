@@ -4228,7 +4228,7 @@ addLayer('r', {
 	automate() {
 		if (hasMilestone('w', 3) && player.r.auto_activate) {
 			if (getLightGain().gt(player.r.lightgainbest)) player.r.lightgainbest = getLightGain();
-			if (this.challenges[11].canComplete()) player.r.challenges[11]++;
+			if (this.challenges[11].canComplete()) player.r.challenges[11] += getRelicActivationBulk();
 		};
 		if (hasMilestone('w', 4) && player.r.auto_upgrade_1) buyUpgrade('r', 11);
 		if (hasMilestone('w', 4) && player.r.auto_upgrade_2) buyUpgrade('r', 12);
@@ -4308,6 +4308,8 @@ addLayer('r', {
 		player.r.light = player.r.light.add(player.r.lightgain.mul(diff));
 		if (player.r.light.gt(player.r.lightbest)) player.r.lightbest = player.r.light;
 		if (player.r.lightgain.gt(player.r.lightgainbest)) player.r.lightgainbest = player.r.lightgain;
+		const bulk = getRelicActivationBulk();
+		if (bulk > 1) player.r.challenges[11] = Math.ceil(player.r.challenges[11] / bulk) * bulk;
 	},
 	tabFormat: {
 		Activation: {
@@ -5023,6 +5025,7 @@ addLayer('gi', {
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
 		if (hasBuyable('w', 11)) gain = gain.mul(buyableEffect('w', 11)[0]);
 		if (hasBuyable('w', 13)) gain = gain.mul(buyableEffect('w', 13));
+		if (hasBuyable('w', 22)) gain = gain.mul(buyableEffect('w', 22));
 		if (hasBuyable('mo', 13)) gain = gain.mul(buyableEffect('mo', 13));
 		return gain;
 	},
@@ -5867,7 +5870,7 @@ addLayer('w', {
 	canReset() { return this.getResetGain().gt(0) },
 	prestigeNotify() { return this.getResetGain().gt(0) },
 	prestigeButtonText() { return 'Reset for +<b>' + formatWhole(tmp.w.getResetGain) + '</b> wars<br><br>' + (player.w.points.lt(30) ? (tmp.w.canBuyMax ? 'Next:' : 'Req:') : '') + ' ' + formatWhole(player.gi.points) + ' / ' + format(tmp.w.getNextAt.mul(tmp.w.giCostMult)) + ' GI<br>' + (player.w.points.lt(30) ? 'and ' : '') + formatWhole(player.ei.points) + ' / ' + format(tmp.w.getNextAt) + ' EI' },
-	canBuyMax() { return hasMilestone('ch', 0) },
+	canBuyMax() { return hasMilestone('ch', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 	onPrestige() {
 		if (hasMilestone('w', 5)) return;
 		player.c.unlocked = false;
@@ -5891,10 +5894,13 @@ addLayer('w', {
 	},
 	autoPrestige() { return hasMilestone('w', 17) },
 	row: 5,
-	tooltipLocked() { return 'Reach ' + this.requires + ' GI and ' + this.requires + ' EI to unlock (You have ' + formatWhole(player.gi.points) + ' GI and ' + formatWhole(player.ei.points) + ' EI)' },
+	tooltipLocked() {
+		if (tmp[this.layer].deactivated) return 'War is deactivated';
+		return 'Reach ' + this.requires + ' GI and ' + this.requires + ' EI to unlock (You have ' + formatWhole(player.gi.points) + ' GI and ' + formatWhole(player.ei.points) + ' EI)';
+	},
 	hotkeys: [{key: 'w', description: 'W: Reset for wars', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
-	layerShown() { return hasChallenge('ei', 21) || player.w.unlocked},
-	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
+	layerShown() { return hasChallenge('ei', 21) || player.w.unlocked },
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer) },
 	automate() {
 		if (hasMilestone('w', 18) && player[this.layer].auto_influence) {
 			for (const id in layers[this.layer].buyables) {
@@ -5902,7 +5908,11 @@ addLayer('w', {
 			};
 		};
 	},
-	effect() { return [new Decimal(1e10).pow(player.w.points), player.w.points.add(1).log10().add(1).pow(0.333), player.w.points.add(1).pow(1.5)] },
+	effect() { return [
+		new Decimal(1e10).pow(player.w.points),
+		player.w.points.add(1).log10().add(1).pow(0.333),
+		player.w.points.add(1).pow(isAssimilated(this.layer) || player.mo.assimilating === this.layer ? 5 : 1.5),
+	]},
 	effectDescription() { return 'which multiplies point, essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x; multiplies atom, sanctum, relic, molecule, good influence, and evil influence by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x; and multiplies light gain after hardcap by <h2 class="layer-w">' + format(tmp.w.effect[2]) + '</h2>x' },
 	doReset(resettingLayer) {
 		if (hasMilestone('ch', 12) && resettingLayer == 'ch') return;
@@ -5970,17 +5980,17 @@ addLayer('w', {
 		},
 		5: {
 			requirementDescription: '6 wars',
-			effectDescription: 'war resets don\'t reset relics, and keep everything unlocked on war resets',
+			effectDescription: "war resets don't reset relics, and keep everything unlocked on war resets",
 			done() { return player.w.points.gte(6) },
 		},
 		6: {
 			requirementDescription: '7 wars',
-			effectDescription: 'war resets don\'t reset molecules',
+			effectDescription: "war resets don't reset molecules",
 			done() { return player.w.points.gte(7) },
 		},
 		7: {
 			requirementDescription: '8 wars',
-			effectDescription: 'war resets don\'t reset cores',
+			effectDescription: "war resets don't reset cores",
 			done() { return player.w.points.gte(8) },
 		},
 		8: {
@@ -5990,7 +6000,7 @@ addLayer('w', {
 		},
 		9: {
 			requirementDescription: '10 wars',
-			effectDescription: 'war resets don\'t reset quarks, and unlock cellular life',
+			effectDescription: "war resets don't reset quarks, and unlock cellular life",
 			done() { return player.w.points.gte(10) },
 		},
 		10: {
@@ -6042,13 +6052,13 @@ addLayer('w', {
 		},
 		19: {
 			requirementDescription: '64 wars',
-			effectDescription() { return 'increase passive protein gain by 10%, multiply passive protein gain by 100x, improve <b' + getColorClass(this, REF, "cl") + 'Passive Discovery</b>\'s effect formulas, and disable manual protein gain';
+			effectDescription() { return "increase passive protein gain by 10%, multiply passive protein gain by 100x, improve <b" + getColorClass(this, REF, "cl") + "Passive Discovery</b>'s effect formulas, and disable manual protein gain";
 			},
 			done() { return player.w.points.gte(64) },
 		},
 		20: {
 			requirementDescription: '67 wars',
-			effectDescription() { return 'improve <b' + getColorClass(this, REF, "cl") + 'Passive Discovery</b>\'s effect formulas and <b' + getColorClass(this, REF, "cl") + 'Innate Evil</b>\'s effect formula';
+			effectDescription() { return "improve <b" + getColorClass(this, REF, "cl") + "Passive Discovery</b>'s effect formulas and <b" + getColorClass(this, REF, "cl") + "Innate Evil</b>'s effect formula";
 			},
 			done() { return player.w.points.gte(67) },
 		},
@@ -6119,13 +6129,13 @@ addLayer('w', {
 				return text;
 			},
 			currencyDisplayName: 'relics',
-			unlocked() { return hasMilestone('w', 3) },
+			unlocked() { return hasMilestone('w', 3) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 		13: {
 			cost(x) {
-				if (player.h.limitsBroken >= 1) return new Decimal(1.1).pow(x).mul(10000000);
-				if (hasMilestone('w', 16)) return x.mul(50000).add(320000);
-				return x.mul(70000).add(320000);
+				if (player.h.limitsBroken >= 1) return new Decimal(1.1).pow(x).mul(10_000_000);
+				if (hasMilestone('w', 16)) return x.mul(50_000).add(320_000);
+				return x.mul(70_000).add(320_000);
 			},
 			title() { return '<b' + getColorClass(this, TITLE) + 'Power of Good' },
 			description: 'multiplies good influence gain based on your sanctums and the amount of this upgrade bought.',
@@ -6155,7 +6165,7 @@ addLayer('w', {
 				return text;
 			},
 			currencyDisplayName: 'sanctums',
-			unlocked() { return hasMilestone('w', 4) },
+			unlocked() { return hasMilestone('w', 4) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 		21: {
 			cost(x) { return x.mul(5).add(235) },
@@ -6175,13 +6185,45 @@ addLayer('w', {
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) {
-					if (hasMilestone('ch', 8)) text += '<br>formula: ((x+1)^7.5)+(2.5^x)-1';
+					if (hasMilestone('ch', 8)) text += '<br>formula: (x+1)^7.5 + 2.5^x - 1';
 					else text += '<br>formula: (x+1)^3.25';
 				};
 				return text;
 			},
 			costDisplay(cost) { return 'Cost: ' + formatWhole(cost) + ' GI and ' + formatWhole(cost) + ' EI' },
-			unlocked() { return hasMilestone('w', 8) },
+			unlocked() { return hasMilestone('w', 8) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
+		},
+		22: {
+			cost(x) { return new Decimal(1000).pow(x) },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Relics of Good' },
+			description: 'multiplies good influence gain based on your relics and the amount of this upgrade bought.',
+			canAfford() { return player.r.points.gte(this.cost()) },
+			purchaseLimit: 99,
+			buy() { buyMultiCurrencyBuyable(this, ['r'], hasMilestone('ch', 10)) },
+			effect(x) { return player.r.points.add(1).log10().mul(x).div(1000).add(1).pow(0.5) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (log10(x+1)*y/1000+1)^0.5';
+				return text;
+			},
+			currencyDisplayName: 'relics',
+			unlocked() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer },
+		},
+		23: {
+			cost(x) { return new Decimal(hasMilestone('ch', 32) ? 1e6 : 1e10).pow(x) },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Sanctum Habitation' },
+			description: 'multiplies multicellular organism gain based on your sanctums and the amount of this upgrade bought.',
+			canAfford() { return player.s.points.gte(this.cost()) },
+			purchaseLimit: 99,
+			buy() { buyMultiCurrencyBuyable(this, ['s'], hasMilestone('ch', 10)) },
+			effect(x) { return player.s.points.add(1).log10().mul(x).div(100).add(1).pow(0.1) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (log10(x+1)*y/100+1)^0.1';
+				return text;
+			},
+			currencyDisplayName: 'sanctums',
+			unlocked() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 	},
 });
@@ -6899,6 +6941,12 @@ addLayer('ch', {
 			done() { return player.ch.points.gte(96) },
 			unlocked() { return player.mo.unlocked },
 		},
+		32: {
+			requirementDescription: '102 chaos',
+			effectDescription() { return 'reduce the cost scaling of <b' + getColorClass(this, TITLE, "w") + 'Sanctum Habitation</b> and you can bulk 10x relic activation' },
+			done() { return player.ch.points.gte(102) },
+			unlocked() { return player.mo.unlocked },
+		},
 	},
 	challenges: {
 		11: {
@@ -6991,10 +7039,11 @@ addLayer('mo', {
 	canBuyMax() { return hasMilestone('ch', 21) },
 	gainExp() {
 		let gain = newDecimalOne();
-		if (hasMilestone('ch', 16)) gain = gain.mul(milestoneEffect('ch', 16));
+		if (hasBuyable('w', 23)) gain = gain.mul(buyableEffect('w', 23));
 		if (hasMilestone('r', 3)) gain = gain.mul(milestoneEffect('r', 3));
 		if (hasMilestone('r', 6)) gain = gain.mul(milestoneEffect('r', 6));
 		if (hasMilestone('r', 8)) gain = gain.mul(milestoneEffect('r', 8));
+		if (hasMilestone('ch', 16)) gain = gain.mul(milestoneEffect('ch', 16));
 		return gain;
 	},
 	row: 6,
@@ -7025,8 +7074,8 @@ addLayer('mo', {
 				else if (getClickableState('mo', 11)) return '<br>You are in an Assimilation Search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click here to exit the search.';
 				else return '<br>Begin an Assimilation search.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
 			},
-			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, 57, 77, 101, 125][player.mo.assimilated.length] || Infinity }, // next: 151
-			canClick() { return getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req) },
+			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, 57, 77, 101, 125, 151][player.mo.assimilated.length] || Infinity },
+			canClick() { return getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req) }, // next: 181
 			onClick() {
 				if (player.mo.assimilating !== null) {
 					if (!confirm('Are you sure you want to exit this Assimilation run? This will reset all Assimilated layers content, all ' + tmp[player.mo.assimilating].name + ' content, and put you back into a normal run.')) return;
