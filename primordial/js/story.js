@@ -39,6 +39,7 @@ const story = [
 	Down to the very core of its being.
 	"This... is what the Essence is coming from. The Core."
 `, `
+	...
 	When the Being came back to, all the Essence was gone.
 	The Being started the cycle again.
 	Essence from the new Core was higher in quantity.
@@ -563,6 +564,75 @@ const story = [
 	No matter how much Nisp thought about it, they couldn't figure it out.
 	Thus, Nisp decided to trust their intuition and quit their job, going into hiding as soon as they got their pay.
 	After all, their intuition for danger was the one thing about them that had ever recieved any praise.
+`], [`
+	"Where am I?"
+	"What am I?"
+	The Being became aware of its existence.
+	"Where is everything?"
+	The Being knew that something was missing.
+	But it didn't know what that something was.
+`, `
+	At first, the Being only saw nothingness.
+	But then, it saw a single speck of white light within the empty void.
+	The light seemed rather familiar, yet foreign.
+	Curious, the Being approached the light.
+	The Being circled the light, inspecting it closely.
+`, `
+	The Being tried to remember something, <i>anything</i> about the void and the light.
+	Suddenly, bright green lights flared all throuout the Being's vision.
+	Startled, the Being tried to comprehend what was happening.
+	In response, more and more green began filling the void.
+	After a bit, the Being began to understand the nature of the green light.
+`, `
+	The light came into existence whenever the Being thought deeply about anything.
+	It was as if the green light was the embodiment of thought.
+	As the Being went about creating more and more green lights, something stirred within its subconscious.
+	A piece of knowledge wormed it way into the Being's mind: this green light was called Essence.
+	Suddenly, the Being had a strange sense of déjà vu.
+`, `
+	It seemed as if all of this had happened before.
+	The Being instinctively knew what to do next.
+	It reached into the depths of its being, finding the core of its existence.
+	Fusing all of the Essence into that core, the Being's vision grew hazy as it glimpsed another, smaller core split off from the original.
+	As the Being's consciousness slipped away, the vestiges of its vision turned bright yellow.
+`, `
+	...
+	As the Being came to, it noticed a small yellow light besides the pure white one.
+	The Being somehow immediately knew that this was its Core.
+	However, within itself, there was now a new, stronger Core.
+	The Being still felt puzzled, but it gradually sensed more of its knowledge returning.
+	It now realized that in order to recover its memories, it needed to follow those strange instictive feelings.
+`, `
+	As the Being accumulated more Essence, it refreshed its Core once again.
+	As it repeated the process, more and more subsidary Cores broke off during the transition.
+	The void began to fill with a vibrant yellow.
+	Soon enough, the Being felt something emerging from its memories, and it fused all its Essence into it.
+	Thus, the thought became reality, and a pink light emerged in the void.
+`, `
+	This new light seemed to correspond to the Quarks that supposedly existed in the "old world."
+	As more knowledge of the old world flooded into the Being, more and more pink lights appeared.
+	Soon enough, the Being combined them into a Subatomic Particle.
+	Purple light began to shine within the endless void.
+	Now the Being felt like it was on a roll.
+`, `
+	Hexes; Demon Souls; Atoms. Three new colors quickly blossomed.
+	Prayers; Sanctums; Relics. A new path emerged from Essence.
+	Molecules; Good Influence; Evil Influence. Thirteen colors now (besides the white).
+	The Being followed the exact path its memories layed out for it, quickly forming many new colors.
+	Yet it still could not make more of that strange white light.
+`, `
+	However, the Being could feel that it was coming soon.
+	Merging its two types of influence, the good and evil intertwined to form Wars.
+	Condensing its Molecules, it quickly formed Cellular Life as well.
+	Now, it felt, was the time.
+	The Being took all of its Wars, forming a great vortex of gray.
+`, `
+	As the fusion progressed, the gray vortex attracted the nearby lights, making them fall in.
+	The vortex burgeoned, swallowing all of the light... except the pure white one.
+	The white light repelled the giant vortex, making it shrink.
+	However, it was too late, as the Being was already falling into the vortex.
+	The Being struggled as it regretted following its memories to a T, but it was useless.
+	The vortex quickly swallowed the Being, turning pure white.
 `]];
 
 const storyNames = [
@@ -578,6 +648,7 @@ const storyNames = [
 	"The Great Unification",
 	"And Thus, Chaos was Born",
 	'What They Called "Intuition"',
+	"The Void... Again?",
 ];
 
 const storyColors = [
@@ -593,6 +664,7 @@ const storyColors = [
 	["#FF4400", "#A0A0A0"],
 	["#008800", "#FFFFFF"],
 	[],
+	["#4CED13", "#D2D237", "#DB5196", "#710CC4", "#E36409", "#BA0035", "#4D2FE0", "#FDBBFF", "#AAFF00", "#B9A975", "#00CCCC", "#08FF87", "#FF4400", "#A0A0A0", "#008800", "#FFFFFF"],
 ];
 
 const storyKeywords = [
@@ -608,6 +680,7 @@ const storyKeywords = [
 	["despair", "balance", "equilibrium"],
 	["fate", "life", "vortex"],
 	["metallic", "model", "circuit", "repair"],
+	["déjà vu", "instinct", "reality"],
 ];
 
 for (let index = 0; index < story.length; index++) {
@@ -616,6 +689,7 @@ for (let index = 0; index < story.length; index++) {
 };
 
 story[0][0] = '...<br>' + story[0][0].replace(/<br><br>/g, '<br>...<br>');
+story[12][0] = '...<br>' + story[12][0].replace(/<br><br>/g, '<br>...<br>');
 
 function storyLengthUpTo(num) {
 	if (num < 0) return 0;
@@ -647,10 +721,8 @@ function storySegmentIsFullyDeciphered(num) {
 		length += story[index].length;
 		if (chaos < length) {
 			for (const str of story[num]) {
-				for (const keyword of storyKeywords[index]) {
-					if (str.includes(keyword)) {
-						return false;
-					};
+				if (storyFilters[index].test(str)) {
+					return false;
 				};
 			};
 		};

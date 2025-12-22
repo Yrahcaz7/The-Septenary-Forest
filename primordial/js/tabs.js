@@ -2,10 +2,10 @@
 function getRawTabContent(layer, name = "") {
 	let content = [];
 	content.push("main-display");
-	if (layer == "mo") {
-		content.push("prestige-button");
-	} else {
+	if (assimilationReq[layer]) {
 		content.push(["row", ["prestige-button", "assimilate-button"]]);
+	} else {
+		content.push("prestige-button");
 	};
 	if (layer == "w") {
 		content.push(["custom-resource-display", "You have " + formatWhole(player.gi.points) + " good influence<br>You have " + formatWhole(player.ei.points) + " evil influence<br><br>Your best wars is " + formatWhole(player.w.best) + "<br>You have made a total of " + formatWhole(player.w.total) + " wars"]);
