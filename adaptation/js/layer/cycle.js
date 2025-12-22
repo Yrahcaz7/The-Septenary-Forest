@@ -6,7 +6,7 @@ const cycleUnlocks = [[
 	[125, () => "you bulk 10x <b>Influence tickspeed</b>" + (player.cy.unlocks[0] >= 5 ? "" : "<br>(this resets <b>Influence tickspeed</b> amount)"), () => setBuyableAmount("ex", 21, newDecimalZero())],
 	[155, "focus+ can be allocated to both species and domination<br>focus+ points are automatically allocated"],
 	[180, "you bulk 10x stats from rows 3 and below"],
-	[225, "unlock an additional effect for settlers"],
+	[225, "unlock a new effect for settlers"],
 	[255, "the first war effect is improved further"],
 ], [
 	[50, "you keep growth enhancements on all resets"],

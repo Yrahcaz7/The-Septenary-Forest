@@ -430,7 +430,7 @@ addLayer("e", {
 		13: {
 			name: "3rd Retrogression",
 			fullDisplay() {
-				if (player.e.points.gte(this.unlockReq) || hasChallenge("e", this.id)) return "Entering this retrogression does an evolution reset.<br>While in this retrogression, you cannot buy stimulation upgrades.<br><br>Goal: " + formatWhole(this.goal) + " growth points<br><br>Rewards: The extra AGI from evolutions is multiplied by 2, unlock 5 more stimulation upgrades, and a new evolution effect is unlocked " + (hasChallenge("e", this.id) ? " (already unlocked)" : "");
+				if (player.e.points.gte(this.unlockReq) || hasChallenge("e", this.id)) return "Entering this retrogression does an evolution reset.<br>While in this retrogression, you cannot buy stimulation upgrades.<br><br>Goal: " + formatWhole(this.goal) + " growth points<br><br>Rewards: The extra AGI from evolutions is multiplied by 2, unlock 5 more stimulation upgrades, and unlock a new effect for evolution" + (hasChallenge("e", this.id) ? " (already unlocked)" : "");
 				return "You need " + formatWhole(this.unlockReq) + " evolutions to unlock this retrogression.";
 			},
 			goal: 345,

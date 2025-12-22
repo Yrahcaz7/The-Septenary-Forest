@@ -92,8 +92,8 @@ addLayer("co", {
 		"resource-display",
 		["display-text", () => {
 			let text = "You keep hybridization completions on continent resets.<br><br>After exploring 1 time, automation for influence is unlocked.<br><br>The above extra effect will not go away even if this layer is reset.";
-			if (player.cy.unlocks[1] >= 4 && player.co.points.gte(5)) text += "<br><br>After exploring 6 times, you unlock another effect for settlers.";
-			else if (player.co.points.gte(9)) text += "<br><br>After exploring 10 times, you unlock another effect for settlers.";
+			if (player.cy.unlocks[1] >= 4 && player.co.points.gte(5)) text += "<br><br>After exploring 6 times, you unlock a new effect for settlers.";
+			else if (player.co.points.gte(9)) text += "<br><br>After exploring 10 times, you unlock a new effect for settlers.";
 			return text;
 		}],
 		"blank",

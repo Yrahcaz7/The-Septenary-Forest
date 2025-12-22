@@ -16,7 +16,7 @@ const changelog = `<h1>Changelog:</h1><br>
 	<br><h3>v3.6: Even More Assimilation</h3><br>
 		- Added more to assimilation.<br>
 		- Added more to story.<br>
-		- Added seven milestones to chaos.<br>
+		- Added nine milestones to chaos.<br>
 		- Added one achievement.<br>
 		- Removed one option.<br>
 		- Added two options.<br>
@@ -222,9 +222,9 @@ function getColorClass(obj, type, layer = obj.layer, plain = false) {
 	return ` class="layer-${layer}">`;
 };
 
-function getDevotionBulk() {
+function getDevotionBuyableBulk() {
 	let bulk = 1;
-	if (challengeCompletions('r', 11) >= 41) bulk *= 10;
+	if (getActivatedRelics() >= 41) bulk *= 10;
 	if (hasMilestone('gi', 17)) bulk *= 2;
 	if (hasUpgrade('gi', 11)) bulk *= 100;
 	if (hasChallenge('ei', 12)) bulk *= 5;
@@ -269,6 +269,35 @@ function getLightGain() {
 	if (hasUpgrade('m', 61)) gain = gain.mul(upgradeEffect('m', 61));
 	gain = gain.add(getLightBoost());
 	return gain;
+};
+
+function getActivatedRelics() {
+	return Math.min(challengeCompletions('r', 11), player.r.points.toNumber());
+};
+
+function buyGoodInfluenceBuyable(obj) {
+	if (hasMilestone('ch', 27)) {
+		let bulk = 10;
+		if (hasMilestone('ch', 30)) bulk *= 10;
+		player.gi.total = player.gi.total.add(obj.cost().mul(bulk ** 1.1));
+		player[obj.layer].buyables[obj.id] = player[obj.layer].buyables[obj.id].add(bulk).min(tmp[obj.layer].buyables[obj.id].purchaseLimit);
+	} else {
+		if (hasMilestone('ch', 2)) player.gi.total = player.gi.total.add(obj.cost());
+		else player.gi.points = player.gi.points.sub(obj.cost());
+		addBuyables(obj.layer, obj.id, 1);
+	};
+};
+
+function getQuarkBuyableBulk() {
+	let bulk = 1;
+	if (hasMilestone('ch', 30)) bulk *= 10;
+	return bulk;
+};
+
+function getCellularLifeBuyableBulk() {
+	let bulk = 1;
+	if (hasMilestone('ch', 30)) bulk *= 10;
+	return bulk;
 };
 
 function canGenPoints() {
@@ -318,7 +347,7 @@ function getPointGen() {
 	if (hasBuyable('sp', 13)) gain = gain.mul(buyableEffect('sp', 13)[0]);
 	if (player.p.unlocked && !tmp.p.deactivated) gain = gain.mul(player.p.divinity.add(1).pow(0.1));
 	if (hasUpgrade('p', 82)) gain = gain.mul(upgradeEffect('p', 82));
-	if (challengeCompletions('r', 11) >= 2) gain = gain.mul(tmp.r.effect[2]);
+	if (getActivatedRelics() >= 2) gain = gain.mul(tmp.r.effect[2]);
 	if (hasUpgrade('ds', 21) && hasUpgrade('ds', 24)) gain = gain.mul(player.A.points.mul(0.2));
 	else gain = gain.mul(player.A.points.mul(0.1).add(1));
 	if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[0]);
@@ -350,7 +379,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return 'You beat the game!<br>For now...' },
 ];
 
-const endPoints = new Decimal('e1e40');
+const endPoints = new Decimal('e1e43');
 
 function onLoad() { calculateColorValue() };
 

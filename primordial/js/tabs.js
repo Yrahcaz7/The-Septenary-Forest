@@ -116,7 +116,7 @@ function getRawTabContent(layer, name = "") {
 			content.push("milestones");
 		};
 	} else if (layer == "r") {
-		content.push(["display-text", 'You have <h2 class="layer-r">' + formatWhole(player.r.points.sub(challengeCompletions('r', 11)).max(0)) + '</h2> unactivated relics and <h2 class="layer-r">' + formatWhole(challengeCompletions('r', 11)) + '</h2> activated relics']);
+		content.push(["display-text", 'You have <h2 class="layer-r">' + formatWhole(player.r.points.sub(getActivatedRelics())) + '</h2> unactivated relics and <h2 class="layer-r">' + formatWhole(getActivatedRelics()) + '</h2> activated relics']);
 		content.push("blank");
 		if (name == "The Prism") {
 			content.push("buyables");

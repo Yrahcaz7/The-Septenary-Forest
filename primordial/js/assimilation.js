@@ -2,7 +2,7 @@
 function isAssimilated(layer) { return player.mo.assimilated.includes(layer) };
 
 // order of layers to be assimilated
-const assimilationOrder = ['e', 'c', 'q', 'sp', 'h', 'ds', 'a', 'p', 's', 'r', 'm', 'gi', 'ei', 'w', 'cl', 'ch'];
+const assimilationOrder = ['e', 'c', 'q', 'sp', 'h', 'ds', 'a', 'p', 's', 'r', 'm', 'gi', 'ei', 'w', 'cl'];
 
 // checks if a layer can be assimilated
 function canAssimilate(layer) { return getClickableState('mo', 11) && (isAssimilated(layer) || assimilationOrder[player.mo.assimilated.length] === layer) };
@@ -40,10 +40,9 @@ const assimilationReq = {
 	r: new Decimal(95),
 	m: new Decimal(1e64),
 	gi: new Decimal(725),
-	ei: newDecimalInf(),
+	ei: new Decimal(1640),
 	w: newDecimalInf(),
 	cl: newDecimalInf(),
-	ch: newDecimalInf(),
 };
 
 // completes an assimilation run
@@ -83,9 +82,10 @@ function unlockLayers() {
 // override tooltips
 function overrideTooltip(layer) {
 	if (getClickableState('mo', 11) && assimilationOrder.includes(layer) && player.mo.assimilating === null) {
-		if (isAssimilated(layer)) return 'You have already Assimilated ' + tmp[layer].name;
-		else if (assimilationOrder[player.mo.assimilated.length] === layer) return 'You can Assimilate ' + tmp[layer].name;
-		else return 'You cannot Assimilate ' + tmp[layer].name + ' yet';
+		const name = tmp[layer].pluralName || tmp[layer].name;
+		if (isAssimilated(layer)) return 'You have already Assimilated ' + name;
+		if (assimilationOrder[player.mo.assimilated.length] === layer) return 'You can Assimilate ' + name;
+		return 'You cannot Assimilate ' + name + ' yet';
 	};
 };
 
@@ -153,8 +153,8 @@ function getAssimilationRewards() {
 		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-ds">Demon Souls</h2><br><br>';
 		text += 'Increases the cap of <b class="layer-ds">Demonic Energy</b> by 77<br>';
 		text += 'Makes the <b class="layer-ds">Demonic Energy</b> cost formula worse<br>';
+		text += 'Makes all previous demon soul upgrades and challenges always unlockable<br>';
 		text += 'Changes the goals of the first four demon soul challenges<br>';
-		text += 'Makes all previous demon soul upgrades always unlockable<br>';
 		text += 'Unlocks two new demon soul upgrades: <b class="layer-ds">Demonic Hexes</b> and <b class="layer-ds">Wider Gate</b>';
 	};
 	if (isAssimilated('a')) {
@@ -198,6 +198,13 @@ function getAssimilationRewards() {
 		text += 'Unlocks four new good influence upgrades: <b class="layer-gi">Devotion to Good</b>, <b class="layer-gi">Sacrifice for Good</b>, <b class="layer-gi">Glowing Goodness</b>, and <b class="layer-gi">Greater Good</b><br>';
 		text += 'Reduces the good influence cost base (2 --> 1.99)<br>';
 		text += 'Unlocks the third <b class="layer-mo">Synergy</b>';
+	};
+	if (isAssimilated('ei')) {
+		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-ei">Evil Influence</h2><br><br>';
+		text += 'Makes all previous evil influence challenges always unlockable<br>';
+		text += 'Adds a new effect to <b class="layer-ei">Enter the Gate</b><br>';
+		text += 'Adds a new effect to evil influence<br>';
+		text += 'Makes the evil influence gain softcaps weaker (^0.1 --> ^0.2)';
 	};
 	text = text.replace("<br><br>", "");
 	if (!colorValue[0][1] || colorValue[1] === 'none') text = text.replace(/<b class="layer-.{1,2}">/g, "<b>");

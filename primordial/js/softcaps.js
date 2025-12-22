@@ -19,6 +19,7 @@ const softcaps = {
 	}],
 	r_eff1: ['e1000000', 0.2],
 	gi_eff: ['1e2500', 0.6666666666666666],
+	mo_buyable_13: [1.22, 10],
 };
 
 const layersWithNormalSoftcappedGain = ["e", "c", "q", "h", "ds", "p", "m"];
@@ -62,6 +63,13 @@ addLayer('SC', {
 				registerActiveSoftcap(layer);
 			};
 		};
+		if (!tmp.ei.deactivated) {
+			for (let index = 0; index < tmp.ei.softcaps.length; index++) {
+				if (player.ei.points.gte(tmp.ei.softcaps[index]) && !tmp.ei.deactivated) {
+					registerActiveSoftcap("ei");
+				};
+			};
+		};
 		if (tmp.p.effect.gte(softcaps.p_eff[0]()) && !tmp.p.deactivated) {
 			registerActiveSoftcap("p-eff");
 		};
@@ -74,12 +82,8 @@ addLayer('SC', {
 		if (tmp.gi.effect.gte(softcaps.gi_eff[0]) && !tmp.gi.deactivated && !(hasMilestone('gi', 18) && player.h.limitsBroken >= 4)) {
 			registerActiveSoftcap("gi-eff");
 		};
-		if (!tmp.ei.deactivated) {
-			for (let index = 0; index < tmp.ei.softcaps.length; index++) {
-				if (player.ei.points.gte(tmp.ei.softcaps[index]) && !tmp.ei.deactivated) {
-					registerActiveSoftcap("ei");
-				};
-			};
+		if (buyableEffect('mo', 13).gte(1.22) && !tmp.mo.deactivated) {
+			registerActiveSoftcap("mo-buyable-13");
 		};
 	},
 	tabFormat: [
@@ -105,6 +109,7 @@ addLayer('SC', {
 			if (activeSoftcaps["r-eff1"]) text += '<br><h2 class="layer-r">Relic\'s First Effect Softcap</h2><br>starts at ' + format(softcaps.r_eff1[0]) + ', effect to ^' + format(softcaps.r_eff1[1]) + '<br>';
 			if (activeSoftcaps["m-eff"]) text += '<br><h2 class="layer-m">Molecule Effect Softcap</h2><br>starts at ' + format(softcaps.m_eff[0]()) + ', effect to ^' + format(softcaps.m_eff[1]()) + '<br>';
 			if (activeSoftcaps["gi-eff"]) text += '<br><h2 class="layer-gi">Good Influence Effect Softcap</h2><br>starts at ' + format(softcaps.gi_eff[0]) + ', effect to ^' + format(softcaps.gi_eff[1]) + '<br>';
+			if (activeSoftcaps["mo-buyable-13"]) text += '<br><h2 class="layer-mo"><b class="layer-gi">Good Influence</b> Synergy Effect Softcap</h2><br>starts at ' + format(softcaps.mo_buyable_13[0]) + ', effect /' + format(softcaps.mo_buyable_13[1]) + '<br>';
 			return text;
 		}],
 	],
