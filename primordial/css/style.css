@@ -195,3 +195,14 @@
 	color: #448822;
 	text-shadow: 0 0 10px #448822;
 }
+
+/* Planets */
+.layer-pl {
+	color: #3C51AF;
+	text-shadow: 0 0 10px #3C51AF;
+}
+
+.layer-pl-dark {
+	color: #25336F;
+	text-shadow: 0 0 10px #25336F;
+}

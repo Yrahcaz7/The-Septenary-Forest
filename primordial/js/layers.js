@@ -4195,6 +4195,7 @@ addLayer('r', {
 		auto_upgrade_1: false,
 		auto_upgrade_2: false,
 		auto_upgrade_3: false,
+		auto_buyables: false,
 	}},
 	color: "#B9A975",
 	branches: ['gi'],
@@ -4233,6 +4234,11 @@ addLayer('r', {
 		if (hasMilestone('w', 4) && player.r.auto_upgrade_1) buyUpgrade('r', 11);
 		if (hasMilestone('w', 4) && player.r.auto_upgrade_2) buyUpgrade('r', 12);
 		if (hasMilestone('w', 4) && player.r.auto_upgrade_3) buyUpgrade('r', 13);
+		if (hasMilestone('pl', 0) && player[this.layer].auto_buyables) {
+			for (const id in layers[this.layer].buyables) {
+				buyBuyable(this.layer, id);
+			};
+		};
 	},
 	effect() {
 		let effBoost1 = newDecimalOne();
@@ -4268,7 +4274,7 @@ addLayer('r', {
 		if (hasMilestone('ei', 0) && resettingLayer == 'ei') return;
 		if (hasMilestone('w', 5) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 1) && resettingLayer == 'cl') return;
-		const keep = ['auto_activate', 'auto_upgrade_1', 'auto_upgrade_2', 'auto_upgrade_3'];
+		const keep = ['auto_activate', 'auto_upgrade_1', 'auto_upgrade_2', 'auto_upgrade_3', 'auto_buyables'];
 		let save = 0;
 		if (hasMilestone('w', 2) && resettingLayer == 'w') {
 			save = getActivatedRelics();
@@ -5913,7 +5919,7 @@ addLayer('w', {
 		player.w.points.add(1).log10().add(1).pow(0.333),
 		player.w.points.add(1).pow(isAssimilated(this.layer) || player.mo.assimilating === this.layer ? 5 : 1.5),
 	]},
-	effectDescription() { return 'which multiplies point, essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x; multiplies atom, sanctum, relic, molecule, good influence, and evil influence by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x; and multiplies light gain after hardcap by <h2 class="layer-w">' + format(tmp.w.effect[2]) + '</h2>x' },
+	effectDescription() { return 'which multiplies point, essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x; multiplies atom, sanctum, relic, molecule, good influence, and evil influence gain by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x; and multiplies light gain after hardcap by <h2 class="layer-w">' + format(tmp.w.effect[2]) + '</h2>x' },
 	doReset(resettingLayer) {
 		if (hasMilestone('ch', 12) && resettingLayer == 'ch') return;
 		const keep = ['auto_influence'];
@@ -6261,13 +6267,13 @@ addLayer('cl', {
 	baseResource: 'molecules',
 	baseAmount() { return player.m.points },
 	type: 'static',
-	base: 100,
+	base() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer ? 50 : 100 },
 	exponent() {
 		if (hasMilestone('cl', 11)) return 1.4;
 		if (hasMilestone('cl', 10)) return 1.45;
 		return 1.5;
 	},
-	canBuyMax() { return hasMilestone('cl', 0) },
+	canBuyMax() { return hasMilestone('cl', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 	gainExp() {
 		let gain = newDecimalOne();
 		if (hasBuyable('cl', 12)) gain = gain.mul(buyableEffect('cl', 12)[1]);
@@ -6278,7 +6284,7 @@ addLayer('cl', {
 	row: 5,
 	hotkeys: [{key: 'l', description: 'L: Reset for cellular life', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return hasMilestone('w', 9) || player.cl.unlocked },
-	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer) },
 	automate() {
 		if (hasMilestone('w', 14) && player.cl.auto_tissues) {
 			[21, 13, 12, 11].forEach(id => buyBuyable("cl", id));
@@ -6431,10 +6437,16 @@ addLayer('cl', {
 			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 750,
 			buy() { buyStandardBuyable(this, 'cl', 'points', getCellularLifeBuyableBulk()) },
-			effect(x) { return [x.add(1).pow(0.05), x.add(1).pow(1.5)] },
+			effect(x) {
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return [x.add(1).pow(0.05), new Decimal(1.1).pow(x)];
+				return [x.add(1).pow(0.05), x.add(1).pow(1.5)];
+			},
 			effectDisplay(eff) {
 				let text = '^' + format(eff[0]) + '<br>and ' + format(eff[1]) + 'x';
-				if (options.nerdMode) text += '<br>formulas: (x+1)^0.05<br>and (x+1)^1.5';
+				if (options.nerdMode) {
+					if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) text += '<br>formulas: (x+1)^0.05<br>and 1.1^x';
+					else text += '<br>formulas: (x+1)^0.05<br>and (x+1)^1.5';
+				};
 				return text;
 			},
 		},
@@ -6448,10 +6460,16 @@ addLayer('cl', {
 			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 750,
 			buy() { buyStandardBuyable(this, 'cl', 'points', getCellularLifeBuyableBulk()) },
-			effect(x) { return [x.add(1).pow(0.0175), x.add(1).pow(0.5)] },
+			effect(x) {
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return [x.add(1).pow(0.0175), x.add(1).pow(0.55)];
+				return [x.add(1).pow(0.0175), x.add(1).pow(0.5)];
+			},
 			effectDisplay(eff) {
 				let text = '^' + format(eff[0]) + '<br>and ' + format(eff[1]) + 'x';
-				if (options.nerdMode) text += '<br>formulas: (x+1)^0.0175<br>and (x+1)^0.5';
+				if (options.nerdMode) {
+					if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) text += '<br>formulas: (x+1)^0.0175<br>and (x+1)^0.55';
+					else text += '<br>formulas: (x+1)^0.0175<br>and (x+1)^0.5';
+				};
 				return text;
 			},
 			unlocked() { return hasMilestone('cl', 1) },
@@ -6466,10 +6484,16 @@ addLayer('cl', {
 			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 750,
 			buy() { buyStandardBuyable(this, 'cl', 'points', getCellularLifeBuyableBulk()) },
-			effect(x) { return [x.add(1).pow(0.025), x.add(1).pow(0.75)] },
+			effect(x) {
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return [x.add(1).pow(0.025), x.add(1).pow(0.8)];
+				return [x.add(1).pow(0.025), x.add(1).pow(0.75)];
+			},
 			effectDisplay(eff) {
 				let text = '^' + format(eff[0]) + '<br>and ' + format(eff[1]) + 'x';
-				if (options.nerdMode) text += '<br>formulas: (x+1)^0.025<br>and (x+1)^0.75';
+				if (options.nerdMode) {
+					if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) text += '<br>formulas: (x+1)^0.025<br>and (x+1)^0.8';
+					else text += '<br>formulas: (x+1)^0.025<br>and (x+1)^0.75';
+				};
 				return text;
 			},
 			unlocked() { return hasMilestone('cl', 3) },
@@ -6602,7 +6626,7 @@ addLayer('cl', {
 				if (options.nerdMode) text += '<br>formula: (x+1)^10';
 				return text;
 			},
-			unlocked() { return hasMilestone('w', 18) },
+			unlocked() { return hasMilestone('w', 18) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 		52: {
 			cost(x) { return new Decimal(1e5).pow(x).mul(1e40) },
@@ -6618,7 +6642,7 @@ addLayer('cl', {
 				return text;
 			},
 			currencyDisplayName: 'protein',
-			unlocked() { return hasMilestone('w', 18) },
+			unlocked() { return hasMilestone('w', 18) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 		53: {
 			cost(x) {
@@ -6640,7 +6664,7 @@ addLayer('cl', {
 				return text;
 			},
 			currencyDisplayName: 'protein',
-			unlocked() { return hasMilestone('w', 18) },
+			unlocked() { return hasMilestone('w', 18) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 	},
 	clickables: {
@@ -6669,13 +6693,16 @@ addLayer('ch', {
 	}},
 	color: '#FFFFFF',
 	nodeStyle() {
-		if (this.getResetGain().gt(0) || player.ch.unlocked) return {width: '150px', height: '150px', 'background-image': 'radial-gradient(#FFFFFF, #4CED13, #D2D237, #DB5196, #710CC4, #E36409, #BA0035, #4D2FE0, #FDBBFF, #AAFF00, #B9A975, #00CCCC, #08FF87, #FF4400, #A0A0A0, #008800, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF)', 'border-width': 0};
-		return {width: '150px', height: '150px'};
+		let obj = {width: '150px', height: '150px'};
+		if (this.getResetGain().gt(0) || player.ch.unlocked) {
+			obj['background-image'] = 'radial-gradient(#FFFFFF, #4CED13, #D2D237, #DB5196, #710CC4, #E36409, #BA0035, #4D2FE0, #FDBBFF, #AAFF00, #B9A975, #00CCCC, #08FF87, #FF4400, #A0A0A0, #008800, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF)';
+			obj['border-width'] = 0;
+		};
+		return obj;
 	},
+	branches: ['pl'],
 	requires: 70,
 	marked() { return isAssimilated(this.layer) },
-	shouldNotify() { return isAssimilated(this.layer) && getClickableState('mo', 11) && player.mo.assimilating === null },
-	glowColor() { if (this.shouldNotify()) return this.color },
 	resource: 'chaos',
 	baseResource: 'wars',
 	baseAmount() { return player.w.points },
@@ -6683,7 +6710,8 @@ addLayer('ch', {
 	getResetGain() {
 		if (tmp.ch.baseAmount.lt(tmp.ch.requires)) return newDecimalZero();
 		let gain = tmp.ch.baseAmount.sub(tmp.ch.requires);
-		if (player.ch.points.gt(97)) gain = gain.add(32870).div(400);
+		if (player.ch.points.gt(102)) gain = newDecimalZero();
+		else if (player.ch.points.gt(97)) gain = gain.add(32870).div(400);
 		else if (player.ch.points.gt(82)) gain = gain.add(13470).div(200);
 		else if (player.ch.points.gt(68)) gain = gain.add(5270).div(100);
 		else if (player.ch.points.gt(48)) gain = gain.add(1190).div(40);
@@ -6694,7 +6722,8 @@ addLayer('ch', {
 	},
 	getNextAt() {
 		let next = player.ch.points.div(this.gainExp());
-		if (player.ch.points.gt(97)) next = next.mul(400).sub(32870);
+		if (player.ch.points.gt(102)) next = newDecimalInf();
+		else if (player.ch.points.gt(97)) next = next.mul(400).sub(32870);
 		else if (player.ch.points.gt(82)) next = next.mul(200).sub(13470);
 		else if (player.ch.points.gt(68)) next = next.mul(100).sub(5270);
 		else if (player.ch.points.gt(48)) next = next.mul(40).sub(1190);
@@ -6716,7 +6745,7 @@ addLayer('ch', {
 	tooltipLocked() { return randomStr(5) + ' ' + this.requires + ' ' + randomStr(4) + ' ' + randomStr(2) + ' ' + randomStr(6) + ' (' + randomStr(3) + ' ' + randomStr(4) + ' ' + formatWhole(player.w.points) + ' ' + randomStr(4) + ')' },
 	hotkeys: [{key: 'C', description: 'Shift-C: Reset for chaos', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.cl.unlocked || player.ch.unlocked },
-	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
+	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer) },
 	effect() { return [
 		(hasMilestone('ch', 15) ? new Decimal('e1e11').pow(player.ch.points) : new Decimal('1e1000').pow(player.ch.points)),
 		(hasMilestone('ch', 19) ? player.ch.points.add(1).pow(0.0575) : player.ch.points.add(1).pow(0.0485)),
@@ -7024,6 +7053,7 @@ addLayer('mo', {
 		hadLayers: [],
 	}},
 	color: '#88CC44',
+	branches: ['pl'],
 	requires: 10000,
 	resource: 'multicellular organisms',
 	baseResource: 'cellular life',
@@ -7050,7 +7080,7 @@ addLayer('mo', {
 	hotkeys: [{key: 'o', description: 'O: Reset for multicellular organisms', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.ch.unlocked || player.mo.unlocked },
 	doReset(resettingLayer) {
-		const keep = [];
+		const keep = ['clickables', 'assimilating', 'assimilated', 'hadLayers'];
 		if (layers[resettingLayer].row > this.row) layerDataReset('mo', keep);
 	},
 	resetsNothing() { return true },
@@ -7070,12 +7100,15 @@ addLayer('mo', {
 		11: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Assimilation' },
 			display() {
-				if (player.mo.assimilating !== null) return '<br>Currently Assimilating: ' + tmp[player.mo.assimilating].name + '.<br><br>Click to exit the run.';
-				else if (getClickableState('mo', 11)) return '<br>You are in an Assimilation Search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click here to exit the search.';
-				else return '<br>Begin an Assimilation search.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
+				let text = '<br>';
+				if (player.mo.assimilating !== null) text += 'Currently Assimilating: ' + (tmp[player.mo.assimilating].pluralName || tmp[player.mo.assimilating].name) + '.<br><br>Click to exit the run.';
+				else if (getClickableState('mo', 11)) text += 'You are in an Assimilation search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click here to exit the search.';
+				else text += 'Begin an Assimilation search.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
+				text += '<br><br>Assimilated layers: ' + formatWhole(player.mo.assimilated.length) + '/15';
+				return text;
 			},
-			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, 57, 77, 101, 125, 151][player.mo.assimilated.length] || Infinity },
-			canClick() { return getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req) }, // next: 181
+			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, 57, 77, 101, 125, 151, 181][player.mo.assimilated.length] || Infinity },
+			canClick() { return getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req) },
 			onClick() {
 				if (player.mo.assimilating !== null) {
 					if (!confirm('Are you sure you want to exit this Assimilation run? This will reset all Assimilated layers content, all ' + tmp[player.mo.assimilating].name + ' content, and put you back into a normal run.')) return;
@@ -7095,7 +7128,29 @@ addLayer('mo', {
 					lockLayers();
 				};
 			},
-			style: {height: '200px', width: '200px'},
+			style() {
+				let obj = {width: '200px', height: '200px'};
+				if (tmp[this.layer].clickables[this.id].req == Infinity) {
+					obj["background-color"] = "#77bf5f";
+					obj.cursor = "default";
+				};
+				return obj;
+			},
+		},
+		21: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Break the Cycle' },
+			display: '<br>Unlock the final layer...<br><br>Req: 245 multicellular organisms',
+			canClick() { return player.mo.points.gte(245) && !getClickableState('mo', 21) },
+			onClick() { setClickableState('mo', 21, true) },
+			style() {
+				let obj = {width: '200px', height: '100px'};
+				if (getClickableState('mo', 21)) {
+					obj["background-color"] = "#77bf5f";
+					obj.cursor = "default";
+				};
+				return obj;
+			},
+			unlocked() { return player.mo.assimilated.length >= 15 },
 		},
 	},
 	buyables: {
@@ -7148,6 +7203,56 @@ addLayer('mo', {
 			purchaseLimit: 99,
 			buy() { buyStandardBuyable(this) },
 			unlocked() { return isAssimilated('gi') || player.mo.assimilating === 'gi' },
+		},
+	},
+});
+
+addLayer('pl', {
+	name: 'Planet',
+	pluralName: 'Planets',
+	symbol: "<img src='images/planet.png' style='width: 200px; height: 200px'>",
+	position: 0,
+	startData() { return {
+		unlocked: false,
+		points: newDecimalZero(),
+		best: newDecimalZero(),
+		total: newDecimalZero(),
+	}},
+	color: "#3C51AF",
+	nodeStyle: {width: '200px', height: '200px', 'border-width': 0},
+	chaosEffect() { return player.ch.points.add(1) },
+	requires() { return new Decimal(250_000).div(tmp.pl.chaosEffect) },
+	marked() { return isAssimilated(this.layer) },
+	resource: 'planets',
+	baseResource: 'multicellular organisms',
+	baseAmount() { return player.mo.points },
+	type: 'static',
+	base: 10,
+	exponent: 2,
+	canBuyMax: false,
+	gainExp() {
+		let gain = newDecimalOne();
+		return gain;
+	},
+	row: 7,
+	hotkeys: [{key: 'P', description: 'Shift-P: Reset for planets', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	layerShown() { return getClickableState('mo', 21) || player.pl.unlocked },
+	doReset(resettingLayer) {
+		const keep = [];
+		if (layers[resettingLayer].row > this.row) layerDataReset('pl', keep);
+	},
+	update(diff) {},
+	tabFormat: {
+		Planets: {
+			content: getTab('pl'),
+		},
+	},
+	milestones: {
+		0: {
+			requirementDescription: '1 planet',
+			effectDescription() { return 'keep <b' + getColorClass(this, REF, "mo") + 'Assimilation</b> on all resets, change the chaos cost formula, you can buy max chaos, and you can autobuy relic rebuyables' },
+			done() { return player.pl.points.gte(1) },
+			toggles: [['r', 'auto_buyables']],
 		},
 	},
 });

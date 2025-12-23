@@ -31,10 +31,10 @@ const assimilationReq = {
 	e: new Decimal('1e3555'),
 	c: new Decimal('5e555'),
 	q: new Decimal('1e1355'),
-	sp: new Decimal(110000),
+	sp: new Decimal(110_000),
 	h: new Decimal('1e1060'),
 	ds: new Decimal(1e122),
-	a: new Decimal(75000),
+	a: new Decimal(75_000),
 	p: new Decimal('1e2000'),
 	s: new Decimal(52),
 	r: new Decimal(95),
@@ -42,7 +42,7 @@ const assimilationReq = {
 	gi: new Decimal(725),
 	ei: new Decimal(1640),
 	w: new Decimal(272),
-	cl: newDecimalInf(),
+	cl: new Decimal(25_000),
 };
 
 // completes an assimilation run
@@ -212,6 +212,13 @@ function getAssimilationRewards() {
 		text += 'Unlocks two new <b class="layer-w">Influences</b>: <b class="layer-w">Relics of Good</b> and <b class="layer-w">Sanctum Habitation</b><br>';
 		text += "Improves the formula of war's last effect<br>";
 		text += 'Makes you always be able to buy max wars';
+	};
+	if (isAssimilated('cl')) {
+		text += '<br><br><h2 class="layer-mo">Assimilated</h2> <h2 class="layer-cl">Cellular Life</h2><br><br>';
+		text += 'Improves the second effect formulas of <b class="layer-cl">Nervous Tissue</b>, <b class="layer-cl">Muscle Tissue</b>, and <b class="layer-cl">Epithelial Tissue</b><br>';
+		text += 'Makes all previous <b class="layer-cl">Protein</b> rebuyables always unlockable<br>';
+		text += 'Reduces the cellular life cost base (100 --> 50)<br>';
+		text += 'Makes you always be able to buy max cellular life';
 	};
 	text = text.replace("<br><br>", "");
 	if (!colorValue[0][1] || colorValue[1] === 'none') text = text.replace(/<b class="layer-.{1,2}">/g, "<b>");

@@ -385,7 +385,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return 'You beat the game!<br>For now...' },
 ];
 
-const endPoints = new Decimal('e1e45');
+const endPoints = new Decimal('e1e46');
 
 function onLoad() { calculateColorValue() };
 

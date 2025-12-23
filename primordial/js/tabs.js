@@ -226,8 +226,16 @@ function getRawTabContent(layer, name = "") {
 			content.push(["display-text", "Multicellular organisms reset nothing."]);
 			content.push("blank");
 			content.push(["clickable", 11]);
+			if (tmp.mo.clickables[21].unlocked) {
+				content.push("blank");
+				content.push(["clickable", 21]);
+			};
 		};
 		content.push("blank");
+	} else if (layer == "pl") {
+		content.push(["display-text", 'You have <h2 class="layer-ch">' + format(player.ch.points) + '</h2> chaos, which divides the planet requirement by /<h2 class="layer-pl">' + format(tmp.pl.chaosEffect) + '</h2>']);
+		content.push("blank");
+		content.push("milestones");
 	};
 	return content;
 };
