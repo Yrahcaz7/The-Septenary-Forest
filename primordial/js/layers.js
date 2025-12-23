@@ -79,6 +79,7 @@ addLayer('e', {
 						if (hasUpgrade('h', 64)) {
 							gen += 0.25;
 		}}}}};
+		if (hasUpgrade('pl', 12)) gen += 0.1;
 		return gen;
 	},
 	automate() {
@@ -99,7 +100,8 @@ addLayer('e', {
 		if (hasMilestone('s', 20) && resettingLayer == 's') return;
 		if (hasMilestone('m', 2) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 1) && resettingLayer == 'gi') return;
-		const keep = ['auto_upgrades', 'auto_buyables'];
+		let keep = ['auto_upgrades', 'auto_buyables'];
+		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (hasMilestone('c', 0) && resettingLayer == 'c') keep.push("upgrades");
 		if (hasMilestone('c', 2) && resettingLayer == 'c') keep.push("buyables");
 		if (hasMilestone('q', 1) && resettingLayer == 'q') keep.push("upgrades");
@@ -388,6 +390,7 @@ addLayer('c', {
 						gen += 0.25;
 		}}}};
 		if (hasUpgrade('c', 41)) gen += upgradeEffect('c', 41).div(100).toNumber();
+		if (hasUpgrade('pl', 14)) gen += 0.1;
 		return gen;
 	},
 	automate() {
@@ -410,7 +413,8 @@ addLayer('c', {
 		if (hasMilestone('ei', 1) && resettingLayer == 'ei') return;
 		if (hasMilestone('w', 7) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 2) && resettingLayer == 'cl') return;
-		const keep = ['auto_upgrades', 'auto_buyables'];
+		let keep = ['auto_upgrades', 'auto_buyables'];
+		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (hasUpgrade('sp', 21) && resettingLayer == 'sp') keep.push("buyables");
 		if (hasUpgrade('sp', 22) && resettingLayer == 'sp') keep.push("upgrades");
 		if (hasUpgrade('sp', 23) && resettingLayer == 'sp') keep.push("milestones");
@@ -727,6 +731,7 @@ addLayer('q', {
 			if (hasMilestone('a', 9)) {
 				gen += 0.09;
 		}};
+		if (hasUpgrade('pl', 22)) gen += 0.1;
 		return gen;
 	},
 	automate() {
@@ -748,7 +753,8 @@ addLayer('q', {
 		if (hasMilestone('ei', 2) && resettingLayer == 'ei') return;
 		if (hasMilestone('w', 9) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 5) && resettingLayer == 'cl') return;
-		const keep = ['auto_upgrades', 'auto_buyable_11', 'auto_buyable_12', 'auto_buyable_13', 'auto_buyable_21'];
+		let keep = ['auto_upgrades', 'auto_buyable_11', 'auto_buyable_12', 'auto_buyable_13', 'auto_buyable_21'];
+		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (hasMilestone('sp', 3) && resettingLayer == 'sp') keep.push("milestones");
 		if (hasMilestone('sp', 5) && resettingLayer == 'sp') keep.push("upgrades");
 		if (hasMilestone('h', 5) && resettingLayer == 'h') keep.push("milestones");
@@ -1300,7 +1306,8 @@ addLayer('sp', {
 	},
 	doReset(resettingLayer) {
 		if (getActivatedRelics() >= 35 && resettingLayer == 'r') return;
-		const keep = ['auto_upgrades', 'auto_buyables'];
+		let keep = ['auto_upgrades', 'auto_buyables'];
+		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (hasMilestone('ds', 0) && resettingLayer == 'ds') keep.push("buyables");
 		if (hasMilestone('ds', 1) && resettingLayer == 'ds') keep.push("upgrades");
 		if (hasMilestone('a', 0) && resettingLayer == 'a') keep.push("buyables");
@@ -1546,7 +1553,8 @@ addLayer('h', {
 		if (getActivatedRelics() >= 27 && resettingLayer == 'r') return;
 		if (hasMilestone('m', 13) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 4) && resettingLayer == 'gi') return;
-		const keep = ['auto_upgrades', 'keep_breaking'];
+		let keep = ['auto_upgrades', 'keep_breaking'];
+		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (hasMilestone('ds', 8) && resettingLayer == 'ds') keep.push("milestones");
 		if (hasMilestone('a', 6) && resettingLayer == 'a') keep.push("milestones");
 		if (hasMilestone('a', 11) && (resettingLayer == 'a' || resettingLayer == 'ds')) keep.push("upgrades");
@@ -2028,7 +2036,8 @@ addLayer('ds', {
 	doReset(resettingLayer) {
 		if (hasMilestone('m', 14) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 5) && resettingLayer == 'gi') return;
-		const keep = ['auto_upgrades', 'auto_buyables'];
+		let keep = ['auto_upgrades', 'auto_buyables'];
+		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		const saveUpg = [];
 		if (hasMilestone('m', 1) && (resettingLayer == 'm' || resettingLayer == 'gi' || resettingLayer == 'ei')) {
 			keep.push("challenges");
@@ -2349,7 +2358,8 @@ addLayer('a', {
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone('ei', 4) && resettingLayer == 'ei') return;
-		const keep = ['auto_upgrades', 'auto_reactor'];
+		let keep = ['auto_upgrades', 'auto_reactor'];
+		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (layers[resettingLayer].row == this.row) {
 			keep.push("milestones", "points", "best", "total", "clickables");
 			if (hasMilestone('a', 12) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) keep.push("upgrades");
@@ -2954,7 +2964,8 @@ addLayer('p', {
 		if (hasMilestone('ei', 3) && resettingLayer == 'ei') return;
 		if (hasMilestone('w', 10) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 6) && resettingLayer == 'cl') return;
-		const keep = ['auto_upgrades', "smart_auto_upgrades"];
+		let keep = ['auto_upgrades', "smart_auto_upgrades"];
+		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (resettingLayer == 'h') keep.push("points", "best", "total", "milestones");
 		if (resettingLayer == 'sp') keep.push("points", "best", "total", "milestones");
 		if (resettingLayer == 'r') keep.push("milestones");
@@ -3520,7 +3531,8 @@ addLayer('s', {
 		if (hasMilestone('s', 12) && resettingLayer == 'a') return;
 		if (hasMilestone('w', 11) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 7) && resettingLayer == 'cl') return;
-		const keep = ["auto_worship", "auto_sacrifice", "auto_sacrificial_ceremony", "no_speed_but_more_bulk", "auto_glow"];
+		let keep = ["auto_worship", "auto_sacrifice", "auto_sacrificial_ceremony", "no_speed_but_more_bulk", "auto_glow"];
+		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (getActivatedRelics() >= 9 && resettingLayer == 'r') keep.push("milestones");
 		if (layers[resettingLayer].row > this.row) {
 			layerDataReset('s', keep);
@@ -4274,7 +4286,8 @@ addLayer('r', {
 		if (hasMilestone('ei', 0) && resettingLayer == 'ei') return;
 		if (hasMilestone('w', 5) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 1) && resettingLayer == 'cl') return;
-		const keep = ['auto_activate', 'auto_upgrade_1', 'auto_upgrade_2', 'auto_upgrade_3', 'auto_buyables'];
+		let keep = ['auto_activate', 'auto_upgrade_1', 'auto_upgrade_2', 'auto_upgrade_3', 'auto_buyables'];
+		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		let save = 0;
 		if (hasMilestone('w', 2) && resettingLayer == 'w') {
 			save = getActivatedRelics();
@@ -4641,7 +4654,8 @@ addLayer('m', {
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone('w', 6) && resettingLayer == 'w') return;
-		const keep = ['auto_upgrades'];
+		let keep = ['auto_upgrades'];
+		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (hasMilestone('w', 0) && resettingLayer == 'w') keep.push('milestones');
 		if (hasMilestone('cl', 4) && resettingLayer == 'cl') keep.push('milestones');
 		if (hasMilestone('ch', 3) && resettingLayer == 'ch') keep.push('milestones');
@@ -5091,7 +5105,8 @@ addLayer('gi', {
 	doReset(resettingLayer) {
 		if (hasMilestone('w', 8) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 4) && resettingLayer == 'cl') return;
-		const keep = ['auto_buyables', 'auto_upgrades', 'auto_prestige'];
+		let keep = ['auto_buyables', 'auto_upgrades', 'auto_prestige'];
+		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (hasMilestone('w', 1) && resettingLayer == 'w') keep.push('milestones');
 		if (hasMilestone('cl', 0) && resettingLayer == 'cl') keep.push('milestones');
 		if (hasMilestone('ch', 8) && resettingLayer == 'ch') keep.push('milestones');
@@ -5415,7 +5430,8 @@ addLayer('ei', {
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone('cl', 3) && resettingLayer == 'cl') return;
-		const keep = ['auto_upgrades', 'auto_prestige'];
+		let keep = ['auto_upgrades', 'auto_prestige'];
+		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (hasMilestone('w', 2) && resettingLayer == 'w') keep.push('milestones');
 		if (hasMilestone('w', 3) && resettingLayer == 'w') keep.push('challenges');
 		if (hasMilestone('cl', 0) && resettingLayer == 'cl') keep.push('milestones');
@@ -5922,7 +5938,8 @@ addLayer('w', {
 	effectDescription() { return 'which multiplies point, essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x; multiplies atom, sanctum, relic, molecule, good influence, and evil influence gain by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x; and multiplies light gain after hardcap by <h2 class="layer-w">' + format(tmp.w.effect[2]) + '</h2>x' },
 	doReset(resettingLayer) {
 		if (hasMilestone('ch', 12) && resettingLayer == 'ch') return;
-		const keep = ['auto_influence'];
+		let keep = ['auto_influence'];
+		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		let save;
 		if (hasMilestone('ch', 10) && resettingLayer == 'ch') {
 			save = player.ch.points.mul(10);
@@ -6309,7 +6326,8 @@ addLayer('cl', {
 		};
 	},
 	doReset(resettingLayer) {
-		const keep = ['auto_tissues', 'auto_buyable_31', 'auto_buyable_32', 'auto_buyable_33', 'auto_buyable_41', 'auto_buyable_42', 'auto_buyable_43', 'auto_buyable_51', 'auto_buyable_52', 'auto_buyable_53'];
+		let keep = ['auto_tissues', 'auto_buyable_31', 'auto_buyable_32', 'auto_buyable_33', 'auto_buyable_41', 'auto_buyable_42', 'auto_buyable_43', 'auto_buyable_51', 'auto_buyable_52', 'auto_buyable_53'];
+		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (hasMilestone('ch', 0) && resettingLayer == 'ch') keep.push('milestones');
 		if (layers[resettingLayer].row > this.row) layerDataReset('cl', keep);
 	},
@@ -6707,7 +6725,12 @@ addLayer('ch', {
 	baseResource: 'wars',
 	baseAmount() { return player.w.points },
 	type: 'custom',
+	base: 1.1,
+	exponent: 0.85,
 	getResetGain() {
+		if (hasMilestone('pl', 0)) {
+			return getResetGain("ch", "static");
+		};
 		if (tmp.ch.baseAmount.lt(tmp.ch.requires)) return newDecimalZero();
 		let gain = tmp.ch.baseAmount.sub(tmp.ch.requires);
 		if (player.ch.points.gt(102)) gain = newDecimalZero();
@@ -6718,10 +6741,13 @@ addLayer('ch', {
 		else if (player.ch.points.gt(19)) gain = gain.add(230).div(20);
 		else if (player.ch.points.gt(8)) gain = gain.add(40).div(10);
 		else gain = gain.div(5);
-		return gain.mul(this.gainExp()).floor().sub(player.ch.points).add(1).max(0).min(1);
+		return gain.mul(tmp.ch.gainExp).floor().sub(player.ch.points).add(1).max(0).min(1);
 	},
 	getNextAt() {
-		let next = player.ch.points.div(this.gainExp());
+		if (hasMilestone('pl', 0)) {
+			return getNextAt("ch", true, "static");
+		};
+		let next = player.ch.points.div(tmp.ch.gainExp);
 		if (player.ch.points.gt(102)) next = newDecimalInf();
 		else if (player.ch.points.gt(97)) next = next.mul(400).sub(32870);
 		else if (player.ch.points.gt(82)) next = next.mul(200).sub(13470);
@@ -6732,10 +6758,10 @@ addLayer('ch', {
 		else next = next.mul(5);
 		return next.add(tmp.ch.requires);
 	},
-	canReset() { return this.getResetGain().gt(0) },
-	prestigeNotify() { return this.getResetGain().gt(0) },
-	prestigeButtonText() { return randomStr(5) + ' ' + randomStr(3) + ' +<b>' + formatWhole(this.getResetGain()) + '</b> ' + randomStr(5) + '<br><br>' + (player.ch.points.lt(30) ? randomStr(3) + ':' : '') + ' ' + formatWhole(tmp.ch.baseAmount) + ' / ' + formatWhole(this.getNextAt()) + ' ' + randomStr(4) },
-	canBuyMax() { return false },
+	canReset() { return tmp.ch.baseAmount.gte(tmp.ch.nextAt) },
+	prestigeNotify() { return tmp.ch.baseAmount.gte(tmp.ch.nextAt) },
+	prestigeButtonText() { return randomStr(5) + ' ' + randomStr(3) + ' +<b>' + formatWhole(tmp.ch.getResetGain) + '</b> ' + randomStr(5) + '<br><br>' + (player.ch.points.lt(30) ? randomStr(3) + ':' : '') + ' ' + formatWhole(tmp.ch.baseAmount) + ' / ' + formatWhole(tmp.ch.getNextAt) + ' ' + randomStr(4) },
+	canBuyMax() { return hasMilestone('pl', 0) },
 	gainExp() {
 		let gain = newDecimalOne();
 		return gain;
@@ -6753,7 +6779,8 @@ addLayer('ch', {
 	]},
 	effectDescription() { return 'which multiplies essence gain by <h2 class="layer-ch">' + format(tmp.ch.effect[0]) + '</h2>x, multiplies war gain by <h2 class="layer-ch">' + format(tmp.ch.effect[1]) + '</h2>x, and multiplies protein found from cellular life by <h2 class="layer-ch">' + format(tmp.ch.effect[2]) + '</h2>x' },
 	doReset(resettingLayer) {
-		const keep = ["deciphering"];
+		let keep = ["deciphering"];
+		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (layers[resettingLayer].row > this.row) layerDataReset('ch', keep);
 	},
 	tabFormat: {
@@ -7080,7 +7107,8 @@ addLayer('mo', {
 	hotkeys: [{key: 'o', description: 'O: Reset for multicellular organisms', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.ch.unlocked || player.mo.unlocked },
 	doReset(resettingLayer) {
-		const keep = ['clickables', 'assimilating', 'assimilated', 'hadLayers'];
+		let keep = ['clickables', 'assimilating', 'assimilated', 'hadLayers'];
+		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (layers[resettingLayer].row > this.row) layerDataReset('mo', keep);
 	},
 	resetsNothing() { return true },
@@ -7217,11 +7245,12 @@ addLayer('pl', {
 		points: newDecimalZero(),
 		best: newDecimalZero(),
 		total: newDecimalZero(),
+		air: newDecimalZero(),
 	}},
 	color: "#3C51AF",
 	nodeStyle: {width: '200px', height: '200px', 'border-width': 0},
 	chaosEffect() { return player.ch.points.add(1) },
-	requires() { return new Decimal(250_000).div(tmp.pl.chaosEffect) },
+	requires() { return new Decimal(25_000).div(tmp.pl.chaosEffect) },
 	marked() { return isAssimilated(this.layer) },
 	resource: 'planets',
 	baseResource: 'multicellular organisms',
@@ -7237,22 +7266,110 @@ addLayer('pl', {
 	row: 7,
 	hotkeys: [{key: 'P', description: 'Shift-P: Reset for planets', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return getClickableState('mo', 21) || player.pl.unlocked },
+	effect() {
+		let eff = player.pl.points.div(10);
+		if (hasUpgrade('pl', 13)) eff = eff.mul(upgradeEffect('pl', 13));
+		if (hasUpgrade('pl', 21)) eff = eff.mul(upgradeEffect('pl', 21));
+		if (hasUpgrade('pl', 23)) eff = eff.mul(upgradeEffect('pl', 23));
+		return eff;
+	},
+	effectDescription() { return "which generate <h2 class='layer-pl'>" + format(tmp.pl.effect) + "</h2> air per second" },
 	doReset(resettingLayer) {
-		const keep = [];
+		let keep = [];
 		if (layers[resettingLayer].row > this.row) layerDataReset('pl', keep);
 	},
-	update(diff) {},
+	update(diff) {
+		player.pl.air = player.pl.air.add(tmp.pl.effect.mul(diff));
+	},
 	tabFormat: {
-		Planets: {
+		Progress: {
 			content: getTab('pl'),
+		},
+		Atmosphere: {
+			content: getTab('pl', "Atmosphere"),
 		},
 	},
 	milestones: {
 		0: {
 			requirementDescription: '1 planet',
-			effectDescription() { return 'keep <b' + getColorClass(this, REF, "mo") + 'Assimilation</b> on all resets, change the chaos cost formula, you can buy max chaos, and you can autobuy relic rebuyables' },
+			effectDescription() { return 'keep <b' + getColorClass(this, REF, "mo") + 'Assimilation</b> on all resets, keep all milestones on lesser resets, change the chaos cost formula (removing hardcap), you can buy max chaos, and you can autobuy relic rebuyables' },
 			done() { return player.pl.points.gte(1) },
 			toggles: [['r', 'auto_buyables']],
+		},
+	},
+	upgrades: {
+		11: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'The Point of Air</b>' },
+			description: 'multiplies point gain based on your air',
+			effect() { return player.pl.air.add(1).pow(2) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (x+1)^2';
+				return text;
+			},
+			cost: 1,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		12: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Airy Essence</b>' },
+			description: 'gain 10% of your essence gain per second',
+			cost: 5,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		13: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Essence of Air</b>' },
+			description: 'multiplies air gain based on your essence',
+			effect() { return player.e.points.add(1).slog().add(1).pow(2) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
+				return text;
+			},
+			cost: 10,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		14: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Airy Cores</b>' },
+			description: 'gain 10% of your core gain per second',
+			cost: 20,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		21: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'The Core of Air</b>' },
+			description: 'multiplies air gain based on your cores',
+			effect() { return player.c.points.add(1).slog().add(1).pow(2) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
+				return text;
+			},
+			cost: 40,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		22: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Airy Quarks</b>' },
+			description: 'gain 10% of your quark gain per second',
+			cost: 80,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		23: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Quirky Air</b>' },
+			description: 'multiplies air gain based on your quarks',
+			effect() { return player.q.points.add(1).slog().add(1).pow(2) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
+				return text;
+			},
+			cost: 160,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
 		},
 	},
 });

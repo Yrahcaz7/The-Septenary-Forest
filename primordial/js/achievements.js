@@ -743,10 +743,10 @@ addLayer('A', {
 			popupColor: '#A0A0A0',
 		},
 		156: {
-			name: 'Fantasy War',
-			done() { return player.w.points.gte(10) && player.m.total.eq(0) && player.ch.total.eq(0) },
-			tooltip: 'obtain 10 wars with no molecules and chaos.',
-			unlocked() { return hasAchievement('A', 152) && hasAchievement('A', 171) },
+			name: 'Vast Battlefields',
+			done() { return player.w.points.gte(10) && player.pl.total.gte(1) },
+			tooltip: 'obtain 10 wars and 1 planet.',
+			unlocked() { return hasAchievement('A', 152) && hasAchievement('A', 191) },
 			popupColor: '#FF4400',
 		},
 		161: {
@@ -778,11 +778,11 @@ addLayer('A', {
 			popupColor: '#008800',
 		},
 		166: {
-			name: 'Life At Peace',
-			done() { return player.cl.points.gte(100) && player.w.total.eq(0) && player.ch.total.eq(0) },
-			tooltip: 'obtain 100 cellular life with no wars and chaos.',
-			unlocked() { return hasAchievement('A', 162) && hasAchievement('A', 171) },
-			popupColor: '#FF4400',
+			name: 'Planetary Life',
+			done() { return player.cl.points.gte(100) && player.pl.total.gte(1) },
+			tooltip: 'obtain 100 cellular life and 1 planet.',
+			unlocked() { return hasAchievement('A', 162) && hasAchievement('A', 191) },
+			popupColor: '#008800',
 		},
 		171: {
 			name: 'Rising Chaos',
@@ -812,6 +812,13 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 173) },
 			popupColor: '#FFFFFF',
 		},
+		176: {
+			name: 'Chaotic Planet',
+			done() { return player.ch.points.gte(8) && player.pl.total.gte(1) },
+			tooltip: 'obtain 8 chaos and 1 planet.',
+			unlocked() { return hasAchievement('A', 172) && hasAchievement('A', 191) },
+			popupColor: '#FFFFFF',
+		},
 		181: {
 			name: 'The First Organism',
 			done() { return player.mo.points.gte(1) },
@@ -839,6 +846,27 @@ addLayer('A', {
 			tooltip: 'obtain 1,000 multicellular organisms.',
 			unlocked() { return hasAchievement('A', 183) },
 			popupColor: '#88CC44',
+		},
+		186: {
+			name: 'Planet Habitation',
+			done() { return player.mo.points.gte(10) && player.pl.total.gte(1) },
+			tooltip: 'obtain 10 multicellular organisms and 1 planet.',
+			unlocked() { return hasAchievement('A', 182) && hasAchievement('A', 191) },
+			popupColor: '#88CC44',
+		},
+		191: {
+			name: 'Home Planet',
+			done() { return player.pl.points.gte(1) },
+			tooltip: 'obtain 1 planet.',
+			unlocked() { return hasAchievement('A', 191) },
+			popupColor: '#3C51AF',
+		},
+		192: {
+			name: 'Solar System',
+			done() { return player.pl.points.gte(10) },
+			tooltip: 'obtain 10 planets.',
+			unlocked() { return hasAchievement('A', 191) },
+			popupColor: '#3C51AF',
 		},
 	},
 });

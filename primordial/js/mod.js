@@ -8,11 +8,16 @@ const modInfo = {
 };
 
 const VERSION = {
-	num: '3.6',
-	name: 'Even More Assimilation',
+	num: '4.0',
+	name: 'The End is Near',
 };
 
 const changelog = `<h1>Changelog:</h1><br>
+	<br><h3>v4.0: The End is Near</h3><br>
+		- Added planets.<br>
+		- Added one milestone to planets.<br>
+		- Added seven upgrades to planets.<br>
+		- Added four achievements.<br>
 	<br><h3>v3.6: Even More Assimilation</h3><br>
 		- Added more to assimilation.<br>
 		- Added more to story.<br>
@@ -306,6 +311,13 @@ function getCellularLifeBuyableBulk() {
 	return bulk;
 };
 
+function getKeepFromPlanets(resettingLayer) {
+	if (resettingLayer == 'pl') return [];
+	let keep = [];
+	if (hasMilestone('pl', 0)) keep.push('milestones');
+	return keep;
+};
+
 function canGenPoints() {
 	if (inChallenge('r', 11)) return false;
 	return true;
@@ -357,6 +369,7 @@ function getPointGen() {
 	if (hasUpgrade('ds', 21) && hasUpgrade('ds', 24)) gain = gain.mul(player.A.points.mul(0.2));
 	else gain = gain.mul(player.A.points.mul(0.1).add(1));
 	if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[0]);
+	if (hasUpgrade('pl', 11)) gain = gain.mul(upgradeEffect('pl', 11));
 	// div
 	if (hasBuyable('sp', 12)) gain = gain.mul(buyableEffect('sp', 12)[1]);
 	if (inChallenge('ds', 11)) gain = gain.div(10_000);

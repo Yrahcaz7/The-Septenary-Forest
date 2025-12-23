@@ -233,9 +233,16 @@ function getRawTabContent(layer, name = "") {
 		};
 		content.push("blank");
 	} else if (layer == "pl") {
-		content.push(["display-text", 'You have <h2 class="layer-ch">' + format(player.ch.points) + '</h2> chaos, which divides the planet requirement by /<h2 class="layer-pl">' + format(tmp.pl.chaosEffect) + '</h2>']);
-		content.push("blank");
-		content.push("milestones");
+		if (name == "Atmosphere") {
+			content.push(["display-text", 'You have <h2 class="layer-pl">' + format(player.pl.air) + '</h2> air']);
+			content.push("blank");
+			content.push("upgrades");
+			content.push("blank");
+		} else {
+			content.push(["display-text", 'You have <h2 class="layer-ch">' + formatWhole(player.ch.points) + '</h2> chaos, which divides the planet requirement by /<h2 class="layer-pl">' + format(tmp.pl.chaosEffect) + '</h2>']);
+			content.push("blank");
+			content.push("milestones");
+		};
 	};
 	return content;
 };

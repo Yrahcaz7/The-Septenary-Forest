@@ -50,7 +50,7 @@ function getNextAt(layer, canMax = false, useType = null) {
 	} else if (type == "static") {
 		if (!tmp[layer].canBuyMax) canMax = false;
 		let next = player[layer].points.add(canMax && tmp[layer].baseAmount.gte(tmp[layer].nextAt) ? tmp[layer].resetGain : 0).div(tmp[layer].directMult);
-		next = applyInverseSoftcapstoNextAt(layer, next);
+		next = applyInverseSoftcapsToNextAt(layer, next);
 		const extraCost = Decimal.pow(tmp[layer].base, next.pow(tmp[layer].exponent).div(tmp[layer].gainExp)).mul(tmp[layer].gainMult);
 		let cost = extraCost.mul(tmp[layer].requires).max(tmp[layer].requires);
 		if (tmp[layer].roundUpCost) cost = cost.ceil();
@@ -58,7 +58,7 @@ function getNextAt(layer, canMax = false, useType = null) {
 	} else if (type == "normal") {
 		let next = tmp[layer].resetGain.add(1).div(tmp[layer].directMult);
 		if (tmp[layer].logged) next = next.pow_base(tmp[layer].logged === true ? 10 : tmp[layer].logged).sub(1);
-		next = applyInverseSoftcapstoNextAt(layer, next);
+		next = applyInverseSoftcapsToNextAt(layer, next);
 		next = next.root(tmp[layer].gainExp).div(tmp[layer].gainMult).root(tmp[layer].exponent).mul(tmp[layer].requires).max(tmp[layer].requires);
 		if (tmp[layer].roundUpCost) next = next.ceil();
 		return next;
@@ -81,7 +81,7 @@ function applySoftcapstoResetGain(layer, gain) {
 	return gain;
 };
 
-function applyInverseSoftcapstoNextAt(layer, next) {
+function applyInverseSoftcapsToNextAt(layer, next) {
 	if (tmp[layer].softcaps.length > 0 && tmp[layer].softcapPowers.length > 0) {
 		const length = Math.min(tmp[layer].softcaps.length, tmp[layer].softcapPowers.length);
 		for (let index = length - 1; index >= 0; index--) {

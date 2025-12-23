@@ -792,6 +792,9 @@ function nextStorySegmentFinishesAt() {
 };
 
 function getNextStoryAt() {
-	if (player.ch.best.toNumber() < storyLengthUpTo(Infinity)) return "<br><br>Next story discovery is at " + formatWhole(player.ch.best.add(1)) + " chaos.<br><br>Next story segment finishes at " + nextStorySegmentFinishesAt() + " chaos.";
-	return "<br><br>All story discoveries found; wait for updates for more!";
+	let text = "";
+	if (player.ch.points.gt(0)) text += "<br><br>";
+	if (player.ch.best.toNumber() < storyLengthUpTo(Infinity)) text += "Next story discovery is at " + formatWhole(player.ch.best.add(1)) + " chaos.<br><br>Next story segment finishes at " + nextStorySegmentFinishesAt() + " chaos.";
+	else text += "All story discoveries found; wait for updates for more!";
+	return text;
 };

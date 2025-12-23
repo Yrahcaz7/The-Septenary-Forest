@@ -76,7 +76,7 @@ addLayer('SC', {
 		if (tmp.r.effect[0].gte(softcaps.r_eff1[0]) && !(isAssimilated('r') || player.mo.assimilating === 'r') && !tmp.r.deactivated) {
 			registerActiveSoftcap("r-eff1");
 		};
-		if (tmp.m.effect.gte(softcaps.m_eff[0]) && !tmp.m.deactivated) {
+		if (tmp.m.effect.gte(softcaps.m_eff[0]()) && !tmp.m.deactivated) {
 			registerActiveSoftcap("m-eff");
 		};
 		if (tmp.gi.effect.gte(softcaps.gi_eff[0]) && !tmp.gi.deactivated && !(hasMilestone('gi', 18) && player.h.limitsBroken >= 4)) {
