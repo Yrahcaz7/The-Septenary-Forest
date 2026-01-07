@@ -1,5 +1,5 @@
 function changeTreeQuality() {
-	let on = options.hqTree;
+	const on = options.hqTree;
 	document.body.style.setProperty('--hqProperty1', on ? '2px solid' : '4px solid');
 	document.body.style.setProperty('--hqProperty2a', on ? '-4px -4px 4px #00000040 inset' : '-4px -4px 4px #00000000 inset');
 	document.body.style.setProperty('--hqProperty2b', on ? '0px 0px 20px var(--background)' : '');
@@ -21,8 +21,8 @@ function adjustMSDisp() {
 
 function milestoneShown(layer, id) {
 	if (layers[layer].milestones[id] === undefined) return false;
-	let complete = player[layer].milestones.includes(id);
-	let auto = layers[layer].milestones[id].toggles;
+	const complete = player[layer].milestones.includes(id);
+	const auto = layers[layer].milestones[id].toggles;
 	switch (options.msDisplay) {
 		case 'always':
 			return true;

@@ -118,4 +118,8 @@ function fixOldSave(oldVersion) {
 		options.extendPlaces = options.extendplaces;
 		delete options.extendplaces;
 	};
+	if (player.nerdMode !== undefined) {
+		options.nerdMode = player.nerdMode;
+		delete player.nerdMode;
+	};
 };

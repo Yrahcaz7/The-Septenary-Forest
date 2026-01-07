@@ -13,6 +13,7 @@ function getStartOptions() {
 		forceTooltips: true,
 		hideMilestonePopups: false,
 		extendPlaces: false,
+		nerdMode: false,
 	});
 };
 
@@ -36,11 +37,12 @@ const optionGrid = [
 	], [
 		{opt: "hideMilestonePopups", text() {return "Show Milestone Popups: " + formatOpt(!options[this.opt])}, onClick: toggleOpt},
 		{opt: "extendPlaces", text() {return "Extended Decimal Places: " + formatOpt(options[this.opt])}, onClick: toggleOpt},
+		{opt: "nerdMode", text() {return "Nerd Mode: " + formatOpt(options[this.opt]) + " (you can also use the control key to toggle)"}, onClick: toggleOpt},
 	],
 ];
 
-function formatOpt(opt) {
-	if (opt) return 'ON';
+function formatOpt(value) {
+	if (value) return 'ON';
 	return 'OFF';
 };
 
@@ -50,4 +52,8 @@ function toggleOpt(name) {
 	// special
 	if (name == 'hqTree') changeTreeQuality();
 	else if (name == 'forceOneTab') needsCanvasUpdate = true;
+};
+
+function onKeyDown(key) {
+	if (ctrlDown) options.nerdMode = !options.nerdMode;
 };

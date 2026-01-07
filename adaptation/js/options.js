@@ -40,8 +40,8 @@ const optionGrid = [
 	],
 ];
 
-function formatOpt(opt) {
-	if (opt) return 'ON';
+function formatOpt(value) {
+	if (value) return 'ON';
 	return 'OFF';
 };
 

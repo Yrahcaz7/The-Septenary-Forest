@@ -279,10 +279,12 @@ document.onkeydown = e => {
 	shiftDown = e.shiftKey;
 	ctrlDown = e.ctrlKey;
 	if (tmp.gameEnded && !player.keepGoing) return;
-	if (ctrlDown) options.nerdMode = !options.nerdMode;
 	let key = e.key;
-	if (ctrlDown) key = 'ctrl+' + key;
+	if (typeof onKeyDown === "function") {
+		onKeyDown(key);
+	};
 	if (focused) return;
+	if (ctrlDown) key = 'ctrl+' + key;
 	if (ctrlDown && hotkeys[key]) e.preventDefault();
 	if (hotkeys[key]) {
 		const k = hotkeys[key];

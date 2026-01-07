@@ -3,8 +3,8 @@ let options = {};
 function getStartOptions() {
 	return Vue.reactive({
 		autosave: true,
-		msDisplay: 'always',
-		theme: 'default',
+		msDisplay: "always",
+		theme: "default",
 		hqTree: false,
 		offlineProd: true,
 		hideChallenges: false,
@@ -38,33 +38,46 @@ const optionGrid = [
 		{opt: "disableGlitchText", text() {return "Glitch Text: " + formatOpt(!options[this.opt]) + " (when off, qestion marks are displayed instead)"}, onClick: toggleOpt},
 	], [
 		{opt: "hideChallenges", text() {return "Show Completed Challenges: " + formatOpt(!options[this.opt])}, onClick: toggleOpt},
-		{opt: "forceOneTab", text() {return "Single-Tab Mode: " + (options.forceOneTab ? "ALWAYS" : "AUTO")}, onClick: toggleOpt},
+		{opt: "forceOneTab", text() {return "Single-Tab Mode: " + (options[this.opt] ? "ALWAYS" : "AUTO")}, onClick: toggleOpt},
 		{opt: "forceTooltips", text() {return "Shift-Click to Toggle Tooltips: " + formatOpt(options[this.opt])}, onClick: toggleOpt},
 		{opt: "extendPlaces", text() {return "Extended Decimal Places: " + formatOpt(options[this.opt])}, onClick: toggleOpt},
 	], [
 		{opt: "hideMilestonePopups", text() {return "Show Milestone Popups: " + formatOpt(!options[this.opt])}, onClick: toggleOpt},
 		{opt: "nerdMode", text() {return "Nerd Mode: " + formatOpt(options[this.opt]) + " (you can also use the control key to toggle)"}, onClick: toggleOpt},
+		{text() {return (player.devSpeed == 0 ? "Unpause" : "Pause") + " (you can also use the space key to toggle)"}, onClick: togglePause},
 	],
 ];
 
-function formatOpt(opt) {
-	if (opt) return 'ON'
-	return 'OFF';
+function formatOpt(value) {
+	if (value) return "ON";
+	return "OFF";
 };
 
 function toggleOpt(name) {
 	// toggle option
 	options[name] = !options[name];
 	// special
-	if (name == 'hqTree') changeTreeQuality();
-	else if (name == 'forceOneTab') needsCanvasUpdate = true;
+	if (name == "hqTree") changeTreeQuality();
+	else if (name == "forceOneTab") needsCanvasUpdate = true;
 };
 
-const DISPLAY_MODES = ['ALL (recommended)', 'ONLY SPECIAL', 'SPECIAL AND TITLES', 'SPECIAL AND REFRENCES'];
+const pausedDisplay = "Paused. Press space to unpause.";
 
-const COLOR_DISPLAYS = ['ON - NORMAL (recommended)', 'ON - ALWAYS DARK', 'OFF (recommended for colorblind)'];
+function togglePause() {
+	if (player.devSpeed == 0) player.devSpeed = 1;
+	else player.devSpeed = 0;
+};
 
-let colorValue = [[true, true], 'normal'];
+function onKeyDown(key) {
+	if (ctrlDown) options.nerdMode = !options.nerdMode;
+	if (key == " " && !focused) togglePause();
+};
+
+const DISPLAY_MODES = ["ALL (recommended)", "ONLY SPECIAL", "SPECIAL AND TITLES", "SPECIAL AND REFRENCES"];
+
+const COLOR_DISPLAYS = ["ON - NORMAL (recommended)", "ON - ALWAYS DARK", "OFF (recommended for colorblind)"];
+
+let colorValue = [[true, true], "normal"];
 
 function adjustColorDispMode() {
 	options.colorDisplayMode++;
@@ -95,13 +108,13 @@ function calculateColorValue() {
 	};
 	switch (options.colorDisplay) {
 		case 0:
-			colorValue[1] = 'normal';
+			colorValue[1] = "normal";
 			break;
 		case 1:
-			colorValue[1] = 'dark';
+			colorValue[1] = "dark";
 			break;
 		case 2:
-			colorValue[1] = 'none';
+			colorValue[1] = "none";
 			break;
 	};
 };

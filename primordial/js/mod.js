@@ -18,6 +18,7 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added one milestone to planets.<br>
 		- Added seven upgrades to planets.<br>
 		- Added four achievements.<br>
+		- Added one option.<br>
 	<br><h3>v3.6: Even More Assimilation</h3><br>
 		- Added more to assimilation.<br>
 		- Added more to story.<br>
@@ -441,13 +442,13 @@ function fixOldSave(oldVersion) {
 		options.forceTooltips = options.tooltipForcing;
 		delete options.tooltipForcing;
 	};
-	if (player.nerdMode !== undefined) {
-		options.nerdMode = player.nerdMode;
-		delete player.nerdMode;
-	};
 	if (options.extendplaces !== undefined) {
 		options.extendPlaces = options.extendplaces;
 		delete options.extendplaces;
+	};
+	if (player.nerdMode !== undefined) {
+		options.nerdMode = player.nerdMode;
+		delete player.nerdMode;
 	};
 	// relocate buyables
 	if (player.sp.buyables[21] !== undefined) {

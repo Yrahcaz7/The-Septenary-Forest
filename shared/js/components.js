@@ -971,6 +971,10 @@ function loadVue(mainPage = false) {
 	addNormalComponent('overlay-head', {
 		data() {return {player, format, formatTime, modInfo, tmp}},
 		computed: {
+			pausedDisplay() {
+				if (typeof pausedDisplay === 'function') return pausedDisplay();
+				if (typeof pausedDisplay !== 'undefined') return pausedDisplay;
+			},
 			overridePointDisplay() {
 				if (typeof overridePointDisplay === 'function') return overridePointDisplay() || "";
 				return "";
@@ -991,7 +995,10 @@ function loadVue(mainPage = false) {
 			z-index: 1000;
 			position: relative;
 		">
-			<div v-if="player.devSpeed !== undefined && player.devSpeed !== 1">
+			<div v-if="player.devSpeed === 0 && pausedDisplay">
+				<br>{{pausedDisplay}}<br>
+			</div>
+			<div v-else-if="player.devSpeed !== undefined && player.devSpeed !== 1">
 				<br>Dev Speed: {{format(player.devSpeed)}}x<br>
 			</div>
 			<div v-if="player.offTime !== undefined">
@@ -1049,18 +1056,24 @@ function loadVue(mainPage = false) {
 	});
 
 	addNormalComponent('options-tab', {
-		data() {return {optionGrid, toggleOpt}},
+		data() {return {optionGrid, run}},
 		template: (() => {
 			let template = `<table><tbody>`;
 			for (let row = 0; row < optionGrid.length; row++) {
 				template += `<tr>`;
 				for (let index = 0; index < optionGrid[row].length; index++) {
-					template += `<td><button class="opt" onclick="`;
-					if (optionGrid[row][index].onClick === toggleOpt) template += `toggleOpt('` + optionGrid[row][index].opt + `')`;
-					else template += `optionGrid[` + row + `][` + index + `].onClick()`;
-					template += `">`;
-					if (optionGrid[row][index].text instanceof Function) template += `{{optionGrid[` + row + `][` + index + `].text()}}`;
-					else template += optionGrid[row][index].text;
+					template += `<td><button class="opt"`;
+					if (optionGrid[row][index].onClick) {
+						template += ` onclick="optionGrid[${row}][${index}].onClick(`;
+						if (optionGrid[row][index].onClick === toggleOpt && optionGrid[row][index].opt) {
+							template += `'${optionGrid[row][index].opt}'`;
+						};
+						template += `)"`;
+					};
+					template += `>`;
+					if (optionGrid[row][index].text) {
+						template += `{{run(optionGrid[${row}][${index}].text, optionGrid[${row}][${index}])}}`;
+					};
 					template += `</button></td>`;
 				};
 				template += `</tr>`;

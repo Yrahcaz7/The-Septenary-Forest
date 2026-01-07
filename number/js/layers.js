@@ -193,7 +193,7 @@ addLayer('rn', {
 					multiply arabic numeral gain based on the amount of roman numerals you have<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + romanNumeralFormat(this.cost) + ` roman numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return player.rn.points.add(1).pow(0.25) },
@@ -205,7 +205,7 @@ addLayer('rn', {
 					multiply roman numeral gain based on the amount of total roman numerals you have<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + romanNumeralFormat(this.cost) + ` roman numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return player.rn.total.add(1).pow(0.2) },
@@ -216,7 +216,7 @@ addLayer('rn', {
 				let text = `<h3>Again</h3><br>
 					multiply arabic numeral gain by ` + format(this.effect()) + ` when you have less than ` + format(this.cap()) + ` arabic numerals<br><br>
 					Cost: ` + romanNumeralFormat(this.cost) + ` roman numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() {
@@ -237,7 +237,7 @@ addLayer('rn', {
 				let text = `<h3>Faster</h3><br>
 					multiply arabic numeral gain by ` + format(this.effect()) + ` when you have less than ` + format(this.cap()) + ` arabic numerals<br><br>
 					Cost: ` + romanNumeralFormat(this.cost) + ` roman numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() {
@@ -261,7 +261,7 @@ addLayer('rn', {
 					multiply arabic numeral gain based on the amount of arabic numerals you have<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + romanNumeralFormat(this.cost) + ` roman numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return player.points.add(1).pow(0.1) },
@@ -283,7 +283,7 @@ addLayer('rn', {
 					multiply roman numeral gain based on your best roman numerals<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + romanNumeralFormat(this.cost) + ` roman numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return player.rn.best.mul(1000).add(1).pow(0.15) },
@@ -295,7 +295,7 @@ addLayer('rn', {
 				let text = `<h3>Again, Again</h3><br>
 					multiply the cap of <b>Again</b> by ` + format(this.effect()) + `<br><br>
 					Cost: ` + romanNumeralFormat(this.cost) + ` roman numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() {
@@ -310,7 +310,7 @@ addLayer('rn', {
 				let text = `<h3>Faster, Faster</h3><br>
 					multiply the effect and cap of <b>Faster</b> by ` + format(this.effect()) + `<br><br>
 					Cost: ` + romanNumeralFormat(this.cost) + ` roman numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return 5 },
@@ -323,7 +323,7 @@ addLayer('rn', {
 					multiply arabic numeral gain based on the amount of arabic numerals you have<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + romanNumeralFormat(this.cost) + ` roman numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return player.points.div(50).add(1).pow(0.5) },
@@ -346,7 +346,7 @@ addLayer('rn', {
 					multiply roman numeral gain based on your best roman numerals<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + romanNumeralFormat(this.cost) + ` roman numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return player.rn.best.mul(20000).add(1).pow(0.075) },
@@ -358,7 +358,7 @@ addLayer('rn', {
 				let text = `<h3>Cycle</h3><br>
 					multiply the effect of <b>Again, Again</b> by ` + format(this.effect()) + `<br><br>
 					Cost: ` + romanNumeralFormat(this.cost) + ` roman numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return 100 },
@@ -370,7 +370,7 @@ addLayer('rn', {
 				let text = `<h3>Fastest</h3><br>
 					multiply the cap of <b>Faster</b> by ` + format(this.effect()) + `<br><br>
 					Cost: ` + romanNumeralFormat(this.cost) + ` roman numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return 200 },
@@ -383,7 +383,7 @@ addLayer('rn', {
 					multiply arabic numeral gain based on your best roman numerals<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + romanNumeralFormat(this.cost) + ` roman numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return player.rn.best.div(100).add(1).pow(0.2) },
@@ -2722,7 +2722,7 @@ addLayer('gn', {
 					multiply arabic numeral gain based on the amount of greek numerals you have<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return new Decimal(10).pow(player.gn.points.add(1).pow(0.5)) },
@@ -2734,7 +2734,7 @@ addLayer('gn', {
 					multiply the digit limit based on the amount of greek numerals you have<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return player.gn.points.add(1).pow(0.05) },
@@ -2746,7 +2746,7 @@ addLayer('gn', {
 					multiply greek numeral gain based on the amount of intelligence you have<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return player.i.points.add(1).pow(0.1) },
@@ -2758,7 +2758,7 @@ addLayer('gn', {
 					multiply greek numeral gain based on your best roman numerals<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return player.rn.best.add(1).log10().add(1).pow(0.05) },
@@ -2769,7 +2769,7 @@ addLayer('gn', {
 				let text = `<h3>Process of Elimination</h3><br>
 					unlock translation tier 1<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			cost: new Decimal(2000),
@@ -2780,7 +2780,7 @@ addLayer('gn', {
 					increase the cap of <b>Cheapest</b> based on the amount of greek numerals you have<br>
 					Currently: +` + formatWhole(this.effect()) + `<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return player.gn.points.add(1).pow(0.75).round() },
@@ -2793,7 +2793,7 @@ addLayer('gn', {
 					increase the cap of <b>Triple</b> based on the amount of greek numerals you have<br>
 					Currently: +` + formatWhole(this.effect()) + `<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return player.gn.points.add(1).pow(0.5).round() },
@@ -2806,7 +2806,7 @@ addLayer('gn', {
 					multiply the digit limit based on the amount of greek numerals you have<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return player.gn.points.add(1).pow(0.03) },
@@ -2819,7 +2819,7 @@ addLayer('gn', {
 					multiply greek numeral gain based on your translation tier<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return player.gn.calcTier.add(1).pow(0.5) },
@@ -2831,7 +2831,7 @@ addLayer('gn', {
 				let text = `<h3>Ask the Locals</h3><br>
 					unlock translation tier 2<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			cost: new Decimal(4500),
@@ -2843,7 +2843,7 @@ addLayer('gn', {
 					multiply the digit limit based on the amount of greek numerals you have<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return player.gn.points.add(1).pow(0.02) },
@@ -2855,7 +2855,7 @@ addLayer('gn', {
 				let text = `<h3>Greek Markets</h3><br>
 					all digit autobuyers can buy 2x as fast<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			cost: new Decimal(10000),
@@ -2867,7 +2867,7 @@ addLayer('gn', {
 					divide the intelligence cost requirement based on your translation tier<br>
 					Currently: /` + format(this.effect()) + `<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return player.gn.calcTier.add(1).pow(0.5) },
@@ -2880,7 +2880,7 @@ addLayer('gn', {
 					multiply the digit limit based on the amount of greek numerals you have<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			effect() { return player.gn.points.add(1).pow(0.1) },
@@ -2892,7 +2892,7 @@ addLayer('gn', {
 				let text = `<h3>Linguistics Class</h3><br>
 					double translation tiers<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
-				if (player.nerdMode) text += '';
+				if (options.nerdMode) text += '';
 				return text;
 			},
 			cost: new Decimal(100000),
