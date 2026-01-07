@@ -110,7 +110,7 @@ You can make almost any value dynamic by using a function in its place, includin
     For normal layers, the default for `softcap` is `e1e7`, and for other types of layers, the default for `softcap` is `Infinity`.
     The default for `softcapPower` is always `0.5`.
 
-- `softcaps`, `softcapPowers` (additional features): **OVERRIDE**. These are just like `softcap` and `softcapPower`, except they are arrays of values, allowing for multiple softcaps instead of just one. If either of these are missing or is an empty array, `softcap` and `softcapPower` are used instead. Both can also be functions that return an array, rather than an array itself.
+> - `softcaps`, `softcapPowers` (additional features): **OVERRIDE**. These are just like `softcap` and `softcapPower`, except they are arrays of values, allowing for multiple softcaps instead of just one. If either of these are missing or is an empty array, `softcap` and `softcapPower` are used instead. Both can also be functions that return an array, rather than an array itself.
 
 ## Other prestige-related features
 
@@ -118,7 +118,7 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `onPrestige(gain)`: **optional**. A function that triggers when this layer prestiges, just before you gain the currency. Can be used to have secondary resource gain on prestige, or to recalculate things or whatnot.
 
-- `onPrestigeIsAfterGain` (additional feature): **optional**. A boolean indicating whether this layer's `onPrestige()` function triggers after prestige resource gain but before resetting anything (this also means that any relevant milestones and achievements will be updated to reflect the gain). By default is false, which makes `onPrestige()` trigger before both gain and reset.
+> - `onPrestigeIsAfterGain` (additional feature): **optional**. A boolean indicating whether this layer's `onPrestige()` function triggers after prestige resource gain but before resetting anything (this also means that any relevant milestones and achievements will be updated to reflect the gain). By default is false, which makes `onPrestige()` trigger before both gain and reset.
 
 - `resetDescription`: **optional**. Use this to replace "Reset for " on the Prestige button with something else.
 
@@ -128,7 +128,7 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `autoPrestige()`: **optional**. Returns a boolean. If it is true, the layer will always automatically do a prestige if it can. This is good for automating static layers.
 
-- `logged` (additional feature): **optional**. For normal layers, if this is a [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) value, the resource gain becomes the log of the previous gain plus one. If it is exactly `true`, the log base is `10`, otherwise the log base is `new Decimal(logged)`. Can also be a function. Has no effect on static layers.
+> - `logged` (additional feature): **optional**. For normal layers, if this is a [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) value, the resource gain becomes the log of the previous gain plus one. If it is exactly `true`, the log base is `10`, otherwise the log base is `new Decimal(logged)`. Can also be a function. Has no effect on static layers.
 
 ## Tree/node features
 
@@ -146,6 +146,10 @@ You can make almost any value dynamic by using a function in its place, includin
     If the value is `""`, the tooltip will be disabled.
 
 - `marked`: **optional**. Adds a mark to the corner of the node. If it's `true` it will be a star, but it can also be an image URL.
+
+> - `alias` (additional feature): **optional**. An object (e.g. `{}`). Adds another tree node that refers to the same layer, with overrides for some layer features. Useful for adding a shortcut to a frequently used layer if your tree get very big.
+>
+>    Overrides you can put on the alias object: `row`, `displayRow`, `symbol`, `position`, and `nodeStyle`. (The alias's `displayRow` defaults to the alias's `row`, or if it is not present, the layer's `displayRow`.)
 
 ## Other features
 

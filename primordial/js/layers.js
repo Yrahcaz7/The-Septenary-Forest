@@ -1,6 +1,7 @@
 addLayer('e', {
 	name: 'Essence',
 	symbol: 'E',
+	row: 0,
 	position: 0,
 	startData() { return {
 		points: newDecimalZero(),
@@ -62,7 +63,6 @@ addLayer('e', {
 		// return
 		return mult;
 	},
-	row: 0,
 	hotkeys: [{key: 'e', description: 'E: Reset for essence', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
@@ -318,6 +318,7 @@ addLayer('c', {
 	name: 'Core',
 	pluralName: 'Cores',
 	symbol: 'C',
+	row: 1,
 	position: 0,
 	startData() { return {
 		unlocked: false,
@@ -375,7 +376,6 @@ addLayer('c', {
 	},
 	softcap: new Decimal("1e1250"),
 	softcapPower: 0.7,
-	row: 1,
 	hotkeys: [{key: 'c', description: 'C: Reset for cores', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
@@ -656,6 +656,7 @@ addLayer('q', {
 	name: 'Quark',
 	pluralName: 'Quarks',
 	symbol: 'Q',
+	row: 1,
 	position: 2,
 	startData() { return {
 		unlocked: false,
@@ -719,7 +720,6 @@ addLayer('q', {
 	},
 	softcap: new Decimal("1e1250"),
 	softcapPower: 0.6,
-	row: 1,
 	hotkeys: [{key: 'q', description: 'Q: Reset for quarks', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.c.unlocked || player.q.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
@@ -1242,6 +1242,7 @@ addLayer('sp', {
 	name: 'Subatomic Particle',
 	pluralName: 'Subatomic Particles',
 	symbol: 'SP',
+	row: 2,
 	position: 2,
 	startData() { return {
 		unlocked: false,
@@ -1287,7 +1288,6 @@ addLayer('sp', {
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('s', 11) },
-	row: 2,
 	hotkeys: [{key: 'S', description: 'Shift-S: Reset for subatomic particles', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.q.unlocked || player.sp.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
@@ -1471,6 +1471,7 @@ addLayer('h', {
 	name: 'Hex',
 	pluralName: 'Hexes',
 	symbol: 'H',
+	row: 2,
 	position: 0,
 	startData() { return {
 		unlocked: false,
@@ -1532,7 +1533,6 @@ addLayer('h', {
 		if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 0.51;
 		return 0.5;
 	},
-	row: 2,
 	hotkeys: [{key: 'h', description: 'H: Reset for hexes', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.sp.unlocked || player.h.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
@@ -1623,7 +1623,7 @@ addLayer('h', {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Hex Leak' },
 			description() {
 				if (hasUpgrade('ds', 11)) return 'multiplies point and hex gain based on your hexes';
-				return 'multiplies point gain based on your hexes';            
+				return 'multiplies point gain based on your hexes';
 			},
 			cost: 1,
 			effect() { return  player.h.points.add(1).pow(0.005) },
@@ -1971,6 +1971,7 @@ addLayer('ds', {
 	name: 'Demon Soul',
 	pluralName: 'Demon Souls',
 	symbol: 'DS',
+	row: 3,
 	position: 0,
 	startData() { return {
 		unlocked: false,
@@ -2013,7 +2014,6 @@ addLayer('ds', {
 	},
 	softcap: new Decimal('e10000000'),
 	softcapPower: 0.8,
-	row: 3,
 	hotkeys: [{key: 'd', description: 'D: Reset for demon souls', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.h.unlocked || player.ds.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
@@ -2299,6 +2299,7 @@ addLayer('a', {
 	name: 'Atom',
 	pluralName: 'Atoms',
 	symbol: 'A',
+	row: 3,
 	position: 2,
 	startData() { return {
 		unlocked: false,
@@ -2340,7 +2341,6 @@ addLayer('a', {
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('a', 15) },
-	row: 3,
 	hotkeys: [{key: 'a', description: 'A: Reset for atoms', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.ds.unlocked || player.a.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
@@ -2834,6 +2834,7 @@ addLayer('p', {
 	name: 'Prayer',
 	pluralName: 'Prayers',
 	symbol: 'P',
+	row: 1,
 	position: 1,
 	startData() { return {
 		unlocked: false,
@@ -2879,7 +2880,6 @@ addLayer('p', {
 		// return
 		return mult;
 	},
-	row: 1,
 	hotkeys: [{key: 'p', description: 'P: Reset for prayers', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.a.unlocked || player.p.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
@@ -3475,6 +3475,7 @@ addLayer('s', {
 	name: 'Sanctum',
 	pluralName: 'Sanctums',
 	symbol: 'S',
+	row: 2,
 	position: 1,
 	startData() { return {
 		unlocked: false,
@@ -3521,7 +3522,6 @@ addLayer('s', {
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('s', 48) },
-	row: 2,
 	hotkeys: [{key: 's', description: 'S: Reset for sanctums', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.p.unlocked || player.s.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
@@ -3900,9 +3900,9 @@ addLayer('s', {
 addLayer('d', {
 	name: 'Devotion',
 	symbol: 'D',
+	row: 2,
 	position: 3,
 	color: "#AAFF00",
-	row: 2,
 	layerShown() { return false },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate('s') },
 	automate() {
@@ -4078,9 +4078,9 @@ addLayer('d', {
 addLayer('g', {
 	name: 'Glow',
 	symbol: 'G',
+	row: 2,
 	position: 4,
 	color: "#AAFF00",
-	row: 2,
 	layerShown() { return false },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate('s')},
 	automate() {
@@ -4191,6 +4191,7 @@ addLayer('r', {
 	name: 'Relic',
 	pluralName: 'Relics',
 	symbol: 'R',
+	row: 3,
 	position: 1,
 	startData() { return {
 		unlocked: false,
@@ -4234,7 +4235,6 @@ addLayer('r', {
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('w', 4) },
-	row: 3,
 	hotkeys: [{key: 'r', description: 'R: Reset for relics', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.s.unlocked || player.r.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
@@ -4591,6 +4591,7 @@ addLayer('m', {
 	name: 'Molecule',
 	pluralName: 'Molecules',
 	symbol: 'M',
+	row: 4,
 	position: 2,
 	startData() { return {
 		unlocked: false,
@@ -4620,7 +4621,6 @@ addLayer('m', {
 		if (hasBuyable('w', 21)) mult = mult.mul(buyableEffect('w', 21));
 		return mult;
 	},
-	row: 4,
 	hotkeys: [{key: 'm', description: 'M: Reset for molecules', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return getActivatedRelics() >= 10 || player.m.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
@@ -5010,6 +5010,7 @@ addLayer('m', {
 addLayer('gi', {
 	name: 'Good Influence',
 	symbol: 'GI',
+	row: 4,
 	position: 1,
 	startData() { return {
 		unlocked: false,
@@ -5050,7 +5051,6 @@ addLayer('gi', {
 		return gain;
 	},
 	autoPrestige() { return (hasMilestone('w', 1) || ((isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('gi', 16))) && (!hasMilestone('cl', 0) || player.gi.auto_prestige) },
-	row: 4,
 	hotkeys: [{key: 'G', description: 'Shift-G: Reset for good influence', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.m.unlocked || player.gi.unlocked },
 	deactivated() { return inChallenge('ch', 11) || (getClickableState('mo', 11) && !canAssimilate(this.layer))},
@@ -5317,6 +5317,7 @@ addLayer('gi', {
 addLayer('ei', {
 	name: 'Evil Influence',
 	symbol: 'EI',
+	row: 4,
 	position: 0,
 	startData() { return {
 		unlocked: false,
@@ -5376,7 +5377,6 @@ addLayer('ei', {
 		return Array.from({length: this.softcaps.length}).map(() => power);
 	},
 	autoPrestige() { return hasMilestone('w', 3) && (!hasMilestone('cl', 0) || player.ei.auto_prestige) },
-	row: 4,
 	hotkeys: [{key: 'E', description: 'Shift-E: Reset for evil influence', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.gi.unlocked || player.ei.unlocked },
 	deactivated() { return inChallenge('ch', 12) || (getClickableState('mo', 11) && !canAssimilate(this.layer)) },
@@ -5855,6 +5855,7 @@ addLayer('w', {
 	name: 'War',
 	pluralName: 'Wars',
 	symbol: 'W',
+	row: 5,
 	position: 0,
 	startData() { return {
 		unlocked: false,
@@ -5915,7 +5916,6 @@ addLayer('w', {
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('w', 17) },
-	row: 5,
 	tooltipLocked() {
 		if (tmp[this.layer].deactivated) return 'War is deactivated';
 		return 'Reach ' + this.requires + ' GI and ' + this.requires + ' EI to unlock (You have ' + formatWhole(player.gi.points) + ' GI and ' + formatWhole(player.ei.points) + ' EI)';
@@ -6254,6 +6254,7 @@ addLayer('w', {
 addLayer('cl', {
 	name: 'Cellular Life',
 	symbol: 'CL',
+	row: 5,
 	position: 2,
 	startData() { return {
 		unlocked: false,
@@ -6298,7 +6299,6 @@ addLayer('cl', {
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('cl', 12) },
-	row: 5,
 	hotkeys: [{key: 'l', description: 'L: Reset for cellular life', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return hasMilestone('w', 9) || player.cl.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer) },
@@ -6701,6 +6701,7 @@ addLayer('cl', {
 addLayer('ch', {
 	name: 'Chaos',
 	symbol: 'CHAOS',
+	row: 6,
 	position: 0,
 	startData() { return {
 		unlocked: false,
@@ -6766,7 +6767,6 @@ addLayer('ch', {
 		let gain = newDecimalOne();
 		return gain;
 	},
-	row: 6,
 	tooltip() { return formatWhole(player.ch.points) + ' ' + randomStr(5) },
 	tooltipLocked() { return randomStr(5) + ' ' + this.requires + ' ' + randomStr(4) + ' ' + randomStr(2) + ' ' + randomStr(6) + ' (' + randomStr(3) + ' ' + randomStr(4) + ' ' + formatWhole(player.w.points) + ' ' + randomStr(4) + ')' },
 	hotkeys: [{key: 'C', description: 'Shift-C: Reset for chaos', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
@@ -7069,6 +7069,7 @@ addLayer('mo', {
 	name: 'Multicellular Organism',
 	pluralName: 'Multicellular Organisms',
 	symbol: 'MO',
+	row: 6,
 	position: 1,
 	startData() { return {
 		unlocked: false,
@@ -7103,7 +7104,6 @@ addLayer('mo', {
 		if (hasMilestone('ch', 16)) gain = gain.mul(milestoneEffect('ch', 16));
 		return gain;
 	},
-	row: 6,
 	hotkeys: [{key: 'o', description: 'O: Reset for multicellular organisms', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.ch.unlocked || player.mo.unlocked },
 	doReset(resettingLayer) {
@@ -7238,8 +7238,15 @@ addLayer('mo', {
 addLayer('pl', {
 	name: 'Planet',
 	pluralName: 'Planets',
-	symbol: "<img src='images/planet.png' style='width: 200px; height: 200px'>",
+	symbol: "<img src='images/planet.png' alt='PLANETS' width='200px' height='200px'>",
+	row: 7,
 	position: 0,
+	alias: {
+		symbol: "<img src='images/planet.png' alt='PL' width='60px' height='60px'>",
+		row: 'side',
+		position: 2,
+		nodeStyle: {'border-width': 0},
+	},
 	startData() { return {
 		unlocked: false,
 		points: newDecimalZero(),
@@ -7263,7 +7270,6 @@ addLayer('pl', {
 		let gain = newDecimalOne();
 		return gain;
 	},
-	row: 7,
 	hotkeys: [{key: 'P', description: 'Shift-P: Reset for planets', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return getClickableState('mo', 21) || player.pl.unlocked },
 	effect() {

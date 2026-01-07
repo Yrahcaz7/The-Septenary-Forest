@@ -60,9 +60,7 @@ function loadVue(mainPage = false) {
 				</div>
 				<overlay-head v-if="!gameEnded"></overlay-head>
 				<div class="upgCol sideLayers">
-					<template v-for="(node, index) in OTHER_LAYERS.side">
-						<tree-node :layer='node' :abb='tmp[node].symbol' :size="'small'"></tree-node>
-					</template>
+					<tree-node v-for="node in OTHER_LAYERS.side" :node='node' :size="'small'"></tree-node>
 				</div>
 			</div>
 			<!-- tree tab -->
@@ -719,11 +717,10 @@ function loadVue(mainPage = false) {
 	// data = an array with the structure of the tree
 	addNormalComponent('tree', {
 		props: ['layer', 'data'],
-		data() {return {tmp}},
 		template: template(`<div>
 			<template v-for="row in data">
 				<div class="upgRow">
-					<tree-node v-for="node in row" :layer='node' :prev='layer' :abb='tmp[node].symbol'></tree-node>
+					<tree-node v-for="node in row" :node='node' :prev='layer'></tree-node>
 				</div>
 				<div class="hidden"></div>
 			</template>
@@ -858,9 +855,12 @@ function loadVue(mainPage = false) {
 	});
 
 	addNormalComponent('tree-node', {
-		props: ['layer', 'abb', 'size', 'prev'],
+		props: ['node', 'size', 'prev'],
 		data() {return {nodeShown, tmp, player, constructNodeStyle}},
 		computed: {
+			layer() {return isPlainObject(this.node) ? this.node.layer : this.node},
+			isAlias() {return isPlainObject(this.node) && this.node.isAlias},
+			symbol() {return this.isAlias ? tmp[this.layer].alias.symbol : tmp[this.layer].symbol},
 			tooltipText() {
 				if (typeof overrideTooltip === 'function' && overrideTooltip(this.layer)) {
 					return overrideTooltip(this.layer);
@@ -896,7 +896,7 @@ function loadVue(mainPage = false) {
 				};
 			},
 		},
-		template: template(`<button v-if="nodeShown(layer)" :id="layer" @click="onClick" :class="{
+		template: template(`<button v-if="nodeShown(layer)" :id="layer + (isAlias ? '-alias' : '')" @click="onClick" :class="{
 			treeNode: tmp[layer].isLayer,
 			treeButton: !tmp[layer].isLayer,
 			smallNode: size == 'small',
@@ -909,9 +909,8 @@ function loadVue(mainPage = false) {
 			notify: tmp[layer].notify && player[layer].unlocked,
 			resetNotify: tmp[layer].prestigeNotify,
 			can: ((player[layer].unlocked || tmp[layer].canReset) && tmp[layer].isLayer) || (!tmp[layer].isLayer && tmp[layer].canClick),
-			front: !tmp.scrolled
-		}" :style="constructNodeStyle(layer)">
-			<span class="nodeLabel" v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : ''"></span>
+		}" :style="constructNodeStyle(layer, isAlias)">
+			<span class="nodeLabel" v-html="(symbol && tmp[layer].image === undefined) ? symbol : ''"></span>
 			<tooltip v-if="tmp[layer].tooltip != ''" :text="tooltipText"></tooltip>
 			<node-mark :layer='layer' :data='tmp[layer].marked'></node-mark>
 		</button>`),
@@ -992,7 +991,7 @@ function loadVue(mainPage = false) {
 			z-index: 1000;
 			position: relative;
 		">
-			<div v-if="player.devSpeed && player.devSpeed !== 1">
+			<div v-if="player.devSpeed !== undefined && player.devSpeed !== 1">
 				<br>Dev Speed: {{format(player.devSpeed)}}x<br>
 			</div>
 			<div v-if="player.offTime !== undefined">

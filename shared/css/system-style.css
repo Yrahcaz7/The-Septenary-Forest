@@ -159,10 +159,6 @@ td {
 	overflow: hidden;
 }
 
-.front {
-	z-index: 30000;
-}
-
 .overlayThing {
 	z-index: 10000;
 	pointer-events: auto;

@@ -20,7 +20,7 @@ function layerShown(layer) {
 
 let LAYERS = Object.keys(layers);
 let hotkeys = {};
-let maxRow = 0;
+let maxTreeRow = 0;
 
 function updateHotkeys() {
 	hotkeys = {};
@@ -54,17 +54,25 @@ function updateLayers() {
 	for (const row in OTHER_LAYERS) {
 		OTHER_LAYERS[row].sort((a, b) => a.position > b.position ? 1 : -1);
 		for (const layer in OTHER_LAYERS[row]) {
-			OTHER_LAYERS[row][layer] = OTHER_LAYERS[row][layer].layer;
+			if (OTHER_LAYERS[row][layer].isAlias) {
+				delete OTHER_LAYERS[row][layer].position;
+			} else {
+				OTHER_LAYERS[row][layer] = OTHER_LAYERS[row][layer].layer;
+			}
 		};
 	};
 	for (const row in TREE_LAYERS) {
 		TREE_LAYERS[row].sort((a, b) => a.position > b.position ? 1 : -1);
 		for (const layer in TREE_LAYERS[row]) {
-			TREE_LAYERS[row][layer] = TREE_LAYERS[row][layer].layer;
+			if (TREE_LAYERS[row][layer].isAlias) {
+				delete TREE_LAYERS[row][layer].position;
+			} else {
+				TREE_LAYERS[row][layer] = TREE_LAYERS[row][layer].layer;
+			}
 		};
 	};
 	const treeLayers = [];
-	for (let x = 0; x < maxRow + 1; x++) {
+	for (let x = 0; x <= maxTreeRow; x++) {
 		if (TREE_LAYERS[x]) treeLayers.push(TREE_LAYERS[x]);
 	};
 	TREE_LAYERS = treeLayers;
@@ -212,13 +220,49 @@ function setupLayer(layer) {
 	const row = layers[layer].row;
 	const displayRow = layers[layer].displayRow;
 	if (!ROW_LAYERS[row]) ROW_LAYERS[row] = {};
-	if (!TREE_LAYERS[displayRow] && !isNaN(displayRow)) TREE_LAYERS[displayRow] = [];
-	if (!OTHER_LAYERS[displayRow] && isNaN(displayRow)) OTHER_LAYERS[displayRow] = [];
 	ROW_LAYERS[row][layer] = layer;
-	const pos = (layers[layer].position !== undefined ? layers[layer].position : layer);
-	if (!isNaN(displayRow) || displayRow < 0) TREE_LAYERS[displayRow].push({layer: layer, position: pos});
-	else OTHER_LAYERS[displayRow].push({layer: layer, position: pos});
-	if (maxRow < layers[layer].displayRow) maxRow = layers[layer].displayRow;
+	const pos = layers[layer].position ?? layer;
+	if (!isNaN(displayRow) && displayRow >= 0) {
+		if (!TREE_LAYERS[displayRow]) TREE_LAYERS[displayRow] = [];
+		TREE_LAYERS[displayRow].push({layer: layer, position: pos});
+		if (maxTreeRow < displayRow) maxTreeRow = displayRow;
+	} else {
+		if (!OTHER_LAYERS[displayRow]) OTHER_LAYERS[displayRow] = [];
+		OTHER_LAYERS[displayRow].push({layer: layer, position: pos});
+	};
+	// setup alias
+	if (isPlainObject(layers[layer].alias)) {
+		const alias = layers[layer].alias;
+		alias.layer = layer;
+		if (alias.symbol === undefined) {
+			alias.symbol = layers[layer].symbol;
+		};
+		if (alias.row === undefined) {
+			alias.row = row;
+		};
+		if (alias.displayRow === undefined) {
+			alias.displayRow = alias.row;
+		};
+		if (alias.position === undefined && layers[layer].position !== undefined) {
+			alias.position = layers[layer].position;
+		};
+		if (alias.nodeStyle === undefined && layers[layer].nodeStyle !== undefined) {
+			alias.nodeStyle = layers[layer].nodeStyle;
+		}
+		const aliasRow = alias.row;
+		const aliasDisplayRow = alias.displayRow;
+		if (!ROW_LAYERS[aliasRow]) ROW_LAYERS[aliasRow] = {};
+		ROW_LAYERS[aliasRow][layer] = layer;
+		const aliasPos = alias.position ?? layer;
+		if (!isNaN(aliasDisplayRow) && aliasDisplayRow >= 0) {
+			if (!TREE_LAYERS[aliasDisplayRow]) TREE_LAYERS[aliasDisplayRow] = [];
+			TREE_LAYERS[aliasDisplayRow].push({layer: layer, position: aliasPos, isAlias: true});
+			if (maxTreeRow < aliasDisplayRow) maxTreeRow = aliasDisplayRow;
+		} else {
+			if (!OTHER_LAYERS[aliasDisplayRow]) OTHER_LAYERS[aliasDisplayRow] = [];
+			OTHER_LAYERS[aliasDisplayRow].push({layer: layer, position: aliasPos, isAlias: true});
+		};
+	};
 };
 
 // Call this to add layers from a different file!

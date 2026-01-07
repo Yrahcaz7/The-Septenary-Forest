@@ -43,7 +43,7 @@ function resetActiveSoftcaps() {
 addLayer('SC', {
 	name: 'Softcaps',
 	symbol: 'SC',
-	position: 2,
+	position: 1,
 	startData() { return {
 		points: newDecimalZero(),
 		softcaps: [],

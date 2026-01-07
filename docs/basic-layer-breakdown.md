@@ -19,7 +19,7 @@ addLayer("p", {
     }},
     color: "#4BDC13",                       // The color for the layer's node and some things in the layer.
     resource: "prestige points",            // The name of this layer's main prestige resource.
-    
+
 
     baseResource: "points",                 // The name of the resource your prestige gain is based on.
     baseAmount() { return player.points },  // A function to return the current amount of baseResource.

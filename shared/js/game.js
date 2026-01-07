@@ -141,6 +141,7 @@ function canReset(layer) {
 
 function rowReset(row, layer) {
 	for (const lr in ROW_LAYERS[row]) {
+		if (isPlainObject(lr)) continue;
 		if (layers[lr].doReset) {
 			if (!isNaN(row)) player[lr].activeChallenge = null; // Exit challenges on any row reset on an equal or higher row
 			run(layers[lr].doReset, layers[lr], layer);
@@ -227,6 +228,7 @@ function resetRow(row) {
 	rowReset(row + 1, ROW_LAYERS[row + 1][0]);
 	doReset(ROW_LAYERS[row - 1][0], true);
 	for (const layer in ROW_LAYERS[row]) {
+		if (isPlainObject(layer)) continue;
 		player[layer].unlocked = false;
 		if (player[layer].unlockOrder) player[layer].unlockOrder = 0;
 	};
@@ -317,9 +319,10 @@ function gameLoop(diff) {
 	if (typeof getPoints === "function" && getPoints() instanceof Decimal) player.points = getPoints();
 	else player.points = player.points.add(tmp.pointGen.mul(diff)).max(0);
 	if (typeof update === "function") update(diff);
-	for (let x = 0; x <= maxRow; x++) {
+	for (let x = 0; x <= maxTreeRow; x++) {
 		for (const item in TREE_LAYERS[x]) {
 			const layer = TREE_LAYERS[x][item];
+			if (isPlainObject(layer)) continue;
 			player[layer].resetTime += diff;
 			if (tmp[layer].passiveGeneration) generatePoints(layer, diff * tmp[layer].passiveGeneration);
 			if (layers[layer].update) layers[layer].update(diff);
@@ -328,14 +331,16 @@ function gameLoop(diff) {
 	for (const row in OTHER_LAYERS) {
 		for (const item in OTHER_LAYERS[row]) {
 			const layer = OTHER_LAYERS[row][item];
+			if (isPlainObject(layer)) continue;
 			player[layer].resetTime += diff;
 			if (tmp[layer].passiveGeneration) generatePoints(layer, diff * tmp[layer].passiveGeneration);
 			if (layers[layer].update) layers[layer].update(diff);
 		};
 	};
-	for (let x = maxRow; x >= 0; x--) {
+	for (let x = maxTreeRow; x >= 0; x--) {
 		for (const item in TREE_LAYERS[x]) {
 			const layer = TREE_LAYERS[x][item];
+			if (isPlainObject(layer)) continue;
 			if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);
 			if (layers[layer].automate) layers[layer].automate();
 			if (tmp[layer].autoUpgrade) autobuyUpgrades(layer);
@@ -344,6 +349,7 @@ function gameLoop(diff) {
 	for (const row in OTHER_LAYERS) {
 		for (const item in OTHER_LAYERS[row]) {
 			const layer = OTHER_LAYERS[row][item];
+			if (isPlainObject(layer)) continue;
 			if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);
 			if (layers[layer].automate) layers[layer].automate();
 			if (player[layer].best instanceof Decimal) player[layer].best = player[layer].best.max(player[layer].points);
@@ -381,7 +387,7 @@ const INTERVAL = setInterval(() => {
 		};
 		if (!options.offlineProd || player.offTime.remain <= 0) player.offTime = undefined;
 	};
-	if (player.devSpeed) diff *= player.devSpeed;
+	if (player.devSpeed !== undefined) diff *= player.devSpeed;
 	player.time = now;
 	if (needCanvasUpdate) {
 		resizeCanvas();
