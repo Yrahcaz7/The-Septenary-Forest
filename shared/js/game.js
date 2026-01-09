@@ -253,7 +253,7 @@ function startChallenge(layer, x) {
 };
 
 function canCompleteChallenge(layer, x) {
-	if (x != player[layer].activeChallenge) return;
+	if (x != player[layer].activeChallenge) return false;
 	const challenge = tmp[layer].challenges[x];
 	if (challenge.canComplete !== undefined) return challenge.canComplete;
 	if (challenge.currencyInternalName) {
@@ -337,23 +337,25 @@ function gameLoop(diff) {
 			if (layers[layer].update) layers[layer].update(diff);
 		};
 	};
-	for (let x = maxTreeRow; x >= 0; x--) {
-		for (const item in TREE_LAYERS[x]) {
-			const layer = TREE_LAYERS[x][item];
-			if (isPlainObject(layer)) continue;
-			if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);
-			if (layers[layer].automate) layers[layer].automate();
-			if (tmp[layer].autoUpgrade) autobuyUpgrades(layer);
+	if (diff > 0) {
+		for (let x = maxTreeRow; x >= 0; x--) {
+			for (const item in TREE_LAYERS[x]) {
+				const layer = TREE_LAYERS[x][item];
+				if (isPlainObject(layer)) continue;
+				if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);
+				if (layers[layer].automate) layers[layer].automate();
+				if (tmp[layer].autoUpgrade) autobuyUpgrades(layer);
+			};
 		};
-	};
-	for (const row in OTHER_LAYERS) {
-		for (const item in OTHER_LAYERS[row]) {
-			const layer = OTHER_LAYERS[row][item];
-			if (isPlainObject(layer)) continue;
-			if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);
-			if (layers[layer].automate) layers[layer].automate();
-			if (player[layer].best instanceof Decimal) player[layer].best = player[layer].best.max(player[layer].points);
-			if (tmp[layer].autoUpgrade) autobuyUpgrades(layer);
+		for (const row in OTHER_LAYERS) {
+			for (const item in OTHER_LAYERS[row]) {
+				const layer = OTHER_LAYERS[row][item];
+				if (isPlainObject(layer)) continue;
+				if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);
+				if (layers[layer].automate) layers[layer].automate();
+				if (player[layer].best instanceof Decimal) player[layer].best = player[layer].best.max(player[layer].points);
+				if (tmp[layer].autoUpgrade) autobuyUpgrades(layer);
+			};
 		};
 	};
 	for (const layer in layers) {

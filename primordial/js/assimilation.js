@@ -14,7 +14,7 @@ function startAssimilation(layer) {
 		console.error("'" + layer + "' is not a valid layer");
 		return false;
 	};
-	if (!confirm('Are you sure you want to start Assimilating ' + tmp[layer].name + '? This will reset all Assimilated layers content, all ' + tmp[layer].name + ' content, and put you in a run where only Assimilated layers and this layer will be active!')) return false;
+	if (!confirm('Are you sure you want to start Assimilating ' + (tmp[layer].pluralName || tmp[layer].name) + '? This will reset all Assimilated layers content, all ' + tmp[layer].name + ' content, and put you in a run where only Assimilated layers and this layer will be active!')) return false;
 	// enter assimilation
 	player.mo.assimilating = layer;
 	// reset things
@@ -39,7 +39,7 @@ const assimilationReq = {
 	s: new Decimal(52),
 	r: new Decimal(95),
 	m: new Decimal(1e64),
-	gi: new Decimal(725),
+	gi: new Decimal(700),
 	ei: new Decimal(1640),
 	w: new Decimal(272),
 	cl: new Decimal(25_000),
@@ -249,14 +249,14 @@ function getGlitch(tweak = false) {
 	if (hasUpgrade('q', 54)) frequency /= 2;
 	if (hasUpgrade('q', 65)) frequency *= 2;
 	// calculate
-	const val = Math.sin(new Date().getTime() / (2000 / frequency));
+	const val = Math.sin(player.timePlayed / (2 / frequency));
 	// with rounding (based on the answer found here: https://math.stackexchange.com/a/107491)
 	if (round) {
 		const result = val * Math.sqrt((1 + (round ** 2)) / (1 + ((round ** 2) * (val ** 2))));
 		if (tweak && hasMilestone('ch', 13)) return new Decimal(1.395e12).mul((result + skew) * mult).add(1);
-		else return player.points.max(player.q.basePointTotal).add(1).log10().mul((result + skew) * mult).add(1);
+		return player.points.max(player.q.basePointTotal).add(1).log10().mul((result + skew) * mult).add(1);
 	};
 	// without rounding
 	if (tweak && hasMilestone('ch', 13)) return new Decimal(1.395e12).mul((val + skew) * mult).add(1);
-	else return player.points.max(player.q.basePointTotal).add(1).log10().mul((val + skew) * mult).add(1);
+	return player.points.max(player.q.basePointTotal).add(1).log10().mul((val + skew) * mult).add(1);
 };

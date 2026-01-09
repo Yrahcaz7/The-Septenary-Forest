@@ -43,8 +43,8 @@ const optionGrid = [
 		{opt: "extendPlaces", text() {return "Extended Decimal Places: " + formatOpt(options[this.opt])}, onClick: toggleOpt},
 	], [
 		{opt: "hideMilestonePopups", text() {return "Show Milestone Popups: " + formatOpt(!options[this.opt])}, onClick: toggleOpt},
-		{opt: "nerdMode", text() {return "Nerd Mode: " + formatOpt(options[this.opt]) + " (you can also use the control key to toggle)"}, onClick: toggleOpt},
-		{text() {return (player.devSpeed == 0 ? "Unpause" : "Pause") + " (you can also use the space key to toggle)"}, onClick: togglePause},
+		{opt: "nerdMode", text() {return "Nerd Mode: " + formatOpt(options[this.opt]) + " (you can also press - to toggle)"}, onClick: toggleOpt},
+		{text() {return (player.devSpeed == 0 ? "Unpause" : "Pause") + " (you can also press = to toggle)"}, onClick: togglePause},
 	],
 ];
 
@@ -61,7 +61,7 @@ function toggleOpt(name) {
 	else if (name == "forceOneTab") needsCanvasUpdate = true;
 };
 
-const pausedDisplay = "Paused. Press space to unpause.";
+const pausedDisplay = "Paused. Press = to unpause.";
 
 function togglePause() {
 	if (player.devSpeed == 0) player.devSpeed = 1;
@@ -69,8 +69,9 @@ function togglePause() {
 };
 
 function onKeyDown(key) {
-	if (ctrlDown) options.nerdMode = !options.nerdMode;
-	if (key == " " && !focused) togglePause();
+	if (focused) return;
+	if (key == "-" || key == "_") options.nerdMode = !options.nerdMode;
+	if (key == "=" || key == "+") togglePause();
 };
 
 const DISPLAY_MODES = ["ALL (recommended)", "ONLY SPECIAL", "SPECIAL AND TITLES", "SPECIAL AND REFRENCES"];

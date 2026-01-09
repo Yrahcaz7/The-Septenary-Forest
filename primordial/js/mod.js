@@ -16,29 +16,29 @@ const changelog = `<h1>Changelog:</h1><br>
 	<br><h3>v4.0: The End is Near</h3><br>
 		- Added planets.<br>
 		- Added one milestone to planets.<br>
-		- Added seven upgrades to planets.<br>
+		- Added thirty-six upgrades to planets.<br>
 		- Added four achievements.<br>
 		- Added one option.<br>
 	<br><h3>v3.6: Even More Assimilation</h3><br>
 		- Added more to assimilation.<br>
-		- Added more to story.<br>
 		- Added ten milestones to chaos.<br>
+		- Added more to story.<br>
 		- Added one achievement.<br>
 		- Removed one option.<br>
 		- Added two options.<br>
 		- Improved option style.<br>
 	<br><h3>v3.5: More Assimilation</h3><br>
 		- Added more to assimilation.<br>
-		- Added more to story.<br>
 		- Added six milestones to chaos.<br>
+		- Added more to story.<br>
 		- Added two achievements.<br>
 		- Added six achievement images.<br>
 		- Improved story infobox style.<br>
 	<br><h3>v3.4: Organisms Emerge</h3><br>
 		- Added multicellular organisms.<br>
 		- Added assimilation.<br>
-		- Added more to story.<br>
 		- Added ten milestones to chaos.<br>
+		- Added more to story.<br>
 		- Added three achievements.<br>
 	<br><h3>v3.3: Chaos Rises</h3><br>
 		- Added chaos.<br>
@@ -95,12 +95,12 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added achievement colors.<br>
 		- Added eight achievements.<br>
 		- Added five achievement images.<br>
-		- Added another option.<br>
+		- Added one option.<br>
 		- Lots of technical changes and fixes.<br>
 	<br><h3>v2.1: Relics of Light</h3><br>
 		- Added relics.<br>
 		- Added one custom challenge to relics.<br>
-		- Added so, so many milestones to sanctums.<br>
+		- Added thirty-nine milestones to sanctums.<br>
 		- Added three custom rebuyables to sanctums.<br>
 		- Added two milestones to atoms.<br>
 		- Added four achievements.<br>
@@ -174,7 +174,7 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added eight achievements.<br>
 	<br><h3>v0.4: To Infinity</h3><br>
 		- Added five more upgrades to essence.<br>
-		- Added another rebuyable to essence.<br>
+		- Added one rebuyable to essence.<br>
 		- Added twelve more upgrades to quarks.<br>
 	<br><h3>v0.3: Quark Addition</h3><br>
 		- Added quarks.<br>
@@ -184,9 +184,9 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added cores.<br>
 		- Added two rebuyables to cores.<br>
 	<br><h3>v0.1: Game Launch</h3><br>
-		- Game Launch.<br>
-		- Added six upgrades.<br>
-		- Added a rebuyable.<br>
+		- Added essence.<br>
+		- Added six upgrades to essence.<br>
+		- Added one rebuyable to essence.<br>
 <br>`;
 
 const TITLE = 0;
@@ -273,6 +273,7 @@ function getLightGain() {
 	if (new Decimal(tmp.w.effect[2]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[2]);
 	if (hasBuyable('r', 12)) gain = gain.mul(buyableEffect('r', 12));
 	if (hasUpgrade('m', 61)) gain = gain.mul(upgradeEffect('m', 61));
+	if (hasUpgrade('pl', 54)) gain = gain.mul(upgradeEffect('pl', 54));
 	gain = gain.add(getLightBoost());
 	return gain;
 };
@@ -399,7 +400,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return 'You beat the game!<br>For now...' },
 ];
 
-const endPoints = new Decimal('e1e46');
+const endPoints = new Decimal('e1e47');
 
 function onLoad() { calculateColorValue() };
 

@@ -1287,7 +1287,7 @@ addLayer('sp', {
 		// return
 		return gain;
 	},
-	autoPrestige() { return hasMilestone('s', 11) },
+	autoPrestige() { return hasMilestone('s', 11) || hasUpgrade('pl', 24) },
 	hotkeys: [{key: 'S', description: 'Shift-S: Reset for subatomic particles', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.q.unlocked || player.sp.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
@@ -1315,7 +1315,7 @@ addLayer('sp', {
 		if (hasMilestone('a', 13) && resettingLayer == 'a') keep.push("milestones");
 		if (layers[resettingLayer].row > this.row) layerDataReset('sp', keep);
 	},
-	resetsNothing() { return hasMilestone('s', 11) || hasUpgrade('sp', 31) },
+	resetsNothing() { return hasMilestone('s', 11) || hasUpgrade('sp', 31) || hasUpgrade('pl', 24) },
 	tabFormat: getTab('sp'),
 	milestones: {
 		0: {
@@ -1540,6 +1540,7 @@ addLayer('h', {
 		let gen = 0;
 		if (hasUpgrade('h', 74)) gen += 6e64;
 		if (hasMilestone('s', 9)) gen += 0.001;
+		if (hasUpgrade('pl', 32)) gen += 0.1;
 		return gen;
 	},
 	automate() {
@@ -2020,6 +2021,7 @@ addLayer('ds', {
 	passiveGeneration() {
 		let gen = 0;
 		if (hasMilestone('s', 10)) gen += 0.00001;
+		if (hasUpgrade('pl', 34)) gen += 0.1;
 		return gen;
 	},
 	automate() {
@@ -2340,7 +2342,7 @@ addLayer('a', {
 		if (hasBuyable('mo', 11)) gain = gain.mul(buyableEffect('mo', 11));
 		return gain;
 	},
-	autoPrestige() { return hasMilestone('a', 15) },
+	autoPrestige() { return hasMilestone('a', 15) || hasUpgrade('pl', 42) },
 	hotkeys: [{key: 'a', description: 'A: Reset for atoms', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.ds.unlocked || player.a.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
@@ -2368,7 +2370,7 @@ addLayer('a', {
 		if (hasMilestone('cl', 8) && resettingLayer == 'cl') keep.push("milestones");
 		if (layers[resettingLayer].row >= this.row) layerDataReset('a', keep);
 	},
-	resetsNothing() { return hasMilestone('a', 14) },
+	resetsNothing() { return hasMilestone('a', 14) || hasUpgrade('pl', 42) },
 	tabFormat: {
 		"Atomic Progress": {
 			content: getTab('a'),
@@ -2875,6 +2877,7 @@ addLayer('p', {
 		if (hasUpgrade('p', 81)) mult = mult.mul(upgradeEffect('p', 81));
 		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated && !(hasMilestone('gi', 19) && player.h.limitsBroken >= 4)) mult = mult.mul(tmp.gi.effect);
 		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
+		if (hasUpgrade('pl', 44)) mult = mult.mul(upgradeEffect('pl', 44));
 		// pow
 		if (challengeCompletions('ch', 12) > 0) mult = mult.pow(challengeEffect('ch', 12));
 		// return
@@ -3519,6 +3522,7 @@ addLayer('s', {
 		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated && hasMilestone('gi', 19) && player.h.limitsBroken >= 4 && tmp.gi.effect.lte(1e100)) gain = gain.mul(tmp.gi.effect);
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
 		if (hasBuyable('mo', 12)) gain = gain.mul(buyableEffect('mo', 12));
+		if (hasUpgrade('pl', 52)) gain = gain.mul(upgradeEffect('pl', 52));
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('s', 48) },
@@ -4247,6 +4251,7 @@ addLayer('r', {
 		if (hasMilestone('w', 4) && player.r.auto_upgrade_2) buyUpgrade('r', 12);
 		if (hasMilestone('w', 4) && player.r.auto_upgrade_3) buyUpgrade('r', 13);
 		if (hasMilestone('pl', 0) && player[this.layer].auto_buyables) {
+			updateBuyableTemp(this.layer);
 			for (const id in layers[this.layer].buyables) {
 				buyBuyable(this.layer, id);
 			};
@@ -4619,6 +4624,7 @@ addLayer('m', {
 		if (getActivatedRelics() >= 12) mult = mult.mul(player.r.relic_effects[0]);
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[1]);
 		if (hasBuyable('w', 21)) mult = mult.mul(buyableEffect('w', 21));
+		if (hasUpgrade('pl', 62)) mult = mult.mul(upgradeEffect('pl', 62));
 		return mult;
 	},
 	hotkeys: [{key: 'm', description: 'M: Reset for molecules', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
@@ -4975,11 +4981,11 @@ addLayer('m', {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Ne<span style="font-size: 0.8em">2</span>, Neon' },
 			description: 'multiplies light gain after hardcap based on your total unique molecules',
 			cost: 1e62,
-			effect() { return player.m.unique_total.add(1).log10().add(1).pow(hasUpgrade('m', 61) ? 10 : 0.5) },
+			effect() { return player.m.unique_total.add(1).log10().add(1).pow(hasUpgrade('m', 62) ? 10 : 0.5) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) {
-					if (hasUpgrade('m', 61)) text += '<br>formula: (log10(x+1)+1)^10';
+					if (hasUpgrade('m', 62)) text += '<br>formula: (log10(x+1)+1)^10';
 					else text += '<br>formula: (log10(x+1)+1)^0.5';
 				};
 				return text;
@@ -4989,7 +4995,7 @@ addLayer('m', {
 		62: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'C<span style="font-size: 0.8em">6</span>H<span style="font-size: 0.8em">5</span>NH<span style="font-size: 0.8em">2</span>, Aniline' },
 			description() { return 'improves <b' + getColorClass(this, "ref-light", "m") + 'Ne<span style="font-size: 0.8em">2</span>, Neon</b>\'s effect exponent<br>(0.5 --> 10)' },
-			cost: '1e1400',
+			cost() { return (player.mo.assimilating != null ? 1e80 : '1e1400') },
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('m', 51) && hasUpgrade('m', 52) && hasUpgrade('m', 53) },
 		},
 		63: {
@@ -5050,12 +5056,13 @@ addLayer('gi', {
 		if (hasBuyable('mo', 13)) gain = gain.mul(buyableEffect('mo', 13));
 		return gain;
 	},
-	autoPrestige() { return (hasMilestone('w', 1) || ((isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('gi', 16))) && (!hasMilestone('cl', 0) || player.gi.auto_prestige) },
+	autoPrestige() { return (hasMilestone('w', 1) || ((isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('gi', 16)) || hasUpgrade('pl', 64)) && (!hasMilestone('cl', 0) || player.gi.auto_prestige) },
 	hotkeys: [{key: 'G', description: 'Shift-G: Reset for good influence', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.m.unlocked || player.gi.unlocked },
 	deactivated() { return inChallenge('ch', 11) || (getClickableState('mo', 11) && !canAssimilate(this.layer))},
 	automate() {
-		if ((hasUpgrade('gi', 11) && (!hasMilestone('w', 0) || player.gi.auto_buyables)) || (hasMilestone('w', 0) && player.gi.auto_buyables)) {
+		if ((hasUpgrade('gi', 11) && !hasMilestone('w', 0)) || (hasMilestone('w', 0) && player.gi.auto_buyables)) {
+			updateBuyableTemp('gi');
 			let work = 1;
 			if (hasMilestone('ch', 2)) work *= 2;
 			if (hasMilestone('ch', 6)) work *= 5;
@@ -5112,7 +5119,7 @@ addLayer('gi', {
 		if (hasMilestone('ch', 8) && resettingLayer == 'ch') keep.push('milestones');
 		if (layers[resettingLayer].row > this.row) layerDataReset('gi', keep);
 	},
-	resetsNothing() { return hasMilestone('gi', 16) },
+	resetsNothing() { return hasMilestone('gi', 16) || hasUpgrade('pl', 64) },
 	update(diff) {
 		let exp = 0.2;
 		if (hasMilestone('gi', 12)) exp = 0.22;
@@ -5376,7 +5383,7 @@ addLayer('ei', {
 		};
 		return Array.from({length: this.softcaps.length}).map(() => power);
 	},
-	autoPrestige() { return hasMilestone('w', 3) && (!hasMilestone('cl', 0) || player.ei.auto_prestige) },
+	autoPrestige() { return (hasMilestone('w', 3) || hasUpgrade('pl', 64)) && (!hasMilestone('cl', 0) || player.ei.auto_prestige) },
 	hotkeys: [{key: 'E', description: 'Shift-E: Reset for evil influence', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.gi.unlocked || player.ei.unlocked },
 	deactivated() { return inChallenge('ch', 12) || (getClickableState('mo', 11) && !canAssimilate(this.layer)) },
@@ -5438,7 +5445,7 @@ addLayer('ei', {
 		if (hasMilestone('ch', 4) && resettingLayer == 'ch') keep.push('challenges');
 		if (layers[resettingLayer].row > this.row) layerDataReset('ei', keep);
 	},
-	resetsNothing() { return hasChallenge('ei', 12) },
+	resetsNothing() { return hasChallenge('ei', 12) || hasUpgrade('pl', 64) },
 	update(diff) {
 		if (tmp.ei.effect[0]?.gt(0) && !tmp.ei.deactivated) {
 			player.ei.power = player.ei.power.add(tmp.ei.effect[0].mul(diff));
@@ -5895,7 +5902,7 @@ addLayer('w', {
 	prestigeButtonText() { return 'Reset for +<b>' + formatWhole(tmp.w.getResetGain) + '</b> wars<br><br>' + (player.w.points.lt(30) ? (tmp.w.canBuyMax ? 'Next:' : 'Req:') : '') + ' ' + formatWhole(player.gi.points) + ' / ' + format(tmp.w.getNextAt.mul(tmp.w.giCostMult)) + ' GI<br>' + (player.w.points.lt(30) ? 'and ' : '') + formatWhole(player.ei.points) + ' / ' + format(tmp.w.getNextAt) + ' EI' },
 	canBuyMax() { return hasMilestone('ch', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 	onPrestige() {
-		if (hasMilestone('w', 5)) return;
+		if (hasMilestone('w', 5) || hasMilestone('pl', 0)) return;
 		player.c.unlocked = false;
 		player.q.unlocked = false;
 		player.sp.unlocked = false;
@@ -5915,7 +5922,7 @@ addLayer('w', {
 		if (new Decimal(tmp.ch.effect[1]).gt(1) && !tmp.ch.deactivated) gain = gain.mul(tmp.ch.effect[1]);
 		return gain;
 	},
-	autoPrestige() { return hasMilestone('w', 17) },
+	autoPrestige() { return hasMilestone('w', 17) || hasUpgrade('pl', 72) },
 	tooltipLocked() {
 		if (tmp[this.layer].deactivated) return 'War is deactivated';
 		return 'Reach ' + this.requires + ' GI and ' + this.requires + ' EI to unlock (You have ' + formatWhole(player.gi.points) + ' GI and ' + formatWhole(player.ei.points) + ' EI)';
@@ -5925,6 +5932,7 @@ addLayer('w', {
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer) },
 	automate() {
 		if (hasMilestone('w', 18) && player[this.layer].auto_influence) {
+			updateBuyableTemp(this.layer);
 			for (const id in layers[this.layer].buyables) {
 				buyBuyable(this.layer, id);
 			};
@@ -5961,7 +5969,7 @@ addLayer('w', {
 			};
 		};
 	},
-	resetsNothing() { return hasMilestone('w', 17) },
+	resetsNothing() { return hasMilestone('w', 17) || hasUpgrade('pl', 72) },
 	tabFormat: {
 		Progress: {
 			content: getTab('w'),
@@ -6298,7 +6306,7 @@ addLayer('cl', {
 		if (hasBuyable('cl', 13)) gain = gain.mul(buyableEffect('cl', 13)[1]);
 		return gain;
 	},
-	autoPrestige() { return hasMilestone('cl', 12) },
+	autoPrestige() { return hasMilestone('cl', 12) || hasUpgrade('pl', 74) },
 	hotkeys: [{key: 'l', description: 'L: Reset for cellular life', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return hasMilestone('w', 9) || player.cl.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer) },
@@ -6331,7 +6339,7 @@ addLayer('cl', {
 		if (hasMilestone('ch', 0) && resettingLayer == 'ch') keep.push('milestones');
 		if (layers[resettingLayer].row > this.row) layerDataReset('cl', keep);
 	},
-	resetsNothing() { return hasMilestone('cl', 12) },
+	resetsNothing() { return hasMilestone('cl', 12) || hasUpgrade('pl', 74) },
 	update(diff) {
 		// init
 		let conv = newDecimalZero();
@@ -6358,7 +6366,7 @@ addLayer('cl', {
 		if (mult.gt(0)) {
 			const gain = player.cl.points.mul(player.cl.protein_conv).mul(mult);
 			player.cl.protein_gain = gain;
-			player.cl.protein = player.cl.protein.add(gain);
+			player.cl.protein = player.cl.protein.add(gain.mul(diff));
 		} else {
 			player.cl.protein_gain = newDecimalZero();
 		};
@@ -6616,16 +6624,16 @@ addLayer('cl', {
 			purchaseLimit: 1e9,
 			buy() { buyStandardBuyable(this, 'cl', 'protein', getCellularLifeBuyableBulk()) },
 			effect(x) {
-				if (hasMilestone('w', 20)) return [new Decimal(1.36).pow(x).sub(1), x.mul(50).add(1).pow(3)];
-				if (hasMilestone('w', 19)) return [new Decimal(1.175).pow(x).sub(1), x.mul(25).add(1).pow(3)];
-				return [new Decimal(1.025).pow(x).sub(1), x.mul(7.5).add(1).pow(2)];
+				if (hasMilestone('w', 20)) return [new Decimal(1.36).pow(x).sub(1).mul(10), x.mul(50).add(1).pow(3)];
+				if (hasMilestone('w', 19)) return [new Decimal(1.175).pow(x).sub(1).mul(10), x.mul(25).add(1).pow(3)];
+				return [new Decimal(1.025).pow(x).sub(1).mul(10), x.mul(7.5).add(1).pow(2)];
 			},
 			effectDisplay(eff) {
 				let text = '+' + format(eff[0].mul(100)) + '%<br>and ' + format(eff[1]) + 'x';
-				if (options.nerdMode) {
-					if (hasMilestone('w', 20)) text += '<br>formulas: (1.36^x)-1<br>and (50x+1)^3';
-					else if (hasMilestone('w', 19)) text += '<br>formulas: (1.175^x)-1<br>and (25x+1)^3';
-					else text += '<br>formulas: (1.025^x)-1<br>and (7.5x+1)^2';
+				if (options.nerdMode) { // x to % -> 10(...) * 100 = 1,000(...)
+					if (hasMilestone('w', 20)) text += '<br>formulas: 1,000((1.36^x)-1)<br>and (50x+1)^3';
+					else if (hasMilestone('w', 19)) text += '<br>formulas: 1,000((1.175^x)-1)<br>and (25x+1)^3';
+					else text += '<br>formulas: 1,000((1.025^x)-1)<br>and (7.5x+1)^2';
 				};
 				return text;
 			},
@@ -6744,9 +6752,9 @@ addLayer('ch', {
 		else gain = gain.div(5);
 		return gain.mul(tmp.ch.gainExp).floor().sub(player.ch.points).add(1).max(0).min(1);
 	},
-	getNextAt() {
+	getNextAt(canMax = false) {
 		if (hasMilestone('pl', 0)) {
-			return getNextAt("ch", true, "static");
+			return getNextAt("ch", canMax, "static");
 		};
 		let next = player.ch.points.div(tmp.ch.gainExp);
 		if (player.ch.points.gt(102)) next = newDecimalInf();
@@ -6761,7 +6769,7 @@ addLayer('ch', {
 	},
 	canReset() { return tmp.ch.baseAmount.gte(tmp.ch.nextAt) },
 	prestigeNotify() { return tmp.ch.baseAmount.gte(tmp.ch.nextAt) },
-	prestigeButtonText() { return randomStr(5) + ' ' + randomStr(3) + ' +<b>' + formatWhole(tmp.ch.getResetGain) + '</b> ' + randomStr(5) + '<br><br>' + (player.ch.points.lt(30) ? randomStr(3) + ':' : '') + ' ' + formatWhole(tmp.ch.baseAmount) + ' / ' + formatWhole(tmp.ch.getNextAt) + ' ' + randomStr(4) },
+	prestigeButtonText() { return randomStr(5) + ' ' + randomStr(3) + ' +<b>' + formatWhole(tmp.ch.getResetGain) + '</b> ' + randomStr(5) + '<br><br>' + (player.ch.points.lt(30) ? (tmp.ch.baseAmount.gte(tmp.ch.nextAt) && tmp.ch.canBuyMax ? randomStr(4) : randomStr(3)) + ':' : '') + ' ' + formatWhole(tmp.ch.baseAmount) + ' / ' + formatWhole(tmp.ch.nextAtDisp) + ' ' + randomStr(4) },
 	canBuyMax() { return hasMilestone('pl', 0) },
 	gainExp() {
 		let gain = newDecimalOne();
@@ -6772,10 +6780,16 @@ addLayer('ch', {
 	hotkeys: [{key: 'C', description: 'Shift-C: Reset for chaos', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.cl.unlocked || player.ch.unlocked },
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer) },
+	automate() {
+		if (hasUpgrade('pl', 92)) {
+			if (canCompleteChallenge('ch', 11)) player.ch.challenges[11]++;
+			if (canCompleteChallenge('ch', 12)) player.ch.challenges[12]++;
+		};
+	},
 	effect() { return [
-		(hasMilestone('ch', 15) ? new Decimal('e1e11').pow(player.ch.points) : new Decimal('1e1000').pow(player.ch.points)),
-		(hasMilestone('ch', 19) ? player.ch.points.add(1).pow(0.0575) : player.ch.points.add(1).pow(0.0485)),
-		(hasMilestone('ch', 3) ? new Decimal(75).pow(player.ch.points) : new Decimal(25).pow(player.ch.points)),
+		new Decimal(hasMilestone('ch', 15) ? 'e1e11' : '1e1000').pow(player.ch.points),
+		player.ch.points.add(1).pow(hasMilestone('ch', 19) ? (hasUpgrade('pl', 94) ? 0.1 : 0.0575) : 0.0485),
+		new Decimal(hasMilestone('ch', 3) ? 75 : 25).pow(player.ch.points),
 	]},
 	effectDescription() { return 'which multiplies essence gain by <h2 class="layer-ch">' + format(tmp.ch.effect[0]) + '</h2>x, multiplies war gain by <h2 class="layer-ch">' + format(tmp.ch.effect[1]) + '</h2>x, and multiplies protein found from cellular life by <h2 class="layer-ch">' + format(tmp.ch.effect[2]) + '</h2>x' },
 	doReset(resettingLayer) {
@@ -6930,7 +6944,7 @@ addLayer('ch', {
 		},
 		21: {
 			requirementDescription: '57 chaos',
-			effectDescription() { return 'you gain 10x glow, improve the effect formula of the <b' + getColorClass(this, REF) + '17th chaos milestone</b>, and you can bulk buy multicellular organisms' },
+			effectDescription() { return 'you gain 10x glow, improve the effect formula of the <b' + getColorClass(this, REF) + '17th chaos milestone</b>, and you can buy max multicellular organisms' },
 			done() { return player.ch.points.gte(57) },
 			unlocked() { return player.mo.unlocked },
 		},
@@ -6987,7 +7001,7 @@ addLayer('ch', {
 		},
 		30: {
 			requirementDescription: '92 chaos',
-			effectDescription() { return 'all quark, good influnce, and cellular life rebuyable autobuyers can bulk buy 10x and increase the caps of <b' + getColorClass(this, REF, "q") + 'Atomic Insight</b> and <b' + getColorClass(this, REF, "q") + 'Insight Into Insight</b> by 101' },
+			effectDescription() { return 'all quark, good influence, and cellular life rebuyable autobuyers can bulk buy 10x and increase the caps of <b' + getColorClass(this, REF, "q") + 'Atomic Insight</b> and <b' + getColorClass(this, REF, "q") + 'Insight Into Insight</b> by 101' },
 			done() { return player.ch.points.gte(92) },
 			unlocked() { return player.mo.unlocked },
 		},
@@ -7015,7 +7029,7 @@ addLayer('ch', {
 				return formatWhole(c.goal) + " evil influence<br>Completions: " + formatWhole(challengeCompletions('ch', this.id)) + "/" + formatWhole(c.completionLimit) + (c.completionLimit >= 20 ? " (maxed)" : "");
 			},
 			canComplete() { return player.ei.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
-			completionLimit() { return player.ch.points.div(2).floor().max(1).min(20).toNumber() },
+			completionLimit() { return (hasUpgrade('pl', 82) ? 20 : player.ch.points.div(2).floor().max(1).min(20).toNumber()) },
 			onEnter() { player.gi.unlocked = false },
 			onExit() { player.gi.unlocked = true },
 			rewardDescription: "exponentiates point gain and demon soul gain multiplier based on completions",
@@ -7042,7 +7056,7 @@ addLayer('ch', {
 				return formatWhole(c.goal) + " good influence<br>Completions: " + formatWhole(challengeCompletions('ch', this.id)) + "/" + c.completionLimit + (c.completionLimit >= 32 ? " (maxed)" : "") + "<br>";
 			},
 			canComplete() { return player.gi.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
-			completionLimit() { return player.ch.points.div(2).floor().max(1).min(32).toNumber() },
+			completionLimit() { return (hasUpgrade('pl', 82) ? 32 : player.ch.points.div(2).floor().max(1).min(32).toNumber()) },
 			onEnter() { player.ei.unlocked = false },
 			onExit() { player.ei.unlocked = true },
 			rewardDescription: "exponentiates point gain and prayer gain multiplier based on completions",
@@ -7094,7 +7108,7 @@ addLayer('mo', {
 		return 1.2;
 	},
 	exponent: 1,
-	canBuyMax() { return hasMilestone('ch', 21) },
+	canBuyMax() { return hasMilestone('ch', 21) || hasUpgrade('pl', 84) },
 	gainExp() {
 		let gain = newDecimalOne();
 		if (hasBuyable('w', 23)) gain = gain.mul(buyableEffect('w', 23));
@@ -7104,6 +7118,7 @@ addLayer('mo', {
 		if (hasMilestone('ch', 16)) gain = gain.mul(milestoneEffect('ch', 16));
 		return gain;
 	},
+	autoPrestige() { return hasUpgrade('pl', 84) },
 	hotkeys: [{key: 'o', description: 'O: Reset for multicellular organisms', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.ch.unlocked || player.mo.unlocked },
 	doReset(resettingLayer) {
@@ -7274,9 +7289,9 @@ addLayer('pl', {
 	layerShown() { return getClickableState('mo', 21) || player.pl.unlocked },
 	effect() {
 		let eff = player.pl.points.div(10);
-		if (hasUpgrade('pl', 13)) eff = eff.mul(upgradeEffect('pl', 13));
-		if (hasUpgrade('pl', 21)) eff = eff.mul(upgradeEffect('pl', 21));
-		if (hasUpgrade('pl', 23)) eff = eff.mul(upgradeEffect('pl', 23));
+		for (const id of [13, 21, 23, 31, 33, 41, 43, 51, 53, 61, 63, 71, 73, 81, 83, 91, 93]) {
+			if (hasUpgrade('pl', id)) eff = eff.mul(upgradeEffect('pl', id));
+		};
 		return eff;
 	},
 	effectDescription() { return "which generate <h2 class='layer-pl'>" + format(tmp.pl.effect) + "</h2> air per second" },
@@ -7298,7 +7313,7 @@ addLayer('pl', {
 	milestones: {
 		0: {
 			requirementDescription: '1 planet',
-			effectDescription() { return 'keep <b' + getColorClass(this, REF, "mo") + 'Assimilation</b> on all resets, keep all milestones on lesser resets, change the chaos cost formula (removing hardcap), you can buy max chaos, and you can autobuy relic rebuyables' },
+			effectDescription() { return 'you can autobuy relic rebuyables, keep everything unlocked on war resets, change the chaos cost formula (removing hardcap), you can buy max chaos, keep <b' + getColorClass(this, REF, "mo") + 'Assimilation</b> on all resets, and keep all milestones on lesser resets' },
 			done() { return player.pl.points.gte(1) },
 			toggles: [['r', 'auto_buyables']],
 		},
@@ -7319,7 +7334,7 @@ addLayer('pl', {
 		},
 		12: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Airy Essence</b>' },
-			description: 'gain 10% of your essence gain per second',
+			description: 'gains 10% of your essence gain per second',
 			cost: 5,
 			currencyInternalName: "air",
 			currencyLayer: "pl",
@@ -7339,7 +7354,7 @@ addLayer('pl', {
 		},
 		14: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Airy Cores</b>' },
-			description: 'gain 10% of your core gain per second',
+			description: 'gains 10% of your core gain per second',
 			cost: 20,
 			currencyInternalName: "air",
 			currencyLayer: "pl",
@@ -7359,8 +7374,8 @@ addLayer('pl', {
 		},
 		22: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Airy Quarks</b>' },
-			description: 'gain 10% of your quark gain per second',
-			cost: 80,
+			description: 'gains 10% of your quark gain per second',
+			cost: 200,
 			currencyInternalName: "air",
 			currencyLayer: "pl",
 		},
@@ -7373,7 +7388,318 @@ addLayer('pl', {
 				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
 				return text;
 			},
-			cost: 160,
+			cost: 800,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		24: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Airy Particles</b>' },
+			description: 'makes subatomic particles reset nothing and perform subatomic particle resets automatically',
+			cost: 2_500,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		31: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Particles of Air</b>' },
+			description: 'multiplies air gain based on your subatomic particles',
+			effect() { return player.sp.points.add(1).slog().add(1).pow(2) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
+				return text;
+			},
+			cost: 10_000,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		32: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Airy Hexes</b>' },
+			description: 'gains 10% of your hex gain per second',
+			cost: 40_000,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		33: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Hexed Air</b>' },
+			description: 'multiplies air gain based on your hexes',
+			effect() { return player.h.points.add(1).slog().add(1).pow(2) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
+				return text;
+			},
+			cost: 100_000,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		34: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Airy Souls</b>' },
+			description: 'gains 10% of your demon soul gain per second',
+			cost: 800_000,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		41: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Demonic Air</b>' },
+			description: 'multiplies air gain based on your demon souls',
+			effect() { return player.ds.points.add(1).slog().add(1).pow(2) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
+				return text;
+			},
+			cost: 2_000_000,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		42: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Airy Atoms</b>' },
+			description: 'makes atoms reset nothing and perform atom resets automatically',
+			cost: 8_000_000,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		43: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Atomic Air</b>' },
+			description: 'multiplies air gain based on your atoms',
+			effect() { return player.a.points.add(1).slog().add(1).pow(2) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
+				return text;
+			},
+			cost: 20_000_000,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		44: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Pray to the Sky</b>' },
+			description: 'multiplies prayer gain based on your air',
+			effect() { return player.pl.air.add(1).pow(10) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (x+1)^10';
+				return text;
+			},
+			cost: 50_000_000,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		51: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Holy Air</b>' },
+			description: 'multiplies air gain based on your holiness',
+			effect() { return player.p.holiness.add(1).slog().add(1).pow(2) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
+				return text;
+			},
+			cost: 200_000_000,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		52: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Sanctum of the Sky</b>' },
+			description: 'multiplies sanctum gain based on your air',
+			effect() { return player.pl.air.add(1).log10().add(1).pow(0.1) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (log(x+1)+1)^0.1';
+				return text;
+			},
+			cost: 2e9,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		53: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Sanctums of Air</b>' },
+			description: 'multiplies air gain based on your sanctums',
+			effect() { return player.s.points.add(1).slog().add(1).pow(2) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
+				return text;
+			},
+			cost: 5e9,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		54: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Bright Sky</b>' },
+			description: 'multiplies light gain after hardcap based on your air',
+			effect() { return player.pl.air.add(1).pow(0.5) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (x+1)^0.5';
+				return text;
+			},
+			cost: 4e10,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		61: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Relics of Air</b>' },
+			description: 'multiplies air gain based on your relics',
+			effect() { return player.r.points.add(1).slog().add(1).pow(2) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
+				return text;
+			},
+			cost: 1e11,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		62: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Molecules of Air</b>' },
+			description: 'multiplies molecule gain based on your air',
+			effect() { return player.pl.air.add(1).pow(0.1) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (x+1)^0.1';
+				return text;
+			},
+			cost: 5e11,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		63: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Varied Atmosphere</b>' },
+			description: 'multiplies air gain based on your total unique molecules',
+			effect() { return player.m.unique_total.add(1).slog().add(1).pow(2) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
+				return text;
+			},
+			cost: 2e12,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		64: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Airy Influence</b>' },
+			description: 'makes good/evil influence reset nothing and perform good/evil influence resets automatically',
+			cost: 8e12,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		71: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Dual Air</b>' },
+			description: 'multiplies air gain based on your good/evil influence',
+			effect() { return player.gi.points.mul(player.ei.points).add(1).slog().add(1).pow(2) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (superlog(xy+1)+1)^2';
+				return text;
+			},
+			cost: 2e13,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		72: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Airy Wars</b>' },
+			description: 'makes wars reset nothing and perform war resets automatically',
+			cost: 8e13,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		73: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Wars of Air</b>' },
+			description: 'multiplies air gain based on your wars',
+			effect() { return player.w.points.add(1).log10().add(1).pow(2) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^2';
+				return text;
+			},
+			cost: 2e14,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		74: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Airy Cells</b>' },
+			description: 'makes cellular life reset nothing and perform cellular life resets automatically',
+			cost: 8e14,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		81: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Achievements of Air</b>' },
+			description: 'multiplies air gain based on your achievements past 90',
+			effect() { return player.A.points.sub(90).max(0).pow_base(1.25) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: 1.25^(x-90)';
+				return text;
+			},
+			cost: 4e15,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		82: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Tides of Air</b>' },
+			description() { return 'makes the completion limits of <b' + getColorClass(this, REF, 'ch', true) + 'The Tides</b> always maxed' },
+			cost: 4e16,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		83: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Chaotic Air</b>' },
+			description: 'multiplies air gain based on your chaos',
+			effect() { return player.ch.points.add(1).pow(0.5) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (x+1)^0.5';
+				return text;
+			},
+			cost: 1e17,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		84: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Breathing</b>' },
+			description: 'makes it so you can always buy max multicellular organisms and perform multicellular organism resets automatically',
+			cost: 4e17,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		91: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Complex Air</b>' },
+			description: 'multiplies air gain based on your multicellular organisms',
+			effect() { return player.mo.points.add(1).pow(0.4) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (x+1)^0.4';
+				return text;
+			},
+			cost: 2e18,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		92: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Flowing Tides</b>' },
+			description() { return 'makes you be able to gain completions of <b' + getColorClass(this, REF, 'ch', true) + 'The Tides</b> without exiting them' },
+			cost: 1e19,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		93: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Milestones of Air</b>' },
+			description: 'multiplies air gain based on your chaos milestones past 20',
+			effect() { return new Decimal(1.2).pow(Math.max(player.ch.milestones.length - 20, 0)) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: 1.2^(x-20)';
+				return text;
+			},
+			cost: 4e19,
+			currencyInternalName: "air",
+			currencyLayer: "pl",
+		},
+		94: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Planetary Chaos</b>' },
+			description() { return "improves the formula of chaos's second effect if you have the <b" + getColorClass(this, REF, "ch", true) + "17th chaos milestone</b>" },
+			cost: 2e20,
 			currencyInternalName: "air",
 			currencyLayer: "pl",
 		},

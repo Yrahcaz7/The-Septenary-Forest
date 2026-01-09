@@ -210,8 +210,10 @@ function getRawTabContent(layer, name = "") {
 			content.push(["display-text", getNextStoryAt()]);
 			content.push("blank");
 		} else if (name == "The Tides") {
-			content.push(["display-text", "All completion limits start at 1. Starting at the fourth chaos, every even-numbered chaos increases all completion limits by 1."]);
-			content.push("blank");
+			if (!hasUpgrade('pl', 82)) {
+				content.push(["display-text", "All completion limits start at 1. Starting at the fourth chaos, every even-numbered chaos increases all completion limits by 1."]);
+				content.push("blank");
+			};
 			content.push("challenges");
 			content.push("blank");
 		} else {
