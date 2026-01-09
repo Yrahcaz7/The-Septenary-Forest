@@ -4633,12 +4633,9 @@ addLayer('m', {
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
-		if (hasMilestone('m', 20)) {
-			gen += 0.1;
-			if (hasMilestone('m', 21)) {
-				gen += 0.4;
-			};
-		};
+		if (hasMilestone('m', 20)) gen += 0.1;
+		if (hasMilestone('m', 21)) gen += 0.4;
+		if (hasMilestone('pl', 1)) gen += 0.1;
 		return gen;
 	},
 	automate() {
@@ -5055,6 +5052,7 @@ addLayer('gi', {
 		if (hasBuyable('w', 13)) gain = gain.mul(buyableEffect('w', 13));
 		if (hasBuyable('w', 22)) gain = gain.mul(buyableEffect('w', 22));
 		if (hasBuyable('mo', 13)) gain = gain.mul(buyableEffect('mo', 13));
+		if (hasBuyable('pl', 11)) gain = gain.mul(buyableEffect('pl', 11));
 		return gain;
 	},
 	autoPrestige() { return (hasMilestone('w', 1) || ((isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasMilestone('gi', 16)) || hasUpgrade('pl', 64)) && (!hasMilestone('cl', 0) || player.gi.auto_prestige) },
@@ -6207,6 +6205,7 @@ addLayer('w', {
 			purchaseLimit() {
 				let max = new Decimal(20);
 				if (hasMilestone('ch', 7)) max = max.add(milestoneEffect('ch', 7));
+				if (hasMilestone('ch', 38)) max = max.add(50);
 				return max;
 			},
 			buy() { buyMultiCurrencyBuyable(this, ['gi', 'ei'], hasMilestone('ch', 10)) },
@@ -6295,6 +6294,7 @@ addLayer('cl', {
 	baseAmount() { return player.m.points },
 	type: 'static',
 	base() {
+		if (hasMilestone('ch', 37)) return 4;
 		if (hasMilestone('ch', 36)) return 14;
 		if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 50;
 		return 100;
@@ -7049,6 +7049,18 @@ addLayer('ch', {
 			done() { return player.ch.points.gte(128) },
 			unlocked() { return player.pl.unlocked },
 		},
+		37: {
+			requirementDescription: '133 chaos',
+			effectDescription() { return 'reduce the cellular life cost base (14 --> 4)' },
+			done() { return player.ch.points.gte(133) },
+			unlocked() { return player.pl.unlocked },
+		},
+		38: {
+			requirementDescription: '140 chaos',
+			effectDescription() { return 'increase the cap of <b' + getColorClass(this, TITLE, "w") + 'Race for Knowledge</b> by 50' },
+			done() { return player.ch.points.gte(140) },
+			unlocked() { return player.pl.unlocked },
+		},
 	},
 	challenges: {
 		11: {
@@ -7361,37 +7373,78 @@ addLayer('pl', {
 		let gain = newDecimalOne();
 		return gain;
 	},
-	hotkeys: [{key: 'P', description: 'Shift-P: Reset for planets', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	hotkeys: [{key: "P", description: "Shift-P: Reset for planets", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return getClickableState('mo', 21) || player.pl.unlocked },
 	effect() {
 		let eff = player.pl.points.div(10);
 		for (const id of [13, 21, 23, 31, 33, 41, 43, 51, 53, 61, 63, 71, 73, 81, 83, 91, 93]) {
-			if (hasUpgrade('pl', id)) eff = eff.mul(upgradeEffect('pl', id));
+			if (hasUpgrade("pl", id)) eff = eff.mul(upgradeEffect("pl", id));
 		};
+		if (hasBuyable('pl', 12)) eff = eff.mul(buyableEffect('pl', 12));
 		return eff;
 	},
 	effectDescription() { return "which generate <h2 class='layer-pl'>" + format(tmp.pl.effect) + "</h2> air per second" },
 	doReset(resettingLayer) {
 		let keep = [];
-		if (layers[resettingLayer].row > this.row) layerDataReset('pl', keep);
+		if (layers[resettingLayer].row > this.row) layerDataReset("pl", keep);
 	},
 	update(diff) {
 		player.pl.air = player.pl.air.add(tmp.pl.effect.mul(diff));
 	},
 	tabFormat: {
 		Progress: {
-			content: getTab('pl'),
+			content: getTab("pl"),
 		},
 		Atmosphere: {
-			content: getTab('pl', "Atmosphere"),
+			content: getTab("pl", "Atmosphere"),
 		},
 	},
 	milestones: {
 		0: {
-			requirementDescription: '1 planet',
-			effectDescription() { return 'you can autobuy relic rebuyables, keep everything unlocked on war resets, change the chaos cost formula (removing hardcap), you can buy max chaos, keep <b' + getColorClass(this, REF, "mo") + 'Assimilation</b> on all resets, and keep all milestones on lesser resets' },
+			requirementDescription: "1 planet",
+			effectDescription() { return "you can autobuy relic rebuyables, keep everything unlocked on war resets, change the chaos cost formula (removing hardcap), you can buy max chaos, keep <b" + getColorClass(this, REF, "mo") + "Assimilation</b> on all resets, and keep all milestones on lesser resets" },
 			done() { return player.pl.points.gte(1) },
-			toggles: [['r', 'auto_buyables']],
+			toggles: [["r", "auto_buyables"]],
+		},
+		1: {
+			requirementDescription: "2 planets",
+			effectDescription() { return "you can bulk 10x relic activation, gain +10% of your molecule gain per second, you can bulk 10x good influence rebuyables if you have the <b" + getColorClass(this, REF, "ch", true) + "28th chaos milestone</b>, keep all challenges on lesser resets, and unlock air rebuyables" },
+			done() { return player.pl.points.gte(2) },
+		},
+		// next: you can bulk 10x protein rebuyables
+	},
+	buyables: {
+		11: {
+			cost(x) { return new Decimal(1e10).pow(x.add(1)) },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Innate Good' },
+			description: 'multiplies good influence gain based the amount of this upgrade bought.',
+			canAfford() { return player.pl.air.gte(this.cost()) },
+			purchaseLimit: 99,
+			buy() { buyStandardBuyable(this, "pl", "air") },
+			effect(x) { return x.div(10).add(1).pow(0.5) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (x/10+1)^0.5';
+				return text;
+			},
+			currencyDisplayName: 'air',
+			unlocked() { return hasMilestone('pl', 1) },
+		},
+		12: {
+			cost(x) { return new Decimal(1.5).pow(x).mul(100) },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Photosynthesis' },
+			description: 'multiplies air gain based your light and the amount of this upgrade bought.',
+			canAfford() { return player.mo.points.gte(this.cost()) },
+			purchaseLimit: 99,
+			buy() { buyStandardBuyable(this, "mo") },
+			effect(x) { return player.r.light.add(1).log10().add(1).pow(x) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^y';
+				return text;
+			},
+			currencyDisplayName: 'multicellular organisms',
+			unlocked() { return hasMilestone('pl', 1) },
 		},
 	},
 	upgrades: {

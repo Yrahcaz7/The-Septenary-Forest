@@ -16,10 +16,11 @@ function changelog() {
 	return `<h1>Changelog:</h1><br>
 		<br><h3>v4.0: The End is Near</h3><br>
 			- Added planets.<br>
-			- Added one milestone to planets.<br>
+			- Added two milestones to planets.<br>
 			- Added thirty-six upgrades to planets.<br>
+			- Added two rebuyables to planets.<br>
 			- Added ${randomStr(4)} to assimilation.<br>
-			- Added four milestones to chaos.<br>
+			- Added six milestones to chaos.<br>
 			- Added ${randomStr(4)} to story.<br>
 			- Added four achievements.<br>
 			- Added one option.<br>
@@ -290,6 +291,7 @@ function getActivatedRelics() {
 function getRelicActivationBulk() {
 	let bulk = 1;
 	if (hasMilestone('ch', 32)) bulk *= 10;
+	if (hasMilestone('pl', 1)) bulk *= 10;
 	return bulk;
 };
 
@@ -297,6 +299,7 @@ function buyGoodInfluenceBuyable(obj) {
 	if (hasMilestone('ch', 27)) {
 		let bulk = 10;
 		if (hasMilestone('ch', 30)) bulk *= 10;
+		if (hasMilestone('pl', 1)) bulk *= 10;
 		player.gi.total = player.gi.total.add(obj.cost().mul(bulk ** 1.1));
 		player[obj.layer].buyables[obj.id] = player[obj.layer].buyables[obj.id].add(bulk).min(tmp[obj.layer].buyables[obj.id].purchaseLimit);
 	} else {
@@ -322,6 +325,7 @@ function getKeepFromPlanets(resettingLayer) {
 	if (resettingLayer == 'pl') return [];
 	let keep = [];
 	if (hasMilestone('pl', 0)) keep.push('milestones');
+	if (hasMilestone('pl', 1)) keep.push('challenges');
 	return keep;
 };
 
@@ -405,7 +409,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return 'You beat the game!<br>For now...' },
 ];
 
-const endPoints = new Decimal('e1e52');
+const endPoints = new Decimal('e1e55');
 
 function onLoad() { calculateColorValue() };
 

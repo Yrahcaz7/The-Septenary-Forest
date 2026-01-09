@@ -926,12 +926,13 @@ function nextStorySegmentFinishesAt() {
 };
 
 function getNextStoryAt() {
+	if (isAssimilated('ch')) {
+		return "<br><br>All the story has been discoverververver" + randomChar() + "erverve" + randomChar() + "verv" + randomChar() + "rv" + randomChar() + "r" + randomStr(3) + "v" + randomStr(6) + "e" + randomStr(6);
+	};
 	let text = "";
-	if (player.ch.points.gt(0)) text += "<br><br>";
+	if (player.ch.best.gt(0)) text += "<br><br>";
 	if (player.ch.best.toNumber() < storyLengthUpTo(Infinity)) {
 		text += "Next story discovery is at " + formatWhole(player.ch.best.add(1)) + " chaos.<br><br>Next story segment finishes at " + nextStorySegmentFinishesAt() + " chaos.";
-	} else if (isAssimilated('ch')) {
-		text += "All the story has been discoverververver" + randomChar() + "erverve" + randomChar() + "verv" + randomChar() + "rv" + randomChar() + "r" + randomStr(3) + "v" + randomStr(6) + "e" + randomStr(6);
 	} else {
 		text += "All the story has been discovered... right? There's nothing more to see here.";
 	};
