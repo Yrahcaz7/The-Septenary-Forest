@@ -2336,6 +2336,7 @@ addLayer('a', {
 		if (hasMilestone('r', 7)) gain = gain.mul(milestoneEffect('r', 7));
 		if (tmp.m.effect.gt(1) && !tmp.m.deactivated) gain = gain.mul(tmp.m.effect);
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
+		if (hasBuyable('w', 21) && hasMilestone('ch', 35)) gain = gain.mul(buyableEffect('w', 21));
 		if (hasBuyable('cl', 11)) gain = gain.mul(buyableEffect('cl', 11)[1]);
 		if (hasBuyable('cl', 33)) gain = gain.mul(buyableEffect('cl', 33));
 		if (hasBuyable('cl', 52)) gain = gain.mul(buyableEffect('cl', 52));
@@ -4374,7 +4375,7 @@ addLayer('r', {
 				// next reward
 				text += '<br><br>Next reward: ';
 				if (completions == 0) text += "multiply relic's second and third effects based on your light<br>Currently: " + format(player.r.relic_effects[0]) + "x";
-				else if (completions == 1) text += "relic's third effect also effects point gain";
+				else if (completions == 1) text += "relic's third effect also affects point gain";
 				else if (completions == 2) text += "multiply relic's first effect by 10,000 and raise it to ^3.5";
 				else if (completions == 3) text += "exponentiate relic's first effect based on your light<br>Currently: ^" + format(player.r.relic_effects[1]);
 				else if (completions == 4) text += "multiply Sacrificial Ceremony's last effect based on your light<br>Currently: " + format(player.r.relic_effects[2]) + "x";
@@ -6201,7 +6202,7 @@ addLayer('w', {
 		21: {
 			cost(x) { return x.mul(5).add(235) },
 			title() { return '<b' + getColorClass(this, TITLE) + 'Race for Knowledge' },
-			description: 'multiplies molecule gain based on the amount of this upgrade bought.',
+			description() { return 'multiplies ' + (hasMilestone('ch', 35) ? 'atom and ' : '') + 'molecule gain based on the amount of this upgrade bought.' },
 			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) },
 			purchaseLimit() {
 				let max = new Decimal(20);
@@ -6293,7 +6294,11 @@ addLayer('cl', {
 	baseResource: 'molecules',
 	baseAmount() { return player.m.points },
 	type: 'static',
-	base() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer ? 50 : 100 },
+	base() {
+		if (hasMilestone('ch', 36)) return 14;
+		if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 50;
+		return 100;
+	},
 	exponent() {
 		if (hasMilestone('cl', 11)) return 1.4;
 		if (hasMilestone('cl', 10)) return 1.45;
@@ -6794,7 +6799,7 @@ addLayer('ch', {
 		player.ch.points.add(1).pow(hasMilestone('ch', 19) ? (hasUpgrade('pl', 94) ? 0.1 : 0.0575) : 0.0485),
 		new Decimal(hasMilestone('ch', 3) ? 75 : 25).pow(player.ch.points),
 	]},
-	effectDescription() { return 'which multiplies essence gain by <h2 class="layer-ch">' + format(tmp.ch.effect[0]) + '</h2>x, multiplies war gain by <h2 class="layer-ch">' + format(tmp.ch.effect[1]) + '</h2>x, and multiplies protein found from cellular life by <h2 class="layer-ch">' + format(tmp.ch.effect[2]) + '</h2>x' },
+	effectDescription() { return 'which multiplies essence gain by <h2 class="layer-ch">' + format(tmp.ch.effect[0]) + '</h2>x, multiplies war gain by <h2 class="layer-ch">' + format(tmp.ch.effect[1]) + '</h2>x, and multiplies protein gain by <h2 class="layer-ch">' + format(tmp.ch.effect[2]) + '</h2>x' },
 	doReset(resettingLayer) {
 		let keep = ["deciphering"];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
@@ -7034,8 +7039,14 @@ addLayer('ch', {
 		},
 		35: {
 			requirementDescription: '122 chaos',
-			effectDescription: 'coming soon...',
+			effectDescription() { return '<b' + getColorClass(this, TITLE, "w") + 'Race for Knowledge</b> also affects atom gain' },
 			done() { return player.ch.points.gte(122) },
+			unlocked() { return player.pl.unlocked },
+		},
+		36: {
+			requirementDescription: '128 chaos',
+			effectDescription() { return 'reduce the cellular life cost base (50 --> 14)' },
+			done() { return player.ch.points.gte(128) },
 			unlocked() { return player.pl.unlocked },
 		},
 	},
@@ -7047,10 +7058,11 @@ addLayer('ch', {
 			goal() { return this.goalLayers[challengeCompletions('ch', this.id)] || Infinity },
 			goalDescription() {
 				const c = tmp.ch.challenges[this.id];
-				return formatWhole(c.goal) + " evil influence<br>Completions: " + formatWhole(challengeCompletions('ch', this.id)) + "/" + formatWhole(c.completionLimit) + (c.completionLimit >= 20 ? " (maxed)" : "");
+				return formatWhole(c.goal) + " evil influence<br>Completions: " + formatWhole(challengeCompletions('ch', this.id)) + "/" + formatWhole(c.completionLimit) + (c.completionLimit >= this.limitLimit ? " (maxed)" : "");
 			},
 			canComplete() { return player.ei.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
-			completionLimit() { return (hasUpgrade('pl', 82) ? 20 : player.ch.points.div(2).floor().max(1).min(20).toNumber()) },
+			completionLimit() { return (hasUpgrade('pl', 82) ? this.limitLimit : player.ch.points.div(2).floor().max(1).min(this.limitLimit).toNumber()) },
+			limitLimit: 20,
 			onEnter() { player.gi.unlocked = false },
 			onExit() { player.gi.unlocked = true },
 			rewardDescription: "exponentiates point gain and demon soul gain multiplier based on completions",
@@ -7074,10 +7086,11 @@ addLayer('ch', {
 			},
 			goalDescription() {
 				const c = tmp.ch.challenges[this.id];
-				return formatWhole(c.goal) + " good influence<br>Completions: " + formatWhole(challengeCompletions('ch', this.id)) + "/" + c.completionLimit + (c.completionLimit >= 32 ? " (maxed)" : "") + "<br>";
+				return formatWhole(c.goal) + " good influence<br>Completions: " + formatWhole(challengeCompletions('ch', this.id)) + "/" + c.completionLimit + (c.completionLimit >= this.limitLimit ? " (maxed)" : "") + "<br>";
 			},
 			canComplete() { return player.gi.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
-			completionLimit() { return (hasUpgrade('pl', 82) ? 32 : player.ch.points.div(2).floor().max(1).min(32).toNumber()) },
+			completionLimit() { return (hasUpgrade('pl', 82) ? this.limitLimit : player.ch.points.div(2).floor().max(1).min(this.limitLimit).toNumber()) },
+			limitLimit: 32,
 			onEnter() { player.ei.unlocked = false },
 			onExit() { player.ei.unlocked = true },
 			rewardDescription: "exponentiates point gain and prayer gain multiplier based on completions",
@@ -7099,20 +7112,21 @@ addLayer('ch', {
 		21: {
 			name() { return '<h3' + getColorClass(this, TITLE) + 'Tide of Science' },
 			challengeDescription() { return "- Applies all previous <b" + getColorClass(this, REF) + "Tides</b> at once<br>" },
-			goal() { return new Decimal("1e500").pow(challengeCompletions('ch', this.id) ** 2).mul("1e2000") },
+			goal() { return new Decimal("1e500").pow(challengeCompletions('ch', this.id) ** 1.1).mul("1e2000") },
 			goalDescription() {
 				const c = tmp.ch.challenges[this.id];
-				return formatWhole(c.goal) + " molecules<br>Completions: " + formatWhole(challengeCompletions('ch', this.id)) + "/" + c.completionLimit + (c.completionLimit >= 99 ? " (maxed)" : "") + "<br>";
+				return formatWhole(c.goal) + " molecules<br>Completions: " + formatWhole(challengeCompletions('ch', this.id)) + "/" + c.completionLimit + (c.completionLimit >= this.limitLimit ? " (maxed)" : "") + "<br>";
 			},
 			canComplete() { return player.m.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
-			completionLimit() { return (hasUpgrade('pl', 82) ? 99 : player.ch.points.div(2).floor().max(1).min(99).toNumber()) },
+			completionLimit() { return (hasUpgrade('pl', 82) ? this.limitLimit : player.ch.points.div(2).floor().max(1).min(this.limitLimit).toNumber()) },
+			limitLimit: 10,
 			onEnter() { player.gi.unlocked = false; player.ei.unlocked = false },
 			onExit() { player.gi.unlocked = true; player.ei.unlocked = true },
 			rewardDescription: "multiplies cellular life gain and protein gain based on completions",
-			rewardEffect() { return [new Decimal(1.2).pow(challengeCompletions('ch', this.id)), new Decimal(1e10).pow(challengeCompletions('ch', this.id))] },
+			rewardEffect() { return [new Decimal(1.2).pow(challengeCompletions('ch', this.id)), new Decimal(1e10).pow(challengeCompletions('ch', this.id) ** 2)] },
 			rewardDisplay(eff) {
 				let text = format(eff[0]) + "x<br>and " + format(eff[1]) + "x";
-				if (options.nerdMode) text += '<br>formulas: 1.2^x<br>and 1e10^x';
+				if (options.nerdMode) text += '<br>formulas: 1.2^x<br>and 1e10^(x^2)';
 				return text;
 			},
 			doReset: true,
@@ -7340,8 +7354,8 @@ addLayer('pl', {
 	baseResource: 'multicellular organisms',
 	baseAmount() { return player.mo.points },
 	type: 'static',
-	base: 10,
-	exponent: 2,
+	base: 2,
+	exponent: 1.5, // calibrate this for getting the 3rd planet
 	canBuyMax: false,
 	gainExp() {
 		let gain = newDecimalOne();
@@ -7740,7 +7754,10 @@ addLayer('pl', {
 		},
 		92: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Flowing Tides</b>' },
-			description() { return 'makes you be able to gain completions of <b' + getColorClass(this, REF, 'ch', true) + 'The Tides</b> without exiting them' },
+			description() {
+				if (isAssimilated('ch')) return 'makes you be able to gain completions of <b' + getColorClass(this, REF, 'ch', true) + randomStr(3) + ' ' + randomStr(5) + '</b> without exiting them';
+				return 'makes you be able to gain completions of <b' + getColorClass(this, REF, 'ch', true) + 'The Tides</b> without exiting them';
+			},
 			cost: 1e19,
 			currencyInternalName: "air",
 			currencyLayer: "pl",
