@@ -1,16 +1,17 @@
 // gets the raw content of a tab.
 function getRawTabContent(layer, name = "") {
+	const prefix = (inGlitchedAssimilationSearch() ? "glitch-" : "");
 	let content = [];
-	content.push("main-display");
+	content.push(prefix + "main-display");
 	if (assimilationReq[layer]) {
 		content.push(["row", ["prestige-button", "assimilate-button"]]);
 	} else {
-		content.push("prestige-button");
+		content.push(prefix + "prestige-button");
 	};
 	if (layer == "w") {
 		content.push(["custom-resource-display", "You have " + formatWhole(player.gi.points) + " good influence<br>You have " + formatWhole(player.ei.points) + " evil influence<br><br>Your best wars is " + formatWhole(player.w.best) + "<br>You have made a total of " + formatWhole(player.w.total) + " wars"]);
 	} else {
-		content.push("resource-display");
+		content.push(prefix + "resource-display");
 	};
 	content.push("blank");
 	if (layer == "e") {
@@ -195,19 +196,19 @@ function getRawTabContent(layer, name = "") {
 	} else if (layer == "ch") {
 		if (name == "Keywords") {
 			let keywords = getDecipheredKeywords();
-			if (keywords.length > 0) keywords[keywords.length - 1] = "and " + keywords[keywords.length - 1];
+			if (keywords.length > 1) keywords[keywords.length - 1] = "and " + keywords[keywords.length - 1];
 			const next = nextStorySegmentFinishesAt();
-			content.push(["display-text", 'For each fully unlocked story segment, you decipher some keywords.<br><br>You have deciphered <h2 class="layer-ch">' + formatWhole(keywords.length) + '</h2> keywords so far.' + (keywords.length > 0 ? '<br><br>These keywords are: ' + keywords.join(", ") + '.' : '') + '<br><br>' + (next == Infinity ? 'You have deciphered all the keywords that currently exist.' : 'More keywords will be deciphered at ' + formatWhole(next) + ' chaos.')]);
+			content.push([prefix + "display-text", 'For each fully unlocked story segment, you decipher some keywords.<br><br>You have deciphered <h2 class="layer-ch">' + formatWhole(keywords.length) + '</h2> keywords so far.' + (keywords.length > 0 ? '<br><br>These keywords are: ' + keywords.join(", ") + '.' : '') + '<br><br>' + (next == Infinity ? 'You have deciphered all the keywords that currently exist.' : 'More keywords will be deciphered at ' + formatWhole(next) + ' chaos.')]);
 			content.push("blank");
-			content.push(["row", [["display-text", "Keyword deciphering is&nbsp;"], ["toggle", ["ch", "deciphering"]]]]);
+			content.push(["row", [[prefix + "display-text", "Keyword deciphering is&nbsp;"], [prefix + "toggle", ["ch", "deciphering"]]]]);
 			content.push("blank");
-			content.push(["display-text", 'Fully deciphered story segments are marked with <h2>[&check;]</h2>']);
+			content.push([prefix + "display-text", "Fully deciphered story segments are marked with <h2>[&check;]</h2>"]);
 			content.push("blank");
 		} else if (name == "Story") {
 			for (let index = 0; index < story.length; index++) {
 				content.push(["infobox", "story" + index]);
 			};
-			content.push(["display-text", getNextStoryAt()]);
+			content.push([prefix + "display-text", getNextStoryAt()]);
 			content.push("blank");
 		} else if (name == "The Tides") {
 			if (!hasUpgrade('pl', 82)) {
@@ -217,33 +218,33 @@ function getRawTabContent(layer, name = "") {
 			content.push("challenges");
 			content.push("blank");
 		} else {
-			content.push("milestones");
+			content.push(prefix + "milestones");
 		};
 	} else if (layer == "mo") {
 		if (name == "Synergism") {
-			content.push("buyables");
+			content.push(prefix + "buyables");
 		} else if (name == "Rewards") {
-			content.push(["display-text", getAssimilationRewards()]);
+			content.push([prefix + "display-text", getAssimilationRewards()]);
 		} else {
-			content.push(["display-text", "Multicellular organisms reset nothing."]);
+			content.push([prefix + "display-text", "Multicellular organisms reset nothing."]);
 			content.push("blank");
-			content.push(["clickable", 11]);
+			content.push([prefix + "clickable", 11]);
 			if (tmp.mo.clickables[21].unlocked) {
 				content.push("blank");
-				content.push(["clickable", 21]);
+				content.push([prefix + "clickable", 21]);
 			};
 		};
 		content.push("blank");
 	} else if (layer == "pl") {
 		if (name == "Atmosphere") {
-			content.push(["display-text", 'You have <h2 class="layer-pl">' + format(player.pl.air) + '</h2> air']);
+			content.push([prefix + "display-text", 'You have <h2 class="layer-pl">' + format(player.pl.air) + '</h2> air']);
 			content.push("blank");
-			content.push("upgrades");
+			content.push(prefix + "upgrades");
 			content.push("blank");
 		} else {
-			content.push(["display-text", 'You have <h2 class="layer-ch">' + formatWhole(player.ch.points) + '</h2> chaos, which divides the planet requirement by /<h2 class="layer-pl">' + format(tmp.pl.chaosEffect) + '</h2>']);
+			content.push([prefix + "display-text", 'You have <h2 class="layer-ch">' + formatWhole(player.ch.points) + '</h2> chaos, which divides the planet requirement by /<h2 class="layer-pl">' + format(tmp.pl.chaosEffect) + '</h2>']);
 			content.push("blank");
-			content.push("milestones");
+			content.push(prefix + "milestones");
 		};
 	};
 	return content;

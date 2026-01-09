@@ -17,6 +17,7 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added planets.<br>
 		- Added one milestone to planets.<br>
 		- Added thirty-six upgrades to planets.<br>
+		- Added one milestone to chaos.<br>
 		- Added four achievements.<br>
 		- Added one option.<br>
 	<br><h3>v3.6: Even More Assimilation</h3><br>
@@ -400,7 +401,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return 'You beat the game!<br>For now...' },
 ];
 
-const endPoints = new Decimal('e1e47');
+const endPoints = new Decimal('e1e49');
 
 function onLoad() { calculateColorValue() };
 

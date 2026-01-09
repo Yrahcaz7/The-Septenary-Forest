@@ -7017,6 +7017,12 @@ addLayer('ch', {
 			done() { return player.ch.points.gte(102) },
 			unlocked() { return player.mo.unlocked },
 		},
+		33: {
+			requirementDescription: '106 chaos',
+			effectDescription() { return 'reduce the multicellular organism cost base (1.063 --> 1.0575) and increase the cap of <b' + getColorClass(this, TITLE, "mo") + 'Assimilation</b> by 1' },
+			done() { return player.ch.points.gte(106) },
+			unlocked() { return player.mo.unlocked },
+		},
 	},
 	challenges: {
 		11: {
@@ -7102,6 +7108,7 @@ addLayer('mo', {
 	baseAmount() { return player.cl.points },
 	type: 'static',
 	base() {
+		if (hasMilestone('ch', 33)) return 1.0575;
 		if (hasMilestone('ch', 29)) return 1.063;
 		if (hasMilestone('ch', 15)) return 1.067;
 		if (hasMilestone('ch', 14)) return 1.1;
@@ -7143,15 +7150,17 @@ addLayer('mo', {
 		11: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Assimilation' },
 			display() {
+				const c = tmp.mo.clickables[11];
 				let text = '<br>';
 				if (player.mo.assimilating !== null) text += 'Currently Assimilating: ' + (tmp[player.mo.assimilating].pluralName || tmp[player.mo.assimilating].name) + '.<br><br>Click to exit the run.';
 				else if (getClickableState('mo', 11)) text += 'You are in an Assimilation search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click here to exit the search.';
-				else text += 'Begin an Assimilation search.<br><br>Req: ' + tmp.mo.clickables[11].req + ' multicellular organisms';
-				text += '<br><br>Assimilated layers: ' + formatWhole(player.mo.assimilated.length) + '/15';
+				else text += 'Begin an Assimilation search.<br><br>Req: ' + formatWhole(c.req) + ' multicellular organisms';
+				text += '<br><br>Assimilated layers: ' + formatWhole(player.mo.assimilated.length) + '/' + formatWhole(c.limit);
 				return text;
 			},
-			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, 57, 77, 101, 125, 151, 181][player.mo.assimilated.length] || Infinity },
-			canClick() { return getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req) },
+			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, 57, 77, 101, 125, 151, 181, 275][player.mo.assimilated.length] || Infinity },
+			limit() { return hasMilestone('ch', 33) ? 16 : 15 },
+			canClick() { return (getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req)) && player.mo.assimilated.length < tmp.mo.clickables[11].limit },
 			onClick() {
 				if (player.mo.assimilating !== null) {
 					if (!confirm('Are you sure you want to exit this Assimilation run? This will reset all Assimilated layers content, all ' + tmp[player.mo.assimilating].name + ' content, and put you back into a normal run.')) return;
@@ -7173,7 +7182,7 @@ addLayer('mo', {
 			},
 			style() {
 				let obj = {width: '200px', height: '200px'};
-				if (tmp[this.layer].clickables[this.id].req == Infinity) {
+				if (player.mo.assimilated.length >= tmp.mo.clickables[11].limit) {
 					obj["background-color"] = "#77bf5f";
 					obj.cursor = "default";
 				};

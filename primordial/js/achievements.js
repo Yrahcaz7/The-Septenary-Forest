@@ -11,42 +11,53 @@ addLayer('A', {
 	effectDescription() {
 		let text = ['<br>which are multiplying your point ', '', '', ''];
 		if (hasUpgrade('ds', 21)) {
-			if (hasUpgrade('ds', 24)) text[0] += 'and essence gain by <h2 class="layer-A">' + format(player.A.points.mul(0.2)) + '</h2>x';
-			else {
-				text[0] += 'gain by <h2 class="layer-A">' + format(player.A.points.mul(0.1).add(1)) + '</h2>x';
-				text[1] += 'essence gain by <h2 class="layer-A">' + format(player.A.points.mul(0.2)) + '</h2>x';
+			if (hasUpgrade('ds', 24)) {
+				text[0] += 'and essence gain by <h2 class="layer-A">' + format(player.A.points.div(5)) + '</h2>x';
+			} else {
+				text[0] += 'gain by <h2 class="layer-A">' + format(player.A.points.div(10).add(1)) + '</h2>x';
+				text[1] += 'essence gain by <h2 class="layer-A">' + format(player.A.points.div(5)) + '</h2>x';
 			};
-			if (hasUpgrade('ds', 23) && !hasUpgrade('ds', 24) && !hasUpgrade('p', 31)) text[2] += 'core and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + '</h2>x';
-			if (hasUpgrade('ds', 23) && hasUpgrade('ds', 24) && !hasUpgrade('p', 31)) text[1] += 'core and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + '</h2>x';
-			if (hasUpgrade('ds', 23) && hasUpgrade('ds', 24) && hasUpgrade('p', 31)) text[1] += 'core, prayer, and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + '</h2>x';
-		} else text[0] += 'gain by <h2 class="layer-A">' + format(player.A.points.mul(0.1).add(1)) + '</h2>x';
+			if (hasUpgrade('ds', 23)) {
+				if (!hasUpgrade('ds', 24) && !hasUpgrade('p', 31)) text[2] += 'core and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + '</h2>x';
+				else if (hasUpgrade('ds', 24) && !hasUpgrade('p', 31)) text[1] += 'core and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + '</h2>x';
+				else if (hasUpgrade('ds', 24) && hasUpgrade('p', 31)) text[1] += 'core, prayer, and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + '</h2>x';
+			};
+		} else {
+			text[0] += 'gain by <h2 class="layer-A">' + format(player.A.points.div(10).add(1)) + '</h2>x';
+		};
 		if (hasUpgrade('a', 51)) text[3] += 'subatomic particle gain by <h2 class="layer-A">' + format(player.A.points.pow(1.25)) + '</h2>x';
 		if (options.nerdMode) {
 			if (hasUpgrade('ds', 21)) {
-				if (hasUpgrade('ds', 24)) text[0] += ' (formula: x*0.2)';
-				else {
-					text[0] += ' (formula: x*0.1+1)';
-					text[1] += ' (formula: x*0.2)';
+				if (hasUpgrade('ds', 24)) {
+					text[0] += ' (formula: 0.2x)';
+				} else {
+					text[0] += ' (formula: x/10+1)';
+					text[1] += ' (formula: x/5)';
 				};
 				if (hasUpgrade('ds', 23) && !hasUpgrade('ds', 24) && !hasUpgrade('p', 31)) text[2] += ' (formula: (x^2)/100)';
 				if (hasUpgrade('ds', 23) && hasUpgrade('ds', 24)) text[1] += ' (formula: (x^2)/100)';
-			} else text[0] += ' (formula: x*0.1+1)';
+			} else {
+				text[0] += ' (formula: x/10+1)';
+			};
 			if (hasUpgrade('a', 51)) text[3] += ' (formula: x^1.25)';
 		};
-		let fintext = text[0];
-		if (text[1]) fintext += '<br>and also multiplying ' + text[1];
-		if (text[2]) fintext += '<br>additionally, also multiplying ' + text[2];
-		if (text[3]) fintext += '<br>and lastly, also multiplying ' + text[3];
-		return fintext;
+		let finalText = text[0];
+		if (text[1]) finalText += '<br>and also multiplying ' + text[1];
+		if (text[2]) finalText += '<br>additionally, also multiplying ' + text[2];
+		if (text[3]) finalText += '<br>and lastly, also multiplying ' + text[3];
+		return finalText;
 	},
 	update(diff) {
 		player.A.points = new Decimal(player.A.achievements.length);
 	},
-	tabFormat: [
-		"main-display",
-		"achievements",
-		"blank",
-	],
+	tabFormat() {
+		const prefix = (inGlitchedAssimilationSearch() ? "glitch-" : "");
+		return [
+			prefix + "main-display",
+			prefix + "achievements",
+			"blank",
+		];
+	},
 	achievements: {
 		11: {
 			name: 'The Point',
