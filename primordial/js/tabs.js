@@ -208,7 +208,15 @@ function getRawTabContent(layer, name = "") {
 			for (let index = 0; index < story.length; index++) {
 				content.push(["infobox", "story" + index]);
 			};
-			content.push([prefix + "display-text", getNextStoryAt()]);
+			content.push(["infobox", "chaos-assimilation"]);
+			if (inGlitchedAssimilationSearch()) {
+				content.push("blank");
+				content.push("blank");
+				content.push("glitch-assimilate-button");
+				content.push("blank");
+			} else {
+				content.push([prefix + "display-text", getNextStoryAt()]);
+			};
 			content.push("blank");
 		} else if (name == "The Tides") {
 			if (!hasUpgrade('pl', 82)) {

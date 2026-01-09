@@ -255,6 +255,10 @@ function getAssimilationRewards() {
 		text += 'Reduces the cellular life cost base (100 --> 50)<br>';
 		text += 'Makes you always be able to buy max cellular life';
 	};
+	if (isAssimilated('ch')) {
+		text += '<br><br><h2 class="layer-mo">Assimilated </h2><h2 class="layer-ch">Chaos</h2><br><br>';
+		text += 'Rewards coming soon!';
+	};
 	text = text.replace("<br><br>", "");
 	if (!colorValue[0][1] || colorValue[1] === 'none') text = text.replace(/<b class="layer-.{1,2}">/g, "<b>");
 	return text;

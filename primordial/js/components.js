@@ -13,6 +13,21 @@ const customComponents = {
 			tmp[layer].componentStyles['prestige-button'],
 		]" v-html="(player[layer].points.gte(assimilationReq[layer]) ? 'Assimilate this layer!' : 'Reach ' + formatWhole(assimilationReq[layer]) + ' ' + tmp[layer].resource + ' to fully Assimilate this layer.')" @click="completeAssimilation(layer)"></button>`),
 	},
+	'glitch-assimilate-button': {
+		props: ['layer'],
+		data() { return {tmp, glitchify} },
+		methods: {
+			assimilate() {
+				player.mo.assimilated.push(this.layer);
+				setClickableState('mo', 11, false);
+				unlockLayers();
+			},
+		},
+		template: template(`<button class="mo reset can" :style="[
+			{'margin-bottom': '8px', background: 'radial-gradient(#88CC44, #88CC44, #BA0035)'},
+			tmp[layer].componentStyles['prestige-button'],
+		]" v-html="glitchify('Assimilate this layer!')" @click="assimilate()"></button>`),
+	},
 	'glitch-display-text': {
 		props: ['layer', 'data'],
 		data() {return {glitchify}},

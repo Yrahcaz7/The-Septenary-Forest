@@ -218,7 +218,7 @@ function loadOptions() {
 };
 
 function setupModInfo() {
-	modInfo.changelog = changelog;
+	if (typeof changelog !== "undefined") modInfo.changelog = changelog;
 	modInfo.winText = (typeof winText !== "undefined" ? (winText instanceof Function ? winText() : winText) : (typeof endPoints !== "undefined" ? "You reached " + format(endPoints) + " " + (modInfo.pointsName || "points") + " and beat the game!<br>However, it isn't the end yet...<br>Wait for more updates for further content." : "Congratulations! You have reached the end and beaten this game, but for now..."));
 };
 

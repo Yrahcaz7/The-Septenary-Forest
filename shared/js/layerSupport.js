@@ -345,6 +345,6 @@ addLayer("options-tab", {
 });
 
 addLayer("changelog-tab", {
-	tabFormat() {return [["raw-html", changelog]]},
+	tabFormat() {return [["raw-html", run(modInfo.changelog, modInfo)]]},
 	row: "otherside",
 });

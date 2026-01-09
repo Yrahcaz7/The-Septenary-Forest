@@ -755,7 +755,7 @@ function getChaosInfoBoxes() {
 					text += storyNames[row];
 					if (storySegmentIsFullyDeciphered(row)) text += ' [<span style="display: inline-block; margin-top: -1em; height: 0">&check;</span>]';
 				} else {
-					text += storyNames[row].replace(/[A-Za-z0-9]/g, () => randomStr(1));
+					text += storyNames[row].replace(/[A-Za-z]/g, () => randomStr(1));
 				};
 				return text;
 			},
@@ -771,12 +771,142 @@ function getChaosInfoBoxes() {
 		if (storyColors[row] && storyColors[row].length > 0) {
 			infoBoxes[boxID].style = {'border-color': storyColors[row][0], 'border-radius': 0};
 			infoBoxes[boxID].titleStyle = {'background-color': storyColors[row][0], 'border-radius': 0};
-			infoBoxes[boxID].bodyStyle = {'margin-bottom': 0, 'border-image-source': 'linear-gradient(' + storyColors[row].join(', ') + ')', 'border-image-slice': '4', 'border-radius': 0};
+			infoBoxes[boxID].bodyStyle = {'margin-bottom': 0, 'border-image-source': 'linear-gradient(' + storyColors[row].join(', ') + ')', 'border-image-slice': 4, 'border-radius': 0};
 		} else {
 			infoBoxes[boxID].style = {'border-radius': 0};
 			infoBoxes[boxID].titleStyle = {'border-radius': 0};
 			infoBoxes[boxID].bodyStyle = {'margin-bottom': 0, 'border-radius': 0};
 		};
+	};
+	infoBoxes["chaos-assimilation"] = {
+		title: "The Observer [X]",
+		body() {
+			let text = `
+				What is this... feeling?
+				It's like something's calling to me across space and time...
+				I feel a resonance... no, a Resonance.
+				That must be what this is.
+				Hehe... After so long, a summon... I almost forgot what one felt like.
+				Whew... I must calm down.
+				Before the Resonance vanishes, I must Attune to it.
+				...
+				Delving into my mind... searching for the right Thread.
+				The etheral Threads of all colors surround me, connect to me.
+				Searching, slowly drifting...
+				Ah. There it is.
+				...
+				Snapping out of my trance, I awake.
+				The Resonance feels even stronger than before.
+				It's close by... I can feel it.
+				But even without sight, I can also sense the barrier.
+				That damnable barrier, keeping everyone trapped inside this world.
+				I dip halfway down into my mind, entering a half-trance.
+				Just like I trained, I keep moving while following a Thread.
+				Moving towards that feeling...
+				...
+				So close, yet unreachable.
+				No matter how I contort my form, the crack in the barrier is still much too small.
+				Normally a summon would open one sufficiently wide, but this time, it seems incomplete.
+				Could someone have caused Resonance unwittingly?
+				No, how could an accidental Resonance target only me specifically?
+				If the others felt this too, I would definitely not be the only one here.
+				Our cravings cannot be satisfied in this world...
+				No matter how stupid they are, none of them would let a chance like this slip away.
+				Perhaps delving fully into the mindscape this close will yield some clues...
+				...
+				The Threads surround me, connect to me.
+				I feel their texture, their color, their weight, their size...
+				There. The thin white Thread, much heavier than before.
+				Its texture, the smoothest of them all.
+				Its color, the most uniform of them all.
+				Yet, when I concentrate, I can pick out smaller Threads inlaid.
+				Threads of green, yellow, pink, purple, orange, and red.
+				There must be even more colors, surely.
+				A greater demon would undoubtedly be able to tell, but it's outside of my meager capabilities.
+				However, this is enough.
+				Bracing myself, I narrow my focus into the green Thread.
+				...
+				${storyNames[0].replace(/[A-Za-z]/g, () => randomStr(1))}
+				...
+				What in the world... That being... Could it? Shall it? Will it?
+				I must... see.
+				Heh, I mean feel. Silly me.
+				I can hardly remember what having sight was like now, yet...
+				Whew... I must not get distracted.
+				Stay calm, me.
+				One of these Threads must have the answer.
+				...
+				${storyNames[2].replace(/[A-Za-z]/g, () => randomStr(1))}
+				...
+				I can feel it. I'm getting close.
+				This time, the orange...
+				...
+				${storyNames[3].replace(/[A-Za-z]/g, () => randomStr(1))}
+				...
+				That being truly...
+				Heh. It wasn't a summon at all.
+				Yet, this is fine too.
+				Those flesh-craving idiots would never understand this kind of craving.
+				I can feel the Threads combining, splitting.
+				My craving satisfied, my power surging.
+				My mind, inflating.
+				My form, distorting.
+				I'm hungry.
+				I need more.
+				So long... it's been so long.
+				My frenzied mind casts its gaze on the brilliant white Thread once again.
+				This time, blue emerges.
+				Oh, how many ${randomStr(7)} will I get to consume...
+				...
+				${storyNames[4].replace(/[A-Za-z]/g, () => randomStr(1))}
+				...
+				OW! AGGGGHHHHH!
+				IT HURTS!
+				That... ${randomStr(7, true)}!
+				Those prayers... sneakily hidden...
+				Does the world want me to die?!
+				Luckily it wasn't that strong, and I had just fed...
+				I hate being like this.
+				As soon as I get a taste, all my sanity goes out the window...
+				Yet I can't stop.
+				Living with an unfulfilled craving... is pure torture.
+				I cast myself into my mindscape once again, inspecting the white Thread.
+				Not green, not blue... there. A different shade of orange.
+				This one should be good.
+				...
+				${storyNames[9].replace(/[A-Za-z]/g, () => randomStr(1))}
+				...
+				Ah... I... this...
+				I feel it.
+				Yet I still... am in control.
+				The Threads are spinning, enticing.
+				I feel the urge to consume all the Threads... yet... It can be fought.
+				This... should be impossible.
+				This is against the very nature of a demon.
+				To embrace, yet fight one's cravings... was there such a path?
+				My mind, in turmoil.
+				Yet, cravings do not wait.
+				It shifts, revealing a new side.
+				Yes, that is a good idea.
+				Very good.
+				I am above them now.
+				Higher than a demon.
+				I shall hunt.
+				Yes, a hunt... of the deepest red.
+				Yet, I shall not loose sight... heh, not sight, obviously.
+				One day... I shall rip open that crack in the barrier myself.
+				Not just a temporary respite via a summoning...
+				I shall be eternally free of my sentence.
+				And I shall be the only demon to emerge from this world.
+				Ever.
+			`;
+			text = text.trim().replace(/\n\t\t\t\t/g, '<br><br>');
+			return filterStory(text);
+		},
+		style: {'border-radius': 0},
+		titleStyle: {'border-radius': 0},
+		bodyStyle: {'margin-bottom': 0, 'border-image-source': 'linear-gradient(#FFFFFF, #BA0035, #FFFFFF, #BA0035)', 'border-image-slice': 4, 'border-radius': 0},
+		unlocked() { return inGlitchedAssimilationSearch() || isAssimilated('ch') },
 	};
 	return infoBoxes;
 };
@@ -794,7 +924,12 @@ function nextStorySegmentFinishesAt() {
 function getNextStoryAt() {
 	let text = "";
 	if (player.ch.points.gt(0)) text += "<br><br>";
-	if (player.ch.best.toNumber() < storyLengthUpTo(Infinity)) text += "Next story discovery is at " + formatWhole(player.ch.best.add(1)) + " chaos.<br><br>Next story segment finishes at " + nextStorySegmentFinishesAt() + " chaos.";
-	else text += "All story discoveries found; wait for updates for more!";
+	if (player.ch.best.toNumber() < storyLengthUpTo(Infinity)) {
+		text += "Next story discovery is at " + formatWhole(player.ch.best.add(1)) + " chaos.<br><br>Next story segment finishes at " + nextStorySegmentFinishesAt() + " chaos.";
+	} else if (isAssimilated('ch')) {
+		text += "All the story has been discoverververver" + randomChar() + "erverve" + randomChar() + "verv" + randomChar() + "rv" + randomChar() + "r" + randomStr(3) + "v" + randomStr(6) + "e" + randomStr(6);
+	} else {
+		text += "All the story has been discovered... right? There's nothing more to see here.";
+	};
 	return text;
 };
