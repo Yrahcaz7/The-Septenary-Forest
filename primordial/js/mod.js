@@ -18,7 +18,8 @@ function changelog() {
 			- Added planets.<br>
 			- Added one milestone to planets.<br>
 			- Added thirty-six upgrades to planets.<br>
-			- Added one milestone to chaos.<br>
+			- Added ${randomStr(4)} to assimilation.<br>
+			- Added three milestones to chaos.<br>
 			- Added ${randomStr(4)} to story.<br>
 			- Added four achievements.<br>
 			- Added one option.<br>
@@ -384,8 +385,8 @@ function getPointGen() {
 	if (inChallenge('ds', 22)) gain = gain.div(1e10);
 	// pow
 	if (hasUpgrade('q', 63)) gain = gain.pow(upgradeEffect('q', 63));
-	if (challengeCompletions('ch', 11) > 0) gain = gain.pow(challengeEffect('ch', 11));
-	if (challengeCompletions('ch', 12) > 0) gain = gain.pow(challengeEffect('ch', 12));
+	if (hasChallenge('ch', 11)) gain = gain.pow(challengeEffect('ch', 11));
+	if (hasChallenge('ch', 12)) gain = gain.pow(challengeEffect('ch', 12));
 	// special nerf
 	if (inChallenge('ds', 32)) gain = gain.add(1).log10().add(1).log10();
 	// softcap

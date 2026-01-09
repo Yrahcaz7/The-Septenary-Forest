@@ -2009,7 +2009,7 @@ addLayer('ds', {
 		if (inChallenge('ch', 11)) mult = mult.mul('1e4000');
 		// pow
 		if (hasBuyable('cl', 12)) mult = mult.pow(buyableEffect('cl', 12)[0]);
-		if (challengeCompletions('ch', 11) > 0) mult = mult.pow(challengeEffect('ch', 11));
+		if (hasChallenge('ch', 11)) mult = mult.pow(challengeEffect('ch', 11));
 		// return
 		return mult;
 	},
@@ -2879,7 +2879,7 @@ addLayer('p', {
 		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
 		if (hasUpgrade('pl', 44)) mult = mult.mul(upgradeEffect('pl', 44));
 		// pow
-		if (challengeCompletions('ch', 12) > 0) mult = mult.pow(challengeEffect('ch', 12));
+		if (hasChallenge('ch', 12)) mult = mult.pow(challengeEffect('ch', 12));
 		// return
 		return mult;
 	},
@@ -5385,7 +5385,7 @@ addLayer('ei', {
 	},
 	autoPrestige() { return (hasMilestone('w', 3) || hasUpgrade('pl', 64)) && (!hasMilestone('cl', 0) || player.ei.auto_prestige) },
 	hotkeys: [{key: 'E', description: 'Shift-E: Reset for evil influence', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
-	layerShown() { return player.gi.unlocked || player.ei.unlocked },
+	layerShown() { return player.gi.unlocked || player.ei.unlocked || player.w.unlocked },
 	deactivated() { return inChallenge('ch', 12) || (getClickableState('mo', 11) && !canAssimilate(this.layer)) },
 	automate() {
 		if (hasMilestone('w', 1) && player[this.layer].auto_upgrades) {
@@ -6225,7 +6225,7 @@ addLayer('w', {
 			unlocked() { return hasMilestone('w', 8) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 		22: {
-			cost(x) { return new Decimal(1000).pow(x) },
+			cost(x) { return new Decimal(hasMilestone('ch', 34) ? 100 : 1000).pow(x) },
 			title() { return '<b' + getColorClass(this, TITLE) + 'Relics of Good' },
 			description: 'multiplies good influence gain based on your relics and the amount of this upgrade bought.',
 			canAfford() { return player.r.points.gte(this.cost()) },
@@ -6304,6 +6304,7 @@ addLayer('cl', {
 		let gain = newDecimalOne();
 		if (hasBuyable('cl', 12)) gain = gain.mul(buyableEffect('cl', 12)[1]);
 		if (hasBuyable('cl', 13)) gain = gain.mul(buyableEffect('cl', 13)[1]);
+		if (hasChallenge('ch', 21)) gain = gain.mul(challengeEffect('ch', 21)[0]);
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('cl', 12) || hasUpgrade('pl', 74) },
@@ -6352,6 +6353,7 @@ addLayer('cl', {
 		if (hasBuyable('cl', 42)) conv = conv.mul(buyableEffect('cl', 42));
 		if (hasBuyable('cl', 43)) conv = conv.mul(buyableEffect('cl', 43)[1]);
 		if (hasBuyable('cl', 51)) conv = conv.mul(buyableEffect('cl', 51));
+		if (hasChallenge('ch', 21)) conv = conv.mul(challengeEffect('ch', 21)[1]);
 		if (new Decimal(tmp.ch.effect[2]).gt(1) && !tmp.ch.deactivated) conv = conv.mul(tmp.ch.effect[2]);
 		// set
 		player.cl.protein_conv = conv;
@@ -6735,7 +6737,7 @@ addLayer('ch', {
 	baseAmount() { return player.w.points },
 	type: 'custom',
 	base: 1.1,
-	exponent: 0.85,
+	exponent() { return isAssimilated(this.layer) ? 0.84 : 0.85 },
 	getResetGain() {
 		if (hasMilestone('pl', 0)) {
 			return getResetGain("ch", "static");
@@ -6773,6 +6775,7 @@ addLayer('ch', {
 	canBuyMax() { return hasMilestone('pl', 0) },
 	gainExp() {
 		let gain = newDecimalOne();
+		if (hasBuyable('mo', 21)) gain = gain.mul(buyableEffect('mo', 21));
 		return gain;
 	},
 	tooltip() { return formatWhole(player.ch.points) + ' ' + randomStr(5) },
@@ -7021,7 +7024,19 @@ addLayer('ch', {
 			requirementDescription: '106 chaos',
 			effectDescription() { return 'reduce the multicellular organism cost base (1.063 --> 1.0575) and increase the cap of <b' + getColorClass(this, TITLE, "mo") + 'Assimilation</b> by 1' },
 			done() { return player.ch.points.gte(106) },
-			unlocked() { return player.mo.unlocked },
+			unlocked() { return player.pl.unlocked },
+		},
+		34: {
+			requirementDescription: '115 chaos',
+			effectDescription() { return 'reduce the cost scaling of <b' + getColorClass(this, TITLE, "w") + 'Relics of Good</b>' },
+			done() { return player.ch.points.gte(115) },
+			unlocked() { return player.pl.unlocked },
+		},
+		35: {
+			requirementDescription: '122 chaos',
+			effectDescription: 'coming soon...',
+			done() { return player.ch.points.gte(122) },
+			unlocked() { return player.pl.unlocked },
 		},
 	},
 	challenges: {
@@ -7080,6 +7095,29 @@ addLayer('ch', {
 			},
 			doReset: true,
 			unlocked() { return hasMilestone('ch', 2) },
+		},
+		21: {
+			name() { return '<h3' + getColorClass(this, TITLE) + 'Tide of Science' },
+			challengeDescription() { return "- Applies all previous <b" + getColorClass(this, REF) + "Tides</b> at once<br>" },
+			goal() { return new Decimal("1e500").pow(challengeCompletions('ch', this.id) ** 2).mul("1e2000") },
+			goalDescription() {
+				const c = tmp.ch.challenges[this.id];
+				return formatWhole(c.goal) + " molecules<br>Completions: " + formatWhole(challengeCompletions('ch', this.id)) + "/" + c.completionLimit + (c.completionLimit >= 99 ? " (maxed)" : "") + "<br>";
+			},
+			canComplete() { return player.m.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
+			completionLimit() { return (hasUpgrade('pl', 82) ? 99 : player.ch.points.div(2).floor().max(1).min(99).toNumber()) },
+			onEnter() { player.gi.unlocked = false; player.ei.unlocked = false },
+			onExit() { player.gi.unlocked = true; player.ei.unlocked = true },
+			rewardDescription: "multiplies cellular life gain and protein gain based on completions",
+			rewardEffect() { return [new Decimal(1.2).pow(challengeCompletions('ch', this.id)), new Decimal(1e10).pow(challengeCompletions('ch', this.id))] },
+			rewardDisplay(eff) {
+				let text = format(eff[0]) + "x<br>and " + format(eff[1]) + "x";
+				if (options.nerdMode) text += '<br>formulas: 1.2^x<br>and 1e10^x';
+				return text;
+			},
+			doReset: true,
+			countsAs: [11, 12],
+			unlocked() { return hasMilestone('ch', 2) && isAssimilated(this.layer) },
 		},
 	},
 	infoboxes: getChaosInfoBoxes(),
@@ -7255,6 +7293,21 @@ addLayer('mo', {
 			purchaseLimit: 99,
 			buy() { buyStandardBuyable(this) },
 			unlocked() { return isAssimilated('gi') || player.mo.assimilating === 'gi' },
+		},
+		21: {
+			cost(x) { return new Decimal(1.5).pow(x).mul(300) },
+			effect(x) { return new Decimal(1.03).pow(x) },
+			title() { return '<b' + getColorClass(this, TITLE, "ch", true) + 'Chaos</b> <b' + getColorClass(this, TITLE) + 'Synergy' },
+			description: 'multiplies chaos gain based on the amount of this upgrade bought.',
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: 1.03^x';
+				return text;
+			},
+			canAfford() { return player.mo.points.gte(this.cost()) },
+			purchaseLimit: 99,
+			buy() { buyStandardBuyable(this) },
+			unlocked() { return isAssimilated('ch') || player.mo.assimilating === 'ch' },
 		},
 	},
 });

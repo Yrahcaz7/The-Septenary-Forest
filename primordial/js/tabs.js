@@ -195,14 +195,21 @@ function getRawTabContent(layer, name = "") {
 		};
 	} else if (layer == "ch") {
 		if (name == "Keywords") {
-			let keywords = getDecipheredKeywords();
-			if (keywords.length > 1) keywords[keywords.length - 1] = "and " + keywords[keywords.length - 1];
-			const next = nextStorySegmentFinishesAt();
-			content.push([prefix + "display-text", 'For each fully unlocked story segment, you decipher some keywords.<br><br>You have deciphered <h2 class="layer-ch">' + formatWhole(keywords.length) + '</h2> keywords so far.' + (keywords.length > 0 ? '<br><br>These keywords are: ' + keywords.join(", ") + '.' : '') + '<br><br>' + (next == Infinity ? 'You have deciphered all the keywords that currently exist.' : 'More keywords will be deciphered at ' + formatWhole(next) + ' chaos.')]);
+			content.push([prefix + "display-text", getKeywordDisplay()]);
 			content.push("blank");
 			content.push(["row", [[prefix + "display-text", "Keyword deciphering is&nbsp;"], [prefix + "toggle", ["ch", "deciphering"]]]]);
 			content.push("blank");
-			content.push([prefix + "display-text", "Fully deciphered story segments are marked with <h2>[&check;]</h2>"]);
+			content.push([prefix + "display-text", "Fully deciphered story segments are marked with <span style='font-size: 24px'>[&check;]</span>"]);
+			if (isAssimilated('ch')) {
+				content.push("blank");
+				content.push(["display-text",
+					"Story "
+					+ "segments that".replace(/[A-Za-z]+(?![A-Za-z0-9])/g, substr => randomStr(substr.length))
+					+ " cannot "
+					+ "be fully deciphered are".replace(/[A-Za-z]+(?![A-Za-z0-9])/g, substr => randomStr(substr.length))
+					+ " marked with <span style='font-size: 24px'>[X]</span>"
+				]);
+			};
 			content.push("blank");
 		} else if (name == "Story") {
 			for (let index = 0; index < story.length; index++) {

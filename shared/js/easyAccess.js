@@ -33,7 +33,7 @@ function hasChallenge(layer, id) {
 		return false;
 	};
 	if (!player[layer] || !tmp[layer] || tmp[layer].deactivated) return false;
-	return player[layer].challenges[id];
+	return player[layer].challenges[id] > 0;
 };
 
 function maxedChallenge(layer, id) {

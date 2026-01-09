@@ -32,11 +32,11 @@ function inGlitchedAssimilationSearch() {
 };
 
 // returns the input string, glitchifying it if neccessary
-function glitchify(str) {
-	if (!inGlitchedAssimilationSearch()) return str;
+function glitchify(string) {
+	if (!inGlitchedAssimilationSearch()) return string;
 	let inTag = false;
 	let inHeader = false;
-	return str.replace(/<h|<\/|<|>|&nbsp;|[A-Za-z]+(?![A-Za-z0-9])/g, substr => {
+	return string.replace(/<h|<\/|<|>|&nbsp;|[A-Za-z]+(?![A-Za-z0-9])/g, substr => {
 		if (substr.startsWith("<")) {
 			inTag = true;
 			if (substr == "<h") inHeader = true;
@@ -257,7 +257,10 @@ function getAssimilationRewards() {
 	};
 	if (isAssimilated('ch')) {
 		text += '<br><br><h2 class="layer-mo">Assimilated </h2><h2 class="layer-ch">Chaos</h2><br><br>';
-		text += 'Rewards coming soon!';
+		text += 'Unlocks one new <b class="layer-ch">Tide</b>: <b class="layer-ch">Tide of Science</b><br>';
+		text += 'Reduces the chaos cost exponent (0.85 --> 0.84)<br>';
+		text += 'Makes story and keywords be kept on all resets<br>';
+		text += 'Unlocks the fourth <b class="layer-mo">Synergy</b>';
 	};
 	text = text.replace("<br><br>", "");
 	if (!colorValue[0][1] || colorValue[1] === 'none') text = text.replace(/<b class="layer-.{1,2}">/g, "<b>");
