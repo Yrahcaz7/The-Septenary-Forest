@@ -237,7 +237,7 @@ function getRawTabContent(layer, name = "") {
 		};
 	} else if (layer == "mo") {
 		if (name == "Attunement") {
-			content.push(["display-text", "Feature coming soon..."]);
+			content.push("milestones");
 		} else if (name == "Synergism") {
 			content.push(prefix + "buyables");
 		} else if (name == "Rewards") {

@@ -7044,13 +7044,13 @@ addLayer('ch', {
 		},
 		36: {
 			requirementDescription: '128 chaos',
-			effectDescription() { return 'reduce the cellular life cost base (50 --> 14)' },
+			effectDescription: 'reduce the cellular life cost base (50 --> 14)',
 			done() { return player.ch.points.gte(128) },
 			unlocked() { return player.pl.unlocked },
 		},
 		37: {
 			requirementDescription: '133 chaos',
-			effectDescription() { return 'reduce the cellular life cost base (14 --> 4)' },
+			effectDescription: 'reduce the cellular life cost base (14 --> 4)',
 			done() { return player.ch.points.gte(133) },
 			unlocked() { return player.pl.unlocked },
 		},
@@ -7062,8 +7062,14 @@ addLayer('ch', {
 		},
 		39: {
 			requirementDescription: '148 chaos',
-			effectDescription() { return 'keep cellular life rebuyables on chaos resets' },
+			effectDescription: 'keep cellular life rebuyables on chaos resets',
 			done() { return player.ch.points.gte(148) },
+			unlocked() { return player.pl.unlocked },
+		},
+		40: {
+			requirementDescription: '158 chaos',
+			effectDescription() { return 'coming soon...' },
+			done() { return player.ch.points.gte(158) },
 			unlocked() { return player.pl.unlocked },
 		},
 	},
@@ -7200,7 +7206,11 @@ addLayer('mo', {
 	hotkeys: [{key: 'o', description: 'O: Reset for multicellular organisms', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.ch.unlocked || player.mo.unlocked },
 	effect() {
-		if (isAssimilated(this.layer)) return player.mo.points.add(1).pow(0.15);
+		if (isAssimilated(this.layer)) {
+			let exp = 0.15;
+			if (hasMilestone('mo', 0)) exp = 0.1666;
+			return player.mo.points.add(1).pow(exp);
+		};
 		return newDecimalOne();
 	},
 	effectDescription() {
@@ -7381,6 +7391,15 @@ addLayer('mo', {
 			unlocked() { return isAssimilated('mo') },
 		},
 	},
+	milestones: {
+		0: {
+			requirementDescription: "Tier 1: [666]",
+			effectDescription() { return "increase the " + randomStr(13) + " " + randomStr(8) + " effect exponent (0.15 --> 0.1666)" },
+			done() { return player.mo.points.gte(666) },
+			popupTitle: "Attuning...",
+			unlocked() { return isAssimilated(this.layer) },
+		},
+	}
 });
 
 addLayer('pl', {
