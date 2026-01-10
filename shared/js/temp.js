@@ -117,10 +117,11 @@ function updateTempData(layerData, tmpData, funcsData, useThis) {
 		} else if (isPlainObject(layerData[item]) || (typeof layerData[item] === "object" && traversableClasses.includes(layerData[item].constructor.name))) {
 			updateTempData(layerData[item], tmpData[item], funcsData[item], useThis);
 		} else if (layerData[item] instanceof Function && !(tmpData[item] instanceof Function)) {
-			let value;
-			if (useThis !== undefined) value = layerData[item].bind(useThis)();
-			else value = layerData[item]();
-			tmpData[item] = value;
+			if (useThis !== undefined) {
+				tmpData[item] = layerData[item].bind(useThis)();
+			} else {
+				tmpData[item] = layerData[item]();
+			};
 		};
 	};
 };

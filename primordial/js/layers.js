@@ -726,11 +726,8 @@ addLayer('q', {
 	passiveGeneration() {
 		let gen = 0;
 		if (hasUpgrade('q', 51)) gen += 1e28;
-		if (hasMilestone('a', 8)) {
-			gen += 0.01;
-			if (hasMilestone('a', 9)) {
-				gen += 0.09;
-		}};
+		if (hasMilestone('a', 8)) gen += 0.01;
+		if (hasMilestone('a', 9)) gen += 0.09;
 		if (hasUpgrade('pl', 22)) gen += 0.1;
 		return gen;
 	},
@@ -1229,7 +1226,7 @@ addLayer('q', {
 			effect(x) { return new Decimal(1.25).pow(x).add(x.pow(2.15)) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
-				if (options.nerdMode) text += '<br>formula: (1.25^x)+(x^2.15)';
+				if (options.nerdMode) text += '<br>formula: 1.25^x + x^2.15';
 				return text;
 			},
 			costDisplay(cost) { return 'Req: ' + formatWhole(cost) + ' insight' },
@@ -6310,6 +6307,7 @@ addLayer('cl', {
 		if (hasBuyable('cl', 12)) gain = gain.mul(buyableEffect('cl', 12)[1]);
 		if (hasBuyable('cl', 13)) gain = gain.mul(buyableEffect('cl', 13)[1]);
 		if (hasChallenge('ch', 21)) gain = gain.mul(challengeEffect('ch', 21)[0]);
+		if (tmp.mo.effect.gt(1) && !tmp.mo.deactivated) gain = gain.mul(tmp.mo.effect);
 		return gain;
 	},
 	autoPrestige() { return hasMilestone('cl', 12) || hasUpgrade('pl', 74) },
@@ -7057,7 +7055,7 @@ addLayer('ch', {
 		},
 		38: {
 			requirementDescription: '140 chaos',
-			effectDescription() { return 'increase the cap of <b' + getColorClass(this, TITLE, "w") + 'Race for Knowledge</b> by 50' },
+			effectDescription() { return 'increase the cap of <b' + getColorClass(this, TITLE, "w") + 'Race for Knowledge</b> by 50 and increase the cap of <b' + getColorClass(this, TITLE, "mo") + 'Assimilation</b> by 1' },
 			done() { return player.ch.points.gte(140) },
 			unlocked() { return player.pl.unlocked },
 		},
@@ -7167,6 +7165,7 @@ addLayer('mo', {
 	color: '#88CC44',
 	branches: ['pl'],
 	requires: 10000,
+	marked() { return isAssimilated(this.layer) },
 	resource: 'multicellular organisms',
 	baseResource: 'cellular life',
 	baseAmount() { return player.cl.points },
@@ -7192,6 +7191,13 @@ addLayer('mo', {
 	autoPrestige() { return hasUpgrade('pl', 84) },
 	hotkeys: [{key: 'o', description: 'O: Reset for multicellular organisms', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.ch.unlocked || player.mo.unlocked },
+	effect() {
+		if (isAssimilated(this.layer)) return player.mo.points.add(1).pow(0.15);
+		return newDecimalOne();
+	},
+	effectDescription() {
+		if (isAssimilated(this.layer)) return 'which multiplies cellular life gain by <h2 class="layer-mo">' + format(tmp.mo.effect) + '</h2>x';
+	},
 	doReset(resettingLayer) {
 		let keep = ['clickables', 'assimilating', 'assimilated', 'hadLayers'];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
@@ -7209,6 +7215,10 @@ addLayer('mo', {
 			content: getUnlockableTab('mo', "Synergism"),
 			unlocked() { return isAssimilated('a') || player.mo.assimilating === 'a' },
 		},
+		Attunement: {
+			content: getUnlockableTab('mo', "Attunement"),
+			unlocked() { return isAssimilated('mo') },
+		},
 	},
 	clickables: {
 		11: {
@@ -7216,14 +7226,26 @@ addLayer('mo', {
 			display() {
 				const c = tmp.mo.clickables[11];
 				let text = '<br>';
-				if (player.mo.assimilating !== null) text += 'Currently Assimilating: ' + (tmp[player.mo.assimilating].pluralName || tmp[player.mo.assimilating].name) + '.<br><br>Click to exit the run.';
-				else if (getClickableState('mo', 11)) text += 'You are in an Assimilation search.<br><br>Click the node of the layer you wish to attempt to Assimilate.<br><br>Click here to exit the search.';
-				else text += 'Begin an Assimilation search.<br><br>Req: ' + formatWhole(c.req) + ' multicellular organisms';
+				if (player.mo.assimilating !== null) {
+					text += 'Currently Assimilating: ' + (tmp[player.mo.assimilating].pluralName || tmp[player.mo.assimilating].name) + '.<br><br>Click to exit the run.';
+				} else if (getClickableState('mo', 11)) {
+					text += 'You are in an Assimilation search.<br><br>';
+					if (player.mo.assimilated.length == 16) text += 'Click the node of the layer you wish to attempt to Assimilate.'.replace(/[A-Za-z]+(?![A-Za-z0-9])/g, substr => randomStr(substr.length));
+					else text += 'Click the node of the layer you wish to attempt to Assimilate.';
+					text += '<br><br>Click here to exit the search.';
+				} else {
+					text += 'Begin an Assimilation search.<br><br>Req: ' + formatWhole(c.req) + ' multicellular organisms';
+				};
 				text += '<br><br>Assimilated layers: ' + formatWhole(player.mo.assimilated.length) + '/' + formatWhole(c.limit);
 				return text;
 			},
-			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, 57, 77, 101, 125, 151, 181, 275][player.mo.assimilated.length] || Infinity },
-			limit() { return hasMilestone('ch', 33) ? 16 : 15 },
+			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, 57, 77, 101, 125, 151, 181, 275, 500][player.mo.assimilated.length] || Infinity },
+			limit() {
+				let max = 15;
+				if (hasMilestone('ch', 33)) max++;
+				if (hasMilestone('ch', 38)) max++;
+				return max;
+			},
 			canClick() { return (getClickableState('mo', 11) ? true : player.mo.points.gte(tmp.mo.clickables[11].req)) && player.mo.assimilated.length < tmp.mo.clickables[11].limit },
 			onClick() {
 				if (player.mo.assimilating !== null) {
@@ -7304,7 +7326,7 @@ addLayer('mo', {
 			cost(x) { return x.add(1).pow(3).add(106) },
 			effect(x) {
 				let eff = new Decimal(1.1).pow(x);
-				if (eff.gte(softcaps.mo_buyable_13[0])) eff = eff.sub(softcaps.mo_buyable_13[0]).div(softcaps.mo_buyable_13[1]).add(softcaps.mo_buyable_13[0]);
+				if (eff.gte(softcaps.mo_buyable_13[0])) eff = eff.sub(softcaps.mo_buyable_13[0]).div(softcaps.mo_buyable_13[1]()).add(softcaps.mo_buyable_13[0]);
 				return eff;
 			},
 			title() { return '<b' + getColorClass(this, TITLE, "gi") + 'Good Influence</b> <b' + getColorClass(this, TITLE) + 'Synergy' },
@@ -7333,7 +7355,22 @@ addLayer('mo', {
 			canAfford() { return player.mo.points.gte(this.cost()) },
 			purchaseLimit: 99,
 			buy() { buyStandardBuyable(this) },
-			unlocked() { return isAssimilated('ch') || player.mo.assimilating === 'ch' },
+			unlocked() { return isAssimilated('ch') },
+		},
+		22: {
+			cost(x) { return new Decimal(1.5).pow(x).mul(600) },
+			effect(x) { return new Decimal(1.03).pow(x) },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Multicellular Organism Synergy' },
+			description: 'multiplies multicellular organism gain based on the amount of this upgrade bought.',
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: 1.03^x';
+				return text;
+			},
+			canAfford() { return player.mo.points.gte(this.cost()) },
+			purchaseLimit: 99,
+			buy() { buyStandardBuyable(this) },
+			unlocked() { return isAssimilated('mo') },
 		},
 	},
 });

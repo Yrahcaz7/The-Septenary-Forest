@@ -262,6 +262,13 @@ function getAssimilationRewards() {
 		text += 'Makes story and keywords be kept on all resets<br>';
 		text += 'Unlocks the fourth <b class="layer-mo">Synergy</b>';
 	};
+	if (isAssimilated('mo')) {
+		text += '<br><br><h2 class="layer-mo">Assimilated Multicellular Organisms</h2><br><br>';
+		text += 'Unlocks <b class="layer-mo">Attunement</b>, a new tab<br>';
+		text += 'Makes the <b class="layer-gi">Good Influence</b> <b class="layer-mo">Synergy</b> softcap weaker (/10 --> /4)<br>';
+		text += 'Adds a new effect to multicellular organisms<br>';
+		text += 'Unlocks the fifth <b class="layer-mo">Synergy</b><br>';
+	};
 	text = text.replace("<br><br>", "");
 	if (!colorValue[0][1] || colorValue[1] === 'none') text = text.replace(/<b class="layer-.{1,2}">/g, "<b>");
 	return text;

@@ -236,7 +236,9 @@ function getRawTabContent(layer, name = "") {
 			content.push(prefix + "milestones");
 		};
 	} else if (layer == "mo") {
-		if (name == "Synergism") {
+		if (name == "Attunement") {
+			content.push(["display-text", "Feature coming soon..."]);
+		} else if (name == "Synergism") {
 			content.push(prefix + "buyables");
 		} else if (name == "Rewards") {
 			content.push([prefix + "display-text", getAssimilationRewards()]);
@@ -248,6 +250,10 @@ function getRawTabContent(layer, name = "") {
 				content.push("blank");
 				content.push([prefix + "clickable", 21]);
 			};
+			if (getClickableState('mo', 11) && player.mo.assimilated.length == 16) {
+				content.push("blank");
+				content.push("glitch-assimilate-button");
+			};
 		};
 		content.push("blank");
 	} else if (layer == "pl") {
@@ -255,7 +261,7 @@ function getRawTabContent(layer, name = "") {
 			content.push([prefix + "display-text", 'You have <h2 class="layer-pl">' + format(player.pl.air) + '</h2> air']);
 			if (hasMilestone('pl', 1)) {
 				content.push("blank");
-				content.push([prefix + "buyables", "1"]);
+				content.push(["buyables", "1"]);
 			};
 			content.push("blank");
 			content.push(prefix + "upgrades");

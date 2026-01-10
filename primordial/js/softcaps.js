@@ -19,7 +19,10 @@ const softcaps = {
 	}],
 	r_eff1: ['e1000000', 0.2],
 	gi_eff: ['1e2500', 0.6666666666666666],
-	mo_buyable_13: [1.22, 10],
+	mo_buyable_13: [1.22, () => {
+		if (isAssimilated('mo')) return 4;
+		return 10;
+	}],
 };
 
 const layersWithNormalSoftcappedGain = ["e", "c", "q", "h", "ds", "p", "m"];
@@ -109,7 +112,7 @@ addLayer('SC', {
 			if (activeSoftcaps["r-eff1"]) text += '<br><h2 class="layer-r">Relic\'s First Effect Softcap</h2><br>starts at ' + format(softcaps.r_eff1[0]) + ', effect to ^' + format(softcaps.r_eff1[1]) + '<br>';
 			if (activeSoftcaps["m-eff"]) text += '<br><h2 class="layer-m">Molecule Effect Softcap</h2><br>starts at ' + format(softcaps.m_eff[0]()) + ', effect to ^' + format(softcaps.m_eff[1]()) + '<br>';
 			if (activeSoftcaps["gi-eff"]) text += '<br><h2 class="layer-gi">Good Influence Effect Softcap</h2><br>starts at ' + format(softcaps.gi_eff[0]) + ', effect to ^' + format(softcaps.gi_eff[1]) + '<br>';
-			if (activeSoftcaps["mo-buyable-13"]) text += '<br><h2 class="layer-mo"><b class="layer-gi">Good Influence</b> Synergy Effect Softcap</h2><br>starts at ' + format(softcaps.mo_buyable_13[0]) + ', effect /' + format(softcaps.mo_buyable_13[1]) + '<br>';
+			if (activeSoftcaps["mo-buyable-13"]) text += '<br><h2 class="layer-mo"><b class="layer-gi">Good Influence</b> Synergy Effect Softcap</h2><br>starts at ' + format(softcaps.mo_buyable_13[0]) + ', effect /' + format(softcaps.mo_buyable_13[1]()) + '<br>';
 			return text;
 		}],
 	],

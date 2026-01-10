@@ -204,7 +204,12 @@ function doReset(layer, force = false, overrideResetsNothing = false) {
 			};
 		};
 	};
-	if (!overrideResetsNothing && run(layers[layer].resetsNothing, layers[layer])) return;
+	if (!overrideResetsNothing && run(layers[layer].resetsNothing, layers[layer])) {
+		tmp[layer].resetGain = getResetGain(layer);
+		tmp[layer].nextAt = getNextAt(layer);
+		tmp[layer].canReset = canReset(layer);
+		return;
+	};
 	tmp[layer].baseAmount = newDecimalZero(); // quick fix
 	for (const layerResetting in layers) {
 		if (row >= layers[layerResetting].row && (!force || layerResetting != layer)) completeChallenge(layerResetting);
