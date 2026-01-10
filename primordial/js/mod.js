@@ -20,9 +20,9 @@ function changelog() {
 			- Added thirty-six upgrades to planets.<br>
 			- Added two rebuyables to planets.<br>
 			- Added ${randomStr(4)} to assimilation.<br>
-			- Added six milestones to chaos.<br>
+			- Added seven milestones to chaos.<br>
 			- Added ${randomStr(4)} to story.<br>
-			- Added four achievements.<br>
+			- Added five achievements.<br>
 			- Added one option.<br>
 		<br><h3>v3.6: Even More Assimilation</h3><br>
 			- Added more to assimilation.<br>

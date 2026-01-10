@@ -148,7 +148,7 @@ addLayer('A', {
 		},
 		26: {
 			name: 'Empty Soul',
-			done() { return player.e.points .gte(1e10) && getBuyableAmount('e', 11).eq(0) && getBuyableAmount('e', 12).eq(0) },
+			done() { return player.e.points.gte(1e10) && getBuyableAmount('e', 11).eq(0) && getBuyableAmount('e', 12).eq(0) },
 			tooltip: 'obtain 1e10 essence with no essence rebuyables.',
 			unlocked() { return hasAchievement('A', 22) && hasAchievement('A', 31) },
 			image() { if (hasAchievement('A', 26)) return "images/achievements/26.png" },
@@ -212,7 +212,7 @@ addLayer('A', {
 		},
 		42: {
 			name: 'Quark Field',
-			done() { return player.q.points .gte(1e10) },
+			done() { return player.q.points.gte(1e10) },
 			tooltip: 'obtain 1e10 quarks.',
 			unlocked() { return hasAchievement('A', 41) },
 			image() { if (hasAchievement('A', 42)) return "images/achievements/42.png" },
@@ -268,7 +268,7 @@ addLayer('A', {
 		},
 		53: {
 			name: 'Periodic Particles',
-			done() { return player.sp.points.gte(10000) },
+			done() { return player.sp.points.gte(10_000) },
 			tooltip: 'obtain 10,000 subatomic particles.',
 			unlocked() { return hasAchievement('A', 52) },
 			image() { if (hasAchievement('A', 53)) return "images/achievements/53.png" },
@@ -276,7 +276,7 @@ addLayer('A', {
 		},
 		54: {
 			name: 'That\'s no Particle no More',
-			done() { return player.sp.points.gte(1000000) },
+			done() { return player.sp.points.gte(1_000_000) },
 			tooltip: 'obtain 1,000,000 subatomic particles.',
 			unlocked() { return hasAchievement('A', 53) },
 			image() { if (hasAchievement('A', 54)) return "images/achievements/54.png" },
@@ -420,7 +420,7 @@ addLayer('A', {
 		},
 		84: {
 			name: 'Atom Dance',
-			done() { return player.a.points.gte(10000) },
+			done() { return player.a.points.gte(10_000) },
 			tooltip: 'obtain 10,000 atoms.',
 			unlocked() { return hasAchievement('A', 83) },
 			image() { if (hasAchievement('A', 84)) return "images/achievements/84.png" },
@@ -524,7 +524,7 @@ addLayer('A', {
 		},
 		105: {
 			name: 'Sanctum, Absolute',
-			done() { return player.s.points.gte(10000) },
+			done() { return player.s.points.gte(10_000) },
 			tooltip: 'obtain 10,000 sanctums.',
 			unlocked() { return hasAchievement('A', 104) },
 			image() { if (hasAchievement('A', 105)) return "images/achievements/105.png" },
@@ -572,7 +572,7 @@ addLayer('A', {
 		},
 		115: {
 			name: 'Dragon\'s Hoard',
-			done() { return player.r.points.gte(10000) },
+			done() { return player.r.points.gte(10_000) },
 			tooltip: 'obtain 10,000 relics.',
 			unlocked() { return hasAchievement('A', 114) },
 			image() { if (hasAchievement('A', 115)) return "images/achievements/115.png" },
@@ -596,7 +596,7 @@ addLayer('A', {
 		},
 		122: {
 			name: 'Varied Molecules',
-			done() { return player.m.points.gte(1000000) },
+			done() { return player.m.points.gte(1_000_000) },
 			tooltip: 'obtain 1,000,000 molecules.',
 			unlocked() { return hasAchievement('A', 121) },
 			image() { if (hasAchievement('A', 122)) return "images/achievements/122.png" },
@@ -628,7 +628,7 @@ addLayer('A', {
 		},
 		126: {
 			name: 'Shiny New Molecules',
-			done() { return player.m.points.gte(1000000) && player.r.total.eq(0) },
+			done() { return player.m.points.gte(1_000_000) && player.r.total.eq(0) },
 			tooltip: 'obtain 1,000,000 molecules with no relics.',
 			unlocked() { return hasAchievement('A', 122) && hasAchievement('A', 131) },
 			image() { if (hasAchievement('A', 126)) return "images/achievements/126.png" },
@@ -664,7 +664,7 @@ addLayer('A', {
 		},
 		135: {
 			name: 'Good Exceeding',
-			done() { return player.gi.points.gte(10000) },
+			done() { return player.gi.points.gte(10_000) },
 			tooltip: 'obtain 10,000 good influence.',
 			unlocked() { return hasAchievement('A', 134) },
 			popupColor: '#08FF87',
@@ -706,7 +706,7 @@ addLayer('A', {
 		},
 		145: {
 			name: 'Evil to Infinity',
-			done() { return player.ei.points.gte(10000) },
+			done() { return player.ei.points.gte(10_000) },
 			tooltip: 'obtain 10,000 evil influence.',
 			unlocked() { return hasAchievement('A', 144) },
 			popupColor: '#FF4400',
@@ -748,7 +748,7 @@ addLayer('A', {
 		},
 		155: {
 			name: 'Ultimate War',
-			done() { return player.w.points.gte(10000) },
+			done() { return player.w.points.gte(10_000) },
 			tooltip: 'obtain 10,000 wars.',
 			unlocked() { return hasAchievement('A', 154) },
 			popupColor: '#A0A0A0',
@@ -776,16 +776,23 @@ addLayer('A', {
 		},
 		163: {
 			name: 'Many Cells',
-			done() { return player.cl.points.gte(10000) },
+			done() { return player.cl.points.gte(10_000) },
 			tooltip: 'obtain 10,000 cellular life.',
 			unlocked() { return hasAchievement('A', 162) },
 			popupColor: '#008800',
 		},
 		164: {
 			name: 'Congealing Cells',
-			done() { return player.cl.points.gte(1000000) },
+			done() { return player.cl.points.gte(1_000_000) },
 			tooltip: 'obtain 1,000,000 cellular life.',
 			unlocked() { return hasAchievement('A', 163) },
+			popupColor: '#008800',
+		},
+		165: {
+			name: 'Ever-Replicating Cells',
+			done() { return player.cl.points.gte(100_000_000) },
+			tooltip: 'obtain 100,000,000 cellular life.',
+			unlocked() { return hasAchievement('A', 164) },
 			popupColor: '#008800',
 		},
 		166: {

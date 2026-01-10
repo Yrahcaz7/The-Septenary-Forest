@@ -6341,6 +6341,7 @@ addLayer('cl', {
 		let keep = ['auto_tissues', 'auto_buyable_31', 'auto_buyable_32', 'auto_buyable_33', 'auto_buyable_41', 'auto_buyable_42', 'auto_buyable_43', 'auto_buyable_51', 'auto_buyable_52', 'auto_buyable_53'];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (hasMilestone('ch', 0) && resettingLayer == 'ch') keep.push('milestones');
+		if (hasMilestone('ch', 39) && resettingLayer == 'ch') keep.push('buyables');
 		if (layers[resettingLayer].row > this.row) layerDataReset('cl', keep);
 	},
 	resetsNothing() { return hasMilestone('cl', 12) || hasUpgrade('pl', 74) },
@@ -7059,6 +7060,12 @@ addLayer('ch', {
 			done() { return player.ch.points.gte(140) },
 			unlocked() { return player.pl.unlocked },
 		},
+		39: {
+			requirementDescription: '148 chaos',
+			effectDescription() { return 'keep cellular life rebuyables on chaos resets' },
+			done() { return player.ch.points.gte(148) },
+			unlocked() { return player.pl.unlocked },
+		},
 	},
 	challenges: {
 		11: {
@@ -7186,6 +7193,7 @@ addLayer('mo', {
 		if (hasMilestone('r', 6)) gain = gain.mul(milestoneEffect('r', 6));
 		if (hasMilestone('r', 8)) gain = gain.mul(milestoneEffect('r', 8));
 		if (hasMilestone('ch', 16)) gain = gain.mul(milestoneEffect('ch', 16));
+		if (hasBuyable('mo', 22)) gain = gain.mul(buyableEffect('mo', 22));
 		return gain;
 	},
 	autoPrestige() { return hasUpgrade('pl', 84) },
