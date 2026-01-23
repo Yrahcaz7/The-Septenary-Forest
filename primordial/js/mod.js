@@ -20,7 +20,7 @@ function changelog() {
 			- Added thirty-six upgrades to planets.<br>
 			- Added two rebuyables to planets.<br>
 			- Added ${randomStr(4)} to assimilation.<br>
-			- Added eight milestones to chaos.<br>
+			- Added ten milestones to chaos.<br>
 			- Added ${randomStr(4)} to story.<br>
 			- Added five achievements.<br>
 			- Added one option.<br>
@@ -209,11 +209,11 @@ function getColorClass(obj, type, layer = obj.layer, plain = false) {
 	if (!colorValue[0][type] || colorValue[1] == "none" || obj.layer === undefined) {
 		return ">";
 	};
-	if (colorValue[1] == "dark" || layer == "h" || layer == "r" || layer == "w" || layer == "mo") {
+	if (colorValue[1] == "dark" || layer == "q" || layer == "h" || layer == "r" || layer == "w" || layer == "mo") {
 		if (plain) return ` class="layer-${layer}">`;
 		return ` class="layer-${layer}-dark">`;
 	};
-	const darkMax = false;
+	const darkMax = (layer == "e" || layer == "m");
 	let isDark = false;
 	if (plain) {
 		isDark = false;
@@ -409,7 +409,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return 'You beat the game!<br>For now...' },
 ];
 
-const endPoints = new Decimal('e1e57');
+const endPoints = new Decimal('e1e61');
 
 function onLoad() { calculateColorValue() };
 

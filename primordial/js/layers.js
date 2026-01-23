@@ -771,12 +771,15 @@ addLayer('q', {
 			let gain = newDecimalZero();
 			if (hasBuyable('q', 11)) gain = gain.add(buyableEffect('q', 11));
 			if (hasBuyable('q', 13)) gain = gain.mul(buyableEffect('q', 13));
+			// calculate max decipher
+			let maxDecipher = new Decimal(100);
+			if (hasBuyable('q', 22)) maxDecipher = maxDecipher.mul(buyableEffect('q', 22));
 			// update deciphered rate
 			if (diff > 0) {
 				if (hasUpgrade('q', 65)) player.q.decipher = player.q.decipher.mul(0.1 ** diff).add(gain.mul(diff));
 				else player.q.decipher = player.q.decipher.mul(0.001 ** diff).add(gain.mul(diff));
 			};
-			if (player.q.decipher.gt(100)) player.q.decipher = new Decimal(100);
+			if (player.q.decipher.gt(maxDecipher)) player.q.decipher = maxDecipher;
 			// calculate insight
 			let mul = newDecimalOne();
 			if (hasBuyable('q', 21)) mul = mul.mul(buyableEffect('q', 21));
@@ -1231,6 +1234,45 @@ addLayer('q', {
 			},
 			costDisplay(cost) { return 'Req: ' + formatWhole(cost) + ' insight' },
 			unlocked() { return hasMilestone('ch', 11) && hasUpgrade('q', 61) },
+		},
+		22: {
+			cost(x) { return new Decimal(10).pow(new Decimal(1e6).pow(x)) },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Knowledge Expansion' },
+			description: 'multiplies maximum deciphering based on the amount of this upgrade bought.',
+			canAfford() { return hasBuyable(this.layer, this.id) ? player.points.gte(this.cost()) : player.q.decipher.gte(100) },
+			purchaseLimit: 99,
+			buy() {
+				if (hasBuyable(this.layer, this.id)) buyStandardBuyable(this, "", "points", getQuarkBuyableBulk());
+				else addBuyables(this.layer, this.id, getQuarkBuyableBulk());
+				player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].min(tmp[this.layer].buyables[this.id].purchaseLimit);
+			},
+			effect(x) { return new Decimal(1e10).pow(x) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: 1e10^x';
+				return text;
+			},
+			costDisplay(cost) {
+				if (hasBuyable(this.layer, this.id)) return 'Cost: ' + formatWhole(cost) + ' points';
+				return 'Req: 100% deciphered';
+			},
+			unlocked() { return hasMilestone('ch', 41) && hasUpgrade('q', 61) },
+		},
+		23: {
+			cost(x) { return new Decimal(1e4).pow(x) },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Chaotic Insight' },
+			description: 'multiplies chaos gain based on the amount of this upgrade bought.',
+			canAfford() { return player.q.insight.gte(this.cost()) },
+			purchaseLimit: 99,
+			buy() { player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(getQuarkBuyableBulk()).min(tmp[this.layer].buyables[this.id].purchaseLimit) },
+			effect(x) { return new Decimal(1.001).pow(x) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: 1.001^x';
+				return text;
+			},
+			costDisplay(cost) { return 'Req: ' + formatWhole(cost) + ' insight' },
+			unlocked() { return hasMilestone('ch', 41) && hasUpgrade('q', 61) },
 		},
 	},
 });
@@ -6203,6 +6245,7 @@ addLayer('w', {
 				let max = new Decimal(20);
 				if (hasMilestone('ch', 7)) max = max.add(milestoneEffect('ch', 7));
 				if (hasMilestone('ch', 38)) max = max.add(50);
+				if (hasMilestone('mo', 1)) max = max.add(50);
 				return max;
 			},
 			buy() { buyMultiCurrencyBuyable(this, ['gi', 'ei'], hasMilestone('ch', 10)) },
@@ -6779,6 +6822,7 @@ addLayer('ch', {
 	canBuyMax() { return hasMilestone('pl', 0) },
 	gainExp() {
 		let gain = newDecimalOne();
+		if (hasBuyable('q', 23)) gain = gain.mul(buyableEffect('q', 23));
 		if (hasBuyable('mo', 21)) gain = gain.mul(buyableEffect('mo', 21));
 		return gain;
 	},
@@ -7067,9 +7111,21 @@ addLayer('ch', {
 			unlocked() { return player.pl.unlocked },
 		},
 		40: {
-			requirementDescription: '158 chaos',
-			effectDescription() { return 'coming soon...' },
+			requirementDescription: "158 chaos",
+			effectDescription() { return "divide <b" + getColorClass(this, REF) + "Tide of Science</b>'s goal by 1e100" },
 			done() { return player.ch.points.gte(158) },
+			unlocked() { return player.pl.unlocked },
+		},
+		41: {
+			requirementDescription: "164 chaos",
+			effectDescription: "unlock two more quark rebuyables",
+			done() { return player.ch.points.gte(164) },
+			unlocked() { return player.pl.unlocked },
+		},
+		42: {
+			requirementDescription: '173 chaos',
+			effectDescription: 'reduce the multicellular organism cost base (1.0575 --> 1.055)',
+			done() { return player.ch.points.gte(173) },
 			unlocked() { return player.pl.unlocked },
 		},
 	},
@@ -7109,7 +7165,7 @@ addLayer('ch', {
 			},
 			goalDescription() {
 				const c = tmp.ch.challenges[this.id];
-				return formatWhole(c.goal) + " good influence<br>Completions: " + formatWhole(challengeCompletions('ch', this.id)) + "/" + c.completionLimit + (c.completionLimit >= this.limitLimit ? " (maxed)" : "") + "<br>";
+				return formatWhole(c.goal) + " good influence<br>Completions: " + formatWhole(challengeCompletions('ch', this.id)) + "/" + formatWhole(c.completionLimit) + (c.completionLimit >= this.limitLimit ? " (maxed)" : "") + "<br>";
 			},
 			canComplete() { return player.gi.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
 			completionLimit() { return (hasUpgrade('pl', 82) ? this.limitLimit : player.ch.points.div(2).floor().max(1).min(this.limitLimit).toNumber()) },
@@ -7135,10 +7191,16 @@ addLayer('ch', {
 		21: {
 			name() { return '<h3' + getColorClass(this, TITLE) + 'Tide of Science' },
 			challengeDescription() { return "- Applies all previous <b" + getColorClass(this, REF) + "Tides</b> at once<br>" },
-			goal() { return new Decimal("1e500").pow(challengeCompletions('ch', this.id) ** 1.1).mul("1e2000") },
+			goal() {
+				let exp = challengeCompletions('ch', this.id) ** 1.1;
+				if (exp > 6) exp = (exp - 6) * 1.2 + 6;
+				let goal = new Decimal("1e500").pow(exp).mul("1e2000");
+				if (hasMilestone('ch', 40)) goal = goal.div(1e100);
+				return goal;
+			},
 			goalDescription() {
 				const c = tmp.ch.challenges[this.id];
-				return formatWhole(c.goal) + " molecules<br>Completions: " + formatWhole(challengeCompletions('ch', this.id)) + "/" + c.completionLimit + (c.completionLimit >= this.limitLimit ? " (maxed)" : "") + "<br>";
+				return formatWhole(c.goal) + " molecules<br>Completions: " + formatWhole(challengeCompletions('ch', this.id)) + "/" + formatWhole(c.completionLimit) + (c.completionLimit >= this.limitLimit ? " (maxed)" : "") + "<br>";
 			},
 			canComplete() { return player.m.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
 			completionLimit() { return (hasUpgrade('pl', 82) ? this.limitLimit : player.ch.points.div(2).floor().max(1).min(this.limitLimit).toNumber()) },
@@ -7184,6 +7246,7 @@ addLayer('mo', {
 	baseAmount() { return player.cl.points },
 	type: 'static',
 	base() {
+		if (hasMilestone('ch', 42)) return 1.055;
 		if (hasMilestone('ch', 33)) return 1.0575;
 		if (hasMilestone('ch', 29)) return 1.063;
 		if (hasMilestone('ch', 15)) return 1.067;
@@ -7399,6 +7462,13 @@ addLayer('mo', {
 			popupTitle: "Attuning...",
 			unlocked() { return isAssimilated(this.layer) },
 		},
+		1: {
+			requirementDescription: "Tier 2: [800]",
+			effectDescription() { return 'increase the cap of <b' + getColorClass(this, TITLE, "w") + 'Race for Knowledge</b> by 50' },
+			done() { return player.mo.points.gte(800) },
+			popupTitle: "Attuning...",
+			unlocked() { return isAssimilated(this.layer) },
+		},
 	}
 });
 
@@ -7431,7 +7501,7 @@ addLayer('pl', {
 	baseAmount() { return player.mo.points },
 	type: 'static',
 	base: 2,
-	exponent: 1.5, // calibrate this for getting the 3rd planet
+	exponent: 1.5, // 1.46
 	canBuyMax: false,
 	gainExp() {
 		let gain = newDecimalOne();
