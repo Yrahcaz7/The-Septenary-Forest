@@ -16,11 +16,11 @@ function changelog() {
 	return `<h1>Changelog:</h1><br>
 		<br><h3>v4.0: The End is Near</h3><br>
 			- Added planets.<br>
-			- Added two milestones to planets.<br>
+			- Added three milestones to planets.<br>
 			- Added thirty-six upgrades to planets.<br>
 			- Added two rebuyables to planets.<br>
 			- Added ${randomStr(4)} to assimilation.<br>
-			- Added ten milestones to chaos.<br>
+			- Added eleven milestones to chaos.<br>
 			- Added ${randomStr(4)} to story.<br>
 			- Added five achievements.<br>
 			- Added one option.<br>
@@ -305,7 +305,7 @@ function buyGoodInfluenceBuyable(obj) {
 	} else {
 		if (hasMilestone('ch', 2)) player.gi.total = player.gi.total.add(obj.cost());
 		else player.gi.points = player.gi.points.sub(obj.cost());
-		addBuyables(obj.layer, obj.id, 1);
+		player[obj.layer].buyables[obj.id] = player[obj.layer].buyables[obj.id].add(1);
 	};
 };
 
@@ -318,6 +318,7 @@ function getQuarkBuyableBulk() {
 function getCellularLifeBuyableBulk() {
 	let bulk = 1;
 	if (hasMilestone('ch', 30)) bulk *= 10;
+	if (hasMilestone('pl', 2)) bulk *= 10;
 	return bulk;
 };
 
@@ -326,6 +327,7 @@ function getKeepFromPlanets(resettingLayer) {
 	let keep = [];
 	if (hasMilestone('pl', 0)) keep.push('milestones');
 	if (hasMilestone('pl', 1)) keep.push('challenges');
+	if (hasMilestone('pl', 2)) keep.push('upgrades');
 	return keep;
 };
 
@@ -409,7 +411,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return 'You beat the game!<br>For now...' },
 ];
 
-const endPoints = new Decimal('e1e61');
+const endPoints = new Decimal('e1e62');
 
 function onLoad() { calculateColorValue() };
 

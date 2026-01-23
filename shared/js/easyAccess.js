@@ -209,14 +209,35 @@ function gridEffect(layer, id) {
 
 //#region buying
 
-function buyStandardBuyable(obj, currencyLayer = obj.layer, currencyName = "points", bulk = 1) {
-	if (currencyLayer === "") player[currencyName] = player[currencyName].sub(run(obj.cost, obj, getBuyableAmount(obj.layer, obj.id)));
-	else player[currencyLayer][currencyName] = player[currencyLayer][currencyName].sub(run(obj.cost, obj, getBuyableAmount(obj.layer, obj.id)));
-	addBuyables(obj.layer, obj.id, bulk);
+function buyStandardBuyable(obj, currencyLayer = obj.layer, currencyName = "points", bulk = 1, limitAmount = false) {
+	if ((modInfo.friendlyErrors === undefined || modInfo.friendlyErrors) && (!layers[obj.layer]?.buyables || !layers[obj.layer].buyables[obj.id])) {
+		console.warn("There was an attempt to use buyStandardBuyable() on a buyable with id '" + obj.id + "' in layer '" + obj.layer + "', but that " + (layers[obj.layer] ? (layers[obj.layer].buyables ? "buyable does not exist" : "layer does not have any buyables") : "layer does not exist") + ".");
+		return;
+	};
+	if (!player[obj.layer] || !player[obj.layer].buyables[obj.id] || !tmp[obj.layer] || tmp[obj.layer].deactivated) {
+		return;
+	};
+	if (currencyLayer === "") {
+		player[currencyName] = player[currencyName].sub(run(obj.cost, obj, player[obj.layer].buyables[obj.id]));
+	} else {
+		player[currencyLayer][currencyName] = player[currencyLayer][currencyName].sub(run(obj.cost, obj, player[obj.layer].buyables[obj.id]));
+	};
+	if (limitAmount) {
+		player[obj.layer].buyables[obj.id] = player[obj.layer].buyables[obj.id].add(bulk).min(tmp[obj.layer].buyables[obj.id].purchaseLimit);
+	} else {
+		player[obj.layer].buyables[obj.id] = player[obj.layer].buyables[obj.id].add(bulk);
+	};
 };
 
-function buyMultiCurrencyBuyable(obj, currencyLayers = [], costless = false, bulk = 1) {
-	const cost = run(obj.cost, obj, getBuyableAmount(obj.layer, obj.id));
+function buyMultiCurrencyBuyable(obj, currencyLayers = [], costless = false, bulk = 1, limitAmount = false) {
+	if ((modInfo.friendlyErrors === undefined || modInfo.friendlyErrors) && (!layers[obj.layer]?.buyables || !layers[obj.layer].buyables[obj.id])) {
+		console.warn("There was an attempt to use buyMultiCurrencyBuyable() on a buyable with id '" + obj.id + "' in layer '" + obj.layer + "', but that " + (layers[obj.layer] ? (layers[obj.layer].buyables ? "buyable does not exist" : "layer does not have any buyables") : "layer does not exist") + ".");
+		return;
+	};
+	if (!player[obj.layer] || !player[obj.layer].buyables[obj.id] || !tmp[obj.layer] || tmp[obj.layer].deactivated) {
+		return;
+	};
+	const cost = run(obj.cost, obj, player[obj.layer].buyables[obj.id]);
 	if (costless) {
 		for (const layer of currencyLayers) {
 			player[layer].total = player[layer].total.add(cost);
@@ -226,5 +247,9 @@ function buyMultiCurrencyBuyable(obj, currencyLayers = [], costless = false, bul
 			player[layer].points = player[layer].points.sub(cost);
 		};
 	};
-	addBuyables(obj.layer, obj.id, bulk);
+	if (limitAmount) {
+		player[obj.layer].buyables[obj.id] = player[obj.layer].buyables[obj.id].add(bulk).min(tmp[obj.layer].buyables[obj.id].purchaseLimit);
+	} else {
+		player[obj.layer].buyables[obj.id] = player[obj.layer].buyables[obj.id].add(bulk);
+	};
 };

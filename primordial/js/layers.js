@@ -1151,10 +1151,7 @@ addLayer('q', {
 			description() { return 'increases deciphering based on the amount of this upgrade bought. becomes less effective based on your ' + randomStr(9) + '.' },
 			canAfford() { return player.q.points.gte(this.cost()) },
 			purchaseLimit() { return player.h.limitsBroken >= 3 ? 1e9 : 99 },
-			buy() {
-				buyStandardBuyable(this, 'q', 'points', getQuarkBuyableBulk());
-				player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].min(tmp[this.layer].buyables[this.id].purchaseLimit);
-			},
+			buy() { buyStandardBuyable(this, 'q', 'points', getQuarkBuyableBulk(), true) },
 			effect(x) {
 				if (hasUpgrade('q', 64)) return new Decimal(100).pow(x).div(getGlitch(true).pow(92))
 				if (hasUpgrade('q', 62)) return new Decimal(100).pow(x).div(getGlitch(true).pow(97.25))
@@ -1201,10 +1198,7 @@ addLayer('q', {
 			description: 'multiplies deciphering based on the amount of this upgrade bought.',
 			canAfford() { return player.e.points.gte(this.cost()) },
 			purchaseLimit: 99,
-			buy() {
-				buyStandardBuyable(this, 'e', 'points', getQuarkBuyableBulk());
-				player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].min(tmp[this.layer].buyables[this.id].purchaseLimit);
-			},
+			buy() { buyStandardBuyable(this, 'e', 'points', getQuarkBuyableBulk(), true) },
 			effect(x) { return new Decimal(10).pow(x) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
@@ -2327,8 +2321,8 @@ addLayer('ds', {
 			name() { return '<h3' + getColorClass(this, REF) + 'Point Deficiency' },
 			challengeDescription: "- Applies all previous demon soul challenge effects at once<br> - Point gain is log10(log10(gain+1)+1)<br>",
 			countsAs: [11, 12, 21, 22, 31],
-			goalDescription() { return format('e5.29e13') + ' hexes and ' + format(1000) + ' points<br>' },
-			canComplete() { return player.h.points.gte('e5.29e13') && player.points.gte(1000) },
+			goalDescription() { return format('e5.29e13') + ' hexes and ' + formatWhole(666) + ' points<br>' },
+			canComplete() { return player.h.points.gte('e5.29e13') && player.points.gte(666) },
 			rewardDescription: "make point gain softcap weaker (^0.25 --> ^0.3)",
 			doReset: true,
 			unlocked() { return hasUpgrade('ds', 32) && hasChallenge('ds', 31) },
@@ -2663,17 +2657,17 @@ addLayer('a', {
 			title() { return '<b' + getColorClass(this, TITLE) + 'The Fallen' },
 			description: 'multiplies demon soul gain based on your best atoms minus your current atoms',
 			cost: 2,
-			effect() { return player.a.best.mul(1.5).sub(player.a.points).pow(1.05) },
+			effect() { return player.a.best.mul(1.5).sub(player.a.points).add(1).pow(1.05) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
-				if (options.nerdMode) text += '<br>formula:<br>(1.5x-y)^1.05';
+				if (options.nerdMode) text += '<br>formula:<br>(1.5x-y+1)^1.05';
 				return text;
 			},
 			branches: [51],
 			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 31) && !hasUpgrade('a', 41)) },
 		},
 		51: {
-			title() { return '<b' + getColorClass(this, TITLE) + 'Famed Atoms\' Donations' },
+			title() { return "<b" + getColorClass(this, TITLE) + "Famed Atoms' Donations" },
 			description() {
 				let text = 'multiplies subatomic particle gain based on your number of achievements';
 				if (options.nerdMode) text += '<br>formula: x^1.25';
@@ -2747,10 +2741,10 @@ addLayer('a', {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Demons Inside' },
 			description: 'multiplies demon soul gain based on your best atoms times your current atoms',
 			cost: 4,
-			effect() { return player.a.best.mul(player.a.points).mul(2.5).pow(0.15) },
+			effect() { return player.a.best.mul(player.a.points).mul(2.5).add(1).pow(0.15) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
-				if (options.nerdMode) text += '<br>formula: (2.5xy)^0.15';
+				if (options.nerdMode) text += '<br>formula: (2.5xy+1)^0.15';
 				return text;
 			},
 			unlocked() { return (hasMilestone('a', 10) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) || (!hasUpgrade('a', 62) && !hasUpgrade('a', 72) && !hasUpgrade('a', 73)) },
@@ -3469,10 +3463,10 @@ addLayer('p', {
 			title() { return '<b' + getColorClass(this, TITLE) + 'The Point of Prayers' },
 			description: 'multiplies point gain based on your prayers',
 			cost: 'e3.94e13',
-			effect() { return player.p.points.pow(0.25) },
+			effect() { return player.p.points.add(1).pow(0.25) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
-				if (options.nerdMode) text += '<br>formula: x^0.25';
+				if (options.nerdMode) text += '<br>formula: (x+1)^0.25';
 				return text;
 			},
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) },
@@ -3481,10 +3475,10 @@ addLayer('p', {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Prayer Influence+' },
 			description: 'multiplies essence gain based on your prayers',
 			cost: 'e4.38e13',
-			effect() { return player.p.points.pow(0.333) },
+			effect() { return player.p.points.add(1).pow(0.333) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
-				if (options.nerdMode) text += '<br>formula: x^0.333';
+				if (options.nerdMode) text += '<br>formula: (x+1)^0.333';
 				return text;
 			},
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) },
@@ -3499,7 +3493,7 @@ addLayer('p', {
 	clickables: {
 		11: {
 			title: 'RESET',
-			display: 'resets your prayer upgrades, divinity, holiness, and hymns (used for if you can\'t get some researches anymore)',
+			display: "resets your prayer upgrades, divinity, holiness, and hymns (used for if you can't get some researches anymore)",
 			canClick() { return true },
 			onClick() {
 				if (confirm('Are you really sure you want to reset your prayer upgrades, divinity, holiness, and hymns?')) {
@@ -4947,10 +4941,10 @@ addLayer('m', {
 			title() { return '<b' + getColorClass(this, TITLE) + 'CH<span style="font-size: 0.8em">4</span>, Methane' },
 			description: 'gives extra unique molecules based on your demon souls',
 			cost: 25000000,
-			effect() { return player.ds.points.pow(10).log10().add(1).floor() },
+			effect() { return player.ds.points.add(1).pow(10).log10().add(1).floor() },
 			effectDisplay(eff) {
 				let text = '+' + formatWhole(eff);
-				if (options.nerdMode) text += '<br>formula: log(x^10)+1';
+				if (options.nerdMode) text += '<br>formula: log((x+1)^10)+1';
 				return text;
 			},
 			unlocked() { return hasUpgrade('m', 31) && hasUpgrade('m', 32) && hasUpgrade('m', 33) },
@@ -6511,7 +6505,7 @@ addLayer('cl', {
 			description: 'exponentiates core gain multiplier and multiplies atom gain based on the amount of this upgrade bought.',
 			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 750,
-			buy() { buyStandardBuyable(this, 'cl', 'points', getCellularLifeBuyableBulk()) },
+			buy() { buyStandardBuyable(this, 'cl', 'points', getCellularLifeBuyableBulk(), true) },
 			effect(x) {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return [x.add(1).pow(0.05), new Decimal(1.1).pow(x)];
 				return [x.add(1).pow(0.05), x.add(1).pow(1.5)];
@@ -6534,7 +6528,7 @@ addLayer('cl', {
 			description: 'exponentiates demon soul gain multiplier and multiplies cellular life gain based on the amount of this upgrade bought.',
 			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 750,
-			buy() { buyStandardBuyable(this, 'cl', 'points', getCellularLifeBuyableBulk()) },
+			buy() { buyStandardBuyable(this, 'cl', 'points', getCellularLifeBuyableBulk(), true) },
 			effect(x) {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return [x.add(1).pow(0.0175), x.add(1).pow(0.55)];
 				return [x.add(1).pow(0.0175), x.add(1).pow(0.5)];
@@ -6558,7 +6552,7 @@ addLayer('cl', {
 			description: 'exponentiates subatomic particle gain multiplier and multiplies cellular life gain based on the amount of this upgrade bought.',
 			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 750,
-			buy() { buyStandardBuyable(this, 'cl', 'points', getCellularLifeBuyableBulk()) },
+			buy() { buyStandardBuyable(this, 'cl', 'points', getCellularLifeBuyableBulk(), true) },
 			effect(x) {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return [x.add(1).pow(0.025), x.add(1).pow(0.8)];
 				return [x.add(1).pow(0.025), x.add(1).pow(0.75)];
@@ -6579,7 +6573,7 @@ addLayer('cl', {
 			description: 'exponentiates essence gain multiplier and exponentiates core gain multiplier based on the amount of this upgrade bought.',
 			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 400,
-			buy() { buyStandardBuyable(this, 'cl', 'points', getCellularLifeBuyableBulk()) },
+			buy() { buyStandardBuyable(this, 'cl', 'points', getCellularLifeBuyableBulk(), true) },
 			effect(x) { return [x.add(1).pow(0.075), x.add(1).pow(0.36)] },
 			effectDisplay(eff) {
 				let text = '^' + format(eff[0]) + '<br>and ^' + format(eff[1]);
@@ -6594,7 +6588,7 @@ addLayer('cl', {
 			description: 'increases protein found from cellular life based on your best cellular life and the amount of this upgrade bought.',
 			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 1e9,
-			buy() { buyStandardBuyable(this, 'cl', 'points', getCellularLifeBuyableBulk()) },
+			buy() { buyStandardBuyable(this, 'cl', 'points', getCellularLifeBuyableBulk(), true) },
 			effect(x) { return player.cl.best.mul(x.pow(2)).add(1).pow(0.25) },
 			effectDisplay(eff) {
 				let text = '+' + format(eff);
@@ -6608,7 +6602,7 @@ addLayer('cl', {
 			description: 'multiplies protein found from cellular life based on your wars and the amount of this upgrade bought.',
 			canAfford() { return player.cl.protein.gte(this.cost()) },
 			purchaseLimit: 1e9,
-			buy() { buyStandardBuyable(this, 'cl', 'protein', getCellularLifeBuyableBulk()) },
+			buy() { buyStandardBuyable(this, 'cl', 'protein', getCellularLifeBuyableBulk(), true) },
 			effect(x) { return player.w.points.mul(x).add(1).pow(1.5) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
@@ -6623,7 +6617,7 @@ addLayer('cl', {
 			description: 'multiplies atom gain based on the amount of this upgrade bought.',
 			canAfford() { return player.cl.protein.gte(this.cost()) },
 			purchaseLimit: 1e9,
-			buy() { buyStandardBuyable(this, 'cl', 'protein', getCellularLifeBuyableBulk()) },
+			buy() { buyStandardBuyable(this, 'cl', 'protein', getCellularLifeBuyableBulk(), true) },
 			effect(x) { return new Decimal(6).pow(x) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
@@ -6641,7 +6635,7 @@ addLayer('cl', {
 			description: 'multiplies protein found from cellular life based on the amount of this upgrade bought.',
 			canAfford() { return player.m.points.gte(this.cost()) },
 			purchaseLimit() { return player.h.limitsBroken >= 2 ? 1e9 : 30 },
-			buy() { buyStandardBuyable(this, 'm', 'points', getCellularLifeBuyableBulk()) },
+			buy() { buyStandardBuyable(this, 'm', 'points', getCellularLifeBuyableBulk(), true) },
 			effect(x) { return new Decimal(3).pow(x) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
@@ -6656,7 +6650,7 @@ addLayer('cl', {
 			description: 'multiplies protein found from cellular life based on the amount of this upgrade bought.',
 			canAfford() { return player.cl.protein.gte(this.cost()) },
 			purchaseLimit: 1e9,
-			buy() { buyStandardBuyable(this, 'cl', 'protein', getCellularLifeBuyableBulk()) },
+			buy() { buyStandardBuyable(this, 'cl', 'protein', getCellularLifeBuyableBulk(), true) },
 			effect(x) { return new Decimal(5).pow(x) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
@@ -6671,7 +6665,7 @@ addLayer('cl', {
 			description: 'increases passive protein gain and multiplies protein found from cellular life based on the amount of this upgrade bought.',
 			canAfford() { return player.cl.protein.gte(this.cost()) },
 			purchaseLimit: 1e9,
-			buy() { buyStandardBuyable(this, 'cl', 'protein', getCellularLifeBuyableBulk()) },
+			buy() { buyStandardBuyable(this, 'cl', 'protein', getCellularLifeBuyableBulk(), true) },
 			effect(x) {
 				if (hasMilestone('w', 20)) return [new Decimal(1.36).pow(x).sub(1).mul(10), x.mul(50).add(1).pow(3)];
 				if (hasMilestone('w', 19)) return [new Decimal(1.175).pow(x).sub(1).mul(10), x.mul(25).add(1).pow(3)];
@@ -6694,7 +6688,7 @@ addLayer('cl', {
 			description: 'multiplies protein found from cellular life based the amount of this upgrade bought.',
 			canAfford() { return player.cl.points.gte(this.cost()) },
 			purchaseLimit: 1e9,
-			buy() { buyStandardBuyable(this, 'cl', 'points', getCellularLifeBuyableBulk()) },
+			buy() { buyStandardBuyable(this, 'cl', 'points', getCellularLifeBuyableBulk(), true) },
 			effect(x) { return x.add(1).pow(10) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
@@ -6709,7 +6703,7 @@ addLayer('cl', {
 			description: 'multiplies atom gain based on the amount of this upgrade bought.',
 			canAfford() { return player.cl.protein.gte(this.cost()) },
 			purchaseLimit: 1e9,
-			buy() { buyStandardBuyable(this, 'cl', 'protein', getCellularLifeBuyableBulk()) },
+			buy() { buyStandardBuyable(this, 'cl', 'protein', getCellularLifeBuyableBulk(), true) },
 			effect(x) { return new Decimal(10).pow(x) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
@@ -6728,7 +6722,7 @@ addLayer('cl', {
 			description: 'multiplies evil influence gain based on the amount of this upgrade bought.',
 			canAfford() { return player.cl.protein.gte(this.cost()) },
 			purchaseLimit: 60,
-			buy() { buyStandardBuyable(this, 'cl', 'protein', getCellularLifeBuyableBulk()) },
+			buy() { buyStandardBuyable(this, 'cl', 'protein', getCellularLifeBuyableBulk(), true) },
 			effect(x) { return x.add(1).pow(hasMilestone('w', 20) ? 0.155 : 0.125) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
@@ -7128,6 +7122,12 @@ addLayer('ch', {
 			done() { return player.ch.points.gte(173) },
 			unlocked() { return player.pl.unlocked },
 		},
+		43: {
+			requirementDescription: "186 chaos",
+			effectDescription: "coming soon...",
+			done() { return player.ch.points.gte(186) },
+			unlocked() { return player.pl.unlocked },
+		},
 	},
 	challenges: {
 		11: {
@@ -7192,9 +7192,7 @@ addLayer('ch', {
 			name() { return '<h3' + getColorClass(this, TITLE) + 'Tide of Science' },
 			challengeDescription() { return "- Applies all previous <b" + getColorClass(this, REF) + "Tides</b> at once<br>" },
 			goal() {
-				let exp = challengeCompletions('ch', this.id) ** 1.1;
-				if (exp > 6) exp = (exp - 6) * 1.2 + 6;
-				let goal = new Decimal("1e500").pow(exp).mul("1e2000");
+				let goal = new Decimal("1e500").pow(challengeCompletions('ch', this.id) ** 1.1).mul("1e2000");
 				if (hasMilestone('ch', 40)) goal = goal.div(1e100);
 				return goal;
 			},
@@ -7204,7 +7202,7 @@ addLayer('ch', {
 			},
 			canComplete() { return player.m.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions('ch', this.id) < tmp.ch.challenges[this.id].completionLimit},
 			completionLimit() { return (hasUpgrade('pl', 82) ? this.limitLimit : player.ch.points.div(2).floor().max(1).min(this.limitLimit).toNumber()) },
-			limitLimit: 10,
+			limitLimit: 6,
 			onEnter() { player.gi.unlocked = false; player.ei.unlocked = false },
 			onExit() { player.gi.unlocked = true; player.ei.unlocked = true },
 			rewardDescription: "multiplies cellular life gain and protein gain based on completions",
@@ -7236,6 +7234,7 @@ addLayer('mo', {
 		assimilating: null,
 		assimilated: [],
 		hadLayers: [],
+		auto_buyable_11: false,
 	}},
 	color: '#88CC44',
 	branches: ['pl'],
@@ -7268,6 +7267,10 @@ addLayer('mo', {
 	autoPrestige() { return hasUpgrade('pl', 84) },
 	hotkeys: [{key: 'o', description: 'O: Reset for multicellular organisms', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.ch.unlocked || player.mo.unlocked },
+	automate() {
+		updateBuyableTemp(this.layer);
+		if (hasMilestone('pl', 2) && player.mo.auto_buyable_11) buyBuyable("mo", 11);
+	},
 	effect() {
 		if (isAssimilated(this.layer)) {
 			let exp = 0.15;
@@ -7280,7 +7283,7 @@ addLayer('mo', {
 		if (isAssimilated(this.layer)) return 'which multiplies cellular life gain by <h2 class="layer-mo">' + format(tmp.mo.effect) + '</h2>x';
 	},
 	doReset(resettingLayer) {
-		let keep = ['clickables', 'assimilating', 'assimilated', 'hadLayers'];
+		let keep = ['clickables', 'assimilating', 'assimilated', 'hadLayers', 'auto_buyable_11'];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (layers[resettingLayer].row > this.row) layerDataReset('mo', keep);
 	},
@@ -7501,7 +7504,7 @@ addLayer('pl', {
 	baseAmount() { return player.mo.points },
 	type: 'static',
 	base: 2,
-	exponent: 1.5, // 1.46
+	exponent: 1.46,
 	canBuyMax: false,
 	gainExp() {
 		let gain = newDecimalOne();
@@ -7545,7 +7548,12 @@ addLayer('pl', {
 			effectDescription() { return "you can bulk 10x relic activation, gain +10% of your molecule gain per second, you can bulk 10x good influence rebuyables if you have the <b" + getColorClass(this, REF, "ch", true) + "28th chaos milestone</b>, keep all challenges on lesser resets, and unlock air rebuyables" },
 			done() { return player.pl.points.gte(2) },
 		},
-		// next: you can bulk 10x protein rebuyables
+		2: {
+			requirementDescription: "3 planets",
+			effectDescription() { return "you can bulk 10x cellular life rebuyables, you can autobuy <b" + getColorClass(this, TITLE, "a") + "Atom</b> <b" + getColorClass(this, TITLE, "mo") + "Synergy</b>, keep all upgrades on lesser resets, and unlock another air rebuyable" },
+			done() { return player.pl.points.gte(3) },
+			toggles: [["mo", "auto_buyable_11"]],
+		},
 	},
 	buyables: {
 		11: {
@@ -7579,6 +7587,22 @@ addLayer('pl', {
 			},
 			currencyDisplayName: 'multicellular organisms',
 			unlocked() { return hasMilestone('pl', 1) },
+		},
+		13: {
+			cost(x) { return new Decimal(1.1).pow(x).mul(200) },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Chaotic Composition' },
+			description: 'multiplies air gain based your atoms and the amount of this upgrade bought.',
+			canAfford() { return player.ch.points.gte(this.cost()) },
+			purchaseLimit: 99,
+			buy() { addBuyables(this.layer, this.id, 1) },
+			effect(x) { return player.a.points.add(1).log10().add(1).pow(x) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^y';
+				return text;
+			},
+			costDisplay(cost) { return 'Req: ' + formatWhole(cost) + ' chaos' },
+			unlocked() { return hasMilestone('pl', 2) },
 		},
 	},
 	upgrades: {
