@@ -52,8 +52,12 @@ function getRawTabContent(layer, name = "") {
 		};
 		content.push("blank");
 	} else if (layer == "ds") {
-		if (name == "Demon Gateway") {
-			content.push("challenges");
+		if (name == "Purification") {
+			content.push(["display-text", "You have purified <h2 class='layer-ds'>" + formatWhole(getPurifiedDemonSouls()) + "</h2> demon souls"]);
+			content.push("blank");
+			content.push(["challenge", 101]);
+		} else if (name == "Demon Gateway") {
+			content.push(["challenges", [1, 2, 3]]);
 		} else {
 			content.push("milestones");
 			content.push("buyables");
@@ -97,7 +101,7 @@ function getRawTabContent(layer, name = "") {
 		content.push("upgrades");
 		content.push("blank");
 		if (tmp.p.clickables[11].unlocked) {
-			content.push("clickables");
+			content.push(["clickable", 11]);
 			content.push("blank");
 		};
 	} else if (layer == "s") {
@@ -178,17 +182,14 @@ function getRawTabContent(layer, name = "") {
 		if (name == "Protein") {
 			content.push(["display-text", 'You are currently finding <h2 class="layer-cl">' + format(player.cl.protein_conv) + '</h2> protein per cellular life<br>' + (player.cl.protein_gain.gt(0) ? 'You are currently gaining <h2 class="layer-cl">' + format(player.cl.protein_gain) + '</h2> protein per second<br>' : '') + 'You currently have <h2 class="layer-cl">' + format(player.cl.protein) + '</h2> protein']);
 			content.push("blank");
-			content.push(["buyables", "3"]);
-			content.push(["buyables", "4"]);
-			content.push(["buyables", "5"]);
+			content.push(["buyables", [3, 4, 5]]);
 			content.push("blank");
 			if (tmp.cl.clickables[11].unlocked) {
 				content.push("clickables");
 				content.push("blank");
 			};
 		} else if (name == "Tissues") {
-			content.push(["buyables", "1"]);
-			content.push(["buyables", "2"]);
+			content.push(["buyables", [1, 2]]);
 			content.push("blank");
 		} else {
 			content.push("milestones");
@@ -261,7 +262,7 @@ function getRawTabContent(layer, name = "") {
 			content.push([prefix + "display-text", 'You have <h2 class="layer-pl">' + format(player.pl.air) + '</h2> air']);
 			if (hasMilestone('pl', 1)) {
 				content.push("blank");
-				content.push(["buyables", "1"]);
+				content.push(["buyables", [1]]);
 			};
 			content.push("blank");
 			content.push(prefix + "upgrades");

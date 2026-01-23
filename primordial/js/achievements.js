@@ -825,8 +825,8 @@ addLayer('A', {
 		},
 		174: {
 			name() {return 'Chaos of ' + randomStr(7)},
-			done() { return player.ch.points.gte(512) },
-			tooltip: 'obtain 512 chaos.',
+			done() { return player.ch.points.gte(256) },
+			tooltip: 'obtain 256 chaos.',
 			unlocked() { return hasAchievement('A', 173) },
 			popupColor: '#FFFFFF',
 		},
@@ -865,6 +865,13 @@ addLayer('A', {
 			unlocked() { return hasAchievement('A', 183) },
 			popupColor: '#88CC44',
 		},
+		185: {
+			name: 'Society of Organisms',
+			done() { return player.mo.points.gte(10_000) },
+			tooltip: 'obtain 10,000 multicellular organisms.',
+			unlocked() { return hasAchievement('A', 184) },
+			popupColor: '#88CC44',
+		},
 		186: {
 			name: 'Planet Habitation',
 			done() { return player.mo.points.gte(10) && player.pl.total.gte(1) },
@@ -880,9 +887,9 @@ addLayer('A', {
 			popupColor: '#3C51AF',
 		},
 		192: {
-			name: 'Solar System',
-			done() { return player.pl.points.gte(10) },
-			tooltip: 'obtain 10 planets.',
+			name: 'Observable Planets',
+			done() { return player.pl.points.gte(5) },
+			tooltip: 'obtain 5 planets.',
 			unlocked() { return hasAchievement('A', 191) },
 			popupColor: '#3C51AF',
 		},

@@ -20,9 +20,9 @@ function changelog() {
 			- Added thirty-six upgrades to planets.<br>
 			- Added two rebuyables to planets.<br>
 			- Added ${randomStr(4)} to assimilation.<br>
-			- Added eleven milestones to chaos.<br>
+			- Added fourteen milestones to chaos.<br>
 			- Added ${randomStr(4)} to story.<br>
-			- Added five achievements.<br>
+			- Added six achievements.<br>
 			- Added one option.<br>
 		<br><h3>v3.6: Even More Assimilation</h3><br>
 			- Added more to assimilation.<br>
@@ -295,6 +295,20 @@ function getRelicActivationBulk() {
 	return bulk;
 };
 
+function getPurifiedDemonSouls() {
+	return Math.min(challengeCompletions('ds', 101), player.ds.points.toNumber());
+};
+
+function getPurificationReq() {
+	return new Decimal(1000).pow(getPurifiedDemonSouls() + 1);
+};
+
+function getQuarkBuyableBulk() {
+	let bulk = 1;
+	if (hasMilestone('ch', 30)) bulk *= 10;
+	return bulk;
+};
+
 function buyGoodInfluenceBuyable(obj) {
 	if (hasMilestone('ch', 27)) {
 		let bulk = 10;
@@ -307,12 +321,6 @@ function buyGoodInfluenceBuyable(obj) {
 		else player.gi.points = player.gi.points.sub(obj.cost());
 		player[obj.layer].buyables[obj.id] = player[obj.layer].buyables[obj.id].add(1);
 	};
-};
-
-function getQuarkBuyableBulk() {
-	let bulk = 1;
-	if (hasMilestone('ch', 30)) bulk *= 10;
-	return bulk;
 };
 
 function getCellularLifeBuyableBulk() {
@@ -411,7 +419,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return 'You beat the game!<br>For now...' },
 ];
 
-const endPoints = new Decimal('e1e62');
+const endPoints = new Decimal('e1e63');
 
 function onLoad() { calculateColorValue() };
 

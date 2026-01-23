@@ -671,6 +671,8 @@ addLayer('q', {
 		auto_buyable_12: false,
 		auto_buyable_13: false,
 		auto_buyable_21: false,
+		auto_buyable_22: false,
+		auto_buyable_23: false,
 	}},
 	color: "#DB5196",
 	branches: ['sp'],
@@ -742,6 +744,8 @@ addLayer('q', {
 		if (hasMilestone('ch', 20) && player.q.auto_buyable_12) buyBuyable("q", 12);
 		if (hasMilestone('ch', 22) && player.q.auto_buyable_13) buyBuyable("q", 13);
 		if (hasMilestone('ch', 22) && player.q.auto_buyable_21) buyBuyable("q", 21);
+		if (hasMilestone('ch', 46) && player.q.auto_buyable_22) buyBuyable("q", 22);
+		if (hasMilestone('ch', 46) && player.q.auto_buyable_23) buyBuyable("q", 23);
 	},
 	doReset(resettingLayer) {
 		if (getActivatedRelics() >= 30 && resettingLayer == 'r') return;
@@ -750,7 +754,7 @@ addLayer('q', {
 		if (hasMilestone('ei', 2) && resettingLayer == 'ei') return;
 		if (hasMilestone('w', 9) && resettingLayer == 'w') return;
 		if (hasMilestone('cl', 5) && resettingLayer == 'cl') return;
-		let keep = ['auto_upgrades', 'auto_buyable_11', 'auto_buyable_12', 'auto_buyable_13', 'auto_buyable_21'];
+		let keep = ['auto_upgrades', 'auto_buyable_11', 'auto_buyable_12', 'auto_buyable_13', 'auto_buyable_21', 'auto_buyable_22', 'auto_buyable_23'];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (hasMilestone('sp', 3) && resettingLayer == 'sp') keep.push("milestones");
 		if (hasMilestone('sp', 5) && resettingLayer == 'sp') keep.push("upgrades");
@@ -2012,6 +2016,8 @@ addLayer('ds', {
 		points: newDecimalZero(),
 		best: newDecimalZero(),
 		total: newDecimalZero(),
+		threads: newDecimalZero(),
+		threadGainBest: newDecimalZero(),
 		auto_upgrades: false,
 		auto_buyables: false,
 	}},
@@ -2071,7 +2077,7 @@ addLayer('ds', {
 	doReset(resettingLayer) {
 		if (hasMilestone('m', 14) && resettingLayer == 'm') return;
 		if (hasMilestone('gi', 5) && resettingLayer == 'gi') return;
-		let keep = ['auto_upgrades', 'auto_buyables'];
+		let keep = ["threads", "threadGainBest", "auto_upgrades", "auto_buyables"];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		const saveUpg = [];
 		if (hasMilestone('m', 1) && (resettingLayer == 'm' || resettingLayer == 'gi' || resettingLayer == 'ei')) {
@@ -2086,6 +2092,18 @@ addLayer('ds', {
 			player[this.layer].upgrades = saveUpg;
 		};
 	},
+	threadGain() {
+		let gain = newDecimalZero();
+		if (inChallenge("ds", 101)) {
+			if (hasMilestone("ch", 45)) gain = gain.add(tmp.pl.effect.add(1).pow(0.1));
+			else gain = gain.add(tmp.pl.effect.add(1).log10());
+		};
+		return gain;
+	},
+	update(diff) {
+		player.ds.threads = player.ds.threads.add(tmp.ds.threadGain.mul(diff));
+		if (tmp.ds.threadGain.gt(player.ds.threadGainBest)) player.ds.threadGainBest = tmp.ds.threadGain;
+	},
 	tabFormat: {
 		"Demonic Curses": {
 			content: getTab('ds'),
@@ -2093,6 +2111,10 @@ addLayer('ds', {
 		"Demon Gateway": {
 			content: getUnlockableTab('ds', "Demon Gateway"),
 			unlocked() { return hasUpgrade('ds', 22) },
+		},
+		Purification: {
+			content: getUnlockableTab('ds', "Purification"),
+			unlocked() { return hasMilestone('ch', 44) },
 		},
 	},
 	milestones: {
@@ -2326,6 +2348,39 @@ addLayer('ds', {
 			rewardDescription: "make point gain softcap weaker (^0.25 --> ^0.3)",
 			doReset: true,
 			unlocked() { return hasUpgrade('ds', 32) && hasChallenge('ds', 31) },
+		},
+		101: {
+			name() { return '<h3' + getColorClass(this, TITLE, "ds", true) + 'Purify Souls' },
+			buttonText: ["Purify", "Cannot purify", "Enter purification", "Enter purification"],
+			challengeDescription: 'Temporarily converts all your air production into Thread production. Get enough Threads, and you can purify your demon souls for rewards.<br>',
+			goalDescription() {
+				let text = "You have " + formatWhole(player.ds.threads);
+				if (!maxedChallenge(this.layer, this.id)) text += "/" + formatWhole(getPurificationReq());
+				text += " Threads.<br>";
+				text += "(" + format(tmp.ds.threadGain) + "/sec)<br>";
+				if (options.nerdMode) text += "Best: (" + format(player.ds.threadGainBest) + "/sec)<br>";
+				return text;
+			},
+			rewardDescription() { // use effects like this: `if (getPurifiedDemonSouls() >= x) gain = gain.mul(challengeEffect("ds", 101)[y]);`
+				const completions = challengeCompletions(this.layer, this.id);
+				const effects = challengeEffect(this.layer, this.id);
+				let text = '';
+				// current rewards
+				if (completions >= 1) text += "multiply good influence gain based on your Threads<br>Currently: " + format(effects[0]) + "x";
+				else text += "nothing currently";
+				// next reward
+				text += '<br><br>Next reward: ';
+				if (completions == 0) text += "multiply good influence gain based on your Threads<br>Currently: " + format(effects[0]) + "x";
+				else if (completions == 1) text += "improve the first purified souls effect";
+				else text += "you have gotten all the rewards!";
+				return text;
+			},
+			rewardEffect() { return [
+				player.ds.threads.add(1).log10().div(getPurifiedDemonSouls() >= 2 ? 9 : 10).add(1),
+			]},
+			canComplete() { return player.ds.threads.gte(getPurificationReq()) && challengeCompletions(this.layer, this.id) < tmp[this.layer].challenges[this.id].completionLimit },
+			completionLimit() { return player.ds.points.toNumber() },
+			style: {width: '450px', height: '450px', 'border-color': '#BA0035', 'border-radius': '70px', 'background-color': '#200000', 'color': 'var(--color)'},
 		},
 	},
 });
@@ -5078,6 +5133,7 @@ addLayer('gi', {
 	canBuyMax() { return true },
 	gainExp() {
 		let gain = newDecimalOne();
+		if (getPurifiedDemonSouls() >= 1) gain = gain.mul(challengeEffect("ds", 101)[0]);
 		if (player.gi.req_devotion.gt(1)) gain = gain.mul(player.gi.req_devotion);
 		if (hasUpgrade('ei', 24)) gain = gain.mul(upgradeEffect('ei', 24));
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
@@ -7124,8 +7180,27 @@ addLayer('ch', {
 		},
 		43: {
 			requirementDescription: "186 chaos",
-			effectDescription: "coming soon...",
+			effectDescription() { return "make the <b" + getColorClass(this, REF, "gi") + "Good Influence</b> <b" + getColorClass(this, REF, "mo") + "Synergy</b> softcap weaker (/4 --> /2) and increase <b" + getColorClass(this, REF, "pl") + "Chaotic Air</b>'s effect exponent (0.5 -> 1.25)" },
 			done() { return player.ch.points.gte(186) },
+			unlocked() { return player.pl.unlocked },
+		},
+		44: {
+			requirementDescription: "194 chaos",
+			effectDescription() { return "unlock <b" + getColorClass(this, REF, "ds") + "Purification</b>, a new demon souls tab" },
+			done() { return player.ch.points.gte(194) },
+			unlocked() { return player.pl.unlocked },
+		},
+		45: {
+			requirementDescription: "203 chaos",
+			effectDescription: "improve the Thread gain formula",
+			done() { return player.ch.points.gte(203) },
+			unlocked() { return player.pl.unlocked },
+		},
+		46: {
+			requirementDescription: "212 chaos",
+			effectDescription: "you can autobuy the fifth and sixth quark rebuyables",
+			done() { return player.ch.points.gte(212) },
+			toggles: [['q', 'auto_buyable_22'], ['q', 'auto_buyable_23']],
 			unlocked() { return player.pl.unlocked },
 		},
 	},
@@ -7518,15 +7593,18 @@ addLayer('pl', {
 			if (hasUpgrade("pl", id)) eff = eff.mul(upgradeEffect("pl", id));
 		};
 		if (hasBuyable('pl', 12)) eff = eff.mul(buyableEffect('pl', 12));
+		if (hasBuyable('pl', 13)) eff = eff.mul(buyableEffect('pl', 13));
 		return eff;
 	},
-	effectDescription() { return "which generate <h2 class='layer-pl'>" + format(tmp.pl.effect) + "</h2> air per second" },
+	effectDescription() { return "which generate <h2 class='layer-pl'>" + format(inChallenge("ds", 101) ? 0 : tmp.pl.effect) + "</h2> air per second" },
 	doReset(resettingLayer) {
 		let keep = [];
 		if (layers[resettingLayer].row > this.row) layerDataReset("pl", keep);
 	},
 	update(diff) {
-		player.pl.air = player.pl.air.add(tmp.pl.effect.mul(diff));
+		if (!inChallenge("ds", 101)) {
+			player.pl.air = player.pl.air.add(tmp.pl.effect.mul(diff));
+		};
 	},
 	tabFormat: {
 		Progress: {
@@ -7933,10 +8011,10 @@ addLayer('pl', {
 		83: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Chaotic Air</b>' },
 			description: 'multiplies air gain based on your chaos',
-			effect() { return player.ch.points.add(1).pow(0.5) },
+			effect() { return player.ch.points.add(1).pow(hasMilestone('ch', 43) ? 1.25 : 0.5) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
-				if (options.nerdMode) text += '<br>formula: (x+1)^0.5';
+				if (options.nerdMode) text += '<br>formula: (x+1)^' + (hasMilestone('ch', 43) ? '1.25' : '0.5');
 				return text;
 			},
 			cost: 1e17,
