@@ -2137,11 +2137,9 @@ addLayer("ds", {
 		};
 		const done = req => player.ds.points.gte(req);
 		for (const key in obj) {
-			if (obj[key].requirement) {
-				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " demon soul" + (obj[key].requirement === 1 ? "" : "s");
-				obj[key].done = done.bind(null, obj[key].requirement);
-				delete obj[key].requirement;
-			};
+			obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " demon soul" + (obj[key].requirement === 1 ? "" : "s");
+			obj[key].done = done.bind(null, obj[key].requirement);
+			delete obj[key].requirement;
 		};
 		return obj;
 	})(),
@@ -3118,9 +3116,8 @@ addLayer("p", {
 				effectDescription: "prayers generate twice as much divinity",
 			},
 			2: {
-				requirementDescription: "2,500 prayers and 250 hymns",
+				requirements: [2500, 250],
 				effectDescription: "divinity gain is raised to the power of 1.5",
-				done() { return player.p.points.gte(2500) && player.p.hymns.gte(250)},
 				unlocked() { return hasUpgrade("p", 41) || player.s.unlocked },
 			},
 			3: {
@@ -3130,8 +3127,13 @@ addLayer("p", {
 			},
 		};
 		const done = req => player.p.points.gte(req);
+		const doneHymns = (req, reqHymns) => player.p.points.gte(req) && player.p.hymns.gte(reqHymns);
 		for (const key in obj) {
-			if (obj[key].requirement) {
+			if (obj[key].requirements) {
+				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirements[0]) + " prayers and " + simpleFormatWhole(obj[key].requirements[1]) + " hymns";
+				obj[key].done = doneHymns.bind(null, ...obj[key].requirements);
+				delete obj[key].requirements;
+			} else if (obj[key].requirement) {
 				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " prayer" + (obj[key].requirement === 1 ? "" : "s");
 				obj[key].done = done.bind(null, obj[key].requirement);
 				delete obj[key].requirement;
@@ -3278,6 +3280,7 @@ addLayer("p", {
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.2';
 				return text;
 			},
+			unlocked() { return hasUpgrade("p", 22) },
 		},
 		34: {
 			title() { return '<b' + getColorClass(this, TITLE, "p", true) + 'Holy Shift' },
@@ -3897,12 +3900,10 @@ addLayer("s", {
 		const unlocked1 = () => hasMilestone("s", 13);
 		const unlocked2 = () => hasMilestone("s", 13) && hasMilestone("m", 8);
 		for (const key in obj) {
-			if (obj[key].requirement) {
-				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " sanctum" + (obj[key].requirement === 1 ? "" : "s");
-				if (+key >= 51) obj[key].done = doneAndUnlocked.bind(null, obj[key].requirement);
-				else obj[key].done = done.bind(null, obj[key].requirement);
-				delete obj[key].requirement;
-			};
+			obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " sanctum" + (obj[key].requirement === 1 ? "" : "s");
+			if (+key >= 51) obj[key].done = doneAndUnlocked.bind(null, obj[key].requirement);
+			else obj[key].done = done.bind(null, obj[key].requirement);
+			delete obj[key].requirement;
 			if (+key >= 51) obj[key].unlocked = unlocked2;
 			else if (+key >= 14) obj[key].unlocked = unlocked1;
 		};
@@ -4635,12 +4636,10 @@ addLayer("r", {
 		const doneAndUnlocked = req => player.r.points.gte(req) && isAssimilated("r") && hasMilestone("ch", 25) && hasMilestone("ch", 26);
 		const unlocked = () => hasMilestone("ch", 26);
 		for (const key in obj) {
-			if (obj[key].requirement) {
-				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " relics";
-				if (+key >= 4) obj[key].done = doneAndUnlocked.bind(null, obj[key].requirement);
-				else obj[key].done = done.bind(null, obj[key].requirement);
-				delete obj[key].requirement;
-			};
+			obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " relics";
+			if (+key >= 4) obj[key].done = doneAndUnlocked.bind(null, obj[key].requirement);
+			else obj[key].done = done.bind(null, obj[key].requirement);
+			delete obj[key].requirement;
 			if (+key >= 4) obj[key].unlocked = unlocked;
 		};
 		return obj;
@@ -4834,11 +4833,9 @@ addLayer("m", {
 		};
 		const done = req => player.m.total.gte(req);
 		for (const key in obj) {
-			if (obj[key].requirement) {
-				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " total molecule" + (obj[key].requirement === 1 ? "" : "s");
-				obj[key].done = done.bind(null, obj[key].requirement);
-				delete obj[key].requirement;
-			};
+			obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " total molecule" + (obj[key].requirement === 1 ? "" : "s");
+			obj[key].done = done.bind(null, obj[key].requirement);
+			delete obj[key].requirement;
 		};
 		return obj;
 	})(),
@@ -5477,43 +5474,50 @@ addLayer("ei", {
 			unlocked() { return hasMilestone("ei", 5) || player.ei.activeChallenge },
 		},
 	},
-	milestones: {
-		0: {
-			requirementDescription: '1 total evil influence',
-			effectDescription: "evil influence resets don't reset relics",
-			done() { return player.ei.total.gte(1) },
-		},
-		1: {
-			requirementDescription: '8 total evil influence and 5,000 evil power',
-			effectDescription: "evil influence resets don't reset cores",
-			done() { return player.ei.total.gte(8) && player.ei.power.gte(5000) },
-			unlocked() { return hasMilestone("ei", 0) },
-		},
-		2: {
-			requirementDescription: '55 total evil influence and 1e12 evil power',
-			effectDescription: "evil influence resets don't reset quarks",
-			done() { return player.ei.total.gte(55) && player.ei.power.gte(1e12) },
-			unlocked() { return hasMilestone("ei", 1) },
-		},
-		3: {
-			requirementDescription: '146 total evil influence and 1e39 evil power',
-			effectDescription: "evil influence resets don't reset prayers",
-			done() { return player.ei.total.gte(146) && player.ei.power.gte(1e39) },
-			unlocked() { return hasMilestone("ei", 2) },
-		},
-		4: {
-			requirementDescription: '303 total evil influence and 1e193 evil power',
-			effectDescription: "evil influence resets don't reset atoms",
-			done() { return player.ei.total.gte(303) && player.ei.power.gte(1e193) },
-			unlocked() { return hasMilestone("ei", 3) },
-		},
-		5: {
-			requirementDescription: '348 total evil influence and 1e245 evil power',
-			effectDescription() { return 'unlock <b' + getColorClass(this, REF) + 'Gate of Evil' },
-			done() { return player.ei.total.gte(348) && player.ei.power.gte(1e245) },
-			unlocked() { return hasMilestone("ei", 4) },
-		},
-	},
+	milestones: (() => {
+		let obj = {
+			0: {
+				requirement: 1,
+				effectDescription: "evil influence resets don't reset relics",
+			},
+			1: {
+				requirements: [8, 5000],
+				effectDescription: "evil influence resets don't reset cores",
+			},
+			2: {
+				requirements: [55, 1e12],
+				effectDescription: "evil influence resets don't reset quarks",
+			},
+			3: {
+				requirements: [146, 1e39],
+				effectDescription: "evil influence resets don't reset prayers",
+			},
+			4: {
+				requirements: [303, 1e193],
+				effectDescription: "evil influence resets don't reset atoms",
+			},
+			5: {
+				requirements: [348, 1e245],
+				effectDescription() { return "unlock <b" + getColorClass(this, REF) + "Gate of Evil" },
+			},
+		};
+		const done = req => player.ei.total.gte(req);
+		const donePower = (req, reqPower) => player.ei.total.gte(req) && player.ei.power.gte(reqPower);
+		const unlocked = id => hasMilestone("ei", id - 1);
+		for (const key in obj) {
+			if (obj[key].requirements) {
+				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirements[0]) + " total evil influence and " + simpleFormatWhole(obj[key].requirements[1]) + " evil power";
+				obj[key].done = donePower.bind(null, ...obj[key].requirements);
+				delete obj[key].requirements;
+			} else if (obj[key].requirement) {
+				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " total evil influence";
+				obj[key].done = done.bind(null, obj[key].requirement);
+				delete obj[key].requirement;
+			};
+			if (+key >= 1) obj[key].unlocked = unlocked.bind(null, +key);
+		};
+		return obj;
+	})(),
 	upgrades: {
 		11: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Cycle of Evil' },
@@ -5995,122 +5999,108 @@ addLayer("w", {
 			content: getTab("w", "Influences"),
 		},
 	},
-	milestones: {
-		0: {
-			requirementDescription: '1 war',
-			effectDescription: 'keep molecule milestones on war resets, and you can autobuy good influence rebuyables',
-			done() { return player.w.points.gte(1) },
-			toggles: [["gi", "auto_buyables"]],
-		},
-		1: {
-			requirementDescription: '2 wars',
-			effectDescription() { return 'keep good influence milestones on war resets, you can autobuy evil influence upgrades, perform good influence resets automatically, and unlock a new <b' + getColorClass(this, REF, "ei") + 'Gate of Evil</b> challenge' },
-			done() { return player.w.points.gte(2) },
-			toggles: [["ei", "auto_upgrades"]],
-		},
-		2: {
-			requirementDescription: '3 wars',
-			effectDescription() { return 'keep evil influence milestones and activated relics on war resets, you can autobuy molecule upgrades, and all <b' + getColorClass(this, REF, "s") + 'Devotion</b> autobuyers can bulk buy 2x' },
-			done() { return player.w.points.gte(3) },
-			toggles: [["m", "auto_upgrades"]],
-		},
-		3: {
-			requirementDescription: '4 wars',
-			effectDescription() { return 'keep evil influence challenge completions on war resets, you can automatically activate relics, perform evil influence resets automatically, and unlock another <b' + getColorClass(this, REF) + 'Influence</b>' },
-			done() { return player.w.points.gte(4) },
-			toggles: [["r", "auto_activate"]],
-		},
-		4: {
-			requirementDescription: '5 wars',
-			effectDescription() { return 'keep demon soul challenge completions on war resets, you can autobuy individual relic upgrades, relics reset nothing, perform relic resets automatically, and unlock another <b' + getColorClass(this, REF) + 'Influence</b>' },
-			done() { return player.w.points.gte(5) },
-			toggles: [["r", "auto_upgrade_1"], ["r", "auto_upgrade_2"], ["r", "auto_upgrade_3"]],
-		},
-		5: {
-			requirementDescription: '6 wars',
-			effectDescription: "war resets don't reset relics, and keep everything unlocked on war resets",
-			done() { return player.w.points.gte(6) },
-		},
-		6: {
-			requirementDescription: '7 wars',
-			effectDescription: "war resets don't reset molecules",
-			done() { return player.w.points.gte(7) },
-		},
-		7: {
-			requirementDescription: '8 wars',
-			effectDescription: "war resets don't reset cores",
-			done() { return player.w.points.gte(8) },
-		},
-		8: {
-			requirementDescription: '9 wars',
-			effectDescription() { return "war resets don't reset good influence, and unlock another <b" + getColorClass(this, REF) + "Influence</b>" },
-			done() { return player.w.points.gte(9) },
-		},
-		9: {
-			requirementDescription: '10 wars',
-			effectDescription: "war resets don't reset quarks, and unlock cellular life",
-			done() { return player.w.points.gte(10) },
-		},
-		10: {
-			requirementDescription: '11 wars',
-			effectDescription() { return "war resets don't reset prayers, and reduce <b" + getColorClass(this, REF) + "Relic Hoarding</b> cost scaling past 6 of them" },
-			done() { return player.w.points.gte(11) },
-		},
-		11: {
-			requirementDescription: '12 wars',
-			effectDescription() { return "war resets don't reset sanctums, and increase the maximum bought of <b" + getColorClass(this, REF) + "Power of Good</b> by 1" },
-			done() { return player.w.points.gte(12) },
-		},
-		12: {
-			requirementDescription: '13 wars',
-			effectDescription() { return 'increase the maximum bought of <b' + getColorClass(this, REF) + 'Power of Good</b> by 1' },
-			done() { return player.w.points.gte(13) },
-		},
-		13: {
-			requirementDescription: '15 wars',
-			effectDescription() { return 'increase the maximum bought of <b' + getColorClass(this, REF) + 'Power of Good</b> by 2' },
-			done() { return player.w.points.gte(15) },
-		},
-		14: {
-			requirementDescription: '18 wars',
-			effectDescription() { return 'increase the maximum bought of <b' + getColorClass(this, REF) + 'Power of Good</b> by 3 and you can autobuy <b' + getColorClass(this, REF, "cl") + 'Tissues</b>' },
-			done() { return player.w.points.gte(18) },
-			toggles: [["cl", "auto_tissues"]],
-		},
-		15: {
-			requirementDescription: '22 wars',
-			effectDescription() { return 'increase the maximum bought of <b' + getColorClass(this, REF) + 'Power of Good</b> by 12, and all <b' + getColorClass(this, REF, "s") + 'Devotion</b> autobuyers can bulk buy 5x' },
-			done() { return player.w.points.gte(22) },
-		},
-		16: {
-			requirementDescription: '24 wars',
-			effectDescription() { return 'increase the maximum bought of <b' + getColorClass(this, REF) + 'Power of Good</b> by 28, reduce <b' + getColorClass(this, REF) + 'Power of Good</b> cost scaling, and unlock <b' + getColorClass(this, REF, "cl") + 'Protein</b>' },
-			done() { return player.w.points.gte(24) },
-		},
-		17: {
-			requirementDescription: '36 wars',
-			effectDescription: 'war resets nothing and auto perform war resets',
-			done() { return player.w.points.gte(36) },
-		},
-		18: {
-			requirementDescription: '60 wars',
-			effectDescription() { return 'unlock 3 more protein buyables, and you can autobuy <b' + getColorClass(this, REF) + 'Influences</b>' },
-			done() { return player.w.points.gte(60) },
-			toggles: [["w", "auto_influence"]],
-		},
-		19: {
-			requirementDescription: '64 wars',
-			effectDescription() { return "increase passive protein gain by 10%, multiply passive protein gain by 100x, improve <b" + getColorClass(this, REF, "cl") + "Passive Discovery</b>'s effect formulas, and disable manual protein gain";
+	milestones: (() => {
+		let obj = {
+			0: {
+				requirement: 1,
+				effectDescription: "keep molecule milestones on war resets, and you can autobuy good influence rebuyables",
+				toggles: [["gi", "auto_buyables"]],
 			},
-			done() { return player.w.points.gte(64) },
-		},
-		20: {
-			requirementDescription: '67 wars',
-			effectDescription() { return "improve <b" + getColorClass(this, REF, "cl") + "Passive Discovery</b>'s effect formulas and <b" + getColorClass(this, REF, "cl") + "Innate Evil</b>'s effect formula";
+			1: {
+				requirement: 2,
+				effectDescription() { return "keep good influence milestones on war resets, you can autobuy evil influence upgrades, perform good influence resets automatically, and unlock a new <b" + getColorClass(this, REF, "ei") + "Gate of Evil</b> challenge" },
+				toggles: [["ei", "auto_upgrades"]],
 			},
-			done() { return player.w.points.gte(67) },
-		},
-	},
+			2: {
+				requirement: 3,
+				effectDescription() { return "keep evil influence milestones and activated relics on war resets, you can autobuy molecule upgrades, and all <b" + getColorClass(this, REF, "s") + "Devotion</b> autobuyers can bulk buy 2x" },
+				toggles: [["m", "auto_upgrades"]],
+			},
+			3: {
+				requirement: 4,
+				effectDescription() { return "keep evil influence challenge completions on war resets, you can automatically activate relics, perform evil influence resets automatically, and unlock another <b" + getColorClass(this, REF) + "Influence</b>" },
+				toggles: [["r", "auto_activate"]],
+			},
+			4: {
+				requirement: 5,
+				effectDescription() { return "keep demon soul challenge completions on war resets, you can autobuy individual relic upgrades, relics reset nothing, perform relic resets automatically, and unlock another <b" + getColorClass(this, REF) + "Influence</b>" },
+				toggles: [["r", "auto_upgrade_1"], ["r", "auto_upgrade_2"], ["r", "auto_upgrade_3"]],
+			},
+			5: {
+				requirement: 6,
+				effectDescription: "war resets don't reset relics, and keep everything unlocked on war resets",
+			},
+			6: {
+				requirement: 7,
+				effectDescription: "war resets don't reset molecules",
+			},
+			7: {
+				requirement: 8,
+				effectDescription: "war resets don't reset cores",
+			},
+			8: {
+				requirement: 9,
+				effectDescription() { return "war resets don't reset good influence, and unlock another <b" + getColorClass(this, REF) + "Influence</b>" },
+			},
+			9: {
+				requirement: 10,
+				effectDescription: "war resets don't reset quarks, and unlock cellular life",
+			},
+			10: {
+				requirement: 11,
+				effectDescription() { return "war resets don't reset prayers, and reduce <b" + getColorClass(this, REF) + "Relic Hoarding</b> cost scaling past 6 of them" },
+			},
+			11: {
+				requirement: 12,
+				effectDescription() { return "war resets don't reset sanctums, and increase the maximum bought of <b" + getColorClass(this, REF) + "Power of Good</b> by 1" },
+			},
+			12: {
+				requirement: 13,
+				effectDescription() { return "increase the maximum bought of <b" + getColorClass(this, REF) + "Power of Good</b> by 1" },
+			},
+			13: {
+				requirement: 15,
+				effectDescription() { return "increase the maximum bought of <b" + getColorClass(this, REF) + "Power of Good</b> by 2" },
+			},
+			14: {
+				requirement: 18,
+				effectDescription() { return "increase the maximum bought of <b" + getColorClass(this, REF) + "Power of Good</b> by 3 and you can autobuy <b" + getColorClass(this, REF, "cl") + "Tissues</b>" },
+				toggles: [["cl", "auto_tissues"]],
+			},
+			15: {
+				requirement: 22,
+				effectDescription() { return "increase the maximum bought of <b" + getColorClass(this, REF) + "Power of Good</b> by 12, and all <b" + getColorClass(this, REF, "s") + "Devotion</b> autobuyers can bulk buy 5x" },
+			},
+			16: {
+				requirement: 24,
+				effectDescription() { return "increase the maximum bought of <b" + getColorClass(this, REF) + "Power of Good</b> by 28, reduce <b" + getColorClass(this, REF) + "Power of Good</b> cost scaling, and unlock <b" + getColorClass(this, REF, "cl") + "Protein</b>" },
+			},
+			17: {
+				requirement: 36,
+				effectDescription: "war resets nothing and auto perform war resets",
+			},
+			18: {
+				requirement: 60,
+				effectDescription() { return "unlock 3 more protein buyables, and you can autobuy <b" + getColorClass(this, REF) + "Influences</b>" },
+				toggles: [["w", "auto_influence"]],
+			},
+			19: {
+				requirement: 64,
+				effectDescription() { return "increase passive protein gain by 10%, multiply passive protein gain by 100x, improve <b" + getColorClass(this, REF, "cl") + "Passive Discovery</b>'s effect formulas, and disable manual protein gain" },
+			},
+			20: {
+				requirement: 67,
+				effectDescription() { return "improve <b" + getColorClass(this, REF, "cl") + "Passive Discovery</b>'s effect formulas and <b" + getColorClass(this, REF, "cl") + "Innate Evil</b>'s effect formula" },
+			},
+		};
+		const done = req => player.w.points.gte(req);
+		for (const key in obj) {
+			obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " war" + (obj[key].requirement === 1 ? "" : "s");
+			obj[key].done = done.bind(null, obj[key].requirement);
+			delete obj[key].requirement;
+		};
+		return obj;
+	})(),
 	bars: {
 		tide: {
 			direction: RIGHT,
@@ -7514,25 +7504,33 @@ addLayer("pl", {
 			content: getTab("pl", "Atmosphere"),
 		},
 	},
-	milestones: {
-		0: {
-			requirementDescription: "1 planet",
-			effectDescription() { return "you can autobuy relic rebuyables, keep everything unlocked on war resets, change the chaos cost formula (removing hardcap), you can buy max chaos, keep <b" + getColorClass(this, REF, "mo") + "Assimilation</b> on all resets, and keep all milestones on lesser resets" },
-			done() { return player.pl.points.gte(1) },
-			toggles: [["r", "auto_buyables"]],
-		},
-		1: {
-			requirementDescription: "2 planets",
-			effectDescription() { return "you can bulk 10x relic activation, gain +10% of your molecule gain per second, you can bulk 10x good influence rebuyables if you have the <b" + getColorClass(this, REF, "ch", true) + "78 chaos milestone</b>, keep all challenges on lesser resets, and unlock air rebuyables" },
-			done() { return player.pl.points.gte(2) },
-		},
-		2: {
-			requirementDescription: "3 planets",
-			effectDescription() { return "you can bulk 10x cellular life rebuyables, you can autobuy <b" + getColorClass(this, TITLE, "a") + "Atom</b> <b" + getColorClass(this, TITLE, "mo") + "Synergy</b>, keep all upgrades on lesser resets, and unlock another air rebuyable" },
-			done() { return player.pl.points.gte(3) },
-			toggles: [["mo", "auto_buyable_11"]],
-		},
-	},
+	milestones: (() => {
+		let obj = {
+			0: {
+				requirement: 1,
+				effectDescription() { return "you can autobuy relic rebuyables, keep everything unlocked on war resets, change the chaos cost formula (removing hardcap), you can buy max chaos, keep <b" + getColorClass(this, REF, "mo") + "Assimilation</b> on all resets, and keep all milestones on lesser resets" },
+				toggles: [["r", "auto_buyables"]],
+			},
+			1: {
+				requirement: 2,
+				effectDescription() { return "you can bulk 10x relic activation, gain +10% of your molecule gain per second, you can bulk 10x good influence rebuyables if you have the <b" + getColorClass(this, REF, "ch", true) + "78 chaos milestone</b>, keep all challenges on lesser resets, and unlock air rebuyables" },
+			},
+			2: {
+				requirement: 3,
+				effectDescription() { return "you can bulk 10x cellular life rebuyables, you can autobuy <b" + getColorClass(this, TITLE, "a") + "Atom</b> <b" + getColorClass(this, TITLE, "mo") + "Synergy</b>, keep all upgrades on lesser resets, and unlock another air rebuyable" },
+				toggles: [["mo", "auto_buyable_11"]],
+			},
+		};
+		const done = req => player.pl.points.gte(req);
+		for (const key in obj) {
+			if (obj[key].requirement) {
+				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " planet" + (obj[key].requirement === 1 ? "" : "s");
+				obj[key].done = done.bind(null, obj[key].requirement);
+				delete obj[key].requirement;
+			};
+		};
+		return obj;
+	})(),
 	buyables: {
 		11: {
 			cost(x) { return new Decimal(1e10).pow(x.add(1)) },
