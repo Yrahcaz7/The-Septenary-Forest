@@ -114,7 +114,7 @@ const customComponents = {
 	'glitch-prestige-button': {
 		props: ['layer'],
 		data() {return {tmp, glitchify, prestigeButtonText, doReset}},
-		template: template(`<button v-if="(tmp[layer].type !== 'none')" :class="{
+		template: template(`<button v-if="tmp[layer].type !== 'none'" :class="{
 			[layer]: true,
 			reset: true,
 			locked: !tmp[layer].canReset,

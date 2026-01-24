@@ -4,6 +4,12 @@
 	text-shadow: 0 0 10px #A5BCC2;
 }
 
+/* Softcaps */
+.layer-SC {
+	color: #DFDFDF;
+	text-shadow: 0 0 10px #DFDFDF;
+}
+
 /* Essence */
 .layer-e {
 	color: #4CED13;

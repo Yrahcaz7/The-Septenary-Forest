@@ -44,7 +44,7 @@ function resetActiveSoftcaps() {
 	player.SC.points = newDecimalZero();
 };
 
-addLayer('SC', {
+addLayer("SC", {
 	name: "Softcaps",
 	symbol: "SC",
 	position: 1,
@@ -91,9 +91,8 @@ addLayer('SC', {
 		};
 	},
 	tabFormat: [
-		"main-display",
 		["display-text", () => {
-			let text = "";
+			let text = "You have <h2 class='layer-SC'>" + player.SC.points + "</h2> discovered softcaps<br>";
 			if (activeSoftcaps["points"]) text += '<br><h2 class="pointSoftcap">Point Gain Softcap</h2><br>starts at ' + format(softcaps.points[0]) + ', gain to ^' + format(softcaps.points[1]()) + '<br>';
 			for (const layer of layersWithNormalSoftcappedGain) {
 				if (activeSoftcaps[layer]) text += '<br><h2 class="layer-' + layer + '">' + tmp[layer].name + ' Gain Softcap</h2><br>starts at ' + format(tmp[layer].softcap) + ', gain to ^' + format(tmp[layer].softcapPower) + '<br>';

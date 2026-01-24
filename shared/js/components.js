@@ -345,7 +345,7 @@ function loadVue(mainPage = false) {
 	addNormalComponent('prestige-button', {
 		props: ['layer'],
 		data() {return {tmp, prestigeButtonText, doReset}},
-		template: template(`<button v-if="(tmp[layer].type !== 'none')" :class="{
+		template: template(`<button v-if="tmp[layer].type !== 'none'" :class="{
 			[layer]: true,
 			reset: true,
 			locked: !tmp[layer].canReset,

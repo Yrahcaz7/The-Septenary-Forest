@@ -4090,7 +4090,7 @@ addLayer("d", {
 				let backColors = '#224400, #336600';
 				if (tmp[this.layer].buyables[this.id].canBuy) backColors = '#112200, #448800';
 				let textColor = '#AAFF00';
-				if (colorValue[1] == 'none') textColor = '#DFDFDF';
+				if (colorValue[1] == "none") textColor = '#DFDFDF';
 				return {'background-image': 'radial-gradient(' + backColors + ')', color: textColor};
 			},
 			unlocked() { return hasMilestone("s", 13) },
@@ -4124,7 +4124,7 @@ addLayer("d", {
 				let backColors = '#224400, #336600';
 				if (tmp[this.layer].buyables[this.id].canBuy) backColors = '#112200, #448800';
 				let textColor = '#AAFF00';
-				if (colorValue[1] == 'none') textColor = '#DFDFDF';
+				if (colorValue[1] == "none") textColor = '#DFDFDF';
 				return {'background-image': 'radial-gradient(' + backColors + ')', color: textColor};
 			},
 			unlocked() { return hasMilestone("s", 13) },
@@ -4169,7 +4169,7 @@ addLayer("d", {
 				let backColors = '#224400, #336600';
 				if (tmp[this.layer].buyables[this.id].canBuy) backColors = '#112200, #448800';
 				let textColor = '#AAFF00';
-				if (colorValue[1] == 'none') textColor = '#DFDFDF';
+				if (colorValue[1] == "none") textColor = '#DFDFDF';
 				return {width: '300px', height: '300px', 'background-image': 'radial-gradient(' + backColors + ')', 'padding': '10px', color: textColor};
 			},
 			unlocked() { return hasMilestone("s", 14) },
@@ -4232,7 +4232,7 @@ addLayer("g", {
 				let backColors = '#224400, #336600';
 				if (tmp[this.layer].buyables[this.id].canBuy) backColors = '#112200, #448800';
 				let textColor = '#AAFF00';
-				if (colorValue[1] == 'none') textColor = '#DFDFDF';
+				if (colorValue[1] == "none") textColor = '#DFDFDF';
 				return {'background-image': 'radial-gradient(' + backColors + ')', color: textColor};
 			},
 			unlocked() { return isAssimilated("s") || player.mo.assimilating === "s" },
@@ -4252,7 +4252,7 @@ addLayer("g", {
 				let backColors = '#224400, #336600';
 				if (tmp[this.layer].buyables[this.id].canBuy) backColors = '#112200, #448800';
 				let textColor = '#AAFF00';
-				if (colorValue[1] == 'none') textColor = '#DFDFDF';
+				if (colorValue[1] == "none") textColor = '#DFDFDF';
 				return {'background-image': 'radial-gradient(' + backColors + ')', color: textColor};
 			},
 			unlocked() { return isAssimilated("s") || player.mo.assimilating === "s" },
@@ -4278,7 +4278,7 @@ addLayer("g", {
 				let backColors = '#224400, #336600';
 				if (tmp[this.layer].buyables[this.id].canBuy) backColors = '#112200, #448800';
 				let textColor = '#AAFF00';
-				if (colorValue[1] == 'none') textColor = '#DFDFDF';
+				if (colorValue[1] == "none") textColor = '#DFDFDF';
 				return {width: '300px', height: '300px', 'background-image': 'radial-gradient(' + backColors + ')', 'padding': '10px', color: textColor};
 			},
 			unlocked() { return isAssimilated("s") || player.mo.assimilating === "s" },
@@ -4564,7 +4564,7 @@ addLayer("r", {
 				let BGcolor = 'rgb(' + num + ',' + num + ',' + (num + 100) + ')';
 				if (num.gt(100)) BGcolor = 'rgb(100,100,200)';
 				let textColor = '#B9A975';
-				if (colorValue[1] == 'none') textColor = '#DFDFDF';
+				if (colorValue[1] == "none") textColor = '#DFDFDF';
 				return {width: '450px', height: '450px', 'background-color': BGcolor, color: textColor, 'border-radius': '70px'};
 			},
 		},
