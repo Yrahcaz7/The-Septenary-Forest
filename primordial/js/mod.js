@@ -1,15 +1,15 @@
 const modInfo = {
-	name: 'The Primordial Tree',
-	id: 'Yrahcaz7-ModTree-ThePrimordialTree',
-	author: 'Yrahcaz7',
-	modFiles: ['components.js', 'tree.js', 'options.js', 'assimilation.js', 'achievements.js', 'softcaps.js', 'story.js', 'tabs.js', 'layers.js'],
+	name: "The Primordial Tree",
+	id: "Yrahcaz7-ModTree-ThePrimordialTree",
+	author: "Yrahcaz7",
+	modFiles: ["components.js", "tree.js", "options.js", "assimilation.js", "achievements.js", "softcaps.js", "story.js", "tabs.js", "layers.js"],
 	offlineLimit: 1,
 	useNewSaveSyntax: false,
 };
 
 const VERSION = {
-	num: '4.0',
-	name: 'The End is Near',
+	num: "4.0",
+	name: "The End is Near",
 };
 
 function changelog() {
@@ -124,7 +124,7 @@ function changelog() {
 			- Added six upgrades to prayers.<br>
 			- Added two achievements.<br>
 			- Added twenty-seven achievement images.<br>
-			- Changed 'best' and 'total' format.<br>
+			- Changed "best" and "total" format.<br>
 			- Finally fixed the rebuyable format bug.<br>
 		<br><h3>v1.4: Praise the Sky</h3><br>
 			- Added prayers.<br>
@@ -306,9 +306,9 @@ function getCellularLifeBuyableBulk() {
 function getKeepFromPlanets(resettingLayer) {
 	if (resettingLayer == "pl") return [];
 	let keep = [];
-	if (hasMilestone("pl", 0)) keep.push('milestones');
-	if (hasMilestone("pl", 1)) keep.push('challenges');
-	if (hasMilestone("pl", 2)) keep.push('upgrades');
+	if (hasMilestone("pl", 0)) keep.push("milestones");
+	if (hasMilestone("pl", 1)) keep.push("challenges");
+	if (hasMilestone("pl", 2)) keep.push("upgrades");
 	return keep;
 };
 
@@ -410,10 +410,10 @@ function removeAchievement(id = NaN) {
 
 function fixOldSave(oldVersion) {
 	// achievement fixes
-	if (oldVersion == '2.2' && player.A.achievements.includes('123')) removeAchievement('123');
-	if (oldVersion == '3.2' && player.A.achievements.includes('163')) removeAchievement('163');
+	if (oldVersion == "2.2" && player.A.achievements.includes("123")) removeAchievement("123");
+	if (oldVersion == "3.2" && player.A.achievements.includes("163")) removeAchievement("163");
 	// endgame fixes
-	if ((oldVersion == '3.4' || oldVersion == '3.4.1') && (player.points.gte('e1.51e14') || player.ch.points.gt(50))) {
+	if ((oldVersion == "3.4" || oldVersion == "3.4.1") && (player.points.gte("e1.51e14") || player.ch.points.gt(50))) {
 		setTimeout(() => {
 			doReset("ch", true);
 			if (player.ch.points.gt(50)) {

@@ -180,7 +180,7 @@ function getRawTabContent(layer, name = "") {
 		};
 	} else if (layer == "cl") {
 		if (name == "Protein") {
-			content.push(["display-text", 'You are currently finding <h2 class="layer-cl">' + format(tmp.cl.proteinConv) + '</h2> protein per cellular life<br>' + (tmp.cl.proteinGain.gt(0) ? 'You are currently gaining <h2 class="layer-cl">' + format(tmp.cl.proteinGain) + '</h2> protein per second<br>' : '') + 'You currently have <h2 class="layer-cl">' + format(player.cl.protein) + '</h2> protein']);
+			content.push(["display-text", 'You are currently finding <h2 class="layer-cl">' + format(tmp.cl.proteinConv) + '</h2> protein per cellular life<br>' + (tmp.cl.proteinGain.gt(0) ? 'You are currently gaining <h2 class="layer-cl">' + format(tmp.cl.proteinGain) + '</h2> protein per second<br>' : "") + 'You currently have <h2 class="layer-cl">' + format(player.cl.protein) + '</h2> protein']);
 			content.push("blank");
 			content.push(["buyables", [3, 4, 5]]);
 			content.push("blank");

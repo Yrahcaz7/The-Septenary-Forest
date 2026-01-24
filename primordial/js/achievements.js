@@ -1,15 +1,15 @@
 addLayer('A', {
-	name: 'Achievements',
-	symbol: 'A',
+	name: "Achievements",
+	symbol: "A",
 	position: 0,
 	startData() { return {
 		points: newDecimalZero(),
 	}},
-	color: '#A5BCC2',
-	resource: 'achievements',
+	color: "#A5BCC2",
+	resource: "achievements",
 	row: 'side',
 	effectDescription() {
-		let text = ['<br>which are multiplying your point ', '', '', ''];
+		let text = ["<br>which are multiplying your point ", "", "", ""];
 		if (hasUpgrade("ds", 21)) {
 			if (hasUpgrade("ds", 24)) {
 				text[0] += 'and essence gain by <h2 class="layer-A">' + format(player.A.points.div(5)) + '</h2>x';
@@ -60,14 +60,14 @@ addLayer('A', {
 	},
 	achievements: {
 		11: {
-			name: 'The Point',
+			name: "The Point",
 			done() { return player.points.gte(1) },
 			tooltip: 'obtain 1 point.',
 			image() { if (hasAchievement('A', 11)) return "images/achievements/11.png" },
 			popupColor: '#DFDFDF',
 		},
 		12: {
-			name: 'Very Pointy',
+			name: "Very Pointy",
 			done() { return player.points.gte(1e10) },
 			tooltip: 'obtain 1e10 points.',
 			unlocked() { return hasAchievement('A', 11) },
@@ -75,7 +75,7 @@ addLayer('A', {
 			popupColor: '#DFDFDF',
 		},
 		13: {
-			name: 'Now That\'s Really Pointy',
+			name: "Now That's Really Pointy",
 			done() { return player.points.gte(1e100) },
 			tooltip: 'obtain 1e100 points.',
 			unlocked() { return hasAchievement('A', 12) },
@@ -83,7 +83,7 @@ addLayer('A', {
 			popupColor: '#DFDFDF',
 		},
 		14: {
-			name: 'Cosmic Point',
+			name: "Cosmic Point",
 			done() { return player.points.gte('1e1000') },
 			tooltip: 'obtain 1e1000 points.',
 			unlocked() { return hasAchievement('A', 13) },
@@ -91,7 +91,7 @@ addLayer('A', {
 			popupColor: '#DFDFDF',
 		},
 		15: {
-			name: 'Everything is Points',
+			name: "Everything is Points",
 			done() { return player.points.gte('1e10000') },
 			tooltip: 'obtain 1e10,000 points.',
 			unlocked() { return hasAchievement('A', 14) },
@@ -99,7 +99,7 @@ addLayer('A', {
 			popupColor: '#DFDFDF',
 		},
 		16: {
-			name: 'Dull Points',
+			name: "Dull Points",
 			done() { return player.points.gte(1e10) && player.e.total.eq(0) },
 			tooltip: 'obtain 1e10 points with no essence.',
 			unlocked() { return hasAchievement('A', 12) && hasAchievement('A', 21) },
@@ -107,7 +107,7 @@ addLayer('A', {
 			popupColor: '#DFDFDF',
 		},
 		21: {
-			name: 'Essence of Rat',
+			name: "Essence of Rat",
 			done() { return player.e.points.gte(1) },
 			tooltip: 'obtain 1 essence.',
 			unlocked() { return hasAchievement('A', 21) },
@@ -115,7 +115,7 @@ addLayer('A', {
 			popupColor: '#4CED13',
 		},
 		22: {
-			name: 'Essence Cluster',
+			name: "Essence Cluster",
 			done() { return player.e.points.gte(1e10) },
 			tooltip: 'obtain 1e10 essence.',
 			unlocked() { return hasAchievement('A', 21) },
@@ -123,7 +123,7 @@ addLayer('A', {
 			popupColor: '#4CED13',
 		},
 		23: {
-			name: 'Gleaming, Golden Essence',
+			name: "Gleaming, Golden Essence",
 			done() { return player.e.points.gte(1e100) },
 			tooltip: 'obtain 1e100 essence.',
 			unlocked() { return hasAchievement('A', 22) },
@@ -131,7 +131,7 @@ addLayer('A', {
 			popupColor: '#4CED13',
 		},
 		24: {
-			name: 'Essence of the Universe',
+			name: "Essence of the Universe",
 			done() { return player.e.points.gte('1e1000') },
 			tooltip: 'obtain 1e1000 essence.',
 			unlocked() { return hasAchievement('A', 23) },
@@ -139,7 +139,7 @@ addLayer('A', {
 			popupColor: '#4CED13',
 		},
 		25: {
-			name: 'Essence of all Essence',
+			name: "Essence of all Essence",
 			done() { return player.e.points.gte('1e10000') },
 			tooltip: 'obtain 1e10,000 essence.',
 			unlocked() { return hasAchievement('A', 24) },
@@ -147,7 +147,7 @@ addLayer('A', {
 			popupColor: '#4CED13',
 		},
 		26: {
-			name: 'Empty Soul',
+			name: "Empty Soul",
 			done() { return player.e.points.gte(1e10) && getBuyableAmount("e", 11).eq(0) && getBuyableAmount("e", 12).eq(0) },
 			tooltip: 'obtain 1e10 essence with no essence rebuyables.',
 			unlocked() { return hasAchievement('A', 22) && hasAchievement('A', 31) },
@@ -155,7 +155,7 @@ addLayer('A', {
 			popupColor: '#4CED13',
 		},
 		31: {
-			name: 'Cracked Core',
+			name: "Cracked Core",
 			done() { return player.c.points.gte(1) },
 			tooltip: 'obtain 1 core.',
 			unlocked() { return hasAchievement('A', 31) },
@@ -163,7 +163,7 @@ addLayer('A', {
 			popupColor: '#D2D237',
 		},
 		32: {
-			name: 'Mountainous Core',
+			name: "Mountainous Core",
 			done() { return player.c.points.gte(1e10) },
 			tooltip: 'obtain 1e10 cores.',
 			unlocked() { return hasAchievement('A', 31) },
@@ -171,7 +171,7 @@ addLayer('A', {
 			popupColor: '#D2D237',
 		},
 		33: {
-			name: 'Core of the Earth',
+			name: "Core of the Earth",
 			done() { return player.c.points.gte(1e100) },
 			tooltip: 'obtain 1e100 cores.',
 			unlocked() { return hasAchievement('A', 32) },
@@ -179,7 +179,7 @@ addLayer('A', {
 			popupColor: '#D2D237',
 		},
 		34: {
-			name: 'Core of the Sun',
+			name: "Core of the Sun",
 			done() { return player.c.points.gte('1e1000') },
 			tooltip: 'obtain 1e1000 cores.',
 			unlocked() { return hasAchievement('A', 33) },
@@ -187,7 +187,7 @@ addLayer('A', {
 			popupColor: '#D2D237',
 		},
 		35: {
-			name: 'Core of the Universe',
+			name: "Core of the Universe",
 			done() { return player.c.points.gte('1e10000') },
 			tooltip: 'obtain 1e10,000 cores.',
 			unlocked() { return hasAchievement('A', 34) },
@@ -195,7 +195,7 @@ addLayer('A', {
 			popupColor: '#D2D237',
 		},
 		36: {
-			name: 'Pointless Core',
+			name: "Pointless Core",
 			done() { return player.c.points.gte(1e10) && getBuyableAmount("c", 11).eq(0) && getBuyableAmount("c", 12).eq(0) && player.q.total.eq(0) },
 			tooltip: 'obtain 1e10 cores with no core rebuyables and quarks.',
 			unlocked() { return hasAchievement('A', 32) && hasAchievement('A', 41) },
@@ -203,7 +203,7 @@ addLayer('A', {
 			popupColor: '#D2D237',
 		},
 		41: {
-			name: 'The Smallest Quark',
+			name: "The Smallest Quark",
 			done() { return player.q.points.gte(1) },
 			tooltip: 'obtain 1 quark.',
 			unlocked() { return hasAchievement('A', 41) },
@@ -211,7 +211,7 @@ addLayer('A', {
 			popupColor: '#DB5196',
 		},
 		42: {
-			name: 'Quark Field',
+			name: "Quark Field",
 			done() { return player.q.points.gte(1e10) },
 			tooltip: 'obtain 1e10 quarks.',
 			unlocked() { return hasAchievement('A', 41) },
@@ -219,7 +219,7 @@ addLayer('A', {
 			popupColor: '#DB5196',
 		},
 		43: {
-			name: 'Oh, the Quark of it all',
+			name: "Oh, the Quark of it all",
 			done() { return player.q.points.gte(1e100) },
 			tooltip: 'obtain 1e100 quarks.',
 			unlocked() { return hasAchievement('A', 42) },
@@ -227,7 +227,7 @@ addLayer('A', {
 			popupColor: '#DB5196',
 		},
 		44: {
-			name: 'Quirky Quarks',
+			name: "Quirky Quarks",
 			done() { return player.q.points.gte('1e1000') },
 			tooltip: 'obtain 1e1000 quarks.',
 			unlocked() { return hasAchievement('A', 43) },
@@ -235,7 +235,7 @@ addLayer('A', {
 			popupColor: '#DB5196',
 		},
 		45: {
-			name: 'Impossible Quarks',
+			name: "Impossible Quarks",
 			done() { return player.q.points.gte('1e10000') },
 			tooltip: 'obtain 1e10,000 quarks.',
 			unlocked() { return hasAchievement('A', 44) },
@@ -243,7 +243,7 @@ addLayer('A', {
 			popupColor: '#DB5196',
 		},
 		46: {
-			name: 'The Outside',
+			name: "The Outside",
 			done() { return player.q.points.gte(1e10) && player.c.total.eq(0) },
 			tooltip: 'obtain 1e10 quarks with no cores.',
 			unlocked() { return hasAchievement('A', 42) && hasAchievement('A', 51) },
@@ -251,7 +251,7 @@ addLayer('A', {
 			popupColor: '#DB5196',
 		},
 		51: {
-			name: 'Submarine, Subatomic',
+			name: "Submarine, Subatomic",
 			done() { return player.sp.points.gte(1) },
 			tooltip: 'obtain 1 subatomic particle.',
 			unlocked() { return hasAchievement('A', 51) },
@@ -259,7 +259,7 @@ addLayer('A', {
 			popupColor: '#710CC4',
 		},
 		52: {
-			name: 'Variant Particles',
+			name: "Variant Particles",
 			done() { return player.sp.points.gte(100) },
 			tooltip: 'obtain 100 subatomic particles.',
 			unlocked() { return hasAchievement('A', 51) },
@@ -267,7 +267,7 @@ addLayer('A', {
 			popupColor: '#710CC4',
 		},
 		53: {
-			name: 'Periodic Particles',
+			name: "Periodic Particles",
 			done() { return player.sp.points.gte(10_000) },
 			tooltip: 'obtain 10,000 subatomic particles.',
 			unlocked() { return hasAchievement('A', 52) },
@@ -275,7 +275,7 @@ addLayer('A', {
 			popupColor: '#710CC4',
 		},
 		54: {
-			name: 'That\'s no Particle no More',
+			name: "That's no Particle no More",
 			done() { return player.sp.points.gte(1_000_000) },
 			tooltip: 'obtain 1,000,000 subatomic particles.',
 			unlocked() { return hasAchievement('A', 53) },
@@ -283,7 +283,7 @@ addLayer('A', {
 			popupColor: '#710CC4',
 		},
 		55: {
-			name: 'Anti Dark Matter',
+			name: "Anti Dark Matter",
 			done() { return player.sp.points.gte(1e11) },
 			tooltip: 'obtain 1e11 subatomic particles.',
 			unlocked() { return hasAchievement('A', 54) },
@@ -291,7 +291,7 @@ addLayer('A', {
 			popupColor: '#710CC4',
 		},
 		56: {
-			name: 'Hollow Particles',
+			name: "Hollow Particles",
 			done() { return player.sp.points.gte(10) && getBuyableAmount("sp", 11).eq(0) && getBuyableAmount("sp", 12).eq(0) && getBuyableAmount("sp", 13).eq(0) && player.h.total.eq(0) },
 			tooltip: 'obtain 10 subatomic particles with no subatomic particle rebuyables and hexes.',
 			unlocked() { return hasAchievement('A', 52) && hasAchievement('A', 61) },
@@ -299,7 +299,7 @@ addLayer('A', {
 			popupColor: '#710CC4',
 		},
 		61: {
-			name: 'The Hex Game',
+			name: "The Hex Game",
 			done() { return player.h.points.gte(1) },
 			tooltip: 'obtain 1 hex.',
 			unlocked() { return hasAchievement('A', 61) },
@@ -307,7 +307,7 @@ addLayer('A', {
 			popupColor: '#E36409',
 		},
 		62: {
-			name: 'Cursed into Oblivion',
+			name: "Cursed into Oblivion",
 			done() { return player.h.points.gte(1e10) },
 			tooltip: 'obtain 1e10 hexes.',
 			unlocked() { return hasAchievement('A', 61) },
@@ -315,7 +315,7 @@ addLayer('A', {
 			popupColor: '#E36409',
 		},
 		63: {
-			name: 'The Prophecy of Doom',
+			name: "The Prophecy of Doom",
 			done() { return player.h.points.gte(1e100) },
 			tooltip: 'obtain 1e100 hexes.',
 			unlocked() { return hasAchievement('A', 62) },
@@ -323,7 +323,7 @@ addLayer('A', {
 			popupColor: '#E36409',
 		},
 		64: {
-			name: 'The Advent of the End',
+			name: "The Advent of the End",
 			done() { return player.h.points.gte('1e1000') },
 			tooltip: 'obtain 1e1000 hexes.',
 			unlocked() { return hasAchievement('A', 63) },
@@ -331,7 +331,7 @@ addLayer('A', {
 			popupColor: '#E36409',
 		},
 		65: {
-			name: 'Nihilism: Nothing is There',
+			name: "Nihilism: Nothing is There",
 			done() { return player.h.points.gte('1e10000') },
 			tooltip: 'obtain 1e10,000 hexes.',
 			unlocked() { return hasAchievement('A', 64) },
@@ -339,7 +339,7 @@ addLayer('A', {
 			popupColor: '#E36409',
 		},
 		66: {
-			name: 'Same Old Tricks',
+			name: "Same Old Tricks",
 			done() { return player.h.points.gte(1e10) && getBuyableAmount("c", 11).eq(0) && getBuyableAmount("c", 12).eq(0) && player.sp.total.eq(0) },
 			tooltip: 'obtain 1e10 hexes with no subatomic particles and core rebuyables.',
 			unlocked() { return hasAchievement('A', 62) && hasAchievement('A', 71) },
@@ -347,7 +347,7 @@ addLayer('A', {
 			popupColor: '#E36409',
 		},
 		71: {
-			name: 'Demon Spirits',
+			name: "Demon Spirits",
 			done() { return player.ds.points.gte(1) },
 			tooltip: 'obtain 1 demon soul.',
 			unlocked() { return hasAchievement('A', 71) },
@@ -355,7 +355,7 @@ addLayer('A', {
 			popupColor: '#BA0035',
 		},
 		72: {
-			name: 'Demonic Ruin',
+			name: "Demonic Ruin",
 			done() { return player.ds.points.gte(1e8) },
 			tooltip: 'obtain 1e8 demon souls.',
 			unlocked() { return hasAchievement('A', 71) },
@@ -363,7 +363,7 @@ addLayer('A', {
 			popupColor: '#BA0035',
 		},
 		73: {
-			name: 'Demon Summoning',
+			name: "Demon Summoning",
 			done() { return player.ds.points.gte(1e60) },
 			tooltip: 'obtain 1e60 demon souls.',
 			unlocked() { return hasAchievement('A', 72) },
@@ -371,7 +371,7 @@ addLayer('A', {
 			popupColor: '#BA0035',
 		},
 		74: {
-			name: 'Demonic Origin',
+			name: "Demonic Origin",
 			done() { return player.ds.points.gte('1e400') },
 			tooltip: 'obtain 1e400 demon souls.',
 			unlocked() { return hasAchievement('A', 73) },
@@ -379,7 +379,7 @@ addLayer('A', {
 			popupColor: '#BA0035',
 		},
 		75: {
-			name: 'Demonic Dimension',
+			name: "Demonic Dimension",
 			done() { return player.ds.points.gte('1e2000') },
 			tooltip: 'obtain 1e2000 demon souls.',
 			unlocked() { return hasAchievement('A', 74) },
@@ -387,7 +387,7 @@ addLayer('A', {
 			popupColor: '#BA0035',
 		},
 		76: {
-			name: 'Occult Uprising',
+			name: "Occult Uprising",
 			done() { return player.ds.points.gte(1e10) && getBuyableAmount("ds", 11).eq(0) && player.a.total.eq(0) },
 			tooltip: 'obtain 1e10 demon souls with no demon soul rebuyables and atoms.',
 			unlocked() { return hasAchievement('A', 72) && hasAchievement('A', 81) },
@@ -395,7 +395,7 @@ addLayer('A', {
 			popupColor: '#BA0035',
 		},
 		81: {
-			name: 'Atomic Mass',
+			name: "Atomic Mass",
 			done() { return player.a.points.gte(1) },
 			tooltip: 'obtain 1 atom.',
 			unlocked() { return hasAchievement('A', 81) },
@@ -403,7 +403,7 @@ addLayer('A', {
 			popupColor: '#4D2FE0',
 		},
 		82: {
-			name: 'Atomic Movement',
+			name: "Atomic Movement",
 			done() { return player.a.points.gte(10) },
 			tooltip: 'obtain 10 atoms.',
 			unlocked() { return hasAchievement('A', 81) },
@@ -411,7 +411,7 @@ addLayer('A', {
 			popupColor: '#4D2FE0',
 		},
 		83: {
-			name: 'Masses of Atoms',
+			name: "Masses of Atoms",
 			done() { return player.a.points.gte(1000) },
 			tooltip: 'obtain 1,000 atoms.',
 			unlocked() { return hasAchievement('A', 82) },
@@ -419,7 +419,7 @@ addLayer('A', {
 			popupColor: '#4D2FE0',
 		},
 		84: {
-			name: 'Atom Dance',
+			name: "Atom Dance",
 			done() { return player.a.points.gte(10_000) },
 			tooltip: 'obtain 10,000 atoms.',
 			unlocked() { return hasAchievement('A', 83) },
@@ -427,7 +427,7 @@ addLayer('A', {
 			popupColor: '#4D2FE0',
 		},
 		85: {
-			name: 'Atomic Hole',
+			name: "Atomic Hole",
 			done() { return player.a.points.gte(1e9) },
 			tooltip: 'obtain 1e9 atoms.',
 			unlocked() { return hasAchievement('A', 84) },
@@ -435,7 +435,7 @@ addLayer('A', {
 			popupColor: '#4D2FE0',
 		},
 		86: {
-			name: 'For Science!',
+			name: "For Science!",
 			done() { return player.a.points.gte(10) && player.ds.total.eq(0) },
 			tooltip: 'obtain 10 atoms with no demon souls.',
 			unlocked() { return hasAchievement('A', 82) && hasAchievement('A', 91) },
@@ -443,7 +443,7 @@ addLayer('A', {
 			popupColor: '#4D2FE0',
 		},
 		91: {
-			name: 'Praise the Lord',
+			name: "Praise the Lord",
 			done() { return player.p.points.gte(1) },
 			tooltip: 'obtain 1 prayer.',
 			unlocked() { return hasAchievement('A', 91) },
@@ -451,7 +451,7 @@ addLayer('A', {
 			popupColor: '#FDBBFF',
 		},
 		92: {
-			name: 'Church Prayer Circle',
+			name: "Church Prayer Circle",
 			done() { return player.p.points.gte(1e10) },
 			tooltip: 'obtain 1e10 prayers.',
 			unlocked() { return hasAchievement('A', 91) },
@@ -459,7 +459,7 @@ addLayer('A', {
 			popupColor: '#FDBBFF',
 		},
 		93: {
-			name: 'Prayers all around',
+			name: "Prayers all around",
 			done() { return player.p.points.gte(1e100) },
 			tooltip: 'obtain 1e100 prayers.',
 			unlocked() { return hasAchievement('A', 92) },
@@ -467,7 +467,7 @@ addLayer('A', {
 			popupColor: '#FDBBFF',
 		},
 		94: {
-			name: 'Global Prayers',
+			name: "Global Prayers",
 			done() { return player.p.points.gte('1e1000') },
 			tooltip: 'obtain 1e1000 prayers.',
 			unlocked() { return hasAchievement('A', 93) },
@@ -475,7 +475,7 @@ addLayer('A', {
 			popupColor: '#FDBBFF',
 		},
 		95: {
-			name: 'Everything is Prayers',
+			name: "Everything is Prayers",
 			done() { return player.p.points.gte('1e10000') },
 			tooltip: 'obtain 1e10,000 prayers.',
 			unlocked() { return hasAchievement('A', 94) },
@@ -483,7 +483,7 @@ addLayer('A', {
 			popupColor: '#FDBBFF',
 		},
 		96: {
-			name: 'Persistence',
+			name: "Persistence",
 			done() { return player.p.points.gte(1e10) && player.h.total.eq(0) && player.sp.total.eq(0) && player.s.total.eq(0) },
 			tooltip: 'obtain 1e10 prayers with no hexes, subatomic particles, and sanctums.',
 			unlocked() { return hasAchievement('A', 92) && hasAchievement('A', 101) },
@@ -491,7 +491,7 @@ addLayer('A', {
 			popupColor: '#FDBBFF',
 		},
 		101: {
-			name: 'Church Sanctum',
+			name: "Church Sanctum",
 			done() { return player.s.points.gte(1) },
 			tooltip: 'obtain 1 sanctum.',
 			unlocked() { return hasAchievement('A', 101) },
@@ -499,7 +499,7 @@ addLayer('A', {
 			popupColor: '#AAFF00',
 		},
 		102: {
-			name: 'Shrine Blessings',
+			name: "Shrine Blessings",
 			done() { return player.s.points.gte(10) },
 			tooltip: 'obtain 10 sanctums.',
 			unlocked() { return hasAchievement('A', 101) },
@@ -507,7 +507,7 @@ addLayer('A', {
 			popupColor: '#AAFF00',
 		},
 		103: {
-			name: 'Greater Sanctum',
+			name: "Greater Sanctum",
 			done() { return player.s.points.gte(100) },
 			tooltip: 'obtain 100 sanctums.',
 			unlocked() { return hasAchievement('A', 102) },
@@ -515,7 +515,7 @@ addLayer('A', {
 			popupColor: '#AAFF00',
 		},
 		104: {
-			name: 'The World is Sanctum',
+			name: "The World is Sanctum",
 			done() { return player.s.points.gte(1000) },
 			tooltip: 'obtain 1,000 sanctums.',
 			unlocked() { return hasAchievement('A', 103) },
@@ -523,7 +523,7 @@ addLayer('A', {
 			popupColor: '#AAFF00',
 		},
 		105: {
-			name: 'Sanctum, Absolute',
+			name: "Sanctum, Absolute",
 			done() { return player.s.points.gte(10_000) },
 			tooltip: 'obtain 10,000 sanctums.',
 			unlocked() { return hasAchievement('A', 104) },
@@ -531,7 +531,7 @@ addLayer('A', {
 			popupColor: '#AAFF00',
 		},
 		106: {
-			name: 'Still Sanctum',
+			name: "Still Sanctum",
 			done() { return player.s.points.gte(10) && player.ds.total.eq(0) && player.a.total.eq(0) },
 			tooltip: 'obtain 10 sanctums with no demon souls and atoms.',
 			unlocked() { return hasAchievement('A', 102) && hasAchievement('A', 111) },
@@ -539,7 +539,7 @@ addLayer('A', {
 			popupColor: '#AAFF00',
 		},
 		111: {
-			name: 'Ancient Relic',
+			name: "Ancient Relic",
 			done() { return player.r.points.gte(1) },
 			tooltip: 'obtain 1 relic.',
 			unlocked() { return hasAchievement('A', 111) },
@@ -547,7 +547,7 @@ addLayer('A', {
 			popupColor: '#B9A975',
 		},
 		112: {
-			name: 'Giant Relics',
+			name: "Giant Relics",
 			done() { return player.r.points.gte(10) },
 			tooltip: 'obtain 10 relics.',
 			unlocked() { return hasAchievement('A', 111) },
@@ -555,7 +555,7 @@ addLayer('A', {
 			popupColor: '#B9A975',
 		},
 		113: {
-			name: 'Treasure Hoard',
+			name: "Treasure Hoard",
 			done() { return player.r.points.gte(100) },
 			tooltip: 'obtain 100 relics.',
 			unlocked() { return hasAchievement('A', 112) },
@@ -563,7 +563,7 @@ addLayer('A', {
 			popupColor: '#B9A975',
 		},
 		114: {
-			name: 'Mountain of Relics',
+			name: "Mountain of Relics",
 			done() { return player.r.points.gte(1000) },
 			tooltip: 'obtain 1,000 relics.',
 			unlocked() { return hasAchievement('A', 113) },
@@ -571,7 +571,7 @@ addLayer('A', {
 			popupColor: '#B9A975',
 		},
 		115: {
-			name: 'Dragon\'s Hoard',
+			name: "Dragon's Hoard",
 			done() { return player.r.points.gte(10_000) },
 			tooltip: 'obtain 10,000 relics.',
 			unlocked() { return hasAchievement('A', 114) },
@@ -579,7 +579,7 @@ addLayer('A', {
 			popupColor: '#B9A975',
 		},
 		116: {
-			name: 'Broken Relics',
+			name: "Broken Relics",
 			done() { return player.r.points.gte(10) && player.m.total.eq(0) },
 			tooltip: 'obtain 10 relics with no molecules.',
 			unlocked() { return hasAchievement('A', 112) && hasAchievement('A', 121) },
@@ -587,7 +587,7 @@ addLayer('A', {
 			popupColor: '#B9A975',
 		},
 		121: {
-			name: 'Atom Combination',
+			name: "Atom Combination",
 			done() { return player.m.points.gte(1) },
 			tooltip: 'obtain 1 molecule.',
 			unlocked() { return hasAchievement('A', 121) },
@@ -595,7 +595,7 @@ addLayer('A', {
 			popupColor: '#00CCCC',
 		},
 		122: {
-			name: 'Varied Molecules',
+			name: "Varied Molecules",
 			done() { return player.m.points.gte(1_000_000) },
 			tooltip: 'obtain 1,000,000 molecules.',
 			unlocked() { return hasAchievement('A', 121) },
@@ -603,7 +603,7 @@ addLayer('A', {
 			popupColor: '#00CCCC',
 		},
 		123: {
-			name: 'Molecule Dictionary',
+			name: "Molecule Dictionary",
 			done() { return player.m.points.gte(1e12) },
 			tooltip: 'obtain 1e12 molecules.',
 			unlocked() { return hasAchievement('A', 122) },
@@ -611,7 +611,7 @@ addLayer('A', {
 			popupColor: '#00CCCC',
 		},
 		124: {
-			name: 'Plethora of Molecules',
+			name: "Plethora of Molecules",
 			done() { return player.m.points.gte(1e25) },
 			tooltip: 'obtain 1e25 molecules.',
 			unlocked() { return hasAchievement('A', 123) },
@@ -619,7 +619,7 @@ addLayer('A', {
 			popupColor: '#00CCCC',
 		},
 		125: {
-			name: 'Molecules are Everything',
+			name: "Molecules are Everything",
 			done() { return player.m.points.gte(1e75) },
 			tooltip: 'obtain 1e75 molecules.',
 			unlocked() { return hasAchievement('A', 124) },
@@ -627,7 +627,7 @@ addLayer('A', {
 			popupColor: '#00CCCC',
 		},
 		126: {
-			name: 'Shiny New Molecules',
+			name: "Shiny New Molecules",
 			done() { return player.m.points.gte(1_000_000) && player.r.total.eq(0) },
 			tooltip: 'obtain 1,000,000 molecules with no relics.',
 			unlocked() { return hasAchievement('A', 122) && hasAchievement('A', 131) },
@@ -635,91 +635,91 @@ addLayer('A', {
 			popupColor: '#00CCCC',
 		},
 		131: {
-			name: 'Spread the Word',
+			name: "Spread the Word",
 			done() { return player.gi.points.gte(1) },
 			tooltip: 'obtain 1 good influence.',
 			unlocked() { return hasAchievement('A', 131) },
 			popupColor: '#08FF87',
 		},
 		132: {
-			name: 'Good Deeds All Around',
+			name: "Good Deeds All Around",
 			done() { return player.gi.points.gte(10) },
 			tooltip: 'obtain 10 good influence.',
 			unlocked() { return hasAchievement('A', 131) },
 			popupColor: '#08FF87',
 		},
 		133: {
-			name: 'World of Good',
+			name: "World of Good",
 			done() { return player.gi.points.gte(100) },
 			tooltip: 'obtain 100 good influence.',
 			unlocked() { return hasAchievement('A', 132) },
 			popupColor: '#08FF87',
 		},
 		134: {
-			name: 'Maximum Good',
+			name: "Maximum Good",
 			done() { return player.gi.points.gte(1000) },
 			tooltip: 'obtain 1,000 good influence.',
 			unlocked() { return hasAchievement('A', 133) },
 			popupColor: '#08FF87',
 		},
 		135: {
-			name: 'Good Exceeding',
+			name: "Good Exceeding",
 			done() { return player.gi.points.gte(10_000) },
 			tooltip: 'obtain 10,000 good influence.',
 			unlocked() { return hasAchievement('A', 134) },
 			popupColor: '#08FF87',
 		},
 		136: {
-			name: 'Science is not Holy',
+			name: "Science is not Holy",
 			done() { return player.gi.points.gte(10) && player.m.total.eq(0) },
 			tooltip: 'obtain 10 good influence with no molecules.',
 			unlocked() { return hasAchievement('A', 132) && hasAchievement('A', 151) },
 			popupColor: '#08FF87',
 		},
 		141: {
-			name: 'Malevolent Evil',
+			name: "Malevolent Evil",
 			done() { return player.ei.points.gte(1) },
 			tooltip: 'obtain 1 evil influence.',
 			unlocked() { return hasAchievement('A', 141) },
 			popupColor: '#FF4400',
 		},
 		142: {
-			name: 'Evil Encroaches',
+			name: "Evil Encroaches",
 			done() { return player.ei.points.gte(10) },
 			tooltip: 'obtain 10 evil influence.',
 			unlocked() { return hasAchievement('A', 141) },
 			popupColor: '#FF4400',
 		},
 		143: {
-			name: 'Evil Encompasses',
+			name: "Evil Encompasses",
 			done() { return player.ei.points.gte(100) },
 			tooltip: 'obtain 100 evil influence.',
 			unlocked() { return hasAchievement('A', 142) },
 			popupColor: '#FF4400',
 		},
 		144: {
-			name: 'Invasion of Evil',
+			name: "Invasion of Evil",
 			done() { return player.ei.points.gte(1000) },
 			tooltip: 'obtain 1,000 evil influence.',
 			unlocked() { return hasAchievement('A', 143) },
 			popupColor: '#FF4400',
 		},
 		145: {
-			name: 'Evil to Infinity',
+			name: "Evil to Infinity",
 			done() { return player.ei.points.gte(10_000) },
 			tooltip: 'obtain 10,000 evil influence.',
 			unlocked() { return hasAchievement('A', 144) },
 			popupColor: '#FF4400',
 		},
 		146: {
-			name: 'Disbelievers',
+			name: "Disbelievers",
 			done() { return player.ei.points.gte(10) && player.m.total.eq(0) },
 			tooltip: 'obtain 10 evil influence with no molecules.',
 			unlocked() { return hasAchievement('A', 142) && hasAchievement('A', 151) },
 			popupColor: '#FF4400',
 		},
 		151: {
-			name: 'Big Fight',
+			name: "Big Fight",
 			done() { return player.w.points.gte(1) },
 			tooltip: 'obtain 1 war.',
 			unlocked() { return hasAchievement('A', 151) },
@@ -733,91 +733,91 @@ addLayer('A', {
 			popupColor: '#A0A0A0',
 		},
 		153: {
-			name: 'Ravaging War',
+			name: "Ravaging War",
 			done() { return player.w.points.gte(100) },
 			tooltip: 'obtain 100 wars.',
 			unlocked() { return hasAchievement('A', 152) },
 			popupColor: '#A0A0A0',
 		},
 		154: {
-			name: 'War of the World',
+			name: "War of the World",
 			done() { return player.w.points.gte(1000) },
 			tooltip: 'obtain 1,000 wars.',
 			unlocked() { return hasAchievement('A', 153) },
 			popupColor: '#A0A0A0',
 		},
 		155: {
-			name: 'Ultimate War',
+			name: "Ultimate War",
 			done() { return player.w.points.gte(10_000) },
 			tooltip: 'obtain 10,000 wars.',
 			unlocked() { return hasAchievement('A', 154) },
 			popupColor: '#A0A0A0',
 		},
 		156: {
-			name: 'Vast Battlefields',
+			name: "Vast Battlefields",
 			done() { return player.w.points.gte(10) && player.pl.total.gte(1) },
 			tooltip: 'obtain 10 wars and 1 planet.',
 			unlocked() { return hasAchievement('A', 152) && hasAchievement('A', 191) },
 			popupColor: '#FF4400',
 		},
 		161: {
-			name: 'Life is Born',
+			name: "Life is Born",
 			done() { return player.cl.points.gte(1) },
 			tooltip: 'obtain 1 cellular life.',
 			unlocked() { return hasAchievement('A', 161) },
 			popupColor: '#008800',
 		},
 		162: {
-			name: 'Life Blossoms',
+			name: "Life Blossoms",
 			done() { return player.cl.points.gte(100) },
 			tooltip: 'obtain 100 cellular life.',
 			unlocked() { return hasAchievement('A', 161) },
 			popupColor: '#008800',
 		},
 		163: {
-			name: 'Many Cells',
+			name: "Many Cells",
 			done() { return player.cl.points.gte(10_000) },
 			tooltip: 'obtain 10,000 cellular life.',
 			unlocked() { return hasAchievement('A', 162) },
 			popupColor: '#008800',
 		},
 		164: {
-			name: 'Congealing Cells',
+			name: "Congealing Cells",
 			done() { return player.cl.points.gte(1_000_000) },
 			tooltip: 'obtain 1,000,000 cellular life.',
 			unlocked() { return hasAchievement('A', 163) },
 			popupColor: '#008800',
 		},
 		165: {
-			name: 'Ever-Replicating Cells',
+			name: "Ever-Replicating Cells",
 			done() { return player.cl.points.gte(100_000_000) },
 			tooltip: 'obtain 100,000,000 cellular life.',
 			unlocked() { return hasAchievement('A', 164) },
 			popupColor: '#008800',
 		},
 		166: {
-			name: 'Planetary Life',
+			name: "Planetary Life",
 			done() { return player.cl.points.gte(100) && player.pl.total.gte(1) },
 			tooltip: 'obtain 100 cellular life and 1 planet.',
 			unlocked() { return hasAchievement('A', 162) && hasAchievement('A', 191) },
 			popupColor: '#008800',
 		},
 		171: {
-			name: 'Rising Chaos',
+			name: "Rising Chaos",
 			done() { return player.ch.points.gte(1) },
 			tooltip: 'obtain 1 chaos.',
 			unlocked() { return hasAchievement('A', 171) },
 			popupColor: '#FFFFFF',
 		},
 		172: {
-			name: 'Madness of Chaos',
+			name: "Madness of Chaos",
 			done() { return player.ch.points.gte(8) },
 			tooltip: 'obtain 8 chaos.',
 			unlocked() { return hasAchievement('A', 171) },
 			popupColor: '#FFFFFF',
 		},
 		173: {
-			name: 'Chaos Engulfs',
+			name: "Chaos Engulfs",
 			done() { return player.ch.points.gte(64) },
 			tooltip: 'obtain 64 chaos.',
 			unlocked() { return hasAchievement('A', 172) },
@@ -838,63 +838,63 @@ addLayer('A', {
 			popupColor: '#FFFFFF',
 		},
 		176: {
-			name: 'Chaotic Planet',
+			name: "Chaotic Planet",
 			done() { return player.ch.points.gte(8) && player.pl.total.gte(1) },
 			tooltip: 'obtain 8 chaos and 1 planet.',
 			unlocked() { return hasAchievement('A', 172) && hasAchievement('A', 191) },
 			popupColor: '#FFFFFF',
 		},
 		181: {
-			name: 'The First Organism',
+			name: "The First Organism",
 			done() { return player.mo.points.gte(1) },
 			tooltip: 'obtain 1 multicellular organism.',
 			unlocked() { return hasAchievement('A', 181) },
 			popupColor: '#88CC44',
 		},
 		182: {
-			name: 'Growing Organisms',
+			name: "Growing Organisms",
 			done() { return player.mo.points.gte(10) },
 			tooltip: 'obtain 10 multicellular organisms.',
 			unlocked() { return hasAchievement('A', 181) },
 			popupColor: '#88CC44',
 		},
 		183: {
-			name: 'Organism Population',
+			name: "Organism Population",
 			done() { return player.mo.points.gte(100) },
 			tooltip: 'obtain 100 multicellular organisms.',
 			unlocked() { return hasAchievement('A', 182) },
 			popupColor: '#88CC44',
 		},
 		184: {
-			name: 'Ecosystem of Organisms',
+			name: "Ecosystem of Organisms",
 			done() { return player.mo.points.gte(1000) },
 			tooltip: 'obtain 1,000 multicellular organisms.',
 			unlocked() { return hasAchievement('A', 183) },
 			popupColor: '#88CC44',
 		},
 		185: {
-			name: 'Society of Organisms',
+			name: "Society of Organisms",
 			done() { return player.mo.points.gte(10_000) },
 			tooltip: 'obtain 10,000 multicellular organisms.',
 			unlocked() { return hasAchievement('A', 184) },
 			popupColor: '#88CC44',
 		},
 		186: {
-			name: 'Planet Habitation',
+			name: "Planet Habitation",
 			done() { return player.mo.points.gte(10) && player.pl.total.gte(1) },
 			tooltip: 'obtain 10 multicellular organisms and 1 planet.',
 			unlocked() { return hasAchievement('A', 182) && hasAchievement('A', 191) },
 			popupColor: '#88CC44',
 		},
 		191: {
-			name: 'Home Planet',
+			name: "Home Planet",
 			done() { return player.pl.points.gte(1) },
 			tooltip: 'obtain 1 planet.',
 			unlocked() { return hasAchievement('A', 191) },
 			popupColor: '#3C51AF',
 		},
 		192: {
-			name: 'Observable Planets',
+			name: "Observable Planets",
 			done() { return player.pl.points.gte(5) },
 			tooltip: 'obtain 5 planets.',
 			unlocked() { return hasAchievement('A', 191) },

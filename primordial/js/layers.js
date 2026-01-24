@@ -1,6 +1,6 @@
 addLayer("e", {
-	name: 'Essence',
-	symbol: 'E',
+	name: "Essence",
+	symbol: "E",
 	row: 0,
 	position: 0,
 	startData() { return {
@@ -10,16 +10,16 @@ addLayer("e", {
 		auto_upgrades: false,
 		auto_buyables: false,
 	}},
-	color: '#4CED13',
+	color: "#4CED13",
 	branches: ["c", "q", "p"],
 	requires: 5,
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
-	resource: 'essence',
-	baseResource: 'points',
+	resource: "essence",
+	baseResource: "points",
 	baseAmount() { return player.points },
-	type: 'normal',
+	type: "normal",
 	exponent: 0.5,
 	gainMult() {
 		// init
@@ -63,7 +63,7 @@ addLayer("e", {
 		// return
 		return mult;
 	},
-	hotkeys: [{key: "e", description: 'E: Reset for essence', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	hotkeys: [{key: "e", description: "E: Reset for essence", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
@@ -100,7 +100,7 @@ addLayer("e", {
 		if (hasMilestone("s", 20) && resettingLayer == "s") return;
 		if (hasMilestone("m", 2) && resettingLayer == "m") return;
 		if (hasMilestone("gi", 1) && resettingLayer == "gi") return;
-		let keep = ['auto_upgrades', 'auto_buyables'];
+		let keep = ["auto_upgrades", "auto_buyables"];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (hasMilestone("c", 0) && resettingLayer == "c") keep.push("upgrades");
 		if (hasMilestone("c", 2) && resettingLayer == "c") keep.push("buyables");
@@ -315,9 +315,9 @@ addLayer("e", {
 });
 
 addLayer("c", {
-	name: 'Core',
-	pluralName: 'Cores',
-	symbol: 'C',
+	name: "Core",
+	pluralName: "Cores",
+	symbol: "C",
 	row: 1,
 	position: 0,
 	startData() { return {
@@ -334,10 +334,10 @@ addLayer("c", {
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
-	resource: 'cores',
-	baseResource: 'essence',
+	resource: "cores",
+	baseResource: "essence",
 	baseAmount() { return player.e.points },
-	type: 'normal',
+	type: "normal",
 	exponent: 0.3,
 	gainMult() {
 		// init
@@ -376,7 +376,7 @@ addLayer("c", {
 	},
 	softcap: new Decimal("1e1250"),
 	softcapPower: 0.7,
-	hotkeys: [{key: "c", description: 'C: Reset for cores', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	hotkeys: [{key: "c", description: "C: Reset for cores", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
@@ -413,7 +413,7 @@ addLayer("c", {
 		if (hasMilestone("ei", 1) && resettingLayer == "ei") return;
 		if (hasMilestone("w", 7) && resettingLayer == "w") return;
 		if (hasMilestone("cl", 2) && resettingLayer == "cl") return;
-		let keep = ['auto_upgrades', 'auto_buyables'];
+		let keep = ["auto_upgrades", "auto_buyables"];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (hasUpgrade("sp", 21) && resettingLayer == "sp") keep.push("buyables");
 		if (hasUpgrade("sp", 22) && resettingLayer == "sp") keep.push("upgrades");
@@ -653,9 +653,9 @@ addLayer("c", {
 });
 
 addLayer("q", {
-	name: 'Quark',
-	pluralName: 'Quarks',
-	symbol: 'Q',
+	name: "Quark",
+	pluralName: "Quarks",
+	symbol: "Q",
 	row: 1,
 	position: 2,
 	startData() { return {
@@ -680,10 +680,10 @@ addLayer("q", {
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
-	resource: 'quarks',
-	baseResource: 'essence',
+	resource: "quarks",
+	baseResource: "essence",
 	baseAmount() { return player.e.points },
-	type: 'normal',
+	type: "normal",
 	exponent: 0.1,
 	gainMult() {
 		// init
@@ -722,7 +722,7 @@ addLayer("q", {
 	},
 	softcap: new Decimal("1e1250"),
 	softcapPower: 0.6,
-	hotkeys: [{key: "q", description: 'Q: Reset for quarks', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	hotkeys: [{key: "q", description: "Q: Reset for quarks", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.c.unlocked || player.q.unlocked },
 	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
@@ -754,7 +754,7 @@ addLayer("q", {
 		if (hasMilestone("ei", 2) && resettingLayer == "ei") return;
 		if (hasMilestone("w", 9) && resettingLayer == "w") return;
 		if (hasMilestone("cl", 5) && resettingLayer == "cl") return;
-		let keep = ['auto_upgrades', 'auto_buyable_11', 'auto_buyable_12', 'auto_buyable_13', 'auto_buyable_21', 'auto_buyable_22', 'auto_buyable_23'];
+		let keep = ["auto_upgrades", "auto_buyable_11", "auto_buyable_12", "auto_buyable_13", "auto_buyable_21", "auto_buyable_22", "auto_buyable_23"];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (hasMilestone("sp", 3) && resettingLayer == "sp") keep.push("milestones");
 		if (hasMilestone("sp", 5) && resettingLayer == "sp") keep.push("upgrades");
@@ -1276,9 +1276,9 @@ addLayer("q", {
 });
 
 addLayer("sp", {
-	name: 'Subatomic Particle',
-	pluralName: 'Subatomic Particles',
-	symbol: 'SP',
+	name: "Subatomic Particle",
+	pluralName: "Subatomic Particles",
+	symbol: "SP",
 	row: 2,
 	position: 2,
 	startData() { return {
@@ -1295,10 +1295,10 @@ addLayer("sp", {
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
-	resource: 'subatomic particles',
-	baseResource: 'quarks',
+	resource: "subatomic particles",
+	baseResource: "quarks",
 	baseAmount() { return player.q.points },
-	type: 'static',
+	type: "static",
 	exponent: 4.25,
 	canBuyMax() { return hasMilestone("sp", 0) || player.w.unlocked || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 	gainExp() {
@@ -1325,7 +1325,7 @@ addLayer("sp", {
 		return gain;
 	},
 	autoPrestige() { return hasMilestone("s", 11) || hasUpgrade("pl", 24) },
-	hotkeys: [{key: 'S', description: 'Shift-S: Reset for subatomic particles', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	hotkeys: [{key: "S", description: "Shift-S: Reset for subatomic particles", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.q.unlocked || player.sp.unlocked },
 	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
 	automate() {
@@ -1343,7 +1343,7 @@ addLayer("sp", {
 	},
 	doReset(resettingLayer) {
 		if (getActivatedRelics() >= 35 && resettingLayer == "r") return;
-		let keep = ['auto_upgrades', 'auto_buyables'];
+		let keep = ["auto_upgrades", "auto_buyables"];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (hasMilestone("ds", 0) && resettingLayer == "ds") keep.push("buyables");
 		if (hasMilestone("ds", 1) && resettingLayer == "ds") keep.push("upgrades");
@@ -1505,9 +1505,9 @@ addLayer("sp", {
 });
 
 addLayer("h", {
-	name: 'Hex',
-	pluralName: 'Hexes',
-	symbol: 'H',
+	name: "Hex",
+	pluralName: "Hexes",
+	symbol: "H",
 	row: 2,
 	position: 0,
 	startData() { return {
@@ -1525,10 +1525,10 @@ addLayer("h", {
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
-	resource: 'hexes',
-	baseResource: 'cores',
+	resource: "hexes",
+	baseResource: "cores",
 	baseAmount() { return player.c.points },
-	type: 'normal',
+	type: "normal",
 	exponent: 0.5,
 	gainMult() {
 		// init
@@ -1561,8 +1561,8 @@ addLayer("h", {
 		return mult;
 	},
 	softcap() {
-		if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return new Decimal('1e100');
-		return new Decimal('1e1000');
+		if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return new Decimal("1e100");
+		return new Decimal("1e1000");
 	},
 	softcapPower() {
 		if (hasChallenge("ds", 31)) return 0.55;
@@ -1570,7 +1570,7 @@ addLayer("h", {
 		if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 0.51;
 		return 0.5;
 	},
-	hotkeys: [{key: "h", description: 'H: Reset for hexes', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	hotkeys: [{key: "h", description: "H: Reset for hexes", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.sp.unlocked || player.h.unlocked },
 	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
@@ -1591,7 +1591,7 @@ addLayer("h", {
 		if (getActivatedRelics() >= 27 && resettingLayer == "r") return;
 		if (hasMilestone("m", 13) && resettingLayer == "m") return;
 		if (hasMilestone("gi", 4) && resettingLayer == "gi") return;
-		let keep = ['auto_upgrades', 'keep_breaking'];
+		let keep = ["auto_upgrades", "keep_breaking"];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (hasMilestone("ds", 8) && resettingLayer == "ds") keep.push("milestones");
 		if (hasMilestone("a", 6) && resettingLayer == "a") keep.push("milestones");
@@ -2006,9 +2006,9 @@ addLayer("h", {
 });
 
 addLayer("ds", {
-	name: 'Demon Soul',
-	pluralName: 'Demon Souls',
-	symbol: 'DS',
+	name: "Demon Soul",
+	pluralName: "Demon Souls",
+	symbol: "DS",
 	row: 3,
 	position: 0,
 	startData() { return {
@@ -2027,10 +2027,10 @@ addLayer("ds", {
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
-	resource: 'demon souls',
-	baseResource: 'hexes',
+	resource: "demon souls",
+	baseResource: "hexes",
 	baseAmount() { return player.h.points },
-	type: 'normal',
+	type: "normal",
 	exponent: 0.05,
 	gainMult() {
 		// init
@@ -2054,7 +2054,7 @@ addLayer("ds", {
 	},
 	softcap: new Decimal('e10000000'),
 	softcapPower: 0.8,
-	hotkeys: [{key: "d", description: 'D: Reset for demon souls', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	hotkeys: [{key: "d", description: "D: Reset for demon souls", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.h.unlocked || player.ds.unlocked },
 	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
@@ -2371,7 +2371,7 @@ addLayer("ds", {
 			rewardDescription() {
 				const completions = challengeCompletions(this.layer, this.id);
 				const effects = challengeEffect(this.layer, this.id);
-				let text = '';
+				let text = "";
 				// current rewards
 				if (completions >= 3) text += "multiply good influence gain and multiply cellular life gain (both based on your Threads)<br>Currently: " + format(effects[0]) + "x<br>and " + format(effects[1]) + "x";
 				else if (completions >= 1) text += "multiply good influence gain based on your Threads<br>Currently: " + format(effects[0]) + "x";
@@ -2396,9 +2396,9 @@ addLayer("ds", {
 });
 
 addLayer("a", {
-	name: 'Atom',
-	pluralName: 'Atoms',
-	symbol: 'A',
+	name: "Atom",
+	pluralName: "Atoms",
+	symbol: "A",
 	row: 3,
 	position: 2,
 	startData() { return {
@@ -2415,10 +2415,10 @@ addLayer("a", {
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
-	resource: 'atoms',
-	baseResource: 'subatomic particles',
+	resource: "atoms",
+	baseResource: "subatomic particles",
 	baseAmount() { return player.sp.points },
-	type: 'static',
+	type: "static",
 	exponent: 1,
 	canBuyMax() { return true },
 	gainExp() {
@@ -2442,7 +2442,7 @@ addLayer("a", {
 		return gain;
 	},
 	autoPrestige() { return hasMilestone("a", 15) || hasUpgrade("pl", 42) },
-	hotkeys: [{key: "a", description: 'A: Reset for atoms', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	hotkeys: [{key: "a", description: "A: Reset for atoms", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.ds.unlocked || player.a.unlocked },
 	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
 	automate() {
@@ -2459,7 +2459,7 @@ addLayer("a", {
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone("ei", 4) && resettingLayer == "ei") return;
-		let keep = ['auto_upgrades', 'auto_reactor'];
+		let keep = ["auto_upgrades", "auto_reactor"];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (layers[resettingLayer].row == this.row) {
 			keep.push("milestones", "points", "best", "total", "clickables");
@@ -2932,9 +2932,9 @@ addLayer("a", {
 });
 
 addLayer("p", {
-	name: 'Prayer',
-	pluralName: 'Prayers',
-	symbol: 'P',
+	name: "Prayer",
+	pluralName: "Prayers",
+	symbol: "P",
 	row: 1,
 	position: 1,
 	startData() { return {
@@ -2954,10 +2954,10 @@ addLayer("p", {
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
-	resource: 'prayers',
-	baseResource: 'essence',
+	resource: "prayers",
+	baseResource: "essence",
 	baseAmount() { return player.e.points },
-	type: 'normal',
+	type: "normal",
 	exponent: 0.012,
 	gainMult() {
 		// init
@@ -2981,7 +2981,7 @@ addLayer("p", {
 		// return
 		return mult;
 	},
-	hotkeys: [{key: "p", description: 'P: Reset for prayers', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	hotkeys: [{key: "p", description: "P: Reset for prayers", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.a.unlocked || player.p.unlocked },
 	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
@@ -3065,7 +3065,7 @@ addLayer("p", {
 		if (hasMilestone("ei", 3) && resettingLayer == "ei") return;
 		if (hasMilestone("w", 10) && resettingLayer == "w") return;
 		if (hasMilestone("cl", 6) && resettingLayer == "cl") return;
-		let keep = ['auto_upgrades', "smart_auto_upgrades"];
+		let keep = ["auto_upgrades", "smart_auto_upgrades"];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (resettingLayer == "h") keep.push("points", "best", "total", "milestones");
 		if (resettingLayer == "sp") keep.push("points", "best", "total", "milestones");
@@ -3571,9 +3571,9 @@ addLayer("p", {
 });
 
 addLayer("s", {
-	name: 'Sanctum',
-	pluralName: 'Sanctums',
-	symbol: 'S',
+	name: "Sanctum",
+	pluralName: "Sanctums",
+	symbol: "S",
 	row: 2,
 	position: 1,
 	startData() { return {
@@ -3594,10 +3594,10 @@ addLayer("s", {
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
-	resource: 'sanctums',
-	baseResource: 'prayers',
+	resource: "sanctums",
+	baseResource: "prayers",
 	baseAmount() { return player.p.points },
-	type: 'static',
+	type: "static",
 	exponent() {
 		if (hasUpgrade("p", 65)) {
 			if (hasUpgrade("p", 74)) {
@@ -3621,7 +3621,7 @@ addLayer("s", {
 		return gain;
 	},
 	autoPrestige() { return hasMilestone("s", 48) },
-	hotkeys: [{key: "s", description: 'S: Reset for sanctums', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	hotkeys: [{key: "s", description: "S: Reset for sanctums", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.p.unlocked || player.s.unlocked },
 	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
 	effect() { return new Decimal(2).pow(player.s.points) },
@@ -3684,13 +3684,13 @@ addLayer("s", {
 			requirementDescription: '2 sanctums',
 			effectDescription: 'you can autobuy core upgrades',
 			done() { return player.s.points.gte(2) },
-			toggles: [["c", 'auto_upgrades']],
+			toggles: [["c", "auto_upgrades"]],
 		},
 		2: {
 			requirementDescription: '3 sanctums',
 			effectDescription: 'you can autobuy core rebuyables',
 			done() { return player.s.points.gte(3) },
-			toggles: [["c", 'auto_buyables']],
+			toggles: [["c", "auto_buyables"]],
 		},
 		3: {
 			requirementDescription: '4 sanctums',
@@ -3701,13 +3701,13 @@ addLayer("s", {
 			requirementDescription: '5 sanctums',
 			effectDescription: 'you can autobuy quark upgrades',
 			done() { return player.s.points.gte(5) },
-			toggles: [["q", 'auto_upgrades']],
+			toggles: [["q", "auto_upgrades"]],
 		},
 		5: {
 			requirementDescription: '6 sanctums',
 			effectDescription: 'you can autobuy prayer upgrades',
 			done() { return player.s.points.gte(6) },
-			toggles: [["p", 'auto_upgrades']],
+			toggles: [["p", "auto_upgrades"]],
 		},
 		6: {
 			requirementDescription: '7 sanctums',
@@ -3997,8 +3997,8 @@ addLayer("s", {
 });
 
 addLayer("d", {
-	name: 'Devotion',
-	symbol: 'D',
+	name: "Devotion",
+	symbol: "D",
 	row: 2,
 	position: 3,
 	color: "#AAFF00",
@@ -4178,8 +4178,8 @@ addLayer("d", {
 });
 
 addLayer("g", {
-	name: 'Glow',
-	symbol: 'G',
+	name: "Glow",
+	symbol: "G",
 	row: 2,
 	position: 4,
 	color: "#AAFF00",
@@ -4287,9 +4287,9 @@ addLayer("g", {
 });
 
 addLayer("r", {
-	name: 'Relic',
-	pluralName: 'Relics',
-	symbol: 'R',
+	name: "Relic",
+	pluralName: "Relics",
+	symbol: "R",
 	row: 3,
 	position: 1,
 	startData() { return {
@@ -4315,10 +4315,10 @@ addLayer("r", {
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
-	resource: 'relics',
-	baseResource: 'sanctums',
+	resource: "relics",
+	baseResource: "sanctums",
 	baseAmount() { return player.s.points },
-	type: 'static',
+	type: "static",
 	exponent: 0.66,
 	canBuyMax() { return true },
 	gainExp() {
@@ -4330,7 +4330,7 @@ addLayer("r", {
 		return gain;
 	},
 	autoPrestige() { return hasMilestone("w", 4) },
-	hotkeys: [{key: "r", description: 'R: Reset for relics', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	hotkeys: [{key: "r", description: "R: Reset for relics", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.s.unlocked || player.r.unlocked },
 	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
 	automate() {
@@ -4370,7 +4370,7 @@ addLayer("r", {
 		return [eff1, player.r.points.add(1).pow(0.5).mul(effBoost2), player.r.points.mul(100).add(1).pow(0.25).mul(effBoost3)];
 	},
 	effectDescription() {
-		let text = ['', ''];
+		let text = ["", ""];
 		if (tmp.r.effect[0].gte(softcaps.r_eff1[0]) && !(isAssimilated("r") || player.mo.assimilating === "r")) text[0] = ' (softcapped)';
 		if (getActivatedRelics() >= 2) text[1] = 'point and ';
 		return 'which makes <b' + getColorClass(this, REF, "e", true) + 'Essence Influence\'s</b> hardcap start <h2 class="layer-r">' + format(tmp.r.effect[0]) + '</h2>x later' + text[0] + ', multiplies sanctum gain by <h2 class="layer-r">' + format(tmp.r.effect[1]) + '</h2>x, and also multiplies ' + text[1] + 'essence gain by <h2 class="layer-r">' + format(tmp.r.effect[2]) + '</h2>x';
@@ -4381,7 +4381,7 @@ addLayer("r", {
 		if (hasMilestone("ei", 0) && resettingLayer == "ei") return;
 		if (hasMilestone("w", 5) && resettingLayer == "w") return;
 		if (hasMilestone("cl", 1) && resettingLayer == "cl") return;
-		let keep = ['auto_activate', 'auto_upgrade_1', 'auto_upgrade_2', 'auto_upgrade_3', 'auto_buyables'];
+		let keep = ["auto_activate", "auto_upgrade_1", "auto_upgrade_2", "auto_upgrade_3", "auto_buyables"];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		let save = 0;
 		if (hasMilestone("w", 2) && resettingLayer == "w") {
@@ -4483,12 +4483,12 @@ addLayer("r", {
 			rewardDescription() {
 				const completions = challengeCompletions(this.layer, this.id);
 				const effects = challengeEffect(this.layer, this.id);
-				let text = '';
+				let text = "";
 				// current rewards
-				if (completions >= 13) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, multiply Sacrificial Ceremony\'s last effect, and also multiply relic gain (all based on your light)<br>Currently: ' + format(effects[0]) + 'x,<br>^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : '') + ',<br>' + format(effects[2]) + 'x,<br>and ' + format(effects[3]) + 'x';
-				else if (completions >= 12) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(effects[0]) + 'x,<br>^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : '') + ',<br>and ' + format(effects[2]) + 'x';
-				else if (completions >= 5) text += 'multiply relic\'s second and third effects, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(effects[0]) + 'x,<br>^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : '') + ',<br>and ' + format(effects[2]) + 'x';
-				else if (completions >= 4) text += 'multiply relic\'s second and third effects based on your light, and also exponentiate relic\'s first effect based on your light<br>Currently: ' + format(effects[0]) + 'x<br>and ^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : '');
+				if (completions >= 13) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, multiply Sacrificial Ceremony\'s last effect, and also multiply relic gain (all based on your light)<br>Currently: ' + format(effects[0]) + 'x,<br>^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : "") + ',<br>' + format(effects[2]) + 'x,<br>and ' + format(effects[3]) + 'x';
+				else if (completions >= 12) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(effects[0]) + 'x,<br>^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : "") + ',<br>and ' + format(effects[2]) + 'x';
+				else if (completions >= 5) text += 'multiply relic\'s second and third effects, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(effects[0]) + 'x,<br>^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : "") + ',<br>and ' + format(effects[2]) + 'x';
+				else if (completions >= 4) text += 'multiply relic\'s second and third effects based on your light, and also exponentiate relic\'s first effect based on your light<br>Currently: ' + format(effects[0]) + 'x<br>and ^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : "");
 				else if (completions >= 1) text += 'multiply relic\'s second and third effects based on your light<br>Currently: ' + format(effects[0]) + 'x';
 				else text += 'nothing currently';
 				// next reward
@@ -4502,7 +4502,7 @@ addLayer("r", {
 				else if (completions == 6) text += 'quadruple the third activated relic effect';
 				else if (completions == 7) text += 'double the third activated relic effect';
 				else if (completions == 8) text += 'keep sanctum milestones on relic resets';
-				else if (completions == 9) text += 'unlock Molecules' + (player.m.unlocked ? ' (already unlocked)' : '');
+				else if (completions == 9) text += 'unlock Molecules' + (player.m.unlocked ? ' (already unlocked)' : "");
 				else if (completions == 10) text += 'double the first activated relic effect';
 				else if (completions == 11) text += 'the first activated relic effect also applies to molecule gain';
 				else if (completions == 12) text += 'multiply relic gain based on your light<br>Currently: ' + format(effects[3]) + 'x';
@@ -4631,7 +4631,7 @@ addLayer("r", {
 				return text;
 			},
 			costDisplay(cost) { return 'Req: ' + formatWhole(cost) + ' activated relics' },
-			boughtDisplay(x) { return 'Bought: ' + formatWhole(x) + '/' + formatWhole(this.purchaseLimit) + (hasBuyable("r", 21) ? ' + ' + formatWhole(buyableEffect("r", 21)) : '') },
+			boughtDisplay(x) { return 'Bought: ' + formatWhole(x) + '/' + formatWhole(this.purchaseLimit) + (hasBuyable("r", 21) ? ' + ' + formatWhole(buyableEffect("r", 21)) : "") },
 		},
 		12: {
 			cost(x) {
@@ -4651,7 +4651,7 @@ addLayer("r", {
 				return text;
 			},
 			costDisplay(cost) { return 'Req: ' + formatWhole(cost) + ' activated relics' },
-			boughtDisplay(x) { return 'Bought: ' + formatWhole(x) + '/' + formatWhole(this.purchaseLimit) + (hasBuyable("r", 21) ? ' + ' + formatWhole(buyableEffect("r", 21)) : '') },
+			boughtDisplay(x) { return 'Bought: ' + formatWhole(x) + '/' + formatWhole(this.purchaseLimit) + (hasBuyable("r", 21) ? ' + ' + formatWhole(buyableEffect("r", 21)) : "") },
 		},
 		21: {
 			cost(x) {
@@ -4733,9 +4733,9 @@ addLayer("r", {
 });
 
 addLayer("m", {
-	name: 'Molecule',
-	pluralName: 'Molecules',
-	symbol: 'M',
+	name: "Molecule",
+	pluralName: "Molecules",
+	symbol: "M",
 	row: 4,
 	position: 2,
 	startData() { return {
@@ -4751,10 +4751,10 @@ addLayer("m", {
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
-	resource: 'molecules',
-	baseResource: 'atoms',
+	resource: "molecules",
+	baseResource: "atoms",
 	baseAmount() { return player.a.points },
-	type: 'normal',
+	type: "normal",
 	exponent: 0.9,
 	gainMult() {
 		let mult = newDecimalOne();
@@ -4764,7 +4764,7 @@ addLayer("m", {
 		if (hasUpgrade("pl", 62)) mult = mult.mul(upgradeEffect("pl", 62));
 		return mult;
 	},
-	hotkeys: [{key: "m", description: 'M: Reset for molecules', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	hotkeys: [{key: "m", description: "M: Reset for molecules", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return getActivatedRelics() >= 10 || player.m.unlocked },
 	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
 	passiveGeneration() {
@@ -4788,17 +4788,17 @@ addLayer("m", {
 		return eff;
 	},
 	effectDescription() {
-		let softcap = '';
+		let softcap = "";
 		if (tmp.m.effect.gt(softcaps.m_eff[0]())) softcap = ' (softcapped)';
 		return 'which multiplies atom gain by <h2 class="layer-m">' + format(tmp.m.effect) + '</h2>x (based on best)' + softcap;
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone("w", 6) && resettingLayer == "w") return;
-		let keep = ['auto_upgrades'];
+		let keep = ["auto_upgrades"];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
-		if (hasMilestone("w", 0) && resettingLayer == "w") keep.push('milestones');
-		if (hasMilestone("cl", 4) && resettingLayer == "cl") keep.push('milestones');
-		if (hasMilestone("ch", 3) && resettingLayer == "ch") keep.push('milestones');
+		if (hasMilestone("w", 0) && resettingLayer == "w") keep.push("milestones");
+		if (hasMilestone("cl", 4) && resettingLayer == "cl") keep.push("milestones");
+		if (hasMilestone("ch", 3) && resettingLayer == "ch") keep.push("milestones");
 		if (layers[resettingLayer].row > this.row) layerDataReset("m", keep);
 	},
 	uniqueNonExtra() {
@@ -4829,19 +4829,19 @@ addLayer("m", {
 			requirementDescription: '1 molecule',
 			effectDescription: 'molecules don\'t reset relics, and<br>you can autobuy essence rebuyables',
 			done() { return player.m.points.gte(1) },
-			toggles: [["e", 'auto_buyables']],
+			toggles: [["e", "auto_buyables"]],
 		},
 		1: {
 			requirementDescription: '2 total molecules',
 			effectDescription: 'keep demon soul challenges and<br><b' + getColorClass(this, REF, "ds") + 'Demonic Key</b> on row 5 resets,<br>and you can autobuy hex upgrades',
 			done() { return player.m.total.gte(2) },
-			toggles: [["h", 'auto_upgrades']],
+			toggles: [["h", "auto_upgrades"]],
 		},
 		2: {
 			requirementDescription: '3 total molecules',
 			effectDescription: 'molecules don\'t reset essence, and<br>you can autobuy essence upgrades',
 			done() { return player.m.total.gte(3) },
-			toggles: [["e", 'auto_upgrades']],
+			toggles: [["e", "auto_upgrades"]],
 		},
 		3: {
 			requirementDescription: '4 total molecules',
@@ -4852,19 +4852,19 @@ addLayer("m", {
 			requirementDescription: '5 total molecules',
 			effectDescription: 'molecules don\'t reset cores, and<br>you can autobuy subatomic<br>particle upgrades and rebuyables',
 			done() { return player.m.total.gte(5) },
-			toggles: [["sp", 'auto_upgrades'], ["sp", 'auto_buyables']],
+			toggles: [["sp", "auto_upgrades"], ["sp", "auto_buyables"]],
 		},
 		5: {
 			requirementDescription: '7 total molecules',
 			effectDescription: 'molecules don\'t reset quarks, and<br>you can autobuy demon soul upgrades',
 			done() { return player.m.total.gte(7) },
-			toggles: [["ds", 'auto_upgrades']],
+			toggles: [["ds", "auto_upgrades"]],
 		},
 		6: {
 			requirementDescription: '10 total molecules',
 			effectDescription: 'you can autobuy demon soul rebuyables',
 			done() { return player.m.total.gte(10) },
-			toggles: [["ds", 'auto_buyables']],
+			toggles: [["ds", "auto_buyables"]],
 		},
 		7: {
 			requirementDescription: '15 total molecules',
@@ -4978,7 +4978,7 @@ addLayer("m", {
 		},
 		21: {
 			fullDisplay() {
-				let text = '';
+				let text = "";
 				if (options.nerdMode) text += '<br>formula: (25x+1)^0.3';
 				return '<h3' + getColorClass(this, TITLE) + 'CO<span style="font-size: 0.8em">3</span>, Carbon Trioxide</h3><br>multiplies core gain based on your best molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: 360,000 atoms';
 			},
@@ -4999,7 +4999,7 @@ addLayer("m", {
 		},
 		23: {
 			fullDisplay() {
-				let text = '';
+				let text = "";
 				if (options.nerdMode) text += '<br>formula: (250x+1)^0.1';
 				return '<h3' + getColorClass(this, TITLE) + 'NH<span style="font-size: 0.8em">3</span>, Ammonia</h3><br>multiplies hex gain based on your best molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: 4,600,000 atoms';
 			},
@@ -5021,7 +5021,7 @@ addLayer("m", {
 		},
 		32: {
 			fullDisplay() {
-				let text = '';
+				let text = "";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.2';
 				return '<h3' + getColorClass(this, TITLE) + 'NaCl, Salt</h3><br>gives extra unique molecules based on your atoms<br>Currently: +' + formatWhole(this.effect()) + text + '<br><br>Cost: 7,777,777 atoms';
 			},
@@ -5032,7 +5032,7 @@ addLayer("m", {
 		},
 		33: {
 			fullDisplay() {
-				let text = '';
+				let text = "";
 				if (options.nerdMode) text += '<br>formula: 1000x';
 				return '<h3' + getColorClass(this, TITLE) + 'O<span style="font-size:0.8em">3</span>, Ozone</h3><br>multiplies demon soul gain based on your total unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e10) + ' atoms';
 			},
@@ -5067,7 +5067,7 @@ addLayer("m", {
 		},
 		43: {
 			fullDisplay() {
-				let text = '';
+				let text = "";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.01';
 				return'<h3' + getColorClass(this, TITLE) + 'Ca(OH)<span style="font-size: 0.8em">2</span>, Calcium Hydroxide</h3><br>multiplies relic gain based on your extra unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1.61e10) + ' atoms';
 			},
@@ -5149,8 +5149,8 @@ addLayer("m", {
 });
 
 addLayer("gi", {
-	name: 'Good Influence',
-	symbol: 'GI',
+	name: "Good Influence",
+	symbol: "GI",
 	row: 4,
 	position: 1,
 	startData() { return {
@@ -5168,10 +5168,10 @@ addLayer("gi", {
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
-	resource: 'good influence',
-	baseResource: 'relics',
+	resource: "good influence",
+	baseResource: "relics",
 	baseAmount() { return player.r.points },
-	type: 'static',
+	type: "static",
 	base() {
 		if (hasUpgrade("gi", 14)) return 1.98;
 		if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 1.99;
@@ -5194,7 +5194,7 @@ addLayer("gi", {
 		return gain;
 	},
 	autoPrestige() { return (hasMilestone("w", 1) || ((isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasMilestone("gi", 16)) || hasUpgrade("pl", 64)) && (!hasMilestone("cl", 0) || player.gi.auto_prestige) },
-	hotkeys: [{key: 'G', description: 'Shift-G: Reset for good influence', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	hotkeys: [{key: "G", description: "Shift-G: Reset for good influence", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.m.unlocked || player.gi.unlocked },
 	deactivated() { return inChallenge("ch", 11) || (getClickableState("mo", 11) && !canAssimilate(this.layer))},
 	automate() {
@@ -5249,11 +5249,11 @@ addLayer("gi", {
 	doReset(resettingLayer) {
 		if (hasMilestone("w", 8) && resettingLayer == "w") return;
 		if (hasMilestone("cl", 4) && resettingLayer == "cl") return;
-		let keep = ['auto_buyables', 'auto_upgrades', 'auto_prestige'];
+		let keep = ["auto_buyables", "auto_upgrades", "auto_prestige"];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
-		if (hasMilestone("w", 1) && resettingLayer == "w") keep.push('milestones');
-		if (hasMilestone("cl", 0) && resettingLayer == "cl") keep.push('milestones');
-		if (hasMilestone("ch", 8) && resettingLayer == "ch") keep.push('milestones');
+		if (hasMilestone("w", 1) && resettingLayer == "w") keep.push("milestones");
+		if (hasMilestone("cl", 0) && resettingLayer == "cl") keep.push("milestones");
+		if (hasMilestone("ch", 8) && resettingLayer == "ch") keep.push("milestones");
 		if (layers[resettingLayer].row > this.row) layerDataReset("gi", keep);
 	},
 	resetsNothing() { return hasMilestone("gi", 16) || hasUpgrade("pl", 64) },
@@ -5327,7 +5327,7 @@ addLayer("gi", {
 			requirementDescription: '21 good influence',
 			effectDescription: 'you can explore 3 further molecule upgrades<br>and you can autobuy atom upgrades',
 			done() { return player.gi.points.gte(21) },
-			toggles: [["a", 'auto_upgrades']],
+			toggles: [["a", "auto_upgrades"]],
 			unlocked() { return hasMilestone("gi", 9) },
 		},
 		12: {
@@ -5454,8 +5454,8 @@ addLayer("gi", {
 });
 
 addLayer("ei", {
-	name: 'Evil Influence',
-	symbol: 'EI',
+	name: "Evil Influence",
+	symbol: "EI",
 	row: 4,
 	position: 0,
 	startData() { return {
@@ -5473,10 +5473,10 @@ addLayer("ei", {
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
-	resource: 'evil influence',
-	baseResource: 'demon souls',
+	resource: "evil influence",
+	baseResource: "demon souls",
 	baseAmount() { return player.ds.points },
-	type: 'static',
+	type: "static",
 	exponent() {
 		if (hasUpgrade("ei", 83)) return 5.75;
 		if (hasUpgrade("ei", 73)) return 6.25;
@@ -5516,7 +5516,7 @@ addLayer("ei", {
 		return Array.from({length: this.softcaps.length}).map(() => power);
 	},
 	autoPrestige() { return (hasMilestone("w", 3) || hasUpgrade("pl", 64)) && (!hasMilestone("cl", 0) || player.ei.auto_prestige) },
-	hotkeys: [{key: 'E', description: 'Shift-E: Reset for evil influence', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	hotkeys: [{key: "E", description: "Shift-E: Reset for evil influence", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.gi.unlocked || player.ei.unlocked || player.w.unlocked },
 	deactivated() { return inChallenge("ch", 12) || (getClickableState("mo", 11) && !canAssimilate(this.layer)) },
 	automate() {
@@ -5569,12 +5569,12 @@ addLayer("ei", {
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone("cl", 3) && resettingLayer == "cl") return;
-		let keep = ['auto_upgrades', 'auto_prestige'];
+		let keep = ["auto_upgrades", "auto_prestige"];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
-		if (hasMilestone("w", 2) && resettingLayer == "w") keep.push('milestones');
-		if (hasMilestone("w", 3) && resettingLayer == "w") keep.push('challenges');
-		if (hasMilestone("cl", 0) && resettingLayer == "cl") keep.push('milestones');
-		if (hasMilestone("ch", 4) && resettingLayer == "ch") keep.push('challenges');
+		if (hasMilestone("w", 2) && resettingLayer == "w") keep.push("milestones");
+		if (hasMilestone("w", 3) && resettingLayer == "w") keep.push("challenges");
+		if (hasMilestone("cl", 0) && resettingLayer == "cl") keep.push("milestones");
+		if (hasMilestone("ch", 4) && resettingLayer == "ch") keep.push("challenges");
 		if (layers[resettingLayer].row > this.row) layerDataReset("ei", keep);
 	},
 	resetsNothing() { return hasChallenge("ei", 12) || hasUpgrade("pl", 64) },
@@ -5991,9 +5991,9 @@ addLayer("ei", {
 });
 
 addLayer("w", {
-	name: 'War',
-	pluralName: 'Wars',
-	symbol: 'W',
+	name: "War",
+	pluralName: "Wars",
+	symbol: "W",
 	row: 5,
 	position: 0,
 	startData() { return {
@@ -6003,13 +6003,13 @@ addLayer("w", {
 		total: newDecimalZero(),
 		auto_influence: false,
 	}},
-	color: '#A0A0A0',
+	color: "#A0A0A0",
 	branches: ["ch"],
 	requires: 60,
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
-	resource: 'wars',
+	resource: "wars",
 	giCostMult() {
 		let mult = newDecimalOne();
 		if (isAssimilated("ei") || player.mo.assimilating === "ei") {
@@ -6018,7 +6018,7 @@ addLayer("w", {
 		return mult;
 	},
 	baseAmount() { return player.gi.points.div(this.giCostMult()).min(player.ei.points) },
-	type: 'custom',
+	type: "custom",
 	getResetGain() {
 		if (tmp.w.baseAmount.lt(tmp.w.requires)) return newDecimalZero();
 		let gain = tmp.w.baseAmount.sub(tmp.w.requires).div(20).mul(this.gainExp()).floor().sub(player.w.points).add(1);
@@ -6031,7 +6031,7 @@ addLayer("w", {
 	},
 	canReset() { return this.getResetGain().gt(0) },
 	prestigeNotify() { return this.getResetGain().gt(0) },
-	prestigeButtonText() { return 'Reset for +<b>' + formatWhole(tmp.w.getResetGain) + '</b> wars<br><br>' + (player.w.points.lt(30) ? (tmp.w.canBuyMax ? 'Next:' : 'Req:') : '') + ' ' + formatWhole(player.gi.points) + ' / ' + format(tmp.w.getNextAt.mul(tmp.w.giCostMult)) + ' GI<br>' + (player.w.points.lt(30) ? 'and ' : '') + formatWhole(player.ei.points) + ' / ' + format(tmp.w.getNextAt) + ' EI' },
+	prestigeButtonText() { return 'Reset for +<b>' + formatWhole(tmp.w.getResetGain) + '</b> wars<br><br>' + (player.w.points.lt(30) ? (tmp.w.canBuyMax ? 'Next:' : 'Req:') : "") + ' ' + formatWhole(player.gi.points) + ' / ' + format(tmp.w.getNextAt.mul(tmp.w.giCostMult)) + ' GI<br>' + (player.w.points.lt(30) ? 'and ' : "") + formatWhole(player.ei.points) + ' / ' + format(tmp.w.getNextAt) + ' EI' },
 	canBuyMax() { return hasMilestone("ch", 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 	onPrestige() {
 		if (hasMilestone("w", 5) || hasMilestone("pl", 0)) return;
@@ -6059,7 +6059,7 @@ addLayer("w", {
 		if (tmp[this.layer].deactivated) return 'War is deactivated';
 		return 'Reach ' + this.requires + ' GI and ' + this.requires + ' EI to unlock (You have ' + formatWhole(player.gi.points) + ' GI and ' + formatWhole(player.ei.points) + ' EI)';
 	},
-	hotkeys: [{key: "w", description: 'W: Reset for wars', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	hotkeys: [{key: "w", description: "W: Reset for wars", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return hasChallenge("ei", 21) || player.w.unlocked },
 	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer) },
 	automate() {
@@ -6078,7 +6078,7 @@ addLayer("w", {
 	effectDescription() { return 'which multiplies point, essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x; multiplies atom, sanctum, relic, molecule, good influence, and evil influence gain by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x; and multiplies light gain after hardcap by <h2 class="layer-w">' + format(tmp.w.effect[2]) + '</h2>x' },
 	doReset(resettingLayer) {
 		if (hasMilestone("ch", 12) && resettingLayer == "ch") return;
-		let keep = ['auto_influence'];
+		let keep = ["auto_influence"];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		let save;
 		if (hasMilestone("ch", 10) && resettingLayer == "ch") {
@@ -6091,7 +6091,7 @@ addLayer("w", {
 			save = player.ch.points;
 			if (save.gt(player.w.points)) save = player.w.points;
 		};
-		if (hasMilestone("ch", 1) && resettingLayer == "ch") keep.push('milestones');
+		if (hasMilestone("ch", 1) && resettingLayer == "ch") keep.push("milestones");
 		if (layers[resettingLayer].row > this.row) {
 			layerDataReset("w", keep);
 			if (save) {
@@ -6115,31 +6115,31 @@ addLayer("w", {
 			requirementDescription: '1 war',
 			effectDescription: 'keep molecule milestones on war resets, and you can autobuy good influence rebuyables',
 			done() { return player.w.points.gte(1) },
-			toggles: [["gi", 'auto_buyables']],
+			toggles: [["gi", "auto_buyables"]],
 		},
 		1: {
 			requirementDescription: '2 wars',
 			effectDescription() { return 'keep good influence milestones on war resets, you can autobuy evil influence upgrades, perform good influence resets automatically, and unlock a new <b' + getColorClass(this, REF, "ei") + 'Gate of Evil</b> challenge' },
 			done() { return player.w.points.gte(2) },
-			toggles: [["ei", 'auto_upgrades']],
+			toggles: [["ei", "auto_upgrades"]],
 		},
 		2: {
 			requirementDescription: '3 wars',
 			effectDescription() { return 'keep evil influence milestones and activated relics on war resets, you can autobuy molecule upgrades, and all <b' + getColorClass(this, REF, "s") + 'Devotion</b> autobuyers can bulk buy 2x' },
 			done() { return player.w.points.gte(3) },
-			toggles: [["m", 'auto_upgrades']],
+			toggles: [["m", "auto_upgrades"]],
 		},
 		3: {
 			requirementDescription: '4 wars',
 			effectDescription() { return 'keep evil influence challenge completions on war resets, you can automatically activate relics, perform evil influence resets automatically, and unlock another <b' + getColorClass(this, REF) + 'Influence</b>' },
 			done() { return player.w.points.gte(4) },
-			toggles: [["r", 'auto_activate']],
+			toggles: [["r", "auto_activate"]],
 		},
 		4: {
 			requirementDescription: '5 wars',
 			effectDescription() { return 'keep demon soul challenge completions on war resets, you can autobuy individual relic upgrades, relics reset nothing, perform relic resets automatically, and unlock another <b' + getColorClass(this, REF) + 'Influence</b>' },
 			done() { return player.w.points.gte(5) },
-			toggles: [["r", 'auto_upgrade_1'], ["r", 'auto_upgrade_2'], ["r", 'auto_upgrade_3']],
+			toggles: [["r", "auto_upgrade_1"], ["r", "auto_upgrade_2"], ["r", "auto_upgrade_3"]],
 		},
 		5: {
 			requirementDescription: '6 wars',
@@ -6190,7 +6190,7 @@ addLayer("w", {
 			requirementDescription: '18 wars',
 			effectDescription() { return 'increase the maximum bought of <b' + getColorClass(this, REF) + 'Power of Good</b> by 3 and you can autobuy <b' + getColorClass(this, REF, "cl") + 'Tissues</b>' },
 			done() { return player.w.points.gte(18) },
-			toggles: [["cl", 'auto_tissues']],
+			toggles: [["cl", "auto_tissues"]],
 		},
 		15: {
 			requirementDescription: '22 wars',
@@ -6211,7 +6211,7 @@ addLayer("w", {
 			requirementDescription: '60 wars',
 			effectDescription() { return 'unlock 3 more protein buyables, and you can autobuy <b' + getColorClass(this, REF) + 'Influences</b>' },
 			done() { return player.w.points.gte(60) },
-			toggles: [["w", 'auto_influence']],
+			toggles: [["w", "auto_influence"]],
 		},
 		19: {
 			requirementDescription: '64 wars',
@@ -6242,7 +6242,7 @@ addLayer("w", {
 			},
 			baseStyle: {'background-image': 'linear-gradient(#08FF87, #AAFF00)'},
 			fillStyle: {'background-image': 'linear-gradient(#FF4400, #BA0035)'},
-			textStyle: {color: '#000000'},
+			textStyle: {color: "#000000"},
 		},
 	},
 	buyables: {
@@ -6333,7 +6333,7 @@ addLayer("w", {
 		21: {
 			cost(x) { return x.mul(5).add(235) },
 			title() { return '<b' + getColorClass(this, TITLE) + 'Race for Knowledge' },
-			description() { return 'multiplies ' + (hasMilestone("ch", 35) ? 'atom and ' : '') + 'molecule gain based on the amount of this upgrade bought.' },
+			description() { return 'multiplies ' + (hasMilestone("ch", 35) ? 'atom and ' : "") + 'molecule gain based on the amount of this upgrade bought.' },
 			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) },
 			purchaseLimit() {
 				let max = new Decimal(20);
@@ -6394,8 +6394,8 @@ addLayer("w", {
 });
 
 addLayer("cl", {
-	name: 'Cellular Life',
-	symbol: 'CL',
+	name: "Cellular Life",
+	symbol: "CL",
 	row: 5,
 	position: 2,
 	startData() { return {
@@ -6421,10 +6421,10 @@ addLayer("cl", {
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
-	resource: 'cellular life',
-	baseResource: 'molecules',
+	resource: "cellular life",
+	baseResource: "molecules",
 	baseAmount() { return player.m.points },
-	type: 'static',
+	type: "static",
 	base() {
 		if (hasMilestone("ch", 37)) return 4;
 		if (hasMilestone("ch", 36)) return 14;
@@ -6447,7 +6447,7 @@ addLayer("cl", {
 		return gain;
 	},
 	autoPrestige() { return hasMilestone("cl", 12) || hasUpgrade("pl", 74) },
-	hotkeys: [{key: 'l', description: 'L: Reset for cellular life', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	hotkeys: [{key: "l", description: "L: Reset for cellular life", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return hasMilestone("w", 9) || player.cl.unlocked },
 	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer) },
 	automate() {
@@ -6474,10 +6474,10 @@ addLayer("cl", {
 		};
 	},
 	doReset(resettingLayer) {
-		let keep = ['auto_tissues', 'auto_buyable_31', 'auto_buyable_32', 'auto_buyable_33', 'auto_buyable_41', 'auto_buyable_42', 'auto_buyable_43', 'auto_buyable_51', 'auto_buyable_52', 'auto_buyable_53'];
+		let keep = ["auto_tissues", "auto_buyable_31", "auto_buyable_32", "auto_buyable_33", "auto_buyable_41", "auto_buyable_42", "auto_buyable_43", "auto_buyable_51", "auto_buyable_52", "auto_buyable_53"];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
-		if (hasMilestone("ch", 0) && resettingLayer == "ch") keep.push('milestones');
-		if (hasMilestone("ch", 39) && resettingLayer == "ch") keep.push('buyables');
+		if (hasMilestone("ch", 0) && resettingLayer == "ch") keep.push("milestones");
+		if (hasMilestone("ch", 39) && resettingLayer == "ch") keep.push("buyables");
 		if (layers[resettingLayer].row > this.row) layerDataReset("cl", keep);
 	},
 	resetsNothing() { return hasMilestone("cl", 12) || hasUpgrade("pl", 74) },
@@ -6527,7 +6527,7 @@ addLayer("cl", {
 			requirementDescription: '1 total cellular life',
 			effectDescription: 'keep good influence and evil influence milestones on cellular life resets, unlock options to toggle good influence and evil influence auto prestiges, and you can buy max cellular life',
 			done() { return player.cl.total.gte(1) },
-			toggles: [["ei", 'auto_prestige'], ["gi", 'auto_prestige']],
+			toggles: [["ei", "auto_prestige"], ["gi", "auto_prestige"]],
 		},
 		1: {
 			requirementDescription: '2 total cellular life',
@@ -6846,8 +6846,8 @@ addLayer("cl", {
 });
 
 addLayer("ch", {
-	name: 'Chaos',
-	symbol: 'CHAOS',
+	name: "Chaos",
+	symbol: "CHAOS",
 	row: 6,
 	position: 0,
 	startData() { return {
@@ -6857,7 +6857,7 @@ addLayer("ch", {
 		total: newDecimalZero(),
 		deciphering: true,
 	}},
-	color: '#FFFFFF',
+	color: "#FFFFFF",
 	nodeStyle() {
 		let obj = {width: '150px', height: '150px'};
 		if (this.getResetGain().gt(0) || player.ch.unlocked) {
@@ -6871,10 +6871,10 @@ addLayer("ch", {
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
-	resource: 'chaos',
-	baseResource: 'wars',
+	resource: "chaos",
+	baseResource: "wars",
 	baseAmount() { return player.w.points },
-	type: 'custom',
+	type: "custom",
 	base: 1.1,
 	exponent() { return isAssimilated(this.layer) ? 0.84 : 0.85 },
 	getResetGain() {
@@ -6910,7 +6910,7 @@ addLayer("ch", {
 	},
 	canReset() { return tmp.ch.baseAmount.gte(tmp.ch.nextAt) },
 	prestigeNotify() { return tmp.ch.baseAmount.gte(tmp.ch.nextAt) },
-	prestigeButtonText() { return randomStr(5) + ' ' + randomStr(3) + ' +<b>' + formatWhole(tmp.ch.getResetGain) + '</b> ' + randomStr(5) + '<br><br>' + (player.ch.points.lt(30) ? (tmp.ch.baseAmount.gte(tmp.ch.nextAt) && tmp.ch.canBuyMax ? randomStr(4) : randomStr(3)) + ':' : '') + ' ' + formatWhole(tmp.ch.baseAmount) + ' / ' + formatWhole(tmp.ch.nextAtDisp) + ' ' + randomStr(4) },
+	prestigeButtonText() { return randomStr(5) + ' ' + randomStr(3) + ' +<b>' + formatWhole(tmp.ch.getResetGain) + '</b> ' + randomStr(5) + '<br><br>' + (player.ch.points.lt(30) ? (tmp.ch.baseAmount.gte(tmp.ch.nextAt) && tmp.ch.canBuyMax ? randomStr(4) : randomStr(3)) + ':' : "") + ' ' + formatWhole(tmp.ch.baseAmount) + ' / ' + formatWhole(tmp.ch.nextAtDisp) + ' ' + randomStr(4) },
 	canBuyMax() { return hasMilestone("pl", 0) },
 	gainExp() {
 		let gain = newDecimalOne();
@@ -6920,7 +6920,7 @@ addLayer("ch", {
 	},
 	tooltip() { return formatWhole(player.ch.points) + ' ' + randomStr(5) },
 	tooltipLocked() { return randomStr(5) + ' ' + this.requires + ' ' + randomStr(4) + ' ' + randomStr(2) + ' ' + randomStr(6) + ' (' + randomStr(3) + ' ' + randomStr(4) + ' ' + formatWhole(player.w.points) + ' ' + randomStr(4) + ')' },
-	hotkeys: [{key: 'C', description: 'Shift-C: Reset for chaos', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	hotkeys: [{key: "C", description: "Shift-C: Reset for chaos", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.cl.unlocked || player.ch.unlocked },
 	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer) },
 	automate() {
@@ -6965,7 +6965,7 @@ addLayer("ch", {
 			requirementDescription: '2 chaos',
 			effectDescription() { return 'keep war milestones on chaos resets, unlock <b' + getColorClass(this, REF) + 'The Tides</b>, and you can autobuy the first three <b' + getColorClass(this, REF, "cl") + 'Protein</b> rebuyables individually' },
 			done() { return player.ch.points.gte(2) },
-			toggles: [["cl", 'auto_buyable_31'], ["cl", 'auto_buyable_32'], ["cl", 'auto_buyable_33']],
+			toggles: [["cl", "auto_buyable_31"], ["cl", "auto_buyable_32"], ["cl", "auto_buyable_33"]],
 		},
 		2: {
 			requirementDescription: '3 chaos',
@@ -6991,14 +6991,14 @@ addLayer("ch", {
 			requirementDescription: '9 chaos',
 			effectDescription() { return 'the good influence rebuyable autobuyer is 2x faster, and you can autobuy the fourth to sixth <b' + getColorClass(this, REF, "cl") + 'Protein</b> rebuyables individually' },
 			done() { return player.ch.points.gte(9) },
-			toggles: [["cl", 'auto_buyable_41'], ["cl", 'auto_buyable_42'], ["cl", 'auto_buyable_43']],
+			toggles: [["cl", "auto_buyable_41"], ["cl", "auto_buyable_42"], ["cl", "auto_buyable_43"]],
 		},
 		7: {
 			requirementDescription: '13 chaos',
 			effect() { return player.ch.points.sub(10).max(0).mul(2.25).floor() },
 			effectDescription(eff) { return 'you can autobuy the seventh to ninth <b' + getColorClass(this, REF, "cl") + 'Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b' + getColorClass(this, REF, "w") + 'Race for Knowledge</b> by 2.25, rounded down (currently +' + formatWhole(eff) + ')' },
 			done() { return player.ch.points.gte(13) },
-			toggles: [["cl", 'auto_buyable_51'], ["cl", 'auto_buyable_52'], ["cl", 'auto_buyable_53']],
+			toggles: [["cl", "auto_buyable_51"], ["cl", "auto_buyable_52"], ["cl", "auto_buyable_53"]],
 		},
 		8: {
 			requirementDescription: '16 chaos',
@@ -7043,7 +7043,7 @@ addLayer("ch", {
 			requirementDescription: '38 chaos',
 			effectDescription() { return "unlock the option to keep Breaking on chaos resets (<b" + getColorClass(this, REF, "h") + "Reset Breaking</b> will still work), improve the formula of chaos's first effect, and reduce the multicellular organism cost base (1.1 --> 1.067)" },
 			done() { return player.ch.points.gte(38) },
-			toggles: [["h", 'keep_breaking']],
+			toggles: [["h", "keep_breaking"]],
 			unlocked() { return player.mo.unlocked },
 		},
 		16: {
@@ -7058,7 +7058,7 @@ addLayer("ch", {
 			},
 			effectDescription(eff) { return 'you can autobuy the first quark rebuyable, the good influence rebuyable autobuyer is 2x faster, and multiply multicellular organism gain based on <b' + getColorClass(this, REF) + (isAssimilated("ch") ? randomStr(4) : 'Tide') + '</b> completions (currently ' + format(eff) + 'x)' },
 			done() { return player.ch.points.gte(42) },
-			toggles: [["q", 'auto_buyable_11']],
+			toggles: [["q", "auto_buyable_11"]],
 			unlocked() { return player.mo.unlocked },
 		},
 		17: {
@@ -7083,7 +7083,7 @@ addLayer("ch", {
 			requirementDescription: '55 chaos',
 			effectDescription() { return 'you can autobuy the second quark rebuyable, the 6th row of quark upgrades can be autobought, and improve the effect formula of the <b' + getColorClass(this, REF) + '17th chaos milestone</b>' },
 			done() { return player.ch.points.gte(55) },
-			toggles: [["q", 'auto_buyable_12']],
+			toggles: [["q", "auto_buyable_12"]],
 			unlocked() { return player.mo.unlocked },
 		},
 		21: {
@@ -7096,7 +7096,7 @@ addLayer("ch", {
 			requirementDescription: '59 chaos',
 			effectDescription() { return 'you can autobuy the third and fourth quark rebuyables and the <b' + getColorClass(this, REF, "cl") + 'Result Analyzing</b> autobuyer is 2x faster' },
 			done() { return player.ch.points.gte(59) },
-			toggles: [["q", 'auto_buyable_13'], ["q", 'auto_buyable_21']],
+			toggles: [["q", "auto_buyable_13"], ["q", "auto_buyable_21"]],
 			unlocked() { return player.mo.unlocked },
 		},
 		23: {
@@ -7109,7 +7109,7 @@ addLayer("ch", {
 			requirementDescription: '67 chaos',
 			effectDescription: 'you can autobuy glow rebuyables',
 			done() { return player.ch.points.gte(67) },
-			toggles: [["s", 'auto_glow']],
+			toggles: [["s", "auto_glow"]],
 			unlocked() { return player.mo.unlocked },
 		},
 		25: {
@@ -7134,7 +7134,7 @@ addLayer("ch", {
 			requirementDescription: '82 chaos',
 			effectDescription() { return 'you can autobuy <b' + getColorClass(this, REF, "a") + 'Atomic Reactor</b>s and good influence upgrades' },
 			done() { return player.ch.points.gte(82) },
-			toggles: [["a", 'auto_reactor'], ["gi", 'auto_upgrades']],
+			toggles: [["a", "auto_reactor"], ["gi", "auto_upgrades"]],
 			unlocked() { return player.mo.unlocked },
 		},
 		29: {
@@ -7243,7 +7243,7 @@ addLayer("ch", {
 			requirementDescription: "216 chaos",
 			effectDescription: "you can autobuy the fifth and sixth quark rebuyables",
 			done() { return player.ch.points.gte(216) },
-			toggles: [["q", 'auto_buyable_22'], ["q", 'auto_buyable_23']],
+			toggles: [["q", "auto_buyable_22"], ["q", "auto_buyable_23"]],
 			unlocked() { return player.pl.unlocked },
 		},
 		47: {
@@ -7361,9 +7361,9 @@ addLayer("ch", {
 });
 
 addLayer("mo", {
-	name: 'Multicellular Organism',
-	pluralName: 'Multicellular Organisms',
-	symbol: 'MO',
+	name: "Multicellular Organism",
+	pluralName: "Multicellular Organisms",
+	symbol: "MO",
 	row: 6,
 	position: 1,
 	startData() { return {
@@ -7376,16 +7376,16 @@ addLayer("mo", {
 		hadLayers: [],
 		auto_buyable_11: false,
 	}},
-	color: '#88CC44',
+	color: "#88CC44",
 	branches: ["pl"],
 	requires: 10000,
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
-	resource: 'multicellular organisms',
-	baseResource: 'cellular life',
+	resource: "multicellular organisms",
+	baseResource: "cellular life",
 	baseAmount() { return player.cl.points },
-	type: 'static',
+	type: "static",
 	base() {
 		if (hasMilestone("ch", 42)) return 1.055;
 		if (hasMilestone("ch", 33)) return 1.0575;
@@ -7407,7 +7407,7 @@ addLayer("mo", {
 		return gain;
 	},
 	autoPrestige() { return hasUpgrade("pl", 84) },
-	hotkeys: [{key: 'o', description: 'O: Reset for multicellular organisms', onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
+	hotkeys: [{key: "o", description: "O: Reset for multicellular organisms", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.ch.unlocked || player.mo.unlocked },
 	automate() {
 		updateBuyableTemp(this.layer);
@@ -7425,7 +7425,7 @@ addLayer("mo", {
 		if (isAssimilated(this.layer)) return 'which multiplies cellular life gain by <h2 class="layer-mo">' + format(tmp.mo.effect) + '</h2>x';
 	},
 	doReset(resettingLayer) {
-		let keep = ['clickables', 'assimilating', 'assimilated', 'hadLayers', 'auto_buyable_11'];
+		let keep = ["clickables", 'assimilating', 'assimilated', 'hadLayers', "auto_buyable_11"];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (layers[resettingLayer].row > this.row) layerDataReset("mo", keep);
 	},
@@ -7632,8 +7632,8 @@ addLayer("mo", {
 });
 
 addLayer("pl", {
-	name: 'Planet',
-	pluralName: 'Planets',
+	name: "Planet",
+	pluralName: "Planets",
 	symbol: "<img src='images/planet.png' alt='PLANETS' width='200px' height='200px'>",
 	row: 7,
 	position: 0,
@@ -7657,10 +7657,10 @@ addLayer("pl", {
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
-	resource: 'planets',
-	baseResource: 'multicellular organisms',
+	resource: "planets",
+	baseResource: "multicellular organisms",
 	baseAmount() { return player.mo.points },
-	type: 'static',
+	type: "static",
 	base: 2,
 	exponent: 1.46,
 	canBuyMax: false,

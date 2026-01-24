@@ -145,7 +145,7 @@ function getAssimilationRewards() {
 	if (player.mo.assimilated.length === 0) {
 		return 'Assimilation rewards will be shown here.';
 	};
-	let text = '';
+	let text = "";
 	if (isAssimilated("e")) {
 		text += '<br><br><h2 class="layer-mo">Assimilated </h2><h2 class="layer-e">Essence</h2><br><br>';
 		text += 'Makes all previous essence rebuyables and upgrades always unlockable<br>';

@@ -277,7 +277,7 @@ const customComponents = {
 		data() {return {tmp, hasAchievement, achievementStyle, glitchify}},
 		computed: {
 			tooltipText() {
-				if (tmp[this.layer].achievements[this.data].tooltip == '') return false;
+				if (tmp[this.layer].achievements[this.data].tooltip == "") return false;
 				if (hasAchievement(this.layer, this.data)) {
 					if (tmp[this.layer].achievements[this.data].doneTooltip) return tmp[this.layer].achievements[this.data].doneTooltip;
 					if (tmp[this.layer].achievements[this.data].tooltip) return tmp[this.layer].achievements[this.data].tooltip;

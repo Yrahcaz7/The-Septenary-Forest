@@ -752,7 +752,7 @@ function getChaosInfoBoxes() {
 		const boxID = 'story' + row;
 		infoBoxes[boxID] = {
 			title() {
-				let text = '';
+				let text = "";
 				if (player.ch.best.toNumber() >= storyLengthUpTo(row) || isAssimilated("ch")) {
 					text += storyNames[row];
 					if (storySegmentIsFullyDeciphered(row)) text += ' [<span style="display: inline-block; margin-top: -1em; height: 0">&check;</span>]';
@@ -762,7 +762,7 @@ function getChaosInfoBoxes() {
 				return text;
 			},
 			body() {
-				let text = '';
+				let text = "";
 				const chaos = (isAssimilated("ch") ? Infinity : player.ch.best.toNumber());
 				for (let index = 0; index < story[row].length && index < chaos - storyLengthUpTo(row - 1); index++) {
 					text += story[row][index];
