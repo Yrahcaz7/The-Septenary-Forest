@@ -184,6 +184,7 @@ function load(mainPage = false) {
 	if (get) {
 		player = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(atob(get))));
 		fixSave();
+		versionCheck();
 		loadOptions();
 	} else {
 		player = getStartPlayer();

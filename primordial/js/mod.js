@@ -427,6 +427,7 @@ function fixOldSave(oldVersion) {
 	delete player.ghost0;
 	delete player.blank;
 	delete player.SC.softcaps;
+	delete player.p.hymnEff;
 	delete player.s.devotion;
 	delete player.s.devotion_effect;
 	delete player.s.glow_gain;
@@ -446,6 +447,10 @@ function fixOldSave(oldVersion) {
 	delete player.cl.protein_gain;
 	delete options.css;
 	// rename vars
+	if (player.p.hymn !== undefined) {
+		player.p.hymns = player.p.hymn;
+		delete player.p.hymn;
+	};
 	if (player.r.lightgainbest !== undefined) {
 		player.r.lightGainBest = player.r.lightgainbest;
 		delete player.r.lightgainbest;

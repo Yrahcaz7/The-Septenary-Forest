@@ -2944,8 +2944,7 @@ addLayer('p', {
 		total: newDecimalZero(),
 		divinity: newDecimalZero(),
 		holiness: newDecimalZero(),
-		hymn: newDecimalZero(),
-		hymnEff: newDecimalZero(),
+		hymns: newDecimalZero(),
 		auto_upgrades: false,
 		smart_auto_upgrades: false,
 	}},
@@ -2967,7 +2966,7 @@ addLayer('p', {
 		if (hasUpgrade('p', 15)) mult = mult.mul(upgradeEffect('p', 15));
 		if (hasUpgrade('p', 21)) mult = mult.mul(upgradeEffect('p', 21));
 		if (hasUpgrade('ds', 21) && hasUpgrade('ds', 23) && hasUpgrade('ds', 24) && hasUpgrade('p', 31)) mult = mult.mul(player.A.points.pow(2).div(100));
-		if (hasUpgrade('p', 41)) mult = mult.mul(player.p.hymnEff);
+		if (hasUpgrade('p', 41)) mult = mult.mul(tmp.p.hymnEffect);
 		if (hasUpgrade('p', 62)) {
 			mult = mult.mul(upgradeEffect('p', 62));
 			if (hasUpgrade('p', 63)) mult = mult.mul(upgradeEffect('p', 63));
@@ -3080,15 +3079,15 @@ addLayer('p', {
 			else player.p.holiness = player.p.holiness.add(player.p.divinity.mul(0.04).mul(mult));
 		};
 		if (hasUpgrade('p', 41) && resettingLayer == 'p') {
-			if (hasUpgrade('p', 51) && hasUpgrade('p', 55)) player.p.hymn = player.p.hymn.add(player.p.holiness.div(175).floor());
-			else if (hasUpgrade('p', 51)) player.p.hymn = player.p.hymn.add(player.p.holiness.div(200).floor());
-			else player.p.hymn = player.p.hymn.add(player.p.holiness.div(250).floor());
+			if (hasUpgrade('p', 51) && hasUpgrade('p', 55)) player.p.hymns = player.p.hymns.add(player.p.holiness.div(175).floor());
+			else if (hasUpgrade('p', 51)) player.p.hymns = player.p.hymns.add(player.p.holiness.div(200).floor());
+			else player.p.hymns = player.p.hymns.add(player.p.holiness.div(250).floor());
 		};
 		if (layers[resettingLayer].row >= this.row) player.p.divinity = newDecimalZero();
 		if (layers[resettingLayer].row > this.row) {
 			layerDataReset('p', keep);
 			if (!keep.includes("holiness")) player.p.holiness = newDecimalZero();
-			if (!keep.includes("hymn")) player.p.hymn = newDecimalZero();
+			if (!keep.includes("hymns")) player.p.hymns = newDecimalZero();
 		};
 	},
 	update(diff) {
@@ -3106,17 +3105,23 @@ addLayer('p', {
 				else player.p.holiness = player.p.holiness.add(player.p.divinity.mul(0.04).mul(mult).mul(diff).mul(0.002));
 			};
 			if (hasUpgrade('p', 41)) {
-				if (hasUpgrade('p', 51) && hasUpgrade('p', 55)) player.p.hymn = player.p.hymn.add(player.p.holiness.div(175).mul(diff).mul(0.002).floor());
-				else if (hasUpgrade('p', 51)) player.p.hymn = player.p.hymn.add(player.p.holiness.div(200).mul(diff).mul(0.002).floor());
-				else player.p.hymn = player.p.hymn.add(player.p.holiness.div(250).mul(diff).mul(0.002).floor());
+				if (hasUpgrade('p', 51) && hasUpgrade('p', 55)) player.p.hymns = player.p.hymns.add(player.p.holiness.div(175).mul(diff).mul(0.002).floor());
+				else if (hasUpgrade('p', 51)) player.p.hymns = player.p.hymns.add(player.p.holiness.div(200).mul(diff).mul(0.002).floor());
+				else player.p.hymns = player.p.hymns.add(player.p.holiness.div(250).mul(diff).mul(0.002).floor());
 			};
 		};
-		if (hasUpgrade('p', 41)) {
-			if (hasUpgrade('p', 43) && hasUpgrade('p', 52) && hasUpgrade('p', 53)) player.p.hymnEff = player.p.hymn.add(1).pow(0.25);
-			else if (hasUpgrade('p', 43) && hasUpgrade('p', 52)) player.p.hymnEff = player.p.hymn.add(1).pow(0.225);
-			else if (hasUpgrade('p', 43)) player.p.hymnEff = player.p.hymn.add(1).pow(0.2);
-			else player.p.hymnEff = player.p.hymn.add(1).pow(0.15);
+	},
+	hymnEffect() {
+		let exp = 0.15;
+		if (hasUpgrade('p', 43)) {
+			if (hasUpgrade('p', 52)) {
+				if (hasUpgrade('p', 53)) exp = 0.25;
+				else exp = 0.225;
+			} else {
+				exp = 0.2;
+			};
 		};
+		return player.p.hymns.add(1).pow(exp);
 	},
 	tabFormat: getTab('p'),
 	milestones: {
@@ -3133,7 +3138,7 @@ addLayer('p', {
 		2: {
 			requirementDescription: '2,500 prayers and 250 hymns',
 			effectDescription: 'divinity gain is raised to the power of 1.5',
-			done() { return player.p.points.gte(2500) && player.p.hymn.gte(250)},
+			done() { return player.p.points.gte(2500) && player.p.hymns.gte(250)},
 			unlocked() { return hasUpgrade('p', 41) || player.s.unlocked },
 		},
 		3: {
@@ -3290,7 +3295,7 @@ addLayer('p', {
 				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
-			canAfford() { return player.p.holiness.gte(1000) && player.p.hymn.eq(0) },
+			canAfford() { return player.p.holiness.gte(1000) && player.p.hymns.eq(0) },
 			style: {height: '120px', border: '2px dashed', 'border-color': '#FF8800', 'background-color': '#0088FF'},
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 22) && !hasUpgrade('p', 34) },
 		},
@@ -3316,17 +3321,17 @@ addLayer('p', {
 		42: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Divine Hymns' },
 			description: 'multiplies divinity gain based on your hymns',
-			effect() { return player.p.hymn.add(1).pow(hasUpgrade('p', 45) ? 0.125 : 0.1) },
+			effect() { return player.p.hymns.add(1).pow(hasUpgrade('p', 45) ? 0.125 : 0.1) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (x+1)^' + (hasUpgrade('p', 45) ? 0.125 : 0.1);
 				return text;
 			},
 			costDisplay: "Cost: 1,000 holiness<br>and 75 hymns",
-			canAfford() { return player.p.holiness.gte(1000) && player.p.hymn.gte(75) },
+			canAfford() { return player.p.holiness.gte(1000) && player.p.hymns.gte(75) },
 			pay() {
 				player.p.holiness = player.p.holiness.sub(1000);
-				player.p.hymn = player.p.hymn.sub(75);
+				player.p.hymns = player.p.hymns.sub(75);
 			},
 			unlocked() { return hasUpgrade('p', 41) },
 		},
@@ -3334,10 +3339,10 @@ addLayer('p', {
 			title() { return "<b" + getColorClass(this, TITLE) + "Hymn Singing" },
 			description: "increases hymn effect exponent<br>(0.15 --> 0.2)",
 			costDisplay: "Cost: 1,000,000 holiness<br>and 50,000 hymns",
-			canAfford() { return player.p.holiness.gte(1000000) && player.p.hymn.gte(50000) },
+			canAfford() { return player.p.holiness.gte(1000000) && player.p.hymns.gte(50000) },
 			pay() {
 				player.p.holiness = player.p.holiness.sub(1000000);
-				player.p.hymn = player.p.hymn.sub(50000);
+				player.p.hymns = player.p.hymns.sub(50000);
 			},
 			unlocked() { return hasUpgrade('p', 41) },
 		},
@@ -3348,7 +3353,7 @@ addLayer('p', {
 				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
-			canAfford() { return player.p.hymn.gte(10000000) && !hasUpgrade('p', 51) },
+			canAfford() { return player.p.hymns.gte(10000000) && !hasUpgrade('p', 51) },
 			style: {height: '120px', border: '2px dashed', 'border-color': '#FF8800', 'background-color': '#0088FF'},
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) && !hasUpgrade('p', 44) },
 		},
@@ -3356,8 +3361,7 @@ addLayer('p', {
 			title() { return "<b" + getColorClass(this, TITLE) + "Hymn Divination" },
 			description() { return 'increases the exponent of <b' + getColorClass(this, REF) + 'Divine Hymns</b><br>(^0.1 --> ^0.125)' },
 			cost: 2_500_000,
-			currencyDisplayName: "hymns",
-			currencyInternalName: "hymn",
+			currencyInternalName: "hymns",
 			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 44) },
 		},
@@ -3365,8 +3369,7 @@ addLayer('p', {
 			title() { return "<b" + getColorClass(this, TITLE) + "Concise Hymns" },
 			description: "decreases hymn requirement<br>(250 --> 200)",
 			cost: 1_000_000,
-			currencyDisplayName: "hymns",
-			currencyInternalName: "hymn",
+			currencyInternalName: "hymns",
 			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 41) },
 		},
@@ -3374,8 +3377,7 @@ addLayer('p', {
 			title() { return "<b" + getColorClass(this, TITLE) + "Stronger Hymns" },
 			description() { return 'increases hymn effect exponent if you have <b' + getColorClass(this, REF) + 'Hymn Singing</b><br>(0.2 --> 0.225)' },
 			cost: 10_000_000,
-			currencyDisplayName: "hymns",
-			currencyInternalName: "hymn",
+			currencyInternalName: "hymns",
 			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 41) },
 		},
@@ -3383,8 +3385,7 @@ addLayer('p', {
 			title() { return "<b" + getColorClass(this, TITLE) + "Strongest Hymns" },
 			description() { return 'increases hymn effect exponent if you have all subsequent upgrades<br>(0.225 --> 0.25)' },
 			cost: 100_000_000,
-			currencyDisplayName: "hymns",
-			currencyInternalName: "hymn",
+			currencyInternalName: "hymns",
 			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 41) },
 		},
@@ -3395,7 +3396,7 @@ addLayer('p', {
 				if (tmp[this.layer].upgrades[this.id].canAfford) text += '<br><br><b>Requirements met!';
 				return text;
 			},
-			canAfford() { return player.p.hymn.gte(1e10) && !hasUpgrade('p', 61) },
+			canAfford() { return player.p.hymns.gte(1e10) && !hasUpgrade('p', 61) },
 			style: {height: '120px', border: '2px dashed', 'border-color': '#FF8800', 'background-color': '#0088FF'},
 			unlocked() { return (hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade('p', 41) && !hasUpgrade('p', 54) },
 		},
@@ -3403,38 +3404,35 @@ addLayer('p', {
 			title() { return "<b" + getColorClass(this, TITLE) + "Hymn Compression" },
 			description() { return 'decreases hymn requirement if you own <b' + getColorClass(this, REF) + 'Concise Hymns</b><br>(200 --> 175)' },
 			cost: 2.5e9,
-			currencyDisplayName: "hymns",
-			currencyInternalName: "hymn",
+			currencyInternalName: "hymns",
 			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 54) },
 		},
 		61: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Holy Hymns" },
 			description: "multiplies holiness gain based on your hymns",
-			effect() { return player.p.hymn.add(1).pow(0.02) },
+			effect() { return player.p.hymns.add(1).pow(0.02) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.02';
 				return text;
 			},
 			cost: 1e9,
-			currencyDisplayName: "hymns",
-			currencyInternalName: "hymn",
+			currencyInternalName: "hymns",
 			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 41) },
 		},
 		62: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Hymn Deconstruction" },
 			description: "multiplies prayer gain based on your hymns",
-			effect() { return player.p.hymn.add(10).log(5) },
+			effect() { return player.p.hymns.add(10).log(5) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: log5(x+10)';
 				return text;
 			},
 			cost: 1e11,
-			currencyDisplayName: "hymns",
-			currencyInternalName: "hymn",
+			currencyInternalName: "hymns",
 			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 41) },
 		},
@@ -3448,8 +3446,7 @@ addLayer('p', {
 				return text;
 			},
 			cost: 1e15,
-			currencyDisplayName: "hymns",
-			currencyInternalName: "hymn",
+			currencyInternalName: "hymns",
 			currencyLayer: "p",
 			unlocked() { return hasUpgrade('p', 41) },
 		},
@@ -3565,7 +3562,7 @@ addLayer('p', {
 					player.p.upgrades = [];
 					player.p.divinity = newDecimalZero();
 					player.p.holiness = newDecimalZero();
-					player.p.hymn = newDecimalZero();
+					player.p.hymns = newDecimalZero();
 				};
 			},
 			unlocked() { return hasMilestone('s', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
