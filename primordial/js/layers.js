@@ -5164,7 +5164,6 @@ addLayer('gi', {
 		points: newDecimalZero(),
 		best: newDecimalZero(),
 		total: newDecimalZero(),
-		req_devotion: newDecimalOne(),
 		auto_buyables: false,
 		auto_upgrades: false,
 		auto_prestige: false,
@@ -5186,10 +5185,11 @@ addLayer('gi', {
 	},
 	exponent: 1,
 	canBuyMax() { return true },
+	devotionEffect() { return player.s.devotion.mul(1.05).add(1).pow(hasMilestone('gi', 12) ? 0.22 : 0.2) },
 	gainExp() {
 		let gain = newDecimalOne();
 		if (getPurifiedDemonSouls() >= 1 && challengeEffect("ds", 101)[0]) gain = gain.mul(challengeEffect("ds", 101)[0]);
-		if (player.gi.req_devotion.gt(1)) gain = gain.mul(player.gi.req_devotion);
+		if (tmp.gi.devotionEffect.gt(1)) gain = gain.mul(tmp.gi.devotionEffect);
 		if (hasUpgrade('ei', 24)) gain = gain.mul(upgradeEffect('ei', 24));
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
 		if (hasBuyable('w', 11)) gain = gain.mul(buyableEffect('w', 11)[0]);
@@ -5263,11 +5263,6 @@ addLayer('gi', {
 		if (layers[resettingLayer].row > this.row) layerDataReset('gi', keep);
 	},
 	resetsNothing() { return hasMilestone('gi', 16) || hasUpgrade('pl', 64) },
-	update(diff) {
-		let exp = 0.2;
-		if (hasMilestone('gi', 12)) exp = 0.22;
-		player.gi.req_devotion = player.s.devotion.mul(1.05).add(1).pow(exp);
-	},
 	tabFormat: getTab('gi'),
 	milestones: {
 		0: {
@@ -6414,9 +6409,7 @@ addLayer('cl', {
 		points: newDecimalZero(),
 		best: newDecimalZero(),
 		total: newDecimalZero(),
-		protein_conv: newDecimalZero(),
 		protein: newDecimalZero(),
-		protein_gain: newDecimalZero(),
 		auto_tissues: false,
 		auto_buyable_31: false,
 		auto_buyable_32: false,
@@ -6494,7 +6487,7 @@ addLayer('cl', {
 		if (layers[resettingLayer].row > this.row) layerDataReset('cl', keep);
 	},
 	resetsNothing() { return hasMilestone('cl', 12) || hasUpgrade('pl', 74) },
-	update(diff) {
+	proteinConv() {
 		// init
 		let conv = newDecimalZero();
 		// add
@@ -6508,8 +6501,10 @@ addLayer('cl', {
 		if (hasBuyable('cl', 51)) conv = conv.mul(buyableEffect('cl', 51));
 		if (hasChallenge('ch', 21)) conv = conv.mul(challengeEffect('ch', 21)[1]);
 		if (new Decimal(tmp.ch.effect[2]).gt(1) && !tmp.ch.deactivated) conv = conv.mul(tmp.ch.effect[2]);
-		// set
-		player.cl.protein_conv = conv;
+		// return
+		return conv;
+	},
+	proteinGain() {
 		// init
 		let mult = newDecimalZero();
 		// add
@@ -6517,15 +6512,10 @@ addLayer('cl', {
 		if (hasMilestone('w', 19)) mult = mult.add(0.1);
 		// mul
 		if (hasMilestone('w', 19)) mult = mult.mul(100);
-		// get
-		if (mult.gt(0)) {
-			const gain = player.cl.points.mul(player.cl.protein_conv).mul(mult);
-			player.cl.protein_gain = gain;
-			player.cl.protein = player.cl.protein.add(gain.mul(diff));
-		} else {
-			player.cl.protein_gain = newDecimalZero();
-		};
+		// return
+		return mult.mul(player.cl.points).mul(tmp.cl.proteinConv);
 	},
+	update(diff) { player.cl.protein = player.cl.protein.add(tmp.cl.proteinGain.mul(diff)) },
 	tabFormat: {
 		"Life Tracker": {
 			content: getTab('cl'),
@@ -6850,10 +6840,10 @@ addLayer('cl', {
 	},
 	clickables: {
 		11: {
-			display() { return 'Convert all your cellular life to ' + format(player.cl.points.mul(player.cl.protein_conv)) + ' protein' },
+			display() { return 'Convert all your cellular life to ' + format(player.cl.points.mul(tmp.cl.proteinConv)) + ' protein' },
 			canClick: true,
 			onClick() {
-				player.cl.protein = player.cl.protein.add(player.cl.points.mul(player.cl.protein_conv));
+				player.cl.protein = player.cl.protein.add(player.cl.points.mul(tmp.cl.proteinConv));
 				player.cl.points = newDecimalZero();
 			},
 			unlocked() { return !hasMilestone('w', 19) },
@@ -6885,6 +6875,8 @@ addLayer('ch', {
 	branches: ['pl'],
 	requires: 70,
 	marked() { return isAssimilated(this.layer) },
+	shouldNotify() { return isAssimilated(this.layer) && getClickableState('mo', 11) && player.mo.assimilating === null },
+	glowColor() { if (this.shouldNotify()) return this.color },
 	resource: 'chaos',
 	baseResource: 'wars',
 	baseAmount() { return player.w.points },
@@ -7394,6 +7386,8 @@ addLayer('mo', {
 	branches: ['pl'],
 	requires: 10000,
 	marked() { return isAssimilated(this.layer) },
+	shouldNotify() { return isAssimilated(this.layer) && getClickableState('mo', 11) && player.mo.assimilating === null },
+	glowColor() { if (this.shouldNotify()) return this.color },
 	resource: 'multicellular organisms',
 	baseResource: 'cellular life',
 	baseAmount() { return player.cl.points },
@@ -7667,6 +7661,8 @@ addLayer('pl', {
 	chaosEffect() { return player.ch.points.add(1) },
 	requires() { return new Decimal(25_000).div(tmp.pl.chaosEffect) },
 	marked() { return isAssimilated(this.layer) },
+	shouldNotify() { return isAssimilated(this.layer) && getClickableState('mo', 11) && player.mo.assimilating === null },
+	glowColor() { if (this.shouldNotify()) return this.color },
 	resource: 'planets',
 	baseResource: 'multicellular organisms',
 	baseAmount() { return player.mo.points },

@@ -426,13 +426,16 @@ function fixOldSave(oldVersion) {
 	// remove unused vars
 	delete player.ghost0;
 	delete player.blank;
-	delete player.SC.softcaps
+	delete player.SC.softcaps;
 	delete player.r.sanctummult;
 	delete player.r.essencemult;
 	delete player.r.lightreq;
 	delete player.r.lightbest;
 	delete player.r.lightgain;
 	delete player.r.relic_effects;
+	delete player.gi.req_devotion;
+	delete player.cl.protein_conv;
+	delete player.cl.protein_gain;
 	delete options.css;
 	// rename vars
 	if (player.r.lightgainbest !== undefined) {
