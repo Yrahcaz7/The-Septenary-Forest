@@ -115,6 +115,64 @@ addLayer("e", {
 		if (layers[resettingLayer].row > this.row) layerDataReset("e", keep);
 	},
 	tabFormat: getTab("e"),
+	buyables: {
+		11: {
+			cost(x) { return new Decimal(12).pow(x).add(20) },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Purer Essence' },
+			description: 'multiplies essence gain based on the amount of this upgrade bought.',
+			canAfford() { return player.e.points.gte(this.cost()) },
+			purchaseLimit() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer ? 99 : 14 },
+			buy() { buyStandardBuyable(this) },
+			effect(x) { return x.mul(2.5).add(1) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: 2.5x+1';
+				return text;
+			},
+		},
+		12: {
+			cost(x) { return new Decimal(44).pow(x).mul(10).add(85184) },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Radiant Essence' },
+			description: 'multiplies core gain (and essence gain at a reduced rate) based on the amount of this upgrade bought.',
+			canAfford() { return player.e.points.gte(this.cost()) },
+			purchaseLimit: 99,
+			buy() { buyStandardBuyable(this) },
+			effect(x) {
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return [x.add(1).pow(2), x.add(1)];
+				return [x.add(1), x.add(1).pow(0.25)];
+			},
+			effectDisplay(eff) {
+				let text = format(eff[0]) + 'x<br>and ' + format(eff[1]) + 'x';
+				if (options.nerdMode) {
+					if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) text += '<br>formulas: (x+1)^2<br>and x+1';
+					else text += '<br>formulas: x+1<br>and (x+1)^0.25';
+				};
+				return text;
+			},
+			unlocked() { return player.e.total.gte(85194) || getBuyableAmount("e", this.id).gt(0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
+		},
+		13: {
+			cost(x) {
+				if (player.mo.assimilating === this.layer) return new Decimal(10).pow(x.add(2));
+				return new Decimal('e10000000').pow(x).mul('e750000000');
+			},
+			title() { return '<b' + getColorClass(this, TITLE) + 'Exponential Essence' },
+			description: 'exponentiates essence gain multiplier based on the amount of this upgrade bought.',
+			canAfford() { return player.e.points.gte(this.cost()) },
+			purchaseLimit: 99,
+			buy() { buyStandardBuyable(this) },
+			effect(x) { return x.add(1).pow(player.mo.assimilating === this.layer ? 0.2 : 0.0025) },
+			effectDisplay(eff) {
+				let text = '^' + format(eff);
+				if (options.nerdMode) {
+					if (player.mo.assimilating === this.layer) text += '<br>formula: (x+1)^0.2';
+					else text += '<br>formula: (x+1)^0.0025';
+				};
+				return text;
+			},
+			unlocked() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer },
+		},
+	},
 	upgrades: {
 		11: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Faster Points' },
@@ -252,64 +310,6 @@ addLayer("e", {
 			description: 'gain +2e22% of your essence gain per second',
 			cost: '1e1111',
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade("e", 42) },
-		},
-	},
-	buyables: {
-		11: {
-			cost(x) { return new Decimal(12).pow(x).add(20) },
-			title() { return '<b' + getColorClass(this, TITLE) + 'Purer Essence' },
-			description: 'multiplies essence gain based on the amount of this upgrade bought.',
-			canAfford() { return player.e.points.gte(this.cost()) },
-			purchaseLimit() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer ? 99 : 14 },
-			buy() { buyStandardBuyable(this) },
-			effect(x) { return x.mul(2.5).add(1) },
-			effectDisplay(eff) {
-				let text = format(eff) + 'x';
-				if (options.nerdMode) text += '<br>formula: 2.5x+1';
-				return text;
-			},
-		},
-		12: {
-			cost(x) { return new Decimal(44).pow(x).mul(10).add(85184) },
-			title() { return '<b' + getColorClass(this, TITLE) + 'Radiant Essence' },
-			description: 'multiplies core gain (and essence gain at a reduced rate) based on the amount of this upgrade bought.',
-			canAfford() { return player.e.points.gte(this.cost()) },
-			purchaseLimit: 99,
-			buy() { buyStandardBuyable(this) },
-			effect(x) {
-				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return [x.add(1).pow(2), x.add(1)];
-				return [x.add(1), x.add(1).pow(0.25)];
-			},
-			effectDisplay(eff) {
-				let text = format(eff[0]) + 'x<br>and ' + format(eff[1]) + 'x';
-				if (options.nerdMode) {
-					if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) text += '<br>formulas: (x+1)^2<br>and x+1';
-					else text += '<br>formulas: x+1<br>and (x+1)^0.25';
-				};
-				return text;
-			},
-			unlocked() { return player.e.total.gte(85194) || getBuyableAmount("e", this.id).gt(0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
-		},
-		13: {
-			cost(x) {
-				if (player.mo.assimilating === this.layer) return new Decimal(10).pow(x.add(2));
-				return new Decimal('e10000000').pow(x).mul('e750000000');
-			},
-			title() { return '<b' + getColorClass(this, TITLE) + 'Exponential Essence' },
-			description: 'exponentiates essence gain multiplier based on the amount of this upgrade bought.',
-			canAfford() { return player.e.points.gte(this.cost()) },
-			purchaseLimit: 99,
-			buy() { buyStandardBuyable(this) },
-			effect(x) { return x.add(1).pow(player.mo.assimilating === this.layer ? 0.2 : 0.0025) },
-			effectDisplay(eff) {
-				let text = '^' + format(eff);
-				if (options.nerdMode) {
-					if (player.mo.assimilating === this.layer) text += '<br>formula: (x+1)^0.2';
-					else text += '<br>formula: (x+1)^0.0025';
-				};
-				return text;
-			},
-			unlocked() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 	},
 });
@@ -457,6 +457,63 @@ addLayer("c", {
 			unlocked() { return player.c.best.gte(1e60) || player.h.unlocked },
 		},
 	},
+	buyables: {
+		11: {
+			cost(x) {
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return new Decimal(6).pow(x);
+				return x.mul(2).add(1);
+			},
+			title() { return '<b' + getColorClass(this, TITLE) + 'Empowered Points' },
+			description: 'multiplies point gain based on the amount of this upgrade bought.',
+			canAfford() { return player.c.points.gte(this.cost()) },
+			purchaseLimit: 99,
+			buy() { buyStandardBuyable(this) },
+			effect(x) {
+				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return new Decimal(2).add(buyableEffect("c", 13)).pow(x);
+				return x.mul(5).add(1);
+			},
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) {
+					if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) text += '<br>formula: 2^x';
+					else text += '<br>formula: 5x+1';
+				};
+				return text;
+			},
+		},
+		12: {
+			cost(x) { return new Decimal(6).pow(x) },
+			title() { return '<b' + getColorClass(this, TITLE) + 'Empowered Essence' },
+			description: 'multiplies essence gain based on the amount of this upgrade bought.',
+			canAfford() { return player.c.points.gte(this.cost()) },
+			purchaseLimit() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer ? 99 : 49 },
+			buy() { buyStandardBuyable(this) },
+			effect(x) { return new Decimal(2).add(buyableEffect("c", 13)).pow(x) },
+			effectDisplay(eff) {
+				let text = format(eff) + 'x';
+				if (options.nerdMode) text += '<br>formula: 2^x';
+				return text;
+			},
+		},
+		13: {
+			cost(x) {
+				if (player.mo.assimilating === this.layer) return new Decimal(1e5).pow(x.div(2).add(2));
+				return new Decimal(1e20).pow(x.add(1));
+			},
+			title() { return '<b' + getColorClass(this, TITLE) + 'Empowered Cores' },
+			description: 'increases the base of the previous two rebuyables based on the amount of this upgrade bought.',
+			canAfford() { return player.c.points.gte(this.cost()) },
+			purchaseLimit: 99,
+			buy() { buyStandardBuyable(this) },
+			effect(x) { return x.mul(0.05) },
+			effectDisplay(eff) {
+				let text = '+' + format(eff);
+				if (options.nerdMode) text += '<br>formula: 0.05x';
+				return text;
+			},
+			unlocked() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer },
+		},
+	},
 	upgrades: {
 		11: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Heat Emission' },
@@ -591,63 +648,6 @@ addLayer("c", {
 			cost: '1e480',
 			effect() { return new Decimal(player.mo.assimilating === this.layer ? 1.25 : 1.005) },
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade("c", 42) },
-		},
-	},
-	buyables: {
-		11: {
-			cost(x) {
-				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return new Decimal(6).pow(x);
-				return x.mul(2).add(1);
-			},
-			title() { return '<b' + getColorClass(this, TITLE) + 'Empowered Points' },
-			description: 'multiplies point gain based on the amount of this upgrade bought.',
-			canAfford() { return player.c.points.gte(this.cost()) },
-			purchaseLimit: 99,
-			buy() { buyStandardBuyable(this) },
-			effect(x) {
-				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return new Decimal(2).add(buyableEffect("c", 13)).pow(x);
-				return x.mul(5).add(1);
-			},
-			effectDisplay(eff) {
-				let text = format(eff) + 'x';
-				if (options.nerdMode) {
-					if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) text += '<br>formula: 2^x';
-					else text += '<br>formula: 5x+1';
-				};
-				return text;
-			},
-		},
-		12: {
-			cost(x) { return new Decimal(6).pow(x) },
-			title() { return '<b' + getColorClass(this, TITLE) + 'Empowered Essence' },
-			description: 'multiplies essence gain based on the amount of this upgrade bought.',
-			canAfford() { return player.c.points.gte(this.cost()) },
-			purchaseLimit() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer ? 99 : 49 },
-			buy() { buyStandardBuyable(this) },
-			effect(x) { return new Decimal(2).add(buyableEffect("c", 13)).pow(x) },
-			effectDisplay(eff) {
-				let text = format(eff) + 'x';
-				if (options.nerdMode) text += '<br>formula: 2^x';
-				return text;
-			},
-		},
-		13: {
-			cost(x) {
-				if (player.mo.assimilating === this.layer) return new Decimal(1e5).pow(x.div(2).add(2));
-				return new Decimal(1e20).pow(x.add(1));
-			},
-			title() { return '<b' + getColorClass(this, TITLE) + 'Empowered Cores' },
-			description: 'increases the base of the previous two rebuyables based on the amount of this upgrade bought.',
-			canAfford() { return player.c.points.gte(this.cost()) },
-			purchaseLimit: 99,
-			buy() { buyStandardBuyable(this) },
-			effect(x) { return x.mul(0.05) },
-			effectDisplay(eff) {
-				let text = '+' + format(eff);
-				if (options.nerdMode) text += '<br>formula: 0.05x';
-				return text;
-			},
-			unlocked() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 	},
 });
@@ -1389,54 +1389,6 @@ addLayer("sp", {
 			done() { return player.sp.points.gte(6) }
 		},
 	},
-	upgrades: {
-		11: {
-			title() { return '<b' + getColorClass(this, TITLE) + 'Positrons' },
-			description() { return 'squares the positive effect of <b' + getColorClass(this, REF) + 'Protons' },
-			cost: 6,
-			unlocked() { return hasUpgrade("h", 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
-		},
-		12: {
-			title() { return '<b' + getColorClass(this, TITLE) + 'Beta Particles' },
-			description() { return 'squares the positive effect of <b' + getColorClass(this, REF) + 'Neutrons' },
-			cost: 6,
-			unlocked() { return hasUpgrade("h", 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
-		},
-		13: {
-			title() { return '<b' + getColorClass(this, TITLE) + 'Gamma Particles' },
-			description() { return 'squares the positive effect of <b' + getColorClass(this, REF) + 'Electrons' },
-			cost: 6,
-			unlocked() { return hasUpgrade("h", 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
-		},
-		21: {
-			title() { return '<b' + getColorClass(this, TITLE) + 'Proton Decay' },
-			description() { return 'squares the positive effect of <b' + getColorClass(this, REF) + 'Protons</b>, and keep core rebuyables on subatomic particle resets' },
-			cost: 32000,
-			unlocked() { return hasUpgrade("sp", 11) && (isAssimilated(this.layer) || player.mo.assimilating === this.layer) },
-		},
-		22: {
-			title() { return '<b' + getColorClass(this, TITLE) + 'Neutron Decay' },
-			description() { return 'squares the positive effect of <b' + getColorClass(this, REF) + 'Neutrons</b>, and keep core upgrades on subatomic particle resets' },
-			cost: 68000,
-			unlocked() { return hasUpgrade("sp", 12) && (isAssimilated(this.layer) || player.mo.assimilating === this.layer) },
-		},
-		23: {
-			title() { return '<b' + getColorClass(this, TITLE) + 'Electron Decay' },
-			description() { return 'squares the positive effect of <b' + getColorClass(this, REF) + 'Electrons</b>, and keep core milestones on subatomic particle resets' },
-			cost: 76000,
-			unlocked() { return hasUpgrade("sp", 13) && (isAssimilated(this.layer) || player.mo.assimilating === this.layer) },
-		},
-		31: {
-			title() { return '<b' + getColorClass(this, TITLE) + 'Particle of the Flow' },
-			description() {
-				if (player.mo.assimilating === this.layer) return 'multiplies subatomic particle gain by 2.5x and subatomic particles reset nothing';
-				return 'multiplies subatomic particle gain by 2.5x, exponentiates subatomic particle gain multiplier by ^3.36, and subatomic particles reset nothing';
-			},
-			cost() { return player.mo.assimilating === this.layer ? 88888 : 'e2.66e9' },
-			style: {width: '150px', height: '150px'},
-			unlocked() { return hasUpgrade("sp", 21) && hasUpgrade("sp", 22) && hasUpgrade("sp", 23) && (isAssimilated(this.layer) || player.mo.assimilating === this.layer) },
-		},
-	},
 	buyables: {
 		11: {
 			cost(x) { return x.add(1) },
@@ -1503,6 +1455,54 @@ addLayer("sp", {
 				};
 				return text;
 			},
+		},
+	},
+	upgrades: {
+		11: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Positrons' },
+			description() { return 'squares the positive effect of <b' + getColorClass(this, REF) + 'Protons' },
+			cost: 6,
+			unlocked() { return hasUpgrade("h", 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
+		},
+		12: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Beta Particles' },
+			description() { return 'squares the positive effect of <b' + getColorClass(this, REF) + 'Neutrons' },
+			cost: 6,
+			unlocked() { return hasUpgrade("h", 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
+		},
+		13: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Gamma Particles' },
+			description() { return 'squares the positive effect of <b' + getColorClass(this, REF) + 'Electrons' },
+			cost: 6,
+			unlocked() { return hasUpgrade("h", 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
+		},
+		21: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Proton Decay' },
+			description() { return 'squares the positive effect of <b' + getColorClass(this, REF) + 'Protons</b>, and keep core rebuyables on subatomic particle resets' },
+			cost: 32000,
+			unlocked() { return hasUpgrade("sp", 11) && (isAssimilated(this.layer) || player.mo.assimilating === this.layer) },
+		},
+		22: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Neutron Decay' },
+			description() { return 'squares the positive effect of <b' + getColorClass(this, REF) + 'Neutrons</b>, and keep core upgrades on subatomic particle resets' },
+			cost: 68000,
+			unlocked() { return hasUpgrade("sp", 12) && (isAssimilated(this.layer) || player.mo.assimilating === this.layer) },
+		},
+		23: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Electron Decay' },
+			description() { return 'squares the positive effect of <b' + getColorClass(this, REF) + 'Electrons</b>, and keep core milestones on subatomic particle resets' },
+			cost: 76000,
+			unlocked() { return hasUpgrade("sp", 13) && (isAssimilated(this.layer) || player.mo.assimilating === this.layer) },
+		},
+		31: {
+			title() { return '<b' + getColorClass(this, TITLE) + 'Particle of the Flow' },
+			description() {
+				if (player.mo.assimilating === this.layer) return 'multiplies subatomic particle gain by 2.5x and subatomic particles reset nothing';
+				return 'multiplies subatomic particle gain by 2.5x, exponentiates subatomic particle gain multiplier by ^3.36, and subatomic particles reset nothing';
+			},
+			cost() { return player.mo.assimilating === this.layer ? 88888 : 'e2.66e9' },
+			style: {width: '150px', height: '150px'},
+			unlocked() { return hasUpgrade("sp", 21) && hasUpgrade("sp", 22) && hasUpgrade("sp", 23) && (isAssimilated(this.layer) || player.mo.assimilating === this.layer) },
 		},
 	},
 });
@@ -2494,90 +2494,92 @@ addLayer("a", {
 			unlocked() { return isAssimilated("a") || player.mo.assimilating === "a" },
 		},
 	},
-	milestones: {
-		0: {
-			requirementDescription: '1 atom',
-			effectDescription: 'keep subatomic particle rebuyables on atom resets',
-			done() { return player.a.points.gte(1) }
-		},
-		1: {
-			requirementDescription: '2 atoms',
-			effectDescription: 'keep core rebuyables on atom resets',
-			done() { return player.a.points.gte(2) }
-		},
-		2: {
-			requirementDescription: '3 atoms',
-			effectDescription: 'keep core upgrades on atom resets',
-			done() { return player.a.points.gte(3) }
-		},
-		3: {
-			requirementDescription: '4 atoms',
-			effectDescription: 'keep subatomic particle upgrades on atom resets',
-			done() { return player.a.points.gte(4) }
-		},
-		4: {
-			requirementDescription: '5 atoms',
-			effectDescription: 'keep core milestones on atom resets',
-			done() { return player.a.points.gte(5) }
-		},
-		5: {
-			requirementDescription: '6 atoms',
-			effectDescription: 'keep quark milestones on atom resets',
-			done() { return player.a.points.gte(6) }
-		},
-		6: {
-			requirementDescription: '7 atoms',
-			effectDescription: 'keep hex milestones on atom resets',
-			done() { return player.a.points.gte(7) }
-		},
-		7: {
-			requirementDescription: '8 atoms and 45 total atoms',
-			effectDescription: 'unlock a new demon soul challenge',
-			done() { return player.a.points.gte(8) && player.a.total.gte(45) }
-		},
-		8: {
-			requirementDescription: '10 atoms and 75 total atoms',
-			effectDescription: 'gain 1% of quark gain per second',
-			done() { return player.a.points.gte(10) && player.a.total.gte(75) }
-		},
-		9: {
-			requirementDescription: '25 atoms and 125 total atoms',
-			effectDescription: 'gain +9% of quark gain per second (total: 10%)',
-			done() { return player.a.points.gte(25) && player.a.total.gte(125) }
-		},
-		10: {
-			requirementDescription: '40 atoms and 175 total atoms',
-			effectDescription: 'you can buy upgrades that are not on the other\'s paths',
-			done() { return player.a.points.gte(40) && player.a.total.gte(175) }
-		},
-		11: {
-			requirementDescription: '200 atoms and 500 total atoms',
-			effectDescription: 'keep hex upgrades on row 4 resets',
-			done() { return player.a.points.gte(200) && player.a.total.gte(500) }
-		},
-		12: {
-			requirementDescription: '750 atoms and 1,000 total atoms',
-			effectDescription: 'keep atom upgrades on row 4 resets',
-			done() { return player.a.points.gte(750) && player.a.total.gte(1000) }
-		},
-		13: {
-			requirementDescription: '1,000 atoms and 1,500 total atoms',
-			effectDescription: 'keep subatomic particle milestones on atom resets',
-			done() { return player.a.points.gte(1000) && player.a.total.gte(1500) }
-		},
-		14: {
-			requirementDescription: '10,000 atoms and 1e600 prayers',
-			effectDescription: 'atoms reset nothing',
-			done() { return player.a.points.gte(10000) && player.p.points.gte('1e600') },
-			unlocked() { return (hasMilestone("a", 13) && player.r.unlocked) || hasMilestone("a", 14) }
-		},
-		15: {
-			requirementDescription: '18,000 atoms and 40 sanctums',
-			effectDescription: 'perform atom resets automatically',
-			done() { return player.a.points.gte(18000) && player.s.points.gte(40) && hasMilestone("a", 14) },
-			unlocked() { return (hasMilestone("a", 14) && player.r.unlocked) || hasMilestone("a", 15) }
-		},
-	},
+	milestones: (() => {
+		let obj = {
+			0: {
+				requirement: 1,
+				effectDescription: "keep subatomic particle rebuyables on atom resets",
+			},
+			1: {
+				requirement: 2,
+				effectDescription: "keep core rebuyables on atom resets",
+			},
+			2: {
+				requirement: 3,
+				effectDescription: "keep core upgrades on atom resets",
+			},
+			3: {
+				requirement: 4,
+				effectDescription: "keep subatomic particle upgrades on atom resets",
+			},
+			4: {
+				requirement: 5,
+				effectDescription: "keep core milestones on atom resets",
+			},
+			5: {
+				requirement: 6,
+				effectDescription: "keep quark milestones on atom resets",
+			},
+			6: {
+				requirement: 7,
+				effectDescription: "keep hex milestones on atom resets",
+			},
+			7: {
+				requirements: [8, 45],
+				effectDescription: "unlock a new demon soul challenge",
+			},
+			8: {
+				requirements: [10, 75],
+				effectDescription: "gain 1% of quark gain per second",
+			},
+			9: {
+				requirements: [25, 125],
+				effectDescription: "gain +9% of quark gain per second (total: 10%)",
+			},
+			10: {
+				requirements: [40, 175],
+				effectDescription: "you can buy upgrades that are not on the other's paths",
+			},
+			11: {
+				requirements: [200, 500],
+				effectDescription: "keep hex upgrades on row 4 resets",
+			},
+			12: {
+				requirements: [750, 1000],
+				effectDescription: "keep atom upgrades on row 4 resets",
+			},
+			13: {
+				requirements: [1000, 1500],
+				effectDescription: "keep subatomic particle milestones on atom resets",
+			},
+			14: {
+				requirementDescription: "10,000 atoms and 1e600 prayers",
+				effectDescription: "atoms reset nothing",
+				done() { return player.a.points.gte(10000) && player.p.points.gte("1e600") },
+				unlocked() { return (hasMilestone("a", 13) && player.r.unlocked) || hasMilestone("a", 14) }
+			},
+			15: {
+				requirementDescription: "18,000 atoms and 40 sanctums",
+				effectDescription: "perform atom resets automatically",
+				done() { return player.a.points.gte(18000) && player.s.points.gte(40) && hasMilestone("a", 14) },
+				unlocked() { return (hasMilestone("a", 14) && player.r.unlocked) || hasMilestone("a", 15) }
+			},
+		};
+		const done = req => player.a.points.gte(req);
+		const doneTotal = (req, reqTotal) => player.a.points.gte(req) && player.a.total.gte(reqTotal);
+		for (const key in obj) {
+			if (obj[key].requirements) {
+				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirements[0]) + " atoms and " + simpleFormatWhole(obj[key].requirements[1]) + " total atoms";
+				obj[key].done = doneTotal.bind(null, ...obj[key].requirements);
+				delete obj[key].requirements;
+			} else if (obj[key].requirement) {
+				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " atom" + (obj[key].requirement === 1 ? "" : "s");
+				obj[key].done = done.bind(null, obj[key].requirement);
+				delete obj[key].requirement;
+			};
+		};
+		return obj;
+	})(),
 	upgrades: {
 		11: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'The Demon of the Atom' },
