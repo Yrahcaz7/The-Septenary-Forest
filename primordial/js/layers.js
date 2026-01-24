@@ -434,29 +434,34 @@ addLayer("c", {
 		if (layers[resettingLayer].row > this.row) layerDataReset("c", keep);
 	},
 	tabFormat: getTab("c"),
-	milestones: {
-		0: {
-			requirementDescription: '10 cores',
-			effectDescription: 'keep essence upgrades on core resets',
-			done() { return player.c.points.gte(10) },
-		},
-		1: {
-			requirementDescription: '25 cores',
-			effectDescription: 'unlock core upgrades',
-			done() { return player.c.points.gte(25) },
-		},
-		2: {
-			requirementDescription: '500 cores',
-			effectDescription: 'keep essence rebuyables on core resets',
-			done() { return player.c.points.gte(500) },
-		},
-		3: {
-			requirementDescription: '1e64 cores',
-			effectDescription: 'gain 50% of your essence gain per second',
-			done() { return player.c.points.gte(1e64) },
-			unlocked() { return player.c.best.gte(1e60) || player.h.unlocked },
-		},
-	},
+	milestones: (() => {
+		let obj = {
+			0: {
+				requirement: 10,
+				effectDescription: "keep essence upgrades on core resets",
+			},
+			1: {
+				requirement: 25,
+				effectDescription: "unlock core upgrades",
+			},
+			2: {
+				requirement: 500,
+				effectDescription: "keep essence rebuyables on core resets",
+			},
+			3: {
+				requirement: 1e64,
+				effectDescription: "gain 50% of your essence gain per second",
+				unlocked() { return player.c.best.gte(1e60) || player.h.unlocked },
+			},
+		};
+		const done = req => player.c.points.gte(req);
+		for (const key in obj) {
+			obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " cores";
+			obj[key].done = done.bind(null, obj[key].requirement);
+			delete obj[key].requirement;
+		};
+		return obj;
+	})(),
 	buyables: {
 		11: {
 			cost(x) {
@@ -803,23 +808,29 @@ addLayer("q", {
 			unlocked() { return hasUpgrade("q", 61) },
 		},
 	},
-	milestones: {
-		0: {
-			requirementDescription: '5 quarks',
-			effectDescription: 'unlock 5 new essence upgrades',
-			done() { return player.q.points.gte(5) }
-		},
-		1: {
-			requirementDescription: '50,000 quarks',
-			effectDescription: 'keep essence upgrades on quark resets',
-			done() { return player.q.points.gte(50000) }
-		},
-		2: {
-			requirementDescription: '250,000,000 quarks',
-			effectDescription: 'keep essence rebuyables on quark resets',
-			done() { return player.q.points.gte(250000000) }
-		},
-	},
+	milestones: (() => {
+		let obj = {
+			0: {
+				requirement: 5,
+				effectDescription: "unlock 5 new essence upgrades",
+			},
+			1: {
+				requirement: 50_000,
+				effectDescription: "keep essence upgrades on quark resets",
+			},
+			2: {
+				requirement: 250_000_000,
+				effectDescription: "keep essence rebuyables on quark resets",
+			},
+		};
+		const done = req => player.q.points.gte(req);
+		for (const key in obj) {
+			obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " quarks";
+			obj[key].done = done.bind(null, obj[key].requirement);
+			delete obj[key].requirement;
+		};
+		return obj;
+	})(),
 	upgrades: {
 		11: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'The Point of Quarks' },
@@ -1357,38 +1368,23 @@ addLayer("sp", {
 	},
 	resetsNothing() { return hasMilestone("s", 11) || hasUpgrade("sp", 31) || hasUpgrade("pl", 24) },
 	tabFormat: getTab("sp"),
-	milestones: {
-		0: {
-			requirementDescription: '1 subatomic particle',
-			effectDescription: 'you can buy max subatomic particles',
-			done() { return player.sp.points.gte(1) }
-		},
-		1: {
-			requirementDescription: '2 subatomic particles',
-			effectDescription: 'keep essence upgrades on subatomic particle resets',
-			done() { return player.sp.points.gte(2) }
-		},
-		2: {
-			requirementDescription: '3 subatomic particles',
-			effectDescription: 'unlock 5 new quark upgrades',
-			done() { return player.sp.points.gte(3) }
-		},
-		3: {
-			requirementDescription: '4 subatomic particles',
-			effectDescription: 'keep quark milestones on subatomic particle resets',
-			done() { return player.sp.points.gte(4) }
-		},
-		4: {
-			requirementDescription: '5 subatomic particles',
-			effectDescription: 'keep essence rebuyables on subatomic particle resets',
-			done() { return player.sp.points.gte(5) }
-		},
-		5: {
-			requirementDescription: '6 subatomic particles',
-			effectDescription: 'keep quark upgrades on subatomic particle resets',
-			done() { return player.sp.points.gte(6) }
-		},
-	},
+	milestones: (() => {
+		let obj = {
+			0: { effectDescription: "you can buy max subatomic particles" },
+			1: { effectDescription: "keep essence upgrades on subatomic particle resets" },
+			2: { effectDescription: "unlock 5 new quark upgrades" },
+			3: { effectDescription: "keep quark milestones on subatomic particle resets" },
+			4: { effectDescription: "keep essence rebuyables on subatomic particle resets" },
+			5: { effectDescription: "keep quark upgrades on subatomic particle resets" },
+		};
+		const done = req => player.sp.points.gte(req);
+		for (const key in obj) {
+			const requirement = (+key) + 1;
+			obj[key].requirementDescription = simpleFormatWhole(requirement) + " subatomic particle" + (requirement === 1 ? "" : "s");
+			obj[key].done = done.bind(null, requirement);
+		};
+		return obj;
+	})(),
 	buyables: {
 		11: {
 			cost(x) { return x.add(1) },
@@ -1612,53 +1608,26 @@ addLayer("h", {
 			unlocked() { return hasUpgrade("h", 81) },
 		},
 	},
-	milestones: {
-		0: {
-			requirementDescription: '5 hexes',
-			effectDescription: 'keep essence upgrades on hex resets',
-			done() { return player.h.points.gte(5) }
-		},
-		1: {
-			requirementDescription: '25 hexes',
-			effectDescription: 'keep essence rebuyables on hex resets',
-			done() { return player.h.points.gte(25) }
-		},
-		2: {
-			requirementDescription: '125 hexes',
-			effectDescription: 'keep core upgrades on hex resets',
-			done() { return player.h.points.gte(125) }
-		},
-		3: {
-			requirementDescription: '625 hexes',
-			effectDescription: 'keep core rebuyables on hex resets',
-			done() { return player.h.points.gte(625) }
-		},
-		4: {
-			requirementDescription: '3,125 hexes',
-			effectDescription: 'keep core upgrades and rebuyables on subatomic particle resets',
-			done() { return player.h.points.gte(3125) }
-		},
-		5: {
-			requirementDescription: '15,625 hexes',
-			effectDescription: 'keep all row 2 milestones on row 3 resets',
-			done() { return player.h.points.gte(15625) }
-		},
-		6: {
-			requirementDescription: '78,125 hexes',
-			effectDescription: 'keep quark upgrades on subatomic particle resets',
-			done() { return player.h.points.gte(78125) }
-		},
-		7: {
-			requirementDescription: '390,625 hexes',
-			effectDescription: 'keep quark upgrades on hex resets',
-			done() { return player.h.points.gte(390625) }
-		},
-		8: {
-			requirementDescription: '1,953,125 hexes',
-			effectDescription: 'unlock 3 new core upgrades',
-			done() { return player.h.points.gte(1953125) }
-		},
-	},
+	milestones: (() => {
+		let obj = {
+			0: { effectDescription: "keep essence upgrades on hex resets" },
+			1: { effectDescription: "keep essence rebuyables on hex resets" },
+			2: { effectDescription: "keep core upgrades on hex resets" },
+			3: { effectDescription: "keep core rebuyables on hex resets" },
+			4: { effectDescription: "keep core upgrades and rebuyables on subatomic particle resets" },
+			5: { effectDescription: "keep all row 2 milestones on row 3 resets" },
+			6: { effectDescription: "keep quark upgrades on subatomic particle resets" },
+			7: { effectDescription: "keep quark upgrades on hex resets" },
+			8: { effectDescription: "unlock 3 new core upgrades" },
+		};
+		const done = req => player.h.points.gte(req);
+		for (const key in obj) {
+			const requirement = 5 ** ((+key) + 1);
+			obj[key].requirementDescription = simpleFormatWhole(requirement) + " hexes";
+			obj[key].done = done.bind(null, requirement);
+		};
+		return obj;
+	})(),
 	upgrades: {
 		11: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Hex Leak' },
@@ -3138,30 +3107,38 @@ addLayer("p", {
 		return player.p.hymns.add(1).pow(exp);
 	},
 	tabFormat: getTab("p"),
-	milestones: {
-		0: {
-			requirementDescription: '1 prayer',
-			effectDescription: 'hex and subatomic particle resets only reset<br>prayer upgrades and special resources<br>out of the things in the prayer layer',
-			done() { return player.p.points.gte(1) },
-		},
-		1: {
-			requirementDescription: '20 prayers',
-			effectDescription: 'prayers generate twice as much divinity',
-			done() { return player.p.points.gte(20) },
-		},
-		2: {
-			requirementDescription: '2,500 prayers and 250 hymns',
-			effectDescription: 'divinity gain is raised to the power of 1.5',
-			done() { return player.p.points.gte(2500) && player.p.hymns.gte(250)},
-			unlocked() { return hasUpgrade("p", 41) || player.s.unlocked },
-		},
-		3: {
-			requirementDescription: '1.00e55 prayers',
-			effectDescription: 'divinity gain is raised to the power<br>of 1.6 instead of 1.5',
-			done() { return player.p.points.gte(1e55)},
-			unlocked() { return hasMilestone("p", 2) || player.s.unlocked },
-		},
-	},
+	milestones: (() => {
+		let obj = {
+			0: {
+				requirement: 1,
+				effectDescription: "hex and subatomic particle resets only reset prayer upgrades and special resources out of the things in the prayer layer",
+			},
+			1: {
+				requirement: 20,
+				effectDescription: "prayers generate twice as much divinity",
+			},
+			2: {
+				requirementDescription: "2,500 prayers and 250 hymns",
+				effectDescription: "divinity gain is raised to the power of 1.5",
+				done() { return player.p.points.gte(2500) && player.p.hymns.gte(250)},
+				unlocked() { return hasUpgrade("p", 41) || player.s.unlocked },
+			},
+			3: {
+				requirement: 1e55,
+				effectDescription: "divinity gain is raised to the power of 1.6 instead of 1.5",
+				unlocked() { return hasMilestone("p", 2) || player.s.unlocked },
+			},
+		};
+		const done = req => player.p.points.gte(req);
+		for (const key in obj) {
+			if (obj[key].requirement) {
+				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " prayer" + (obj[key].requirement === 1 ? "" : "s");
+				obj[key].done = done.bind(null, obj[key].requirement);
+				delete obj[key].requirement;
+			};
+		};
+		return obj;
+	})(),
 	upgrades: {
 		11: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Prayer Influence' },
@@ -3688,326 +3665,249 @@ addLayer("s", {
 			unlocked() { return isAssimilated("s") || player.mo.assimilating === "s" },
 		},
 	},
-	milestones: {
-		0: {
-			requirementDescription: '1 sanctum',
-			effectDescription: 'you can buy max sanctums and<br><b>research</b> 6 new prayer upgrades',
-			done() { return player.s.points.gte(1) },
-		},
-		1: {
-			requirementDescription: '2 sanctums',
-			effectDescription: 'you can autobuy core upgrades',
-			done() { return player.s.points.gte(2) },
-			toggles: [["c", "auto_upgrades"]],
-		},
-		2: {
-			requirementDescription: '3 sanctums',
-			effectDescription: 'you can autobuy core rebuyables',
-			done() { return player.s.points.gte(3) },
-			toggles: [["c", "auto_buyables"]],
-		},
-		3: {
-			requirementDescription: '4 sanctums',
-			effectDescription: 'unlock 4 new prayer upgrades',
-			done() { return player.s.points.gte(4) },
-		},
-		4: {
-			requirementDescription: '5 sanctums',
-			effectDescription: 'you can autobuy quark upgrades',
-			done() { return player.s.points.gte(5) },
-			toggles: [["q", "auto_upgrades"]],
-		},
-		5: {
-			requirementDescription: '6 sanctums',
-			effectDescription: 'you can autobuy prayer upgrades',
-			done() { return player.s.points.gte(6) },
-			toggles: [["p", "auto_upgrades"]],
-		},
-		6: {
-			requirementDescription: '7 sanctums',
-			effectDescription: 'you can have autobuy prayer upgrades<br>option be smart (toggle on or off)',
-			done() { return player.s.points.gte(7) },
-			toggles: [["p", "smart_auto_upgrades"]],
-		},
-		7: {
-			requirementDescription: '8 sanctums',
-			effectDescription: 'gain 0.5% of your prayer gain per second',
-			done() { return player.s.points.gte(8) },
-		},
-		8: {
-			requirementDescription: '9 sanctums',
-			effectDescription: 'gain 0.2% of your holiness and hymn gain per second',
-			done() { return player.s.points.gte(9) },
-		},
-		9: {
-			requirementDescription: '10 sanctums',
-			effectDescription: 'gain 0.1% of your hex gain per second',
-			done() { return player.s.points.gte(10) },
-		},
-		10: {
-			requirementDescription: '14 sanctums',
-			effectDescription: 'gain 0.001% of your demon soul gain per second',
-			done() { return player.s.points.gte(14) },
-		},
-		11: {
-			requirementDescription: '16 sanctums',
-			effectDescription: 'subatomic particles reset nothing and<br>perform subatomic particle resets automatically',
-			done() { return player.s.points.gte(16) },
-		},
-		12: {
-			requirementDescription: '18 sanctums',
-			effectDescription: "atom resets don't reset sanctums",
-			done() { return player.s.points.gte(18) },
-		},
-		13: {
-			requirementDescription: '19 sanctums',
-			effectDescription() { return 'unlock <b' + getColorClass(this, REF) + 'Devotion' },
-			done() { return player.s.points.gte(19) },
-		},
-		14: {
-			requirementDescription: '22 sanctums',
-			effectDescription() { return 'unlock <b' + getColorClass(this, REF) + 'Sacrificial Ceremonies' },
-			done() { return player.s.points.gte(22) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		15: {
-			requirementDescription: '24 sanctums',
-			effectDescription: 'gain +4.5% of prayer gain per second',
-			done() { return player.s.points.gte(24) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		16: {
-			requirementDescription: '25 sanctums',
-			effectDescription: 'gain +2.3% of holiness and hymn gain per second',
-			done() { return player.s.points.gte(25) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		17: {
-			requirementDescription: '26 sanctums',
-			effectDescription() { return 'divide <b' + getColorClass(this, REF) + 'Worship</b> cost scaling by 15' },
-			done() { return player.s.points.gte(26) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		18: {
-			requirementDescription: '27 sanctums',
-			effectDescription() { return 'increase <b' + getColorClass(this, REF) + 'Devotion</b> effect exponent<br>0.3 --> 0.375' },
-			done() { return player.s.points.gte(27) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		19: {
-			requirementDescription: '30 sanctums',
-			effectDescription() { return 'you can auto <b' + getColorClass(this, REF) + 'Worship' },
-			done() { return player.s.points.gte(30) },
-			toggles: [["s", "auto_worship"]],
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		20: {
-			requirementDescription: '31 sanctums',
-			effectDescription: "sanctum resets don't reset essence",
-			done() { return player.s.points.gte(31) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		21: {
-			requirementDescription: '32 sanctums',
-			effectDescription() { return 'increase <b' + getColorClass(this, REF) + 'Devotion</b> effect exponent<br>0.375 --> 0.45' },
-			done() { return player.s.points.gte(32) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		22: {
-			requirementDescription: '35 sanctums',
-			effectDescription() { return 'increase <b' + getColorClass(this, REF) + 'Devotion</b> effect exponent<br>0.45 --> 0.55' },
-			done() { return player.s.points.gte(35) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		23: {
-			requirementDescription: '39 sanctums',
-			effectDescription() { return 'divide <b' + getColorClass(this, REF) + 'Worship</b> cost scaling by 2' },
-			done() { return player.s.points.gte(39) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		24: {
-			requirementDescription: '42 sanctums',
-			effectDescription() { return "double <b" + getColorClass(this, REF) + "Sacrifice</b>'s effect" },
-			done() { return player.s.points.gte(42) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		25: {
-			requirementDescription: '43 sanctums',
-			effectDescription: 'keep row 2 milestones on sanctum resets',
-			done() { return player.s.points.gte(43) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		26: {
-			requirementDescription: '44 sanctums',
-			effectDescription() { return 'divide <b' + getColorClass(this, REF) + 'Sacrifice</b> cost scaling by 2' },
-			done() { return player.s.points.gte(44) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		27: {
-			requirementDescription: '46 sanctums',
-			effectDescription() { return 'divide <b' + getColorClass(this, REF) + 'Sacrificial Ceremony</b><br>cost scaling by 2' },
-			done() { return player.s.points.gte(46) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		28: {
-			requirementDescription: '49 sanctums',
-			effectDescription() { return 'you can auto perform<br><b' + getColorClass(this, REF) + 'Sacrificial Ceremonies' },
-			done() { return player.s.points.gte(49) },
-			toggles: [["s", "auto_sacrificial_ceremony"]],
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		29: {
-			requirementDescription: '50 sanctums',
-			effectDescription() { return 'divide <b' + getColorClass(this, REF) + 'Sacrificial Ceremony</b><br>cost scaling by 1.5' },
-			done() { return player.s.points.gte(50) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		30: {
-			requirementDescription: '53 sanctums',
-			effectDescription: 'double light gain',
-			done() { return player.s.points.gte(53) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		31: {
-			requirementDescription: '66 sanctums',
-			effectDescription() { return 'divide <b' + getColorClass(this, REF) + 'Sacrificial Ceremony</b><br>cost scaling by 1.2' },
-			done() { return player.s.points.gte(66) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		32: {
-			requirementDescription: '69 sanctums',
-			effectDescription() { return 'divide <b' + getColorClass(this, REF) + 'Worship</b> cost by 1e100' },
-			done() { return player.s.points.gte(69) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		33: {
-			requirementDescription: '70 sanctums',
-			effectDescription() { return 'divide <b' + getColorClass(this, REF) + 'Sacrifice</b> cost scaling by 1.6' },
-			done() { return player.s.points.gte(70) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		34: {
-			requirementDescription: '71 sanctums',
-			effectDescription() { return "change <b" + getColorClass(this, REF) + "Sacrifice</b>'s cost to a requirement" },
-			done() { return player.s.points.gte(71) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		35: {
-			requirementDescription: '72 sanctums',
-			effectDescription() { return 'increase <b' + getColorClass(this, REF) + 'Devotion</b> effect exponent<br>0.55 --> 0.575' },
-			done() { return player.s.points.gte(72) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		36: {
-			requirementDescription: '77 sanctums',
-			effectDescription() { return 'increase <b' + getColorClass(this, REF) + 'Devotion</b> effect exponent<br>0.575 --> 0.6' },
-			done() { return player.s.points.gte(77) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		37: {
-			requirementDescription: '80 sanctums',
-			effectDescription() { return 'divide <b' + getColorClass(this, REF) + 'Sacrifice</b> cost scaling by 2' },
-			done() { return player.s.points.gte(80) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		38: {
-			requirementDescription: '85 sanctums',
-			effectDescription() { return 'you can auto <b' + getColorClass(this, REF) + 'Sacrifice' },
-			done() { return player.s.points.gte(85) },
-			toggles: [["s", "auto_sacrifice"]],
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		39: {
-			requirementDescription: '87 sanctums',
-			effectDescription() { return 'divide <b' + getColorClass(this, REF) + 'Sacrifice</b> cost scaling by 2' },
-			done() { return player.s.points.gte(87) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		40: {
-			requirementDescription: '96 sanctums',
-			effectDescription() { return 'divide <b' + getColorClass(this, REF) + 'Worship</b> cost scaling by 1.5' },
-			done() { return player.s.points.gte(96) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		41: {
-			requirementDescription: '100 sanctums',
-			effectDescription: 'triple light gain',
-			done() { return player.s.points.gte(100) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		42: {
-			requirementDescription: '110 sanctums',
-			effectDescription() { return 'divide <b' + getColorClass(this, REF) + 'Sacrificial Ceremony</b><br>cost scaling by 1.5' },
-			done() { return player.s.points.gte(110) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		43: {
-			requirementDescription: '112 sanctums',
-			effectDescription() { return 'divide <b' + getColorClass(this, REF) + 'Sacrificial Ceremony</b><br>hex cost scaling by 3' },
-			done() { return player.s.points.gte(112) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		44: {
-			requirementDescription: '120 sanctums',
-			effectDescription() { return 'auto <b' + getColorClass(this, REF) + 'Worship</b> works twice as fast' },
-			done() { return player.s.points.gte(120) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		45: {
-			requirementDescription: '125 sanctums',
-			effectDescription() { return 'divide <b' + getColorClass(this, REF) + 'Sacrificial Ceremony</b><br>hex cost scaling by 4' },
-			done() { return player.s.points.gte(125) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		46: {
-			requirementDescription: '140 sanctums',
-			effectDescription() { return 'auto <b' + getColorClass(this, REF) + 'Worship</b> works twice as fast (4x total)' },
-			done() { return player.s.points.gte(140) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		47: {
-			requirementDescription: '161 sanctums',
-			effectDescription: 'sanctums reset nothing',
-			done() { return player.s.points.gte(161) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		48: {
-			requirementDescription: '164 sanctums',
-			effectDescription: 'perform sanctum resets automatically',
-			done() { return player.s.points.gte(164) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		49: {
-			requirementDescription: '175 sanctums',
-			effectDescription() { return 'increase <b' + getColorClass(this, REF) + 'Devotion</b> effect exponent<br>0.6 --> 0.625' },
-			done() { return player.s.points.gte(175) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		50: {
-			requirementDescription: '190 sanctums',
-			effectDescription: 'triple light gain',
-			done() { return player.s.points.gte(190) },
-			unlocked() { return hasMilestone("s", 13) },
-		},
-		51: {
-			requirementDescription: '200 sanctums',
-			effectDescription() { return 'auto <b' + getColorClass(this, REF) + 'Worship</b> works thrice as fast (12x total)' },
-			done() { return player.s.points.gte(200) && hasMilestone("m", 8) },
-			unlocked() { return hasMilestone("s", 13) && hasMilestone("m", 8) },
-		},
-		52: {
-			requirementDescription: '210 sanctums',
-			effectDescription: 'triple light gain',
-			done() { return player.s.points.gte(210) && hasMilestone("m", 8) },
-			unlocked() { return hasMilestone("s", 13) && hasMilestone("m", 8) },
-		},
-		53: {
-			requirementDescription: '215 sanctums',
-			effectDescription() { return 'increase <b' + getColorClass(this, REF) + 'Devotion</b> effect exponent<br>0.625 --> 0.666' },
-			done() { return player.s.points.gte(215) && hasMilestone("m", 8) },
-			unlocked() { return hasMilestone("s", 13) && hasMilestone("m", 8) },
-		},
-	},
+	milestones: (() => {
+		let obj = {
+			0: {
+				requirement: 1,
+				effectDescription: "you can buy max sanctums and <b>research</b> 6 new prayer upgrades",
+			},
+			1: {
+				requirement: 2,
+				effectDescription: "you can autobuy core upgrades",
+				toggles: [["c", "auto_upgrades"]],
+			},
+			2: {
+				requirement: 3,
+				effectDescription: "you can autobuy core rebuyables",
+				toggles: [["c", "auto_buyables"]],
+			},
+			3: {
+				requirement: 4,
+				effectDescription: "unlock 4 new prayer upgrades",
+			},
+			4: {
+				requirement: 5,
+				effectDescription: "you can autobuy quark upgrades",
+				toggles: [["q", "auto_upgrades"]],
+			},
+			5: {
+				requirement: 6,
+				effectDescription: "you can autobuy prayer upgrades",
+				toggles: [["p", "auto_upgrades"]],
+			},
+			6: {
+				requirement: 7,
+				effectDescription: "unlock an option to make the prayer upgrade autobuyer be smart",
+				toggles: [["p", "smart_auto_upgrades"]],
+			},
+			7: {
+				requirement: 8,
+				effectDescription: "gain 0.5% of your prayer gain per second",
+			},
+			8: {
+				requirement: 9,
+				effectDescription: "gain 0.2% of your holiness and hymn gain per second",
+			},
+			9: {
+				requirement: 10,
+				effectDescription: "gain 0.1% of your hex gain per second",
+			},
+			10: {
+				requirement: 14,
+				effectDescription: "gain 0.001% of your demon soul gain per second",
+			},
+			11: {
+				requirement: 16,
+				effectDescription: "subatomic particles reset nothing and perform subatomic particle resets automatically",
+			},
+			12: {
+				requirement: 18,
+				effectDescription: "atom resets don't reset sanctums",
+			},
+			13: {
+				requirement: 19,
+				effectDescription() { return "unlock <b" + getColorClass(this, REF) + "Devotion" },
+			},
+			14: {
+				requirement: 22,
+				effectDescription() { return "unlock <b" + getColorClass(this, REF) + "Sacrificial Ceremonies" },
+			},
+			15: {
+				requirement: 24,
+				effectDescription: "gain +4.5% of prayer gain per second",
+			},
+			16: {
+				requirement: 25,
+				effectDescription: "gain +2.3% of holiness and hymn gain per second",
+			},
+			17: {
+				requirement: 26,
+				effectDescription() { return "divide <b" + getColorClass(this, REF) + "Worship</b> cost scaling by 15" },
+			},
+			18: {
+				requirement: 27,
+				effectDescription() { return "increase <b" + getColorClass(this, REF) + "Devotion</b> effect exponent (0.3 --> 0.375)" },
+			},
+			19: {
+				requirement: 30,
+				effectDescription() { return "you can auto <b" + getColorClass(this, REF) + 'Worship' },
+				toggles: [["s", "auto_worship"]],
+			},
+			20: {
+				requirement: 31,
+				effectDescription: "sanctum resets don't reset essence",
+			},
+			21: {
+				requirement: 32,
+				effectDescription() { return "increase <b" + getColorClass(this, REF) + "Devotion</b> effect exponent (0.375 --> 0.45)" },
+			},
+			22: {
+				requirement: 35,
+				effectDescription() { return "increase <b" + getColorClass(this, REF) + "Devotion</b> effect exponent (0.45 --> 0.55)" },
+			},
+			23: {
+				requirement: 39,
+				effectDescription() { return "divide <b" + getColorClass(this, REF) + "Worship</b> cost scaling by 2" },
+			},
+			24: {
+				requirement: 42,
+				effectDescription() { return "double <b" + getColorClass(this, REF) + "Sacrifice</b>'s effect" },
+			},
+			25: {
+				requirement: 43,
+				effectDescription: "keep row 2 milestones on sanctum resets",
+			},
+			26: {
+				requirement: 44,
+				effectDescription() { return "divide <b" + getColorClass(this, REF) + "Sacrifice</b> cost scaling by 2" },
+			},
+			27: {
+				requirement: 46,
+				effectDescription() { return "divide <b" + getColorClass(this, REF) + "Sacrificial Ceremony</b> cost scaling by 2" },
+			},
+			28: {
+				requirement: 49,
+				effectDescription() { return "you can auto perform <b" + getColorClass(this, REF) + "Sacrificial Ceremonies" },
+				toggles: [["s", "auto_sacrificial_ceremony"]],
+			},
+			29: {
+				requirement: 50,
+				effectDescription() { return "divide <b" + getColorClass(this, REF) + "Sacrificial Ceremony</b> cost scaling by 1.5" },
+			},
+			30: {
+				requirement: 53,
+				effectDescription: "double light gain",
+			},
+			31: {
+				requirement: 66,
+				effectDescription() { return "divide <b" + getColorClass(this, REF) + "Sacrificial Ceremony</b> cost scaling by 1.2" },
+			},
+			32: {
+				requirement: 69,
+				effectDescription() { return "divide <b" + getColorClass(this, REF) + "Worship</b> cost by 1e100" },
+			},
+			33: {
+				requirement: 70,
+				effectDescription() { return "divide <b" + getColorClass(this, REF) + "Sacrifice</b> cost scaling by 1.6" },
+			},
+			34: {
+				requirement: 71,
+				effectDescription() { return "change <b" + getColorClass(this, REF) + "Sacrifice</b>'s cost to a requirement" },
+			},
+			35: {
+				requirement: 72,
+				effectDescription() { return "increase <b" + getColorClass(this, REF) + "Devotion</b> effect exponent (0.55 --> 0.575)" },
+			},
+			36: {
+				requirement: 77,
+				effectDescription() { return "increase <b" + getColorClass(this, REF) + "Devotion</b> effect exponent (0.575 --> 0.6)" },
+			},
+			37: {
+				requirement: 80,
+				effectDescription() { return "divide <b" + getColorClass(this, REF) + "Sacrifice</b> cost scaling by 2" },
+			},
+			38: {
+				requirement: 85,
+				effectDescription() { return "you can auto <b" + getColorClass(this, REF) + "Sacrifice" },
+				toggles: [["s", "auto_sacrifice"]],
+			},
+			39: {
+				requirement: 87,
+				effectDescription() { return "divide <b" + getColorClass(this, REF) + "Sacrifice</b> cost scaling by 2" },
+			},
+			40: {
+				requirement: 96,
+				effectDescription() { return "divide <b" + getColorClass(this, REF) + "Worship</b> cost scaling by 1.5" },
+			},
+			41: {
+				requirement: 100,
+				effectDescription: "triple light gain",
+			},
+			42: {
+				requirement: 110,
+				effectDescription() { return "divide <b" + getColorClass(this, REF) + "Sacrificial Ceremony</b> cost scaling by 1.5" },
+			},
+			43: {
+				requirement: 112,
+				effectDescription() { return "divide <b" + getColorClass(this, REF) + "Sacrificial Ceremony</b> hex cost scaling by 3" },
+			},
+			44: {
+				requirement: 120,
+				effectDescription() { return "auto <b" + getColorClass(this, REF) + "Worship</b> works twice as fast" },
+			},
+			45: {
+				requirement: 125,
+				effectDescription() { return "divide <b" + getColorClass(this, REF) + "Sacrificial Ceremony</b> hex cost scaling by 4" },
+			},
+			46: {
+				requirement: 140,
+				effectDescription() { return "auto <b" + getColorClass(this, REF) + "Worship</b> works twice as fast (4x total)" },
+			},
+			47: {
+				requirement: 161,
+				effectDescription: "sanctums reset nothing",
+			},
+			48: {
+				requirement: 164,
+				effectDescription: "perform sanctum resets automatically",
+			},
+			49: {
+				requirement: 175,
+				effectDescription() { return "increase <b" + getColorClass(this, REF) + "Devotion</b> effect exponent (0.6 --> 0.625)" },
+			},
+			50: {
+				requirement: 190,
+				effectDescription: "triple light gain",
+			},
+			51: {
+				requirement: 200,
+				effectDescription() { return "auto <b" + getColorClass(this, REF) + "Worship</b> works thrice as fast (12x total)" },
+			},
+			52: {
+				requirement: 210,
+				effectDescription: "triple light gain",
+			},
+			53: {
+				requirement: 215,
+				effectDescription() { return "increase <b" + getColorClass(this, REF) + "Devotion</b> effect exponent (0.625 --> 0.666)" },
+			},
+		};
+		const done = req => player.s.points.gte(req);
+		const doneAndUnlocked = req => player.s.points.gte(req) && hasMilestone("m", 8);
+		const unlocked1 = () => hasMilestone("s", 13);
+		const unlocked2 = () => hasMilestone("s", 13) && hasMilestone("m", 8);
+		for (const key in obj) {
+			if (obj[key].requirement) {
+				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " sanctum" + (obj[key].requirement === 1 ? "" : "s");
+				if (+key >= 51) obj[key].done = doneAndUnlocked.bind(null, obj[key].requirement);
+				else obj[key].done = done.bind(null, obj[key].requirement);
+				delete obj[key].requirement;
+			};
+			if (+key >= 51) obj[key].unlocked = unlocked2;
+			else if (+key >= 14) obj[key].unlocked = unlocked1;
+		};
+		return obj;
+	})(),
 });
 
 addLayer("d", {
