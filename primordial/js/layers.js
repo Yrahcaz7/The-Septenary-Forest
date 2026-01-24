@@ -4834,124 +4834,113 @@ addLayer("m", {
 			content: getTab("m", "Constructor"),
 		},
 	},
-	milestones: {
-		0: {
-			requirementDescription: '1 molecule',
-			effectDescription: 'molecules don\'t reset relics, and<br>you can autobuy essence rebuyables',
-			done() { return player.m.points.gte(1) },
-			toggles: [["e", "auto_buyables"]],
-		},
-		1: {
-			requirementDescription: '2 total molecules',
-			effectDescription: 'keep demon soul challenges and<br><b' + getColorClass(this, REF, "ds") + 'Demonic Key</b> on row 5 resets,<br>and you can autobuy hex upgrades',
-			done() { return player.m.total.gte(2) },
-			toggles: [["h", "auto_upgrades"]],
-		},
-		2: {
-			requirementDescription: '3 total molecules',
-			effectDescription: 'molecules don\'t reset essence, and<br>you can autobuy essence upgrades',
-			done() { return player.m.total.gte(3) },
-			toggles: [["e", "auto_upgrades"]],
-		},
-		3: {
-			requirementDescription: '4 total molecules',
-			effectDescription: 'gain 0.1% of your best light gain per second',
-			done() { return player.m.total.gte(4) },
-		},
-		4: {
-			requirementDescription: '5 total molecules',
-			effectDescription: 'molecules don\'t reset cores, and<br>you can autobuy subatomic<br>particle upgrades and rebuyables',
-			done() { return player.m.total.gte(5) },
-			toggles: [["sp", "auto_upgrades"], ["sp", "auto_buyables"]],
-		},
-		5: {
-			requirementDescription: '7 total molecules',
-			effectDescription: 'molecules don\'t reset quarks, and<br>you can autobuy demon soul upgrades',
-			done() { return player.m.total.gte(7) },
-			toggles: [["ds", "auto_upgrades"]],
-		},
-		6: {
-			requirementDescription: '10 total molecules',
-			effectDescription: 'you can autobuy demon soul rebuyables',
-			done() { return player.m.total.gte(10) },
-			toggles: [["ds", "auto_buyables"]],
-		},
-		7: {
-			requirementDescription: '15 total molecules',
-			effectDescription: 'gain +0.9% of your best light gain per second',
-			done() { return player.m.total.gte(15) },
-		},
-		8: {
-			requirementDescription: '25 total molecules',
-			effectDescription: 'unlock 3 more sanctum milestones',
-			done() { return player.m.total.gte(25) },
-		},
-		9: {
-			requirementDescription: '50 total molecules',
-			effectDescription() { return 'keep the <b' + getColorClass(this, REF, "s") + '1st sanctum milestone</b><br>on molecule resets' },
-			done() { return player.m.total.gte(50) },
-		},
-		10: {
-			requirementDescription: '125 total molecules',
-			effectDescription: 'keep 5 sanctums on molecule resets',
-			done() { return player.m.total.gte(125) },
-		},
-		11: {
-			requirementDescription: '500 total molecules',
-			effectDescription: 'hardcapped atom upgrades always<br>have max effect',
-			done() { return player.m.total.gte(500) },
-		},
-		12: {
-			requirementDescription: '4,500 total molecules',
-			effectDescription: 'keep atom milestones on molecule resets',
-			done() { return player.m.total.gte(4500) },
-		},
-		13: {
-			requirementDescription: '50,000 total molecules',
-			effectDescription: 'molecules don\'t reset hexes',
-			done() { return player.m.total.gte(50000) },
-		},
-		14: {
-			requirementDescription: '750,000 total molecules',
-			effectDescription: 'molecules don\'t reset demon souls',
-			done() { return player.m.total.gte(750000) },
-		},
-		15: {
-			requirementDescription: '15,000,000 total molecules',
-			effectDescription: 'gain +1.5% of your best light gain per second',
-			done() { return player.m.total.gte(15000000) },
-		},
-		16: {
-			requirementDescription: '450,000,000 total molecules',
-			effectDescription: 'gain +2.5% of your best light gain per second',
-			done() { return player.m.total.gte(450000000) },
-		},
-		17: {
-			requirementDescription: '2.5e10 total molecules',
-			effectDescription: 'gain +5% of your best light gain per second',
-			done() { return player.m.total.gte(2.5e10) },
-		},
-		18: {
-			requirementDescription: '2.5e12 total molecules',
-			effectDescription: 'keep 25 more sanctums (30 total)<br>on molecule resets',
-			done() { return player.m.total.gte(2.5e12) },
-		},
-		19: {
-			requirementDescription: '4e14 total molecules',
-			effectDescription: 'keep 185 more sanctums (215 total)<br>on molecule resets',
-			done() { return player.m.total.gte(4e14) },
-		},
-		20: {
-			requirementDescription: '7.5e16 total molecules',
-			effectDescription: 'gain +10% of your molecule gain per second',
-			done() { return player.m.total.gte(7.5e16) },
-		},
-		21: {
-			requirementDescription: '1.5e19 total molecules',
-			effectDescription: 'gain +40% of your molecule gain per second',
-			done() { return player.m.total.gte(1.5e19) },
-		},
-	},
+	milestones: (() => {
+		let obj = {
+			0: {
+				requirement: 1,
+				effectDescription: "molecules don't reset relics, and you can autobuy essence rebuyables",
+				toggles: [["e", "auto_buyables"]],
+			},
+			1: {
+				requirement: 2,
+				effectDescription() { return "keep demon soul challenges and <b" + getColorClass(this, REF, "ds") + "Demonic Key</b> on row 5 resets, and you can autobuy hex upgrades" },
+				toggles: [["h", "auto_upgrades"]],
+			},
+			2: {
+				requirement: 3,
+				effectDescription: "molecules don't reset essence, and you can autobuy essence upgrades",
+				toggles: [["e", "auto_upgrades"]],
+			},
+			3: {
+				requirement: 4,
+				effectDescription: "gain 0.1% of your best light gain per second",
+			},
+			4: {
+				requirement: 5,
+				effectDescription: "molecules don't reset cores, and you can autobuy subatomic particle upgrades and rebuyables",
+				toggles: [["sp", "auto_upgrades"], ["sp", "auto_buyables"]],
+			},
+			5: {
+				requirement: 7,
+				effectDescription: "molecules don't reset quarks, and you can autobuy demon soul upgrades",
+				toggles: [["ds", "auto_upgrades"]],
+			},
+			6: {
+				requirement: 10,
+				effectDescription: "you can autobuy demon soul rebuyables",
+				toggles: [["ds", "auto_buyables"]],
+			},
+			7: {
+				requirement: 15,
+				effectDescription: "gain +0.9% of your best light gain per second",
+			},
+			8: {
+				requirement: 25,
+				effectDescription: "unlock 3 more sanctum milestones",
+			},
+			9: {
+				requirement: 50,
+				effectDescription() { return "keep the <b" + getColorClass(this, REF, "s") + "1 sanctum milestone</b> on molecule resets" },
+			},
+			10: {
+				requirement: 125,
+				effectDescription: "keep 5 sanctums on molecule resets",
+			},
+			11: {
+				requirement: 500,
+				effectDescription: "hardcapped atom upgrades always have max effect",
+			},
+			12: {
+				requirement: 4500,
+				effectDescription: "keep atom milestones on molecule resets",
+			},
+			13: {
+				requirement: 50_000,
+				effectDescription: "molecules don't reset hexes",
+			},
+			14: {
+				requirement: 750_000,
+				effectDescription: "molecules don't reset demon souls",
+			},
+			15: {
+				requirement: 15_000_000,
+				effectDescription: "gain +1.5% of your best light gain per second",
+			},
+			16: {
+				requirement: 450_000_000,
+				effectDescription: "gain +2.5% of your best light gain per second",
+			},
+			17: {
+				requirement: 2.5e10,
+				effectDescription: "gain +5% of your best light gain per second",
+			},
+			18: {
+				requirement: 2.5e12,
+				effectDescription: "keep 25 more sanctums (30 total) on molecule resets",
+			},
+			19: {
+				requirement: 4e14,
+				effectDescription: "keep 185 more sanctums (215 total) on molecule resets",
+			},
+			20: {
+				requirement: 7.5e16,
+				effectDescription: "gain +10% of your molecule gain per second",
+			},
+			21: {
+				requirement: 1.5e19,
+				effectDescription: "gain +40% of your molecule gain per second",
+			},
+		};
+		const done = req => player.m.total.gte(req);
+		for (const key in obj) {
+			if (obj[key].requirement) {
+				obj[key].requirementDescription = formatWhole(obj[key].requirement) + " total molecule" + (obj[key].requirement === 1 ? "" : "s");
+				obj[key].done = done.bind(null, obj[key].requirement);
+				delete obj[key].requirement;
+			};
+		};
+		return obj;
+	})(),
 	upgrades: {
 		11: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'O<span style="font-size: 0.8em">2</span>, Oxygen' },
@@ -7093,7 +7082,7 @@ addLayer("ch", {
 			},
 			27: {
 				requirement: 78,
-				effectDescription: 'the 6th row of molecule upgrades can be autobought, the good influence rebuyable autobuyer can bulk buy 10x, and you gain more total good influence from buying rebuyables based on bulk',
+				effectDescription: "the 6th row of molecule upgrades can be autobought, the good influence rebuyable autobuyer can bulk buy 10x, and you gain more total good influence from buying rebuyables based on bulk",
 			},
 			28: {
 				requirement: 82,
