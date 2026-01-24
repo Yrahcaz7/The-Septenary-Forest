@@ -4747,9 +4747,6 @@ addLayer('m', {
 		points: newDecimalZero(),
 		best: newDecimalZero(),
 		total: newDecimalZero(),
-		unique_nonextra: newDecimalZero(),
-		unique_extra: newDecimalZero(),
-		unique_total: newDecimalZero(),
 		auto_upgrades: false,
 	}},
 	color: "#00CCCC",
@@ -4808,19 +4805,20 @@ addLayer('m', {
 		if (hasMilestone('ch', 3) && resettingLayer == 'ch') keep.push('milestones');
 		if (layers[resettingLayer].row > this.row) layerDataReset('m', keep);
 	},
-	update(diff) {
-		let eff_nonextra = new Decimal(player.m.upgrades.length);
-		if (hasUpgrade('m', 42)) eff_nonextra = eff_nonextra.mul(upgradeEffect('m', 42));
-		player.m.unique_nonextra = eff_nonextra;
-		let eff_extra = newDecimalZero();
-		if (hasUpgrade('m', 31) && upgradeEffect('m', 31).gt(0)) eff_extra = eff_extra.add(upgradeEffect('m', 31));
-		if (hasUpgrade('m', 32) && upgradeEffect('m', 32).gt(0)) eff_extra = eff_extra.add(upgradeEffect('m', 32));
-		if (hasUpgrade('m', 41) && upgradeEffect('m', 41).gt(0)) eff_extra = eff_extra.add(upgradeEffect('m', 41));
-		if (hasUpgrade('m', 51) && upgradeEffect('m', 51).gt(0)) eff_extra = eff_extra.add(upgradeEffect('m', 51));
-		if (hasUpgrade('m', 53) && upgradeEffect('m', 53).gt(0)) eff_extra = eff_extra.add(upgradeEffect('m', 53));
-		if (hasUpgrade('m', 63)) eff_extra = eff_extra.mul(upgradeEffect('m', 63));
-		player.m.unique_extra = eff_extra;
-		player.m.unique_total = player.m.unique_nonextra.add(player.m.unique_extra);
+	uniqueNonExtra() {
+		let unique = new Decimal(player.m.upgrades.length);
+		if (hasUpgrade('m', 42)) unique = unique.mul(upgradeEffect('m', 42));
+		return unique;
+	},
+	uniqueExtra() {
+		let unique = newDecimalZero();
+		if (hasUpgrade('m', 31) && upgradeEffect('m', 31).gt(0)) unique = unique.add(upgradeEffect('m', 31));
+		if (hasUpgrade('m', 32) && upgradeEffect('m', 32).gt(0)) unique = unique.add(upgradeEffect('m', 32));
+		if (hasUpgrade('m', 41) && upgradeEffect('m', 41).gt(0)) unique = unique.add(upgradeEffect('m', 41));
+		if (hasUpgrade('m', 51) && upgradeEffect('m', 51).gt(0)) unique = unique.add(upgradeEffect('m', 51));
+		if (hasUpgrade('m', 53) && upgradeEffect('m', 53).gt(0)) unique = unique.add(upgradeEffect('m', 53));
+		if (hasUpgrade('m', 63)) unique = unique.mul(upgradeEffect('m', 63));
+		return unique;
 	},
 	tabFormat: {
 		Microscope: {
@@ -4996,7 +4994,7 @@ addLayer('m', {
 			title() { return '<b' + getColorClass(this, TITLE) + 'H<span style="font-size: 0.8em">2</span>O, Water' },
 			description: 'multiplies essence gain based on your total unique molecules',
 			cost: 125,
-			effect() { return player.m.unique_total.add(1).mul(5) },
+			effect() { return tmp.m.uniqueNonExtra.add(tmp.m.uniqueExtra).add(1).mul(5) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: 5(x+1)';
@@ -5017,7 +5015,7 @@ addLayer('m', {
 			title() { return '<b' + getColorClass(this, TITLE) + 'H<span style="font-size: 0.8em">2</span>, Hydrogen' },
 			description: "gives extra unique molecules based on your non-extra ones' amount and worth",
 			cost: 250,
-			effect() { return player.m.unique_nonextra.div(2).add(1).floor() },
+			effect() { return tmp.m.uniqueNonExtra.div(2).add(1).floor() },
 			effectDisplay(eff) {
 				let text = '+' + formatWhole(eff);
 				if (options.nerdMode) text += '<br>formula: xy/2+1';
@@ -5044,7 +5042,7 @@ addLayer('m', {
 			},
 			canAfford() { return player.a.points.gte(1e10) },
 			pay() { player.a.points = player.a.points.sub(1e10) },
-			effect() { return player.m.unique_total.mul(1000) },
+			effect() { return tmp.m.uniqueNonExtra.add(tmp.m.uniqueExtra).mul(1000) },
 			unlocked() { return hasUpgrade('m', 21) && hasUpgrade('m', 22) && hasUpgrade('m', 23) },
 		},
 		41: {
@@ -5079,7 +5077,7 @@ addLayer('m', {
 			},
 			canAfford() { return player.a.points.gte(1.61e10) },
 			pay() { player.a.points = player.a.points.sub(1.61e10) },
-			effect() { return player.m.unique_extra.add(1).pow(0.01) },
+			effect() { return tmp.m.uniqueExtra.add(1).pow(0.01) },
 			unlocked() { return hasUpgrade('m', 31) && hasUpgrade('m', 32) && hasUpgrade('m', 33) },
 		},
 		51: {
@@ -5098,7 +5096,7 @@ addLayer('m', {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Na<span style="font-size: 0.8em">2</span>O, Sodium Oxide' },
 			description: 'multiplies point gain based on your total unique molecules',
 			cost: 1e14,
-			effect() { return player.m.unique_total.add(1).pow(25) },
+			effect() { return tmp.m.uniqueNonExtra.add(tmp.m.uniqueExtra).add(1).pow(25) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (x+1)^25';
@@ -5122,7 +5120,7 @@ addLayer('m', {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Ne<span style="font-size: 0.8em">2</span>, Neon' },
 			description: 'multiplies light gain after hardcap based on your total unique molecules',
 			cost: 1e62,
-			effect() { return player.m.unique_total.add(1).log10().add(1).pow(hasUpgrade('m', 62) ? 10 : 0.5) },
+			effect() { return tmp.m.uniqueNonExtra.add(tmp.m.uniqueExtra).add(1).log10().add(1).pow(hasUpgrade('m', 62) ? 10 : 0.5) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) {
@@ -8020,7 +8018,7 @@ addLayer('pl', {
 		63: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Varied Atmosphere</b>' },
 			description: 'multiplies air gain based on your total unique molecules',
-			effect() { return player.m.unique_total.add(1).slog().add(1).pow(2) },
+			effect() { return tmp.m.uniqueNonExtra.add(tmp.m.uniqueExtra).add(1).slog().add(1).pow(2) },
 			effectDisplay(eff) {
 				let text = format(eff) + 'x';
 				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';

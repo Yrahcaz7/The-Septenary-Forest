@@ -137,8 +137,8 @@ function getRawTabContent(layer, name = "") {
 		};
 	} else if (layer == "m") {
 		if (name == "Constructor") {
-			let text = 'You have <h2 class="layer-m">' + formatWhole(player.m.unique_nonextra) + '</h2>';
-			if (player.m.unique_extra.gt(0)) text += '<h3 class="layer-m-light">+' + formatWhole(player.m.unique_extra) + '</h3>';
+			let text = 'You have <h2 class="layer-m">' + formatWhole(tmp.m.uniqueNonExtra) + '</h2>';
+			if (tmp.m.uniqueExtra.gt(0)) text += '<h3 class="layer-m-light">+' + formatWhole(tmp.m.uniqueExtra) + '</h3>';
 			text += ' total unique molecules';
 			content.push(["display-text", text]);
 			content.push("blank");

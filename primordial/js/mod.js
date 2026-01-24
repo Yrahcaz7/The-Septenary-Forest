@@ -427,6 +427,9 @@ function fixOldSave(oldVersion) {
 	delete player.ghost0;
 	delete player.blank;
 	delete player.SC.softcaps;
+	delete player.m.unique_nonextra;
+	delete player.m.unique_extra;
+	delete player.m.unique_total;
 	delete player.r.sanctummult;
 	delete player.r.essencemult;
 	delete player.r.lightreq;
