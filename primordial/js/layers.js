@@ -5254,131 +5254,116 @@ addLayer("gi", {
 	},
 	resetsNothing() { return hasMilestone("gi", 16) || hasUpgrade("pl", 64) },
 	tabFormat: getTab("gi"),
-	milestones: {
-		0: {
-			requirementDescription: '1 good influence',
-			effectDescription: "unlock relic upgrades and<br>good influence resets don't reset relics",
-			done() { return player.gi.points.gte(1) },
-		},
-		1: {
-			requirementDescription: '2 good influence',
-			effectDescription: "good influence resets don't reset essence",
-			done() { return player.gi.points.gte(2) },
-		},
-		2: {
-			requirementDescription: '3 good influence',
-			effectDescription: "good influence resets don't reset cores",
-			done() { return player.gi.points.gte(3) },
-			unlocked() { return hasMilestone("gi", 0) },
-		},
-		3: {
-			requirementDescription: '4 good influence',
-			effectDescription: "good influence resets don't reset quarks",
-			done() { return player.gi.points.gte(4) },
-			unlocked() { return hasMilestone("gi", 1) },
-		},
-		4: {
-			requirementDescription: '5 good influence',
-			effectDescription: "good influence resets don't reset hexes",
-			done() { return player.gi.points.gte(5) },
-			unlocked() { return hasMilestone("gi", 2) },
-		},
-		5: {
-			requirementDescription: '6 good influence',
-			effectDescription: "good influence resets don't reset demon souls",
-			done() { return player.gi.points.gte(6) },
-			unlocked() { return hasMilestone("gi", 3) },
-		},
-		6: {
-			requirementDescription: '8 good influence',
-			effectDescription: 'keep 4 sanctums on good influence resets',
-			done() { return player.gi.points.gte(8) },
-			unlocked() { return hasMilestone("gi", 4) },
-		},
-		7: {
-			requirementDescription: '10 good influence',
-			effectDescription: 'keep 3 more sanctums (7 total) on good influence resets',
-			done() { return player.gi.points.gte(10) },
-			unlocked() { return hasMilestone("gi", 5) },
-		},
-		8: {
-			requirementDescription: '12 good influence',
-			effectDescription: 'keep 3 more sanctums (10 total) on good influence resets',
-			done() { return player.gi.points.gte(12) },
-			unlocked() { return hasMilestone("gi", 6) },
-		},
-		9: {
-			requirementDescription: '15 good influence',
-			effectDescription: 'keep 6 more sanctums (16 total) on good influence resets',
-			done() { return player.gi.points.gte(15) },
-			unlocked() { return hasMilestone("gi", 7) },
-		},
-		10: {
-			requirementDescription: '18 good influence',
-			effectDescription() { return 'all <b' + getColorClass(this, REF, "s") + 'Devotion</b> autobuyers work twice as fast' },
-			done() { return player.gi.points.gte(18) },
-			unlocked() { return hasMilestone("gi", 8) },
-		},
-		11: {
-			requirementDescription: '21 good influence',
-			effectDescription: 'you can explore 3 further molecule upgrades<br>and you can autobuy atom upgrades',
-			done() { return player.gi.points.gte(21) },
-			toggles: [["a", "auto_upgrades"]],
-			unlocked() { return hasMilestone("gi", 9) },
-		},
-		12: {
-			requirementDescription: '22 good influence and<br>555 total good influence',
-			effectDescription() { return "increase <b" + getColorClass(this, REF, "s") + "Devotion</b>'s effect exponent<br>on good influence gain<br>0.2 --> 0.22" },
-			done() { return player.gi.points.gte(22) && player.gi.total.gte(555) },
-			unlocked() { return hasMilestone("gi", 10) },
-		},
-		13: {
-			requirementDescription: '28 good influence and<br>1,000 total good influence',
-			effectDescription: 'keep 14 more sanctums (30 total)<br>on good influence resets',
-			done() { return player.gi.points.gte(28) && player.gi.total.gte(1000) },
-			unlocked() { return hasMilestone("gi", 12) },
-		},
-		14: {
-			requirementDescription: '32 good influence and<br>1,500 total good influence',
-			effectDescription: 'keep 55 more sanctums (85 total)<br>on good influence resets',
-			done() { return player.gi.points.gte(32) && player.gi.total.gte(1500) },
-			unlocked() { return hasMilestone("gi", 13) },
-		},
-		15: {
-			requirementDescription: '33 good influence and<br>1,750 total good influence',
-			effectDescription: 'keep 130 more sanctums (215 total)<br>on good influence resets',
-			done() { return player.gi.points.gte(33) && player.gi.total.gte(1750) },
-			unlocked() { return hasMilestone("gi", 14) },
-		},
-		16: {
-			requirementDescription: '36 good influence and<br>2,000 total good influence',
-			effectDescription() {
-				let text = 'good influence resets nothing';
-				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) text += ' and<br>perform good influence resets automatically'
-				return text;
+	milestones: (() => {
+		let obj = {
+			0: {
+				requirement: 1,
+				effectDescription: "unlock relic upgrades and good influence resets don't reset relics",
 			},
-			done() { return player.gi.points.gte(36) && player.gi.total.gte(2000) },
-			unlocked() { return hasMilestone("gi", 15) },
-		},
-		17: {
-			requirementDescription: '50 good influence and<br>6,400 total good influence',
-			effectDescription() { return 'all <b' + getColorClass(this, REF, "s") + 'Devotion</b> autobuyers can bulk buy 2x' },
-			done() { return player.gi.points.gte(50) && player.gi.total.gte(6400) },
-			unlocked() { return hasMilestone("gi", 16) },
-		},
-		18: {
-			requirementDescription: '16,100 good influence and<br>4 limits broken',
-			effectDescription() { return 'remove the good influence effect softcap and<br>improve the good influence effect formula<br>if you have at least 4 limits broken' },
-			done() { return player.gi.points.gte(16100) && player.h.limitsBroken >= 4 },
-			unlocked() { return hasMilestone("gi", 17) && player.h.limitsBroken >= 4 },
-		},
-		19: {
-			requirementDescription: '20,640 good influence<br>and 2.5e17 glow',
-			effectDescription() { return 'change the good influence effect<br>if you have at least 4 limits broken' },
-			done() { return player.gi.points.gte(20640) && player.h.limitsBroken >= 4 && player.s.glow.gte(2.5e17) },
-			unlocked() { return hasMilestone("gi", 18) && player.h.limitsBroken >= 4 },
-		},
-	},
+			1: {
+				requirement: 2,
+				effectDescription: "good influence resets don't reset essence",
+			},
+			2: {
+				requirement: 3,
+				effectDescription: "good influence resets don't reset cores",
+			},
+			3: {
+				requirement: 4,
+				effectDescription: "good influence resets don't reset quarks",
+			},
+			4: {
+				requirement: 5,
+				effectDescription: "good influence resets don't reset hexes",
+			},
+			5: {
+				requirement: 6,
+				effectDescription: "good influence resets don't reset demon souls",
+			},
+			6: {
+				requirement: 8,
+				effectDescription: "keep 4 sanctums on good influence resets",
+			},
+			7: {
+				requirement: 10,
+				effectDescription: "keep 3 more sanctums (7 total) on good influence resets",
+			},
+			8: {
+				requirement: 12,
+				effectDescription: "keep 3 more sanctums (10 total) on good influence resets",
+			},
+			9: {
+				requirement: 15,
+				effectDescription: "keep 6 more sanctums (16 total) on good influence resets",
+			},
+			10: {
+				requirement: 18,
+				effectDescription() { return "all <b" + getColorClass(this, REF, "s") + "Devotion</b> autobuyers work twice as fast" },
+			},
+			11: {
+				requirement: 21,
+				effectDescription: "you can explore 3 further molecule upgrades and you can autobuy atom upgrades",
+				toggles: [["a", "auto_upgrades"]],
+			},
+			12: {
+				requirements: [22, 555],
+				effectDescription() { return "increase <b" + getColorClass(this, REF, "s") + "Devotion</b>'s effect exponent on good influence gain (0.2 --> 0.22)" },
+				done() { return player.gi.points.gte(22) && player.gi.total.gte(555) },
+			},
+			13: {
+				requirements: [28, 1000],
+				effectDescription: "keep 14 more sanctums (30 total) on good influence resets",
+			},
+			14: {
+				requirements: [32, 1500],
+				effectDescription: "keep 55 more sanctums (85 total) on good influence resets",
+			},
+			15: {
+				requirements: [33, 1750],
+				effectDescription: "keep 130 more sanctums (215 total) on good influence resets",
+			},
+			16: {
+				requirements: [36, 2000],
+				effectDescription() {
+					let text = "good influence resets nothing";
+					if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) text += " and perform good influence resets automatically";
+					return text;
+				},
+			},
+			17: {
+				requirements: [50, 6400],
+				effectDescription() { return "all <b" + getColorClass(this, REF, "s") + "Devotion</b> autobuyers can bulk buy 2x" },
+			},
+			18: {
+				requirementDescription: "16,100 good influence and 4 limits broken",
+				effectDescription: "remove the good influence effect softcap and improve the good influence effect formula if you have at least 4 limits broken",
+				done() { return player.gi.points.gte(16100) && player.h.limitsBroken >= 4 },
+			},
+			19: {
+				requirementDescription: "20,640 good influence and 2.5e17 glow",
+				effectDescription: "change the good influence effect if you have at least 4 limits broken",
+				done() { return player.gi.points.gte(20640) && player.h.limitsBroken >= 4 && player.s.glow.gte(2.5e17) },
+			},
+		};
+		const done = req => player.gi.points.gte(req);
+		const doneTotal = (req, reqTotal) => player.gi.points.gte(req) && player.gi.total.gte(reqTotal);
+		const unlocked = id => hasMilestone("gi", id - 2);
+		const unlockedLimitsBroken = id => hasMilestone("gi", id - 2) && player.h.limitsBroken >= 4;
+		for (const key in obj) {
+			if (obj[key].requirements) {
+				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirements[0]) + " good influence and " + simpleFormatWhole(obj[key].requirements[1]) + " total good influence";
+				obj[key].done = doneTotal.bind(null, ...obj[key].requirements);
+				delete obj[key].requirements;
+			} else if (obj[key].requirement) {
+				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " good influence";
+				obj[key].done = done.bind(null, obj[key].requirement);
+				delete obj[key].requirement;
+			};
+			if (+key >= 18) obj[key].unlocked = unlockedLimitsBroken.bind(null, +key);
+			else if (+key >= 2) obj[key].unlocked = unlocked.bind(null, +key);
+		};
+		return obj;
+	})(),
 	buyables: {
 		11: {
 			cost(x) {
