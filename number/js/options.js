@@ -37,7 +37,7 @@ const optionGrid = [
 	], [
 		{opt: "hideMilestonePopups", text() {return "Show Milestone Popups: " + formatOpt(!options[this.opt])}, onClick: toggleOpt},
 		{opt: "extendPlaces", text() {return "Extended Decimal Places: " + formatOpt(options[this.opt])}, onClick: toggleOpt},
-		{opt: "nerdMode", text() {return "Nerd Mode: " + formatOpt(options[this.opt]) + " (you can also use the control key to toggle)"}, onClick: toggleOpt},
+		{opt: "nerdMode", text() {return "Nerd Mode: " + formatOpt(options[this.opt]) + " (you can also press - to toggle)"}, onClick: toggleOpt},
 	],
 ];
 
@@ -55,5 +55,6 @@ function toggleOpt(name) {
 };
 
 function onKeyDown(key) {
-	if (ctrlDown) options.nerdMode = !options.nerdMode;
+	if (focused) return;
+	if (key == "-" || key == "_") options.nerdMode = !options.nerdMode;
 };

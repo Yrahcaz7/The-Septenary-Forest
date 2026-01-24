@@ -6965,324 +6965,248 @@ addLayer("ch", {
 			content: getTab("ch", "Keywords"),
 		},
 	},
-	milestones: {
-		0: {
-			requirementDescription: '1 chaos',
-			effectDescription() { return 'keep wars equal to your chaos on chaos resets, keep cellular life milestones on chaos resets, you can buy max wars, and reduce <b' + getColorClass(this, REF, "cl") + 'Innate Evil</b> cost scaling' },
-			done() { return player.ch.points.gte(1) },
-		},
-		1: {
-			requirementDescription: '2 chaos',
-			effectDescription() { return 'keep war milestones on chaos resets, unlock <b' + getColorClass(this, REF) + 'The Tides</b>, and you can autobuy the first three <b' + getColorClass(this, REF, "cl") + 'Protein</b> rebuyables individually' },
-			done() { return player.ch.points.gte(2) },
-			toggles: [["cl", "auto_buyable_31"], ["cl", "auto_buyable_32"], ["cl", "auto_buyable_33"]],
-		},
-		2: {
-			requirementDescription: '3 chaos',
-			effectDescription() { return 'the good influence rebuyable autobuyer is 2x faster, and when you buy a good influence rebuyable, you do not spend any good influence, instead you gain total good influence equal to its cost; also unlock another <b' + getColorClass(this, REF) + 'Tide</b>' },
-			done() { return player.ch.points.gte(3) },
-		},
-		3: {
-			requirementDescription: '4 chaos',
-			effectDescription: 'keep molecule milestones on chaos resets, and improve the formula of chaos\'s third effect',
-			done() { return player.ch.points.gte(4) },
-		},
-		4: {
-			requirementDescription: '5 chaos',
-			effectDescription: 'keep evil influence challenge completions on chaos resets',
-			done() { return player.ch.points.gte(5) },
-		},
-		5: {
-			requirementDescription: '6 chaos',
-			effectDescription: 'keep demon soul challenge completions on chaos resets',
-			done() { return player.ch.points.gte(6) },
-		},
-		6: {
-			requirementDescription: '9 chaos',
-			effectDescription() { return 'the good influence rebuyable autobuyer is 2x faster, and you can autobuy the fourth to sixth <b' + getColorClass(this, REF, "cl") + 'Protein</b> rebuyables individually' },
-			done() { return player.ch.points.gte(9) },
-			toggles: [["cl", "auto_buyable_41"], ["cl", "auto_buyable_42"], ["cl", "auto_buyable_43"]],
-		},
-		7: {
-			requirementDescription: '13 chaos',
-			effect() { return player.ch.points.sub(10).max(0).mul(2.25).floor() },
-			effectDescription(eff) { return 'you can autobuy the seventh to ninth <b' + getColorClass(this, REF, "cl") + 'Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b' + getColorClass(this, REF, "w") + 'Race for Knowledge</b> by 2.25, rounded down (currently +' + formatWhole(eff) + ')' },
-			done() { return player.ch.points.gte(13) },
-			toggles: [["cl", "auto_buyable_51"], ["cl", "auto_buyable_52"], ["cl", "auto_buyable_53"]],
-		},
-		8: {
-			requirementDescription: '16 chaos',
-			effectDescription() { return "keep good influence milestones on chaos resets, and improve <b" + getColorClass(this, REF, "w") + "Race for Knowledge</b>'s effect formula" },
-			done() { return player.ch.points.gte(16) },
-		},
-		9: {
-			requirementDescription: '19 chaos',
-			effectDescription() { return 'keep wars equal to five times your chaos on chaos resets, all <b' + getColorClass(this, REF, "s") + 'Devotion</b> autobuyers can bulk buy 5x, and the good influence rebuyable autobuyer is 2x faster' },
-			done() { return player.ch.points.gte(19) },
-		},
-		10: {
-			requirementDescription: '24 chaos',
-			effectDescription() { return 'keep wars equal to ten times your chaos on chaos resets, all <b' + getColorClass(this, REF, "s") + 'Devotion</b> autobuyers can bulk buy 2x, and when you buy an <b' + getColorClass(this, REF, "w") + 'Influence</b>, you do not spend any currency, instead you gain total amount(s) of the kind(s) of currency spent equal to its cost' },
-			done() { return player.ch.points.gte(24) },
-		},
-		11: {
-			requirementDescription: '26 chaos',
-			effectDescription() { return 'if you have <b' + getColorClass(this, REF, "mo") + 'Assimilated</b> <b' + getColorClass(this, REF, "q") + 'Quarks</b>, unlock four new quark upgrades and another quark rebuyable' },
-			done() { return player.ch.points.gte(26) },
-			unlocked() { return player.mo.unlocked },
-		},
-		12: {
-			requirementDescription: '28 chaos',
-			effectDescription: "chaos resets don't reset wars",
-			done() { return player.ch.points.gte(28) },
-			unlocked() { return player.mo.unlocked },
-		},
-		13: {
-			requirementDescription: '30 chaos',
-			effectDescription() { return "improve <b" + getColorClass(this, REF) + ">Tide of Good</b>'s effect formula, and do something with " + getGlitchDecipherText() },
-			done() { return player.ch.points.gte(30) },
-			unlocked() { return player.mo.unlocked },
-		},
-		14: {
-			requirementDescription: '33 chaos',
-			effectDescription: 'reduce the multicellular organism cost base (1.2 --> 1.1) and the good influence rebuyable autobuyer is 2x faster',
-			done() { return player.ch.points.gte(33) },
-			unlocked() { return player.mo.unlocked },
-		},
-		15: {
-			requirementDescription: '38 chaos',
-			effectDescription() { return "unlock the option to keep Breaking on chaos resets (<b" + getColorClass(this, REF, "h") + "Reset Breaking</b> will still work), improve the formula of chaos's first effect, and reduce the multicellular organism cost base (1.1 --> 1.067)" },
-			done() { return player.ch.points.gte(38) },
-			toggles: [["h", "keep_breaking"]],
-			unlocked() { return player.mo.unlocked },
-		},
-		16: {
-			requirementDescription: '42 chaos',
-			effect() {
-				const base = (player.ch.challenges[11] + player.ch.challenges[12]) / 250 + 1;
-				if (hasMilestone("ch", 21)) return base ** 6;
-				if (hasMilestone("ch", 20)) return base ** 3.5;
-				if (hasMilestone("ch", 19)) return base ** 3.325;
-				if (hasMilestone("ch", 18)) return base ** 1.8;
-				return base ** 1.35;
+	milestones: (() => {
+		let obj = {
+			0: {
+				requirement: 1,
+				effectDescription() { return "keep wars equal to your chaos on chaos resets, keep cellular life milestones on chaos resets, you can buy max wars, and reduce <b" + getColorClass(this, REF, "cl") + "Innate Evil</b> cost scaling" },
 			},
-			effectDescription(eff) { return 'you can autobuy the first quark rebuyable, the good influence rebuyable autobuyer is 2x faster, and multiply multicellular organism gain based on <b' + getColorClass(this, REF) + (isAssimilated("ch") ? randomStr(4) : 'Tide') + '</b> completions (currently ' + format(eff) + 'x)' },
-			done() { return player.ch.points.gte(42) },
-			toggles: [["q", "auto_buyable_11"]],
-			unlocked() { return player.mo.unlocked },
-		},
-		17: {
-			requirementDescription: '48 chaos',
-			effectDescription() { return "make the <b" + getColorClass(this, REF) + "17th chaos milestone</b> (the previous milestone)'s effect also multiply evil influence gain" },
-			done() { return player.ch.points.gte(48) },
-			unlocked() { return player.mo.unlocked },
-		},
-		18: {
-			requirementDescription: '50 chaos',
-			effectDescription() { return 'improve the effect formula of the <b' + getColorClass(this, REF) + '17th chaos milestone</b>' },
-			done() { return player.ch.points.gte(50) },
-			unlocked() { return player.mo.unlocked },
-		},
-		19: {
-			requirementDescription: '51 chaos',
-			effectDescription() { return "improve the formula of chaos's second effect and improve the effect formula of the the <b" + getColorClass(this, REF) + "17th chaos milestone</b>" },
-			done() { return player.ch.points.gte(51) },
-			unlocked() { return player.mo.unlocked },
-		},
-		20: {
-			requirementDescription: '55 chaos',
-			effectDescription() { return 'you can autobuy the second quark rebuyable, the 6th row of quark upgrades can be autobought, and improve the effect formula of the <b' + getColorClass(this, REF) + '17th chaos milestone</b>' },
-			done() { return player.ch.points.gte(55) },
-			toggles: [["q", "auto_buyable_12"]],
-			unlocked() { return player.mo.unlocked },
-		},
-		21: {
-			requirementDescription: '57 chaos',
-			effectDescription() { return 'you gain 10x glow, improve the effect formula of the <b' + getColorClass(this, REF) + '17th chaos milestone</b>, and you can buy max multicellular organisms' },
-			done() { return player.ch.points.gte(57) },
-			unlocked() { return player.mo.unlocked },
-		},
-		22: {
-			requirementDescription: '59 chaos',
-			effectDescription() { return 'you can autobuy the third and fourth quark rebuyables and the <b' + getColorClass(this, REF, "cl") + 'Result Analyzing</b> autobuyer is 2x faster' },
-			done() { return player.ch.points.gte(59) },
-			toggles: [["q", "auto_buyable_13"], ["q", "auto_buyable_21"]],
-			unlocked() { return player.mo.unlocked },
-		},
-		23: {
-			requirementDescription: '63 chaos',
-			effectDescription: 'the 8th row of hex upgrades and the 8th row of prayer upgrades can be autobought',
-			done() { return player.ch.points.gte(63) },
-			unlocked() { return player.mo.unlocked },
-		},
-		24: {
-			requirementDescription: '67 chaos',
-			effectDescription: 'you can autobuy glow rebuyables',
-			done() { return player.ch.points.gte(67) },
-			toggles: [["s", "auto_glow"]],
-			unlocked() { return player.mo.unlocked },
-		},
-		25: {
-			requirementDescription: '70 chaos',
-			effectDescription() { return 'if you have <b' + getColorClass(this, REF, "mo") + 'Assimilated</b> <b' + getColorClass(this, REF, "r") + 'Relics</b>, unlock relic milestones' },
-			done() { return player.ch.points.gte(70) },
-			unlocked() { return player.mo.unlocked },
-		},
-		26: {
-			requirementDescription: '75 chaos',
-			effectDescription() { return 'if you have <b' + getColorClass(this, REF, "mo") + 'Assimilated</b> <b' + getColorClass(this, REF, "r") + 'Relics</b>, unlock more relic milestones' },
-			done() { return player.ch.points.gte(75) },
-			unlocked() { return player.mo.unlocked },
-		},
-		27: {
-			requirementDescription: '78 chaos',
-			effectDescription: 'the 6th row of molecule upgrades can be autobought, the good influence rebuyable autobuyer can bulk buy 10x, and you gain more total good influence from buying rebuyables based on bulk',
-			done() { return player.ch.points.gte(78) },
-			unlocked() { return player.mo.unlocked },
-		},
-		28: {
-			requirementDescription: '82 chaos',
-			effectDescription() { return 'you can autobuy <b' + getColorClass(this, REF, "a") + 'Atomic Reactor</b>s and good influence upgrades' },
-			done() { return player.ch.points.gte(82) },
-			toggles: [["a", "auto_reactor"], ["gi", "auto_upgrades"]],
-			unlocked() { return player.mo.unlocked },
-		},
-		29: {
-			requirementDescription: '87 chaos',
-			effectDescription: 'reduce the multicellular organism cost base (1.067 --> 1.063)',
-			done() { return player.ch.points.gte(87) },
-			unlocked() { return player.mo.unlocked },
-		},
-		30: {
-			requirementDescription: '92 chaos',
-			effectDescription() { return 'all quark, good influence, and cellular life rebuyable autobuyers can bulk buy 10x and increase the caps of <b' + getColorClass(this, REF, "q") + 'Atomic Insight</b> and <b' + getColorClass(this, REF, "q") + 'Insight Into Insight</b> by 101' },
-			done() { return player.ch.points.gte(92) },
-			unlocked() { return player.mo.unlocked },
-		},
-		31: {
-			requirementDescription: '96 chaos',
-			effectDescription() { return 'increase the caps of <b' + getColorClass(this, REF, "q") + 'Atomic Insight</b> and <b' + getColorClass(this, REF, "q") + 'Insight Into Insight</b> by 800' },
-			done() { return player.ch.points.gte(96) },
-			unlocked() { return player.mo.unlocked },
-		},
-		32: {
-			requirementDescription: '102 chaos',
-			effectDescription() { return 'reduce the cost scaling of <b' + getColorClass(this, TITLE, "w") + 'Sanctum Habitation</b> and you can bulk 10x relic activation' },
-			done() { return player.ch.points.gte(102) },
-			unlocked() { return player.mo.unlocked },
-		},
-		33: {
-			requirementDescription: '106 chaos',
-			effectDescription() { return 'reduce the multicellular organism cost base (1.063 --> 1.0575) and increase the cap of <b' + getColorClass(this, TITLE, "mo") + 'Assimilation</b> by 1' },
-			done() { return player.ch.points.gte(106) },
-			unlocked() { return player.pl.unlocked },
-		},
-		34: {
-			requirementDescription: '115 chaos',
-			effectDescription() { return 'reduce the cost scaling of <b' + getColorClass(this, TITLE, "w") + 'Relics of Good</b>' },
-			done() { return player.ch.points.gte(115) },
-			unlocked() { return player.pl.unlocked },
-		},
-		35: {
-			requirementDescription: '122 chaos',
-			effectDescription() { return '<b' + getColorClass(this, TITLE, "w") + 'Race for Knowledge</b> also affects atom gain' },
-			done() { return player.ch.points.gte(122) },
-			unlocked() { return player.pl.unlocked },
-		},
-		36: {
-			requirementDescription: '128 chaos',
-			effectDescription: 'reduce the cellular life cost base (50 --> 14)',
-			done() { return player.ch.points.gte(128) },
-			unlocked() { return player.pl.unlocked },
-		},
-		37: {
-			requirementDescription: '133 chaos',
-			effectDescription: 'reduce the cellular life cost base (14 --> 4)',
-			done() { return player.ch.points.gte(133) },
-			unlocked() { return player.pl.unlocked },
-		},
-		38: {
-			requirementDescription: '140 chaos',
-			effectDescription() { return 'increase the cap of <b' + getColorClass(this, TITLE, "w") + 'Race for Knowledge</b> by 50 and increase the cap of <b' + getColorClass(this, TITLE, "mo") + 'Assimilation</b> by 1' },
-			done() { return player.ch.points.gte(140) },
-			unlocked() { return player.pl.unlocked },
-		},
-		39: {
-			requirementDescription: '148 chaos',
-			effectDescription: 'keep cellular life rebuyables on chaos resets',
-			done() { return player.ch.points.gte(148) },
-			unlocked() { return player.pl.unlocked },
-		},
-		40: {
-			requirementDescription: "158 chaos",
-			effectDescription() { return "divide <b" + getColorClass(this, REF) + "Tide of Science</b>'s goal by 1e100" },
-			done() { return player.ch.points.gte(158) },
-			unlocked() { return player.pl.unlocked },
-		},
-		41: {
-			requirementDescription: "164 chaos",
-			effectDescription: "unlock two more quark rebuyables",
-			done() { return player.ch.points.gte(164) },
-			unlocked() { return player.pl.unlocked },
-		},
-		42: {
-			requirementDescription: '173 chaos',
-			effectDescription: 'reduce the multicellular organism cost base (1.0575 --> 1.055)',
-			done() { return player.ch.points.gte(173) },
-			unlocked() { return player.pl.unlocked },
-		},
-		43: {
-			requirementDescription: "186 chaos",
-			effectDescription() { return "make the <b" + getColorClass(this, REF, "gi") + "Good Influence</b> <b" + getColorClass(this, REF, "mo") + "Synergy</b> softcap weaker (/4 --> /2) and increase <b" + getColorClass(this, REF, "pl") + "Chaotic Air</b>'s effect exponent (0.5 -> 1.25)" },
-			done() { return player.ch.points.gte(186) },
-			unlocked() { return player.pl.unlocked },
-		},
-		44: {
-			requirementDescription: "194 chaos",
-			effectDescription() { return "unlock <b" + getColorClass(this, REF, "ds") + "Purification</b>, a new demon souls tab" },
-			done() { return player.ch.points.gte(194) },
-			unlocked() { return player.pl.unlocked },
-		},
-		45: {
-			requirementDescription: "203 chaos",
-			effectDescription: "improve the Thread gain formula",
-			done() { return player.ch.points.gte(203) },
-			unlocked() { return player.pl.unlocked },
-		},
-		46: {
-			requirementDescription: "216 chaos",
-			effectDescription: "you can autobuy the fifth and sixth quark rebuyables",
-			done() { return player.ch.points.gte(216) },
-			toggles: [["q", "auto_buyable_22"], ["q", "auto_buyable_23"]],
-			unlocked() { return player.pl.unlocked },
-		},
-		47: {
-			requirementDescription: "231 chaos",
-			effectDescription() { return "increase the maximum completion limit of <b" + getColorClass(this, REF) + "Tide of Science</b> by 2" },
-			done() { return player.ch.points.gte(231) },
-			unlocked() { return player.pl.unlocked },
-		},
-		48: {
-			requirementDescription: "252 chaos",
-			effect() { return player.ch.points.add(1) },
-			effectDescription(eff) { return "multiply Thread gain by your chaos plus 1 (currently " + formatWhole(eff) + "x)" },
-			done() { return player.ch.points.gte(252) },
-			unlocked() { return player.pl.unlocked },
-		},
-		49: {
-			requirementDescription: "280 chaos",
-			effect() { return player.q.buyables[11].add(player.q.buyables[12]).add(player.q.buyables[13]).add(player.q.buyables[21]).add(player.q.buyables[22]).add(player.q.buyables[23]).add(1) },
-			effectDescription(eff) { return "change <b" + getColorClass(this, TITLE, "q") + "Knowledge Expansion</b>'s cost formula and multiply Thread gain by the amount of quark rebuyables bought plus 1 (currently " + formatWhole(eff) + "x)" },
-			done() { return player.ch.points.gte(280) },
-			unlocked() { return player.pl.unlocked },
-		},
-		50: {
-			requirementDescription: "300 chaos",
-			effectDescription() { return "coming soon..." },
-			done() { return player.ch.points.gte(300) },
-			unlocked() { return player.pl.unlocked },
-		},
-	},
+			1: {
+				requirement: 2,
+				effectDescription() { return "keep war milestones on chaos resets, unlock <b" + getColorClass(this, REF) + "The Tides</b>, and you can autobuy the first three <b" + getColorClass(this, REF, "cl") + "Protein</b> rebuyables individually" },
+				toggles: [["cl", "auto_buyable_31"], ["cl", "auto_buyable_32"], ["cl", "auto_buyable_33"]],
+			},
+			2: {
+				requirement: 3,
+				effectDescription() { return "the good influence rebuyable autobuyer is 2x faster; when you buy a good influence rebuyable, you do not spend any good influence, instead you gain total good influence equal to its cost; and unlock another <b" + getColorClass(this, REF) + "Tide</b>" },
+			},
+			3: {
+				requirement: 4,
+				effectDescription: "keep molecule milestones on chaos resets, and improve the formula of chaos's third effect",
+			},
+			4: {
+				requirement: 5,
+				effectDescription: "keep evil influence challenge completions on chaos resets",
+			},
+			5: {
+				requirement: 6,
+				effectDescription: "keep demon soul challenge completions on chaos resets",
+			},
+			6: {
+				requirement: 9,
+				effectDescription() { return "the good influence rebuyable autobuyer is 2x faster, and you can autobuy the fourth to sixth <b" + getColorClass(this, REF, "cl") + "Protein</b> rebuyables individually" },
+				toggles: [["cl", "auto_buyable_41"], ["cl", "auto_buyable_42"], ["cl", "auto_buyable_43"]],
+			},
+			7: {
+				requirement: 13,
+				effect() { return player.ch.points.sub(10).max(0).mul(2.25).floor() },
+				effectDescription(eff) { return "you can autobuy the seventh to ninth <b" + getColorClass(this, REF, "cl") + "Protein</b> rebuyables individually, and every chaos after 10 increases the the maximum bought of <b" + getColorClass(this, REF, "w") + "Race for Knowledge</b> by 2.25, rounded down (currently +" + formatWhole(eff) + ")" },
+				toggles: [["cl", "auto_buyable_51"], ["cl", "auto_buyable_52"], ["cl", "auto_buyable_53"]],
+			},
+			8: {
+				requirement: 16,
+				effectDescription() { return "keep good influence milestones on chaos resets, and improve <b" + getColorClass(this, REF, "w") + "Race for Knowledge</b>'s effect formula" },
+			},
+			9: {
+				requirement: 19,
+				effectDescription() { return "keep wars equal to five times your chaos on chaos resets, all <b" + getColorClass(this, REF, "s") + "Devotion</b> autobuyers can bulk buy 5x, and the good influence rebuyable autobuyer is 2x faster" },
+			},
+			10: {
+				requirement: 24,
+				effectDescription() { return "keep wars equal to ten times your chaos on chaos resets, all <b" + getColorClass(this, REF, "s") + "Devotion</b> autobuyers can bulk buy 2x, and when you buy an <b" + getColorClass(this, REF, "w") + "Influence</b>, you do not spend any currency, instead you gain total amount(s) of the kind(s) of currency spent equal to its cost" },
+			},
+			11: {
+				requirement: 26,
+				effectDescription() { return "if you have <b" + getColorClass(this, REF, "mo") + "Assimilated</b> <b" + getColorClass(this, REF, "q") + "Quarks</b>, unlock four new quark upgrades and another quark rebuyable" },
+			},
+			12: {
+				requirement: 28,
+				effectDescription: "chaos resets don't reset wars",
+			},
+			13: {
+				requirement: 30,
+				effectDescription() { return "improve <b" + getColorClass(this, REF) + ">Tide of Good</b>'s effect formula, and do something with " + getGlitchDecipherText() },
+			},
+			14: {
+				requirement: 33,
+				effectDescription: "reduce the multicellular organism cost base (1.2 --> 1.1) and the good influence rebuyable autobuyer is 2x faster",
+			},
+			15: {
+				requirement: 38,
+				effectDescription() { return "unlock the option to keep Breaking on chaos resets (<b" + getColorClass(this, REF, "h") + "Reset Breaking</b> will still work), improve the formula of chaos's first effect, and reduce the multicellular organism cost base (1.1 --> 1.067)" },
+				toggles: [["h", "keep_breaking"]],
+			},
+			16: {
+				requirement: 42,
+				effect() {
+					const base = (player.ch.challenges[11] + player.ch.challenges[12]) / 250 + 1;
+					if (hasMilestone("ch", 21)) return base ** 6;
+					if (hasMilestone("ch", 20)) return base ** 3.5;
+					if (hasMilestone("ch", 19)) return base ** 3.325;
+					if (hasMilestone("ch", 18)) return base ** 1.8;
+					return base ** 1.35;
+				},
+				effectDescription(eff) { return "you can autobuy the first quark rebuyable, the good influence rebuyable autobuyer is 2x faster, and multiply multicellular organism gain based on <b" + getColorClass(this, REF) + (isAssimilated("ch") ? randomStr(4) : 'Tide') + "</b> completions (currently " + format(eff) + "x)" },
+				toggles: [["q", "auto_buyable_11"]],
+			},
+			17: {
+				requirement: 48,
+				effectDescription() { return "make the <b" + getColorClass(this, REF) + "17th chaos milestone</b> (the previous milestone)'s effect also multiply evil influence gain" },
+			},
+			18: {
+				requirement: 50,
+				effectDescription() { return "improve the effect formula of the <b" + getColorClass(this, REF) + "17th chaos milestone</b>" },
+			},
+			19: {
+				requirement: 51,
+				effectDescription() { return "improve the formula of chaos's second effect and improve the effect formula of the the <b" + getColorClass(this, REF) + "17th chaos milestone</b>" },
+			},
+			20: {
+				requirement: 55,
+				effectDescription() { return "you can autobuy the second quark rebuyable, the 6th row of quark upgrades can be autobought, and improve the effect formula of the <b" + getColorClass(this, REF) + "17th chaos milestone</b>" },
+				toggles: [["q", "auto_buyable_12"]],
+			},
+			21: {
+				requirement: 57,
+				effectDescription() { return "you gain 10x glow, improve the effect formula of the <b" + getColorClass(this, REF) + "17th chaos milestone</b>, and you can buy max multicellular organisms" },
+			},
+			22: {
+				requirement: 59,
+				effectDescription() { return "you can autobuy the third and fourth quark rebuyables and the <b" + getColorClass(this, REF, "cl") + "Result Analyzing</b> autobuyer is 2x faster" },
+				toggles: [["q", "auto_buyable_13"], ["q", "auto_buyable_21"]],
+			},
+			23: {
+				requirement: 63,
+				effectDescription: "the 8th row of hex upgrades and the 8th row of prayer upgrades can be autobought",
+			},
+			24: {
+				requirement: 67,
+				effectDescription: "you can autobuy glow rebuyables",
+				toggles: [["s", "auto_glow"]],
+			},
+			25: {
+				requirement: 70,
+				effectDescription() { return "if you have <b" + getColorClass(this, REF, "mo") + "Assimilated</b> <b" + getColorClass(this, REF, "r") + "Relics</b>, unlock relic milestones" },
+			},
+			26: {
+				requirement: 75,
+				effectDescription() { return "if you have <b" + getColorClass(this, REF, "mo") + "Assimilated</b> <b" + getColorClass(this, REF, "r") + "Relics</b>, unlock more relic milestones" },
+			},
+			27: {
+				requirement: 78,
+				effectDescription: 'the 6th row of molecule upgrades can be autobought, the good influence rebuyable autobuyer can bulk buy 10x, and you gain more total good influence from buying rebuyables based on bulk',
+			},
+			28: {
+				requirement: 82,
+				effectDescription() { return "you can autobuy <b" + getColorClass(this, REF, "a") + "Atomic Reactor</b>s and good influence upgrades" },
+				toggles: [["a", "auto_reactor"], ["gi", "auto_upgrades"]],
+			},
+			29: {
+				requirement: 87,
+				effectDescription: "reduce the multicellular organism cost base (1.067 --> 1.063)",
+			},
+			30: {
+				requirement: 92,
+				effectDescription() { return "all quark, good influence, and cellular life rebuyable autobuyers can bulk buy 10x and increase the caps of <b" + getColorClass(this, REF, "q") + "Atomic Insight</b> and <b" + getColorClass(this, REF, "q") + "Insight Into Insight</b> by 101" },
+			},
+			31: {
+				requirement: 96,
+				effectDescription() { return "increase the caps of <b" + getColorClass(this, REF, "q") + "Atomic Insight</b> and <b" + getColorClass(this, REF, "q") + "Insight Into Insight</b> by 800" },
+			},
+			32: {
+				requirement: 102,
+				effectDescription() { return "reduce the cost scaling of <b" + getColorClass(this, TITLE, "w") + "Sanctum Habitation</b> and you can bulk 10x relic activation" },
+			},
+			33: {
+				requirement: 106,
+				effectDescription() { return "reduce the multicellular organism cost base (1.063 --> 1.0575) and increase the cap of <b" + getColorClass(this, TITLE, "mo") + "Assimilation</b> by 1" },
+			},
+			34: {
+				requirement: 115,
+				effectDescription() { return "reduce the cost scaling of <b" + getColorClass(this, TITLE, "w") + "Relics of Good</b>" },
+			},
+			35: {
+				requirement: 122,
+				effectDescription() { return "<b" + getColorClass(this, TITLE, "w") + "Race for Knowledge</b> also affects atom gain" },
+			},
+			36: {
+				requirement: 128,
+				effectDescription: "reduce the cellular life cost base (50 --> 14)",
+			},
+			37: {
+				requirement: 133,
+				effectDescription: "reduce the cellular life cost base (14 --> 4)",
+			},
+			38: {
+				requirement: 140,
+				effectDescription() { return "increase the cap of <b" + getColorClass(this, TITLE, "w") + "Race for Knowledge</b> by 50 and increase the cap of <b" + getColorClass(this, TITLE, "mo") + "Assimilation</b> by 1" },
+			},
+			39: {
+				requirement: 148,
+				effectDescription: "keep cellular life rebuyables on chaos resets",
+			},
+			40: {
+				requirement: 158,
+				effectDescription() { return "divide <b" + getColorClass(this, REF) + "Tide of Science</b>'s goal by 1e100" },
+			},
+			41: {
+				requirement: 164,
+				effectDescription: "unlock two more quark rebuyables",
+			},
+			42: {
+				requirement: 173,
+				effectDescription: "reduce the multicellular organism cost base (1.0575 --> 1.055)",
+			},
+			43: {
+				requirement: 186,
+				effectDescription() { return "make the <b" + getColorClass(this, REF, "gi") + "Good Influence</b> <b" + getColorClass(this, REF, "mo") + "Synergy</b> softcap weaker (/4 --> /2) and increase <b" + getColorClass(this, REF, "pl") + "Chaotic Air</b>'s effect exponent (0.5 -> 1.25)" },
+			},
+			44: {
+				requirement: 194,
+				effectDescription() { return "unlock <b" + getColorClass(this, REF, "ds") + "Purification</b>, a new demon souls tab" },
+			},
+			45: {
+				requirement: 203,
+				effectDescription: "improve the Thread gain formula",
+			},
+			46: {
+				requirement: 216,
+				effectDescription: "you can autobuy the fifth and sixth quark rebuyables",
+				toggles: [["q", "auto_buyable_22"], ["q", "auto_buyable_23"]],
+			},
+			47: {
+				requirement: 231,
+				effectDescription() { return "increase the maximum completion limit of <b" + getColorClass(this, REF) + "Tide of Science</b> by 2" },
+			},
+			48: {
+				requirement: 252,
+				effect() { return player.ch.points.add(1) },
+				effectDescription(eff) { return "multiply Thread gain by your chaos plus 1 (currently " + formatWhole(eff) + "x)" },
+			},
+			49: {
+				requirement: 280,
+				effect() { return player.q.buyables[11].add(player.q.buyables[12]).add(player.q.buyables[13]).add(player.q.buyables[21]).add(player.q.buyables[22]).add(player.q.buyables[23]).add(1) },
+				effectDescription(eff) { return "change <b" + getColorClass(this, TITLE, "q") + "Knowledge Expansion</b>'s cost formula and multiply Thread gain by the amount of quark rebuyables bought plus 1 (currently " + formatWhole(eff) + "x)" },
+			},
+			50: {
+				requirement: 300,
+				effectDescription() { return "coming soon..." },
+			},
+		};
+		const done = req => player.ch.points.gte(req);
+		const unlockedMO = () => player.mo.unlocked;
+		const unlockedPL = () => player.pl.unlocked;
+		for (const key in obj) {
+			if (obj[key].requirement) {
+				obj[key].requirementDescription = formatWhole(obj[key].requirement) + " chaos";
+				obj[key].done = done.bind(null, obj[key].requirement);
+				delete obj[key].requirement;
+			};
+			if (+key >= 33) obj[key].unlocked = unlockedPL;
+			else if (+key >= 11) obj[key].unlocked = unlockedMO;
+		};
+		return obj;
+	})(),
 	challenges: {
 		11: {
 			name() { return '<h3' + getColorClass(this, TITLE) + 'Tide of Evil' },
