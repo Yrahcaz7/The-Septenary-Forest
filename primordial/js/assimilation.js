@@ -309,3 +309,13 @@ function getGlitch(tweak = false) {
 	if (tweak && hasMilestone('ch', 13)) return new Decimal(1.395e12).mul((val + skew) * mult).add(1);
 	return player.points.max(player.q.basePointTotal).add(1).log10().mul((val + skew) * mult).add(1);
 };
+
+// gets glitch text in The Decipherer
+function getGlitchDecipherText() {
+	return randomStr(9);
+};
+
+// gets glitch text in Attunement
+function getGlitchAttuneText() {
+	return randomStr(13) + " " + randomStr(8);
+};

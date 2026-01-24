@@ -824,10 +824,17 @@ addLayer('A', {
 			popupColor: '#FFFFFF',
 		},
 		174: {
-			name() {return 'Chaos of ' + randomStr(7)},
+			name() { return 'Chaos of ' + randomStr(7) },
 			done() { return player.ch.points.gte(256) },
 			tooltip: 'obtain 256 chaos.',
 			unlocked() { return hasAchievement('A', 173) },
+			popupColor: '#FFFFFF',
+		},
+		175: {
+			name() { return randomStr(5) + ' of ' + randomStr(4) },
+			done() { return player.ch.points.gte(1024) },
+			tooltip: 'obtain 1,024 chaos.',
+			unlocked() { return hasAchievement('A', 174) },
 			popupColor: '#FFFFFF',
 		},
 		176: {

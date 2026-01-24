@@ -20,9 +20,9 @@ function changelog() {
 			- Added thirty-six upgrades to planets.<br>
 			- Added two rebuyables to planets.<br>
 			- Added ${randomStr(4)} to assimilation.<br>
-			- Added fourteen milestones to chaos.<br>
+			- Added seventeen milestones to chaos.<br>
 			- Added ${randomStr(4)} to story.<br>
-			- Added six achievements.<br>
+			- Added seven achievements.<br>
 			- Added one option.<br>
 		<br><h3>v3.6: Even More Assimilation</h3><br>
 			- Added more to assimilation.<br>
@@ -261,7 +261,9 @@ function getLightBoost() {
 };
 
 function getLightGain() {
+	// init
 	let gain = getPointGen().pow(0.001).div(10);
+	// base
 	if (hasUpgrade('r', 13)) {
 		gain = upgradeEffect('r', 13);
 	} else {
@@ -274,13 +276,18 @@ function getLightGain() {
 		if (hasMilestone('s', 52)) gain = gain.mul(3);
 		if (gain.gt(1e25)) gain = new Decimal(1e25);
 	};
+	// mul
 	if (player.s.glow_effect.gt(1)) gain = gain.mul(player.s.glow_effect);
 	if (hasBuyable('g', 21)) gain = gain.mul(buyableEffect('g', 21)[2]);
 	if (new Decimal(tmp.w.effect[2]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[2]);
 	if (hasBuyable('r', 12)) gain = gain.mul(buyableEffect('r', 12));
 	if (hasUpgrade('m', 61)) gain = gain.mul(upgradeEffect('m', 61));
 	if (hasUpgrade('pl', 54)) gain = gain.mul(upgradeEffect('pl', 54));
+	// pow
+	if (hasMilestone('mo', 3)) gain = gain.pow(1.2);
+	// boost
 	gain = gain.add(getLightBoost());
+	// return
 	return gain;
 };
 
@@ -416,10 +423,10 @@ function getPointGen() {
 function addedPlayerData() { return {} };
 
 const displayThings = [
-	() => { if (tmp.gameEnded) return 'You beat the game!<br>For now...' },
+	() => { if (tmp.gameEnded) return "You beat the game!<br>For now..." },
 ];
 
-const endPoints = new Decimal('e1e63');
+const endPoints = new Decimal("e1e75");
 
 function onLoad() { calculateColorValue() };
 

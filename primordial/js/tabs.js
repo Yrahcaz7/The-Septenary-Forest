@@ -27,7 +27,7 @@ function getRawTabContent(layer, name = "") {
 		content.push("blank");
 	} else if (layer == "q") {
 		if (name == "The Decipherer") {
-			content.push(["display-text", 'Your ' + randomStr(9) + ' is currently <h2 class="layer-q">' + format(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + '</h2> insight<br><br>Deciphered amount decays over time with a decay factor of ' + (hasUpgrade('q', 65) ? 0.1 : 0.001)]);
+			content.push(["display-text", 'Your ' + getGlitchDecipherText() + ' is currently <h2 class="layer-q">' + format(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + '</h2> insight<br><br>Deciphered amount decays over time with a decay factor of ' + (hasUpgrade('q', 65) ? 0.1 : 0.001)]);
 			content.push("blank");
 			content.push("buyables");
 		} else {
