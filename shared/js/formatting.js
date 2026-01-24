@@ -54,7 +54,7 @@ function format(decimal, precision = 2, small = true) {
 	if (decimal.gte(0.0001) || !small) return regularFormat(decimal, precision, small);
 	if (decimal.eq(0)) return (0).toFixed(precision);
 	decimal = invertOOM(decimal);
-	if (decimal.lt("1e1000")) return exponentialFormat(decimal, precision).replace(/([^(?:e|F)]*)$/, "-$1");
+	if (decimal.lt("1e1000")) return exponentialFormat(decimal, precision).replace(/([^eF]*)$/, "-$1");
 	return format(decimal, precision) + "&#8315;&#185;";
 };
 

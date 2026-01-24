@@ -4683,63 +4683,64 @@ addLayer("r", {
 			costDisplay(cost) { return 'Req: ' + formatWhole(cost) + ' activated relics' },
 		},
 	},
-	milestones: {
-		0: {
-			requirementDescription: '1e12 relics',
-			effectDescription: 'reduce relic activation requirement scaling (3 --> 2)',
-			done() { return player.r.points.gte(1e12) && isAssimilated("r") && hasMilestone("ch", 25) },
-		},
-		1: {
-			requirementDescription: '6e12 relics',
-			effectDescription: 'reduce requirement scaling of <b class="layer-r-dark">Gleaming Relics</b> (2.5 --> 2) and <b class="layer-r-dark">Prismatic Relics</b> (4 --> 2)',
-			done() { return player.r.points.gte(6e12) && isAssimilated("r") && hasMilestone("ch", 25) },
-		},
-		2: {
-			requirementDescription: '1e13 relics',
-			effect() { return player.ch.points.sub(70).max(0).add(1) },
-			effectDescription(eff) { return 'divide relic rebuyable requirements based on your chaos after 70 (currently /' + format(eff) + ')' },
-			done() { return player.r.points.gte(1e13) && isAssimilated("r") && hasMilestone("ch", 25) },
-		},
-		3: {
-			requirementDescription: '2e13 relics',
-			effect() { return new Decimal(getActivatedRelics()).add(1).pow(0.0252) },
-			effectDescription(eff) { return 'multiply multicellular organism gain based on your activated relics (currently ' + format(eff) + 'x)' },
-			done() { return player.r.points.gte(2e13) && isAssimilated("r") && hasMilestone("ch", 25) },
-		},
-		4: {
-			requirementDescription: '1e14 relics',
-			effectDescription: 'reduce requirement scaling of <b class="layer-r-dark">Glowing Relics</b> (2 --> 1.75)',
-			done() { return player.r.points.gte(1e14) && isAssimilated("r") && hasMilestone("ch", 25) && hasMilestone("ch", 26) },
-			unlocked() { return hasMilestone("ch", 26) },
-		},
-		5: {
-			requirementDescription: '1e15 relics',
-			effectDescription: 'reduce requirement scaling of <b class="layer-r-dark">Prismatic Relics</b> (2 --> 1.5)',
-			done() { return player.r.points.gte(1e15) && isAssimilated("r") && hasMilestone("ch", 25) && hasMilestone("ch", 26) },
-			unlocked() { return hasMilestone("ch", 26) },
-		},
-		6: {
-			requirementDescription: '1e16 relics',
-			effect() { return player.r.points.add(1).pow(0.0045) },
-			effectDescription(eff) { return 'multiply multicellular organism gain based on your relics (currently ' + format(eff) + 'x)' },
-			done() { return player.r.points.gte(1e16) && isAssimilated("r") && hasMilestone("ch", 25) && hasMilestone("ch", 26) },
-			unlocked() { return hasMilestone("ch", 26) },
-		},
-		7: {
-			requirementDescription: '2e17 relics',
-			effect() { return new Decimal(getActivatedRelics()).add(1).pow(10) },
-			effectDescription(eff) { return 'multiply atom gain based on your activated relics (currently ' + format(eff) + 'x)' },
-			done() { return player.r.points.gte(2e17) && isAssimilated("r") && hasMilestone("ch", 25) && hasMilestone("ch", 26) },
-			unlocked() { return hasMilestone("ch", 26) },
-		},
-		8: {
-			requirementDescription: '2e18 relics',
-			effect() { return player.r.light.add(1).log10().add(1).pow(0.01) },
-			effectDescription(eff) { return 'multiply multicellular organism gain based on your light (currently ' + format(eff) + 'x)' },
-			done() { return player.r.points.gte(2e18) && isAssimilated("r") && hasMilestone("ch", 25) && hasMilestone("ch", 26) },
-			unlocked() { return hasMilestone("ch", 26) },
-		},
-	},
+	milestones: (() => {
+		let obj = {
+			0: {
+				requirement: 1e12,
+				effectDescription: "reduce relic activation requirement scaling (3 --> 2)",
+			},
+			1: {
+				requirement: 6e12,
+				effectDescription() { return "reduce requirement scaling of <b" + getColorClass(this, REF) + "Gleaming Relics</b> (2.5 --> 2) and <b" + getColorClass(this, REF) + "Prismatic Relics</b> (4 --> 2)" },
+			},
+			2: {
+				requirement: 1e13,
+				effect() { return player.ch.points.sub(70).max(0).add(1) },
+				effectDescription(eff) { return "divide relic rebuyable requirements based on your chaos after 70 (currently /" + format(eff) + ")" },
+			},
+			3: {
+				requirement: 2e13,
+				effect() { return new Decimal(getActivatedRelics()).add(1).pow(0.0252) },
+				effectDescription(eff) { return "multiply multicellular organism gain based on your activated relics (currently " + format(eff) + "x)" },
+			},
+			4: {
+				requirement: 1e14,
+				effectDescription() { return "reduce requirement scaling of <b" + getColorClass(this, REF) + "Glowing Relics</b> (2 --> 1.75)" },
+			},
+			5: {
+				requirement: 1e15,
+				effectDescription() { return "reduce requirement scaling of <b" + getColorClass(this, REF) + "Prismatic Relics</b> (2 --> 1.5)" },
+			},
+			6: {
+				requirement: 1e16,
+				effect() { return player.r.points.add(1).pow(0.0045) },
+				effectDescription(eff) { return "multiply multicellular organism gain based on your relics (currently " + format(eff) + "x)" },
+			},
+			7: {
+				requirement: 2e17,
+				effect() { return new Decimal(getActivatedRelics()).add(1).pow(10) },
+				effectDescription(eff) { return "multiply atom gain based on your activated relics (currently " + format(eff) + "x)" },
+			},
+			8: {
+				requirement: 2e18,
+				effect() { return player.r.light.add(1).log10().add(1).pow(0.01) },
+				effectDescription(eff) { return "multiply multicellular organism gain based on your light (currently " + format(eff) + "x)" },
+			},
+		};
+		const done = req => player.r.points.gte(req) && isAssimilated("r") && hasMilestone("ch", 25);
+		const doneAndUnlocked = req => player.r.points.gte(req) && isAssimilated("r") && hasMilestone("ch", 25) && hasMilestone("ch", 26);
+		const unlocked = () => hasMilestone("ch", 26);
+		for (const key in obj) {
+			if (obj[key].requirement) {
+				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " relics";
+				if (+key >= 4) obj[key].done = doneAndUnlocked.bind(null, obj[key].requirement);
+				else obj[key].done = done.bind(null, obj[key].requirement);
+				delete obj[key].requirement;
+			};
+			if (+key >= 4) obj[key].unlocked = unlocked;
+		};
+		return obj;
+	})(),
 });
 
 addLayer("m", {
@@ -4797,11 +4798,7 @@ addLayer("m", {
 		if (eff.gt(sc_start)) eff = eff.div(sc_start).pow(softcaps.m_eff[1]()).mul(sc_start);
 		return eff;
 	},
-	effectDescription() {
-		let softcap = "";
-		if (tmp.m.effect.gt(softcaps.m_eff[0]())) softcap = ' (softcapped)';
-		return 'which multiplies atom gain by <h2 class="layer-m">' + format(tmp.m.effect) + '</h2>x (based on best)' + softcap;
-	},
+	effectDescription() { return 'which multiplies atom gain by <h2 class="layer-m">' + format(tmp.m.effect) + '</h2>x (based on best)' + (tmp.m.effect.gt(softcaps.m_eff[0]()) ? ' (softcapped)' : '') },
 	doReset(resettingLayer) {
 		if (hasMilestone("w", 6) && resettingLayer == "w") return;
 		let keep = ["auto_upgrades"];
@@ -4934,7 +4931,7 @@ addLayer("m", {
 		const done = req => player.m.total.gte(req);
 		for (const key in obj) {
 			if (obj[key].requirement) {
-				obj[key].requirementDescription = formatWhole(obj[key].requirement) + " total molecule" + (obj[key].requirement === 1 ? "" : "s");
+				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " total molecule" + (obj[key].requirement === 1 ? "" : "s");
 				obj[key].done = done.bind(null, obj[key].requirement);
 				delete obj[key].requirement;
 			};
@@ -6582,7 +6579,7 @@ addLayer("cl", {
 		const done = req => player.cl.total.gte(req);
 		for (const key in obj) {
 			if (obj[key].requirement) {
-				obj[key].requirementDescription = formatWhole(obj[key].requirement) + " total cellular life";
+				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " total cellular life";
 				obj[key].done = done.bind(null, obj[key].requirement);
 				delete obj[key].requirement;
 			};
@@ -7186,7 +7183,7 @@ addLayer("ch", {
 		const unlockedPL = () => player.pl.unlocked;
 		for (const key in obj) {
 			if (obj[key].requirement) {
-				obj[key].requirementDescription = formatWhole(obj[key].requirement) + " chaos";
+				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " chaos";
 				obj[key].done = done.bind(null, obj[key].requirement);
 				delete obj[key].requirement;
 			};

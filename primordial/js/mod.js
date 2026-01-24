@@ -234,6 +234,13 @@ function getColorClass(obj, type, layer = obj.layer, plain = false) {
 	return ` class="layer-${layer}">`;
 };
 
+function simpleFormatWhole(num) {
+	num = +num;
+	if (num >= 1e9) return num.toExponential().replace("+", "");
+	if (num >= 1e3) return num.toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+	return num.toFixed(0);
+};
+
 function getDevotionBuyableBulk() {
 	let bulk = 1;
 	if (getActivatedRelics() >= 41) bulk *= 10;
