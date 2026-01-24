@@ -806,7 +806,7 @@ addLayer("q", {
 	milestones: {
 		0: {
 			requirementDescription: '5 quarks',
-			effectDescription: 'you can explore 5 further essence upgrades',
+			effectDescription: 'unlock 5 new essence upgrades',
 			done() { return player.q.points.gte(5) }
 		},
 		1: {
@@ -1370,7 +1370,7 @@ addLayer("sp", {
 		},
 		2: {
 			requirementDescription: '3 subatomic particles',
-			effectDescription: 'you can explore 5 further quark upgrades',
+			effectDescription: 'unlock 5 new quark upgrades',
 			done() { return player.sp.points.gte(3) }
 		},
 		3: {
@@ -1655,7 +1655,7 @@ addLayer("h", {
 		},
 		8: {
 			requirementDescription: '1,953,125 hexes',
-			effectDescription: 'you can explore 3 further core upgrades',
+			effectDescription: 'unlock 3 new core upgrades',
 			done() { return player.h.points.gte(1953125) }
 		},
 	},
@@ -1848,7 +1848,7 @@ addLayer("h", {
 		},
 		53: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Sub Core Particle Fusion' },
-			description: 'you can explore 3 new core upgrades and 3 new subatomic particle upgrades',
+			description: 'unlock 3 new core upgrades and 3 new subatomic particle upgrades',
 			cost: 7.5e9,
 			unlocked() { return hasUpgrade("h", 41) && hasUpgrade("h", 42) && hasUpgrade("h", 43) && hasUpgrade("h", 44) },
 		},
@@ -2127,62 +2127,64 @@ addLayer("ds", {
 			unlocked() { return hasMilestone("ch", 44) },
 		},
 	},
-	milestones: {
-		0: {
-			requirementDescription: '1 demon soul',
-			effectDescription: 'keep subatomic particle rebuyables on demon soul resets',
-			done() { return player.ds.points.gte(1) }
-		},
-		1: {
-			requirementDescription: '5 demon souls',
-			effectDescription: 'keep subatomic particle upgrades on demon soul resets',
-			done() { return player.ds.points.gte(5) }
-		},
-		2: {
-			requirementDescription: '15 demon souls',
-			effectDescription: 'keep row 2 milestones on demon soul resets',
-			done() { return player.ds.points.gte(15) }
-		},
-		3: {
-			requirementDescription: '50 demon souls',
-			effectDescription: 'keep essence upgrades on all resets',
-			done() { return player.ds.points.gte(50) }
-		},
-		4: {
-			requirementDescription: '125 demon souls',
-			effectDescription: 'keep essence rebuyables on all resets',
-			done() { return player.ds.points.gte(125) }
-		},
-		5: {
-			requirementDescription: '625 demon souls',
-			effectDescription: 'keep core upgrades on demon soul resets',
-			done() { return player.ds.points.gte(625) }
-		},
-		6: {
-			requirementDescription: '3,125 demon souls',
-			effectDescription: 'keep core rebuyables on demon soul resets',
-			done() { return player.ds.points.gte(3125) }
-		},
-		7: {
-			requirementDescription: '1e10 demon souls',
-			effectDescription: 'keep quark upgrades on demon soul resets',
-			done() { return player.ds.points.gte(1e10) }
-		},
-		8: {
-			requirementDescription: '1e14 demon souls',
-			effectDescription: 'keep hex milestones on demon soul resets',
-			done() { return player.ds.points.gte(1e14) }
-		},
-	},
+	milestones: (() => {
+		let obj = {
+			0: {
+				requirement: 1,
+				effectDescription: "keep subatomic particle rebuyables on demon soul resets",
+			},
+			1: {
+				requirement: 5,
+				effectDescription: "keep subatomic particle upgrades on demon soul resets",
+			},
+			2: {
+				requirement: 15,
+				effectDescription: "keep row 2 milestones on demon soul resets",
+			},
+			3: {
+				requirement: 50,
+				effectDescription: "keep essence upgrades on all resets",
+			},
+			4: {
+				requirement: 125,
+				effectDescription: "keep essence rebuyables on all resets",
+			},
+			5: {
+				requirement: 625,
+				effectDescription: "keep core upgrades on demon soul resets",
+			},
+			6: {
+				requirement: 3125,
+				effectDescription: "keep core rebuyables on demon soul resets",
+			},
+			7: {
+				requirement: 1e10,
+				effectDescription: "keep quark upgrades on demon soul resets",
+			},
+			8: {
+				requirement: 1e14,
+				effectDescription: "keep hex milestones on demon soul resets",
+			},
+		};
+		const done = req => player.ds.points.gte(req);
+		for (const key in obj) {
+			if (obj[key].requirement) {
+				obj[key].requirementDescription = simpleFormatWhole(obj[key].requirement) + " demon soul" + (obj[key].requirement === 1 ? "" : "s");
+				obj[key].done = done.bind(null, obj[key].requirement);
+				delete obj[key].requirement;
+			};
+		};
+		return obj;
+	})(),
 	upgrades: {
 		11: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Mad Hexes' },
-			description() { return 'you can explore 2 further hex upgrades, and <b' + getColorClass(this, REF, "h") + 'Hex Leak</b> also applies to hex gain (and not any other upgrades in the chain)' },
+			description() { return 'unlock 2 new hex upgrades, and <b' + getColorClass(this, REF, "h") + 'Hex Leak</b> also applies to hex gain (and not any other upgrades in the chain)' },
 			cost: 10,
 		},
 		12: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Hex Mania' },
-			description() { return 'you can explore 2 further hex upgrades, and <b' + getColorClass(this, REF, "h") + 'Stronger Hexes</b>\' effect is squared' },
+			description() { return 'unlock 2 new hex upgrades, and <b' + getColorClass(this, REF, "h") + 'Stronger Hexes</b>\' effect is squared' },
 			cost: 75,
 		},
 		21: {
@@ -3704,7 +3706,7 @@ addLayer("s", {
 		},
 		3: {
 			requirementDescription: '4 sanctums',
-			effectDescription: 'you can explore 4 further prayer upgrades',
+			effectDescription: 'unlock 4 new prayer upgrades',
 			done() { return player.s.points.gte(4) },
 		},
 		4: {
@@ -5302,7 +5304,7 @@ addLayer("gi", {
 			},
 			11: {
 				requirement: 21,
-				effectDescription: "you can explore 3 further molecule upgrades and you can autobuy atom upgrades",
+				effectDescription: "unlock 3 new molecule upgrades and you can autobuy atom upgrades",
 				toggles: [["a", "auto_upgrades"]],
 			},
 			12: {
@@ -5575,9 +5577,9 @@ addLayer("ei", {
 	},
 	milestones: {
 		0: {
-			requirementDescription: '2 total evil influence',
+			requirementDescription: '1 total evil influence',
 			effectDescription: "evil influence resets don't reset relics",
-			done() { return player.ei.total.gte(2) },
+			done() { return player.ei.total.gte(1) },
 		},
 		1: {
 			requirementDescription: '8 total evil influence and 5,000 evil power',

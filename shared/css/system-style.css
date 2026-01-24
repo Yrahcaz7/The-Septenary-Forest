@@ -39,8 +39,16 @@ td {
 	flex-flow: row wrap;
 }
 
+.treeRow {
+	margin-bottom: 50px;
+}
+
+.treeRow:empty {
+	margin-bottom: 0;
+}
+
 .treeThing {
-	margin: 0 10px 0 10px;
+	margin: 0 10px;
 	vertical-align: middle;
 }
 

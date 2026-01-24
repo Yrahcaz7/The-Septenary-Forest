@@ -718,12 +718,9 @@ function loadVue(mainPage = false) {
 	addNormalComponent('tree', {
 		props: ['layer', 'data'],
 		template: template(`<div>
-			<template v-for="row in data">
-				<div class="upgRow">
-					<tree-node v-for="node in row" :node='node' :prev='layer'></tree-node>
-				</div>
-				<div class="hidden"></div>
-			</template>
+			<div v-for="row in data" class="treeRow">
+				<tree-node v-for="node in row" :node='node' :prev='layer'></tree-node>
+			</div>
 		</div>`),
 	});
 
@@ -750,12 +747,11 @@ function loadVue(mainPage = false) {
 		props: ['layer', 'data', 'type'],
 		data() {return {tmp}},
 		template: template(`<div>
-			<template v-for="row in data">
+			<div v-for="row in data" class="treeRow">
 				<template v-for="id in row">
 					<component v-if="tmp[layer][type + 's'][id] !== undefined && tmp[layer][type + 's'][id].unlocked" :is="type" :layer="layer" :data="id" :style="tmp[layer].componentStyles[type]" class="treeThing"></component>
 				</template>
-				<div class="hidden"></div>
-			</template>
+			</div>
 		</div>`),
 	});
 
