@@ -1836,7 +1836,7 @@ addLayer("h", {
 		},
 		51: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Faster Essence' },
-			description() { return 'increases essence gain per second by 25% if you have the <b' + getColorClass(this, REF, "c") + '4th core milestone</b> (total: 75%)' },
+			description() { return 'increases essence gain per second by 25% if you have the <b' + getColorClass(this, REF, "c") + '1e64 cores milestone</b> (total: 75%)' },
 			cost: 9e90,
 			unlocked() { return (hasUpgrade("ds", 11) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade("h", 41) && hasUpgrade("h", 42) && hasUpgrade("h", 43) && hasUpgrade("h", 44) },
 		},
@@ -6532,75 +6532,74 @@ addLayer("cl", {
 			unlocked() { return hasMilestone("w", 16)},
 		},
 	},
-	milestones: {
-		0: {
-			requirementDescription: '1 total cellular life',
-			effectDescription: 'keep good influence and evil influence milestones on cellular life resets, unlock options to toggle good influence and evil influence auto prestiges, and you can buy max cellular life',
-			done() { return player.cl.total.gte(1) },
-			toggles: [["ei", "auto_prestige"], ["gi", "auto_prestige"]],
-		},
-		1: {
-			requirementDescription: '2 total cellular life',
-			effectDescription() { return 'cellular life doesn\'t reset relics, unlock option to disable exta <b' + getColorClass(this, REF, "s") + 'Devotion</b> autobuyer speed, but make all <b' + getColorClass(this, REF, "s") + 'Devotion</b> autobuyers bulk buy 100x, and unlock another <b' + getColorClass(this, REF) + 'Tissue</b>' },
-			done() { return player.cl.total.gte(2) },
-			toggles: [["s", 'no_speed_but_more_bulk']],
-		},
-		2: {
-			requirementDescription: '4 total cellular life',
-			effectDescription() { return 'cellular life doesn\'t reset cores, and all <b' + getColorClass(this, REF, "s") + 'Devotion</b> autobuyers can bulk buy 2x' },
-			done() { return player.cl.total.gte(4) },
-		},
-		3: {
-			requirementDescription: '6 total cellular life',
-			effectDescription() { return 'cellular life doesn\'t reset evil influence, keep demon soul challenge completions on cellular life resets, and unlock another <b' + getColorClass(this, REF) + 'Tissue</b>' },
-			done() { return player.cl.total.gte(6) },
-		},
-		4: {
-			requirementDescription: '9 total cellular life',
-			effectDescription: 'cellular life doesn\'t reset good influence, and keep molecule milestones on cellular life resets',
-			done() { return player.cl.total.gte(9) },
-		},
-		5: {
-			requirementDescription: '18 total cellular life',
-			effectDescription: 'cellular life doesn\'t reset quarks',
-			done() { return player.cl.total.gte(18) },
-		},
-		6: {
-			requirementDescription: '30 total cellular life',
-			effectDescription: 'cellular life doesn\'t reset prayers',
-			done() { return player.cl.total.gte(30) },
-		},
-		7: {
-			requirementDescription: '63 total cellular life',
-			effectDescription: 'cellular life doesn\'t reset sanctums',
-			done() { return player.cl.total.gte(63) },
-		},
-		8: {
-			requirementDescription: '135 total cellular life',
-			effectDescription: 'keep atom milestones on cellular life resets',
-			done() { return player.cl.total.gte(135) },
-		},
-		9: {
-			requirementDescription: '214 total cellular life',
-			effectDescription() { return 'unlock another <b' + getColorClass(this, REF) + 'Tissue</b>' },
-			done() { return player.cl.total.gte(214) },
-		},
-		10: {
-			requirementDescription: '318 total cellular life',
-			effectDescription: 'reduce the cost scaling of cellular life (1.5 --> 1.45)',
-			done() { return player.cl.total.gte(318) },
-		},
-		11: {
-			requirementDescription: '677 total cellular life',
-			effectDescription: 'reduce the cost scaling of cellular life (1.45 --> 1.4)',
-			done() { return player.cl.total.gte(677) },
-		},
-		12: {
-			requirementDescription: '111 cellular life and 9,999 total cellular life',
-			effectDescription: 'cellular life resets nothing and auto perform cellular life resets',
-			done() { return player.cl.points.gte(111) && player.cl.total.gte(9999) },
-		},
-	},
+	milestones: (() => {
+		let obj = {
+			0: {
+				requirement: 1,
+				effectDescription: "keep good influence and evil influence milestones on cellular life resets, unlock options to toggle good influence and evil influence auto prestiges, and you can buy max cellular life",
+				toggles: [["ei", "auto_prestige"], ["gi", "auto_prestige"]],
+			},
+			1: {
+				requirement: 2,
+				effectDescription() { return "cellular life doesn't reset relics, unlock an option to disable extra <b" + getColorClass(this, REF, "s") + "Devotion</b> autobuyer speed, but make all <b" + getColorClass(this, REF, "s") + "Devotion</b> autobuyers bulk buy 100x, and unlock another <b" + getColorClass(this, REF) + "Tissue</b>" },
+				toggles: [["s", 'no_speed_but_more_bulk']],
+			},
+			2: {
+				requirement: 4,
+				effectDescription() { return "cellular life doesn't reset cores, and all <b" + getColorClass(this, REF, "s") + "Devotion</b> autobuyers can bulk buy 2x" },
+			},
+			3: {
+				requirement: 6,
+				effectDescription() { return "cellular life doesn't reset evil influence, keep demon soul challenge completions on cellular life resets, and unlock another <b" + getColorClass(this, REF) + "Tissue</b>" },
+			},
+			4: {
+				requirement: 9,
+				effectDescription: "cellular life doesn't reset good influence, and keep molecule milestones on cellular life resets",
+			},
+			5: {
+				requirement: 18,
+				effectDescription: "cellular life doesn't reset quarks",
+			},
+			6: {
+				requirement: 30,
+				effectDescription: "cellular life doesn't reset prayers",
+			},
+			7: {
+				requirement: 63,
+				effectDescription: "cellular life doesn't reset sanctums",
+			},
+			8: {
+				requirement: 135,
+				effectDescription: "keep atom milestones on cellular life resets",
+			},
+			9: {
+				requirement: 214,
+				effectDescription() { return "unlock another <b" + getColorClass(this, REF) + "Tissue</b>" },
+			},
+			10: {
+				requirement: 318,
+				effectDescription: "reduce the cost scaling of cellular life (1.5 --> 1.45)",
+			},
+			11: {
+				requirement: 677,
+				effectDescription: "reduce the cost scaling of cellular life (1.45 --> 1.4)",
+			},
+			12: {
+				requirementDescription: "111 cellular life and 9,999 total cellular life",
+				effectDescription: "cellular life resets nothing and auto perform cellular life resets",
+				done() { return player.cl.points.gte(111) && player.cl.total.gte(9999) },
+			},
+		};
+		const done = req => player.cl.total.gte(req);
+		for (const key in obj) {
+			if (obj[key].requirement) {
+				obj[key].requirementDescription = formatWhole(obj[key].requirement) + " total cellular life";
+				obj[key].done = done.bind(null, obj[key].requirement);
+				delete obj[key].requirement;
+			};
+		};
+		return obj;
+	})(),
 	buyables: {
 		11: {
 			cost(x) {
@@ -7025,7 +7024,7 @@ addLayer("ch", {
 			},
 			13: {
 				requirement: 30,
-				effectDescription() { return "improve <b" + getColorClass(this, REF) + ">Tide of Good</b>'s effect formula, and do something with " + getGlitchDecipherText() },
+				effectDescription() { return "improve <b" + getColorClass(this, REF) + "Tide of Good</b>'s effect formula, and do something with " + getGlitchDecipherText() },
 			},
 			14: {
 				requirement: 33,
@@ -7051,24 +7050,24 @@ addLayer("ch", {
 			},
 			17: {
 				requirement: 48,
-				effectDescription() { return "make the <b" + getColorClass(this, REF) + "17th chaos milestone</b> (the previous milestone)'s effect also multiply evil influence gain" },
+				effectDescription() { return "make the <b" + getColorClass(this, REF) + "42 chaos milestone</b>'s effect also multiply evil influence gain" },
 			},
 			18: {
 				requirement: 50,
-				effectDescription() { return "improve the effect formula of the <b" + getColorClass(this, REF) + "17th chaos milestone</b>" },
+				effectDescription() { return "improve the effect formula of the <b" + getColorClass(this, REF) + "42 chaos milestone</b>" },
 			},
 			19: {
 				requirement: 51,
-				effectDescription() { return "improve the formula of chaos's second effect and improve the effect formula of the the <b" + getColorClass(this, REF) + "17th chaos milestone</b>" },
+				effectDescription() { return "improve the formula of chaos's second effect and improve the effect formula of the the <b" + getColorClass(this, REF) + "42 chaos milestone</b>" },
 			},
 			20: {
 				requirement: 55,
-				effectDescription() { return "you can autobuy the second quark rebuyable, the 6th row of quark upgrades can be autobought, and improve the effect formula of the <b" + getColorClass(this, REF) + "17th chaos milestone</b>" },
+				effectDescription() { return "you can autobuy the second quark rebuyable, the 6th row of quark upgrades can be autobought, and improve the effect formula of the <b" + getColorClass(this, REF) + "42 chaos milestone</b>" },
 				toggles: [["q", "auto_buyable_12"]],
 			},
 			21: {
 				requirement: 57,
-				effectDescription() { return "you gain 10x glow, improve the effect formula of the <b" + getColorClass(this, REF) + "17th chaos milestone</b>, and you can buy max multicellular organisms" },
+				effectDescription() { return "you gain 10x glow, improve the effect formula of the <b" + getColorClass(this, REF) + "42 chaos milestone</b>, and you can buy max multicellular organisms" },
 			},
 			22: {
 				requirement: 59,
@@ -7540,36 +7539,38 @@ addLayer("mo", {
 			unlocked() { return isAssimilated("mo") },
 		},
 	},
-	milestones: {
-		0: {
-			requirementDescription: "Tier 1: [666]",
-			effectDescription() { return "increase the " + getGlitchAttuneText() + " effect exponent (0.15 --> 0.1666)" },
-			done() { return player.mo.points.gte(666) },
-			popupTitle: "Attuning...",
-			unlocked() { return isAssimilated(this.layer) },
-		},
-		1: {
-			requirementDescription: "Tier 2: [800]",
-			effectDescription() { return "increase the cap of <b" + getColorClass(this, TITLE, "w") + "Race for Knowledge</b> by 50" },
-			done() { return player.mo.points.gte(800) },
-			popupTitle: "Attuning...",
-			unlocked() { return isAssimilated(this.layer) },
-		},
-		2: {
-			requirementDescription: "Tier 3: [999]",
-			effectDescription() { return "reduce the cost scaling of <b" + getColorClass(this, TITLE, "ch", true) + "Chaos</b> <b" + getColorClass(this, TITLE) + "Synergy</b> and <b" + getColorClass(this, TITLE) + getGlitchAttuneText() + " Synergy</b>" },
-			done() { return player.mo.points.gte(999) },
-			popupTitle: "Attuning...",
-			unlocked() { return isAssimilated(this.layer) },
-		},
-		3: {
-			requirementDescription: "Tier 4: [1,360]",
-			effectDescription() { return "exponentiate light gain after hardcap by ^1.2" },
-			done() { return player.mo.points.gte(1360) },
-			popupTitle: "Attuning...",
-			unlocked() { return isAssimilated(this.layer) },
-		},
-	}
+	milestones: (() => {
+		let obj = {
+			0: {
+				requirement: 666,
+				effectDescription() { return "increase the " + getGlitchAttuneText() + " effect exponent (0.15 --> 0.1666)" },
+			},
+			1: {
+				requirement: 800,
+				effectDescription() { return "increase the cap of <b" + getColorClass(this, TITLE, "w") + "Race for Knowledge</b> by 50" },
+			},
+			2: {
+				requirement: 999,
+				effectDescription() { return "reduce the cost scaling of <b" + getColorClass(this, TITLE, "ch", true) + "Chaos</b> <b" + getColorClass(this, TITLE) + "Synergy</b> and <b" + getColorClass(this, TITLE) + getGlitchAttuneText() + " Synergy</b>" },
+			},
+			3: {
+				requirement: 1360,
+				effectDescription() { return "exponentiate light gain after hardcap by ^1.2" },
+			},
+		};
+		const done = req => player.mo.points.gte(req);
+		const unlocked = () => isAssimilated("mo");
+		for (const key in obj) {
+			if (obj[key].requirement) {
+				obj[key].requirementDescription = "Tier " + ((+key) + 1) + ": [" + formatWhole(obj[key].requirement) + "]";
+				obj[key].done = done.bind(null, obj[key].requirement);
+				delete obj[key].requirement;
+			};
+			obj[key].popupTitle = "Attuning...";
+			obj[key].unlocked = unlocked;
+		};
+		return obj;
+	})(),
 });
 
 addLayer("pl", {
@@ -7647,7 +7648,7 @@ addLayer("pl", {
 		},
 		1: {
 			requirementDescription: "2 planets",
-			effectDescription() { return "you can bulk 10x relic activation, gain +10% of your molecule gain per second, you can bulk 10x good influence rebuyables if you have the <b" + getColorClass(this, REF, "ch", true) + "28th chaos milestone</b>, keep all challenges on lesser resets, and unlock air rebuyables" },
+			effectDescription() { return "you can bulk 10x relic activation, gain +10% of your molecule gain per second, you can bulk 10x good influence rebuyables if you have the <b" + getColorClass(this, REF, "ch", true) + "78 chaos milestone</b>, keep all challenges on lesser resets, and unlock air rebuyables" },
 			done() { return player.pl.points.gte(2) },
 		},
 		2: {
@@ -8090,7 +8091,7 @@ addLayer("pl", {
 		},
 		94: {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Planetary Chaos</b>' },
-			description() { return "improves the formula of chaos's second effect if you have the <b" + getColorClass(this, REF, "ch", true) + "17th chaos milestone</b>" },
+			description() { return "improves the formula of chaos's second effect if you have the <b" + getColorClass(this, REF, "ch", true) + "42 chaos milestone</b>" },
 			cost: 2e20,
 			currencyInternalName: "air",
 			currencyLayer: "pl",
