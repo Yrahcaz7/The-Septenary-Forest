@@ -242,8 +242,8 @@ function exportSave() {
 		navigator.clipboard.writeText(btoa(encodeURIComponent(JSON.stringify(player)))).then(() => {
 			alert("Your save has been successfully copied to the clipboard.");
 		}, err => {
-			alert("Could not copy save: ", err);
-			console.error("Could not copy save: ", err);
+			alert("Could not copy save: " + err);
+			console.error("Could not copy save: " + err);
 		});
 	} else {
 		alert("Could not copy save: navigator.clipboard is not supported in this context.");
@@ -258,6 +258,7 @@ function importSave(imported = undefined, forced = false) {
 		if (tempPlr.versionType !== getModID() && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")) {
 			return; // Wrong save. Use "forced" to force it to accept.
 		};
+		clearInterval(INTERVAL);
 		player = tempPlr;
 		player.versionType = getModID();
 		fixSave();

@@ -2367,7 +2367,8 @@ addLayer('ds', {
 				if (options.nerdMode) text += "Best: (" + format(player.ds.threadGainBest) + "/sec)<br>";
 				return text;
 			},
-			rewardDescription() { // use effects like this: `if (getPurifiedDemonSouls() >= x) gain = gain.mul(challengeEffect("ds", 101)[y]);`
+			// use effects like this: `if (getPurifiedDemonSouls() >= x && challengeEffect("ds", 101)[y]) gain = gain.mul(challengeEffect("ds", 101)[y]);`
+			rewardDescription() {
 				const completions = challengeCompletions(this.layer, this.id);
 				const effects = challengeEffect(this.layer, this.id);
 				let text = '';
@@ -4158,7 +4159,7 @@ addLayer('d', {
 				addBuyables(this.layer, this.id, getDevotionBuyableBulk());
 			},
 			effect(x) {
-				if (getActivatedRelics() >= 5) return [undefined, x.add(1), new Decimal(1e25).mul(player.r.relic_effects[2]).pow(x)];
+				if (getActivatedRelics() >= 5 && challengeEffect("r", 11)[2]) return [undefined, x.add(1), new Decimal(1e25).mul(challengeEffect("r", 11)[2]).pow(x)];
 				return [undefined, x.add(1), new Decimal(1e25).pow(x)];
 			},
 			devotion() { return getBuyableAmount(this.layer, this.id).mul(0.75) },
@@ -4300,12 +4301,8 @@ addLayer('r', {
 		points: newDecimalZero(),
 		best: newDecimalZero(),
 		total: newDecimalZero(),
-		lightreq: new Decimal(20000),
 		light: newDecimalZero(),
-		lightbest: newDecimalZero(),
-		lightgain: newDecimalZero(),
-		lightgainbest: newDecimalZero(),
-		relic_effects: [newDecimalOne(), newDecimalOne(), newDecimalOne(), newDecimalOne()],
+		lightGainBest: newDecimalZero(),
 		auto_activate: false,
 		auto_upgrade_1: false,
 		auto_upgrade_2: false,
@@ -4331,7 +4328,7 @@ addLayer('r', {
 	gainExp() {
 		let gain = newDecimalOne();
 		if (hasUpgrade('m', 43)) gain = gain.mul(upgradeEffect('m', 43));
-		if (getActivatedRelics() >= 13) gain = gain.mul(player.r.relic_effects[3]);
+		if (getActivatedRelics() >= 13 && challengeEffect("r", 11)[3]) gain = gain.mul(challengeEffect("r", 11)[3]);
 		if (hasUpgrade('ei', 34)) gain = gain.mul(upgradeEffect('ei', 34));
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
 		return gain;
@@ -4342,8 +4339,7 @@ addLayer('r', {
 	deactivated() { return getClickableState('mo', 11) && !canAssimilate(this.layer)},
 	automate() {
 		if (hasMilestone('w', 3) && player.r.auto_activate) {
-			if (getLightGain().gt(player.r.lightgainbest)) player.r.lightgainbest = getLightGain();
-			if (this.challenges[11].canComplete()) player.r.challenges[11] += getRelicActivationBulk();
+			if (layers.r.challenges[11].canComplete()) player.r.challenges[11] += getRelicActivationBulk();
 		};
 		if (hasMilestone('w', 4) && player.r.auto_upgrade_1) buyUpgrade('r', 11);
 		if (hasMilestone('w', 4) && player.r.auto_upgrade_2) buyUpgrade('r', 12);
@@ -4365,11 +4361,11 @@ addLayer('r', {
 			effBoost1 = effBoost1.mul(10000);
 			effex1 = new Decimal(3.5);
 		};
-		if (getActivatedRelics() >= 4) effex1 = effex1.mul(player.r.relic_effects[1]);
+		if (getActivatedRelics() >= 4 && challengeEffect("r", 11)[1]) effex1 = effex1.mul(challengeEffect("r", 11)[1]);
 		if (getActivatedRelics() >= 6) effex1 = effex1.mul(5);
-		if (getActivatedRelics() >= 1) {
-			effBoost2 = effBoost2.mul(player.r.relic_effects[0]);
-			effBoost3 = effBoost3.mul(player.r.relic_effects[0]);
+		if (getActivatedRelics() >= 1 && challengeEffect("r", 11)[0]) {
+			effBoost2 = effBoost2.mul(challengeEffect("r", 11)[0]);
+			effBoost3 = effBoost3.mul(challengeEffect("r", 11)[0]);
 		};
 		let eff1 = player.r.points.mul(effBoost1).add(1).pow(1.1).pow(effex1);
 		if (eff1.gt(softcaps.r_eff1[0]) && !(isAssimilated('r') || player.mo.assimilating === 'r')) {
@@ -4404,32 +4400,61 @@ addLayer('r', {
 		};
 	},
 	resetsNothing() { return hasMilestone('w', 4) },
+	lightGain(activating = inChallenge('r', 11)) {
+		// init
+		let gain = newDecimalZero();
+		// active
+		if (activating) {
+			// base
+			if (hasUpgrade('r', 13)) {
+				gain = upgradeEffect('r', 13);
+			} else {
+				gain = getPointGen().pow(0.001).div(10);
+				// mul (before hardcap)
+				if (hasUpgrade('r', 11)) gain = gain.mul(upgradeEffect('r', 11));
+				if (hasUpgrade('r', 12)) gain = gain.mul(upgradeEffect('r', 12));
+				if (hasBuyable('d', 21)) gain = gain.mul(buyableEffect('d', 21)[1]);
+				if (hasMilestone('s', 30)) gain = gain.mul(2);
+				if (hasMilestone('s', 41)) gain = gain.mul(3);
+				if (hasMilestone('s', 50)) gain = gain.mul(3);
+				if (hasMilestone('s', 52)) gain = gain.mul(3);
+				// hardcap
+				if (gain.gt(1e25)) gain = new Decimal(1e25);
+			};
+			// mul (after hardcap)
+			if (player.s.glow_effect.gt(1)) gain = gain.mul(player.s.glow_effect);
+			if (hasBuyable('g', 21)) gain = gain.mul(buyableEffect('g', 21)[2]);
+			if (new Decimal(tmp.w.effect[2]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[2]);
+			if (hasBuyable('r', 12)) gain = gain.mul(buyableEffect('r', 12));
+			if (hasUpgrade('m', 61)) gain = gain.mul(upgradeEffect('m', 61));
+			if (hasUpgrade('pl', 54)) gain = gain.mul(upgradeEffect('pl', 54));
+			// pow (after hardcap)
+			if (hasMilestone('mo', 3)) gain = gain.pow(1.2);
+		};
+		// add portion of best
+		let portion = 0;
+		if (hasMilestone('m', 17)) portion = 0.1;
+		else if (hasMilestone('m', 16)) portion = 0.05;
+		else if (hasMilestone('m', 15)) portion = 0.025;
+		else if (hasMilestone('m', 7)) portion = 0.01;
+		else if (hasMilestone('m', 3)) portion = 0.001;
+		if (portion > 0) {
+			gain = gain.add(player.r.lightGainBest.mul(portion));
+		};
+		// return
+		return gain;
+	},
 	update(diff) {
-		let lightReqScale = new Decimal(5);
-		if (isAssimilated('r') || player.mo.assimilating === 'r') lightReqScale = lightReqScale.sub(2);
-		if (hasMilestone('r', 0)) lightReqScale = lightReqScale.sub(1);
-		player.r.lightreq = lightReqScale.pow(getActivatedRelics()).mul(20000);
-		let mult0 = newDecimalOne();
-		if (getActivatedRelics() >= 11) mult0 = mult0.mul(2);
-		if (getActivatedRelics() >= 14) mult0 = mult0.mul(2);
-		if (getActivatedRelics() >= 15) mult0 = mult0.mul(1.2);
-		if (getActivatedRelics() >= 16) mult0 = mult0.mul(1.1);
-		if (getActivatedRelics() >= 18) mult0 = mult0.mul(1.05);
-		if (getActivatedRelics() >= 19) mult0 = mult0.mul(1.02);
-		if (getActivatedRelics() >= 20) mult0 = mult0.mul(1.01);
-		if (getActivatedRelics() >= 25) mult0 = mult0.mul(1.001);
-		player.r.relic_effects[0] = player.r.light.mul(10).add(1).pow(0.15).mul(mult0);
-		player.r.relic_effects[1] = player.r.light.mul(1000).add(1).pow(0.05).min(100);
-		let mult2 = newDecimalOne();
-		if (getActivatedRelics() >= 7) mult2 = mult2.mul(4);
-		if (getActivatedRelics() >= 8) mult2 = mult2.mul(2);
-		player.r.relic_effects[2] = player.r.light.div(1000).add(1).pow(0.25).mul(mult2);
-		player.r.relic_effects[3] = player.r.light.pow(0.0021);
-		if (inChallenge('r', 11)) player.r.lightgain = getLightGain();
-		else player.r.lightgain = getLightBoost();
-		player.r.light = player.r.light.add(player.r.lightgain.mul(diff));
-		if (player.r.light.gt(player.r.lightbest)) player.r.lightbest = player.r.light;
-		if (player.r.lightgain.gt(player.r.lightgainbest)) player.r.lightgainbest = player.r.lightgain;
+		// generate light
+		player.r.light = player.r.light.add(tmp.r.lightGain.mul(diff));
+		// update best light gain
+		if (hasMilestone('w', 3) && player.r.auto_activate) {
+			const potentialLightGain = layers.r.lightGain(true);
+			if (potentialLightGain.gt(player.r.lightGainBest)) player.r.lightGainBest = potentialLightGain;
+		} else {
+			if (tmp.r.lightGain.gt(player.r.lightGainBest)) player.r.lightGainBest = tmp.r.lightGain;
+		};
+		// round up activation to bulk
 		const bulk = getRelicActivationBulk();
 		if (bulk > 1) player.r.challenges[11] = Math.ceil(player.r.challenges[11] / bulk) * bulk;
 	},
@@ -4449,33 +4474,34 @@ addLayer('r', {
 			challengeDescription: 'Temporarily converts all your point production into light production. Get enough light, and you can activate your relics for rewards.<br>',
 			goalDescription() {
 				let text = "";
-				if (getLightGain().gte(1e25) && !hasUpgrade('r', 13)) {
-					if (maxedChallenge('r', this.id)) text = 'You have ' + format(player.r.light) + ' light.<br>(' + format(player.r.lightgain) + '/sec - hardcapped at 1e25)<br>';
-					else text = 'You have ' + format(player.r.light) + '/' + format(player.r.lightreq) + ' light.<br>(' + format(player.r.lightgain) + '/sec - hardcapped at 1e25)<br>';
+				if (tmp.r.lightGain.gte(1e25) && !hasUpgrade('r', 13)) {
+					if (maxedChallenge(this.layer, this.id)) text = 'You have ' + format(player.r.light) + ' light.<br>(' + format(tmp.r.lightGain) + '/sec - hardcapped at 1e25)<br>';
+					else text = 'You have ' + format(player.r.light) + '/' + format(getActivationReq()) + ' light.<br>(' + format(tmp.r.lightGain) + '/sec - hardcapped at 1e25)<br>';
 				} else {
-					if (maxedChallenge('r', this.id)) text = 'You have ' + format(player.r.light) + ' light.<br>(' + format(player.r.lightgain) + '/sec)<br>';
-					else text = 'You have ' + format(player.r.light) + '/' + format(player.r.lightreq) + ' light.<br>(' + format(player.r.lightgain) + '/sec)<br>';
+					if (maxedChallenge(this.layer, this.id)) text = 'You have ' + format(player.r.light) + ' light.<br>(' + format(tmp.r.lightGain) + '/sec)<br>';
+					else text = 'You have ' + format(player.r.light) + '/' + format(getActivationReq()) + ' light.<br>(' + format(tmp.r.lightGain) + '/sec)<br>';
 				};
-				if (options.nerdMode) text += 'Best: (' + format(player.r.lightgainbest) + '/sec)<br>';
+				if (options.nerdMode) text += 'Best: (' + format(player.r.lightGainBest) + '/sec)<br>';
 				return text;
 			},
 			rewardDescription() {
-				const completions = challengeCompletions('r', this.id);
+				const completions = challengeCompletions(this.layer, this.id);
+				const effects = challengeEffect(this.layer, this.id);
 				let text = '';
 				// current rewards
-				if (completions >= 13) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, multiply Sacrificial Ceremony\'s last effect, and also multiply relic gain (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '') + ',<br>' + format(player.r.relic_effects[2]) + 'x,<br>and ' + format(player.r.relic_effects[3]) + 'x';
-				else if (completions >= 12) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '') + ',<br>and ' + format(player.r.relic_effects[2]) + 'x';
-				else if (completions >= 5) text += 'multiply relic\'s second and third effects, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(player.r.relic_effects[0]) + 'x,<br>^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '') + ',<br>and ' + format(player.r.relic_effects[2]) + 'x';
-				else if (completions >= 4) text += 'multiply relic\'s second and third effects based on your light, and also exponentiate relic\'s first effect based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x<br>and ^' + format(player.r.relic_effects[1]) + (player.r.relic_effects[1].eq(100) ? ' (capped)' : '');
-				else if (completions >= 1) text += 'multiply relic\'s second and third effects based on your light<br>Currently: ' + format(player.r.relic_effects[0]) + 'x';
+				if (completions >= 13) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, multiply Sacrificial Ceremony\'s last effect, and also multiply relic gain (all based on your light)<br>Currently: ' + format(effects[0]) + 'x,<br>^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : '') + ',<br>' + format(effects[2]) + 'x,<br>and ' + format(effects[3]) + 'x';
+				else if (completions >= 12) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(effects[0]) + 'x,<br>^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : '') + ',<br>and ' + format(effects[2]) + 'x';
+				else if (completions >= 5) text += 'multiply relic\'s second and third effects, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(effects[0]) + 'x,<br>^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : '') + ',<br>and ' + format(effects[2]) + 'x';
+				else if (completions >= 4) text += 'multiply relic\'s second and third effects based on your light, and also exponentiate relic\'s first effect based on your light<br>Currently: ' + format(effects[0]) + 'x<br>and ^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : '');
+				else if (completions >= 1) text += 'multiply relic\'s second and third effects based on your light<br>Currently: ' + format(effects[0]) + 'x';
 				else text += 'nothing currently';
 				// next reward
 				text += '<br><br>Next reward: ';
-				if (completions == 0) text += "multiply relic's second and third effects based on your light<br>Currently: " + format(player.r.relic_effects[0]) + "x";
+				if (completions == 0) text += "multiply relic's second and third effects based on your light<br>Currently: " + format(effects[0]) + "x";
 				else if (completions == 1) text += "relic's third effect also affects point gain";
 				else if (completions == 2) text += "multiply relic's first effect by 10,000 and raise it to ^3.5";
-				else if (completions == 3) text += "exponentiate relic's first effect based on your light<br>Currently: ^" + format(player.r.relic_effects[1]);
-				else if (completions == 4) text += "multiply Sacrificial Ceremony's last effect based on your light<br>Currently: " + format(player.r.relic_effects[2]) + "x";
+				else if (completions == 3) text += "exponentiate relic's first effect based on your light<br>Currently: ^" + format(effects[1]);
+				else if (completions == 4) text += "multiply Sacrificial Ceremony's last effect based on your light<br>Currently: " + format(effects[2]) + "x";
 				else if (completions == 5) text += "raise relic's first effect to ^5";
 				else if (completions == 6) text += 'quadruple the third activated relic effect';
 				else if (completions == 7) text += 'double the third activated relic effect';
@@ -4483,7 +4509,7 @@ addLayer('r', {
 				else if (completions == 9) text += 'unlock Molecules' + (player.m.unlocked ? ' (already unlocked)' : '');
 				else if (completions == 10) text += 'double the first activated relic effect';
 				else if (completions == 11) text += 'the first activated relic effect also applies to molecule gain';
-				else if (completions == 12) text += 'multiply relic gain based on your light<br>Currently: ' + format(player.r.relic_effects[3]) + 'x';
+				else if (completions == 12) text += 'multiply relic gain based on your light<br>Currently: ' + format(effects[3]) + 'x';
 				else if (completions == 13) text += 'double the first activated relic effect';
 				else if (completions == 14) text += 'multiply the first activated relic<br>effect by 1.2';
 				else if (completions == 15) text += 'multiply the first activated relic<br>effect by 1.1';
@@ -4515,10 +4541,30 @@ addLayer('r', {
 				else text += 'you have gotten all the rewards!';
 				return text;
 			},
-			canComplete() { return player.r.light.gte(player.r.lightreq) && challengeCompletions('r', this.id) < tmp.r.challenges[this.id].completionLimit },
+			rewardEffect() {
+				let mult0 = newDecimalOne();
+				if (getActivatedRelics() >= 11) mult0 = mult0.mul(2);
+				if (getActivatedRelics() >= 14) mult0 = mult0.mul(2);
+				if (getActivatedRelics() >= 15) mult0 = mult0.mul(1.2);
+				if (getActivatedRelics() >= 16) mult0 = mult0.mul(1.1);
+				if (getActivatedRelics() >= 18) mult0 = mult0.mul(1.05);
+				if (getActivatedRelics() >= 19) mult0 = mult0.mul(1.02);
+				if (getActivatedRelics() >= 20) mult0 = mult0.mul(1.01);
+				if (getActivatedRelics() >= 25) mult0 = mult0.mul(1.001);
+				let mult2 = newDecimalOne();
+				if (getActivatedRelics() >= 7) mult2 = mult2.mul(4);
+				if (getActivatedRelics() >= 8) mult2 = mult2.mul(2);
+				return [
+					player.r.light.mul(10).add(1).pow(0.15).mul(mult0),
+					player.r.light.mul(1000).add(1).pow(0.05).min(100),
+					player.r.light.div(1000).add(1).pow(0.25).mul(mult2),
+					player.r.light.pow(0.0021),
+				];
+			},
+			canComplete() { return player.r.light.gte(getActivationReq()) && challengeCompletions(this.layer, this.id) < tmp.r.challenges[this.id].completionLimit },
 			completionLimit() { return player.r.points.toNumber() },
 			style() {
-				const num = player.r.light.add(1).log(2).div(player.r.lightreq.add(1).log(2)).mul(100).floor();
+				const num = player.r.light.add(1).log(2).div(getActivationReq().add(1).log(2)).mul(100).floor();
 				let BGcolor = 'rgb(' + num + ',' + num + ',' + (num + 100) + ')';
 				if (num.gt(100)) BGcolor = 'rgb(100,100,200)';
 				let textColor = '#B9A975';
@@ -4567,7 +4613,7 @@ addLayer('r', {
 			},
 			canAfford() { return this.effect().gte(1e25) },
 			costDisplay: "Req: effect must be at least 1e25",
-			unlocked() { return hasMilestone('gi', 0) && player.r.lightbest.gte(1e20) },
+			unlocked() { return hasMilestone('gi', 0) },
 		},
 	},
 	buyables: {
@@ -4719,7 +4765,7 @@ addLayer('m', {
 	exponent: 0.9,
 	gainMult() {
 		let mult = newDecimalOne();
-		if (getActivatedRelics() >= 12) mult = mult.mul(player.r.relic_effects[0]);
+		if (getActivatedRelics() >= 12 && challengeEffect("r", 11)[0]) mult = mult.mul(challengeEffect("r", 11)[0]);
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[1]);
 		if (hasBuyable('w', 21)) mult = mult.mul(buyableEffect('w', 21));
 		if (hasUpgrade('pl', 62)) mult = mult.mul(upgradeEffect('pl', 62));
@@ -5142,7 +5188,7 @@ addLayer('gi', {
 	canBuyMax() { return true },
 	gainExp() {
 		let gain = newDecimalOne();
-		if (getPurifiedDemonSouls() >= 1) gain = gain.mul(challengeEffect("ds", 101)[0]);
+		if (getPurifiedDemonSouls() >= 1 && challengeEffect("ds", 101)[0]) gain = gain.mul(challengeEffect("ds", 101)[0]);
 		if (player.gi.req_devotion.gt(1)) gain = gain.mul(player.gi.req_devotion);
 		if (hasUpgrade('ei', 24)) gain = gain.mul(upgradeEffect('ei', 24));
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
@@ -6406,7 +6452,7 @@ addLayer('cl', {
 	canBuyMax() { return hasMilestone('cl', 0) || isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 	gainExp() {
 		let gain = newDecimalOne();
-		if (getPurifiedDemonSouls() >= 3) gain = gain.mul(challengeEffect("ds", 101)[1]);
+		if (getPurifiedDemonSouls() >= 3 && challengeEffect("ds", 101)[1]) gain = gain.mul(challengeEffect("ds", 101)[1]);
 		if (hasBuyable('cl', 12)) gain = gain.mul(buyableEffect('cl', 12)[1]);
 		if (hasBuyable('cl', 13)) gain = gain.mul(buyableEffect('cl', 13)[1]);
 		if (hasChallenge('ch', 21)) gain = gain.mul(challengeEffect('ch', 21)[0]);

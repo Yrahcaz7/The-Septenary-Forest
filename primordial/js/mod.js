@@ -250,49 +250,15 @@ function getDevotionBuyableBulk() {
 	return bulk;
 };
 
-function getLightBoost() {
-	let lightboost = newDecimalZero();
-	if (hasMilestone('m', 17)) lightboost = player.r.lightgainbest.mul(0.1);
-	else if (hasMilestone('m', 16)) lightboost = player.r.lightgainbest.mul(0.05);
-	else if (hasMilestone('m', 15)) lightboost = player.r.lightgainbest.mul(0.025);
-	else if (hasMilestone('m', 7)) lightboost = player.r.lightgainbest.mul(0.01);
-	else if (hasMilestone('m', 3)) lightboost = player.r.lightgainbest.mul(0.001);
-	return lightboost;
-};
-
-function getLightGain() {
-	// init
-	let gain = getPointGen().pow(0.001).div(10);
-	// base
-	if (hasUpgrade('r', 13)) {
-		gain = upgradeEffect('r', 13);
-	} else {
-		if (hasUpgrade('r', 11)) gain = gain.mul(upgradeEffect('r', 11));
-		if (hasUpgrade('r', 12)) gain = gain.mul(upgradeEffect('r', 12));
-		if (hasBuyable('d', 21)) gain = gain.mul(buyableEffect('d', 21)[1]);
-		if (hasMilestone('s', 30)) gain = gain.mul(2);
-		if (hasMilestone('s', 41)) gain = gain.mul(3);
-		if (hasMilestone('s', 50)) gain = gain.mul(3);
-		if (hasMilestone('s', 52)) gain = gain.mul(3);
-		if (gain.gt(1e25)) gain = new Decimal(1e25);
-	};
-	// mul
-	if (player.s.glow_effect.gt(1)) gain = gain.mul(player.s.glow_effect);
-	if (hasBuyable('g', 21)) gain = gain.mul(buyableEffect('g', 21)[2]);
-	if (new Decimal(tmp.w.effect[2]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[2]);
-	if (hasBuyable('r', 12)) gain = gain.mul(buyableEffect('r', 12));
-	if (hasUpgrade('m', 61)) gain = gain.mul(upgradeEffect('m', 61));
-	if (hasUpgrade('pl', 54)) gain = gain.mul(upgradeEffect('pl', 54));
-	// pow
-	if (hasMilestone('mo', 3)) gain = gain.pow(1.2);
-	// boost
-	gain = gain.add(getLightBoost());
-	// return
-	return gain;
-};
-
 function getActivatedRelics() {
 	return Math.min(challengeCompletions('r', 11), player.r.points.toNumber());
+};
+
+function getActivationReq() {
+	let scaleBase = new Decimal(5);
+	if (isAssimilated('r') || player.mo.assimilating === 'r') scaleBase = scaleBase.sub(2);
+	if (hasMilestone('r', 0)) scaleBase = scaleBase.sub(1);
+	return scaleBase.pow(getActivatedRelics()).mul(20000);
 };
 
 function getRelicActivationBulk() {
@@ -463,8 +429,16 @@ function fixOldSave(oldVersion) {
 	delete player.SC.softcaps
 	delete player.r.sanctummult;
 	delete player.r.essencemult;
+	delete player.r.lightreq;
+	delete player.r.lightbest;
+	delete player.r.lightgain;
+	delete player.r.relic_effects;
 	delete options.css;
 	// rename vars
+	if (player.r.lightgainbest !== undefined) {
+		player.r.lightGainBest = player.r.lightgainbest;
+		delete player.r.lightgainbest;
+	};
 	if (options.tooltipForcing !== undefined) {
 		options.forceTooltips = options.tooltipForcing;
 		delete options.tooltipForcing;
