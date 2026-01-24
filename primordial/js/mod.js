@@ -237,39 +237,39 @@ function getColorClass(obj, type, layer = obj.layer, plain = false) {
 function getDevotionBuyableBulk() {
 	let bulk = 1;
 	if (getActivatedRelics() >= 41) bulk *= 10;
-	if (hasMilestone('gi', 17)) bulk *= 2;
-	if (hasUpgrade('gi', 11)) bulk *= 100;
-	if (hasChallenge('ei', 12)) bulk *= 5;
-	if (hasMilestone('w', 2)) bulk *= 2;
-	if (hasMilestone('w', 15)) bulk *= 5;
-	if (hasMilestone('cl', 1) && player.s.no_speed_but_more_bulk) bulk *= 100;
-	if (hasMilestone('cl', 2)) bulk *= 2;
-	if (hasMilestone('ch', 9)) bulk *= 5;
-	if (hasMilestone('ch', 10)) bulk *= 2;
-	if (isAssimilated('s') || player.mo.assimilating === 's') bulk *= 10;
+	if (hasMilestone("gi", 17)) bulk *= 2;
+	if (hasUpgrade("gi", 11)) bulk *= 100;
+	if (hasChallenge("ei", 12)) bulk *= 5;
+	if (hasMilestone("w", 2)) bulk *= 2;
+	if (hasMilestone("w", 15)) bulk *= 5;
+	if (hasMilestone("cl", 1) && player.s.no_speed_but_more_bulk) bulk *= 100;
+	if (hasMilestone("cl", 2)) bulk *= 2;
+	if (hasMilestone("ch", 9)) bulk *= 5;
+	if (hasMilestone("ch", 10)) bulk *= 2;
+	if (isAssimilated("s") || player.mo.assimilating === "s") bulk *= 10;
 	return bulk;
 };
 
 function getActivatedRelics() {
-	return Math.min(challengeCompletions('r', 11), player.r.points.toNumber());
+	return Math.min(challengeCompletions("r", 11), player.r.points.toNumber());
 };
 
 function getActivationReq() {
 	let scaleBase = new Decimal(5);
-	if (isAssimilated('r') || player.mo.assimilating === 'r') scaleBase = scaleBase.sub(2);
-	if (hasMilestone('r', 0)) scaleBase = scaleBase.sub(1);
+	if (isAssimilated("r") || player.mo.assimilating === "r") scaleBase = scaleBase.sub(2);
+	if (hasMilestone("r", 0)) scaleBase = scaleBase.sub(1);
 	return scaleBase.pow(getActivatedRelics()).mul(20000);
 };
 
 function getRelicActivationBulk() {
 	let bulk = 1;
-	if (hasMilestone('ch', 32)) bulk *= 10;
-	if (hasMilestone('pl', 1)) bulk *= 10;
+	if (hasMilestone("ch", 32)) bulk *= 10;
+	if (hasMilestone("pl", 1)) bulk *= 10;
 	return bulk;
 };
 
 function getPurifiedDemonSouls() {
-	return Math.min(challengeCompletions('ds', 101), player.ds.points.toNumber());
+	return Math.min(challengeCompletions("ds", 101), player.ds.points.toNumber());
 };
 
 function getPurificationReq() {
@@ -278,19 +278,19 @@ function getPurificationReq() {
 
 function getQuarkBuyableBulk() {
 	let bulk = 1;
-	if (hasMilestone('ch', 30)) bulk *= 10;
+	if (hasMilestone("ch", 30)) bulk *= 10;
 	return bulk;
 };
 
 function buyGoodInfluenceBuyable(obj) {
-	if (hasMilestone('ch', 27)) {
+	if (hasMilestone("ch", 27)) {
 		let bulk = 10;
-		if (hasMilestone('ch', 30)) bulk *= 10;
-		if (hasMilestone('pl', 1)) bulk *= 10;
+		if (hasMilestone("ch", 30)) bulk *= 10;
+		if (hasMilestone("pl", 1)) bulk *= 10;
 		player.gi.total = player.gi.total.add(obj.cost().mul(bulk ** 1.1));
 		player[obj.layer].buyables[obj.id] = player[obj.layer].buyables[obj.id].add(bulk).min(tmp[obj.layer].buyables[obj.id].purchaseLimit);
 	} else {
-		if (hasMilestone('ch', 2)) player.gi.total = player.gi.total.add(obj.cost());
+		if (hasMilestone("ch", 2)) player.gi.total = player.gi.total.add(obj.cost());
 		else player.gi.points = player.gi.points.sub(obj.cost());
 		player[obj.layer].buyables[obj.id] = player[obj.layer].buyables[obj.id].add(1);
 	};
@@ -298,22 +298,22 @@ function buyGoodInfluenceBuyable(obj) {
 
 function getCellularLifeBuyableBulk() {
 	let bulk = 1;
-	if (hasMilestone('ch', 30)) bulk *= 10;
-	if (hasMilestone('pl', 2)) bulk *= 10;
+	if (hasMilestone("ch", 30)) bulk *= 10;
+	if (hasMilestone("pl", 2)) bulk *= 10;
 	return bulk;
 };
 
 function getKeepFromPlanets(resettingLayer) {
-	if (resettingLayer == 'pl') return [];
+	if (resettingLayer == "pl") return [];
 	let keep = [];
-	if (hasMilestone('pl', 0)) keep.push('milestones');
-	if (hasMilestone('pl', 1)) keep.push('challenges');
-	if (hasMilestone('pl', 2)) keep.push('upgrades');
+	if (hasMilestone("pl", 0)) keep.push('milestones');
+	if (hasMilestone("pl", 1)) keep.push('challenges');
+	if (hasMilestone("pl", 2)) keep.push('upgrades');
 	return keep;
 };
 
 function canGenPoints() {
-	if (inChallenge('r', 11)) return false;
+	if (inChallenge("r", 11)) return false;
 	return true;
 };
 
@@ -321,61 +321,61 @@ function getPointGen() {
 	// init
 	let gain = newDecimalOne();
 	// mul
-	if (hasUpgrade('e', 11)) gain = gain.mul(1.5);
-	if (hasUpgrade('e', 12)) {
-		gain = gain.mul(upgradeEffect('e', 12));
-		if (hasUpgrade('e', 33)) gain = gain.mul(upgradeEffect('e', 33));
+	if (hasUpgrade("e", 11)) gain = gain.mul(1.5);
+	if (hasUpgrade("e", 12)) {
+		gain = gain.mul(upgradeEffect("e", 12));
+		if (hasUpgrade("e", 33)) gain = gain.mul(upgradeEffect("e", 33));
 	};
-	if (hasUpgrade('e', 21)) {
-		gain = gain.mul(upgradeEffect('e', 21));
-		if (hasUpgrade('e', 23)) {
-			gain = gain.mul(upgradeEffect('e', 23));
-			if (hasUpgrade('e', 31)) gain = gain.mul(upgradeEffect('e', 31));
+	if (hasUpgrade("e", 21)) {
+		gain = gain.mul(upgradeEffect("e", 21));
+		if (hasUpgrade("e", 23)) {
+			gain = gain.mul(upgradeEffect("e", 23));
+			if (hasUpgrade("e", 31)) gain = gain.mul(upgradeEffect("e", 31));
 	}};
-	if (hasUpgrade('e', 32)) gain = gain.mul(upgradeEffect('e', 32));
-	if (hasUpgrade('q', 12)) {
-		gain = gain.mul(upgradeEffect('q', 12));
-		if (hasUpgrade('q', 13)) gain = gain.mul(upgradeEffect('q', 13));
+	if (hasUpgrade("e", 32)) gain = gain.mul(upgradeEffect("e", 32));
+	if (hasUpgrade("q", 12)) {
+		gain = gain.mul(upgradeEffect("q", 12));
+		if (hasUpgrade("q", 13)) gain = gain.mul(upgradeEffect("q", 13));
 	};
-	if (hasUpgrade('q', 34)) {
-		gain = gain.mul(upgradeEffect('q', 34));
-		if (hasUpgrade('q', 35)) {
-			gain = gain.mul(upgradeEffect('q', 35));
-			if (hasUpgrade('q', 41)) gain = gain.mul(upgradeEffect('q', 41));
+	if (hasUpgrade("q", 34)) {
+		gain = gain.mul(upgradeEffect("q", 34));
+		if (hasUpgrade("q", 35)) {
+			gain = gain.mul(upgradeEffect("q", 35));
+			if (hasUpgrade("q", 41)) gain = gain.mul(upgradeEffect("q", 41));
 	}};
-	if (hasUpgrade('q', 55)) gain = gain.mul(upgradeEffect('q', 55));
-	if (hasUpgrade('h', 11)) {
-		gain = gain.mul(upgradeEffect('h', 11));
-		if (hasUpgrade('h', 21)) {
-			gain = gain.mul(upgradeEffect('h', 21));
-			if (hasUpgrade('h', 31)) {
-				gain = gain.mul(upgradeEffect('h', 31));
-				if (hasUpgrade('h', 41)) gain = gain.mul(upgradeEffect('h', 41));
+	if (hasUpgrade("q", 55)) gain = gain.mul(upgradeEffect("q", 55));
+	if (hasUpgrade("h", 11)) {
+		gain = gain.mul(upgradeEffect("h", 11));
+		if (hasUpgrade("h", 21)) {
+			gain = gain.mul(upgradeEffect("h", 21));
+			if (hasUpgrade("h", 31)) {
+				gain = gain.mul(upgradeEffect("h", 31));
+				if (hasUpgrade("h", 41)) gain = gain.mul(upgradeEffect("h", 41));
 	}}};
-	if (hasUpgrade('h', 73)) gain = gain.mul(upgradeEffect('h', 73));
-	if (hasUpgrade('p', 72)) gain = gain.mul(upgradeEffect('p', 72));
-	if (hasUpgrade('m', 52)) gain = gain.mul(upgradeEffect('m', 52));
-	if (hasBuyable('c', 11)) gain = gain.mul(buyableEffect('c', 11));
-	if (hasBuyable('sp', 13)) gain = gain.mul(buyableEffect('sp', 13)[0]);
+	if (hasUpgrade("h", 73)) gain = gain.mul(upgradeEffect("h", 73));
+	if (hasUpgrade("p", 72)) gain = gain.mul(upgradeEffect("p", 72));
+	if (hasUpgrade("m", 52)) gain = gain.mul(upgradeEffect("m", 52));
+	if (hasBuyable("c", 11)) gain = gain.mul(buyableEffect("c", 11));
+	if (hasBuyable("sp", 13)) gain = gain.mul(buyableEffect("sp", 13)[0]);
 	if (player.p.unlocked && !tmp.p.deactivated) gain = gain.mul(player.p.divinity.add(1).pow(0.1));
-	if (hasUpgrade('p', 82)) gain = gain.mul(upgradeEffect('p', 82));
+	if (hasUpgrade("p", 82)) gain = gain.mul(upgradeEffect("p", 82));
 	if (getActivatedRelics() >= 2) gain = gain.mul(tmp.r.effect[2]);
-	if (hasUpgrade('ds', 21) && hasUpgrade('ds', 24)) gain = gain.mul(player.A.points.mul(0.2));
+	if (hasUpgrade("ds", 21) && hasUpgrade("ds", 24)) gain = gain.mul(player.A.points.mul(0.2));
 	else gain = gain.mul(player.A.points.mul(0.1).add(1));
 	if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[0]);
-	if (hasUpgrade('pl', 11)) gain = gain.mul(upgradeEffect('pl', 11));
+	if (hasUpgrade("pl", 11)) gain = gain.mul(upgradeEffect("pl", 11));
 	// div
-	if (hasBuyable('sp', 12)) gain = gain.mul(buyableEffect('sp', 12)[1]);
-	if (inChallenge('ds', 11)) gain = gain.div(10_000);
-	if (inChallenge('ds', 12)) gain = gain.div(1_000_000);
-	if (inChallenge('ds', 21)) gain = gain.div(1e10);
-	if (inChallenge('ds', 22)) gain = gain.div(1e10);
+	if (hasBuyable("sp", 12)) gain = gain.mul(buyableEffect("sp", 12)[1]);
+	if (inChallenge("ds", 11)) gain = gain.div(10_000);
+	if (inChallenge("ds", 12)) gain = gain.div(1_000_000);
+	if (inChallenge("ds", 21)) gain = gain.div(1e10);
+	if (inChallenge("ds", 22)) gain = gain.div(1e10);
 	// pow
-	if (hasUpgrade('q', 63)) gain = gain.pow(upgradeEffect('q', 63));
-	if (hasChallenge('ch', 11)) gain = gain.pow(challengeEffect('ch', 11));
-	if (hasChallenge('ch', 12)) gain = gain.pow(challengeEffect('ch', 12));
+	if (hasUpgrade("q", 63)) gain = gain.pow(upgradeEffect("q", 63));
+	if (hasChallenge("ch", 11)) gain = gain.pow(challengeEffect("ch", 11));
+	if (hasChallenge("ch", 12)) gain = gain.pow(challengeEffect("ch", 12));
 	// special nerf
-	if (inChallenge('ds', 32)) gain = gain.add(1).log10().add(1).log10();
+	if (inChallenge("ds", 32)) gain = gain.add(1).log10().add(1).log10();
 	// softcap
 	if (gain.gt(softcaps.points[0])) {
 		let excessGain = gain.div(softcaps.points[0]);
@@ -415,7 +415,7 @@ function fixOldSave(oldVersion) {
 	// endgame fixes
 	if ((oldVersion == '3.4' || oldVersion == '3.4.1') && (player.points.gte('e1.51e14') || player.ch.points.gt(50))) {
 		setTimeout(() => {
-			doReset('ch', true);
+			doReset("ch", true);
 			if (player.ch.points.gt(50)) {
 				player.ch.points = new Decimal(50);
 				player.ch.best = new Decimal(50);

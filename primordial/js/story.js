@@ -702,7 +702,7 @@ function storyLengthUpTo(num) {
 
 function getDecipheredKeywords() {
 	let keywords = [];
-	const chaos = (isAssimilated('ch') ? Infinity : player.ch.best.toNumber());
+	const chaos = (isAssimilated("ch") ? Infinity : player.ch.best.toNumber());
 	let length = 0;
 	for (let index = 0; index < storyKeywords.length; index++) {
 		length += story[index].length;
@@ -715,7 +715,7 @@ function getDecipheredKeywords() {
 
 function storySegmentIsFullyDeciphered(num) {
 	if (!player.ch.deciphering) return false;
-	if (isAssimilated('ch')) return true;
+	if (isAssimilated("ch")) return true;
 	const chaos = player.ch.best.toNumber();
 	let length = storyLengthUpTo(num);
 	for (let index = num + 1; index < storyKeywords.length; index++) {
@@ -734,7 +734,7 @@ function storySegmentIsFullyDeciphered(num) {
 const storyFilters = storyKeywords.map(arr => RegExp(arr.join("|"), "gi"));
 
 function filterStory(string) {
-	if (isAssimilated('ch')) return string;
+	if (isAssimilated("ch")) return string;
 	const chaos = player.ch.best.toNumber();
 	let length = 0;
 	for (let index = 0; index < storyFilters.length; index++) {
@@ -753,7 +753,7 @@ function getChaosInfoBoxes() {
 		infoBoxes[boxID] = {
 			title() {
 				let text = '';
-				if (player.ch.best.toNumber() >= storyLengthUpTo(row) || isAssimilated('ch')) {
+				if (player.ch.best.toNumber() >= storyLengthUpTo(row) || isAssimilated("ch")) {
 					text += storyNames[row];
 					if (storySegmentIsFullyDeciphered(row)) text += ' [<span style="display: inline-block; margin-top: -1em; height: 0">&check;</span>]';
 				} else {
@@ -763,13 +763,13 @@ function getChaosInfoBoxes() {
 			},
 			body() {
 				let text = '';
-				const chaos = (isAssimilated('ch') ? Infinity : player.ch.best.toNumber());
+				const chaos = (isAssimilated("ch") ? Infinity : player.ch.best.toNumber());
 				for (let index = 0; index < story[row].length && index < chaos - storyLengthUpTo(row - 1); index++) {
 					text += story[row][index];
 				};
 				return filterStory(text);
 			},
-			unlocked() { return player.ch.best.toNumber() > storyLengthUpTo(row - 1) || isAssimilated('ch') },
+			unlocked() { return player.ch.best.toNumber() > storyLengthUpTo(row - 1) || isAssimilated("ch") },
 		};
 		if (storyColors[row] && storyColors[row].length > 0) {
 			infoBoxes[boxID].style = {'border-color': storyColors[row][0], 'border-radius': 0};
@@ -909,13 +909,13 @@ function getChaosInfoBoxes() {
 		style: {'border-radius': 0},
 		titleStyle: {'border-radius': 0},
 		bodyStyle: {'margin-bottom': 0, 'border-image-source': 'linear-gradient(#FFFFFF, #BA0035, #FFFFFF, #BA0035)', 'border-image-slice': 4, 'border-radius': 0},
-		unlocked() { return inGlitchedAssimilationSearch() || isAssimilated('ch') },
+		unlocked() { return inGlitchedAssimilationSearch() || isAssimilated("ch") },
 	};
 	return infoBoxes;
 };
 
 function nextStorySegmentFinishesAt() {
-	if (isAssimilated('ch')) return Infinity;
+	if (isAssimilated("ch")) return Infinity;
 	const chaos = player.ch.best.toNumber();
 	let length = 0;
 	for (let index = 0; index < story.length && chaos >= length; index++) {
@@ -926,7 +926,7 @@ function nextStorySegmentFinishesAt() {
 };
 
 function getNextStoryAt() {
-	if (isAssimilated('ch')) {
+	if (isAssimilated("ch")) {
 		return "<br><br>All the story has been discoverververver" + randomChar() + "erverve" + randomChar() + "verv" + randomChar() + "rv" + randomChar() + "r" + randomStr(3) + "v" + randomStr(6) + "e" + randomStr(6);
 	};
 	let text = "";
@@ -946,7 +946,7 @@ function getKeywordDisplay() {
 	let text = 'For each fully unlocked story segment, you decipher some keywords.<br><br>You have deciphered <h2 class="layer-ch">' + formatWhole(keywords.length) + '</h2> keywords so far.';
 	if (keywords.length > 0) text += '<br><br>These keywords are: ' + keywords.join(", ") + '.';
 	text += '<br><br>';
-	if (isAssimilated('ch')) text += "You have deciphered all the keywords that currenenene" + randomChar() + "ene" + randomChar() + "e" + randomStr(2) + "n" + randomStr(4) + "e" + randomStr(6);
+	if (isAssimilated("ch")) text += "You have deciphered all the keywords that currenenene" + randomChar() + "ene" + randomChar() + "e" + randomStr(2) + "n" + randomStr(4) + "e" + randomStr(6);
 	else if (next == Infinity) text += 'You have deciphered all the keywords that currently exist.';
 	else text += 'More keywords will be deciphered at ' + formatWhole(next) + ' chaos.';
 	return text;

@@ -27,7 +27,7 @@ function getRawTabContent(layer, name = "") {
 		content.push("blank");
 	} else if (layer == "q") {
 		if (name == "The Decipherer") {
-			content.push(["display-text", 'Your ' + getGlitchDecipherText() + ' is currently <h2 class="layer-q">' + format(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + '</h2> insight<br><br>Deciphered amount decays over time with a decay factor of ' + (hasUpgrade('q', 65) ? 0.1 : 0.001)]);
+			content.push(["display-text", 'Your ' + getGlitchDecipherText() + ' is currently <h2 class="layer-q">' + format(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + '</h2> insight<br><br>Deciphered amount decays over time with a decay factor of ' + (hasUpgrade("q", 65) ? 0.1 : 0.001)]);
 			content.push("blank");
 			content.push("buyables");
 		} else {
@@ -93,8 +93,8 @@ function getRawTabContent(layer, name = "") {
 		};
 	} else if (layer == "p") {
 		let text = 'You have <h2 class="layer-p">' + format(player.p.divinity) + '</h2> divinity, which boosts point generation by <h2 class="layer-p">' + format(player.p.divinity.add(1).pow(0.1)) + '</h2>x';
-		if (hasUpgrade('p', 22)) text += '<br>You have <h2 class="layer-p">' + format(player.p.holiness) + '</h2> holiness, which boosts essence gain by <h2 class="layer-p">' + format(player.p.holiness.add(1).pow(0.055)) + '</h2>x';
-		if (hasUpgrade('p', 41)) text += '<br>You have <h2 class="layer-p">' + formatWhole(player.p.hymns) + '</h2> hymns, which boosts prayer gain by <h2 class="layer-p">' + format(tmp.p.hymnEffect) + '</h2>x';
+		if (hasUpgrade("p", 22)) text += '<br>You have <h2 class="layer-p">' + format(player.p.holiness) + '</h2> holiness, which boosts essence gain by <h2 class="layer-p">' + format(player.p.holiness.add(1).pow(0.055)) + '</h2>x';
+		if (hasUpgrade("p", 41)) text += '<br>You have <h2 class="layer-p">' + formatWhole(player.p.hymns) + '</h2> hymns, which boosts prayer gain by <h2 class="layer-p">' + format(tmp.p.hymnEffect) + '</h2>x';
 		content.push(["display-text", text]);
 		content.push("blank");
 		content.push("milestones");
@@ -126,7 +126,7 @@ function getRawTabContent(layer, name = "") {
 		if (name == "The Prism") {
 			content.push("buyables");
 			content.push("blank");
-			if (hasMilestone('ch', 25)) {
+			if (hasMilestone("ch", 25)) {
 				content.push("milestones");
 			};
 		} else {
@@ -153,7 +153,7 @@ function getRawTabContent(layer, name = "") {
 		content.push("milestones");
 		content.push("buyables");
 		content.push("blank");
-		if (isAssimilated('gi') || player.mo.assimilating === 'gi') {
+		if (isAssimilated("gi") || player.mo.assimilating === "gi") {
 			content.push("upgrades");
 			content.push("blank");
 		};
@@ -201,7 +201,7 @@ function getRawTabContent(layer, name = "") {
 			content.push(["row", [[prefix + "display-text", "Keyword deciphering is&nbsp;"], [prefix + "toggle", ["ch", "deciphering"]]]]);
 			content.push("blank");
 			content.push([prefix + "display-text", "Fully deciphered story segments are marked with <span style='font-size: 24px'>[&check;]</span>"]);
-			if (isAssimilated('ch')) {
+			if (isAssimilated("ch")) {
 				content.push("blank");
 				content.push(["display-text",
 					"Story "
@@ -227,7 +227,7 @@ function getRawTabContent(layer, name = "") {
 			};
 			content.push("blank");
 		} else if (name == "The Tides") {
-			if (!hasUpgrade('pl', 82)) {
+			if (!hasUpgrade("pl", 82)) {
 				content.push(["display-text", "All completion limits start at 1. Starting at the fourth chaos, every even-numbered chaos increases all completion limits by 1."]);
 				content.push("blank");
 			};
@@ -251,7 +251,7 @@ function getRawTabContent(layer, name = "") {
 				content.push("blank");
 				content.push([prefix + "clickable", 21]);
 			};
-			if (getClickableState('mo', 11) && player.mo.assimilated.length == 16) {
+			if (getClickableState("mo", 11) && player.mo.assimilated.length == 16) {
 				content.push("blank");
 				content.push("glitch-assimilate-button");
 			};
@@ -260,7 +260,7 @@ function getRawTabContent(layer, name = "") {
 	} else if (layer == "pl") {
 		if (name == "Atmosphere") {
 			content.push([prefix + "display-text", 'You have <h2 class="layer-pl">' + format(player.pl.air) + '</h2> air']);
-			if (hasMilestone('pl', 1)) {
+			if (hasMilestone("pl", 1)) {
 				content.push("blank");
 				content.push(["buyables", [1]]);
 			};

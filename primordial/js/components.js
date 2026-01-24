@@ -19,7 +19,7 @@ const customComponents = {
 		methods: {
 			assimilate() {
 				player.mo.assimilated.push(this.layer);
-				setClickableState('mo', 11, false);
+				setClickableState("mo", 11, false);
 				unlockLayers();
 			},
 		},

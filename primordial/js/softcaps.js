@@ -1,27 +1,27 @@
 const softcaps = {
 	points: ['e1e14', () => {
-		if (hasChallenge('ds', 32)) return 0.3;
+		if (hasChallenge("ds", 32)) return 0.3;
 		return 0.25;
 	}],
 	p_eff: [() => {
-		if (isAssimilated('p') || player.mo.assimilating === 'p') return 1e15;
+		if (isAssimilated("p") || player.mo.assimilating === "p") return 1e15;
 		return 1e150;
 	}, () => {
-		if (isAssimilated('p') || player.mo.assimilating === 'p') return 0.96;
+		if (isAssimilated("p") || player.mo.assimilating === "p") return 0.96;
 		return 0.95;
 	}],
 	m_eff: [() => {
-		if (isAssimilated('m') || player.mo.assimilating === 'm') return 1e9;
+		if (isAssimilated("m") || player.mo.assimilating === "m") return 1e9;
 		return 15000;
 	}, () => {
-		if (isAssimilated('m') || player.mo.assimilating === 'm') return 0.51;
+		if (isAssimilated("m") || player.mo.assimilating === "m") return 0.51;
 		return 0.5;
 	}],
 	r_eff1: ['e1000000', 0.2],
 	gi_eff: ['1e2500', 0.6666666666666666],
 	mo_buyable_13: [1.22, () => {
-		if (hasMilestone('ch', 43)) return 2;
-		if (isAssimilated('mo')) return 4;
+		if (hasMilestone("ch", 43)) return 2;
+		if (isAssimilated("mo")) return 4;
 		return 10;
 	}],
 };
@@ -55,7 +55,7 @@ addLayer('SC', {
 	color: '#DFDFDF',
 	resource: 'discovered softcaps',
 	row: 'side',
-	layerShown() { return player.SC.points.gt(0) && !(getClickableState('mo', 11) && player.mo.assimilating === null) },
+	layerShown() { return player.SC.points.gt(0) && !(getClickableState("mo", 11) && player.mo.assimilating === null) },
 	tooltip() { return player.SC.points + ' softcaps' },
 	update(diff) {
 		resetActiveSoftcaps();
@@ -77,16 +77,16 @@ addLayer('SC', {
 		if (tmp.p.effect.gte(softcaps.p_eff[0]()) && !tmp.p.deactivated) {
 			registerActiveSoftcap("p-eff");
 		};
-		if (tmp.r.effect[0].gte(softcaps.r_eff1[0]) && !(isAssimilated('r') || player.mo.assimilating === 'r') && !tmp.r.deactivated) {
+		if (tmp.r.effect[0].gte(softcaps.r_eff1[0]) && !(isAssimilated("r") || player.mo.assimilating === "r") && !tmp.r.deactivated) {
 			registerActiveSoftcap("r-eff1");
 		};
 		if (tmp.m.effect.gte(softcaps.m_eff[0]()) && !tmp.m.deactivated) {
 			registerActiveSoftcap("m-eff");
 		};
-		if (tmp.gi.effect.gte(softcaps.gi_eff[0]) && !tmp.gi.deactivated && !(hasMilestone('gi', 18) && player.h.limitsBroken >= 4)) {
+		if (tmp.gi.effect.gte(softcaps.gi_eff[0]) && !tmp.gi.deactivated && !(hasMilestone("gi", 18) && player.h.limitsBroken >= 4)) {
 			registerActiveSoftcap("gi-eff");
 		};
-		if (buyableEffect('mo', 13).gte(1.22) && !tmp.mo.deactivated) {
+		if (buyableEffect("mo", 13).gte(1.22) && !tmp.mo.deactivated) {
 			registerActiveSoftcap("mo-buyable-13");
 		};
 	},

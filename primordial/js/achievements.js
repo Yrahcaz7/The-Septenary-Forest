@@ -10,36 +10,36 @@ addLayer('A', {
 	row: 'side',
 	effectDescription() {
 		let text = ['<br>which are multiplying your point ', '', '', ''];
-		if (hasUpgrade('ds', 21)) {
-			if (hasUpgrade('ds', 24)) {
+		if (hasUpgrade("ds", 21)) {
+			if (hasUpgrade("ds", 24)) {
 				text[0] += 'and essence gain by <h2 class="layer-A">' + format(player.A.points.div(5)) + '</h2>x';
 			} else {
 				text[0] += 'gain by <h2 class="layer-A">' + format(player.A.points.div(10).add(1)) + '</h2>x';
 				text[1] += 'essence gain by <h2 class="layer-A">' + format(player.A.points.div(5)) + '</h2>x';
 			};
-			if (hasUpgrade('ds', 23)) {
-				if (!hasUpgrade('ds', 24) && !hasUpgrade('p', 31)) text[2] += 'core and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + '</h2>x';
-				else if (hasUpgrade('ds', 24) && !hasUpgrade('p', 31)) text[1] += 'core and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + '</h2>x';
-				else if (hasUpgrade('ds', 24) && hasUpgrade('p', 31)) text[1] += 'core, prayer, and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + '</h2>x';
+			if (hasUpgrade("ds", 23)) {
+				if (!hasUpgrade("ds", 24) && !hasUpgrade("p", 31)) text[2] += 'core and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + '</h2>x';
+				else if (hasUpgrade("ds", 24) && !hasUpgrade("p", 31)) text[1] += 'core and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + '</h2>x';
+				else if (hasUpgrade("ds", 24) && hasUpgrade("p", 31)) text[1] += 'core, prayer, and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + '</h2>x';
 			};
 		} else {
 			text[0] += 'gain by <h2 class="layer-A">' + format(player.A.points.div(10).add(1)) + '</h2>x';
 		};
-		if (hasUpgrade('a', 51)) text[3] += 'subatomic particle gain by <h2 class="layer-A">' + format(player.A.points.pow(1.25)) + '</h2>x';
+		if (hasUpgrade("a", 51)) text[3] += 'subatomic particle gain by <h2 class="layer-A">' + format(player.A.points.pow(1.25)) + '</h2>x';
 		if (options.nerdMode) {
-			if (hasUpgrade('ds', 21)) {
-				if (hasUpgrade('ds', 24)) {
+			if (hasUpgrade("ds", 21)) {
+				if (hasUpgrade("ds", 24)) {
 					text[0] += ' (formula: 0.2x)';
 				} else {
 					text[0] += ' (formula: x/10+1)';
 					text[1] += ' (formula: x/5)';
 				};
-				if (hasUpgrade('ds', 23) && !hasUpgrade('ds', 24) && !hasUpgrade('p', 31)) text[2] += ' (formula: (x^2)/100)';
-				if (hasUpgrade('ds', 23) && hasUpgrade('ds', 24)) text[1] += ' (formula: (x^2)/100)';
+				if (hasUpgrade("ds", 23) && !hasUpgrade("ds", 24) && !hasUpgrade("p", 31)) text[2] += ' (formula: (x^2)/100)';
+				if (hasUpgrade("ds", 23) && hasUpgrade("ds", 24)) text[1] += ' (formula: (x^2)/100)';
 			} else {
 				text[0] += ' (formula: x/10+1)';
 			};
-			if (hasUpgrade('a', 51)) text[3] += ' (formula: x^1.25)';
+			if (hasUpgrade("a", 51)) text[3] += ' (formula: x^1.25)';
 		};
 		let finalText = text[0];
 		if (text[1]) finalText += '<br>and also multiplying ' + text[1];
@@ -148,7 +148,7 @@ addLayer('A', {
 		},
 		26: {
 			name: 'Empty Soul',
-			done() { return player.e.points.gte(1e10) && getBuyableAmount('e', 11).eq(0) && getBuyableAmount('e', 12).eq(0) },
+			done() { return player.e.points.gte(1e10) && getBuyableAmount("e", 11).eq(0) && getBuyableAmount("e", 12).eq(0) },
 			tooltip: 'obtain 1e10 essence with no essence rebuyables.',
 			unlocked() { return hasAchievement('A', 22) && hasAchievement('A', 31) },
 			image() { if (hasAchievement('A', 26)) return "images/achievements/26.png" },
@@ -196,7 +196,7 @@ addLayer('A', {
 		},
 		36: {
 			name: 'Pointless Core',
-			done() { return player.c.points.gte(1e10) && getBuyableAmount('c', 11).eq(0) && getBuyableAmount('c', 12).eq(0) && player.q.total.eq(0) },
+			done() { return player.c.points.gte(1e10) && getBuyableAmount("c", 11).eq(0) && getBuyableAmount("c", 12).eq(0) && player.q.total.eq(0) },
 			tooltip: 'obtain 1e10 cores with no core rebuyables and quarks.',
 			unlocked() { return hasAchievement('A', 32) && hasAchievement('A', 41) },
 			image() { if (hasAchievement('A', 36)) return "images/achievements/36.png" },
@@ -292,7 +292,7 @@ addLayer('A', {
 		},
 		56: {
 			name: 'Hollow Particles',
-			done() { return player.sp.points.gte(10) && getBuyableAmount('sp', 11).eq(0) && getBuyableAmount('sp', 12).eq(0) && getBuyableAmount('sp', 13).eq(0) && player.h.total.eq(0) },
+			done() { return player.sp.points.gte(10) && getBuyableAmount("sp", 11).eq(0) && getBuyableAmount("sp", 12).eq(0) && getBuyableAmount("sp", 13).eq(0) && player.h.total.eq(0) },
 			tooltip: 'obtain 10 subatomic particles with no subatomic particle rebuyables and hexes.',
 			unlocked() { return hasAchievement('A', 52) && hasAchievement('A', 61) },
 			image() { if (hasAchievement('A', 56)) return "images/achievements/56.png" },
@@ -340,7 +340,7 @@ addLayer('A', {
 		},
 		66: {
 			name: 'Same Old Tricks',
-			done() { return player.h.points.gte(1e10) && getBuyableAmount('c', 11).eq(0) && getBuyableAmount('c', 12).eq(0) && player.sp.total.eq(0) },
+			done() { return player.h.points.gte(1e10) && getBuyableAmount("c", 11).eq(0) && getBuyableAmount("c", 12).eq(0) && player.sp.total.eq(0) },
 			tooltip: 'obtain 1e10 hexes with no subatomic particles and core rebuyables.',
 			unlocked() { return hasAchievement('A', 62) && hasAchievement('A', 71) },
 			image() { if (hasAchievement('A', 66)) return "images/achievements/66.png" },
@@ -388,7 +388,7 @@ addLayer('A', {
 		},
 		76: {
 			name: 'Occult Uprising',
-			done() { return player.ds.points.gte(1e10) && getBuyableAmount('ds', 11).eq(0) && player.a.total.eq(0) },
+			done() { return player.ds.points.gte(1e10) && getBuyableAmount("ds", 11).eq(0) && player.a.total.eq(0) },
 			tooltip: 'obtain 1e10 demon souls with no demon soul rebuyables and atoms.',
 			unlocked() { return hasAchievement('A', 72) && hasAchievement('A', 81) },
 			image() { if (hasAchievement('A', 76)) return "images/achievements/76.png" },
