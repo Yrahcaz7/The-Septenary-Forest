@@ -427,6 +427,11 @@ function fixOldSave(oldVersion) {
 	delete player.ghost0;
 	delete player.blank;
 	delete player.SC.softcaps;
+	delete player.s.devotion;
+	delete player.s.devotion_effect;
+	delete player.s.glow_gain;
+	delete player.s.glow_max;
+	delete player.s.glow_effect;
 	delete player.m.unique_nonextra;
 	delete player.m.unique_extra;
 	delete player.m.unique_total;

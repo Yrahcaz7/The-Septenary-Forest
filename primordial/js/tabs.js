@@ -106,13 +106,13 @@ function getRawTabContent(layer, name = "") {
 		};
 	} else if (layer == "s") {
 		if (name == "Glow") {
-			content.push(["display-text", 'You are generating <h2 class="layer-s">' + format(player.s.glow_gain) + '</h2> glow/sec, with a maximum of <h2 class="layer-s">' + format(player.s.glow_max) + '</h2> glow<br>You have <h2 class="layer-s">' + format(player.s.glow) + '</h2> glow, which multiplies sanctum gain and light gain after hardcap by <h2 class="layer-s">' + format(player.s.glow_effect) + '</h2>x']);
+			content.push(["display-text", 'You are generating <h2 class="layer-s">' + format(tmp.g.glowGain) + '</h2> glow/sec, with a maximum of <h2 class="layer-s">' + format(tmp.g.glowMax) + '</h2> glow<br>You have <h2 class="layer-s">' + format(player.s.glow) + '</h2> glow, which multiplies sanctum gain and light gain after hardcap by <h2 class="layer-s">' + format(tmp.g.glowEffect) + '</h2>x']);
 			content.push("blank");
 			content.push(["layer-proxy", ["g", ["buyables"]]]);
 			content.push("blank");
 			content.push("blank");
 		} else if (name == "Devotion") {
-			content.push(["display-text", 'You have <h2 class="layer-s">' + format(player.s.devotion) + '</h2> devotion, which multiplies sanctum gain by <h2 class="layer-s">' + format(player.s.devotion_effect) + '</h2>x']);
+			content.push(["display-text", 'You have <h2 class="layer-s">' + format(tmp.d.devotion) + '</h2> devotion, which multiplies sanctum gain by <h2 class="layer-s">' + format(tmp.d.devotionEffect) + '</h2>x']);
 			content.push("blank");
 			content.push(["layer-proxy", ["d", ["buyables"]]]);
 			content.push("blank");
@@ -148,7 +148,7 @@ function getRawTabContent(layer, name = "") {
 			content.push("milestones");
 		};
 	} else if (layer == "gi") {
-		content.push(["display-text", 'You have <h2 class="layer-s">' + format(player.s.devotion) + '</h2> devotion, which multiplies good influence gain by <h2 class="layer-gi">' + format(tmp.gi.devotionEffect) + '</h2>x']);
+		content.push(["display-text", 'You have <h2 class="layer-s">' + format(tmp.d.devotion) + '</h2> devotion, which multiplies good influence gain by <h2 class="layer-gi">' + format(tmp.gi.devotionEffect) + '</h2>x']);
 		content.push("blank");
 		content.push("milestones");
 		content.push("buyables");

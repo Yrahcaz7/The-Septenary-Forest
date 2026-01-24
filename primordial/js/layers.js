@@ -3584,12 +3584,7 @@ addLayer('s', {
 		points: newDecimalZero(),
 		best: newDecimalZero(),
 		total: newDecimalZero(),
-		devotion: newDecimalZero(),
-		devotion_effect: newDecimalOne(),
 		glow: newDecimalZero(),
-		glow_gain: newDecimalZero(),
-		glow_max: new Decimal(1000),
-		glow_effect: newDecimalOne(),
 		auto_worship: false,
 		auto_sacrifice: false,
 		auto_sacrificial_ceremony: false,
@@ -3607,16 +3602,20 @@ addLayer('s', {
 	baseAmount() { return player.p.points },
 	type: 'static',
 	exponent() {
-		if (hasUpgrade('p', 65) && hasUpgrade('p', 74) && hasUpgrade('p', 84)) return 3.3;
-		if (hasUpgrade('p', 65) && hasUpgrade('p', 74)) return 3.48;
-		if (hasUpgrade('p', 65)) return 4;
+		if (hasUpgrade('p', 65)) {
+			if (hasUpgrade('p', 74)) {
+				if (hasUpgrade('p', 84)) return 3.3;
+				return 3.48;
+			};
+			return 4;
+		};
 		return 5;
 	},
 	canBuyMax() { return hasMilestone('s', 0) || player.r.total.gt(0) || player.w.unlocked },
 	gainExp() {
 		let gain = newDecimalOne();
-		if (player.s.devotion_effect.gt(1)) gain = gain.mul(player.s.devotion_effect);
-		if (player.s.glow_effect.gt(1)) gain = gain.mul(player.s.glow_effect);
+		if (tmp.d.devotionEffect.gt(1)) gain = gain.mul(tmp.d.devotionEffect);
+		if (tmp.g.glowEffect.gt(1)) gain = gain.mul(tmp.g.glowEffect);
 		if (new Decimal(tmp.r.effect[1]).gt(1) && !tmp.r.deactivated) gain = gain.mul(tmp.r.effect[1]);
 		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated && hasMilestone('gi', 19) && player.h.limitsBroken >= 4 && tmp.gi.effect.lte(1e100)) gain = gain.mul(tmp.gi.effect);
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
@@ -4054,15 +4053,18 @@ addLayer('d', {
 		if (player.d.buyables[11].gt(tmp.d.buyables[11].purchaseLimit)) player.d.buyables[11] = new Decimal(tmp.d.buyables[11].purchaseLimit);
 		if (player.d.buyables[12].gt(tmp.d.buyables[12].purchaseLimit)) player.d.buyables[12] = new Decimal(tmp.d.buyables[12].purchaseLimit);
 		if (player.d.buyables[21].gt(tmp.d.buyables[21].purchaseLimit)) player.d.buyables[21] = new Decimal(tmp.d.buyables[21].purchaseLimit);
-		player.s.devotion = tmp.d.buyables[11].devotion.add(tmp.d.buyables[12].devotion).add(tmp.d.buyables[21].devotion);
-		if (hasMilestone('s', 53)) player.s.devotion_effect = player.s.devotion.add(1).pow(0.666);
-		else if (hasMilestone('s', 49)) player.s.devotion_effect = player.s.devotion.add(1).pow(0.625);
-		else if (hasMilestone('s', 36)) player.s.devotion_effect = player.s.devotion.add(1).pow(0.6);
-		else if (hasMilestone('s', 35)) player.s.devotion_effect = player.s.devotion.add(1).pow(0.575);
-		else if (hasMilestone('s', 22)) player.s.devotion_effect = player.s.devotion.add(1).pow(0.55);
-		else if (hasMilestone('s', 21)) player.s.devotion_effect = player.s.devotion.add(1).pow(0.45);
-		else if (hasMilestone('s', 18)) player.s.devotion_effect = player.s.devotion.add(1).pow(0.375);
-		else player.s.devotion_effect = player.s.devotion.add(1).pow(0.3);
+	},
+	devotion() { return tmp.d.buyables[11].devotion.add(tmp.d.buyables[12].devotion).add(tmp.d.buyables[21].devotion) },
+	devotionEffect() {
+		let exp = 0.3;
+		if (hasMilestone('s', 53)) exp = 0.666;
+		else if (hasMilestone('s', 49)) exp = 0.625;
+		else if (hasMilestone('s', 36)) exp = 0.6;
+		else if (hasMilestone('s', 35)) exp = 0.575;
+		else if (hasMilestone('s', 22)) exp = 0.55;
+		else if (hasMilestone('s', 21)) exp = 0.45;
+		else if (hasMilestone('s', 18)) exp = 0.375;
+		return tmp.d.devotion.add(1).pow(exp);
 	},
 	componentStyles: {
 		buyable: {'border-radius': '50%'},
@@ -4194,29 +4196,26 @@ addLayer('g', {
 		};
 	},
 	doReset(resettingLayer) {},
-	update(diff) {
-		player.s.glow_max = new Decimal(1000).mul(buyableEffect('g', 21)[1]);
-		player.s.glow_gain = buyableEffect('g', 11).mul(buyableEffect('g', 12)).mul(buyableEffect('g', 21)[0]);
-		if (hasUpgrade('gi', 13)) {
-			player.s.glow_gain = player.s.glow_gain.mul(upgradeEffect('gi', 13));
-		};
-		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated && hasMilestone('gi', 19) && player.h.limitsBroken >= 4 && tmp.gi.effect.lte(1e100)) {
-			player.s.glow_gain = player.s.glow_gain.mul(tmp.gi.effect);
-		};
-		if (hasMilestone('ch', 21)) {
-			player.s.glow_gain = player.s.glow_gain.mul(10);
-		};
-		if (hasBuyable('r', 11)) {
-			player.s.glow_max = player.s.glow_max.mul(buyableEffect('r', 11));
-			player.s.glow_gain = player.s.glow_gain.mul(buyableEffect('r', 11));
-		};
-		if (hasChallenge('ei', 21) && (isAssimilated('ei') || player.mo.assimilating === 'ei')) {
-			player.s.glow_gain = player.s.glow_gain.pow(1.1);
-		};
-		player.s.glow = player.s.glow.add(player.s.glow_gain.mul(diff));
-		if (player.s.glow.gt(player.s.glow_max)) player.s.glow = player.s.glow_max;
-		player.s.glow_effect = player.s.glow.mul(1000).add(1).pow(0.1);
+	glowGain() {
+		// init
+		let gain = buyableEffect('g', 11).mul(buyableEffect('g', 12)).mul(buyableEffect('g', 21)[0]);
+		// mul
+		if (hasUpgrade('gi', 13)) gain = gain.mul(upgradeEffect('gi', 13));
+		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated && hasMilestone('gi', 19) && player.h.limitsBroken >= 4 && tmp.gi.effect.lte(1e100)) gain = gain.mul(tmp.gi.effect);
+		if (hasMilestone('ch', 21)) gain = gain.mul(10);
+		if (hasBuyable('r', 11)) gain = gain.mul(buyableEffect('r', 11));
+		// pow
+		if (hasChallenge('ei', 21) && (isAssimilated('ei') || player.mo.assimilating === 'ei')) gain = gain.pow(1.1);
+		// return
+		return gain;
 	},
+	glowMax() {
+		let max = new Decimal(1000).mul(buyableEffect('g', 21)[1]);
+		if (hasBuyable('r', 11)) max = max.mul(buyableEffect('r', 11));
+		return max;
+	},
+	update(diff) { player.s.glow = player.s.glow.add(tmp.g.glowGain.mul(diff)).min(tmp.g.glowMax) },
+	glowEffect() { return player.s.glow.mul(1000).add(1).pow(0.1) },
 	componentStyles: {
 		buyable: {'border-radius': '50%'},
 	},
@@ -4422,7 +4421,7 @@ addLayer('r', {
 				if (gain.gt(1e25)) gain = new Decimal(1e25);
 			};
 			// mul (after hardcap)
-			if (player.s.glow_effect.gt(1)) gain = gain.mul(player.s.glow_effect);
+			if (tmp.g.glowEffect.gt(1)) gain = gain.mul(tmp.g.glowEffect);
 			if (hasBuyable('g', 21)) gain = gain.mul(buyableEffect('g', 21)[2]);
 			if (new Decimal(tmp.w.effect[2]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[2]);
 			if (hasBuyable('r', 12)) gain = gain.mul(buyableEffect('r', 12));
@@ -5183,7 +5182,7 @@ addLayer('gi', {
 	},
 	exponent: 1,
 	canBuyMax() { return true },
-	devotionEffect() { return player.s.devotion.mul(1.05).add(1).pow(hasMilestone('gi', 12) ? 0.22 : 0.2) },
+	devotionEffect() { return tmp.d.devotion.mul(1.05).add(1).pow(hasMilestone('gi', 12) ? 0.22 : 0.2) },
 	gainExp() {
 		let gain = newDecimalOne();
 		if (getPurifiedDemonSouls() >= 1 && challengeEffect("ds", 101)[0]) gain = gain.mul(challengeEffect("ds", 101)[0]);
