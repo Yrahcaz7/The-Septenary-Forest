@@ -20,7 +20,7 @@ function changelog() {
 			- Added thirty-six upgrades to planets.<br>
 			- Added two rebuyables to planets.<br>
 			- Added ${randomStr(4)} to assimilation.<br>
-			- Added seventeen milestones to chaos.<br>
+			- Added eighteen milestones to chaos.<br>
 			- Added ${randomStr(4)} to story.<br>
 			- Added seven achievements.<br>
 			- Added one option.<br>
@@ -392,7 +392,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return "You beat the game!<br>For now..." },
 ];
 
-const endPoints = new Decimal("e1e75");
+const endPoints = new Decimal("e1e77");
 
 function onLoad() { calculateColorValue() };
 

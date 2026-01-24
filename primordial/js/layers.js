@@ -1154,7 +1154,7 @@ addLayer("q", {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Sample Quarks' },
 			description() { return 'increases deciphering based on the amount of this upgrade bought. becomes less effective based on your ' + getGlitchDecipherText() + '.' },
 			canAfford() { return player.q.points.gte(this.cost()) },
-			purchaseLimit() { return player.h.limitsBroken >= 3 ? 1e9 : 99 },
+			purchaseLimit() { return player.h.limitsBroken >= 3 ? 1000 : 99 },
 			buy() { buyStandardBuyable(this, "q", 'points', getQuarkBuyableBulk(), true) },
 			effect(x) {
 				if (hasUpgrade("q", 64)) return new Decimal(100).pow(x).div(getGlitch(true).pow(92))
@@ -1234,7 +1234,10 @@ addLayer("q", {
 			unlocked() { return hasMilestone("ch", 11) && hasUpgrade("q", 61) },
 		},
 		22: {
-			cost(x) { return new Decimal(10).pow(new Decimal(1e6).pow(x)) },
+			cost(x) {
+				if (hasMilestone('ch', 49)) return new Decimal(10).pow(new Decimal(10).pow(x.div(2).add(60)));
+				return new Decimal(10).pow(new Decimal(1e6).pow(x));
+			},
 			title() { return '<b' + getColorClass(this, TITLE) + 'Knowledge Expansion' },
 			description: 'multiplies maximum deciphering based on the amount of this upgrade bought.',
 			canAfford() { return hasBuyable(this.layer, this.id) ? player.points.gte(this.cost()) : player.q.decipher.gte(100) },
@@ -2102,6 +2105,7 @@ addLayer("ds", {
 			else gain = gain.add(tmp.pl.effect.add(1).log10());
 			// mul
 			if (hasMilestone("ch", 48)) gain = gain.mul(milestoneEffect("ch", 48));
+			if (hasMilestone("ch", 49)) gain = gain.mul(milestoneEffect("ch", 49));
 		};
 		// return
 		return gain;
@@ -2381,13 +2385,19 @@ addLayer("ds", {
 				if (completions == 0) text += "multiply good influence gain based on your Threads<br>Currently: " + format(effects[0]) + "x";
 				else if (completions == 1) text += "improve the first purified souls effect";
 				else if (completions == 2) text += "multiply cellular life gain based on your Threads<br>Currently: " + format(effects[1]) + "x";
+				else if (completions == 3) text += "further improve the first purified souls effect";
 				else text += "you have gotten all the rewards!";
 				return text;
 			},
-			rewardEffect() { return [
-				player.ds.threads.add(1).log10().div(getPurifiedDemonSouls() >= 2 ? 9 : 10).add(1),
-				player.ds.threads.add(1).log10().add(1).pow(0.2),
-			]},
+			rewardEffect() {
+				let div0 = 10;
+				if (getPurifiedDemonSouls() >= 2) div0--;
+				if (getPurifiedDemonSouls() >= 4) div0--;
+				return [
+					player.ds.threads.add(1).log10().div(div0).add(1),
+					player.ds.threads.add(1).log10().add(1).pow(0.2),
+				];
+			},
 			canComplete() { return player.ds.threads.gte(getPurificationReq()) && challengeCompletions(this.layer, this.id) < tmp[this.layer].challenges[this.id].completionLimit },
 			completionLimit() { return player.ds.points.toNumber() },
 			style: {width: '450px', height: '450px', 'border-color': '#BA0035', 'border-radius': '70px', 'background-color': '#200000', 'color': 'var(--color)'},
@@ -7255,14 +7265,21 @@ addLayer("ch", {
 		48: {
 			requirementDescription: "252 chaos",
 			effect() { return player.ch.points.add(1) },
-			effectDescription(eff) { return "multiply Thread gain based on your chaos (currently " + formatWhole(eff) + "x)" },
+			effectDescription(eff) { return "multiply Thread gain by your chaos plus 1 (currently " + formatWhole(eff) + "x)" },
 			done() { return player.ch.points.gte(252) },
 			unlocked() { return player.pl.unlocked },
 		},
 		49: {
 			requirementDescription: "280 chaos",
-			effectDescription: "coming soon...",
+			effect() { return player.q.buyables[11].add(player.q.buyables[12]).add(player.q.buyables[13]).add(player.q.buyables[21]).add(player.q.buyables[22]).add(player.q.buyables[23]).add(1) },
+			effectDescription(eff) { return "change <b" + getColorClass(this, TITLE, "q") + "Knowledge Expansion</b>'s cost formula and multiply Thread gain by the amount of quark rebuyables bought plus 1 (currently " + formatWhole(eff) + "x)" },
 			done() { return player.ch.points.gte(280) },
+			unlocked() { return player.pl.unlocked },
+		},
+		50: {
+			requirementDescription: "300 chaos",
+			effectDescription() { return "coming soon..." },
+			done() { return player.ch.points.gte(300) },
 			unlocked() { return player.pl.unlocked },
 		},
 	},
