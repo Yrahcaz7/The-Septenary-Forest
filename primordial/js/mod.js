@@ -2,7 +2,7 @@ const modInfo = {
 	name: "The Primordial Tree",
 	id: "Yrahcaz7-ModTree-ThePrimordialTree",
 	author: "Yrahcaz7",
-	modFiles: ["components.js", "tree.js", "options.js", "assimilation.js", "achievements.js", "softcaps.js", "story.js", "tabs.js", "layers.js"],
+	modFiles: ["components.js", "tree.js", "options.js", "assimilation.js", "softcaps.js", "story.js", "tabs.js", "layers.js", "achievements.js"],
 	offlineLimit: 1,
 	useNewSaveSyntax: false,
 };
@@ -235,7 +235,11 @@ function getColorClass(obj, type, layer = obj.layer, plain = false) {
 };
 
 function simpleFormatWhole(num) {
-	num = +num;
+	if (typeof num === "string") {
+		let parts = num.split("e");
+		if (parts[1].length >= 5) parts[1] = parts[1].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
+		return parts.join("e");
+	};
 	if (num >= 1e9) return num.toExponential().replace("+", "");
 	if (num >= 1e3) return num.toFixed(0).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
 	return num.toFixed(0);
