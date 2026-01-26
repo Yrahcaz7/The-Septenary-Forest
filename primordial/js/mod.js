@@ -23,7 +23,7 @@ function changelog() {
 			- Added eighteen milestones to chaos.<br>
 			- Added ${randomStr(4)} to story.<br>
 			- Added seven achievements.<br>
-			- Added six achievement images.<br>
+			- Added ten achievement images.<br>
 			- Added one option.<br>
 		<br><h3>v3.6: Even More Assimilation</h3><br>
 			- Added more to assimilation.<br>

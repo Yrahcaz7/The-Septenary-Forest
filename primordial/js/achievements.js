@@ -556,7 +556,10 @@ addLayer("A", {
 				if (columnId === 1) obj[key].unlocked = hasAchievement.bind(null, "A", +key);
 				else if (columnId <= 5) obj[key].unlocked = hasAchievement.bind(null, "A", (+key) - 1);
 			};
-			if (+key < 140) obj[key].image = image.bind(null, +key);
+			if (+key <= 144) {
+				obj[key].image = image.bind(null, +key);
+				if (+key >= 140) obj[key].style = {"background-position": "-2px -2px", "background-size": "94px", "background-repeat": "no-repeat"};
+			};
 			obj[key].popupColor = (layer ? layers[layer].color : "#DFDFDF");
 		};
 		return obj;
