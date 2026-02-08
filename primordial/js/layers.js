@@ -125,7 +125,7 @@ addLayer("e", {
 			buy() { buyStandardBuyable(this) },
 			effect(x) { return x.mul(2.5).add(1) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 2.5x+1';
 				return text;
 			},
@@ -142,7 +142,7 @@ addLayer("e", {
 				return [x.add(1), x.add(1).pow(0.25)];
 			},
 			effectDisplay(eff) {
-				let text = format(eff[0]) + 'x<br>and ' + format(eff[1]) + 'x';
+				let text = format(eff[0]) + 'x<br>and ' + format(eff[1]) + "x";
 				if (options.nerdMode) {
 					if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) text += '<br>formulas: (x+1)^2<br>and x+1';
 					else text += '<br>formulas: x+1<br>and (x+1)^0.25';
@@ -163,7 +163,7 @@ addLayer("e", {
 			buy() { buyStandardBuyable(this) },
 			effect(x) { return x.add(1).pow(player.mo.assimilating === this.layer ? 0.2 : 0.0025) },
 			effectDisplay(eff) {
-				let text = '^' + format(eff);
+				let text = "^" + format(eff);
 				if (options.nerdMode) {
 					if (player.mo.assimilating === this.layer) text += '<br>formula: (x+1)^0.2';
 					else text += '<br>formula: (x+1)^0.0025';
@@ -190,8 +190,8 @@ addLayer("e", {
 			},
 			effect() { return player.e.points.add(1).pow(0.5).min(this.hardcap()) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
-				if (eff.gte(this.hardcap())) text += ' (hardcapped)';
+				let text = format(eff) + "x";
+				if (eff.gte(this.hardcap())) text += " (hardcapped)";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.5';
 				return text;
 			},
@@ -203,7 +203,7 @@ addLayer("e", {
 			cost: 5,
 			effect() { return player.points.add(1).pow(0.15) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.15';
 				return text;
 			},
@@ -215,7 +215,7 @@ addLayer("e", {
 			cost: 500,
 			effect() { return player.points.add(1).pow(0.075) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.075';
 				return text;
 			},
@@ -227,7 +227,7 @@ addLayer("e", {
 			cost: 1250,
 			effect() { return player.e.points.add(1).pow(0.11111111111) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.11111111111';
 				return text;
 			},
@@ -239,7 +239,7 @@ addLayer("e", {
 			cost: 3500,
 			effect() { return player.points.add(1).pow(0.25) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.25';
 				return text;
 			},
@@ -251,7 +251,7 @@ addLayer("e", {
 			cost: 1e11,
 			effect() { return player.points.add(1).pow(0.01) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.01';
 				return text;
 			},
@@ -263,7 +263,7 @@ addLayer("e", {
 			cost: 3e33,
 			effect() { return (buyableEffect("e", 12)[0] || newDecimalOne()).pow(0.1).mul(player.e.points).add(1).pow(0.001) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: ((x^0.1)y+1)^0.001';
 				return text;
 			},
@@ -275,7 +275,7 @@ addLayer("e", {
 			cost: 5e55,
 			effect() { return player.e.points.add(1).pow(0.025) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.025';
 				return text;
 			},
@@ -287,7 +287,7 @@ addLayer("e", {
 			cost: 7e77,
 			effect() { return player.e.points.add(1).pow(0.001) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.001';
 				return text;
 			},
@@ -299,7 +299,7 @@ addLayer("e", {
 			cost: 9e99,
 			effect() { return player.e.points.add(1).pow(0.01) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.01';
 				return text;
 			},
@@ -478,7 +478,7 @@ addLayer("c", {
 				return x.mul(5).add(1);
 			},
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) {
 					if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) text += '<br>formula: 2^x';
 					else text += '<br>formula: 5x+1';
@@ -495,7 +495,7 @@ addLayer("c", {
 			buy() { buyStandardBuyable(this) },
 			effect(x) { return new Decimal(2).add(buyableEffect("c", 13)).pow(x) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 2^x';
 				return text;
 			},
@@ -512,7 +512,7 @@ addLayer("c", {
 			buy() { buyStandardBuyable(this) },
 			effect(x) { return x.mul(0.05) },
 			effectDisplay(eff) {
-				let text = '+' + format(eff);
+				let text = "+" + format(eff);
 				if (options.nerdMode) text += '<br>formula: 0.05x';
 				return text;
 			},
@@ -526,7 +526,7 @@ addLayer("c", {
 			cost: 25,
 			effect() { return player.c.points.add(1).pow(0.2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.2';
 				return text;
 			},
@@ -538,7 +538,7 @@ addLayer("c", {
 			cost: 100,
 			effect() { return player.points.add(1).pow(0.01) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.01';
 				return text;
 			},
@@ -550,7 +550,7 @@ addLayer("c", {
 			cost: 750,
 			effect() { return player.c.points.add(1).pow(0.1) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.1';
 				return text;
 			},
@@ -562,7 +562,7 @@ addLayer("c", {
 			cost: 1e69,
 			effect() { return player.c.points.add(1).pow(0.005) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.005';
 				return text;
 			},
@@ -574,7 +574,7 @@ addLayer("c", {
 			cost: 1e71,
 			effect() { return player.c.points.add(1).pow(0.002) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.002';
 				return text;
 			},
@@ -586,7 +586,7 @@ addLayer("c", {
 			cost: 1e73,
 			effect() { return player.c.points.add(1).pow(0.01) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.01';
 				return text;
 			},
@@ -598,7 +598,7 @@ addLayer("c", {
 			cost: 1e75,
 			effect() { return player.c.points.add(1).pow(0.0025) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.0025';
 				return text;
 			},
@@ -610,7 +610,7 @@ addLayer("c", {
 			cost: 1e77,
 			effect() { return player.c.points.add(1).pow(0.001) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.001';
 				return text;
 			},
@@ -628,7 +628,7 @@ addLayer("c", {
 			cost: 1e145,
 			effect() { return player.c.points.add(1).log10().add(1).pow(13.3).min(1e36) },
 			effectDisplay(eff) {
-				let text = '+' + format(eff) + '%';
+				let text = "+" + format(eff) + "%";
 				if (eff.gte(1e36)) text += ' (maxed)';
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^13.3';
 				return text;
@@ -640,7 +640,7 @@ addLayer("c", {
 			description: 'multiplies core gain based on your cores',
 			effect() { return  player.c.points.add(1).log10().add(1).pow(80) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^80';
 				return text;
 			},
@@ -838,7 +838,7 @@ addLayer("q", {
 			cost: 1,
 			effect() { return player.points.add(1).pow(0.01) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.01';
 				return text;
 			},
@@ -849,7 +849,7 @@ addLayer("q", {
 			cost: 2,
 			effect() { return player.q.points.add(1).pow(0.09) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.09';
 				return text;
 			},
@@ -861,7 +861,7 @@ addLayer("q", {
 			cost: 25,
 			effect() { return player.points.add(1).pow(0.0025) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.0025';
 				return text;
 			},
@@ -873,7 +873,7 @@ addLayer("q", {
 			cost: 100,
 			effect() { return player.q.points.add(1).pow(0.2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.2';
 				return text;
 			},
@@ -885,7 +885,7 @@ addLayer("q", {
 			cost: 750,
 			effect() { return player.c.points.add(1).pow(0.02) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.02';
 				return text;
 			},
@@ -897,7 +897,7 @@ addLayer("q", {
 			cost: 2500,
 			effect() { return player.q.points.add(1).pow(0.05) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.05';
 				return text;
 			},
@@ -909,7 +909,7 @@ addLayer("q", {
 			cost: 7500,
 			effect() { return player.points.add(1).pow(0.02) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.02';
 				return text;
 			},
@@ -921,7 +921,7 @@ addLayer("q", {
 			cost: 25000,
 			effect() { return player.q.points.add(1).pow(0.1) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.1';
 				return text;
 			},
@@ -933,7 +933,7 @@ addLayer("q", {
 			cost: 100000,
 			effect() { return player.q.points.add(1).pow(0.2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.2';
 				return text;
 			},
@@ -945,7 +945,7 @@ addLayer("q", {
 			cost: 1500000,
 			effect() { return player.q.points.add(1).pow(0.05) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.05';
 				return text;
 			},
@@ -957,7 +957,7 @@ addLayer("q", {
 			cost: 50000000,
 			effect() { return player.q.points.add(1).pow(0.01) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.01';
 				return text;
 			},
@@ -969,7 +969,7 @@ addLayer("q", {
 			cost: 1e9,
 			effect() { return player.q.points.add(1).pow(0.15) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.15';
 				return text;
 			},
@@ -981,7 +981,7 @@ addLayer("q", {
 			cost: 1e10,
 			effect() { return player.q.points.add(1).pow(0.075) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.075';
 				return text;
 			},
@@ -993,7 +993,7 @@ addLayer("q", {
 			cost: 2.5e11,
 			effect() { return player.q.points.add(1).pow(0.01) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.01';
 				return text;
 			},
@@ -1005,7 +1005,7 @@ addLayer("q", {
 			cost: 1e13,
 			effect() { return player.q.points.add(1).pow(0.015) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.015';
 				return text;
 			},
@@ -1017,7 +1017,7 @@ addLayer("q", {
 			cost: 1e14,
 			effect() { return player.q.points.add(1).pow(0.005) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.005';
 				return text;
 			},
@@ -1032,7 +1032,7 @@ addLayer("q", {
 				return player.sp.points.add(1).pow(0.5);
 			},
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.5';
 				return text;
 			},
@@ -1044,7 +1044,7 @@ addLayer("q", {
 			cost: 1e18,
 			effect() { return player.q.points.add(1).pow(0.01) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.01';
 				return text;
 			},
@@ -1056,7 +1056,7 @@ addLayer("q", {
 			cost: 1e20,
 			effect() { return player.q.points.add(1).pow(0.005) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.005';
 				return text;
 			},
@@ -1068,7 +1068,7 @@ addLayer("q", {
 			cost: 1e22,
 			effect() { return player.q.points.add(1).pow(0.125) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.125';
 				return text;
 			},
@@ -1089,7 +1089,7 @@ addLayer("q", {
 				return getGlitch().pow(5);
 			},
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: ???';
 				return text;
 			},
@@ -1113,7 +1113,7 @@ addLayer("q", {
 			cost: '1e1295',
 			effect() { return getGlitch().pow(21) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: ???';
 				return text;
 			},
@@ -1137,7 +1137,7 @@ addLayer("q", {
 			cost: 'e8.34e10',
 			effect() { return getGlitch().log10().add(1).pow(0.05) },
 			effectDisplay(eff) {
-				let text = '^' + format(eff);
+				let text = "^" + format(eff);
 				if (options.nerdMode) text += '<br>formula: ???';
 				return text;
 			},
@@ -1173,7 +1173,7 @@ addLayer("q", {
 				return new Decimal(100).pow(x).div(getGlitch(true).pow(100));
 			},
 			effectDisplay(eff) {
-				let text = '+' + format(eff) + '%';
+				let text = "+" + format(eff) + "%";
 				if (options.nerdMode) text += '<br>formula: (100^x)/y';
 				return text;
 			},
@@ -1200,7 +1200,7 @@ addLayer("q", {
 				return player.q.insight.add(1).pow(0.1).mul(new Decimal(10).pow(x));
 			},
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: ((x+1)^0.1)(10^y)';
 				return text;
 			},
@@ -1216,7 +1216,7 @@ addLayer("q", {
 			buy() { buyStandardBuyable(this, "e", 'points', getQuarkBuyableBulk(), true) },
 			effect(x) { return new Decimal(10).pow(x) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 10^x';
 				return text;
 			},
@@ -1237,7 +1237,7 @@ addLayer("q", {
 			buy() { player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(getQuarkBuyableBulk()).min(tmp[this.layer].buyables[this.id].purchaseLimit) },
 			effect(x) { return new Decimal(1.25).pow(x).add(x.pow(2.15)) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 1.25^x + x^2.15';
 				return text;
 			},
@@ -1260,7 +1260,7 @@ addLayer("q", {
 			},
 			effect(x) { return new Decimal(1e10).pow(x) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 1e10^x';
 				return text;
 			},
@@ -1279,7 +1279,7 @@ addLayer("q", {
 			buy() { player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(getQuarkBuyableBulk()).min(tmp[this.layer].buyables[this.id].purchaseLimit) },
 			effect(x) { return new Decimal(1.001).pow(x) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 1.001^x';
 				return text;
 			},
@@ -1399,7 +1399,7 @@ addLayer("sp", {
 				return [new Decimal(5).pow(x), newDecimalOne().div(x.add(1))];
 			},
 			effectDisplay(eff) {
-				let text = format(eff[0]) + 'x<br>and ' + format(eff[1]) + 'x';
+				let text = format(eff[0]) + 'x<br>and ' + format(eff[1]) + "x";
 				if (options.nerdMode) {
 					if (hasUpgrade("sp", 21)) text += '<br>formulas: (5^x)^4<br>and 1/(x+1)';
 					else if (hasUpgrade("sp", 11)) text += '<br>formulas: (5^x)^2<br>and 1/(x+1)';
@@ -1421,7 +1421,7 @@ addLayer("sp", {
 				return [new Decimal(5).pow(x), newDecimalOne().div(x.add(1))];
 			},
 			effectDisplay(eff) {
-				let text = format(eff[0]) + 'x<br>and ' + format(eff[1]) + 'x';
+				let text = format(eff[0]) + 'x<br>and ' + format(eff[1]) + "x";
 				if (options.nerdMode) {
 					if (hasUpgrade("sp", 22)) text += '<br>formulas: (5^x)^4<br>and 1/(x+1)';
 					else if (hasUpgrade("sp", 12)) text += '<br>formulas: (5^x)^2<br>and 1/(x+1)';
@@ -1443,7 +1443,7 @@ addLayer("sp", {
 				return [new Decimal(5).pow(x), newDecimalOne().div(x.add(1))];
 			},
 			effectDisplay(eff) {
-				let text = format(eff[0]) + 'x<br>and ' + format(eff[1]) + 'x';
+				let text = format(eff[0]) + 'x<br>and ' + format(eff[1]) + "x";
 				if (options.nerdMode) {
 					if (hasUpgrade("sp", 23)) text += '<br>formulas: (5^x)^4<br>and 1/(x+1)';
 					else if (hasUpgrade("sp", 13)) text += '<br>formulas: (5^x)^2<br>and 1/(x+1)';
@@ -1638,8 +1638,8 @@ addLayer("h", {
 			cost: 1,
 			effect() { return  player.h.points.add(1).pow(0.005) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
-				if (hasUpgrade("ds", 11)) text += '<br>and ' + format(eff) + 'x';
+				let text = format(eff) + "x";
+				if (hasUpgrade("ds", 11)) text += '<br>and ' + format(eff) + "x";
 				if (options.nerdMode) {
 					if (hasUpgrade("ds", 11)) text += '<br>formula (for both): (x+1)^0.005';
 					else text += '<br>formula: (x+1)^0.005';
@@ -1656,7 +1656,7 @@ addLayer("h", {
 				return player.h.points.add(1).pow(0.1);
 			},
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) {
 					if (hasUpgrade("ds", 12)) text += '<br>formula: (x+1)^0.1^2';
 					else text += '<br>formula: (x+1)^0.1';
@@ -1670,7 +1670,7 @@ addLayer("h", {
 			cost: 10,
 			effect() { return player.h.points.add(1).pow(0.09) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.09';
 				return text;
 			},
@@ -1689,7 +1689,7 @@ addLayer("h", {
 			cost: 1000,
 			effect() { return player.h.points.add(1).pow(0.025) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.025';
 				return text;
 			},
@@ -1701,7 +1701,7 @@ addLayer("h", {
 			cost: 5000,
 			effect() { return player.h.points.add(1).pow(0.05) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.05';
 				return text;
 			},
@@ -1713,7 +1713,7 @@ addLayer("h", {
 			cost: 10000,
 			effect() { return player.h.points.add(1).pow(0.15) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.15';
 				return text;
 			},
@@ -1731,7 +1731,7 @@ addLayer("h", {
 			cost: 100000,
 			effect() { return player.points.add(1).pow(0.002) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.002';
 				return text;
 			},
@@ -1743,7 +1743,7 @@ addLayer("h", {
 			cost: 500000,
 			effect() { return player.h.points.add(1).pow(0.01) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.01';
 				return text;
 			},
@@ -1755,7 +1755,7 @@ addLayer("h", {
 			cost: 1000000,
 			effect() { return player.h.points.add(1).pow(0.025) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.025';
 				return text;
 			},
@@ -1773,7 +1773,7 @@ addLayer("h", {
 			cost: 7500000,
 			effect() { return  player.points.add(1).pow(0.0001) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.0001';
 				return text;
 			},
@@ -1785,7 +1785,7 @@ addLayer("h", {
 			cost: 15000000,
 			effect() { return  player.h.points.add(1).pow(0.001) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.001';
 				return text;
 			},
@@ -1839,7 +1839,7 @@ addLayer("h", {
 			cost: 1e50,
 			effect() { return player.sp.points.add(1).pow(2.5) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^2.5';
 				return text;
 			},
@@ -1851,7 +1851,7 @@ addLayer("h", {
 			cost: 6.66e66,
 			effect() { return player.h.points.add(1).pow(0.02) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.02';
 				return text;
 			},
@@ -1869,7 +1869,7 @@ addLayer("h", {
 			cost: '1e570',
 			effect() { return player.h.points.add(1).log10().add(1).pow(75) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^75';
 				return text;
 			},
@@ -1881,7 +1881,7 @@ addLayer("h", {
 			cost: '1e696',
 			effect() { return player.h.points.add(1).log10().add(1).pow(250) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^250';
 				return text;
 			},
@@ -1893,7 +1893,7 @@ addLayer("h", {
 			cost: '1e870',
 			effect() { return player.h.points.add(1).log10().add(1).pow(336) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^336';
 				return text;
 			},
@@ -1931,7 +1931,7 @@ addLayer("h", {
 				};
 				text += '<br><br>Effect on evil influence gain: /' + format(tmp.h.clickables[11].nerf);
 				text += '<br><br>Req: ' + formatWhole(tmp.h.clickables[11].req[0]) + ' achievements and ' + formatWhole(tmp.h.clickables[11].req[1]) + ' evil influence';
-				text += '<br><br>Bought: ' + formatWhole(player.h.limitsBroken) + '/' + formatWhole(this.reqLayers.length);
+				text += '<br><br>Bought: ' + formatWhole(player.h.limitsBroken) + "/" + formatWhole(this.reqLayers.length);
 				return text;
 			},
 			reqLayers: [79900, 33133, 20900, 22888],
@@ -2217,7 +2217,7 @@ addLayer("ds", {
 			buy() { buyStandardBuyable(this) },
 			effect(x) { return [new Decimal(2).pow(x), x.mul(5).add(1)] },
 			effectDisplay(eff) {
-				let text = format(eff[0]) + 'x<br>and ' + format(eff[1]) + 'x';
+				let text = format(eff[0]) + 'x<br>and ' + format(eff[1]) + "x";
 				if (options.nerdMode) text += '<br>formulas: 2^x<br>and 5x+1';
 				return text;
 			},
@@ -2240,7 +2240,7 @@ addLayer("ds", {
 			rewardDescription: "multiplies hex and demon soul gain based on your demon souls",
 			rewardEffect() { return player.ds.points.add(1).pow(0.25) },
 			rewardDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.25';
 				return text;
 			},
@@ -2262,7 +2262,7 @@ addLayer("ds", {
 			rewardDescription: "multiply demon soul gain based on your hexes",
 			rewardEffect() { return player.h.points.add(1).pow(0.02) },
 			rewardDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.02';
 				return text;
 			},
@@ -2285,7 +2285,7 @@ addLayer("ds", {
 			rewardDescription: "multiply subatomic particle<br>gain based on your demon souls",
 			rewardEffect() { return player.ds.points.add(1).pow(0.2) },
 			rewardDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.2';
 				return text;
 			},
@@ -2563,7 +2563,7 @@ addLayer("a", {
 			},
 			effectDisplay(eff) {
 				if (hasMilestone("m", 11)) return 'max effect';
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (eff.gte(1000)) text += '<br>(hardcapped)';
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.5';
 				return text;
@@ -2576,7 +2576,7 @@ addLayer("a", {
 			cost: 1,
 			effect() { return player.a.best.add(1).pow(1.25) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^1.25';
 				return text;
 			},
@@ -2600,7 +2600,7 @@ addLayer("a", {
 				return eff;
 			},
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (getClickableState("a", 11) >= 2) {
 					if (options.nerdMode) text += '<br>formula: log10((x+1)^0.02)+1';
 					return text;
@@ -2619,7 +2619,7 @@ addLayer("a", {
 			cost: 2,
 			effect() { return player.a.total.add(1).pow(1.05) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^1.05';
 				return text;
 			},
@@ -2643,7 +2643,7 @@ addLayer("a", {
 				return eff;
 			},
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (getClickableState("a", 11) >= 3) {
 					if (options.nerdMode) text += '<br>formula: (x+1)^0.01';
 					return text;
@@ -2673,7 +2673,7 @@ addLayer("a", {
 				return eff;
 			},
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (getClickableState("a", 11) >= 1) {
 					if (options.nerdMode) text += '<br>formula: log10((x+1)^0.025)+1';
 					return text;
@@ -2692,7 +2692,7 @@ addLayer("a", {
 			cost: 2,
 			effect() { return player.a.total.sub(player.a.points).add(1).pow(0.75) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x-y+1)^0.75';
 				return text;
 			},
@@ -2705,7 +2705,7 @@ addLayer("a", {
 			cost: 2,
 			effect() { return player.a.best.mul(1.5).sub(player.a.points).add(1).pow(1.05) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula:<br>(1.5x-y+1)^1.05';
 				return text;
 			},
@@ -2740,7 +2740,7 @@ addLayer("a", {
 				return eff;
 			},
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (getClickableState("a", 11) >= 6) {
 					if (options.nerdMode) text += '<br>formula: (x+1)^0.02';
 					return text;
@@ -2770,7 +2770,7 @@ addLayer("a", {
 				return eff;
 			},
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (getClickableState("a", 11) >= 4) {
 					if (options.nerdMode) text += '<br>formula: (xy+1)^0.013';
 					return text;
@@ -2789,7 +2789,7 @@ addLayer("a", {
 			cost: 4,
 			effect() { return player.a.best.mul(player.a.points).mul(2.5).add(1).pow(0.15) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (2.5xy+1)^0.15';
 				return text;
 			},
@@ -2812,7 +2812,7 @@ addLayer("a", {
 				return eff;
 			},
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (getClickableState("a", 11) >= 5) {
 					if (options.nerdMode) text += '<br>formula: (x+1)^0.025';
 					return text;
@@ -2830,7 +2830,7 @@ addLayer("a", {
 			cost: 4,
 			effect() { return player.a.points.add(1).pow(1.75) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^1.75';
 				return text;
 			},
@@ -2852,7 +2852,7 @@ addLayer("a", {
 				} else {
 					text += '<br>none so far';
 				};
-				text += '<br><br>Cost: ' + formatWhole(this.cost()) + ' atoms<br><br>Bought: ' + formatWhole(num) + '/' + formatWhole(this.upgrades.length);
+				text += '<br><br>Cost: ' + formatWhole(this.cost()) + ' atoms<br><br>Bought: ' + formatWhole(num) + "/" + formatWhole(this.upgrades.length);
 				if (tmp[this.layer].clickables[this.id].canClick) text = text.replace(/layer-a/g, 'layer-a-dark');
 				else text = text.replace(/layer-a-dark/g, 'layer-a');
 				return text;
@@ -3148,7 +3148,7 @@ addLayer("p", {
 			cost: 1,
 			effect() { return player.p.points.add(1).pow(0.075) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.075';
 				return text;
 			},
@@ -3164,7 +3164,7 @@ addLayer("p", {
 			cost: 25,
 			effect() { return player.e.points.add(1).pow(0.0001) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.0001';
 				return text;
 			},
@@ -3185,7 +3185,7 @@ addLayer("p", {
 			description: 'multiplies prayer gain based on your divinity',
 			effect() { return player.p.divinity.add(1).pow(0.02) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.02';
 				return text;
 			},
@@ -3199,7 +3199,7 @@ addLayer("p", {
 			description: 'multiplies prayer gain based on your divinity',
 			effect() { return player.p.divinity.add(1).pow(0.01) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.01';
 				return text;
 			},
@@ -3258,7 +3258,7 @@ addLayer("p", {
 			description: 'multiplies divinity gain based on your holiness',
 			effect() { return player.p.holiness.add(1).pow(0.025) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.025';
 				return text;
 			},
@@ -3276,7 +3276,7 @@ addLayer("p", {
 			cost: 1000,
 			effect() { return player.p.divinity.add(1).pow(0.2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.2';
 				return text;
 			},
@@ -3317,7 +3317,7 @@ addLayer("p", {
 			description: 'multiplies divinity gain based on your hymns',
 			effect() { return player.p.hymns.add(1).pow(hasUpgrade("p", 45) ? 0.125 : 0.1) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^' + (hasUpgrade("p", 45) ? 0.125 : 0.1);
 				return text;
 			},
@@ -3407,7 +3407,7 @@ addLayer("p", {
 			description: "multiplies holiness gain based on your hymns",
 			effect() { return player.p.hymns.add(1).pow(0.02) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.02';
 				return text;
 			},
@@ -3421,7 +3421,7 @@ addLayer("p", {
 			description: "multiplies prayer gain based on your hymns",
 			effect() { return player.p.hymns.add(10).log(5) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: log5(x+10)';
 				return text;
 			},
@@ -3435,7 +3435,7 @@ addLayer("p", {
 			description() { return 'multiplies the effect of <b' + getColorClass(this, REF) + 'Hymn Deconstruction</b> based on your essence' },
 			effect() { return player.e.points.add(1).pow(0.0015) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.0015';
 				return text;
 			},
@@ -3467,7 +3467,7 @@ addLayer("p", {
 			cost: 1e30,
 			effect() { return player.s.points.mul(30).add(1).pow(0.95) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (30x+1)^0.95';
 				return text;
 			},
@@ -3479,7 +3479,7 @@ addLayer("p", {
 			cost: 1e75,
 			effect() { return player.s.points.mul(25).add(1).pow(0.5) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (25x+1)^0.5';
 				return text;
 			},
@@ -3491,7 +3491,7 @@ addLayer("p", {
 			cost: 1e125,
 			effect() { return player.s.points.mul(2).add(1).pow(1.5) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (2x+1)^1.5';
 				return text;
 			},
@@ -3509,7 +3509,7 @@ addLayer("p", {
 			cost: 'e3.75e13',
 			effect() { return new Decimal(1e10).pow(player.s.points) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 1e10^x';
 				return text;
 			},
@@ -3521,7 +3521,7 @@ addLayer("p", {
 			cost: 'e3.94e13',
 			effect() { return player.p.points.add(1).pow(0.25) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.25';
 				return text;
 			},
@@ -3533,7 +3533,7 @@ addLayer("p", {
 			cost: 'e4.38e13',
 			effect() { return player.p.points.add(1).pow(0.333) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.333';
 				return text;
 			},
@@ -4000,7 +4000,7 @@ addLayer("d", {
 			buy() { buyStandardBuyable(this, "p", 'points', getDevotionBuyableBulk()) },
 			devotion() { return getBuyableAmount(this.layer, this.id).mul(0.1) },
 			costDisplay(cost) { return 'Devotion Reward: ' + format(this.devotion()) + '<br><br>Cost: ' + formatWhole(cost) + ' prayers' },
-			boughtDisplay(x) { return 'Times Worshipped:<br>' + formatWhole(x) + '/' + formatWhole(this.purchaseLimit) },
+			boughtDisplay(x) { return 'Times Worshipped:<br>' + formatWhole(x) + "/" + formatWhole(this.purchaseLimit) },
 			style() {
 				let backColors = '#224400, #336600';
 				if (tmp[this.layer].buyables[this.id].canBuy) backColors = '#112200, #448800';
@@ -4032,7 +4032,7 @@ addLayer("d", {
 				if (hasMilestone("s", 24)) return getBuyableAmount(this.layer, this.id);
 				return getBuyableAmount(this.layer, this.id).mul(0.5);
 			},
-			effectDisplay(eff) { return format(eff) + 'x' },
+			effectDisplay(eff) { return format(eff) + "x" },
 			costDisplay(cost) { return 'Devotion Reward: ' + format(this.devotion()) + '<br><br>' + (hasMilestone("s", 34) ? 'Req' : 'Cost') + ': '  + formatWhole(cost) + ' sanctums' },
 			boughtDisplay(x) { return 'Times Sacrificed:' + (formatWhole(x).length >= 8 ? '<br>' : ' ') + formatWhole(x) + '<br>/' + formatWhole(this.purchaseLimit) },
 			style() {
@@ -4079,7 +4079,7 @@ addLayer("d", {
 			devotion() { return getBuyableAmount(this.layer, this.id).mul(0.75) },
 			effectDisplay(eff) { return format(eff[1]) + 'x,<br>' + format(eff[1]) + 'x,<br>and /' + format(eff[2]) },
 			costDisplay(cost) { return 'Devotion Reward: ' + format(this.devotion()) + '<br><br>Cost: ' + formatWhole(this.cost_h()) + ' hexes<br>and ' + formatWhole(this.cost_sp()) + ' subatomic particles' },
-			boughtDisplay(x) { return 'Ceremonies Performed: ' + formatWhole(x) + '/' + formatWhole(this.purchaseLimit) },
+			boughtDisplay(x) { return 'Ceremonies Performed: ' + formatWhole(x) + "/" + formatWhole(this.purchaseLimit) },
 			style() {
 				let backColors = '#224400, #336600';
 				if (tmp[this.layer].buyables[this.id].canBuy) backColors = '#112200, #448800';
@@ -4142,7 +4142,7 @@ addLayer("g", {
 			effect(x) { return x },
 			effectDisplay(eff) { return format(eff) + '/sec' },
 			currencyDisplayName: 'prayers',
-			boughtDisplay(x) { return 'Times Worshipped: ' + formatWhole(x) + '/' + formatWhole(this.purchaseLimit) },
+			boughtDisplay(x) { return 'Times Worshipped: ' + formatWhole(x) + "/" + formatWhole(this.purchaseLimit) },
 			style() {
 				let backColors = '#224400, #336600';
 				if (tmp[this.layer].buyables[this.id].canBuy) backColors = '#112200, #448800';
@@ -4160,9 +4160,9 @@ addLayer("g", {
 			purchaseLimit: 99,
 			buy() { buyStandardBuyable(this, "s", 'glow') },
 			effect(x) { return new Decimal(2).pow(x) },
-			effectDisplay(eff) { return format(eff) + 'x' },
+			effectDisplay(eff) { return format(eff) + "x" },
 			currencyDisplayName: 'glow',
-			boughtDisplay(x) { return 'Times Sacrificed: ' + formatWhole(x) + '/' + formatWhole(this.purchaseLimit) },
+			boughtDisplay(x) { return 'Times Sacrificed: ' + formatWhole(x) + "/" + formatWhole(this.purchaseLimit) },
 			style() {
 				let backColors = '#224400, #336600';
 				if (tmp[this.layer].buyables[this.id].canBuy) backColors = '#112200, #448800';
@@ -4186,9 +4186,9 @@ addLayer("g", {
 			purchaseLimit: 99,
 			buy() { buyStandardBuyable(this, "e") },
 			effect(x) { return [new Decimal(2.5).pow(x), new Decimal(10).pow(x), getBuyableAmount("g", 11).add(1).pow(x)] },
-			effectDisplay(eff) { return format(eff[0]) + 'x,<br>' + format(eff[1]) + 'x,<br>and ' + format(eff[2]) + 'x' },
+			effectDisplay(eff) { return format(eff[0]) + 'x,<br>' + format(eff[1]) + 'x,<br>and ' + format(eff[2]) + "x" },
 			currencyDisplayName: 'essence',
-			boughtDisplay(x) { return 'Ceremonies Performed: ' + formatWhole(x) + '/' + formatWhole(this.purchaseLimit) },
+			boughtDisplay(x) { return 'Ceremonies Performed: ' + formatWhole(x) + "/" + formatWhole(this.purchaseLimit) },
 			style() {
 				let backColors = '#224400, #336600';
 				if (tmp[this.layer].buyables[this.id].canBuy) backColors = '#112200, #448800';
@@ -4286,7 +4286,7 @@ addLayer("r", {
 	},
 	effectDescription() {
 		let text = ["", ""];
-		if (tmp.r.effect[0].gte(softcaps.r_eff1[0]) && !(isAssimilated("r") || player.mo.assimilating === "r")) text[0] = ' (softcapped)';
+		if (tmp.r.effect[0].gte(softcaps.r_eff1[0]) && !(isAssimilated("r") || player.mo.assimilating === "r")) text[0] = " (softcapped)";
 		if (getActivatedRelics() >= 2) text[1] = 'point and ';
 		return 'which makes <b' + getColorClass(this, REF, "e", true) + 'Essence Influence\'s</b> hardcap start <h2 class="layer-r">' + format(tmp.r.effect[0]) + '</h2>x later' + text[0] + ', multiplies sanctum gain by <h2 class="layer-r">' + format(tmp.r.effect[1]) + '</h2>x, and also multiplies ' + text[1] + 'essence gain by <h2 class="layer-r">' + format(tmp.r.effect[2]) + '</h2>x';
 	},
@@ -4387,10 +4387,10 @@ addLayer("r", {
 				let text = "";
 				if (tmp.r.lightGain.gte(1e25) && !hasUpgrade("r", 13)) {
 					if (maxedChallenge(this.layer, this.id)) text = 'You have ' + format(player.r.light) + ' light.<br>(' + format(tmp.r.lightGain) + '/sec - hardcapped at 1e25)<br>';
-					else text = 'You have ' + format(player.r.light) + '/' + format(getActivationReq()) + ' light.<br>(' + format(tmp.r.lightGain) + '/sec - hardcapped at 1e25)<br>';
+					else text = 'You have ' + format(player.r.light) + "/" + format(getActivationReq()) + ' light.<br>(' + format(tmp.r.lightGain) + '/sec - hardcapped at 1e25)<br>';
 				} else {
 					if (maxedChallenge(this.layer, this.id)) text = 'You have ' + format(player.r.light) + ' light.<br>(' + format(tmp.r.lightGain) + '/sec)<br>';
-					else text = 'You have ' + format(player.r.light) + '/' + format(getActivationReq()) + ' light.<br>(' + format(tmp.r.lightGain) + '/sec)<br>';
+					else text = 'You have ' + format(player.r.light) + "/" + format(getActivationReq()) + ' light.<br>(' + format(tmp.r.lightGain) + '/sec)<br>';
 				};
 				if (options.nerdMode) text += 'Best: (' + format(player.r.lightGainBest) + '/sec)<br>';
 				return text;
@@ -4400,11 +4400,11 @@ addLayer("r", {
 				const effects = challengeEffect(this.layer, this.id);
 				let text = "";
 				// current rewards
-				if (completions >= 13) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, multiply Sacrificial Ceremony\'s last effect, and also multiply relic gain (all based on your light)<br>Currently: ' + format(effects[0]) + 'x,<br>^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : "") + ',<br>' + format(effects[2]) + 'x,<br>and ' + format(effects[3]) + 'x';
-				else if (completions >= 12) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(effects[0]) + 'x,<br>^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : "") + ',<br>and ' + format(effects[2]) + 'x';
-				else if (completions >= 5) text += 'multiply relic\'s second and third effects, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(effects[0]) + 'x,<br>^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : "") + ',<br>and ' + format(effects[2]) + 'x';
+				if (completions >= 13) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, multiply Sacrificial Ceremony\'s last effect, and also multiply relic gain (all based on your light)<br>Currently: ' + format(effects[0]) + 'x,<br>^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : "") + ',<br>' + format(effects[2]) + 'x,<br>and ' + format(effects[3]) + "x";
+				else if (completions >= 12) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(effects[0]) + 'x,<br>^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : "") + ',<br>and ' + format(effects[2]) + "x";
+				else if (completions >= 5) text += 'multiply relic\'s second and third effects, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(effects[0]) + 'x,<br>^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : "") + ',<br>and ' + format(effects[2]) + "x";
 				else if (completions >= 4) text += 'multiply relic\'s second and third effects based on your light, and also exponentiate relic\'s first effect based on your light<br>Currently: ' + format(effects[0]) + 'x<br>and ^' + format(effects[1]) + (effects[1]?.eq(100) ? ' (capped)' : "");
-				else if (completions >= 1) text += 'multiply relic\'s second and third effects based on your light<br>Currently: ' + format(effects[0]) + 'x';
+				else if (completions >= 1) text += 'multiply relic\'s second and third effects based on your light<br>Currently: ' + format(effects[0]) + "x";
 				else text += 'nothing currently';
 				// next reward
 				text += '<br><br>Next reward: ';
@@ -4420,7 +4420,7 @@ addLayer("r", {
 				else if (completions == 9) text += 'unlock Molecules' + (player.m.unlocked ? ' (already unlocked)' : "");
 				else if (completions == 10) text += 'double the first activated relic effect';
 				else if (completions == 11) text += 'the first activated relic effect also applies to molecule gain';
-				else if (completions == 12) text += 'multiply relic gain based on your light<br>Currently: ' + format(effects[3]) + 'x';
+				else if (completions == 12) text += 'multiply relic gain based on your light<br>Currently: ' + format(effects[3]) + "x";
 				else if (completions == 13) text += 'double the first activated relic effect';
 				else if (completions == 14) text += 'multiply the first activated relic<br>effect by 1.2';
 				else if (completions == 15) text += 'multiply the first activated relic<br>effect by 1.1';
@@ -4490,7 +4490,7 @@ addLayer("r", {
 			description: 'multiplies light gain based on your sanctums',
 			effect() { return player.s.points.add(1).pow(0.3) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.3';
 				return text;
 			},
@@ -4504,7 +4504,7 @@ addLayer("r", {
 			description: 'multiplies light gain based on your light',
 			effect() { return player.r.light.add(1).pow(0.1) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.1';
 				return text;
 			},
@@ -4541,12 +4541,12 @@ addLayer("r", {
 			buy() { addBuyables(this.layer, this.id, 1) },
 			effect(x) { return new Decimal(5).pow(x.add(buyableEffect("r", 21))) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 5^x';
 				return text;
 			},
 			costDisplay(cost) { return 'Req: ' + formatWhole(cost) + ' activated relics' },
-			boughtDisplay(x) { return 'Bought: ' + formatWhole(x) + '/' + formatWhole(this.purchaseLimit) + (hasBuyable("r", 21) ? ' + ' + formatWhole(buyableEffect("r", 21)) : "") },
+			boughtDisplay(x) { return 'Bought: ' + formatWhole(x) + "/" + formatWhole(this.purchaseLimit) + (hasBuyable("r", 21) ? ' + ' + formatWhole(buyableEffect("r", 21)) : "") },
 		},
 		12: {
 			cost(x) {
@@ -4561,12 +4561,12 @@ addLayer("r", {
 			buy() { addBuyables(this.layer, this.id, 1) },
 			effect(x) { return new Decimal(1000).pow(x.add(buyableEffect("r", 21))) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 1,000^x';
 				return text;
 			},
 			costDisplay(cost) { return 'Req: ' + formatWhole(cost) + ' activated relics' },
-			boughtDisplay(x) { return 'Bought: ' + formatWhole(x) + '/' + formatWhole(this.purchaseLimit) + (hasBuyable("r", 21) ? ' + ' + formatWhole(buyableEffect("r", 21)) : "") },
+			boughtDisplay(x) { return 'Bought: ' + formatWhole(x) + "/" + formatWhole(this.purchaseLimit) + (hasBuyable("r", 21) ? ' + ' + formatWhole(buyableEffect("r", 21)) : "") },
 		},
 		21: {
 			cost(x) {
@@ -4581,7 +4581,7 @@ addLayer("r", {
 			buy() { addBuyables(this.layer, this.id, 1) },
 			effect(x) { return x },
 			effectDisplay(eff) {
-				let text = '+' + formatWhole(eff);
+				let text = "+" + formatWhole(eff);
 				if (options.nerdMode) text += '<br>formula: x';
 				return text;
 			},
@@ -4701,7 +4701,7 @@ addLayer("m", {
 		if (eff.gt(sc_start)) eff = eff.div(sc_start).pow(softcaps.m_eff[1]()).mul(sc_start);
 		return eff;
 	},
-	effectDescription() { return 'which multiplies atom gain by <h2 class="layer-m">' + format(tmp.m.effect) + '</h2>x (based on best)' + (tmp.m.effect.gt(softcaps.m_eff[0]()) ? ' (softcapped)' : '') },
+	effectDescription() { return 'which multiplies atom gain by <h2 class="layer-m">' + format(tmp.m.effect) + '</h2>x (based on best)' + (tmp.m.effect.gt(softcaps.m_eff[0]()) ? " (softcapped)" : '') },
 	doReset(resettingLayer) {
 		if (hasMilestone("w", 6) && resettingLayer == "w") return;
 		let keep = ["auto_upgrades"];
@@ -4846,7 +4846,7 @@ addLayer("m", {
 			cost: 1,
 			effect() { return player.m.best.mul(100).add(1).pow(0.5) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (100x+1)^0.5';
 				return text;
 			},
@@ -4857,7 +4857,7 @@ addLayer("m", {
 			cost: 5,
 			effect() { return player.m.best.mul(10).add(1).pow(0.2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (10x+1)^0.2';
 				return text;
 			},
@@ -4868,7 +4868,7 @@ addLayer("m", {
 			cost: 10,
 			effect() { return player.m.best.mul(50).add(1).pow(0.4) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (50x+1)^0.4';
 				return text;
 			},
@@ -4877,7 +4877,7 @@ addLayer("m", {
 			fullDisplay() {
 				let text = "";
 				if (options.nerdMode) text += '<br>formula: (25x+1)^0.3';
-				return '<h3' + getColorClass(this, TITLE) + 'CO<span style="font-size: 0.8em">3</span>, Carbon Trioxide</h3><br>multiplies core gain based on your best molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: 360,000 atoms';
+				return '<h3' + getColorClass(this, TITLE) + 'CO<span style="font-size: 0.8em">3</span>, Carbon Trioxide</h3><br>multiplies core gain based on your best molecules<br>Currently: ' + format(this.effect()) + "x" + text + '<br><br>Cost: 360,000 atoms';
 			},
 			canAfford() { return player.a.points.gte(360000) },
 			pay() { player.a.points = player.a.points.sub(360000) },
@@ -4889,7 +4889,7 @@ addLayer("m", {
 			cost: 125,
 			effect() { return tmp.m.uniqueNonExtra.add(tmp.m.uniqueExtra).add(1).mul(5) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 5(x+1)';
 				return text;
 			},
@@ -4898,7 +4898,7 @@ addLayer("m", {
 			fullDisplay() {
 				let text = "";
 				if (options.nerdMode) text += '<br>formula: (250x+1)^0.1';
-				return '<h3' + getColorClass(this, TITLE) + 'NH<span style="font-size: 0.8em">3</span>, Ammonia</h3><br>multiplies hex gain based on your best molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: 4,600,000 atoms';
+				return '<h3' + getColorClass(this, TITLE) + 'NH<span style="font-size: 0.8em">3</span>, Ammonia</h3><br>multiplies hex gain based on your best molecules<br>Currently: ' + format(this.effect()) + "x" + text + '<br><br>Cost: 4,600,000 atoms';
 			},
 			canAfford() { return player.a.points.gte(4600000) },
 			pay() { player.a.points = player.a.points.sub(4600000) },
@@ -4910,7 +4910,7 @@ addLayer("m", {
 			cost: 250,
 			effect() { return tmp.m.uniqueNonExtra.div(2).add(1).floor() },
 			effectDisplay(eff) {
-				let text = '+' + formatWhole(eff);
+				let text = "+" + formatWhole(eff);
 				if (options.nerdMode) text += '<br>formula: xy/2+1';
 				return text;
 			},
@@ -4931,7 +4931,7 @@ addLayer("m", {
 			fullDisplay() {
 				let text = "";
 				if (options.nerdMode) text += '<br>formula: 1000x';
-				return '<h3' + getColorClass(this, TITLE) + 'O<span style="font-size:0.8em">3</span>, Ozone</h3><br>multiplies demon soul gain based on your total unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1e10) + ' atoms';
+				return '<h3' + getColorClass(this, TITLE) + 'O<span style="font-size:0.8em">3</span>, Ozone</h3><br>multiplies demon soul gain based on your total unique molecules<br>Currently: ' + format(this.effect()) + "x" + text + '<br><br>Cost: ' + format(1e10) + ' atoms';
 			},
 			canAfford() { return player.a.points.gte(1e10) },
 			pay() { player.a.points = player.a.points.sub(1e10) },
@@ -4944,7 +4944,7 @@ addLayer("m", {
 			cost: 25000000,
 			effect() { return player.ds.points.add(1).pow(10).log10().add(1).floor() },
 			effectDisplay(eff) {
-				let text = '+' + formatWhole(eff);
+				let text = "+" + formatWhole(eff);
 				if (options.nerdMode) text += '<br>formula: log((x+1)^10)+1';
 				return text;
 			},
@@ -4956,7 +4956,7 @@ addLayer("m", {
 			cost: 50000000,
 			effect() { return player.r.points.mul(5).add(1).pow(2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (5x+1)^2';
 				return text;
 			},
@@ -4966,7 +4966,7 @@ addLayer("m", {
 			fullDisplay() {
 				let text = "";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.01';
-				return'<h3' + getColorClass(this, TITLE) + 'Ca(OH)<span style="font-size: 0.8em">2</span>, Calcium Hydroxide</h3><br>multiplies relic gain based on your extra unique molecules<br>Currently: ' + format(this.effect()) + 'x' + text + '<br><br>Cost: ' + format(1.61e10) + ' atoms';
+				return'<h3' + getColorClass(this, TITLE) + 'Ca(OH)<span style="font-size: 0.8em">2</span>, Calcium Hydroxide</h3><br>multiplies relic gain based on your extra unique molecules<br>Currently: ' + format(this.effect()) + "x" + text + '<br><br>Cost: ' + format(1.61e10) + ' atoms';
 			},
 			canAfford() { return player.a.points.gte(1.61e10) },
 			pay() { player.a.points = player.a.points.sub(1.61e10) },
@@ -4979,7 +4979,7 @@ addLayer("m", {
 			cost: 1e13,
 			effect() { return (tmp.gi.deactivated ? new Decimal(0) : player.gi.total).add(1).pow(2.5).floor() },
 			effectDisplay(eff) {
-				let text = '+' + formatWhole(eff);
+				let text = "+" + formatWhole(eff);
 				if (options.nerdMode) text += '<br>formula: (x+1)^2.5';
 				return text;
 			},
@@ -4991,7 +4991,7 @@ addLayer("m", {
 			cost: 1e14,
 			effect() { return tmp.m.uniqueNonExtra.add(tmp.m.uniqueExtra).add(1).pow(25) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^25';
 				return text;
 			},
@@ -5003,7 +5003,7 @@ addLayer("m", {
 			cost: 1e13,
 			effect() { return player.a.points.add(1).pow(0.45).floor() },
 			effectDisplay(eff) {
-				let text = '+' + formatWhole(eff);
+				let text = "+" + formatWhole(eff);
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.45';
 				return text;
 			},
@@ -5015,7 +5015,7 @@ addLayer("m", {
 			cost: 1e62,
 			effect() { return tmp.m.uniqueNonExtra.add(tmp.m.uniqueExtra).add(1).log10().add(1).pow(hasUpgrade("m", 62) ? 10 : 0.5) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) {
 					if (hasUpgrade("m", 62)) text += '<br>formula: (log10(x+1)+1)^10';
 					else text += '<br>formula: (log10(x+1)+1)^0.5';
@@ -5036,7 +5036,7 @@ addLayer("m", {
 			cost: '1e1575',
 			effect() { return player.m.points.add(1).log10().add(1).pow(10) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^10';
 				return text;
 			},
@@ -5140,7 +5140,7 @@ addLayer("gi", {
 			return 'which multiplies sanctum gain and glow gain by <h2 class="layer-gi">' + format(tmp.gi.effect) + '</h2>x';
 		};
 		let text = 'which multiplies prayer gain by <h2 class="layer-gi">' + format(tmp.gi.effect) + '</h2>x (based on total)';
-		if (this.effect().gte(softcaps.gi_eff[0]) && !(hasMilestone("gi", 18) && player.h.limitsBroken >= 4)) text += ' (softcapped)';
+		if (this.effect().gte(softcaps.gi_eff[0]) && !(hasMilestone("gi", 18) && player.h.limitsBroken >= 4)) text += " (softcapped)";
 		return text;
 	},
 	doReset(resettingLayer) {
@@ -5277,7 +5277,7 @@ addLayer("gi", {
 			purchaseLimit() { return player.h.limitsBroken >= 4 ? 1e9 : 8 },
 			buy() { buyGoodInfluenceBuyable(this) },
 			effect(x) { return x },
-			effectDisplay(eff) { return '+' + format(eff) },
+			effectDisplay(eff) { return "+" + format(eff) },
 		},
 		12: {
 			cost(x) { return x.div(5).add(1).floor() },
@@ -5288,12 +5288,12 @@ addLayer("gi", {
 			buy() { buyGoodInfluenceBuyable(this) },
 			effect(x) { return new Decimal(10).pow(x.pow(1.5)) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 10^(x^1.5)';
 				return text;
 			},
 			boughtDisplay(x) {
-				let text = 'Bought: ' + formatWhole(x) + '/' + formatWhole(tmp[this.layer].buyables[this.id].purchaseLimit);
+				let text = 'Bought: ' + formatWhole(x) + "/" + formatWhole(tmp[this.layer].buyables[this.id].purchaseLimit);
 				if (options.nerdMode) text += '<br>limit formula: log10(x+1)/12.5 (floored) where x is demon souls<br>limit maxes at 1e9';
 				return text;
 			},
@@ -5320,7 +5320,7 @@ addLayer("gi", {
 			cost: 40_000,
 			effect() { return player.gi.total.add(1).pow(1.5) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^1.5';
 				return text;
 			},
@@ -5525,7 +5525,7 @@ addLayer("ei", {
 			cost: 2,
 			effect() { return player.ei.power.add(1).log10().add(1) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: log10(x+1)+1';
 				return text;
 			},
@@ -5536,7 +5536,7 @@ addLayer("ei", {
 			cost: 3,
 			effect() { return player.ei.power.add(1).pow(0.1) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.1';
 				return text;
 			},
@@ -5554,7 +5554,7 @@ addLayer("ei", {
 			cost: 4,
 			effect() { return  player.gi.points.add(1).pow(0.75) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.75';
 				return text;
 			},
@@ -5572,7 +5572,7 @@ addLayer("ei", {
 			cost: 4,
 			effect() { return  player.ei.power.add(1).log10().add(1) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: log10(x+1)+1';
 				return text;
 			},
@@ -5584,7 +5584,7 @@ addLayer("ei", {
 			cost: 5,
 			effect() { return  player.ei.power.add(1).pow(0.2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.2';
 				return text;
 			},
@@ -5602,7 +5602,7 @@ addLayer("ei", {
 			cost: 6,
 			effect() { return  player.ei.power.add(1).log10().add(1).pow(0.0175) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^0.0175';
 				return text;
 			},
@@ -5620,7 +5620,7 @@ addLayer("ei", {
 			cost: 6,
 			effect() { return  player.ds.points.add(1).log10().add(1).pow(0.02) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^0.02';
 				return text;
 			},
@@ -5632,7 +5632,7 @@ addLayer("ei", {
 			cost: 7,
 			effect() { return  player.ds.points.add(1).log10().add(1).pow(0.9) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^0.9';
 				return text;
 			},
@@ -5650,7 +5650,7 @@ addLayer("ei", {
 			cost: 8,
 			effect() { return  player.ei.power.add(1).log10().add(1).pow(0.01) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^0.01';
 				return text;
 			},
@@ -5668,7 +5668,7 @@ addLayer("ei", {
 			cost: 8,
 			effect() { return  player.ei.power.add(1).log10().add(1).pow(0.06) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^0.06';
 				return text;
 			},
@@ -5680,7 +5680,7 @@ addLayer("ei", {
 			cost: 9,
 			effect() { return  player.ds.points.add(1).log10().add(1).pow(0.5) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^0.5';
 				return text;
 			},
@@ -5698,7 +5698,7 @@ addLayer("ei", {
 			cost: 10,
 			effect() { return  player.s.points.add(1).log10().add(1).pow(4) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^4';
 				return text;
 			},
@@ -5716,7 +5716,7 @@ addLayer("ei", {
 			cost: 11,
 			effect() { return  player.ei.power.add(1).pow(0.15) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.15';
 				return text;
 			},
@@ -5734,7 +5734,7 @@ addLayer("ei", {
 			cost: 13,
 			effect() { return  player.gi.points.add(1).log10().add(1).pow(0.8) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^0.8';
 				return text;
 			},
@@ -5746,7 +5746,7 @@ addLayer("ei", {
 			cost: 15,
 			effect() { return  player.ei.power.add(1).pow(0.1) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.1';
 				return text;
 			},
@@ -5764,7 +5764,7 @@ addLayer("ei", {
 			cost: 17,
 			effect() { return  player.gi.points.add(1).log10().add(1).pow(0.55) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^0.55';
 				return text;
 			},
@@ -5776,7 +5776,7 @@ addLayer("ei", {
 			cost: 19,
 			effect() { return  player.ei.power.add(1).pow(0.145) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.145';
 				return text;
 			},
@@ -5794,7 +5794,7 @@ addLayer("ei", {
 			cost: 25,
 			effect() { return  player.p.points.add(1).log10().add(1).pow(3.6) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^3.6';
 				return text;
 			},
@@ -6107,8 +6107,8 @@ addLayer("w", {
 			width: 600,
 			height: 50,
 			display() {
-				if (player.gi.points.gt(player.ei.points)) return 'the tide currently favors good by ' + format(player.ei.points.div(player.gi.points).neg().add(1).mul(100)) + '%';
-				if (player.ei.points.gt(player.gi.points)) return 'the tide currently favors evil by ' + format(player.gi.points.div(player.ei.points).neg().add(1).mul(100)) + '%';
+				if (player.gi.points.gt(player.ei.points)) return 'the tide currently favors good by ' + format(player.ei.points.div(player.gi.points).neg().add(1).mul(100)) + "%";
+				if (player.ei.points.gt(player.gi.points)) return 'the tide currently favors evil by ' + format(player.gi.points.div(player.ei.points).neg().add(1).mul(100)) + "%";
 				return 'the tide currently favors neither good nor evil';
 			},
 			progress() {
@@ -6138,7 +6138,7 @@ addLayer("w", {
 			buy() { buyMultiCurrencyBuyable(this, ["gi", "ei"], hasMilestone("ch", 10)) },
 			effect(x) { return [x.add(1).pow(0.09), x.add(1).pow(0.21)] },
 			effectDisplay(eff) {
-				let text = format(eff[0]) + 'x<br>and ' + format(eff[1]) + 'x';
+				let text = format(eff[0]) + 'x<br>and ' + format(eff[1]) + "x";
 				if (options.nerdMode) text += '<br>formulas: (x+1)^0.09<br>and (x+1)^0.21';
 				return text;
 			},
@@ -6162,7 +6162,7 @@ addLayer("w", {
 			buy() { buyMultiCurrencyBuyable(this, ["r"], hasMilestone("ch", 10)) },
 			effect(x) { return player.r.points.add(1).pow(0.1).mul(x).add(1).pow(0.25) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (y((x+1)^0.1)+1)^0.25';
 				return text;
 			},
@@ -6195,7 +6195,7 @@ addLayer("w", {
 				return player.s.points.add(1).pow(0.025).mul(x).add(1).pow(0.025);
 			},
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) {
 					if (player.h.limitsBroken >= 1) text += '<br>formula: (y((x+1)^0.025)+1)^0.05';
 					else text += '<br>formula: (y((x+1)^0.025)+1)^0.025';
@@ -6223,7 +6223,7 @@ addLayer("w", {
 				return x.add(1).pow(3.25);
 			},
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) {
 					if (hasMilestone("ch", 8)) text += '<br>formula: (x+1)^7.5 + 2.5^x - 1';
 					else text += '<br>formula: (x+1)^3.25';
@@ -6242,7 +6242,7 @@ addLayer("w", {
 			buy() { buyMultiCurrencyBuyable(this, ["r"], hasMilestone("ch", 10)) },
 			effect(x) { return player.r.points.add(1).log10().mul(x).div(1000).add(1).pow(0.5) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)*y/1000+1)^0.5';
 				return text;
 			},
@@ -6250,19 +6250,24 @@ addLayer("w", {
 			unlocked() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 		23: {
-			cost(x) { return new Decimal(hasMilestone("ch", 32) ? 1e6 : 1e10).pow(x) },
-			title() { return '<b' + getColorClass(this, TITLE) + 'Sanctum Habitation' },
-			description: 'multiplies multicellular organism gain based on your sanctums and the amount of this upgrade bought.',
+			cost(x) {
+				let base = 1e10;
+				if (hasMilestone("ch", 32)) base /= 10_000;
+				if (hasMilestone("ch", 50)) base /= 20;
+				return new Decimal(base).pow(x);
+			},
+			title() { return "<b" + getColorClass(this, TITLE) + "Sanctum Habitation" },
+			description: "multiplies multicellular organism gain based on your sanctums and the amount of this upgrade bought.",
 			canAfford() { return player.s.points.gte(this.cost()) },
 			purchaseLimit: 99,
 			buy() { buyMultiCurrencyBuyable(this, ["s"], hasMilestone("ch", 10)) },
 			effect(x) { return player.s.points.add(1).log10().mul(x).div(100).add(1).pow(0.1) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
-				if (options.nerdMode) text += '<br>formula: (log10(x+1)*y/100+1)^0.1';
+				let text = format(eff) + "x";
+				if (options.nerdMode) text += "<br>formula: (log10(x+1)*y/100+1)^0.1";
 				return text;
 			},
-			currencyDisplayName: 'sanctums',
+			currencyDisplayName: "sanctums",
 			unlocked() { return isAssimilated(this.layer) || player.mo.assimilating === this.layer },
 		},
 	},
@@ -6481,7 +6486,7 @@ addLayer("cl", {
 				return [x.add(1).pow(0.05), x.add(1).pow(1.5)];
 			},
 			effectDisplay(eff) {
-				let text = '^' + format(eff[0]) + '<br>and ' + format(eff[1]) + 'x';
+				let text = "^" + format(eff[0]) + '<br>and ' + format(eff[1]) + "x";
 				if (options.nerdMode) {
 					if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) text += '<br>formulas: (x+1)^0.05<br>and 1.1^x';
 					else text += '<br>formulas: (x+1)^0.05<br>and (x+1)^1.5';
@@ -6504,7 +6509,7 @@ addLayer("cl", {
 				return [x.add(1).pow(0.0175), x.add(1).pow(0.5)];
 			},
 			effectDisplay(eff) {
-				let text = '^' + format(eff[0]) + '<br>and ' + format(eff[1]) + 'x';
+				let text = "^" + format(eff[0]) + '<br>and ' + format(eff[1]) + "x";
 				if (options.nerdMode) {
 					if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) text += '<br>formulas: (x+1)^0.0175<br>and (x+1)^0.55';
 					else text += '<br>formulas: (x+1)^0.0175<br>and (x+1)^0.5';
@@ -6528,7 +6533,7 @@ addLayer("cl", {
 				return [x.add(1).pow(0.025), x.add(1).pow(0.75)];
 			},
 			effectDisplay(eff) {
-				let text = '^' + format(eff[0]) + '<br>and ' + format(eff[1]) + 'x';
+				let text = "^" + format(eff[0]) + '<br>and ' + format(eff[1]) + "x";
 				if (options.nerdMode) {
 					if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) text += '<br>formulas: (x+1)^0.025<br>and (x+1)^0.8';
 					else text += '<br>formulas: (x+1)^0.025<br>and (x+1)^0.75';
@@ -6546,7 +6551,7 @@ addLayer("cl", {
 			buy() { buyStandardBuyable(this, "cl", 'points', getCellularLifeBuyableBulk(), true) },
 			effect(x) { return [x.add(1).pow(0.075), x.add(1).pow(0.36)] },
 			effectDisplay(eff) {
-				let text = '^' + format(eff[0]) + '<br>and ^' + format(eff[1]);
+				let text = "^" + format(eff[0]) + '<br>and ^' + format(eff[1]);
 				if (options.nerdMode) text += '<br>formulas: (x+1)^0.075<br>and (x+1)^0.36';
 				return text;
 			},
@@ -6561,7 +6566,7 @@ addLayer("cl", {
 			buy() { buyStandardBuyable(this, "cl", 'points', getCellularLifeBuyableBulk(), true) },
 			effect(x) { return player.cl.best.mul(x.pow(2)).add(1).pow(0.25) },
 			effectDisplay(eff) {
-				let text = '+' + format(eff);
+				let text = "+" + format(eff);
 				if (options.nerdMode) text += '<br>formula: (x(y^2)+1)^0.25';
 				return text;
 			},
@@ -6575,7 +6580,7 @@ addLayer("cl", {
 			buy() { buyStandardBuyable(this, "cl", 'protein', getCellularLifeBuyableBulk(), true) },
 			effect(x) { return player.w.points.mul(x).add(1).pow(1.5) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (xy+1)^1.5';
 				return text;
 			},
@@ -6590,7 +6595,7 @@ addLayer("cl", {
 			buy() { buyStandardBuyable(this, "cl", 'protein', getCellularLifeBuyableBulk(), true) },
 			effect(x) { return new Decimal(6).pow(x) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 6^x';
 				return text;
 			},
@@ -6608,7 +6613,7 @@ addLayer("cl", {
 			buy() { buyStandardBuyable(this, "m", 'points', getCellularLifeBuyableBulk(), true) },
 			effect(x) { return new Decimal(3).pow(x) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 3^x';
 				return text;
 			},
@@ -6623,7 +6628,7 @@ addLayer("cl", {
 			buy() { buyStandardBuyable(this, "cl", 'protein', getCellularLifeBuyableBulk(), true) },
 			effect(x) { return new Decimal(5).pow(x) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 5^x';
 				return text;
 			},
@@ -6642,7 +6647,7 @@ addLayer("cl", {
 				return [new Decimal(1.025).pow(x).sub(1).mul(10), x.mul(7.5).add(1).pow(2)];
 			},
 			effectDisplay(eff) {
-				let text = '+' + format(eff[0].mul(100)) + '%<br>and ' + format(eff[1]) + 'x';
+				let text = "+" + format(eff[0].mul(100)) + '%<br>and ' + format(eff[1]) + "x";
 				if (options.nerdMode) { // x to % -> 10(...) * 100 = 1,000(...)
 					if (hasMilestone("w", 20)) text += '<br>formulas: 1,000((1.36^x)-1)<br>and (50x+1)^3';
 					else if (hasMilestone("w", 19)) text += '<br>formulas: 1,000((1.175^x)-1)<br>and (25x+1)^3';
@@ -6661,7 +6666,7 @@ addLayer("cl", {
 			buy() { buyStandardBuyable(this, "cl", 'points', getCellularLifeBuyableBulk(), true) },
 			effect(x) { return x.add(1).pow(10) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^10';
 				return text;
 			},
@@ -6676,7 +6681,7 @@ addLayer("cl", {
 			buy() { buyStandardBuyable(this, "cl", 'protein', getCellularLifeBuyableBulk(), true) },
 			effect(x) { return new Decimal(10).pow(x) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 10^x';
 				return text;
 			},
@@ -6695,7 +6700,7 @@ addLayer("cl", {
 			buy() { buyStandardBuyable(this, "cl", 'protein', getCellularLifeBuyableBulk(), true) },
 			effect(x) { return x.add(1).pow(hasMilestone("w", 20) ? 0.155 : 0.125) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) {
 					if (hasMilestone("w", 20)) text += '<br>formula: (x+1)^0.155';
 					else text += '<br>formula: (x+1)^0.125';
@@ -7054,7 +7059,7 @@ addLayer("ch", {
 			},
 			50: {
 				requirement: 300,
-				effectDescription() { return "coming soon..." },
+				effectDescription() { return "reduce the cost scaling of <b" + getColorClass(this, TITLE, "w") + "Sanctum Habitation</b>" },
 			},
 		};
 		const done = req => player.ch.points.gte(req);
@@ -7089,7 +7094,7 @@ addLayer("ch", {
 			rewardDescription: "exponentiates point gain and demon soul gain multiplier based on completions",
 			rewardEffect() { return challengeCompletions(this.layer, this.id) / 100 + 1 },
 			rewardDisplay(eff) {
-				let text = '^' + format(eff);
+				let text = "^" + format(eff);
 				if (options.nerdMode) text += '<br>formula: x/100+1';
 				return text;
 			},
@@ -7121,7 +7126,7 @@ addLayer("ch", {
 				return (challengeCompletions(this.layer, this.id) * 6.32 + 1) ** 0.005;
 			},
 			rewardDisplay(eff) {
-				let text = '^' + format(eff);
+				let text = "^" + format(eff);
 				if (options.nerdMode) {
 					if (hasMilestone("ch", 13)) text += '<br>formula: (x+1)^0.2';
 					else text += '<br>formula: (6.32x+1)^0.005';
@@ -7230,7 +7235,7 @@ addLayer("mo", {
 		if (isAssimilated(this.layer)) return 'which multiplies cellular life gain by <h2 class="layer-mo">' + format(tmp.mo.effect) + '</h2>x';
 	},
 	doReset(resettingLayer) {
-		let keep = ["clickables", 'assimilating', 'assimilated', 'hadLayers', "auto_buyable_11"];
+		let keep = ["clickables", "assimilating", "assimilated", "hadLayers", "auto_buyable_11"];
 		keep = keep.concat(getKeepFromPlanets(resettingLayer));
 		if (layers[resettingLayer].row > this.row) layerDataReset("mo", keep);
 	},
@@ -7267,7 +7272,7 @@ addLayer("mo", {
 				} else {
 					text += 'Begin an Assimilation search.<br><br>Req: ' + formatWhole(c.req) + ' multicellular organisms';
 				};
-				text += '<br><br>Assimilated layers: ' + formatWhole(player.mo.assimilated.length) + '/' + formatWhole(c.limit);
+				text += '<br><br>Assimilated layers: ' + formatWhole(player.mo.assimilated.length) + "/" + formatWhole(c.limit);
 				return text;
 			},
 			req() { return [1, 2, 3, 4, 7, 12, 16, 21, 30, 57, 77, 101, 125, 151, 181, 275, 500][player.mo.assimilated.length] || Infinity },
@@ -7329,7 +7334,7 @@ addLayer("mo", {
 			title() { return '<b' + getColorClass(this, TITLE, "a") + 'Atom</b> <b' + getColorClass(this, TITLE) + 'Synergy' },
 			description: 'multiplies atom gain based on the amount of this upgrade bought.',
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 1000^x';
 				return text;
 			},
@@ -7344,7 +7349,7 @@ addLayer("mo", {
 			title() { return '<b' + getColorClass(this, TITLE, "s") + 'Sanctum</b> <b' + getColorClass(this, TITLE) + 'Synergy' },
 			description: 'multiplies sanctum gain based on the amount of this upgrade bought.',
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 2^x';
 				return text;
 			},
@@ -7363,8 +7368,8 @@ addLayer("mo", {
 			title() { return '<b' + getColorClass(this, TITLE, "gi") + 'Good Influence</b> <b' + getColorClass(this, TITLE) + 'Synergy' },
 			description: 'multiplies good influence gain based on the amount of this upgrade bought.',
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
-				if (eff.gte(softcaps.mo_buyable_13[0])) text += ' (softcapped)';
+				let text = format(eff) + "x";
+				if (eff.gte(softcaps.mo_buyable_13[0])) text += " (softcapped)";
 				if (options.nerdMode) text += '<br>formula: 1.1^x';
 				return text;
 			},
@@ -7379,7 +7384,7 @@ addLayer("mo", {
 			title() { return '<b' + getColorClass(this, TITLE, "ch", true) + 'Chaos</b> <b' + getColorClass(this, TITLE) + 'Synergy' },
 			description: 'multiplies chaos gain based on the amount of this upgrade bought.',
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 1.03^x';
 				return text;
 			},
@@ -7394,7 +7399,7 @@ addLayer("mo", {
 			title() { return '<b' + getColorClass(this, TITLE) + 'Multicellular Organism Synergy' },
 			description: 'multiplies multicellular organism gain based on the amount of this upgrade bought.',
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 1.03^x';
 				return text;
 			},
@@ -7541,7 +7546,7 @@ addLayer("pl", {
 			buy() { buyStandardBuyable(this, "pl", "air") },
 			effect(x) { return x.div(10).add(1).pow(0.5) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x/10+1)^0.5';
 				return text;
 			},
@@ -7557,7 +7562,7 @@ addLayer("pl", {
 			buy() { buyStandardBuyable(this, "mo") },
 			effect(x) { return player.r.light.add(1).log10().add(1).pow(x) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^y';
 				return text;
 			},
@@ -7573,7 +7578,7 @@ addLayer("pl", {
 			buy() { addBuyables(this.layer, this.id, 1) },
 			effect(x) { return player.a.points.add(1).log10().add(1).pow(x) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^y';
 				return text;
 			},
@@ -7587,7 +7592,7 @@ addLayer("pl", {
 			description: 'multiplies point gain based on your air',
 			effect() { return player.pl.air.add(1).pow(2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^2';
 				return text;
 			},
@@ -7607,7 +7612,7 @@ addLayer("pl", {
 			description: 'multiplies air gain based on your essence',
 			effect() { return player.e.points.add(1).slog().add(1).pow(2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
 				return text;
 			},
@@ -7627,7 +7632,7 @@ addLayer("pl", {
 			description: 'multiplies air gain based on your cores',
 			effect() { return player.c.points.add(1).slog().add(1).pow(2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
 				return text;
 			},
@@ -7647,7 +7652,7 @@ addLayer("pl", {
 			description: 'multiplies air gain based on your quarks',
 			effect() { return player.q.points.add(1).slog().add(1).pow(2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
 				return text;
 			},
@@ -7667,7 +7672,7 @@ addLayer("pl", {
 			description: 'multiplies air gain based on your subatomic particles',
 			effect() { return player.sp.points.add(1).slog().add(1).pow(2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
 				return text;
 			},
@@ -7687,7 +7692,7 @@ addLayer("pl", {
 			description: 'multiplies air gain based on your hexes',
 			effect() { return player.h.points.add(1).slog().add(1).pow(2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
 				return text;
 			},
@@ -7707,7 +7712,7 @@ addLayer("pl", {
 			description: 'multiplies air gain based on your demon souls',
 			effect() { return player.ds.points.add(1).slog().add(1).pow(2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
 				return text;
 			},
@@ -7727,7 +7732,7 @@ addLayer("pl", {
 			description: 'multiplies air gain based on your atoms',
 			effect() { return player.a.points.add(1).slog().add(1).pow(2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
 				return text;
 			},
@@ -7740,7 +7745,7 @@ addLayer("pl", {
 			description: 'multiplies prayer gain based on your air',
 			effect() { return player.pl.air.add(1).pow(10) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^10';
 				return text;
 			},
@@ -7753,7 +7758,7 @@ addLayer("pl", {
 			description: 'multiplies air gain based on your holiness',
 			effect() { return player.p.holiness.add(1).slog().add(1).pow(2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
 				return text;
 			},
@@ -7766,7 +7771,7 @@ addLayer("pl", {
 			description: 'multiplies sanctum gain based on your air',
 			effect() { return player.pl.air.add(1).log10().add(1).pow(0.1) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log(x+1)+1)^0.1';
 				return text;
 			},
@@ -7779,7 +7784,7 @@ addLayer("pl", {
 			description: 'multiplies air gain based on your sanctums',
 			effect() { return player.s.points.add(1).slog().add(1).pow(2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
 				return text;
 			},
@@ -7792,7 +7797,7 @@ addLayer("pl", {
 			description: 'multiplies light gain after hardcap based on your air',
 			effect() { return player.pl.air.add(1).pow(0.5) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.5';
 				return text;
 			},
@@ -7805,7 +7810,7 @@ addLayer("pl", {
 			description: 'multiplies air gain based on your relics',
 			effect() { return player.r.points.add(1).slog().add(1).pow(2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
 				return text;
 			},
@@ -7818,7 +7823,7 @@ addLayer("pl", {
 			description: 'multiplies molecule gain based on your air',
 			effect() { return player.pl.air.add(1).pow(0.1) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.1';
 				return text;
 			},
@@ -7831,7 +7836,7 @@ addLayer("pl", {
 			description: 'multiplies air gain based on your total unique molecules',
 			effect() { return tmp.m.uniqueNonExtra.add(tmp.m.uniqueExtra).add(1).slog().add(1).pow(2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (superlog(x+1)+1)^2';
 				return text;
 			},
@@ -7851,7 +7856,7 @@ addLayer("pl", {
 			description: 'multiplies air gain based on your good/evil influence',
 			effect() { return player.gi.points.mul(player.ei.points).add(1).slog().add(1).pow(2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (superlog(xy+1)+1)^2';
 				return text;
 			},
@@ -7871,7 +7876,7 @@ addLayer("pl", {
 			description: 'multiplies air gain based on your wars',
 			effect() { return player.w.points.add(1).log10().add(1).pow(2) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (log10(x+1)+1)^2';
 				return text;
 			},
@@ -7891,7 +7896,7 @@ addLayer("pl", {
 			description: 'multiplies air gain based on your achievements past 90',
 			effect() { return player.A.points.sub(90).max(0).pow_base(1.25) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 1.25^(x-90)';
 				return text;
 			},
@@ -7911,7 +7916,7 @@ addLayer("pl", {
 			description: 'multiplies air gain based on your chaos',
 			effect() { return player.ch.points.add(1).pow(hasMilestone("ch", 43) ? 1.25 : 0.5) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^' + (hasMilestone("ch", 43) ? '1.25' : '0.5');
 				return text;
 			},
@@ -7931,7 +7936,7 @@ addLayer("pl", {
 			description: 'multiplies air gain based on your multicellular organisms',
 			effect() { return player.mo.points.add(1).pow(0.4) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: (x+1)^0.4';
 				return text;
 			},
@@ -7954,7 +7959,7 @@ addLayer("pl", {
 			description: 'multiplies air gain based on your chaos milestones past 20',
 			effect() { return new Decimal(1.2).pow(Math.max(player.ch.milestones.length - 20, 0)) },
 			effectDisplay(eff) {
-				let text = format(eff) + 'x';
+				let text = format(eff) + "x";
 				if (options.nerdMode) text += '<br>formula: 1.2^(x-20)';
 				return text;
 			},
