@@ -52,7 +52,7 @@ addLayer("G", {
 	tabFormat: [
 		"main-display",
 		"prestige-button",
-		["custom-resource-display", () => `You have generated ${format(player.stats[0].total)} coins in this realm<br><br>Your best gems this life is ${format(player.G.best)}<br>You have recieved a total of ${format(player.G.total)} gems this life`],
+		["custom-resource-display", () => `You have generated ${format(player.stats[0].total)} coins in this realm<br><br>Your best gems this life is ${formatWhole(player.G.best)}<br>You have recieved a total of ${formatWhole(player.G.total)} gems this life`],
 		"blank",
 		"upgrades",
 		"blank",

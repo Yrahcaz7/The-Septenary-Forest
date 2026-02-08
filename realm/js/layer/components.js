@@ -40,11 +40,11 @@ addLayer("C", {
 			"blank",
 			["row", clickableRow],
 			"blank",
-			["row", buyableRow],
+			["row", buyableRow, {"row-gap": "17px"}],
 		];
 	},
 	componentStyles: {
-		buyable: {width: "180px", height: "125px", "border-radius": "25px"},
+		buyable: {width: "180px", "border-radius": "25px"},
 	},
 	buyables: (() => {
 		const data = {};
@@ -115,6 +115,7 @@ addLayer("C", {
 					player.points = player.points.sub(this.cost());
 					addBuyables("C", index + 11, player.C.bulk);
 				},
+				style: {"min-height": "135px"},
 			};
 			if (index === 2) {
 				data[index + 11].effect2 = new Decimal(5);
@@ -142,7 +143,7 @@ addLayer("C", {
 					player.points = player.points.sub(this.cost());
 					addBuyables("C", index + 111, 1);
 				},
-				style: {height: "90px"},
+				style: {"min-height": "90px"},
 			};
 			if (index >= 3) {
 				data[index + 11].color = getSideColor;
