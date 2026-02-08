@@ -27,7 +27,7 @@ function getRawTabContent(layer, name = "") {
 		content.push("blank");
 	} else if (layer == "q") {
 		if (name == "The Decipherer") {
-			content.push(["display-text", 'Your ' + getGlitchDecipherText() + ' is currently <h2 class="layer-q">' + format(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + '</h2> insight<br><br>Deciphered amount decays over time with a decay factor of ' + (hasUpgrade("q", 65) ? 0.1 : 0.001)]);
+			content.push(["display-text", "Your " + getGlitchDecipherText() + ' is currently <h2 class="layer-q">' + format(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + "</h2> insight<br><br>Deciphered amount decays over time with a decay factor of " + (hasUpgrade("q", 65) ? 0.1 : 0.001)]);
 			content.push("blank");
 			content.push("buyables");
 		} else {
@@ -92,9 +92,9 @@ function getRawTabContent(layer, name = "") {
 			content.push("milestones");
 		};
 	} else if (layer == "p") {
-		let text = 'You have <h2 class="layer-p">' + format(player.p.divinity) + '</h2> divinity, which boosts point generation by <h2 class="layer-p">' + format(player.p.divinity.add(1).pow(0.1)) + '</h2>x';
-		if (hasUpgrade("p", 22)) text += '<br>You have <h2 class="layer-p">' + format(player.p.holiness) + '</h2> holiness, which boosts essence gain by <h2 class="layer-p">' + format(player.p.holiness.add(1).pow(0.055)) + '</h2>x';
-		if (hasUpgrade("p", 41)) text += '<br>You have <h2 class="layer-p">' + formatWhole(player.p.hymns) + '</h2> hymns, which boosts prayer gain by <h2 class="layer-p">' + format(tmp.p.hymnEffect) + '</h2>x';
+		let text = 'You have <h2 class="layer-p">' + format(player.p.divinity) + '</h2> divinity, which boosts point generation by <h2 class="layer-p">' + format(player.p.divinity.add(1).pow(0.1)) + "</h2>x";
+		if (hasUpgrade("p", 22)) text += '<br>You have <h2 class="layer-p">' + format(player.p.holiness) + '</h2> holiness, which boosts essence gain by <h2 class="layer-p">' + format(player.p.holiness.add(1).pow(0.055)) + "</h2>x";
+		if (hasUpgrade("p", 41)) text += '<br>You have <h2 class="layer-p">' + formatWhole(player.p.hymns) + '</h2> hymns, which boosts prayer gain by <h2 class="layer-p">' + format(tmp.p.hymnEffect) + "</h2>x";
 		content.push(["display-text", text]);
 		content.push("blank");
 		content.push("milestones");
@@ -106,13 +106,13 @@ function getRawTabContent(layer, name = "") {
 		};
 	} else if (layer == "s") {
 		if (name == "Glow") {
-			content.push(["display-text", 'You are generating <h2 class="layer-s">' + format(tmp.g.glowGain) + '</h2> glow/sec, with a maximum of <h2 class="layer-s">' + format(tmp.g.glowMax) + '</h2> glow<br>You have <h2 class="layer-s">' + format(player.s.glow) + '</h2> glow, which multiplies sanctum gain and light gain after hardcap by <h2 class="layer-s">' + format(tmp.g.glowEffect) + '</h2>x']);
+			content.push(["display-text", 'You are generating <h2 class="layer-s">' + format(tmp.g.glowGain) + '</h2> glow/sec, with a maximum of <h2 class="layer-s">' + format(tmp.g.glowMax) + '</h2> glow<br>You have <h2 class="layer-s">' + format(player.s.glow) + '</h2> glow, which multiplies sanctum gain and light gain after hardcap by <h2 class="layer-s">' + format(tmp.g.glowEffect) + "</h2>x"]);
 			content.push("blank");
 			content.push(["layer-proxy", ["g", ["buyables"]]]);
 			content.push("blank");
 			content.push("blank");
 		} else if (name == "Devotion") {
-			content.push(["display-text", 'You have <h2 class="layer-s">' + format(tmp.d.devotion) + '</h2> devotion, which multiplies sanctum gain by <h2 class="layer-s">' + format(tmp.d.devotionEffect) + '</h2>x']);
+			content.push(["display-text", 'You have <h2 class="layer-s">' + format(tmp.d.devotion) + '</h2> devotion, which multiplies sanctum gain by <h2 class="layer-s">' + format(tmp.d.devotionEffect) + "</h2>x"]);
 			content.push("blank");
 			content.push(["layer-proxy", ["d", ["buyables"]]]);
 			content.push("blank");
@@ -121,7 +121,7 @@ function getRawTabContent(layer, name = "") {
 			content.push("milestones");
 		};
 	} else if (layer == "r") {
-		content.push(["display-text", 'You have <h2 class="layer-r">' + formatWhole(player.r.points.sub(getActivatedRelics())) + '</h2> unactivated relics and <h2 class="layer-r">' + formatWhole(getActivatedRelics()) + '</h2> activated relics']);
+		content.push(["display-text", 'You have <h2 class="layer-r">' + formatWhole(player.r.points.sub(getActivatedRelics())) + '</h2> unactivated relics and <h2 class="layer-r">' + formatWhole(getActivatedRelics()) + "</h2> activated relics"]);
 		content.push("blank");
 		if (name == "The Prism") {
 			content.push("buyables");
@@ -137,9 +137,9 @@ function getRawTabContent(layer, name = "") {
 		};
 	} else if (layer == "m") {
 		if (name == "Constructor") {
-			let text = 'You have <h2 class="layer-m">' + formatWhole(tmp.m.uniqueNonExtra) + '</h2>';
-			if (tmp.m.uniqueExtra.gt(0)) text += '<h3 class="layer-m-light">+' + formatWhole(tmp.m.uniqueExtra) + '</h3>';
-			text += ' total unique molecules';
+			let text = 'You have <h2 class="layer-m">' + formatWhole(tmp.m.uniqueNonExtra) + "</h2>";
+			if (tmp.m.uniqueExtra.gt(0)) text += '<h3 class="layer-m-light">+' + formatWhole(tmp.m.uniqueExtra) + "</h3>";
+			text += " total unique molecules";
 			content.push(["display-text", text]);
 			content.push("blank");
 			content.push("upgrades");
@@ -148,7 +148,7 @@ function getRawTabContent(layer, name = "") {
 			content.push("milestones");
 		};
 	} else if (layer == "gi") {
-		content.push(["display-text", 'You have <h2 class="layer-s">' + format(tmp.d.devotion) + '</h2> devotion, which multiplies good influence gain by <h2 class="layer-gi">' + format(tmp.gi.devotionEffect) + '</h2>x']);
+		content.push(["display-text", 'You have <h2 class="layer-s">' + format(tmp.d.devotion) + '</h2> devotion, which multiplies good influence gain by <h2 class="layer-gi">' + format(tmp.gi.devotionEffect) + "</h2>x"]);
 		content.push("blank");
 		content.push("milestones");
 		content.push("buyables");
@@ -158,7 +158,7 @@ function getRawTabContent(layer, name = "") {
 			content.push("blank");
 		};
 	} else if (layer == "ei") {
-		content.push(["display-text", 'You have <h2 class="layer-ei">' + format(player.ei.power) + '</h2> evil power']);
+		content.push(["display-text", 'You have <h2 class="layer-ei">' + format(player.ei.power) + "</h2> evil power"]);
 		content.push("blank");
 		if (name == "Gate of Evil") {
 			content.push("challenges");
@@ -180,7 +180,7 @@ function getRawTabContent(layer, name = "") {
 		};
 	} else if (layer == "cl") {
 		if (name == "Protein") {
-			content.push(["display-text", 'You are currently finding <h2 class="layer-cl">' + format(tmp.cl.proteinConv) + '</h2> protein per cellular life<br>' + (tmp.cl.proteinGain.gt(0) ? 'You are currently gaining <h2 class="layer-cl">' + format(tmp.cl.proteinGain) + '</h2> protein per second<br>' : "") + 'You currently have <h2 class="layer-cl">' + format(player.cl.protein) + '</h2> protein']);
+			content.push(["display-text", 'You are currently finding <h2 class="layer-cl">' + format(tmp.cl.proteinConv) + "</h2> protein per cellular life<br>" + (tmp.cl.proteinGain.gt(0) ? 'You are currently gaining <h2 class="layer-cl">' + format(tmp.cl.proteinGain) + "</h2> protein per second<br>" : "") + 'You currently have <h2 class="layer-cl">' + format(player.cl.protein) + "</h2> protein"]);
 			content.push("blank");
 			content.push(["buyables", [3, 4, 5]]);
 			content.push("blank");
@@ -259,7 +259,7 @@ function getRawTabContent(layer, name = "") {
 		content.push("blank");
 	} else if (layer == "pl") {
 		if (name == "Atmosphere") {
-			content.push([prefix + "display-text", 'You have <h2 class="layer-pl">' + format(player.pl.air) + '</h2> air']);
+			content.push([prefix + "display-text", 'You have <h2 class="layer-pl">' + format(player.pl.air) + "</h2> air"]);
 			if (hasMilestone("pl", 1)) {
 				content.push("blank");
 				content.push(["buyables", [1]]);
@@ -268,7 +268,7 @@ function getRawTabContent(layer, name = "") {
 			content.push(prefix + "upgrades");
 			content.push("blank");
 		} else {
-			content.push([prefix + "display-text", 'You have <h2 class="layer-ch">' + formatWhole(player.ch.points) + '</h2> chaos, which divides the planet requirement by /<h2 class="layer-pl">' + format(tmp.pl.chaosEffect) + '</h2>']);
+			content.push([prefix + "display-text", 'You have <h2 class="layer-ch">' + formatWhole(player.ch.points) + '</h2> chaos, which divides the planet requirement by /<h2 class="layer-pl">' + format(tmp.pl.chaosEffect) + "</h2>"]);
 			content.push("blank");
 			content.push(prefix + "milestones");
 		};

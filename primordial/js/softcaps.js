@@ -1,5 +1,5 @@
 const softcaps = {
-	points: ['e1e14', () => {
+	points: ["e1e14", () => {
 		if (hasChallenge("ds", 32)) return 0.3;
 		return 0.25;
 	}],
@@ -17,8 +17,8 @@ const softcaps = {
 		if (isAssimilated("m") || player.mo.assimilating === "m") return 0.51;
 		return 0.5;
 	}],
-	r_eff1: ['e1000000', 0.2],
-	gi_eff: ['1e2500', 0.6666666666666666],
+	r_eff1: ["e1000000", 0.2],
+	gi_eff: ["1e2500", 0.6666666666666666],
 	mo_buyable_13: [1.22, () => {
 		if (hasMilestone("ch", 43)) return 2;
 		if (isAssimilated("mo")) return 4;
@@ -54,9 +54,9 @@ addLayer("SC", {
 	}},
 	color: "#DFDFDF",
 	resource: "discovered softcaps",
-	row: 'side',
+	row: "side",
 	layerShown() { return player.SC.points.gt(0) && !(getClickableState("mo", 11) && player.mo.assimilating === null) },
-	tooltip() { return player.SC.points + ' softcaps' },
+	tooltip() { return player.SC.points + " softcaps" },
 	update(diff) {
 		resetActiveSoftcaps();
 		if (player.points.gte(softcaps.points[0])) {
@@ -93,26 +93,26 @@ addLayer("SC", {
 	tabFormat: [
 		["display-text", () => {
 			let text = "You have <h2 class='layer-SC'>" + player.SC.points + "</h2> discovered softcaps<br>";
-			if (activeSoftcaps["points"]) text += '<br><h2 class="pointSoftcap">Point Gain Softcap</h2><br>starts at ' + format(softcaps.points[0]) + ', gain to ^' + format(softcaps.points[1]()) + '<br>';
+			if (activeSoftcaps["points"]) text += '<br><h2 class="pointSoftcap">Point Gain Softcap</h2><br>starts at ' + format(softcaps.points[0]) + ", gain to ^" + format(softcaps.points[1]()) + "<br>";
 			for (const layer of layersWithNormalSoftcappedGain) {
-				if (activeSoftcaps[layer]) text += '<br><h2 class="layer-' + layer + '">' + tmp[layer].name + ' Gain Softcap</h2><br>starts at ' + format(tmp[layer].softcap) + ', gain to ^' + format(tmp[layer].softcapPower) + '<br>';
+				if (activeSoftcaps[layer]) text += '<br><h2 class="layer-' + layer + '">' + tmp[layer].name + " Gain Softcap</h2><br>starts at " + format(tmp[layer].softcap) + ", gain to ^" + format(tmp[layer].softcapPower) + "<br>";
 			};
 			if (activeSoftcaps["ei"]) {
 				if (activeSoftcaps["ei"] > 1) {
 					text += '<br><h2 class="layer-ei">Evil Influence Gain Softcaps</h2><ul>';
 					for (let index = 0; index < activeSoftcaps["ei"]; index++) {
-						text += '<li>' + (index + 1) + '. starts at ' + format(tmp.ei.softcaps[index]) + ', gain to ^' + format(tmp.ei.softcapPowers[index]) + '</li>';
+						text += "<li>" + (index + 1) + ". starts at " + format(tmp.ei.softcaps[index]) + ", gain to ^" + format(tmp.ei.softcapPowers[index]) + "</li>";
 					};
-					text += '</ul>';
+					text += "</ul>";
 				} else {
-					text += '<br><h2 class="layer-ei">Evil Influence Gain Softcap</h2><br>starts at ' + format(tmp.ei.softcaps[0]) + ', gain to ^' + format(tmp.ei.softcapPowers[0]) + '<br>';
+					text += '<br><h2 class="layer-ei">Evil Influence Gain Softcap</h2><br>starts at ' + format(tmp.ei.softcaps[0]) + ", gain to ^" + format(tmp.ei.softcapPowers[0]) + "<br>";
 				};
 			};
-			if (activeSoftcaps["p-eff"]) text += '<br><h2 class="layer-p">Prayer Effect Softcap</h2><br>starts at ' + format(softcaps.p_eff[0]()) + ', effect to ^' + format(softcaps.p_eff[1]()) + '<br>';
-			if (activeSoftcaps["r-eff1"]) text += '<br><h2 class="layer-r">Relic\'s First Effect Softcap</h2><br>starts at ' + format(softcaps.r_eff1[0]) + ', effect to ^' + format(softcaps.r_eff1[1]) + '<br>';
-			if (activeSoftcaps["m-eff"]) text += '<br><h2 class="layer-m">Molecule Effect Softcap</h2><br>starts at ' + format(softcaps.m_eff[0]()) + ', effect to ^' + format(softcaps.m_eff[1]()) + '<br>';
-			if (activeSoftcaps["gi-eff"]) text += '<br><h2 class="layer-gi">Good Influence Effect Softcap</h2><br>starts at ' + format(softcaps.gi_eff[0]) + ', effect to ^' + format(softcaps.gi_eff[1]) + '<br>';
-			if (activeSoftcaps["mo-buyable-13"]) text += '<br><h2 class="layer-mo"><b class="layer-gi">Good Influence</b> Synergy Effect Softcap</h2><br>starts at ' + format(softcaps.mo_buyable_13[0]) + ', effect /' + format(softcaps.mo_buyable_13[1]()) + '<br>';
+			if (activeSoftcaps["p-eff"]) text += '<br><h2 class="layer-p">Prayer Effect Softcap</h2><br>starts at ' + format(softcaps.p_eff[0]()) + ", effect to ^" + format(softcaps.p_eff[1]()) + "<br>";
+			if (activeSoftcaps["r-eff1"]) text += '<br><h2 class="layer-r">Relic\'s First Effect Softcap</h2><br>starts at ' + format(softcaps.r_eff1[0]) + ", effect to ^" + format(softcaps.r_eff1[1]) + "<br>";
+			if (activeSoftcaps["m-eff"]) text += '<br><h2 class="layer-m">Molecule Effect Softcap</h2><br>starts at ' + format(softcaps.m_eff[0]()) + ", effect to ^" + format(softcaps.m_eff[1]()) + "<br>";
+			if (activeSoftcaps["gi-eff"]) text += '<br><h2 class="layer-gi">Good Influence Effect Softcap</h2><br>starts at ' + format(softcaps.gi_eff[0]) + ", effect to ^" + format(softcaps.gi_eff[1]) + "<br>";
+			if (activeSoftcaps["mo-buyable-13"]) text += '<br><h2 class="layer-mo"><b class="layer-gi">Good Influence</b> Synergy Effect Softcap</h2><br>starts at ' + format(softcaps.mo_buyable_13[0]) + ", effect /" + format(softcaps.mo_buyable_13[1]()) + "<br>";
 			return text;
 		}],
 	],

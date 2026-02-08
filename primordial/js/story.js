@@ -685,11 +685,11 @@ const storyKeywords = [
 
 for (let index = 0; index < story.length; index++) {
 	if (story[index][0].startsWith('\n\t')) story[index][0] = story[index][0].slice(2);
-	story[index] = story[index].map(value => value.replace(/\n\t/g, '<br><br>').trim());
+	story[index] = story[index].map(value => value.replace(/\n\t/g, "<br><br>").trim());
 };
 
-story[0][0] = '...<br>' + story[0][0].replace(/<br><br>/g, '<br>...<br>');
-story[12][0] = '...<br>' + story[12][0].replace(/<br><br>/g, '<br>...<br>');
+story[0][0] = "...<br>" + story[0][0].replace(/<br><br>/g, "<br>...<br>");
+story[12][0] = "...<br>" + story[12][0].replace(/<br><br>/g, "<br>...<br>");
 
 function storyLengthUpTo(num) {
 	if (num < 0) return 0;
@@ -749,7 +749,7 @@ function filterStory(string) {
 function getChaosInfoBoxes() {
 	let infoBoxes = {};
 	for (let row = 0; row < story.length; row++) {
-		const boxID = 'story' + row;
+		const boxID = "story" + row;
 		infoBoxes[boxID] = {
 			title() {
 				let text = "";
@@ -772,13 +772,13 @@ function getChaosInfoBoxes() {
 			unlocked() { return player.ch.best.toNumber() > storyLengthUpTo(row - 1) || isAssimilated("ch") },
 		};
 		if (storyColors[row] && storyColors[row].length > 0) {
-			infoBoxes[boxID].style = {'border-color': storyColors[row][0], 'border-radius': 0};
-			infoBoxes[boxID].titleStyle = {'background-color': storyColors[row][0], 'border-radius': 0};
-			infoBoxes[boxID].bodyStyle = {'margin-bottom': 0, 'border-image-source': 'linear-gradient(' + storyColors[row].join(', ') + ')', 'border-image-slice': 4, 'border-radius': 0};
+			infoBoxes[boxID].style = {"border-color": storyColors[row][0], "border-radius": 0};
+			infoBoxes[boxID].titleStyle = {"background-color": storyColors[row][0], "border-radius": 0};
+			infoBoxes[boxID].bodyStyle = {"margin-bottom": 0, "border-image-source": "linear-gradient(" + storyColors[row].join(", ") + ")", "border-image-slice": 4, "border-radius": 0};
 		} else {
-			infoBoxes[boxID].style = {'border-radius': 0};
-			infoBoxes[boxID].titleStyle = {'border-radius': 0};
-			infoBoxes[boxID].bodyStyle = {'margin-bottom': 0, 'border-radius': 0};
+			infoBoxes[boxID].style = {"border-radius": 0};
+			infoBoxes[boxID].titleStyle = {"border-radius": 0};
+			infoBoxes[boxID].bodyStyle = {"margin-bottom": 0, "border-radius": 0};
 		};
 	};
 	infoBoxes["chaos-assimilation"] = {
@@ -903,12 +903,12 @@ function getChaosInfoBoxes() {
 				And I shall be the only demon to emerge from this world.
 				Ever.
 			`;
-			text = text.trim().replace(/\n\t\t\t\t/g, '<br><br>');
+			text = text.trim().replace(/\n\t\t\t\t/g, "<br><br>");
 			return filterStory(text);
 		},
-		style: {'border-radius': 0},
-		titleStyle: {'border-radius': 0},
-		bodyStyle: {'margin-bottom': 0, 'border-image-source': 'linear-gradient(#FFFFFF, #BA0035, #FFFFFF, #BA0035)', 'border-image-slice': 4, 'border-radius': 0},
+		style: {"border-radius": 0},
+		titleStyle: {"border-radius": 0},
+		bodyStyle: {"margin-bottom": 0, "border-image-source": "linear-gradient(#FFFFFF, #BA0035, #FFFFFF, #BA0035)", "border-image-slice": 4, "border-radius": 0},
 		unlocked() { return inGlitchedAssimilationSearch() || isAssimilated("ch") },
 	};
 	return infoBoxes;
@@ -943,11 +943,11 @@ function getKeywordDisplay() {
 	let keywords = getDecipheredKeywords();
 	if (keywords.length > 1) keywords[keywords.length - 1] = "and " + keywords[keywords.length - 1];
 	const next = nextStorySegmentFinishesAt();
-	let text = 'For each fully unlocked story segment, you decipher some keywords.<br><br>You have deciphered <h2 class="layer-ch">' + formatWhole(keywords.length) + '</h2> keywords so far.';
-	if (keywords.length > 0) text += '<br><br>These keywords are: ' + keywords.join(", ") + '.';
-	text += '<br><br>';
+	let text = 'For each fully unlocked story segment, you decipher some keywords.<br><br>You have deciphered <h2 class="layer-ch">' + formatWhole(keywords.length) + "</h2> keywords so far.";
+	if (keywords.length > 0) text += "<br><br>These keywords are: " + keywords.join(", ") + ".";
+	text += "<br><br>";
 	if (isAssimilated("ch")) text += "You have deciphered all the keywords that currenenene" + randomChar() + "ene" + randomChar() + "e" + randomStr(2) + "n" + randomStr(4) + "e" + randomStr(6);
-	else if (next == Infinity) text += 'You have deciphered all the keywords that currently exist.';
-	else text += 'More keywords will be deciphered at ' + formatWhole(next) + ' chaos.';
+	else if (next == Infinity) text += "You have deciphered all the keywords that currently exist.";
+	else text += "More keywords will be deciphered at " + formatWhole(next) + " chaos.";
 	return text;
 };

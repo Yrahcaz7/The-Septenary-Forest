@@ -7,44 +7,44 @@ addLayer("A", {
 	}},
 	color: "#A5BCC2",
 	resource: "achievements",
-	row: 'side',
+	row: "side",
 	effectDescription() {
 		let text = ["<br>which are multiplying your point ", "", "", ""];
 		if (hasUpgrade("ds", 21)) {
 			if (hasUpgrade("ds", 24)) {
-				text[0] += 'and essence gain by <h2 class="layer-A">' + format(player.A.points.div(5)) + '</h2>x';
+				text[0] += 'and essence gain by <h2 class="layer-A">' + format(player.A.points.div(5)) + "</h2>x";
 			} else {
-				text[0] += 'gain by <h2 class="layer-A">' + format(player.A.points.div(10).add(1)) + '</h2>x';
-				text[1] += 'essence gain by <h2 class="layer-A">' + format(player.A.points.div(5)) + '</h2>x';
+				text[0] += 'gain by <h2 class="layer-A">' + format(player.A.points.div(10).add(1)) + "</h2>x";
+				text[1] += 'essence gain by <h2 class="layer-A">' + format(player.A.points.div(5)) + "</h2>x";
 			};
 			if (hasUpgrade("ds", 23)) {
-				if (!hasUpgrade("ds", 24) && !hasUpgrade("p", 31)) text[2] += 'core and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + '</h2>x';
-				else if (hasUpgrade("ds", 24) && !hasUpgrade("p", 31)) text[1] += 'core and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + '</h2>x';
-				else if (hasUpgrade("ds", 24) && hasUpgrade("p", 31)) text[1] += 'core, prayer, and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + '</h2>x';
+				if (!hasUpgrade("ds", 24) && !hasUpgrade("p", 31)) text[2] += 'core and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + "</h2>x";
+				else if (hasUpgrade("ds", 24) && !hasUpgrade("p", 31)) text[1] += 'core and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + "</h2>x";
+				else if (hasUpgrade("ds", 24) && hasUpgrade("p", 31)) text[1] += 'core, prayer, and quark gain by <h2 class="layer-A">' + format(player.A.points.pow(2).div(100)) + "</h2>x";
 			};
 		} else {
-			text[0] += 'gain by <h2 class="layer-A">' + format(player.A.points.div(10).add(1)) + '</h2>x';
+			text[0] += 'gain by <h2 class="layer-A">' + format(player.A.points.div(10).add(1)) + "</h2>x";
 		};
-		if (hasUpgrade("a", 51)) text[3] += 'subatomic particle gain by <h2 class="layer-A">' + format(player.A.points.pow(1.25)) + '</h2>x';
+		if (hasUpgrade("a", 51)) text[3] += 'subatomic particle gain by <h2 class="layer-A">' + format(player.A.points.pow(1.25)) + "</h2>x";
 		if (options.nerdMode) {
 			if (hasUpgrade("ds", 21)) {
 				if (hasUpgrade("ds", 24)) {
-					text[0] += ' (formula: 0.2x)';
+					text[0] += " (formula: 0.2x)";
 				} else {
-					text[0] += ' (formula: x/10+1)';
-					text[1] += ' (formula: x/5)';
+					text[0] += " (formula: x/10+1)";
+					text[1] += " (formula: x/5)";
 				};
-				if (hasUpgrade("ds", 23) && !hasUpgrade("ds", 24) && !hasUpgrade("p", 31)) text[2] += ' (formula: (x^2)/100)';
-				if (hasUpgrade("ds", 23) && hasUpgrade("ds", 24)) text[1] += ' (formula: (x^2)/100)';
+				if (hasUpgrade("ds", 23) && !hasUpgrade("ds", 24) && !hasUpgrade("p", 31)) text[2] += " (formula: (x^2)/100)";
+				if (hasUpgrade("ds", 23) && hasUpgrade("ds", 24)) text[1] += " (formula: (x^2)/100)";
 			} else {
-				text[0] += ' (formula: x/10+1)';
+				text[0] += " (formula: x/10+1)";
 			};
-			if (hasUpgrade("a", 51)) text[3] += ' (formula: x^1.25)';
+			if (hasUpgrade("a", 51)) text[3] += " (formula: x^1.25)";
 		};
 		let finalText = text[0];
-		if (text[1]) finalText += '<br>and also multiplying ' + text[1];
-		if (text[2]) finalText += '<br>additionally, also multiplying ' + text[2];
-		if (text[3]) finalText += '<br>and lastly, also multiplying ' + text[3];
+		if (text[1]) finalText += "<br>and also multiplying " + text[1];
+		if (text[2]) finalText += "<br>additionally, also multiplying " + text[2];
+		if (text[3]) finalText += "<br>and lastly, also multiplying " + text[3];
 		return finalText;
 	},
 	update(diff) {
@@ -489,11 +489,11 @@ addLayer("A", {
 				requirement: 64,
 			},
 			174: {
-				name() { return 'Chaos of ' + randomStr(7) },
+				name() { return "Chaos of " + randomStr(7) },
 				requirement: 256,
 			},
 			175: {
-				name() { return randomStr(5) + ' of ' + randomStr(4) },
+				name() { return randomStr(5) + " of " + randomStr(4) },
 				requirement: 1024,
 			},
 			176: {
