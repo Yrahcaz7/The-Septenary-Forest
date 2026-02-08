@@ -540,12 +540,11 @@ addLayer("A", {
 		const done = req => player.points.gte(req);
 		const doneLayer = (layer, req) => player[layer].points.gte(req);
 		const image = id => { if (hasAchievement("A", id)) return "images/achievements/" + id + ".png" };
-		const layerOrder = ["", "e", "c", "q", "sp", "h", "ds", "a", "p", "s", "r", "m", "gi", "ei", "w", "cl", "ch", "mo", "pl"];
 		const currencyNames = ["point", "essence", "core", "quark", "subatomic particle", "hex", "demon soul", "atom", "prayer", "sanctum", "relic", "molecule", "good influence", "evil influence", "war", "cellular life", "chaos", "multicellular organism", "planet"];
 		for (const key in obj) {
 			const requirement = obj[key].requirement;
 			const layerIndex = Math.floor((+key) / 10) - 1;
-			const layer = layerOrder[layerIndex];
+			const layer = LAYER_ORDER[layerIndex];
 			if (requirement) {
 				if (layer) obj[key].done = doneLayer.bind(null, layer, requirement);
 				else obj[key].done = done.bind(null, requirement);

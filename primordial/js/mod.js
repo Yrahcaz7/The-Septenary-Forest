@@ -196,6 +196,8 @@ function changelog() {
 	<br>`;
 };
 
+const LAYER_ORDER = ["", "e", "c", "q", "sp", "h", "ds", "a", "p", "s", "r", "m", "gi", "ei", "w", "cl", "ch", "mo", "pl"];
+
 const TITLE = 0;
 const REF = 1;
 
@@ -406,9 +408,13 @@ const displayThings = [
 
 const endPoints = new Decimal("e1e77");
 
-function onLoad() { calculateColorValue() };
+function onLoad() {
+	calculateColorValue();
+};
 
-function maxTickLength() { return 1 };
+function maxTickLength() {
+	return 1;
+};
 
 function removeAchievement(id = NaN) {
 	for (var i = 0; i < player.A.achievements.length; i++) {
