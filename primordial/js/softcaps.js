@@ -20,6 +20,7 @@ const softcaps = {
 	r_eff1: ["e1000000", 0.2],
 	gi_eff: ["1e2500", 0.6666666666666666],
 	mo_buyable_13: [1.22, () => {
+		if (getBuyableAmount("pl", 22).gte(1)) return 1.5;
 		if (hasMilestone("ch", 43)) return 2;
 		if (isAssimilated("mo")) return 4;
 		return 10;

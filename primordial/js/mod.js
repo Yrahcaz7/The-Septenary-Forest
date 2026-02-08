@@ -16,11 +16,12 @@ function changelog() {
 	return `<h1>Changelog:</h1><br>
 		<br><h3>v4.0: The End is Near</h3><br>
 			- Added planets.<br>
-			- Added three milestones to planets.<br>
+			- Added four milestones to planets.<br>
 			- Added thirty-six upgrades to planets.<br>
-			- Added two rebuyables to planets.<br>
+			- Added three rebuyables to planets.<br>
+			- Added two correction types to planets.<br>
 			- Added ${randomStr(4)} to assimilation.<br>
-			- Added eighteen milestones to chaos.<br>
+			- Added twenty milestones to chaos.<br>
 			- Added ${randomStr(4)} to story.<br>
 			- Added seven achievements.<br>
 			- Added twelve achievement images.<br>
@@ -317,8 +318,18 @@ function getCellularLifeBuyableBulk() {
 	return bulk;
 };
 
+function getInfluenceBulk() {
+	let bulk = 1;
+	if (hasMilestone("pl", 3)) bulk *= 5;
+	return bulk;
+};
+
 function getKeepFromPlanets(resettingLayer) {
-	if (resettingLayer == "pl") return [];
+	if (resettingLayer == "pl") {
+		let keep = [];
+		if (hasMilestone("pl", 3)) keep.push("milestones");
+		return keep;
+	};
 	let keep = [];
 	if (hasMilestone("pl", 0)) keep.push("milestones");
 	if (hasMilestone("pl", 1)) keep.push("challenges");
@@ -406,7 +417,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return "You beat the game!<br>For now..." },
 ];
 
-const endPoints = new Decimal("e1e77");
+const endPoints = new Decimal("e1e85");
 
 function onLoad() {
 	calculateColorValue();

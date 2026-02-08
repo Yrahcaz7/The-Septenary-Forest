@@ -2075,6 +2075,7 @@ addLayer("ds", {
 			// mul
 			if (hasMilestone("ch", 48)) gain = gain.mul(milestoneEffect("ch", 48));
 			if (hasMilestone("ch", 49)) gain = gain.mul(milestoneEffect("ch", 49));
+			if (hasMilestone("ch", 51)) gain = gain.mul(milestoneEffect("ch", 51));
 		};
 		// return
 		return gain;
@@ -2346,7 +2347,8 @@ addLayer("ds", {
 				const effects = challengeEffect(this.layer, this.id);
 				let text = "";
 				// current rewards
-				if (completions >= 3) text += "multiply good influence gain and multiply cellular life gain (both based on your Threads)<br>Currently: " + format(effects[0]) + "x<br>and " + format(effects[1]) + "x";
+				if (completions >= 6) text += "multiply good influence gain, multiply cellular life gain, and multiply light gain after hardcap (all based on your Threads)<br>Currently: " + format(effects[0]) + "x,<br>" + format(effects[1]) + "x,<br>and " + format(effects[2]) + "x";
+				else if (completions >= 3) text += "multiply good influence gain and multiply cellular life gain (both based on your Threads)<br>Currently: " + format(effects[0]) + "x<br>and " + format(effects[1]) + "x";
 				else if (completions >= 1) text += "multiply good influence gain based on your Threads<br>Currently: " + format(effects[0]) + "x";
 				else text += "nothing currently";
 				// next reward
@@ -2355,6 +2357,8 @@ addLayer("ds", {
 				else if (completions == 1) text += "improve the first purified souls effect";
 				else if (completions == 2) text += "multiply cellular life gain based on your Threads<br>Currently: " + format(effects[1]) + "x";
 				else if (completions == 3) text += "further improve the first purified souls effect";
+				else if (completions == 4) text += "improve the second purified souls effect";
+				else if (completions == 5) text += "multiply light gain after hardcap based on your Threads<br>Currently: " + format(effects[2]) + "x";
 				else text += "you have gotten all the rewards!";
 				return text;
 			},
@@ -2362,9 +2366,12 @@ addLayer("ds", {
 				let div0 = 10;
 				if (getPurifiedDemonSouls() >= 2) div0--;
 				if (getPurifiedDemonSouls() >= 4) div0--;
+				let pow1 = 0.2;
+				if (getPurifiedDemonSouls() >= 5) pow1 += 0.025;
 				return [
 					player.ds.threads.add(1).log10().div(div0).add(1),
-					player.ds.threads.add(1).log10().add(1).pow(0.2),
+					player.ds.threads.add(1).log10().add(1).pow(pow1),
+					player.ds.threads.add(1).pow(2),
 				];
 			},
 			canComplete() { return player.ds.threads.gte(getPurificationReq()) && challengeCompletions(this.layer, this.id) < tmp[this.layer].challenges[this.id].completionLimit },
@@ -4333,6 +4340,7 @@ addLayer("r", {
 				if (gain.gt(1e25)) gain = new Decimal(1e25);
 			};
 			// mul (after hardcap)
+			if (getPurifiedDemonSouls() >= 6 && challengeEffect("ds", 101)[2]) gain = gain.mul(challengeEffect("ds", 101)[2]);
 			if (tmp.g.glowEffect.gt(1)) gain = gain.mul(tmp.g.glowEffect);
 			if (hasBuyable("g", 21)) gain = gain.mul(buyableEffect("g", 21)[2]);
 			if (new Decimal(tmp.w.effect[2]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[2]);
@@ -6135,7 +6143,7 @@ addLayer("w", {
 			description: "multiplies good influence and evil influence gain based on the amount of this upgrade bought.",
 			canAfford() { return player.gi.points.gte(this.cost()) && player.ei.points.gte(this.cost()) },
 			purchaseLimit: 5000,
-			buy() { buyMultiCurrencyBuyable(this, ["gi", "ei"], hasMilestone("ch", 10)) },
+			buy() { buyMultiCurrencyBuyable(this, ["gi", "ei"], hasMilestone("ch", 10), getInfluenceBulk(), true) },
 			effect(x) { return [x.add(1).pow(0.09), x.add(1).pow(0.21)] },
 			effectDisplay(eff) {
 				let text = format(eff[0]) + "x<br>and " + format(eff[1]) + "x";
@@ -6159,7 +6167,7 @@ addLayer("w", {
 			description: "multiplies evil influence gain based on your relics and the amount of this upgrade bought.",
 			canAfford() { return player.r.points.gte(this.cost()) },
 			purchaseLimit: 15,
-			buy() { buyMultiCurrencyBuyable(this, ["r"], hasMilestone("ch", 10)) },
+			buy() { buyMultiCurrencyBuyable(this, ["r"], hasMilestone("ch", 10), getInfluenceBulk(), true) },
 			effect(x) { return player.r.points.add(1).pow(0.1).mul(x).add(1).pow(0.25) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
@@ -6189,7 +6197,7 @@ addLayer("w", {
 				if (hasMilestone("w", 16)) max += 28;
 				return max;
 			},
-			buy() { buyMultiCurrencyBuyable(this, ["s"], hasMilestone("ch", 10)) },
+			buy() { buyMultiCurrencyBuyable(this, ["s"], hasMilestone("ch", 10), getInfluenceBulk(), true) },
 			effect(x) {
 				if (player.h.limitsBroken >= 1) return player.s.points.add(1).pow(0.025).mul(x).add(1).pow(0.05);
 				return player.s.points.add(1).pow(0.025).mul(x).add(1).pow(0.025);
@@ -6217,7 +6225,7 @@ addLayer("w", {
 				if (hasMilestone("mo", 1)) max = max.add(50);
 				return max;
 			},
-			buy() { buyMultiCurrencyBuyable(this, ["gi", "ei"], hasMilestone("ch", 10)) },
+			buy() { buyMultiCurrencyBuyable(this, ["gi", "ei"], hasMilestone("ch", 10), getInfluenceBulk(), true) },
 			effect(x) {
 				if (hasMilestone("ch", 8)) return x.add(1).pow(7.5).add(new Decimal(2.5).pow(x)).sub(1);
 				return x.add(1).pow(3.25);
@@ -6239,7 +6247,7 @@ addLayer("w", {
 			description: "multiplies good influence gain based on your relics and the amount of this upgrade bought.",
 			canAfford() { return player.r.points.gte(this.cost()) },
 			purchaseLimit: 99,
-			buy() { buyMultiCurrencyBuyable(this, ["r"], hasMilestone("ch", 10)) },
+			buy() { buyMultiCurrencyBuyable(this, ["r"], hasMilestone("ch", 10), getInfluenceBulk(), true) },
 			effect(x) { return player.r.points.add(1).log10().mul(x).div(1000).add(1).pow(0.5) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
@@ -6260,7 +6268,7 @@ addLayer("w", {
 			description: "multiplies multicellular organism gain based on your sanctums and the amount of this upgrade bought.",
 			canAfford() { return player.s.points.gte(this.cost()) },
 			purchaseLimit: 99,
-			buy() { buyMultiCurrencyBuyable(this, ["s"], hasMilestone("ch", 10)) },
+			buy() { buyMultiCurrencyBuyable(this, ["s"], hasMilestone("ch", 10), getInfluenceBulk(), true) },
 			effect(x) { return player.s.points.add(1).log10().mul(x).div(100).add(1).pow(0.1) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
@@ -6806,6 +6814,7 @@ addLayer("ch", {
 		if (hasUpgrade("pl", 92)) {
 			if (canCompleteChallenge("ch", 11)) player.ch.challenges[11]++;
 			if (canCompleteChallenge("ch", 12)) player.ch.challenges[12]++;
+			if (getBuyableAmount("pl", 21).gte(1) && canCompleteChallenge("ch", 21)) player.ch.challenges[21]++;
 		};
 	},
 	effect() { return [
@@ -6908,14 +6917,17 @@ addLayer("ch", {
 			16: {
 				requirement: 42,
 				effect() {
-					const base = (player.ch.challenges[11] + player.ch.challenges[12]) / 250 + 1;
+					let base = (player.ch.challenges[11] + player.ch.challenges[12]) / 250 + 1;
+					if (getBuyableAmount("pl", 21).gte(1)) {
+						base = (player.ch.challenges[11] + player.ch.challenges[12] + player.ch.challenges[21]) / 250 + 1;
+					};
 					if (hasMilestone("ch", 21)) return base ** 6;
 					if (hasMilestone("ch", 20)) return base ** 3.5;
 					if (hasMilestone("ch", 19)) return base ** 3.325;
 					if (hasMilestone("ch", 18)) return base ** 1.8;
 					return base ** 1.35;
 				},
-				effectDescription(eff) { return "you can autobuy the first quark rebuyable, the good influence rebuyable autobuyer is 2x faster, and multiply multicellular organism gain based on <b" + getColorClass(this, REF) + (isAssimilated("ch") ? randomStr(4) : "Tide") + "</b> completions (currently " + format(eff) + "x)" },
+				effectDescription(eff) { return "you can autobuy the first quark rebuyable, the good influence rebuyable autobuyer is 2x faster, and multiply multicellular organism gain based on <b" + getColorClass(this, REF) + (isAssimilated("ch") && getBuyableAmount("pl", 21).lt(1) ? randomStr(4) : "Tide") + "</b> completions (currently " + format(eff) + "x)" },
 				toggles: [["q", "auto_buyable_11"]],
 			},
 			17: {
@@ -7060,6 +7072,15 @@ addLayer("ch", {
 			50: {
 				requirement: 300,
 				effectDescription() { return "reduce the cost scaling of <b" + getColorClass(this, TITLE, "w") + "Sanctum Habitation</b>" },
+			},
+			51: {
+				requirement: 328,
+				effect() { return player.pl.points.add(1) },
+				effectDescription(eff) { return "multiply Thread gain by your planets plus 1 (currently " + formatWhole(eff) + "x)" },
+			},
+			52: {
+				requirement: 360,
+				effectDescription: "coming soon...",
 			},
 		};
 		const done = req => player.ch.points.gte(req);
@@ -7425,7 +7446,15 @@ addLayer("mo", {
 			},
 			3: {
 				requirement: 1360,
-				effectDescription() { return "exponentiate light gain after hardcap by ^1.2" },
+				effectDescription: "exponentiate light gain after hardcap by ^1.2",
+			},
+			4: {
+				requirement: 1860,
+				effectDescription: "reduce the planet cost exponent (1.46 -> 1.37)",
+			},
+			5: {
+				requirement: 2400,
+				effectDescription() { return "reduce the cost scaling of <b" + getColorClass(this, TITLE, "pl") + "Photosynthesis</b> and <b" + getColorClass(this, TITLE, "pl") + "Chaotic Composition</b>" },
 			},
 		};
 		const done = req => player.mo.points.gte(req);
@@ -7474,7 +7503,7 @@ addLayer("pl", {
 	baseAmount() { return player.mo.points },
 	type: "static",
 	base: 2,
-	exponent: 1.46,
+	exponent() { return (hasMilestone("mo", 4) ? 1.37 : 1.46) },
 	canBuyMax: false,
 	gainExp() {
 		let gain = newDecimalOne();
@@ -7508,6 +7537,10 @@ addLayer("pl", {
 		Atmosphere: {
 			content: getTab("pl", "Atmosphere"),
 		},
+		Correction: {
+			content: getUnlockableTab("pl", "Correction"),
+			unlocked() { return hasMilestone("pl", 3) },
+		},
 	},
 	milestones: (() => {
 		let obj = {
@@ -7524,6 +7557,10 @@ addLayer("pl", {
 				requirement: 3,
 				effectDescription() { return "you can bulk 10x cellular life rebuyables, you can autobuy <b" + getColorClass(this, TITLE, "a") + "Atom</b> <b" + getColorClass(this, TITLE, "mo") + "Synergy</b>, keep all upgrades on lesser resets, and unlock another air rebuyable" },
 				toggles: [["mo", "auto_buyable_11"]],
+			},
+			3: {
+				requirement: 4,
+				effectDescription() { return "you can bulk 5x war rebuyables, keep all milestones on planet resets, and unlock <b" + getColorClass(this, REF) + "Correction</b>, a new tab" },
 			},
 		};
 		const done = req => player.pl.points.gte(req);
@@ -7554,7 +7591,7 @@ addLayer("pl", {
 			unlocked() { return hasMilestone("pl", 1) },
 		},
 		12: {
-			cost(x) { return new Decimal(1.5).pow(x).mul(100) },
+			cost(x) { return new Decimal(hasMilestone("mo", 5) ? 1.3 : 1.5).pow(x).mul(100) },
 			title() { return "<b" + getColorClass(this, TITLE) + "Photosynthesis" },
 			description: "multiplies air gain based your light and the amount of this upgrade bought.",
 			canAfford() { return player.mo.points.gte(this.cost()) },
@@ -7570,7 +7607,7 @@ addLayer("pl", {
 			unlocked() { return hasMilestone("pl", 1) },
 		},
 		13: {
-			cost(x) { return new Decimal(1.1).pow(x).mul(200) },
+			cost(x) { return new Decimal(hasMilestone("mo", 5) ? 1.05 : 1.1).pow(x).mul(200) },
 			title() { return "<b" + getColorClass(this, TITLE) + "Chaotic Composition" },
 			description: "multiplies air gain based your atoms and the amount of this upgrade bought.",
 			canAfford() { return player.ch.points.gte(this.cost()) },
@@ -7584,6 +7621,40 @@ addLayer("pl", {
 			},
 			costDisplay(cost) { return "Req: " + formatWhole(cost) + " chaos" },
 			unlocked() { return hasMilestone("pl", 2) },
+		},
+		21: {
+			cost(x) { return x.add(106) },
+			title() { return "<b" + getColorClass(this, TITLE) + "Correction Type 16-A-TT-S-K" },
+			description() {
+				const amt = getBuyableAmount(this.layer, this.id);
+				let text = "<br>";
+				if (amt.gte(1)) text += "the next correction is coming soon...";
+				else text += "makes <b" + getColorClass(this, REF, "ch", true) + "Tide of Science</b> count as a <b" + getColorClass(this, REF, "ch", true) + "Tide</b>";
+				return text;
+			},
+			canAfford() { return player.A.points.gte(this.cost()) },
+			purchaseLimit: 1,
+			buy() { addBuyables(this.layer, this.id, 1) },
+			costDisplay(cost) { return "Req: " + formatWhole(cost) + " achievements" },
+			style: {width: "260px", "min-height": "140px"},
+			unlocked() { return hasMilestone("pl", 3) },
+		},
+		22: {
+			cost(x) { return new Decimal(1.2).pow(x).mul(316) },
+			title() { return "<b" + getColorClass(this, TITLE) + "Correction Type NAN-2-SC" },
+			description() {
+				const amt = getBuyableAmount(this.layer, this.id);
+				let text = "<br>";
+				if (amt.gte(1)) text += "the next correction is coming soon...";
+				else text += "makes the <b" + getColorClass(this, REF, "gi", true) + "Good Influence </b><b" + getColorClass(this, REF, "mo", true) + "Synergy</b> softcap weaker (/2 --> /1.5)";
+				return text;
+			},
+			canAfford() { return player.ch.points.gte(this.cost()) },
+			purchaseLimit: 1,
+			buy() { addBuyables(this.layer, this.id, 1) },
+			costDisplay(cost) { return "Req: " + formatWhole(cost) + " chaos" },
+			style: {width: "260px", "min-height": "140px"},
+			unlocked() { return hasMilestone("pl", 3) },
 		},
 	},
 	upgrades: {
@@ -7946,10 +8017,7 @@ addLayer("pl", {
 		},
 		92: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Flowing Tides</b>" },
-			description() {
-				if (isAssimilated("ch")) return "makes you be able to gain completions of <b" + getColorClass(this, REF, "ch", true) + randomStr(3) + " " + randomStr(5) + "</b> without exiting them";
-				return "makes you be able to gain completions of <b" + getColorClass(this, REF, "ch", true) + "The Tides</b> without exiting them";
-			},
+			description() { return "makes you be able to gain completions of <b" + getColorClass(this, REF, "ch", true) + (isAssimilated("ch") && getBuyableAmount("pl", 21).lt(1) ? randomStr(3) + " " + randomStr(5) : "The Tides") + "</b> without exiting them" },
 			cost: 1e19,
 			currencyInternalName: "air",
 			currencyLayer: "pl",

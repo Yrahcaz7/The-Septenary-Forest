@@ -258,7 +258,9 @@ function getRawTabContent(layer, name = "") {
 		};
 		content.push("blank");
 	} else if (layer == "pl") {
-		if (name == "Atmosphere") {
+		if (name == "Correction") {
+			content.push(["buyables", [2]]);
+		} else if (name == "Atmosphere") {
 			content.push([prefix + "display-text", 'You have <h2 class="layer-pl">' + format(player.pl.air) + "</h2> air"]);
 			if (hasMilestone("pl", 1)) {
 				content.push("blank");
