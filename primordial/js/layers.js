@@ -64,7 +64,7 @@ addLayer("e", {
 		return mult;
 	},
 	hotkeys: [{key: "e", description: "E: Reset for essence", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
-	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
+	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
 		if (hasUpgrade("e", 43)) gen += 2e20;
@@ -377,7 +377,7 @@ addLayer("c", {
 	softcap: new Decimal("1e1250"),
 	softcapPower: 0.7,
 	hotkeys: [{key: "c", description: "C: Reset for cores", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
-	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
+	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
 		if (hasUpgrade("h", 43)) {
@@ -729,7 +729,7 @@ addLayer("q", {
 	softcapPower: 0.6,
 	hotkeys: [{key: "q", description: "Q: Reset for quarks", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.c.unlocked || player.q.unlocked },
-	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
+	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
 		if (hasUpgrade("q", 51)) gen += 1e28;
@@ -1341,7 +1341,7 @@ addLayer("sp", {
 	autoPrestige() { return hasMilestone("s", 11) || hasUpgrade("pl", 24) },
 	hotkeys: [{key: "S", description: "Shift-S: Reset for subatomic particles", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.q.unlocked || player.sp.unlocked },
-	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
+	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	automate() {
 		if (hasMilestone("m", 4) && player[this.layer].auto_upgrades) {
 			for (const id in tmp[this.layer].upgrades) {
@@ -1571,7 +1571,7 @@ addLayer("h", {
 	},
 	hotkeys: [{key: "h", description: "H: Reset for hexes", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.sp.unlocked || player.h.unlocked },
-	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
+	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
 		if (hasUpgrade("h", 74)) gen += 6e64;
@@ -2028,7 +2028,7 @@ addLayer("ds", {
 	softcapPower: 0.8,
 	hotkeys: [{key: "d", description: "D: Reset for demon souls", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.h.unlocked || player.ds.unlocked },
-	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
+	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
 		if (hasMilestone("s", 10)) gen += 0.00001;
@@ -2423,7 +2423,7 @@ addLayer("a", {
 	autoPrestige() { return hasMilestone("a", 15) || hasUpgrade("pl", 42) },
 	hotkeys: [{key: "a", description: "A: Reset for atoms", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.ds.unlocked || player.a.unlocked },
-	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
+	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	automate() {
 		if (hasMilestone("gi", 11) && player[this.layer].auto_upgrades) {
 			for (const id in tmp[this.layer].upgrades) {
@@ -2964,7 +2964,7 @@ addLayer("p", {
 	},
 	hotkeys: [{key: "p", description: "P: Reset for prayers", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.a.unlocked || player.p.unlocked },
-	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
+	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
 		if (hasMilestone("s", 7)) {
@@ -3617,7 +3617,7 @@ addLayer("s", {
 	autoPrestige() { return hasMilestone("s", 48) },
 	hotkeys: [{key: "s", description: "S: Reset for sanctums", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.p.unlocked || player.s.unlocked },
-	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
+	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	effect() { return new Decimal(2).pow(player.s.points) },
 	effectDescription() { return 'which multiplies essence gain by <h2 class="layer-s">' + format(tmp.s.effect) + "</h2>x" },
 	doReset(resettingLayer) {
@@ -3918,7 +3918,7 @@ addLayer("d", {
 	position: 3,
 	color: "#AAFF00",
 	layerShown() { return false },
-	deactivated() { return getClickableState("mo", 11) && !canAssimilate("s") },
+	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun("s") },
 	automate() {
 		if (hasMilestone("cl", 1) && player.s.no_speed_but_more_bulk) {
 			if (hasMilestone("s", 19) && player.s.auto_worship) buyBuyable("d", 11);
@@ -4099,7 +4099,7 @@ addLayer("g", {
 	position: 4,
 	color: "#AAFF00",
 	layerShown() { return false },
-	deactivated() { return getClickableState("mo", 11) && !canAssimilate("s")},
+	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun("s")},
 	automate() {
 		if (hasMilestone("ch", 24) && player.s.auto_glow) {
 			buyBuyable("g", 11);
@@ -4247,7 +4247,7 @@ addLayer("r", {
 	autoPrestige() { return hasMilestone("w", 4) },
 	hotkeys: [{key: "r", description: "R: Reset for relics", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.s.unlocked || player.r.unlocked },
-	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
+	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	automate() {
 		if (hasMilestone("w", 3) && player.r.auto_activate) {
 			if (layers.r.challenges[11].canComplete()) player.r.challenges[11] += getRelicActivationBulk();
@@ -4680,7 +4680,7 @@ addLayer("m", {
 	},
 	hotkeys: [{key: "m", description: "M: Reset for molecules", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return getActivatedRelics() >= 10 || player.m.unlocked },
-	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer)},
+	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
 		if (hasMilestone("m", 20)) gen += 0.1;
@@ -5093,7 +5093,7 @@ addLayer("gi", {
 	autoPrestige() { return (hasMilestone("w", 1) || ((isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasMilestone("gi", 16)) || hasUpgrade("pl", 64)) && (!hasMilestone("cl", 0) || player.gi.auto_prestige) },
 	hotkeys: [{key: "G", description: "Shift-G: Reset for good influence", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.m.unlocked || player.gi.unlocked },
-	deactivated() { return inChallenge("ch", 11) || (getClickableState("mo", 11) && !canAssimilate(this.layer))},
+	deactivated() { return inChallenge("ch", 11) || (getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer))},
 	automate() {
 		if ((hasUpgrade("gi", 11) && !hasMilestone("w", 0)) || (hasMilestone("w", 0) && player.gi.auto_buyables)) {
 			updateBuyableTemp("gi");
@@ -5400,7 +5400,7 @@ addLayer("ei", {
 	autoPrestige() { return (hasMilestone("w", 3) || hasUpgrade("pl", 64)) && (!hasMilestone("cl", 0) || player.ei.auto_prestige) },
 	hotkeys: [{key: "E", description: "Shift-E: Reset for evil influence", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.gi.unlocked || player.ei.unlocked || player.w.unlocked },
-	deactivated() { return inChallenge("ch", 12) || (getClickableState("mo", 11) && !canAssimilate(this.layer)) },
+	deactivated() { return inChallenge("ch", 12) || (getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)) },
 	automate() {
 		if (hasMilestone("w", 1) && player[this.layer].auto_upgrades) {
 			for (const id in tmp[this.layer].upgrades) {
@@ -5950,7 +5950,7 @@ addLayer("w", {
 	},
 	hotkeys: [{key: "w", description: "W: Reset for wars", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return hasChallenge("ei", 21) || player.w.unlocked },
-	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer) },
+	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer) },
 	automate() {
 		if (hasMilestone("w", 18) && player[this.layer].auto_influence) {
 			updateBuyableTemp(this.layer);
@@ -6329,7 +6329,7 @@ addLayer("cl", {
 	autoPrestige() { return hasMilestone("cl", 12) || hasUpgrade("pl", 74) },
 	hotkeys: [{key: "l", description: "L: Reset for cellular life", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return hasMilestone("w", 9) || player.cl.unlocked },
-	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer) },
+	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer) },
 	automate() {
 		if (hasMilestone("w", 14) && player.cl.auto_tissues) {
 			[21, 13, 12, 11].forEach(id => buyBuyable("cl", id));
@@ -6801,7 +6801,7 @@ addLayer("ch", {
 	tooltipLocked() { return randomStr(5) + " " + this.requires + " " + randomStr(4) + " " + randomStr(2) + " " + randomStr(6) + " (" + randomStr(3) + " " + randomStr(4) + " " + formatWhole(player.w.points) + " " + randomStr(4) + ")" },
 	hotkeys: [{key: "C", description: "Shift-C: Reset for chaos", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.cl.unlocked || player.ch.unlocked },
-	deactivated() { return getClickableState("mo", 11) && !canAssimilate(this.layer) },
+	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer) },
 	automate() {
 		if (hasUpgrade("pl", 92)) {
 			if (canCompleteChallenge("ch", 11)) player.ch.challenges[11]++;
@@ -7293,13 +7293,13 @@ addLayer("mo", {
 					};
 					tmp[player.mo.assimilating].doReset("mo");
 					player.mo.assimilating = null;
-					unlockLayers();
+					unlockNonAssimilatedLayers();
 				} else if (getClickableState("mo", 11)) {
 					setClickableState("mo", 11, false);
-					unlockLayers();
+					unlockNonAssimilatedLayers();
 				} else {
 					setClickableState("mo", 11, true);
-					lockLayers();
+					lockNonAssimilatedLayers();
 				};
 			},
 			style() {

@@ -1,17 +1,17 @@
 const customComponents = {
 	'assimilate-button': {
 		props: ['layer'],
-		data() { return {canAssimilate, player, assimilationReq, tmp, formatWhole, completeAssimilation} },
-		template: template(`<button v-if="canAssimilate(layer) && player.mo.assimilating === layer" :class="{
+		data() { return {canEnterAssimilationRun, player, ASSIMILATION_REQUIREMENTS, tmp, formatWhole, completeAssimilationRun} },
+		template: template(`<button v-if="canEnterAssimilationRun(layer) && player.mo.assimilating === layer" :class="{
 			mo: true,
 			reset: true,
-			locked: player[layer].points.lt(assimilationReq[layer]),
-			can: player[layer].points.gte(assimilationReq[layer]),
+			locked: player[layer].points.lt(ASSIMILATION_REQUIREMENTS[layer]),
+			can: player[layer].points.gte(ASSIMILATION_REQUIREMENTS[layer]),
 		}" :style="[
 			{'margin-left': '16px'},
-			(player[layer].points.gte(assimilationReq[layer]) ? {'background-color': tmp.mo.color} : {}),
+			(player[layer].points.gte(ASSIMILATION_REQUIREMENTS[layer]) ? {'background-color': tmp.mo.color} : {}),
 			tmp[layer].componentStyles['prestige-button'],
-		]" v-html="(player[layer].points.gte(assimilationReq[layer]) ? 'Assimilate this layer!' : 'Reach ' + formatWhole(assimilationReq[layer]) + ' ' + tmp[layer].resource + ' to fully Assimilate this layer.')" @click="completeAssimilation(layer)"></button>`),
+		]" v-html="(player[layer].points.gte(ASSIMILATION_REQUIREMENTS[layer]) ? 'Assimilate this layer!' : 'Reach ' + formatWhole(ASSIMILATION_REQUIREMENTS[layer]) + ' ' + tmp[layer].resource + ' to fully Assimilate this layer.')" @click="completeAssimilationRun(layer)"></button>`),
 	},
 	'glitch-assimilate-button': {
 		props: ['layer'],
@@ -20,7 +20,7 @@ const customComponents = {
 			assimilate() {
 				player.mo.assimilated.push(this.layer);
 				setClickableState("mo", 11, false);
-				unlockLayers();
+				unlockNonAssimilatedLayers();
 			},
 		},
 		template: template(`<button class="mo reset can" :style="[

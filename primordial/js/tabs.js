@@ -3,7 +3,7 @@ function getRawTabContent(layer, name = "") {
 	const prefix = (inGlitchedAssimilationSearch() ? "glitch-" : "");
 	let content = [];
 	content.push(prefix + "main-display");
-	if (assimilationReq[layer]) {
+	if (ASSIMILATION_REQUIREMENTS[layer]) {
 		content.push(["row", ["prestige-button", "assimilate-button"]]);
 	} else {
 		content.push(prefix + "prestige-button");
@@ -223,7 +223,7 @@ function getRawTabContent(layer, name = "") {
 				content.push("glitch-assimilate-button");
 				content.push("blank");
 			} else {
-				content.push([prefix + "display-text", getNextStoryAt()]);
+				content.push([prefix + "display-text", getNextStoryAtDisplay()]);
 			};
 			content.push("blank");
 		} else if (name == "The Tides") {
@@ -242,7 +242,7 @@ function getRawTabContent(layer, name = "") {
 		} else if (name == "Synergism") {
 			content.push(prefix + "buyables");
 		} else if (name == "Rewards") {
-			content.push([prefix + "display-text", getAssimilationRewards()]);
+			content.push([prefix + "display-text", getAssimilationRewardDisplay()]);
 		} else {
 			content.push([prefix + "display-text", "Multicellular organisms reset nothing."]);
 			content.push("blank");

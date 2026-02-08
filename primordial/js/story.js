@@ -635,7 +635,7 @@ const story = [
 	The vortex quickly swallowed the Being, turning pure white.
 `]];
 
-const storyNames = [
+const STORY_TITLES = [
 	"The Endless Void",
 	"The World's End",
 	"Knowledge of the Old World",
@@ -651,7 +651,7 @@ const storyNames = [
 	"The Void... Again?",
 ];
 
-const storyColors = [
+const STORY_COLORS = [
 	["#4CED13", "#D2D237"],
 	[],
 	["#DB5196", "#710CC4"],
@@ -667,7 +667,7 @@ const storyColors = [
 	["#4CED13", "#D2D237", "#DB5196", "#710CC4", "#E36409", "#BA0035", "#4D2FE0", "#FDBBFF", "#AAFF00", "#B9A975", "#00CCCC", "#08FF87", "#FF4400", "#A0A0A0", "#008800", "#FFFFFF"],
 ];
 
-const storyKeywords = [
+const STORY_KEYWORDS = [
 	["void", "spark", "cycle"],
 	["pitch", "black", "light"],
 	["knowledge", "memories"],
@@ -704,10 +704,10 @@ function getDecipheredKeywords() {
 	let keywords = [];
 	const chaos = (isAssimilated("ch") ? Infinity : player.ch.best.toNumber());
 	let length = 0;
-	for (let index = 0; index < storyKeywords.length; index++) {
+	for (let index = 0; index < STORY_KEYWORDS.length; index++) {
 		length += story[index].length;
 		if (chaos >= length) {
-			keywords.push(...storyKeywords[index]);
+			keywords.push(...STORY_KEYWORDS[index]);
 		};
 	};
 	return keywords;
@@ -718,11 +718,11 @@ function storySegmentIsFullyDeciphered(num) {
 	if (isAssimilated("ch")) return true;
 	const chaos = player.ch.best.toNumber();
 	let length = storyLengthUpTo(num);
-	for (let index = num + 1; index < storyKeywords.length; index++) {
+	for (let index = num + 1; index < STORY_KEYWORDS.length; index++) {
 		length += story[index].length;
 		if (chaos < length) {
 			for (const str of story[num]) {
-				if (storyFilters[index].test(str)) {
+				if (STORY_FILTERS[index].test(str)) {
 					return false;
 				};
 			};
@@ -731,16 +731,16 @@ function storySegmentIsFullyDeciphered(num) {
 	return true;
 };
 
-const storyFilters = storyKeywords.map(arr => RegExp(arr.join("|"), "gi"));
+const STORY_FILTERS = STORY_KEYWORDS.map(arr => RegExp(arr.join("|"), "gi"));
 
 function filterStory(string) {
 	if (isAssimilated("ch")) return string;
 	const chaos = player.ch.best.toNumber();
 	let length = 0;
-	for (let index = 0; index < storyFilters.length; index++) {
+	for (let index = 0; index < STORY_FILTERS.length; index++) {
 		length += story[index].length;
 		if (chaos < length || !player.ch.deciphering) {
-			string = string.replace(storyFilters[index], match => randomStr(match.length));
+			string = string.replace(STORY_FILTERS[index], match => randomStr(match.length));
 		};
 	};
 	return string;
@@ -754,10 +754,10 @@ function getChaosInfoBoxes() {
 			title() {
 				let text = "";
 				if (player.ch.best.toNumber() >= storyLengthUpTo(row) || isAssimilated("ch")) {
-					text += storyNames[row];
+					text += STORY_TITLES[row];
 					if (storySegmentIsFullyDeciphered(row)) text += ' [<span style="display: inline-block; margin-top: -1em; height: 0">&check;</span>]';
 				} else {
-					text += storyNames[row].replace(/[A-Za-z]/g, () => randomStr(1));
+					text += STORY_TITLES[row].replace(/[A-Za-z]/g, () => randomStr(1));
 				};
 				return text;
 			},
@@ -771,10 +771,10 @@ function getChaosInfoBoxes() {
 			},
 			unlocked() { return player.ch.best.toNumber() > storyLengthUpTo(row - 1) || isAssimilated("ch") },
 		};
-		if (storyColors[row] && storyColors[row].length > 0) {
-			infoBoxes[boxID].style = {"border-color": storyColors[row][0], "border-radius": 0};
-			infoBoxes[boxID].titleStyle = {"background-color": storyColors[row][0], "border-radius": 0};
-			infoBoxes[boxID].bodyStyle = {"margin-bottom": 0, "border-image-source": "linear-gradient(" + storyColors[row].join(", ") + ")", "border-image-slice": 4, "border-radius": 0};
+		if (STORY_COLORS[row] && STORY_COLORS[row].length > 0) {
+			infoBoxes[boxID].style = {"border-color": STORY_COLORS[row][0], "border-radius": 0};
+			infoBoxes[boxID].titleStyle = {"background-color": STORY_COLORS[row][0], "border-radius": 0};
+			infoBoxes[boxID].bodyStyle = {"margin-bottom": 0, "border-image-source": "linear-gradient(" + STORY_COLORS[row].join(", ") + ")", "border-image-slice": 4, "border-radius": 0};
 		} else {
 			infoBoxes[boxID].style = {"border-radius": 0};
 			infoBoxes[boxID].titleStyle = {"border-radius": 0};
@@ -829,7 +829,7 @@ function getChaosInfoBoxes() {
 				However, this is enough.
 				Bracing myself, I narrow my focus into the green Thread.
 				...
-				${storyNames[0].replace(/[A-Za-z]/g, () => randomStr(1))}
+				${STORY_TITLES[0].replace(/[A-Za-z]/g, () => randomStr(1))}
 				...
 				What in the world... That being... Could it? Shall it? Will it?
 				I must... see.
@@ -839,12 +839,12 @@ function getChaosInfoBoxes() {
 				Stay calm, me.
 				One of these Threads must have the answer.
 				...
-				${storyNames[2].replace(/[A-Za-z]/g, () => randomStr(1))}
+				${STORY_TITLES[2].replace(/[A-Za-z]/g, () => randomStr(1))}
 				...
 				I can feel it. I'm getting close.
 				This time, the orange...
 				...
-				${storyNames[3].replace(/[A-Za-z]/g, () => randomStr(1))}
+				${STORY_TITLES[3].replace(/[A-Za-z]/g, () => randomStr(1))}
 				...
 				That being truly...
 				Heh. It wasn't a summon at all.
@@ -861,7 +861,7 @@ function getChaosInfoBoxes() {
 				This time, blue emerges.
 				Oh, how many ${randomStr(7)} will I get to consume...
 				...
-				${storyNames[4].replace(/[A-Za-z]/g, () => randomStr(1))}
+				${STORY_TITLES[4].replace(/[A-Za-z]/g, () => randomStr(1))}
 				...
 				OW! AGGGGHHHHH!
 				IT HURTS!
@@ -877,7 +877,7 @@ function getChaosInfoBoxes() {
 				Not green, not blue... there. A different shade of orange.
 				This one should be good.
 				...
-				${storyNames[9].replace(/[A-Za-z]/g, () => randomStr(1))}
+				${STORY_TITLES[9].replace(/[A-Za-z]/g, () => randomStr(1))}
 				...
 				Ah... I... this...
 				I feel it.
@@ -925,7 +925,7 @@ function nextStorySegmentFinishesAt() {
 	return length;
 };
 
-function getNextStoryAt() {
+function getNextStoryAtDisplay() {
 	if (isAssimilated("ch")) {
 		return "<br><br>All the story has been discoverververver" + randomChar() + "erverve" + randomChar() + "verv" + randomChar() + "rv" + randomChar() + "r" + randomStr(3) + "v" + randomStr(6) + "e" + randomStr(6);
 	};

@@ -1,18 +1,14 @@
-// checks if a layer is assimilated
+const ASSIMILATION_ORDER = ["e", "c", "q", "sp", "h", "ds", "a", "p", "s", "r", "m", "gi", "ei", "w", "cl"];
+
 function isAssimilated(layer) {
 	return player.mo.assimilated.includes(layer);
 };
 
-// order of layers to be assimilated
-const assimilationOrder = ["e", "c", "q", "sp", "h", "ds", "a", "p", "s", "r", "m", "gi", "ei", "w", "cl"];
-
-// checks if a layer can be assimilated
-function canAssimilate(layer) {
-	return getClickableState("mo", 11) && (isAssimilated(layer) || assimilationOrder[player.mo.assimilated.length] === layer);
+function canEnterAssimilationRun(layer) {
+	return getClickableState("mo", 11) && (isAssimilated(layer) || ASSIMILATION_ORDER[player.mo.assimilated.length] === layer);
 };
 
-// enters an assimilation run
-function startAssimilation(layer) {
+function enterAssimilationRun(layer) {
 	// confirmation and such
 	if (!tmp[layer]) {
 		console.error("'" + layer + "' is not a valid layer");
@@ -58,8 +54,7 @@ function glitchify(string) {
 	});
 };
 
-// resource requirements to complete assimilation runs
-const assimilationReq = {
+const ASSIMILATION_REQUIREMENTS = {
 	e: new Decimal("1e3555"),
 	c: new Decimal("5e555"),
 	q: new Decimal("1e1355"),
@@ -77,10 +72,9 @@ const assimilationReq = {
 	cl: new Decimal(25_000),
 };
 
-// completes an assimilation run
-function completeAssimilation(layer) {
+function completeAssimilationRun(layer) {
 	// exit assimilation
-	if (player[layer].points.lt(assimilationReq[layer]) || !assimilationReq[layer]) return false;
+	if (player[layer].points.lt(ASSIMILATION_REQUIREMENTS[layer]) || !ASSIMILATION_REQUIREMENTS[layer]) return false;
 	if (!isAssimilated(layer)) player.mo.assimilated.push(layer);
 	setClickableState("mo", 11, false);
 	player.mo.assimilating = null;
@@ -89,35 +83,32 @@ function completeAssimilation(layer) {
 	for (let index = 0; index < player.mo.assimilated.length; index++) {
 		tmp[player.mo.assimilated[index]].doReset("mo");
 	};
-	unlockLayers();
+	unlockNonAssimilatedLayers();
 	return true;
 };
 
-// lock non-assimilated layers
-function lockLayers() {
+function lockNonAssimilatedLayers() {
 	player.mo.hadLayers = [];
 	for (const layer in player) {
-		if (player[layer]?.unlocked && !canAssimilate(layer) && assimilationOrder.includes(layer)) {
+		if (player[layer]?.unlocked && !canEnterAssimilationRun(layer) && ASSIMILATION_ORDER.includes(layer)) {
 			player[layer].unlocked = false;
 			player.mo.hadLayers.push(layer);
 		};
 	};
 };
 
-// unlock non-assimilated layers
-function unlockLayers() {
+function unlockNonAssimilatedLayers() {
 	for (const layer in player) {
 		if (player.mo.hadLayers.includes(layer)) player[layer].unlocked = true;
 	};
 };
 
-// override tooltips
 function overrideTooltip(layer) {
 	if (getClickableState("mo", 11) && player.mo.assimilating === null) {
-		if (assimilationOrder.includes(layer)) {
+		if (ASSIMILATION_ORDER.includes(layer)) {
 			const name = tmp[layer].pluralName || tmp[layer].name;
 			if (isAssimilated(layer)) return glitchify("You have already Assimilated " + name);
-			if (assimilationOrder[player.mo.assimilated.length] === layer) return "You can Assimilate " + name;
+			if (ASSIMILATION_ORDER[player.mo.assimilated.length] === layer) return "You can Assimilate " + name;
 			return "You cannot Assimilate " + name + " yet";
 		};
 		if (!tmp[layer].tooltip) {
@@ -126,18 +117,16 @@ function overrideTooltip(layer) {
 	};
 };
 
-// override point display
 function overridePointDisplay() {
 	if (getClickableState("mo", 11) && player.mo.assimilating === null) {
 		return glitchify("You have <h2 id='points'>" + formatWhole(player.mo.assimilated.length) + "</h2>/" + formatWhole(tmp.mo.clickables[11].limit) + " Assimilated layers");
 	};
 };
 
-// override tree node clicks
 function overrideTreeNodeClick(layer) {
-	if (getClickableState("mo", 11) && assimilationOrder.includes(layer) && !(isAssimilated(layer) && player.mo.assimilating)) {
-		if (assimilationOrder[player.mo.assimilated.length] === layer) {
-			if (player.mo.assimilating === null) return () => { if (startAssimilation(layer)) showTab(layer) };
+	if (getClickableState("mo", 11) && ASSIMILATION_ORDER.includes(layer) && !(isAssimilated(layer) && player.mo.assimilating)) {
+		if (ASSIMILATION_ORDER[player.mo.assimilated.length] === layer) {
+			if (player.mo.assimilating === null) return () => { if (enterAssimilationRun(layer)) showTab(layer) };
 		} else {
 			return () => {};
 		};
@@ -235,8 +224,7 @@ const ASSIMILATION_REWARDS = [[
 	["Unlocks the fifth", "Synergy"],
 ]];
 
-// gets the assimilation reward display
-function getAssimilationRewards() {
+function getAssimilationRewardDisplay() {
 	if (player.mo.assimilated.length === 0) {
 		return "Assimilation rewards will be shown here.";
 	};
@@ -269,7 +257,6 @@ function getAssimilationRewards() {
 	return text.replace(/^<br>/, "").replace(/<br>$/, "");
 };
 
-// adds to the main display (right after currency number)
 function extraMainDisplay(layer) {
 	if (isAssimilated(layer)) return "<b class='layer-mo'>Assimilated</b> ";
 };

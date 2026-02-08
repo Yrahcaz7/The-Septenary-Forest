@@ -10,17 +10,17 @@ I recommend creating a new `components.js` file to keep your custom components i
 const customComponents = {
     "assimilate-button": {
         props: ["layer", "data"],
-        data() { return {canAssimilate, player, assimilationReq, tmp, format, completeAssimilation} },
-        template: template(`<button v-if="canAssimilate(layer) && player[data].assimilating === layer" :class="{
+        data() { return {canEnterAssimilationRun, player, ASSIMILATION_REQUIREMENTS, tmp, format, completeAssimilationRun} },
+        template: template(`<button v-if="canEnterAssimilationRun(layer) && player[data].assimilating === layer" :class="{
             [data]: true,
             reset: true,
-            locked: player[layer].points.lt(assimilationReq[layer]),
-            can: player[layer].points.gte(assimilationReq[layer]),
+            locked: player[layer].points.lt(ASSIMILATION_REQUIREMENTS[layer]),
+            can: player[layer].points.gte(ASSIMILATION_REQUIREMENTS[layer]),
         }" :style="[
             {'margin-left': '16px'},
-            (player[layer].points.gte(assimilationReq[layer]) ? {'background-color': tmp[data].color} : {}),
+            (player[layer].points.gte(ASSIMILATION_REQUIREMENTS[layer]) ? {'background-color': tmp[data].color} : {}),
             tmp[layer].componentStyles['prestige-button'],
-        ]" v-html="(player[layer].points.gte(assimilationReq[layer]) ? 'Assimilate this layer!' : 'Reach ' + format(assimilationReq[layer]) + ' ' + tmp[layer].resource + ' to fully Assimilate this layer.')" @click="completeAssimilation(layer)"></button>`),
+        ]" v-html="(player[layer].points.gte(ASSIMILATION_REQUIREMENTS[layer]) ? 'Assimilate this layer!' : 'Reach ' + format(ASSIMILATION_REQUIREMENTS[layer]) + ' ' + tmp[layer].resource + ' to fully Assimilate this layer.')" @click="completeAssimilationRun(layer)"></button>`),
     },
 };
 ```
