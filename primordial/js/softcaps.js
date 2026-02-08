@@ -17,9 +17,18 @@ const softcaps = {
 		if (isAssimilated("m") || player.mo.assimilating === "m") return 0.51;
 		return 0.5;
 	}],
-	r_eff1: ["e1000000", 0.2],
-	gi_eff: ["1e2500", 0.6666666666666666],
-	mo_buyable_13: [1.22, () => {
+	r_eff1: [() => {
+		if (isAssimilated("r") || player.mo.assimilating === "r") return Infinity;
+		return "e1000000";
+	}, 0.2],
+	gi_eff: [() => {
+		if (hasMilestone("gi", 18) && player.h.limitsBroken >= 4) return Infinity;
+		return "1e2500";
+	}, 0.6666666666666666],
+	mo_buyable_13: [() => {
+		if (getBuyableAmount("pl", 22).gte(2)) return Infinity;
+		return 1.22;
+	}, () => {
 		if (getBuyableAmount("pl", 22).gte(1)) return 1.5;
 		if (hasMilestone("ch", 43)) return 2;
 		if (isAssimilated("mo")) return 4;
@@ -78,16 +87,16 @@ addLayer("SC", {
 		if (tmp.p.effect.gte(softcaps.p_eff[0]()) && !tmp.p.deactivated) {
 			registerActiveSoftcap("p-eff");
 		};
-		if (tmp.r.effect[0].gte(softcaps.r_eff1[0]) && !(isAssimilated("r") || player.mo.assimilating === "r") && !tmp.r.deactivated) {
+		if (tmp.r.effect[0].gte(softcaps.r_eff1[0]()) && !tmp.r.deactivated) {
 			registerActiveSoftcap("r-eff1");
 		};
 		if (tmp.m.effect.gte(softcaps.m_eff[0]()) && !tmp.m.deactivated) {
 			registerActiveSoftcap("m-eff");
 		};
-		if (tmp.gi.effect.gte(softcaps.gi_eff[0]) && !tmp.gi.deactivated && !(hasMilestone("gi", 18) && player.h.limitsBroken >= 4)) {
+		if (tmp.gi.effect.gte(softcaps.gi_eff[0]()) && !tmp.gi.deactivated) {
 			registerActiveSoftcap("gi-eff");
 		};
-		if (buyableEffect("mo", 13).gte(1.22) && !tmp.mo.deactivated) {
+		if (buyableEffect("mo", 13).gte(softcaps.mo_buyable_13[0]()) && !tmp.mo.deactivated) {
 			registerActiveSoftcap("mo-buyable-13");
 		};
 	},
@@ -110,10 +119,10 @@ addLayer("SC", {
 				};
 			};
 			if (activeSoftcaps["p-eff"]) text += '<br><h2 class="layer-p">Prayer Effect Softcap</h2><br>starts at ' + format(softcaps.p_eff[0]()) + ", effect to ^" + format(softcaps.p_eff[1]()) + "<br>";
-			if (activeSoftcaps["r-eff1"]) text += '<br><h2 class="layer-r">Relic\'s First Effect Softcap</h2><br>starts at ' + format(softcaps.r_eff1[0]) + ", effect to ^" + format(softcaps.r_eff1[1]) + "<br>";
+			if (activeSoftcaps["r-eff1"]) text += '<br><h2 class="layer-r">Relic\'s First Effect Softcap</h2><br>starts at ' + format(softcaps.r_eff1[0]()) + ", effect to ^" + format(softcaps.r_eff1[1]) + "<br>";
 			if (activeSoftcaps["m-eff"]) text += '<br><h2 class="layer-m">Molecule Effect Softcap</h2><br>starts at ' + format(softcaps.m_eff[0]()) + ", effect to ^" + format(softcaps.m_eff[1]()) + "<br>";
-			if (activeSoftcaps["gi-eff"]) text += '<br><h2 class="layer-gi">Good Influence Effect Softcap</h2><br>starts at ' + format(softcaps.gi_eff[0]) + ", effect to ^" + format(softcaps.gi_eff[1]) + "<br>";
-			if (activeSoftcaps["mo-buyable-13"]) text += '<br><h2 class="layer-mo"><b class="layer-gi">Good Influence</b> Synergy Effect Softcap</h2><br>starts at ' + format(softcaps.mo_buyable_13[0]) + ", effect /" + format(softcaps.mo_buyable_13[1]()) + "<br>";
+			if (activeSoftcaps["gi-eff"]) text += '<br><h2 class="layer-gi">Good Influence Effect Softcap</h2><br>starts at ' + format(softcaps.gi_eff[0]()) + ", effect to ^" + format(softcaps.gi_eff[1]) + "<br>";
+			if (activeSoftcaps["mo-buyable-13"]) text += '<br><h2 class="layer-mo"><b class="layer-gi">Good Influence</b> Synergy Effect Softcap</h2><br>starts at ' + format(softcaps.mo_buyable_13[0]()) + ", effect /" + format(softcaps.mo_buyable_13[1]()) + "<br>";
 			return text;
 		}],
 	],

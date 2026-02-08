@@ -21,7 +21,7 @@ function changelog() {
 			- Added three rebuyables to planets.<br>
 			- Added two correction types to planets.<br>
 			- Added ${randomStr(4)} to assimilation.<br>
-			- Added twenty milestones to chaos.<br>
+			- Added twenty-four milestones to chaos.<br>
 			- Added ${randomStr(4)} to story.<br>
 			- Added seven achievements.<br>
 			- Added twelve achievement images.<br>
@@ -301,6 +301,7 @@ function buyGoodInfluenceBuyable(obj) {
 	if (hasMilestone("ch", 27)) {
 		let bulk = 10;
 		if (hasMilestone("ch", 30)) bulk *= 10;
+		if (hasMilestone("ch", 51)) bulk *= 10;
 		if (hasMilestone("pl", 1)) bulk *= 10;
 		player.gi.total = player.gi.total.add(obj.cost().mul(bulk ** 1.1));
 		player[obj.layer].buyables[obj.id] = player[obj.layer].buyables[obj.id].add(bulk).min(tmp[obj.layer].buyables[obj.id].purchaseLimit);
@@ -417,7 +418,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return "You beat the game!<br>For now..." },
 ];
 
-const endPoints = new Decimal("e1e85");
+const endPoints = new Decimal("e1e98");
 
 function onLoad() {
 	calculateColorValue();

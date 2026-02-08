@@ -1277,10 +1277,10 @@ addLayer("q", {
 			canAfford() { return player.q.insight.gte(this.cost()) },
 			purchaseLimit: 99,
 			buy() { player[this.layer].buyables[this.id] = player[this.layer].buyables[this.id].add(getQuarkBuyableBulk()).min(tmp[this.layer].buyables[this.id].purchaseLimit) },
-			effect(x) { return new Decimal(1.001).pow(x) },
+			effect(x) { return new Decimal(hasMilestone("mo", 6) ? 1.002 : 1.001).pow(x) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
-				if (options.nerdMode) text += "<br>formula: 1.001^x";
+				if (options.nerdMode) text += "<br>formula: " + (hasMilestone("mo", 6) ? "1.002" : "1.001") + "^x";
 				return text;
 			},
 			costDisplay(cost) { return "Req: " + formatWhole(cost) + " insight" },
@@ -2073,9 +2073,9 @@ addLayer("ds", {
 			if (hasMilestone("ch", 45)) gain = gain.add(tmp.pl.effect.add(1).pow(0.1));
 			else gain = gain.add(tmp.pl.effect.add(1).log10());
 			// mul
-			if (hasMilestone("ch", 48)) gain = gain.mul(milestoneEffect("ch", 48));
-			if (hasMilestone("ch", 49)) gain = gain.mul(milestoneEffect("ch", 49));
-			if (hasMilestone("ch", 51)) gain = gain.mul(milestoneEffect("ch", 51));
+			for (const id of [48, 49, 51, 52, 54, 55]) {
+				if (hasMilestone("ch", id)) gain = gain.mul(milestoneEffect("ch", id));
+			};
 		};
 		// return
 		return gain;
@@ -2347,7 +2347,8 @@ addLayer("ds", {
 				const effects = challengeEffect(this.layer, this.id);
 				let text = "";
 				// current rewards
-				if (completions >= 6) text += "multiply good influence gain, multiply cellular life gain, and multiply light gain after hardcap (all based on your Threads)<br>Currently: " + format(effects[0]) + "x,<br>" + format(effects[1]) + "x,<br>and " + format(effects[2]) + "x";
+				if (completions >= 10) text += "multiply good influence gain, multiply cellular life gain, multiply light gain after hardcap, and multiply sanctum gain (all based on your Threads)<br>Currently: " + format(effects[0]) + "x,<br>" + format(effects[1]) + "x,<br>" + format(effects[2]) + "x,<br>and " + format(effects[3]) + "x";
+				else if (completions >= 6) text += "multiply good influence gain, multiply cellular life gain, and multiply light gain after hardcap (all based on your Threads)<br>Currently: " + format(effects[0]) + "x,<br>" + format(effects[1]) + "x,<br>and " + format(effects[2]) + "x";
 				else if (completions >= 3) text += "multiply good influence gain and multiply cellular life gain (both based on your Threads)<br>Currently: " + format(effects[0]) + "x<br>and " + format(effects[1]) + "x";
 				else if (completions >= 1) text += "multiply good influence gain based on your Threads<br>Currently: " + format(effects[0]) + "x";
 				else text += "nothing currently";
@@ -2359,6 +2360,10 @@ addLayer("ds", {
 				else if (completions == 3) text += "further improve the first purified souls effect";
 				else if (completions == 4) text += "improve the second purified souls effect";
 				else if (completions == 5) text += "multiply light gain after hardcap based on your Threads<br>Currently: " + format(effects[2]) + "x";
+				else if (completions == 6) text += "improve the first purified souls effect again";
+				else if (completions == 7) text += "improve the third purified souls effect";
+				else if (completions == 8) text += "further improve the second purified souls effect";
+				else if (completions == 9) text += "multiply sanctum gain based on your Threads<br>Currently: " + format(effects[3]) + "x";
 				else text += "you have gotten all the rewards!";
 				return text;
 			},
@@ -2366,12 +2371,17 @@ addLayer("ds", {
 				let div0 = 10;
 				if (getPurifiedDemonSouls() >= 2) div0--;
 				if (getPurifiedDemonSouls() >= 4) div0--;
+				if (getPurifiedDemonSouls() >= 7) div0--;
 				let pow1 = 0.2;
 				if (getPurifiedDemonSouls() >= 5) pow1 += 0.025;
+				if (getPurifiedDemonSouls() >= 9) pow1 += 0.025;
+				let pow2 = 2;
+				if (getPurifiedDemonSouls() >= 8) pow2 += 0.5;
 				return [
 					player.ds.threads.add(1).log10().div(div0).add(1),
 					player.ds.threads.add(1).log10().add(1).pow(pow1),
-					player.ds.threads.add(1).pow(2),
+					player.ds.threads.add(1).pow(pow2),
+					player.ds.threads.add(1).log10().add(1),
 				];
 			},
 			canComplete() { return player.ds.threads.gte(getPurificationReq()) && challengeCompletions(this.layer, this.id) < tmp[this.layer].challenges[this.id].completionLimit },
@@ -3612,6 +3622,7 @@ addLayer("s", {
 	canBuyMax() { return hasMilestone("s", 0) || player.r.total.gt(0) || player.w.unlocked },
 	gainExp() {
 		let gain = newDecimalOne();
+		if (getPurifiedDemonSouls() >= 10 && challengeEffect("ds", 101)[3]) gain = gain.mul(challengeEffect("ds", 101)[3]);
 		if (tmp.d.devotionEffect.gt(1)) gain = gain.mul(tmp.d.devotionEffect);
 		if (tmp.g.glowEffect.gt(1)) gain = gain.mul(tmp.g.glowEffect);
 		if (new Decimal(tmp.r.effect[1]).gt(1) && !tmp.r.deactivated) gain = gain.mul(tmp.r.effect[1]);
@@ -4286,16 +4297,16 @@ addLayer("r", {
 			effBoost3 = effBoost3.mul(challengeEffect("r", 11)[0]);
 		};
 		let eff1 = player.r.points.mul(effBoost1).add(1).pow(1.1).pow(effex1);
-		if (eff1.gt(softcaps.r_eff1[0]) && !(isAssimilated("r") || player.mo.assimilating === "r")) {
-			eff1 = eff1.div(softcaps.r_eff1[0]).pow(softcaps.r_eff1[1]).mul(softcaps.r_eff1[0]);
+		if (eff1.gt(softcaps.r_eff1[0]())) {
+			eff1 = eff1.div(softcaps.r_eff1[0]()).pow(softcaps.r_eff1[1]).mul(softcaps.r_eff1[0]());
 		};
 		return [eff1, player.r.points.add(1).pow(0.5).mul(effBoost2), player.r.points.mul(100).add(1).pow(0.25).mul(effBoost3)];
 	},
 	effectDescription() {
 		let text = ["", ""];
-		if (tmp.r.effect[0].gte(softcaps.r_eff1[0]) && !(isAssimilated("r") || player.mo.assimilating === "r")) text[0] = " (softcapped)";
+		if (tmp.r.effect[0].gte(softcaps.r_eff1[0]())) text[0] = " (softcapped)";
 		if (getActivatedRelics() >= 2) text[1] = "point and ";
-		return "which makes <b" + getColorClass(this, REF, "e", true) + 'Essence Influence\'s</b> hardcap start <h2 class="layer-r">' + format(tmp.r.effect[0]) + "</h2>x later" + text[0] + ', multiplies sanctum gain by <h2 class="layer-r">' + format(tmp.r.effect[1]) + "</h2>x, and also multiplies " + text[1] + 'essence gain by <h2 class="layer-r">' + format(tmp.r.effect[2]) + "</h2>x";
+		return "which makes <b" + getColorClass(this, REF, "e", true) + "Essence Influence's</b> hardcap start <h2 class='layer-r'>" + format(tmp.r.effect[0]) + "</h2>x later" + text[0] + ", multiplies sanctum gain by <h2 class='layer-r'>" + format(tmp.r.effect[1]) + "</h2>x, and also multiplies " + text[1] + "essence gain by <h2 class='layer-r'>" + format(tmp.r.effect[2]) + "</h2>x";
 	},
 	doReset(resettingLayer) {
 		if (hasMilestone("m", 0) && resettingLayer == "m") return;
@@ -5138,17 +5149,17 @@ addLayer("gi", {
 			return effBase.pow(player.gi.total.pow(1.454));
 		};
 		let eff = effBase.pow(player.gi.total);
-		if (eff.gt(softcaps.gi_eff[0])) {
-			eff = eff.div(softcaps.gi_eff[0]).pow(softcaps.gi_eff[1]).mul(softcaps.gi_eff[0]);
+		if (eff.gt(softcaps.gi_eff[0]())) {
+			eff = eff.div(softcaps.gi_eff[0]()).pow(softcaps.gi_eff[1]).mul(softcaps.gi_eff[0]());
 		};
 		return eff;
 	},
 	effectDescription() {
 		if (hasMilestone("gi", 19) && player.h.limitsBroken >= 4) {
-			return 'which multiplies sanctum gain and glow gain by <h2 class="layer-gi">' + format(tmp.gi.effect) + "</h2>x";
+			return "which multiplies sanctum gain and glow gain by <h2 class='layer-gi'>" + format(tmp.gi.effect) + "</h2>x";
 		};
-		let text = 'which multiplies prayer gain by <h2 class="layer-gi">' + format(tmp.gi.effect) + "</h2>x (based on total)";
-		if (this.effect().gte(softcaps.gi_eff[0]) && !(hasMilestone("gi", 18) && player.h.limitsBroken >= 4)) text += " (softcapped)";
+		let text = "which multiplies prayer gain by <h2 class='layer-gi'>" + format(tmp.gi.effect) + "</h2>x (based on total)";
+		if (tmp.gi.effect.gte(softcaps.gi_eff[0]())) text += " (softcapped)";
 		return text;
 	},
 	doReset(resettingLayer) {
@@ -6314,6 +6325,7 @@ addLayer("cl", {
 	baseAmount() { return player.m.points },
 	type: "static",
 	base() {
+		if (hasMilestone("ch", 53)) return 3;
 		if (hasMilestone("ch", 37)) return 4;
 		if (hasMilestone("ch", 36)) return 14;
 		if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) return 50;
@@ -6803,6 +6815,7 @@ addLayer("ch", {
 		let gain = newDecimalOne();
 		if (hasBuyable("q", 23)) gain = gain.mul(buyableEffect("q", 23));
 		if (hasBuyable("mo", 21)) gain = gain.mul(buyableEffect("mo", 21));
+		if (getBuyableAmount("pl", 22).gte(3)) gain = gain.mul(tmp.A.effect);
 		return gain;
 	},
 	tooltip() { return formatWhole(player.ch.points) + " " + randomStr(5) },
@@ -7076,10 +7089,29 @@ addLayer("ch", {
 			51: {
 				requirement: 328,
 				effect() { return player.pl.points.add(1) },
-				effectDescription(eff) { return "multiply Thread gain by your planets plus 1 (currently " + formatWhole(eff) + "x)" },
+				effectDescription(eff) { return "multiply Thread gain by your planets plus 1 (currently " + formatWhole(eff) + "x) and the good influence rebuyable autobuyer can bulk buy 10x" },
 			},
 			52: {
 				requirement: 360,
+				effect() { return player.mo.points.add(1) },
+				effectDescription(eff) { return "multiply Thread gain by your multicellular organisms plus 1 (currently " + formatWhole(eff) + "x)" },
+			},
+			53: {
+				requirement: 386,
+				effectDescription: "reduce the cellular life cost base (4 --> 3)",
+			},
+			54: {
+				requirement: 420,
+				effect() { return player.A.points.pow(1.3) },
+				effectDescription(eff) { return "multiply Thread gain by your achievements to the power of 1.3 (currently " + formatWhole(eff) + "x)" },
+			},
+			55: {
+				requirement: 465,
+				effect() { return player.ch.milestones.length ** 1.2 },
+				effectDescription(eff) { return "multiply Thread gain by your chaos milestones to the power of 1.2 (currently " + formatWhole(eff) + "x)" },
+			},
+			56: {
+				requirement: 540,
 				effectDescription: "coming soon...",
 			},
 		};
@@ -7383,14 +7415,14 @@ addLayer("mo", {
 			cost(x) { return x.add(1).pow(3).add(106) },
 			effect(x) {
 				let eff = new Decimal(1.1).pow(x);
-				if (eff.gte(softcaps.mo_buyable_13[0])) eff = eff.sub(softcaps.mo_buyable_13[0]).div(softcaps.mo_buyable_13[1]()).add(softcaps.mo_buyable_13[0]);
+				if (eff.gte(softcaps.mo_buyable_13[0]())) eff = eff.sub(softcaps.mo_buyable_13[0]()).div(softcaps.mo_buyable_13[1]()).add(softcaps.mo_buyable_13[0]());
 				return eff;
 			},
 			title() { return "<b" + getColorClass(this, TITLE, "gi") + "Good Influence</b> <b" + getColorClass(this, TITLE) + "Synergy" },
 			description: "multiplies good influence gain based on the amount of this upgrade bought.",
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
-				if (eff.gte(softcaps.mo_buyable_13[0])) text += " (softcapped)";
+				if (eff.gte(softcaps.mo_buyable_13[0]())) text += " (softcapped)";
 				if (options.nerdMode) text += "<br>formula: 1.1^x";
 				return text;
 			},
@@ -7400,7 +7432,12 @@ addLayer("mo", {
 			unlocked() { return isAssimilated("gi") || player.mo.assimilating === "gi" },
 		},
 		21: {
-			cost(x) { return new Decimal(hasMilestone("mo", 2) ? 1.3 : 1.5).pow(x).mul(300) },
+			cost(x) {
+				let base = 1.5;
+				if (hasMilestone("mo", 2)) base -= 0.2;
+				if (hasMilestone("mo", 7)) base -= 0.05;
+				return new Decimal(base).pow(x).mul(300);
+			},
 			effect(x) { return new Decimal(1.03).pow(x) },
 			title() { return "<b" + getColorClass(this, TITLE, "ch", true) + "Chaos</b> <b" + getColorClass(this, TITLE) + "Synergy" },
 			description: "multiplies chaos gain based on the amount of this upgrade bought.",
@@ -7438,11 +7475,11 @@ addLayer("mo", {
 			},
 			1: {
 				requirement: 800,
-				effectDescription() { return "increase the cap of <b" + getColorClass(this, TITLE, "w") + "Race for Knowledge</b> by 50" },
+				effectDescription() { return "increase the cap of <b" + getColorClass(this, REF, "w") + "Race for Knowledge</b> by 50" },
 			},
 			2: {
 				requirement: 999,
-				effectDescription() { return "reduce the cost scaling of <b" + getColorClass(this, TITLE, "ch", true) + "Chaos</b> <b" + getColorClass(this, TITLE) + "Synergy</b> and <b" + getColorClass(this, TITLE) + getGlitchAttuneText() + " Synergy</b>" },
+				effectDescription() { return "reduce the cost scaling of <b" + getColorClass(this, REF, "ch", true) + "Chaos</b> <b" + getColorClass(this, REF) + "Synergy</b> and <b" + getColorClass(this, REF) + getGlitchAttuneText() + " Synergy</b>" },
 			},
 			3: {
 				requirement: 1360,
@@ -7454,7 +7491,15 @@ addLayer("mo", {
 			},
 			5: {
 				requirement: 2400,
-				effectDescription() { return "reduce the cost scaling of <b" + getColorClass(this, TITLE, "pl") + "Photosynthesis</b> and <b" + getColorClass(this, TITLE, "pl") + "Chaotic Composition</b>" },
+				effectDescription() { return "reduce the cost scaling of <b" + getColorClass(this, REF, "pl") + "Photosynthesis</b> and <b" + getColorClass(this, REF, "pl") + "Chaotic Composition</b>" },
+			},
+			6: {
+				requirement: 2772,
+				effectDescription() { return "improve the effect formula of <b" + getColorClass(this, REF, "q") + "Chaotic Insight</b>" },
+			},
+			7: {
+				requirement: 3003,
+				effectDescription() { return "reduce the cost scaling of <b" + getColorClass(this, REF, "ch", true) + "Chaos</b> <b" + getColorClass(this, REF) + "Synergy</b>" },
 			},
 		};
 		const done = req => player.mo.points.gte(req);
@@ -7640,17 +7685,20 @@ addLayer("pl", {
 			unlocked() { return hasMilestone("pl", 3) },
 		},
 		22: {
-			cost(x) { return new Decimal(1.2).pow(x).mul(316) },
-			title() { return "<b" + getColorClass(this, TITLE) + "Correction Type NAN-2-SC" },
+			costs: [316, 373, 480],
+			cost(x) { return this.costs[x] || Infinity },
+			title() { return "<b" + getColorClass(this, TITLE) + "Correction Type NAN-1-2" },
 			description() {
 				const amt = getBuyableAmount(this.layer, this.id);
 				let text = "<br>";
-				if (amt.gte(1)) text += "the next correction is coming soon...";
-				else text += "makes the <b" + getColorClass(this, REF, "gi", true) + "Good Influence </b><b" + getColorClass(this, REF, "mo", true) + "Synergy</b> softcap weaker (/2 --> /1.5)";
+				if (amt.gte(3)) text += "the next correction is coming soon...";
+				else if (amt.gte(2)) text += "fixes the first glitched achievement name and replaces all previous achievement effects with a new effect";
+				else if (amt.gte(1)) text += "removes the <b" + getColorClass(this, REF, "gi", true) + "Good Influence </b><b" + getColorClass(this, REF, "mo", true) + "Synergy</b> effect softcap";
+				else text += "makes the <b" + getColorClass(this, REF, "gi", true) + "Good Influence </b><b" + getColorClass(this, REF, "mo", true) + "Synergy</b> effect softcap weaker (/2 --> /1.5)";
 				return text;
 			},
 			canAfford() { return player.ch.points.gte(this.cost()) },
-			purchaseLimit: 1,
+			purchaseLimit() { return this.costs.length },
 			buy() { addBuyables(this.layer, this.id, 1) },
 			costDisplay(cost) { return "Req: " + formatWhole(cost) + " chaos" },
 			style: {width: "260px", "min-height": "140px"},
