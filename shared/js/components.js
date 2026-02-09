@@ -717,11 +717,30 @@ function loadVue(mainPage = false) {
 	// data = an array with the structure of the tree
 	addNormalComponent('tree', {
 		props: ['layer', 'data'],
+		data() {return {layoutInfo, tmp}},
+		methods: {
+			updateBranches() { updateHTMLBranchStyles(this.$refs.branch) },
+		},
 		template: template(`<div>
 			<div v-for="row in data" class="treeRow">
-				<tree-node v-for="node in row" :node='node' :prev='layer'></tree-node>
+				<div v-for="node in row" class="stackingContext">
+					<tree-node :node="node" :prev="layer"></tree-node>
+					<div v-if="layoutInfo.htmlBranches" class="branches">
+						<div v-for="branch in tmp[node].branches" class="branch" ref="branch" :data-id="node" :data-data="branch"></div>
+					</div>
+				</div>
 			</div>
 		</div>`),
+		mounted() {
+			this.updateBranches();
+			addEventListener("resize", this.updateBranches);
+		},
+		updated() {
+			this.updateBranches();
+		},
+		beforeUnmount() {
+			removeEventListener("resize", this.updateBranches);
+		},
 	});
 
 	// data = an array with the structure of the tree
@@ -745,14 +764,30 @@ function loadVue(mainPage = false) {
 	// data = an array with the structure of the tree
 	addNormalComponent('thing-tree', {
 		props: ['layer', 'data', 'type'],
-		data() {return {tmp}},
+		data() {return {tmp, layoutInfo}},
+		methods: {
+			updateBranches() { updateHTMLBranchStyles(this.$refs.branch, this.type + "-" + this.layer + "-") },
+		},
 		template: template(`<div>
 			<div v-for="row in data" class="treeRow">
-				<template v-for="id in row">
+				<div v-for="id in row" class="stackingContext">
 					<component v-if="tmp[layer][type + 's'][id] !== undefined && tmp[layer][type + 's'][id].unlocked" :is="type" :layer="layer" :data="id" :style="tmp[layer].componentStyles[type]" class="treeThing"></component>
-				</template>
+					<div v-if="layoutInfo.htmlBranches" class="branches">
+						<div v-for="branch in tmp[layer][type + 's'][id].branches" class="branch" ref="branch" :data-id="id" :data-data="branch"></div>
+					</div>
+				</div>
 			</div>
 		</div>`),
+		mounted() {
+			this.updateBranches();
+			addEventListener("resize", this.updateBranches);
+		},
+		updated() {
+			this.updateBranches();
+		},
+		beforeUnmount() {
+			removeEventListener("resize", this.updateBranches);
+		},
 	});
 
 	// Updates the value in player[layer][data]

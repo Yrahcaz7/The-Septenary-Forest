@@ -23,6 +23,7 @@ addEventListener("resize", resizeCanvas);
 function drawTree() {
 	if (!retrieveCanvasData()) return;
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	if (layoutInfo.htmlBranches) return;
 	const queuedBranches = [[], [], [], []];
 	for (const layer in layers) {
 		if (tmp[layer].layerShown && tmp[layer].branches) {
@@ -87,4 +88,50 @@ function drawTreeBranch(num1, data, prefix) { // taken from Antimatter Dimension
 	ctx.moveTo(x1, y1);
 	ctx.lineTo(x2, y2);
 	ctx.stroke();
+};
+
+function updateHTMLBranchStyles(branches, prefix) {
+	if (!branches) return;
+	for (const elt of branches) {
+		const style = getHTMLBranchStyle(elt.dataset.id, elt.dataset.data, prefix);
+		for (const key in style) {
+			elt.style.setProperty(key, style[key]);
+		};
+	};
+}
+
+function getHTMLBranchStyle(id1, data, prefix) {
+	let id2 = data;
+	let colorID = 1;
+	let width = 15;
+	if (Array.isArray(data)) {
+		id2 = data[0];
+		colorID = data[1];
+		width = data[2] || width;
+	};
+	if (typeof colorID === "number") {
+		colorID = themeColors[getThemeName()][colorID];
+	};
+	if (prefix) {
+		id1 = prefix + id1;
+		id2 = prefix + id2;
+	};
+	if (!document.getElementById(id1) || !document.getElementById(id2)) {
+		return {visibility: "hidden"};
+	};
+	const start = document.getElementById(id1).getBoundingClientRect();
+	const end = document.getElementById(id2).getBoundingClientRect();
+	const x1 = start.x + (start.width / 2);
+	const y1 = start.y + (start.height / 2);
+	const x2 = end.x + (end.width / 2);
+	const y2 = end.y + (end.height / 2);
+	return {
+		visibility: "inherit",
+		left: (0 - width / 2) + "px",
+		width: width + "px",
+		height: Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2) + "px",
+		background: colorID,
+		"transform": "rotate(" + (Math.atan2(y2 - y1, x2 - x1) - Math.PI / 2) + "rad)",
+		"transform-origin": (width / 2) + "px 0px",
+	};
 };

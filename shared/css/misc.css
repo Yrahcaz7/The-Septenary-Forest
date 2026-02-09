@@ -24,6 +24,11 @@
 	text-shadow: 0 0 7px var(--color);
 }
 
+.stackingContext {
+	display: inline-block;
+	position: relative;
+}
+
 .tooltip {
 	pointer-events: none;
 	text-align: center;
@@ -57,6 +62,22 @@
 	border-width: 5px;
 	border-style: solid;
 	border-color: var(--tooltipBackground) transparent transparent transparent;
+}
+
+.branches {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	z-index: -1;
+}
+
+.can:hover>.branches {
+	transform: scale(0.8695652173913044); /* 1/1.15 */
+}
+
+.branch {
+	transition-duration: 0s;
+	position: absolute;
 }
 
 /* Horizontal/vertical lines */
