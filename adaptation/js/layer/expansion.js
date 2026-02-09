@@ -161,7 +161,7 @@ addLayer("ex", {
 			};
 			if (getUnlockedExpansionGens() >= 7) {
 				let html = "<div style='display: grid'>";
-				html += "<button class='buyable tooltipBox locked' style='width: 500px; height: 60px; border-radius: 0px; background-color: #FFFFFF40' id='buyable-ex-20'>";
+				html += "<button class='buyable tooltipBox locked' style='width: 500px; min-height: 60px; border-radius: 0px; background-color: #FFFFFF60' id='buyable-ex-20'>";
 				html += "<h2><s>10th</s> 1st influence generator</h2><br>";
 				html += "<span style='white-space: pre-line'>through the power of 10s, these generators are producing<br>" + format(expansionGen10Effect()) + " 9th influence generators per second</span>";
 				html += "</button></div>";
@@ -243,7 +243,7 @@ addLayer("ex", {
 	},
 	componentStyles: {
 		"prestige-button"() {if (tmp.ex.canReset && tmp.ex.nodeStyle) return tmp.ex.nodeStyle},
-		"buyable"() {return {width: "500px", height: "60px", "border-radius": 0}},
+		"buyable"() {return {width: "500px", "min-height": "60px", "border-radius": 0}},
 	},
 	buyables: {
 		11: {
@@ -396,7 +396,7 @@ addLayer("ex", {
 				return extra;
 			},
 			style() {
-				let obj = {width: "250px", height: "100px", "border-radius": "25px"};
+				let obj = {width: "250px", "min-height": "100px", "border-radius": "25px"};
 				if (tmp[this.layer].buyables[this.id].canBuy) obj.background = tmp.ex.nodeStyle.background;
 				return obj;
 			},
@@ -419,7 +419,7 @@ addLayer("ex", {
 				addBuyables(this.layer, this.id, bulk);
 			},
 			style() {
-				let obj = {width: "250px", height: "100px", "border-radius": "25px"};
+				let obj = {width: "250px", "min-height": "100px", "border-radius": "25px"};
 				if (tmp[this.layer].buyables[this.id].canBuy) obj.background = tmp.ex.nodeStyle.background;
 				return obj;
 			},
@@ -448,7 +448,7 @@ addLayer("ex", {
 				addBuyables(this.layer, this.id, 1);
 			},
 			style() {
-				let obj = {width: "400px", height: "110px", "border-radius": "25px"};
+				let obj = {width: "400px", "min-height": "110px", "border-radius": "25px"};
 				if (getBuyableAmount(this.layer, this.id).gte(this.purchaseLimit())) obj["border-color"] = "#B44990";
 				else if (tmp[this.layer].buyables[this.id].canBuy) obj.background = tmp.ex.nodeStyle.background;
 				return obj;

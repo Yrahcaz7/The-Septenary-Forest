@@ -65,7 +65,7 @@ addLayer("em", {
 		"main-display",
 		"prestige-button",
 		"resource-display",
-		["display-text", "After consolidating 1 time, you keep domination enhancements on all resets.<br><br>The above extra effect will not go away even if this layer is reset."],
+		["display-text", "After imperializing 1 time, you keep domination enhancements on all resets.<br><br>The above extra effect will not go away even if this layer is reset."],
 		"blank",
 		["microtabs", "features"],
 		"blank",
@@ -178,7 +178,7 @@ addLayer("em", {
 				player[this.layer].spent++;
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {width: "210px", height: "110px"},
+			style: {width: "210px", "min-height": "110px"},
 		},
 		12: {
 			cost(amt) {return amt.add(1).mul(hasMilestone("em", 4) ? 450 : 500)},
@@ -207,7 +207,7 @@ addLayer("em", {
 				player[this.layer].spent++;
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {width: "210px", height: "110px"},
+			style: {width: "210px", "min-height": "110px"},
 		},
 		13: {
 			cost(amt) {return amt.add(1).mul(hasMilestone("em", 9) ? 450 : 500)},
@@ -238,7 +238,7 @@ addLayer("em", {
 				player[this.layer].spent++;
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {width: "210px", height: "110px"},
+			style: {width: "210px", "min-height": "110px"},
 		},
 		14: {
 			cost(amt) {return amt.add(1).mul(hasMilestone("em", 9) ? 450 : 500)},
@@ -268,7 +268,7 @@ addLayer("em", {
 				player[this.layer].spent++;
 				addBuyables(this.layer, this.id, 1);
 			},
-			style: {width: "210px", height: "110px"},
+			style: {width: "210px", "min-height": "110px"},
 		},
 		21: {
 			cost(amt) {

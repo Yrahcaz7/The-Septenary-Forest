@@ -343,7 +343,7 @@ addLayer("c", {
 		},
 	},
 	componentStyles: {
-		buyable: {height: "25px", width: "175px", "border-radius": "10px", "z-index": 99},
+		buyable: {"min-height": "25px", width: "175px", "border-radius": "10px", "z-index": 99},
 	},
 	bars: getColorBars(),
 	buyables: getColorBuyables(),
@@ -378,6 +378,7 @@ addLayer("c", {
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect: 1.1,
 			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			unlocked() { return hasMilestone("m", 1) },
 		},
 		12: {
 			coinCost: 1e9,
@@ -391,6 +392,7 @@ addLayer("c", {
 				};
 			},
 			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			unlocked() { return hasMilestone("m", 1) },
 		},
 		13: {
 			coinCost: 1e12,
@@ -399,6 +401,7 @@ addLayer("c", {
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return (player.c.colors) ** 2 / 100 + 1 },
 			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			unlocked() { return hasMilestone("m", 1) },
 		},
 		14: {
 			coinCost: 1e15,
@@ -407,6 +410,7 @@ addLayer("c", {
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return player.m.points.add(1).log10().div(5).add(1) },
 			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			unlocked() { return hasMilestone("m", 1) },
 		},
 		15: {
 			coinCost: 1e18,
@@ -420,6 +424,7 @@ addLayer("c", {
 				};
 			},
 			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			unlocked() { return hasMilestone("m", 1) },
 		},
 		21: {
 			coinCost: 1e21,
@@ -428,6 +433,7 @@ addLayer("c", {
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return player.m.points.add(1).log10().div(4).add(1) },
 			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			unlocked() { return hasMilestone("m", 1) },
 		},
 		22: {
 			coinCost: 1e24,
@@ -441,6 +447,7 @@ addLayer("c", {
 				};
 			},
 			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			unlocked() { return hasMilestone("m", 1) },
 		},
 		23: {
 			coinCost: 1e27,
@@ -449,6 +456,7 @@ addLayer("c", {
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return (player.c.colors) ** 2 / 100 + 1 },
 			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			unlocked() { return hasMilestone("m", 1) },
 		},
 		24: {
 			coinCost: 1e30,
@@ -457,6 +465,7 @@ addLayer("c", {
 			pay() { player.points = player.points.sub(this.coinCost) },
 			effect() { return player.c.upgrades.length / 10 + 1 },
 			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			unlocked() { return hasMilestone("m", 1) },
 		},
 		25: {
 			coinCost: 1e33,
@@ -464,6 +473,7 @@ addLayer("c", {
 			canAfford() { return player.points.gte(this.coinCost) },
 			pay() { player.points = player.points.sub(this.coinCost) },
 			style() { if (tmp[this.layer].upgrades[this.id].canAfford && !hasUpgrade("c", this.id)) return COLOR_UPGRADE_STYLE},
+			unlocked() { return hasMilestone("m", 1) },
 		},
 	},
 });
@@ -555,7 +565,9 @@ addLayer("m", {
 		rows: 4,
 		cols() { return player.c.colorBest + 1 },
 		maxCols: COLORS.length + 1,
-		getStartData(id) {},
+		getStartData(id) {
+			return null;
+		},
 		getDisplay(data, id) {
 			if (id == 101) return "<h3>this row multiplies power";
 			if (id == 201) return "<h3>this row multiplies speed";
@@ -569,7 +581,7 @@ addLayer("m", {
 			const INDEX = id % 100 - 2;
 			return {
 				width: "90px",
-				height: (id >= 401 ? "30px" : "90px"),
+				"min-height": (id >= 401 ? "30px" : "90px"),
 				"border-color": (id >= 401 ? (INDEX >= 0 ? COLORS[INDEX].hex : "#888888") : "#00000020"),
 				"border-radius": "10px",
 				"background-color": (INDEX >= 0 ? (COLORS[INDEX].dark ? "#888888" : "#f0f0f0") : "#f0f0f0"),

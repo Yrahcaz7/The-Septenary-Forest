@@ -4,6 +4,7 @@ const layoutInfo = {
 	showTree: true,
 	// treeLayout: [["p"], ["b", "g"]],
 	orderBranches: false,
+	htmlBranches: true,
 };
 
 /* A "ghost" layer which offsets other layers in the tree
@@ -15,7 +16,7 @@ addNode("blank", {
 */
 
 addLayer("tree-tab", {
-	tabFormat: [["tree", () => layoutInfo.treeLayout ? layoutInfo.treeLayout : TREE_LAYERS]],
+	tabFormat: [["tree", () => layoutInfo.treeLayout || TREE_LAYERS]],
 	previousTab: "",
 	leftTab: true,
 });

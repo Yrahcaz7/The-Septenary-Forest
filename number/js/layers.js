@@ -162,7 +162,7 @@ addLayer('rn', {
 		layerDataReset('rn', keep);
 	},
 	hotkeys: [{
-		key: 'r', // Use uppercase if it's combined with shift, or 'ctrl+x' for holding down ctrl.
+		key: 'r',
 		description: 'R: reset for roman numerals',
 		onPress() { if (player.rn.unlocked) doReset('rn') },
 	}],
@@ -183,6 +183,7 @@ addLayer('rn', {
 		}],
 		'blank',
 		'upgrades',
+		'blank',
 		'clickables',
 		'blank',
 	],
@@ -190,7 +191,7 @@ addLayer('rn', {
 		11: {
 			fullDisplay() {
 				let text = `<h3>Countings</h3><br>
-					multiply arabic numeral gain based on the amount of roman numerals you have<br>
+					multiply arabic numeral gain based on your roman numerals<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + romanNumeralFormat(this.cost) + ` roman numerals`;
 				if (options.nerdMode) text += '';
@@ -202,7 +203,7 @@ addLayer('rn', {
 		12: {
 			fullDisplay() {
 				let text = `<h3>Practice...</h3><br>
-					multiply roman numeral gain based on the amount of total roman numerals you have<br>
+					multiply roman numeral gain based on your total roman numerals<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + romanNumeralFormat(this.cost) + ` roman numerals`;
 				if (options.nerdMode) text += '';
@@ -258,7 +259,7 @@ addLayer('rn', {
 		15: {
 			fullDisplay() {
 				let text = `<h3>Repetitive</h3><br>
-					multiply arabic numeral gain based on the amount of arabic numerals you have<br>
+					multiply arabic numeral gain based on your arabic numerals<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + romanNumeralFormat(this.cost) + ` roman numerals`;
 				if (options.nerdMode) text += '';
@@ -320,7 +321,7 @@ addLayer('rn', {
 		25: {
 			fullDisplay() {
 				let text = `<h3>Patterns</h3><br>
-					multiply arabic numeral gain based on the amount of arabic numerals you have<br>
+					multiply arabic numeral gain based on your arabic numerals<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + romanNumeralFormat(this.cost) + ` roman numerals`;
 				if (options.nerdMode) text += '';
@@ -593,7 +594,7 @@ addLayer('d', {
 		if (!keep.includes('milestones')) player[this.layer].milestones = keepMile;
 	},
 	hotkeys: [{
-		key: 'd', // Use uppercase if it's combined with shift, or 'ctrl+x' for holding down ctrl.
+		key: 'd',
 		description: 'D: reset for digits',
 		onPress() { if (player.d.unlocked) doReset('d') },
 	}],
@@ -715,11 +716,7 @@ addLayer('d', {
 			return;
 		};
 		player.d.meta = (player.d.number.toNumber()).toString(getNumberBase());
-		let meta = player.d.meta;
-		if ((tmp.d.grid.cols - meta.length) == 0) return;
-		for (let i = 0; i < (tmp.d.grid.cols - meta.length); i++) {
-			player.d.meta = '0' + player.d.meta;
-		};
+		player.d.meta = '0'.repeat(tmp.d.grid.cols - player.d.meta.length) + player.d.meta;
 	},
 	automate() {
 		for (let num = 0; num < (hasUpgrade('gn', 32) && !inChallenge('i', 32) ? 2 : 1); num++) {
@@ -750,22 +747,22 @@ addLayer('d', {
 		},
 		maxCols: 99,
 		getStartData(id) { return 0 },
-		getUnlocked(id) { return true },
 		getCanClick(data, id) { return false },
 		getDisplay(data, id) {
 			if (buyableEffect('d', 51).gte(10) && id == 101) return '<h2>Base ' + formatWhole(buyableEffect('d', 51)) + ' achieved';
 			if (hasUpgrade('d', 11) && id == 102) return '<h2>Limit broken';
 			if (player.d.points.gt(99) && id == 101) return '<h2>Limit bent';
 			if (player.d.limited) return '<h2>' + formatWhole(buyableEffect('d', 51).sub(1));
-			data = player.d.meta.at(id - 101);
+			data = player.d.meta.at(id - 101) || "0";
 			setGridData('d', id, data);
 			return '<h2>' + data;
 		},
 		getStyle(data, id) {
-			if (buyableEffect('d', 51).gte(10) && id == 101) return {height:'30px',width:'170px','border-radius':0};
-			if (hasUpgrade('d', 11) && id == 102) return {height:'30px',width:'130px','border-radius':0};
-			if (player.d.points.gt(99) && id == 101) return {height:'30px',width:'120px','border-radius':0};
-			return {height:'30px',width:'30px','border-radius':'50%'};
+			if (buyableEffect('d', 51).gte(10) && id == 101) return {"min-height": '30px', width: '170px', 'border-radius': 0};
+			if (hasUpgrade('d', 11) && id == 102) return {"min-height": '30px', width: '130px', 'border-radius': 0};
+			if (player.d.points.gt(99) && id == 101) return {"min-height": '30px', width: '120px', 'border-radius': 0};
+			if (data == "1" || player.d.limited) return {"min-height": '30px', width: '30px', 'border-radius': '50%', "background-color": "#E0C0C0"};
+			return {"min-height": '30px', width: '30px', 'border-radius': '50%'};
 		},
 	},
 	clickables: {
@@ -792,7 +789,7 @@ addLayer('d', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit() {
 				lim = new Decimal(250);
 				if (getBuyableAmount('d', 31).gt(0)) lim = lim.add(buyableEffect('d', 31));
@@ -816,7 +813,7 @@ addLayer('d', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit() {
 				let cap = new Decimal(1000);
 				if (hasUpgrade('gn', 22) && !inChallenge('i', 32)) cap = cap.add(upgradeEffect('gn', 22));
@@ -839,7 +836,7 @@ addLayer('d', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 200,
 		},
 		32: {
@@ -854,7 +851,7 @@ addLayer('d', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 33333,
 		},
 		21: {
@@ -877,7 +874,7 @@ addLayer('d', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit() {
 				let limit = new Decimal(500);
 				if (hasChallenge('i', 12)) limit = limit.add(challengeEffect('i', 12));
@@ -902,7 +899,7 @@ addLayer('d', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			unlocked() { return hasMilestone('d', 7) },
 		},
 		31: {
@@ -917,7 +914,7 @@ addLayer('d', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 20,
 			unlocked() { return hasMilestone('d', 8) },
 		},
@@ -937,7 +934,7 @@ addLayer('d', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			unlocked() { return hasMilestone('d', 8) },
 		},
 		51: {
@@ -985,7 +982,7 @@ addLayer('d', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit() {
 				let limit = new Decimal(25);
 				if (hasChallenge('i', 11)) limit = limit.add(challengeEffect('i', 11));
@@ -1005,7 +1002,7 @@ addLayer('d', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 4,
 			unlocked() { return hasMilestone('d', 17) },
 		},
@@ -1025,7 +1022,7 @@ addLayer('d', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit() {
 				let cap = new Decimal(50);
 				if (hasUpgrade('gn', 21) && !inChallenge('i', 32)) cap = cap.add(upgradeEffect('gn', 21));
@@ -1205,7 +1202,7 @@ addLayer('d', {
 		32: {
 			fullDisplay() {
 				let text = `<h3>Number Warp</h3><br>
-					multiply the number effect based on the number you have<br>
+					multiply the number effect based on your number<br>
 					Currently: ` + format(upgradeEffect(this.layer, this.id)) + `x<br><br>
 					Cost: ` + formatWhole(this.cost) + ` digits`;
 				return text;
@@ -1248,7 +1245,7 @@ addLayer('d', {
 		43: {
 			fullDisplay() {
 				let text = `<h3>Number Hole</h3><br>
-					multiply the number effect based on the number you have<br>
+					multiply the number effect based on your number<br>
 					Currently: ` + format(upgradeEffect(this.layer, this.id)) + `x<br><br>
 					Cost: ` + formatWhole(this.cost) + ` digits`;
 				return text;
@@ -1291,7 +1288,7 @@ addLayer('d', {
 		53: {
 			fullDisplay() {
 				let text = `<h3>Cost Void</h3><br>
-					multiply the effect of <b>Cheapest</b> based on the number you have<br>
+					multiply the effect of <b>Cheapest</b> based on your number<br>
 					Currently: ` + format(upgradeEffect(this.layer, this.id)) + `x<br><br>
 					Cost: ` + formatWhole(this.cost) + ` digits`;
 				return text;
@@ -1303,7 +1300,7 @@ addLayer('d', {
 		54: {
 			fullDisplay() {
 				let text = `<h3>Number Void</h3><br>
-					multiply the number effect based on the number you have<br>
+					multiply the number effect based on your number<br>
 					Currently: ` + format(upgradeEffect(this.layer, this.id)) + `x<br><br>
 					Cost: ` + formatWhole(this.cost) + ` digits`;
 				return text;
@@ -1346,7 +1343,7 @@ addLayer('d', {
 		63: {
 			fullDisplay() {
 				let text = `<h3>Cost Space</h3><br>
-					divide the cost of <b>Up Even More</b> based on the number you have<br>
+					divide the cost of <b>Up Even More</b> based on your number<br>
 					Currently: /` + format(upgradeEffect(this.layer, this.id)) + `<br><br>
 					Cost: ` + formatWhole(this.cost) + ` digits`;
 				return text;
@@ -1358,7 +1355,7 @@ addLayer('d', {
 		64: {
 			fullDisplay() {
 				let text = `<h3>Number Space</h3><br>
-					multiply the number effect based on the number you have<br>
+					multiply the number effect based on your number<br>
 					Currently: ` + format(upgradeEffect(this.layer, this.id)) + `x<br><br>
 					Cost: ` + formatWhole(this.cost) + ` digits`;
 				return text;
@@ -1412,7 +1409,7 @@ addLayer('d', {
 		74: {
 			fullDisplay() {
 				let text = `<h3>Number Star</h3><br>
-					multiply the number effect based on the number you have<br>
+					multiply the number effect based on your number<br>
 					Currently: ` + format(upgradeEffect(this.layer, this.id)) + `x<br><br>
 					Cost: ` + formatWhole(this.cost) + ` digits`;
 				return text;
@@ -1465,7 +1462,7 @@ addLayer('d', {
 		84: {
 			fullDisplay() {
 				let text = `<h3>Number Galaxy</h3><br>
-					multiply the number effect based on the number you have<br>
+					multiply the number effect based on your number<br>
 					Currently: ` + format(upgradeEffect(this.layer, this.id)) + `x<br><br>
 					Cost: ` + formatWhole(this.cost) + ` digits`;
 				return text;
@@ -1507,7 +1504,7 @@ addLayer('d', {
 		93: {
 			fullDisplay() {
 				let text = `<h3>Cost Dimension</h3><br>
-					divide intelligence cost requirement based on the number you have<br>
+					divide intelligence cost requirement based on your number<br>
 					Currently: ` + format(upgradeEffect(this.layer, this.id)) + `x<br><br>
 					Cost: ` + formatWhole(this.cost) + ` digits`;
 				return text;
@@ -1519,7 +1516,7 @@ addLayer('d', {
 		94: {
 			fullDisplay() {
 				let text = `<h3>Number Dimension</h3><br>
-					multiply the number effect based on the number you have<br>
+					multiply the number effect based on your number<br>
 					Currently: ` + format(upgradeEffect(this.layer, this.id)) + `x<br><br>
 					Cost: ` + formatWhole(this.cost) + ` digits`;
 				return text;
@@ -1594,7 +1591,7 @@ addLayer('i', {
 	},
 	canBuyMax() { return hasMilestone('i', 18) },
 	hotkeys: [{
-		key: 'i', // Use uppercase if it's combined with shift, or 'ctrl+x' for holding down ctrl.
+		key: 'i',
 		description: 'I: reset for intelligence',
 		onPress() { if (player.i.unlocked) doReset('i') },
 	}],
@@ -1989,7 +1986,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 5,
 		},
 		12: {
@@ -2004,7 +2001,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 20,
 		},
 		31: {
@@ -2019,7 +2016,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 		},
 		32: {
 			cost() { return new Decimal('1e5900') },
@@ -2032,7 +2029,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 1,
 		},
 		33: {
@@ -2047,7 +2044,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 		},
 		41: {
 			cost() {
@@ -2065,7 +2062,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "i", "money") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 2500, // 17500
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2085,7 +2082,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "i", "money") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 2500, // 17500
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2105,7 +2102,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "i", "money") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 2500, // 17500
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2125,7 +2122,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "i", "money") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 2500, // 17500
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2148,7 +2145,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "i", "money") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 25,
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2171,7 +2168,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "i", "money") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 25,
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2194,7 +2191,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "i", "money") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 30,
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2217,7 +2214,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "i", "money") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 30,
 			unlocked() { return hasMilestone('i', 5) },
 		},
@@ -2233,7 +2230,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "i", "money") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 10,
 			unlocked() { return hasMilestone('i', 7) },
 		},
@@ -2249,7 +2246,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "i", "money") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 10,
 			unlocked() { return hasMilestone('i', 7) },
 		},
@@ -2265,7 +2262,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "i", "money") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 10,
 			unlocked() { return hasMilestone('i', 7) },
 		},
@@ -2281,7 +2278,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.i.money.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "i", "money") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 10,
 			unlocked() { return hasMilestone('i', 7) },
 		},
@@ -2297,7 +2294,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			unlocked() { return hasMilestone('i', 7) },
 		},
 		72: {
@@ -2311,7 +2308,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 1,
 			unlocked() { return hasMilestone('i', 7) },
 		},
@@ -2327,7 +2324,7 @@ addLayer('i', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			unlocked() { return hasMilestone('i', 7) },
 		},
 	},
@@ -2507,7 +2504,7 @@ addLayer('gn', {
 		return text;
 	},
 	hotkeys: [{
-		key: 'g', // Use uppercase if it's combined with shift, or 'ctrl+x' for holding down ctrl.
+		key: 'g',
 		description: 'G: reset for greek numerals',
 		onPress() { if (player.i.unlocked) doReset('i') },
 	}],
@@ -2719,7 +2716,7 @@ addLayer('gn', {
 		11: {
 			fullDisplay() {
 				let text = `<h3>Greek Know-How</h3><br>
-					multiply arabic numeral gain based on the amount of greek numerals you have<br>
+					multiply arabic numeral gain based on your greek numerals<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
 				if (options.nerdMode) text += '';
@@ -2731,7 +2728,7 @@ addLayer('gn', {
 		12: {
 			fullDisplay() {
 				let text = `<h3>Greek Digits</h3><br>
-					multiply the digit limit based on the amount of greek numerals you have<br>
+					multiply the digit limit based on your greek numerals<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
 				if (options.nerdMode) text += '';
@@ -2743,7 +2740,7 @@ addLayer('gn', {
 		13: {
 			fullDisplay() {
 				let text = `<h3>Greek IQ</h3><br>
-					multiply greek numeral gain based on the amount of intelligence you have<br>
+					multiply greek numeral gain based on your intelligence<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
 				if (options.nerdMode) text += '';
@@ -2777,7 +2774,7 @@ addLayer('gn', {
 		21: {
 			fullDisplay() {
 				let text = `<h3>Greek Markets</h3><br>
-					increase the cap of <b>Cheapest</b> based on the amount of greek numerals you have<br>
+					increase the cap of <b>Cheapest</b> based on your greek numerals<br>
 					Currently: +` + formatWhole(this.effect()) + `<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
 				if (options.nerdMode) text += '';
@@ -2790,7 +2787,7 @@ addLayer('gn', {
 		22: {
 			fullDisplay() {
 				let text = `<h3>Greek Multiplication</h3><br>
-					increase the cap of <b>Triple</b> based on the amount of greek numerals you have<br>
+					increase the cap of <b>Triple</b> based on your greek numerals<br>
 					Currently: +` + formatWhole(this.effect()) + `<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
 				if (options.nerdMode) text += '';
@@ -2803,7 +2800,7 @@ addLayer('gn', {
 		23: {
 			fullDisplay() {
 				let text = `<h3>Greek Counting</h3><br>
-					multiply the digit limit based on the amount of greek numerals you have<br>
+					multiply the digit limit based on your greek numerals<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
 				if (options.nerdMode) text += '';
@@ -2840,7 +2837,7 @@ addLayer('gn', {
 		31: {
 			fullDisplay() {
 				let text = `<h3>Greek Geometry</h3><br>
-					multiply the digit limit based on the amount of greek numerals you have<br>
+					multiply the digit limit based on your greek numerals<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
 				if (options.nerdMode) text += '';
@@ -2877,7 +2874,7 @@ addLayer('gn', {
 		34: {
 			fullDisplay() {
 				let text = `<h3>Greek Trigonometry</h3><br>
-					multiply the digit limit based on the amount of greek numerals you have<br>
+					multiply the digit limit based on your greek numerals<br>
 					Currently: ` + format(this.effect()) + `x<br><br>
 					Cost: ` + greekNumeralFormat(this.cost) + ` greek numerals`;
 				if (options.nerdMode) text += '';
@@ -2930,7 +2927,7 @@ addLayer('gn', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 10,
 			unlocked() { return hasMilestone('gn', 15) },
 		},
@@ -2949,7 +2946,7 @@ addLayer('gn', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 10,
 			unlocked() { return hasMilestone('gn', 15) },
 		},
@@ -2968,7 +2965,7 @@ addLayer('gn', {
 			},
 			canAfford() { return player.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this, "") },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			purchaseLimit: 5,
 			unlocked() { return hasMilestone('gn', 15) },
 		},
@@ -2987,7 +2984,7 @@ addLayer('gn', {
 			},
 			canAfford() { return player.gn.points.gte(this.cost()) },
 			buy() { buyStandardBuyable(this) },
-			style: {width: '120px', height: '120px'},
+			style: {width: '120px', "min-height": '120px'},
 			unlocked() { return hasMilestone('gn', 15) },
 		},
 	},

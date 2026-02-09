@@ -120,7 +120,7 @@ addLayer("co", {
 	},
 	componentStyles: {
 		"prestige-button"() {if (tmp.co.canReset && tmp.co.nodeStyle) return tmp.co.nodeStyle},
-		challenge: {width: "500px", height: "500px", background: "none", "border-radius": "10%", "border-color": "#55B020", color: "var(--color)", cursor: "default"},
+		challenge: {width: "550px", "min-height": "550px", background: "none", "border-radius": "10%", "border-color": "#55B020", "padding-bottom": "17px", color: "var(--color)", cursor: "default"},
 	},
 	challenges: {
 		11: {

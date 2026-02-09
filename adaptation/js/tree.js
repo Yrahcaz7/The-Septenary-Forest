@@ -6,6 +6,6 @@ const layoutInfo = {
 };
 
 addLayer("tree-tab", {
-	tabFormat: [["tree", () => layoutInfo.treeLayout ? layoutInfo.treeLayout : TREE_LAYERS]],
+	tabFormat: [["tree", () => layoutInfo.treeLayout || TREE_LAYERS]],
 	leftTab: true,
 });

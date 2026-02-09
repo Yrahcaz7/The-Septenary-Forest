@@ -121,7 +121,7 @@ addLayer("g", {
 		};
 	},
 	componentStyles: {
-		buyable: {width: "210px", height: "110px"},
+		buyable: {width: "210px", "min-height": "110px"},
 		clickable: {"min-height": "30px", transform: "none"},
 	},
 	buyables: {

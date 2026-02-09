@@ -895,7 +895,7 @@ addLayer("sg", {
 		passive: newDecimalZero(),
 		capacity: newDecimalZero(),
 	}},
-	color: "#248239",
+	color: "#30A849",
 	resource: "super generator power",
 	row: 0,
 	effect() {return player.sg.points.add(1).pow(0.5)},
@@ -939,8 +939,8 @@ addLayer("sg", {
 		player.sg.capacity = cap;
 	},
 	componentStyles: {
-		buyable: {width: "200px", height: "125px"},
-		upgrade: {width: "125px", height: "125px"},
+		buyable: {width: "200px", "min-height": "125px"},
+		upgrade: {width: "125px", "min-height": "125px"},
 	},
 	buyables: {
 		respec() {
@@ -1242,7 +1242,7 @@ addLayer("hg", {
 		points: newDecimalZero(),
 		passive: newDecimalZero(),
 	}},
-	color: "#164E21",
+	color: "#217131",
 	resource: "hyper generator power",
 	row: 0,
 	tabFormat: [
@@ -1275,8 +1275,8 @@ addLayer("hg", {
 		if (player.hg.points.gt(player.hg.best)) player.hg.best = player.hg.points;
 	},
 	componentStyles: {
-		buyable: {width: "200px", height: "125px"},
-		clickable: {width: "200px", height: "125px"},
+		buyable: {width: "200px", "min-height": "125px"},
+		clickable: {width: "200px", "min-height": "125px"},
 	},
 	buyables: {
 		11: {
