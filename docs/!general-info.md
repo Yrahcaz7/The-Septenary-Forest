@@ -21,6 +21,7 @@ While reading this documentation, the following key will be used when describing
 - **optional**: You can leave this out if you don't intend to use that feature for the layer.
 - **assigned automagically**: This value will be set automatically and override any value you set.
 - **deprecated**: This feature is not recommended to be used, because newer features are able to achieve the same thing in a better, easier way.
+- **OVERRIDE**: This feature overrides one or more other features (which one(s) are overriden are mentioned in the description).
 
 In addition, things marked with "(additional feature)" are exclusive to The Septenary Forest and are not present in The Modding Tree.
 
@@ -58,5 +59,6 @@ In addition, things marked with "(additional feature)" are exclusive to The Sept
 
 ### Additional features
 
+- [Overview](additional-feature-overview.md): A list of all additional features in The Septenary Forest.
 - [Custom Components](custom-components.md): Create your own components to use in custom tab layouts.
     **WARNING: This is one of the most complicated features.**

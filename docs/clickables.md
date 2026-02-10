@@ -52,7 +52,7 @@ Features:
 
 - `branches`: **optional**. This is primarially useful for clickable trees. An array of clickable ids. A line will appear from this clickable to all of the clickables in the list. Alternatively, an entry in the array can be a 2-element array consisting of the clickable id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). A third element in the array optionally specifies line width.
 
-> - `color` (additional feature): **optional**. The background color of the clickable if it can be clicked. (A string in hex format with a `#`.) The default is the color of the layer the clickable belongs to. Can be a function.
+> - `color` (additional feature): **optional**. The background color of the clickable if it can be clicked. (A string in hex format with a `#`.) The default is the layer's color. Can be a function.
 
 Master button features (you can use these features on the clickables object to add a button above all the clickables, for implementing a respec button or similar):
 

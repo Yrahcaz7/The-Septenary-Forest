@@ -101,7 +101,7 @@ Features:
 
 - `branches`: **optional**. This is primarially useful for buyable trees. An array of buyable ids. A line will appear from this buyable to all of the buyables in the list. Alternatively, an entry in the array can be a 2-element array consisting of the buyable id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). A third element in the array optionally specifies line width.
 
-> - `color` (additional feature): **optional**. The background color of the buyable if it can be purchased. (A string in hex format with a `#`.) The default is the color of the layer the buyable belongs to. Can be a function.
+> - `color` (additional feature): **optional**. The background color of the buyable if it can be purchased. (A string in hex format with a `#`.) The default is the layer's color. Can be a function.
 
 Sell One/Sell All:
 

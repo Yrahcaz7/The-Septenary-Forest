@@ -118,9 +118,9 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `onPrestige(gain)`: **optional**. A function that triggers when this layer prestiges, just before you gain the currency. Can be used to have secondary resource gain on prestige, or to recalculate things or whatnot.
 
-> - `onPrestigeIsAfterGain` (additional feature): **optional**. A boolean indicating whether this layer's `onPrestige()` function triggers after prestige resource gain but before resetting anything (this also means that any relevant milestones and achievements will be updated to reflect the gain). By default is false, which makes `onPrestige()` trigger before both gain and reset.
+> - `onPrestigeIsAfterGain` (additional feature): **optional**. A boolean indicating whether this layer's `onPrestige()` function triggers after prestige resource gain but before resetting anything (this also means that any relevant milestones and achievements will be updated to reflect the gain). Defaults to `false`, which makes `onPrestige()` trigger before both gain and reset.
 
-- `resetDescription`: **optional**. Use this to replace "Reset for " on the Prestige button with something else.
+- `resetDescription`: **optional**. Use this to replace `"Reset for "` on the Prestige button with something else.
 
 - `prestigeButtonText()`: **sometimes required**. Use this to make the entirety of the text a Prestige button contains. Only required for custom layers, but usable by all types.
 
@@ -128,7 +128,7 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `autoPrestige()`: **optional**. Returns a boolean. If it is true, the layer will always automatically do a prestige if it can. This is good for automating static layers.
 
-> - `logged` (additional feature): **optional**. For normal layers, if this is a [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) value, the resource gain becomes the log of the previous gain plus one. If it is exactly `true`, the log base is `10`, otherwise the log base is `new Decimal(logged)`. Can also be a function. Has no effect on static layers.
+> - `logged` (additional feature): **optional**. For normal layers, if this is a [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) value, the resource gain becomes the log of the previous gain plus one. If it is exactly `true`, the log base is `10`, otherwise the log base is `new Decimal(logged)`. Can also be a function. **Has no effect on static layers.**
 
 ## Tree/node features
 
