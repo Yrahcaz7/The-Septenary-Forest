@@ -16,14 +16,14 @@ function changelog() {
 	return `<h1>Changelog:</h1><br>
 		<br><h3>v4.0: The End is Near</h3><br>
 			- Added planets.<br>
-			- Added four milestones to planets.<br>
+			- Added five milestones to planets.<br>
 			- Added thirty-six upgrades to planets.<br>
 			- Added three rebuyables to planets.<br>
 			- Added two correction types to planets.<br>
 			- Added ${randomStr(4)} to assimilation.<br>
-			- Added twenty-four milestones to chaos.<br>
+			- Added twenty-seven milestones to chaos.<br>
 			- Added ${randomStr(4)} to story.<br>
-			- Added seven achievements.<br>
+			- Added eight achievements.<br>
 			- Added twelve achievement images.<br>
 			- Added one option.<br>
 		<br><h3>v3.6: Even More Assimilation</h3><br>
@@ -303,6 +303,7 @@ function buyGoodInfluenceBuyable(obj) {
 		if (hasMilestone("ch", 30)) bulk *= 10;
 		if (hasMilestone("ch", 51)) bulk *= 10;
 		if (hasMilestone("pl", 1)) bulk *= 10;
+		if (hasMilestone("pl", 4)) bulk *= 10;
 		player.gi.total = player.gi.total.add(obj.cost().mul(bulk ** 1.1));
 		player[obj.layer].buyables[obj.id] = player[obj.layer].buyables[obj.id].add(bulk).min(tmp[obj.layer].buyables[obj.id].purchaseLimit);
 	} else {
@@ -316,6 +317,7 @@ function getCellularLifeBuyableBulk() {
 	let bulk = 1;
 	if (hasMilestone("ch", 30)) bulk *= 10;
 	if (hasMilestone("pl", 2)) bulk *= 10;
+	if (hasMilestone("pl", 4)) bulk *= 10;
 	return bulk;
 };
 
@@ -329,6 +331,7 @@ function getKeepFromPlanets(resettingLayer) {
 	if (resettingLayer == "pl") {
 		let keep = [];
 		if (hasMilestone("pl", 3)) keep.push("milestones");
+		if (hasMilestone("pl", 4)) keep.push("challenges");
 		return keep;
 	};
 	let keep = [];
@@ -418,7 +421,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return "You beat the game!<br>For now..." },
 ];
 
-const endPoints = new Decimal("e1e98");
+const endPoints = new Decimal("e1e121");
 
 function onLoad() {
 	calculateColorValue();

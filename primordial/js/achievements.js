@@ -8,7 +8,7 @@ addLayer("A", {
 	color: "#A5BCC2",
 	resource: "achievements",
 	row: "side",
-	effect() { return new Decimal(1.0005).pow(player.A.points) },
+	effect() { return new Decimal(getBuyableAmount("pl", 22).gte(4) ? 1.001 : 1.0005).pow(player.A.points) },
 	effectDescription() {
 		if (getBuyableAmount("pl", 22).gte(3)) {
 			return "which multiplies your chaos gain by <h2 class='layer-A'>" + format(tmp.A.effect) + "</h2>x";
@@ -539,6 +539,10 @@ addLayer("A", {
 			192: {
 				name: "Observable Planets",
 				requirement: 5,
+			},
+			193: {
+				name: "Solar System",
+				requirement: 8,
 			},
 		};
 		const done = req => player.points.gte(req);
