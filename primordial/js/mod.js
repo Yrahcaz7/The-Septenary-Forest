@@ -21,7 +21,7 @@ function changelog() {
 			- Added three rebuyables to planets.<br>
 			- Added two correction types to planets.<br>
 			- Added ${randomStr(4)} to assimilation.<br>
-			- Added twenty-seven milestones to chaos.<br>
+			- Added twenty-six milestones to chaos.<br>
 			- Added ${randomStr(4)} to story.<br>
 			- Added eight achievements.<br>
 			- Added twelve achievement images.<br>
@@ -421,7 +421,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return "You beat the game!<br>For now..." },
 ];
 
-const endPoints = new Decimal("e1e121");
+const endPoints = new Decimal("e1e122");
 
 function onLoad() {
 	calculateColorValue();
@@ -432,19 +432,32 @@ function maxTickLength() {
 };
 
 function removeAchievement(id = NaN) {
-	for (var i = 0; i < player.A.achievements.length; i++) {
+	for (let i = 0; i < player.A.achievements.length; i++) {
 		if (player.A.achievements[i] == id) {
 			player.A.achievements.splice(i, 1);
-			return true;
+			return;
 		};
 	};
-	return false;
+};
+
+function removeMilestone(layer, id = NaN) {
+	for (let i = 0; i < player[layer].milestones.length; i++) {
+		if (player[layer].milestones[i] == id) {
+			player[layer].milestones.splice(i, 1);
+			if (player[layer].lastMilestone == id) {
+				player[layer].lastMilestone = null;
+			};
+			return;
+		};
+	};
 };
 
 function fixOldSave(oldVersion) {
 	// achievement fixes
-	if (oldVersion == "2.2" && player.A.achievements.includes("123")) removeAchievement("123");
-	if (oldVersion == "3.2" && player.A.achievements.includes("163")) removeAchievement("163");
+	if (oldVersion == "2.2") removeAchievement("123");
+	if (oldVersion == "3.2") removeAchievement("163");
+	// milestone fixes
+	if (oldVersion == "4.0") removeMilestone("ch", "59");
 	// endgame fixes
 	if ((oldVersion == "3.4" || oldVersion == "3.4.1") && (player.points.gte("e1.51e14") || player.ch.points.gt(50))) {
 		setTimeout(() => {

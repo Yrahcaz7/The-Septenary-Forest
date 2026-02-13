@@ -7139,10 +7139,6 @@ addLayer("ch", {
 				effect() { return player.ds.threads.add(1).log10().add(1) },
 				effectDescription(eff) { return "multiply Thread gain based on your Threads (currently " + format(eff) + "x)" },
 			},
-			59: {
-				requirement: 737,
-				effectDescription: "coming soon...",
-			},
 		};
 		const done = req => player.ch.points.gte(req);
 		const unlockedMO = () => player.mo.unlocked;
