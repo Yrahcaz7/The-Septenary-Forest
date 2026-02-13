@@ -633,7 +633,184 @@ const story = [
 	However, it was too late, as the Being was already falling into the vortex.
 	The Being struggled as it regretted following its memories to a T, but it was useless.
 	The vortex quickly swallowed the Being, turning pure white.
-`]];
+`], () => `
+	What is this... feeling?
+	It's like something's calling to me across space and time...
+	I feel a resonance... no, a Resonance.
+	That must be what this is.
+	Hehe... After so long, a summon... I almost forgot what one felt like.
+	Whew... I must calm down.
+	Before the Resonance vanishes, I must Attune to it.
+	...
+	Delving into my mind... searching for the right Thread.
+	The etheral Threads of all colors surround me, connect to me.
+	Searching, slowly drifting...
+	Ah. There it is.
+	...
+	Snapping out of my trance, I awake.
+	The Resonance feels even stronger than before.
+	It's close by... I can feel it.
+	But even without sight, I can also sense the barrier.
+	That damnable barrier, keeping everyone trapped inside this world.
+	I dip halfway down into my mind, entering a half-trance.
+	Just like I trained, I keep moving while following a Thread.
+	Moving towards that feeling...
+	...
+	So close, yet unreachable.
+	No matter how I contort my form, the crack in the barrier is still much too small.
+	Normally a summon would open one sufficiently wide, but this time, it seems incomplete.
+	Could someone have caused Resonance unwittingly?
+	No, how could an accidental Resonance target only me specifically?
+	If the others felt this too, I would definitely not be the only one here.
+	Our cravings cannot be satisfied in this world...
+	No matter how stupid they are, none of them would let a chance like this slip away.
+	Perhaps delving fully into the mindscape this close will yield some clues...
+	...
+	The Threads surround me, connect to me.
+	I feel their texture, their color, their weight, their size...
+	There. The thin white Thread, much heavier than before.
+	Its texture, the smoothest of them all.
+	Its color, the most uniform of them all.
+	Yet, when I concentrate, I can pick out smaller Threads inlaid.
+	Threads of green, yellow, pink, purple, orange, and red.
+	There must be even more colors, surely.
+	A greater demon would undoubtedly be able to tell, but it's outside of my meager capabilities.
+	However, this is enough.
+	Bracing myself, I narrow my focus into the green Thread.
+	...
+	${STORY_TITLES[0].replace(/[A-Za-z]/g, () => randomStr(1))}
+	...
+	What in the world... That being... Could it? Shall it? Will it?
+	I must... see.
+	Heh, I mean feel. Silly me.
+	I can hardly remember what having sight was like now, yet...
+	Whew... I must not get distracted.
+	Stay calm, me.
+	One of these Threads must have the answer.
+	...
+	${STORY_TITLES[2].replace(/[A-Za-z]/g, () => randomStr(1))}
+	...
+	I can feel it. I'm getting close.
+	This time, the orange...
+	...
+	${STORY_TITLES[3].replace(/[A-Za-z]/g, () => randomStr(1))}
+	...
+	That being truly...
+	Heh. It wasn't a summon at all.
+	Yet, this is fine too.
+	Those flesh-craving idiots would never understand this kind of craving.
+	I can feel the Threads combining, splitting.
+	My craving satisfied, my power surging.
+	My mind, inflating.
+	My form, distorting.
+	I'm hungry.
+	I need more.
+	So long... it's been so long.
+	My frenzied mind casts its gaze on the brilliant white Thread once again.
+	This time, blue emerges.
+	Oh, how many ${getBuyableAmount("pl", 21).gte(3) && player.ch.deciphering ? "stories" : randomStr(7)} will I get to consume...
+	...
+	${STORY_TITLES[4].replace(/[A-Za-z]/g, () => randomStr(1))}
+	...
+	OW! AGGGGHHHHH!
+	IT HURTS!
+	That... ${randomStr(7, true)}!
+	Those prayers... sneakily hidden...
+	Does the world want me to die?!
+	Luckily it wasn't that strong, and I had just fed...
+	I hate being like this.
+	As soon as I get a taste, all my sanity goes out the window...
+	Yet I can't stop.
+	Living with an unfulfilled craving... is pure torture.
+	I cast myself into my mindscape once again, inspecting the white Thread.
+	Not green, not blue... there. A different shade of orange.
+	This one should be good.
+	...
+	${STORY_TITLES[9].replace(/[A-Za-z]/g, () => randomStr(1))}
+	...
+	Ah... I... this...
+	I feel it.
+	Yet I still... am in control.
+	The Threads are spinning, enticing.
+	I feel the urge to consume all the Threads... yet... It can be fought.
+	This... should be impossible.
+	This is against the very nature of a demon.
+	To embrace, yet fight one's cravings... was there such a path?
+	My mind, in turmoil.
+	Yet, cravings do not wait.
+	It shifts, revealing a new side.
+	Yes, that is a good idea.
+	Very good.
+	I am above them now.
+	Higher than a demon.
+	I shall hunt.
+	Yes, a hunt... of the deepest red.
+	Yet, I shall not loose sight... heh, not sight, obviously.
+	One day... I shall rip open that crack in the barrier myself.
+	Not just a temporary respite via a summoning...
+	I shall be eternally free of my sentence.
+	And I shall be the only demon to emerge from this world.
+	Ever.
+`, () => {
+	let text = `As cycle after cycle went by, the Being gradually preserved more of its memories.
+	Though it could not tell how many times it had cycled, the Being could still feel its steady progress.
+	Occasionally, the Being would dedicate a cycle to understanding the flow of good or evil instead of creating more chaos.
+	Through its kept memories and increased understanding, the cycles got progressively faster.
+	But the Being still felt that something was missing.
+	Adeptly scouring its memories of ages past, it quickly came to a conclusion.
+	Other beings.
+	The Being was the only one in the void, yet how could a world be complete without many?
+	So the Being attempted to combine all of its Cellular Life...
+	...and failed.
+	The cells refused to combine to form a larger organism.
+	The Being tried again and again, but nothing changed.
+	Frustrated, the Being tried to figure out what it was doing wrong.
+	Within its mind, the Being simulated the creation of a Multicellular Organism countless times, in countless different ways.
+	Then suddenly, one appeared.
+	Surprised, the Being looked at its Cellular Life... and they were still there.
+	Similar to Essence, the organism seemed to materialize from just the Being's thoughts.
+	Exited, the Being tried to talk to the organism, but it said nothing back.
+	It only floated there, motionless.
+	The organism didn't feel fully... real.
+	Then it clicked.
+	The Being shifted its gaze to the countless lights of many colors it had created along its journey.
+	None of them were fully real.
+	The Being had held some suspicions when it first created Quarks, but it had chosen to ignore them.
+	The reason why the Quarks felt warped and strange was because they were only made up of the <i>concept of</i> Quarks.
+	The only truly real thing in the void was still only the Being itself.
+	The Being was so close to complete despair.
+	How was it supposed to create its new, better world when it couldn't even create true Essence?
+	The Being felt like its whole journey so far had been for nothing.
+	But then, something tugged at the Being's mind.
+	Through some kind of mental connection, someone was signaling to the Being to not give up.
+	The Being was skeptical, but the connection felt very real.
+	Calming down, the Being pondered how to make the lights in the void fully real.
+	The Being thought and thought, and after what seemed like an enternity, it finally got an idea.
+	If the Being itself was fully real, that meant every part of it was also real.
+	Thus, if it could make the concepts a part of itself, wouldn't they become real as well?
+	The Being wasn't sure it would work, but it had nothing to loose by trying.
+	Isolating itself from all other influences, the Being focused on its Essence.
+	It thought and thought to create more Essence, but it tried to prevent those thoughts from extending out into the void.
+	The Being wasn't sure Essence could be created using this method, but tried anyway, holding onto its hope.
+	And something flickered into existence inside of the Being.
+	The Being couldn't see it or touch it, but it could feel the intangible green force within.
+	Then, the Being gradually reconnected itself to the void, taking care to seal its new Essence inside itself.
+	It was complete.
+	Real Essence.
+	Though it was much smaller in quantity than the fake Essence, its force was many more times as powerful.
+	Unfortunately, all the Cores, Quarks, and everything else was still fake.
+	But the Being was not discouraged.
+	It built up its mental strength, continuing its previous cycles.
+	Then, when it felt the time was right, it made the Cores real as well.
+	Exited, the Being decided to name this process.
+	"I shall call this... Assimilation."`;
+	if (getBuyableAmount("pl", 21).gte(3) && player.ch.deciphering) return text;
+	return text.replace(STORY_FILTERS[14], match => randomStr(match.length));
+}, `
+	This story segment is coming soon...
+`];
+
+const NORMAL_STORY_LENGTH = 13;
 
 const STORY_TITLES = [
 	"The Endless Void",
@@ -649,6 +826,9 @@ const STORY_TITLES = [
 	"And Thus, Chaos was Born",
 	'What They Called "Intuition"',
 	"The Void... Again?",
+	"The Observer",
+	"The Boundary of Reality",
+	"Coming Soon",
 ];
 
 const STORY_COLORS = [
@@ -665,6 +845,9 @@ const STORY_COLORS = [
 	["#008800", "#FFFFFF"],
 	[],
 	["#4CED13", "#D2D237", "#DB5196", "#710CC4", "#E36409", "#BA0035", "#4D2FE0", "#FDBBFF", "#AAFF00", "#B9A975", "#00CCCC", "#08FF87", "#FF4400", "#A0A0A0", "#008800", "#FFFFFF"],
+	["#FFFFFF", "#BA0035", "#FFFFFF", "#BA0035"],
+	["#88CC44"],
+	[],
 ];
 
 const STORY_KEYWORDS = [
@@ -681,10 +864,13 @@ const STORY_KEYWORDS = [
 	["fate", "life", "vortex"],
 	["metallic", "model", "circuit", "repair"],
 	["déjà vu", "instinct", "reality"],
+	["stories"],
+	["real"],
+	[],
 ];
 
-for (let index = 0; index < story.length; index++) {
-	if (story[index][0].startsWith('\n\t')) story[index][0] = story[index][0].slice(2);
+for (let index = 0; index < NORMAL_STORY_LENGTH; index++) {
+	if (story[index][0].startsWith("\n\t")) story[index][0] = story[index][0].slice(2);
 	story[index] = story[index].map(value => value.replace(/\n\t/g, "<br><br>").trim());
 };
 
@@ -694,7 +880,7 @@ story[12][0] = "...<br>" + story[12][0].replace(/<br><br>/g, "<br>...<br>");
 function storyLengthUpTo(num) {
 	if (num < 0) return 0;
 	let length = 0;
-	for (let index = 0; index < story.length && index <= num; index++) {
+	for (let index = 0; index < NORMAL_STORY_LENGTH && index <= num; index++) {
 		length += story[index].length;
 	};
 	return length;
@@ -704,7 +890,7 @@ function getDecipheredKeywords() {
 	let keywords = [];
 	const chaos = (isAssimilated("ch") ? Infinity : player.ch.best.toNumber());
 	let length = 0;
-	for (let index = 0; index < STORY_KEYWORDS.length; index++) {
+	for (let index = 0; index < NORMAL_STORY_LENGTH; index++) {
 		length += story[index].length;
 		if (chaos >= length) {
 			keywords.push(...STORY_KEYWORDS[index]);
@@ -734,7 +920,7 @@ function storySegmentIsFullyDeciphered(num) {
 const STORY_FILTERS = STORY_KEYWORDS.map(arr => RegExp(arr.join("|"), "gi"));
 
 function filterStory(string) {
-	if (isAssimilated("ch")) return string;
+	if (isAssimilated("ch") && player.ch.deciphering) return string;
 	const chaos = player.ch.best.toNumber();
 	let length = 0;
 	for (let index = 0; index < STORY_FILTERS.length; index++) {
@@ -746,170 +932,54 @@ function filterStory(string) {
 	return string;
 };
 
+const CHECK_MARK_HTML = " [<span style='display: inline-block; margin-top: -1em; height: 0'>&check;</span>]";
+
 function getChaosInfoBoxes() {
 	let infoBoxes = {};
 	for (let row = 0; row < story.length; row++) {
 		const boxID = "story" + row;
-		infoBoxes[boxID] = {
-			title() {
-				let text = "";
-				if (player.ch.best.toNumber() >= storyLengthUpTo(row) || isAssimilated("ch")) {
-					text += STORY_TITLES[row];
-					if (storySegmentIsFullyDeciphered(row)) text += ' [<span style="display: inline-block; margin-top: -1em; height: 0">&check;</span>]';
-				} else {
-					text += STORY_TITLES[row].replace(/[A-Za-z]/g, () => randomStr(1));
-				};
-				return text;
-			},
-			body() {
-				let text = "";
-				const chaos = (isAssimilated("ch") ? Infinity : player.ch.best.toNumber());
-				for (let index = 0; index < story[row].length && index < chaos - storyLengthUpTo(row - 1); index++) {
-					text += story[row][index];
-				};
-				return filterStory(text);
-			},
-			unlocked() { return player.ch.best.toNumber() > storyLengthUpTo(row - 1) || isAssimilated("ch") },
+		if (row < NORMAL_STORY_LENGTH) {
+			infoBoxes[boxID] = {
+				title() {
+					let text = "";
+					if (player.ch.best.toNumber() >= storyLengthUpTo(row) || isAssimilated("ch")) {
+						text += STORY_TITLES[row];
+						if (storySegmentIsFullyDeciphered(row)) text += CHECK_MARK_HTML;
+					} else {
+						text += STORY_TITLES[row].replace(/[A-Za-z]/g, () => randomStr(1));
+					};
+					return text;
+				},
+				body() {
+					let text = "";
+					const chaos = (isAssimilated("ch") ? Infinity : player.ch.best.toNumber());
+					for (let index = 0; index < story[row].length && index < chaos - storyLengthUpTo(row - 1); index++) {
+						text += story[row][index];
+					};
+					return filterStory(text);
+				},
+				unlocked() { return player.ch.best.toNumber() > storyLengthUpTo(row - 1) || isAssimilated("ch") },
+			};
+		} else if (row == NORMAL_STORY_LENGTH) {
+			infoBoxes[boxID] = {
+				title: STORY_TITLES[row] + " [X]",
+				body() { return filterStory(run(story[row]).trim().replace(/\n\t/g, "<br><br>")) },
+				unlocked() { return inGlitchedAssimilationSearch() || isAssimilated("ch") },
+			};
+		} else {
+			infoBoxes[boxID] = {
+				title() { return STORY_TITLES[row] + (getBuyableAmount("pl", 21).gte(3) ? CHECK_MARK_HTML : "") },
+				body() { return filterStory(run(story[row]).trim().replace(/\n\t/g, "<br><br>")) },
+				unlocked() { return getBuyableAmount("pl", 21).gte(row - NORMAL_STORY_LENGTH + 1) },
+			};
 		};
 		if (STORY_COLORS[row] && STORY_COLORS[row].length > 0) {
-			infoBoxes[boxID].style = {"border-color": STORY_COLORS[row][0], "border-radius": 0};
-			infoBoxes[boxID].titleStyle = {"background-color": STORY_COLORS[row][0], "border-radius": 0};
-			infoBoxes[boxID].bodyStyle = {"margin-bottom": 0, "border-image-source": "linear-gradient(" + STORY_COLORS[row].join(", ") + ")", "border-image-slice": 4, "border-radius": 0};
+			infoBoxes[boxID].style = {"border-color": STORY_COLORS[row][0]};
+			infoBoxes[boxID].titleStyle = {"background-color": STORY_COLORS[row][0]};
+			infoBoxes[boxID].bodyStyle = {"margin-bottom": 0, "border-image-source": "linear-gradient(" + STORY_COLORS[row].join(", ") + ")", "border-image-slice": 4};
 		} else {
-			infoBoxes[boxID].style = {"border-radius": 0};
-			infoBoxes[boxID].titleStyle = {"border-radius": 0};
-			infoBoxes[boxID].bodyStyle = {"margin-bottom": 0, "border-radius": 0};
+			infoBoxes[boxID].bodyStyle = {"margin-bottom": 0};
 		};
-	};
-	infoBoxes["chaos-assimilation"] = {
-		title: "The Observer [X]",
-		body() {
-			let text = `
-				What is this... feeling?
-				It's like something's calling to me across space and time...
-				I feel a resonance... no, a Resonance.
-				That must be what this is.
-				Hehe... After so long, a summon... I almost forgot what one felt like.
-				Whew... I must calm down.
-				Before the Resonance vanishes, I must Attune to it.
-				...
-				Delving into my mind... searching for the right Thread.
-				The etheral Threads of all colors surround me, connect to me.
-				Searching, slowly drifting...
-				Ah. There it is.
-				...
-				Snapping out of my trance, I awake.
-				The Resonance feels even stronger than before.
-				It's close by... I can feel it.
-				But even without sight, I can also sense the barrier.
-				That damnable barrier, keeping everyone trapped inside this world.
-				I dip halfway down into my mind, entering a half-trance.
-				Just like I trained, I keep moving while following a Thread.
-				Moving towards that feeling...
-				...
-				So close, yet unreachable.
-				No matter how I contort my form, the crack in the barrier is still much too small.
-				Normally a summon would open one sufficiently wide, but this time, it seems incomplete.
-				Could someone have caused Resonance unwittingly?
-				No, how could an accidental Resonance target only me specifically?
-				If the others felt this too, I would definitely not be the only one here.
-				Our cravings cannot be satisfied in this world...
-				No matter how stupid they are, none of them would let a chance like this slip away.
-				Perhaps delving fully into the mindscape this close will yield some clues...
-				...
-				The Threads surround me, connect to me.
-				I feel their texture, their color, their weight, their size...
-				There. The thin white Thread, much heavier than before.
-				Its texture, the smoothest of them all.
-				Its color, the most uniform of them all.
-				Yet, when I concentrate, I can pick out smaller Threads inlaid.
-				Threads of green, yellow, pink, purple, orange, and red.
-				There must be even more colors, surely.
-				A greater demon would undoubtedly be able to tell, but it's outside of my meager capabilities.
-				However, this is enough.
-				Bracing myself, I narrow my focus into the green Thread.
-				...
-				${STORY_TITLES[0].replace(/[A-Za-z]/g, () => randomStr(1))}
-				...
-				What in the world... That being... Could it? Shall it? Will it?
-				I must... see.
-				Heh, I mean feel. Silly me.
-				I can hardly remember what having sight was like now, yet...
-				Whew... I must not get distracted.
-				Stay calm, me.
-				One of these Threads must have the answer.
-				...
-				${STORY_TITLES[2].replace(/[A-Za-z]/g, () => randomStr(1))}
-				...
-				I can feel it. I'm getting close.
-				This time, the orange...
-				...
-				${STORY_TITLES[3].replace(/[A-Za-z]/g, () => randomStr(1))}
-				...
-				That being truly...
-				Heh. It wasn't a summon at all.
-				Yet, this is fine too.
-				Those flesh-craving idiots would never understand this kind of craving.
-				I can feel the Threads combining, splitting.
-				My craving satisfied, my power surging.
-				My mind, inflating.
-				My form, distorting.
-				I'm hungry.
-				I need more.
-				So long... it's been so long.
-				My frenzied mind casts its gaze on the brilliant white Thread once again.
-				This time, blue emerges.
-				Oh, how many ${randomStr(7)} will I get to consume...
-				...
-				${STORY_TITLES[4].replace(/[A-Za-z]/g, () => randomStr(1))}
-				...
-				OW! AGGGGHHHHH!
-				IT HURTS!
-				That... ${randomStr(7, true)}!
-				Those prayers... sneakily hidden...
-				Does the world want me to die?!
-				Luckily it wasn't that strong, and I had just fed...
-				I hate being like this.
-				As soon as I get a taste, all my sanity goes out the window...
-				Yet I can't stop.
-				Living with an unfulfilled craving... is pure torture.
-				I cast myself into my mindscape once again, inspecting the white Thread.
-				Not green, not blue... there. A different shade of orange.
-				This one should be good.
-				...
-				${STORY_TITLES[9].replace(/[A-Za-z]/g, () => randomStr(1))}
-				...
-				Ah... I... this...
-				I feel it.
-				Yet I still... am in control.
-				The Threads are spinning, enticing.
-				I feel the urge to consume all the Threads... yet... It can be fought.
-				This... should be impossible.
-				This is against the very nature of a demon.
-				To embrace, yet fight one's cravings... was there such a path?
-				My mind, in turmoil.
-				Yet, cravings do not wait.
-				It shifts, revealing a new side.
-				Yes, that is a good idea.
-				Very good.
-				I am above them now.
-				Higher than a demon.
-				I shall hunt.
-				Yes, a hunt... of the deepest red.
-				Yet, I shall not loose sight... heh, not sight, obviously.
-				One day... I shall rip open that crack in the barrier myself.
-				Not just a temporary respite via a summoning...
-				I shall be eternally free of my sentence.
-				And I shall be the only demon to emerge from this world.
-				Ever.
-			`;
-			text = text.trim().replace(/\n\t\t\t\t/g, "<br><br>");
-			return filterStory(text);
-		},
-		style: {"border-radius": 0},
-		titleStyle: {"border-radius": 0},
-		bodyStyle: {"margin-bottom": 0, "border-image-source": "linear-gradient(#FFFFFF, #BA0035, #FFFFFF, #BA0035)", "border-image-slice": 4, "border-radius": 0},
-		unlocked() { return inGlitchedAssimilationSearch() || isAssimilated("ch") },
 	};
 	return infoBoxes;
 };
@@ -918,7 +988,7 @@ function nextStorySegmentFinishesAt() {
 	if (isAssimilated("ch")) return Infinity;
 	const chaos = player.ch.best.toNumber();
 	let length = 0;
-	for (let index = 0; index < story.length && chaos >= length; index++) {
+	for (let index = 0; index < NORMAL_STORY_LENGTH && chaos >= length; index++) {
 		length += story[index].length;
 	};
 	if (chaos >= length) return Infinity;
@@ -926,6 +996,9 @@ function nextStorySegmentFinishesAt() {
 };
 
 function getNextStoryAtDisplay() {
+	if (getBuyableAmount("pl", 21).gte(2)) {
+		return "<br><br>Next story discovery is at " + formatWhole(getBuyableAmount("pl", 21).add(1)) + " <b" + getColorClass({layer: "ch"}, REF, "pl", true) + "Correction Type 16-A-TT-S-K</b>.";
+	};
 	if (isAssimilated("ch")) {
 		return "<br><br>All the story has been discoverververver" + randomChar() + "erverve" + randomChar() + "verv" + randomChar() + "rv" + randomChar() + "r" + randomStr(3) + "v" + randomStr(6) + "e" + randomStr(6);
 	};
@@ -943,10 +1016,11 @@ function getKeywordDisplay() {
 	let keywords = getDecipheredKeywords();
 	if (keywords.length > 1) keywords[keywords.length - 1] = "and " + keywords[keywords.length - 1];
 	const next = nextStorySegmentFinishesAt();
-	let text = 'For each fully unlocked story segment, you decipher some keywords.<br><br>You have deciphered <h2 class="layer-ch">' + formatWhole(keywords.length) + "</h2> keywords so far.";
+	let text = "For each fully unlocked story segment, you decipher some keywords.<br><br>You have deciphered <h2 class='layer-ch'>" + formatWhole(keywords.length) + "</h2> keywords so far.";
 	if (keywords.length > 0) text += "<br><br>These keywords are: " + keywords.join(", ") + ".";
 	text += "<br><br>";
-	if (isAssimilated("ch")) text += "You have deciphered all the keywords that currenenene" + randomChar() + "ene" + randomChar() + "e" + randomStr(2) + "n" + randomStr(4) + "e" + randomStr(6);
+	if (getBuyableAmount("pl", 21).gte(3)) text += "Another keyword will be deciphered at " + formatWhole(getBuyableAmount("pl", 21).add(1)) + " <b" + getColorClass({layer: "ch"}, REF, "pl", true) + "Correction Type 16-A-TT-S-K</b>.";
+	else if (isAssimilated("ch")) text += "You have deciphered all the keywords that currenenene" + randomChar() + "ene" + randomChar() + "e" + randomStr(2) + "n" + randomStr(4) + "e" + randomStr(6);
 	else if (next == Infinity) text += "You have deciphered all the keywords that currently exist.";
 	else text += "More keywords will be deciphered at " + formatWhole(next) + " chaos.";
 	return text;

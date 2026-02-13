@@ -7714,12 +7714,14 @@ addLayer("pl", {
 			description() {
 				const amt = getBuyableAmount(this.layer, this.id);
 				let text = "<br>";
-				if (amt.gte(1)) text += "the next correction is coming soon...";
+				if (amt.gte(3)) text += "the next correction is coming soon...";
+				else if (amt.gte(2)) text += "fixes the <b" + getColorClass(this, REF, "ch", true) + "Keywords</b> tab and unlocks a new story segment";
+				else if (amt.gte(1)) text += "fixes the <b" + getColorClass(this, REF, "ch", true) + "Story</b> tab and unlocks a new story segment";
 				else text += "makes <b" + getColorClass(this, REF, "ch", true) + "Tide of Science</b> count as a <b" + getColorClass(this, REF, "ch", true) + "Tide</b>";
 				return text;
 			},
 			canAfford() { return player.A.points.gte(this.cost()) },
-			purchaseLimit: 1,
+			purchaseLimit: 3,
 			buy() { addBuyables(this.layer, this.id, 1) },
 			costDisplay(cost) { return "Req: " + formatWhole(cost) + " achievements" },
 			style: {width: "260px", "min-height": "140px"},

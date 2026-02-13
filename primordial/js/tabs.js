@@ -201,22 +201,18 @@ function getRawTabContent(layer, name = "") {
 			content.push(["row", [[prefix + "display-text", "Keyword deciphering is&nbsp;"], [prefix + "toggle", ["ch", "deciphering"]]]]);
 			content.push("blank");
 			content.push([prefix + "display-text", "Fully deciphered story segments are marked with <span style='font-size: 24px'>[&check;]</span>"]);
-			if (isAssimilated("ch")) {
+			if (getBuyableAmount("pl", 21).gte(3)) {
 				content.push("blank");
-				content.push(["display-text",
-					"Story "
-					+ "segments that".replace(/[A-Za-z]+(?![A-Za-z0-9])/g, substr => randomStr(substr.length))
-					+ " cannot "
-					+ "be fully deciphered are".replace(/[A-Za-z]+(?![A-Za-z0-9])/g, substr => randomStr(substr.length))
-					+ " marked with <span style='font-size: 24px'>[X]</span>"
-				]);
+				content.push(["display-text", "Story segments that cannot be fully deciphered are marked with <span style='font-size: 24px'>[X]</span>"]);
+			} else if (isAssimilated("ch")) {
+				content.push("blank");
+				content.push(["display-text", "Story " + randomStr(8) + " " + randomStr(4) + " cannot " + randomStr(2) + " " + randomStr(5) + " " + randomStr(10) + " " + randomStr(3) + " marked with <span style='font-size: 24px'>[X]</span>"]);
 			};
 			content.push("blank");
 		} else if (name == "Story") {
 			for (let index = 0; index < story.length; index++) {
 				content.push(["infobox", "story" + index]);
 			};
-			content.push(["infobox", "chaos-assimilation"]);
 			if (inGlitchedAssimilationSearch()) {
 				content.push("blank");
 				content.push("blank");
