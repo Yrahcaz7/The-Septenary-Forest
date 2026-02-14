@@ -807,7 +807,40 @@ const story = [
 	if (getBuyableAmount("pl", 21).gte(3) && player.ch.deciphering) return text;
 	return text.replace(STORY_FILTERS[14], match => randomStr(match.length));
 }, `
-	This story segment is coming soon...
+	As the Being gradually Assimilated more concepts, the colors of light in the void dissapeared one by one.
+	The Being's form expanded as it progressed, getting ever closer to becoming a real world.
+	The spark of hope within the Being burned ever brighter.
+	Assimilating the concepts got harder every time, but the Being could still manage it after cycling some more.
+	However, when the Being finally got to Chaos, it got stuck.
+	It seemed impossible to contain such a powerful, self-conflicting force.
+	The Being hoped that cycling some more would help, but that had reached a dead end as well.
+	The Chaos ripped itself apart if the Being tried to accumulate any more.
+	After pondering the problem for a bit, the Being got an idea.
+	Since the vortexes of Chaos did not consume Multicellular Organisms, didn't that mean that combining them wouldn't result in Chaos, but something else?
+	If it could fuse the concepts of Multicellular Organisms and Chaos together, what that create?
+	The Being was overcome by curiosity.
+	Wielding its now formidable might of fifteen Assimilated concepts, the Being grasped the only two colors of light left in the void...
+	...and brutally smashed them together.
+	This wasn't anything like its previous concept advancements, brought about by knowledge.
+	This time, the Being was simply brute-forcing its way through.
+	Both concepts resisted, the white and green shifting, swirling, refusing to mesh together.
+	But the Being persisted, applying a ludicrous amount of force to the lights.
+	Then suddenly, the white expanded, becoming a vortex once again.
+	Unable to draw in the Being's great might, the vortex only consumed the other lights.
+	First the vortex turned green, then blue, then tan, then white, then finally blue again.
+	However, as the vortex began collapsing, it seemed to reach out to the Being, extracting the power of the concepts within it.
+	The Being resisted, but it was unable to stop the transfer.
+	The vortex collapsed in on itself, becoming a single blue point of light.
+	The Being felt somewhat annoyed, but it was glad that it had at least kept its memories this time.
+	As the Being inspected the oddly familar blue light, a word came to mind: Planet.
+	Somehow, the Chaos had warped the white and green into blue, creating the concept of a Planet.
+	As the Being set about restoring its power, it continued its previous cycles much faster than before.
+	The Planet seemed to connect itself to all of the other concepts, creating great synergy between them.
+	However, when the Being reached Chaos once again, it noticed something odd.
+	The Chaos felt different from before, like the Planet had changed something fundamental about it.
+	Each white point of light seemed to repulse the other white lights, making it harder to gather Chaos.
+	However, that also meant that the Chaos would no longer rip itself apart when exceeding the threshold the Being discovered previously.
+	Satisfied with this blessing in disguise, the Being continued its cycles, preparing for its next Planet.
 `];
 
 const NORMAL_STORY_LENGTH = 13;
@@ -828,7 +861,7 @@ const STORY_TITLES = [
 	"The Void... Again?",
 	"The Observer",
 	"The Boundary of Reality",
-	"Coming Soon",
+	"Forced Unification",
 ];
 
 const STORY_COLORS = [
@@ -847,7 +880,7 @@ const STORY_COLORS = [
 	["#4CED13", "#D2D237", "#DB5196", "#710CC4", "#E36409", "#BA0035", "#4D2FE0", "#FDBBFF", "#AAFF00", "#B9A975", "#00CCCC", "#08FF87", "#FF4400", "#A0A0A0", "#008800", "#FFFFFF"],
 	["#FFFFFF", "#BA0035", "#FFFFFF", "#BA0035"],
 	["#88CC44"],
-	[],
+	["#88CC44", "#3C51AF"],
 ];
 
 const STORY_KEYWORDS = [
@@ -866,7 +899,7 @@ const STORY_KEYWORDS = [
 	["déjà vu", "instinct", "reality"],
 	["stories"],
 	["real"],
-	[],
+	["fuse"],
 ];
 
 for (let index = 0; index < NORMAL_STORY_LENGTH; index++) {
@@ -893,6 +926,11 @@ function getDecipheredKeywords() {
 	for (let index = 0; index < NORMAL_STORY_LENGTH; index++) {
 		length += story[index].length;
 		if (chaos >= length) {
+			keywords.push(...STORY_KEYWORDS[index]);
+		};
+	};
+	if (getBuyableAmount("pl", 21).gte(3)) {
+		for (let index = NORMAL_STORY_LENGTH; index < story.length; index++) {
 			keywords.push(...STORY_KEYWORDS[index]);
 		};
 	};

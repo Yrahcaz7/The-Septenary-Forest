@@ -2368,28 +2368,30 @@ addLayer("ds", {
 				else if (completions == 10) text += "improve the fourth purified souls effect";
 				else if (completions == 11) text += "further improve the third purified souls effect";
 				else if (completions == 12) text += "improve the second purified souls effect again";
+				else if (completions == 13) text += "improve the second purified souls effect yet again";
 				else text += "you have gotten all the rewards!";
 				return text;
 			},
 			rewardEffect() {
-				let div0 = 10;
-				if (getPurifiedDemonSouls() >= 2) div0--;
-				if (getPurifiedDemonSouls() >= 4) div0--;
-				if (getPurifiedDemonSouls() >= 7) div0--;
-				let pow1 = 0.2;
-				if (getPurifiedDemonSouls() >= 5) pow1 += 0.025;
-				if (getPurifiedDemonSouls() >= 9) pow1 += 0.025;
-				if (getPurifiedDemonSouls() >= 13) pow1 += 0.025;
-				let pow2 = 2;
-				if (getPurifiedDemonSouls() >= 8) pow2 += 0.5;
-				if (getPurifiedDemonSouls() >= 12) pow2 += 2.5;
-				let pow3 = 1;
-				if (getPurifiedDemonSouls() >= 11) pow3 += 2;
+				let div1 = 10;
+				if (getPurifiedDemonSouls() >= 2) div1--;
+				if (getPurifiedDemonSouls() >= 4) div1--;
+				if (getPurifiedDemonSouls() >= 7) div1--;
+				let pow2 = 0.2;
+				if (getPurifiedDemonSouls() >= 5) pow2 += 0.025;
+				if (getPurifiedDemonSouls() >= 9) pow2 += 0.025;
+				if (getPurifiedDemonSouls() >= 13) pow2 += 0.025;
+				if (getPurifiedDemonSouls() >= 14) pow2 += 0.1;
+				let pow3 = 2;
+				if (getPurifiedDemonSouls() >= 8) pow3 += 0.5;
+				if (getPurifiedDemonSouls() >= 12) pow3 += 2.5;
+				let pow4 = 1;
+				if (getPurifiedDemonSouls() >= 11) pow4 += 2;
 				return [
-					player.ds.threads.add(1).log10().div(div0).add(1),
-					player.ds.threads.add(1).log10().add(1).pow(pow1),
-					player.ds.threads.add(1).pow(pow2),
-					player.ds.threads.add(1).log10().add(1).pow(pow3),
+					player.ds.threads.add(1).log10().div(div1).add(1),
+					player.ds.threads.add(1).log10().add(1).pow(pow2),
+					player.ds.threads.add(1).pow(pow3),
+					player.ds.threads.add(1).log10().add(1).pow(pow4),
 				];
 			},
 			canComplete() { return player.ds.threads.gte(getPurificationReq()) && challengeCompletions(this.layer, this.id) < tmp[this.layer].challenges[this.id].completionLimit },
@@ -5419,7 +5421,9 @@ addLayer("ei", {
 	softcaps: [new Decimal(25_000_000), new Decimal(50_000_000), new Decimal(100_000_000)],
 	softcapPowers() {
 		let power = 0.1;
-		if (getBuyableAmount("pl", 22).gte(5)) {
+		if (getBuyableAmount("pl", 22).gte(6)) {
+			power = 0.4;
+		} else if (getBuyableAmount("pl", 22).gte(5)) {
 			power = 0.3;
 		} else if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) {
 			power = 0.2;
@@ -6788,6 +6792,7 @@ addLayer("ch", {
 	type: "custom",
 	base: 1.1,
 	exponent() {
+		if (hasMilestone("mo", 10)) return 0.83;
 		if (hasMilestone("mo", 9)) return 0.835;
 		if (isAssimilated(this.layer)) return 0.84;
 		return 0.85;
@@ -7537,6 +7542,10 @@ addLayer("mo", {
 				requirement: 6400,
 				effectDescription: "reduce the chaos cost exponent (0.84 -> 0.835)",
 			},
+			10: {
+				requirement: 10_000,
+				effectDescription: "reduce the chaos cost exponent (0.835 -> 0.83)",
+			},
 		};
 		const done = req => player.mo.points.gte(req);
 		const unlocked = () => isAssimilated("mo");
@@ -7728,13 +7737,14 @@ addLayer("pl", {
 			unlocked() { return hasMilestone("pl", 3) },
 		},
 		22: {
-			costs: [316, 373, 480, 555, 705],
+			costs: [316, 373, 480, 555, 705, 855],
 			cost(x) { return this.costs[x] || Infinity },
 			title() { return "<b" + getColorClass(this, TITLE) + "Correction Type NAN-1-2" },
 			description() {
 				const amt = getBuyableAmount(this.layer, this.id);
 				let text = "<br>";
-				if (amt.gte(5)) text += "the next correction is coming soon...";
+				if (amt.gte(6)) text += "the next correction is coming soon...";
+				else if (amt.gte(5)) text += "makes the evil influence gain softcaps weaker (^0.3 --> ^0.4)";
 				else if (amt.gte(4)) text += "makes the evil influence gain softcaps weaker (^0.2 --> ^0.3)";
 				else if (amt.gte(3)) text += "fixes the second glitched achievement name and improves the achievement effect";
 				else if (amt.gte(2)) text += "fixes the first glitched achievement name and replaces all previous achievement effects with a new effect";
