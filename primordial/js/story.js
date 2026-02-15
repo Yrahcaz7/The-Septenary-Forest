@@ -247,8 +247,7 @@ const story = [
 	<b>--- 37th sunset ---</b>
 	Today, I found some ruins of human structures.
 	There was some paper and ink in some of the fallen houses.
-	I still can't remember anything before the first sunrise,
-	but I'm writing my discoveries now so I don't forget agin.
+	I still can't remember anything before the first sunrise, but I'm writing my discoveries now so I don't forget agin.
 	I can't find any corpses here, though, which is odd.
 `, `
 	<b>--- 61st sunset ---</b>
@@ -262,7 +261,7 @@ const story = [
 	Yesterday, my home was destroyed by the bears.
 	I have never see a whole pack of them like that before.
 	At least I managed to salvage this record and a small amount of food.
-	However, food is getting harder to find now that the temperature is dropping.
+	However, it is getting harder to find food now that the temperature is dropping.
 	Just gathering and hunting won't be enough now that my home is gone.
 `, `
 	<b>--- 102nd sunset ---</b>
@@ -270,8 +269,7 @@ const story = [
 	The people living there provided me with food and water.
 	However, conflict is rife throughout the settlement.
 	I have decided to stay here until it gets deadly.
-	This place is even more dangerous than the forest,
-	but their farming techniques should prove very helpful.
+	This place is even more dangerous than the forest, but their farming techniques should prove very helpful.
 `, `
 	<b>--- 134th sunset ---</b>
 	Somehow, I managed to convince the leaders of both factions to hold a meeting at the triangle.
@@ -291,8 +289,8 @@ const story = [
 	I haven't been able to write much recently because I have been so busy.
 	But if the citizens are content, that is enough for me.
 	Leading over a thousand people is truly very, very tiring.
-	I can't belive it has been over a year since that fateful day...
-	Anyway, new tribes and villages have joined us recently.
+	I can't belive it has already been over a year since that fateful day...
+	Anyway, new tribes and refugees have joined us recently.
 	The new citizens seem to look up to me and keep calling me Tzar.
 	I'll have to ask one what that word means tomorrow.
 `, `
@@ -708,7 +706,7 @@ const story = [
 	So long... it's been so long.
 	My frenzied mind casts its gaze on the brilliant white Thread once again.
 	This time, blue emerges.
-	Oh, how many ${getBuyableAmount("pl", 21).gte(3) && player.ch.deciphering ? "stories" : randomStr(7)} will I get to consume...
+	Oh, how many stories will I get to consume...
 	...
 	${STORY_TITLES[4].replace(/[A-Za-z]/g, () => randomStr(1))}
 	...
@@ -751,8 +749,8 @@ const story = [
 	I shall be eternally free of my sentence.
 	And I shall be the only demon to emerge from this world.
 	Ever.
-`, () => {
-	let text = `As cycle after cycle went by, the Being gradually preserved more of its memories.
+`, `
+	As cycle after cycle went by, the Being gradually preserved more of its memories.
 	Though it could not tell how many times it had cycled, the Being could still feel its steady progress.
 	Occasionally, the Being would dedicate a cycle to understanding the flow of good or evil instead of creating more chaos.
 	Through its kept memories and increased understanding, the cycles got progressively faster.
@@ -803,10 +801,8 @@ const story = [
 	It built up its mental strength, continuing its previous cycles.
 	Then, when it felt the time was right, it made the Cores real as well.
 	Exited, the Being decided to name this process.
-	"I shall call this... Assimilation."`;
-	if (getBuyableAmount("pl", 21).gte(3) && player.ch.deciphering) return text;
-	return text.replace(STORY_FILTERS[14], match => randomStr(match.length));
-}, `
+	"I shall call this... Assimilation."
+`, `
 	As the Being gradually Assimilated more concepts, the colors of light in the void dissapeared one by one.
 	The Being's form expanded as it progressed, getting ever closer to becoming a real world.
 	The spark of hope within the Being burned ever brighter.
@@ -841,8 +837,68 @@ const story = [
 	Each white point of light seemed to repulse the other white lights, making it harder to gather Chaos.
 	However, that also meant that the Chaos would no longer rip itself apart when exceeding the threshold the Being discovered previously.
 	Satisfied with this blessing in disguise, the Being continued its cycles, preparing for its next Planet.
-`, `
-	coming soon...
+`, () => `
+	Within the endless void, a soul-like entity drifted aimlessly.
+	As the entity drifted, it felt lonely.
+	However, it did not try to enter one of the nearby worlds, nor did it have any thoughts about its loneliness.
+	In fact, the entity could not think at all.
+	It could feel, but not think; it was sentient, but not sapient.
+	It wanted the loneliness to go away, yet it could not connect that fact to the act of changing its direction of drifting.
+	Luckily, it accidentally drifted into a world after not too long.
+	The entity smoothly drifted into the world, the defence system not recognizing it as the foreign thing that it was.
+	As the entity drifted, it passed by many beings, completely invisible to them.
+	Eventually, it collided with a certain being.
+	Just like all the previous times, the entity overlapped with the being, the two partially becoming one.
+	...
+	As Sagaf enjoyed the leisurely boat ride, a strange feeling suddenly overcame them.
+	It felt similar to intuition, yet it was much stronger.
+	More certain.
+	Listening to the feeling, Sagaf looked down at their middle-left hand.
+	The hand was crumpled into an unnatural shape, betraying the fact that its bones had been replaced by Magistrings.
+	Internally cursing, Sagaf quickly used their other three hands to smooth it back out.
+	Luckily, the boatman hadn't noticed the little episode, still rhythmically rowing the boat with his two oars.
+	Sagaf sighed in relief.
+	If anyone reported the unauthorized procedure to a professor, he would doubtlessly be expelled.
+	Sagaf found their rules ridiculous.
+	Magistrings could grow with one's body, so why did they only allow adults to use them?
+	There's no point in trying to find logic in it, Sagaf thought.
+	Not wanting to waste their boat fare, Sagaf quickly returned to gazing at the peaceful scenery.
+	...
+	The entity dislodged from the being known as Sagaf, drifting once again.
+	The entity drifted upwards, leaving that particular world behind.
+	If the entity could think, it would have remarked at how short that instance was; the fusions normally lasted for at least a few days.
+	But the entity had no mind to think.
+	No soul to remember.
+	It could only feel a slight regret and loneliness.
+	...
+	During its drifting through the void, it encountered a being.
+	It was odd for a being to be in the void; not many had the ability to leave their home worlds.
+	However, the entity had no thoughts about this, as always.
+	It overlapped with the being, the two connecting in a strange manner.
+	...
+	${STORY_TITLES[8].replace(/[A-Za-z]/g, () => randomStr(1))}
+	...
+	The entity dislodged from the being known as the Wanderer, its connection strained too much from the shedding of shells.
+	However, the intensity of the Wanderer's feelings were so great that some had leaked into the entity, even in that small amount of time.
+	The entity called these new feelings Determination, Hope, and Love.
+	However, as all foreign feelings do, they quickly dissipated.
+	But then the entity realized something was strange.
+	Since when could it think?
+	The entity observed its surroundings, but found only endless void.
+	Undeterred, the entity observed itself next.
+	Inside it was an amalgamation of shells, remnants of a soul's identities.
+	However, the shells were gradually fading.
+	Without a soul to support them, the shells were completely hollow.
+	The entity felt that once all of the shells dissolved, its thoughts would be no more.
+	Unwilling to lose its sapience, the entity tried to hold the shells together.
+	However, it only slowed the decay.
+	Thinking fast, a peculiar idea hit the entity.
+	If tried to fuse itself to all of the shells at once, maybe the shells would combine into something stable?
+	The entity couldn't think of a better plan, so it quickly placed itself in the center of the gathering of shells, overlapping all of them at once.
+	The entity felt like it was being ripped apart, but it tried to hold on as the shells gradually collapsed in on themselves...
+	...and everything converged into a single point, creating a new soul.
+	...
+	${STORY_TITLES[0].replace(/[A-Za-z]/g, () => randomStr(1))}
 `];
 
 const NORMAL_STORY_LENGTH = 13;
@@ -864,7 +920,7 @@ const STORY_TITLES = [
 	"The Observer",
 	"The Boundary of Reality",
 	"Forced Unification",
-	"Coming Soon",
+	"Before the Beginning",
 ];
 
 const STORY_COLORS = [
@@ -904,7 +960,7 @@ const STORY_KEYWORDS = [
 	["stories"],
 	["real"],
 	["fuse"],
-	[],
+	["shell"],
 ];
 
 for (let index = 0; index < NORMAL_STORY_LENGTH; index++) {
@@ -962,15 +1018,18 @@ function storySegmentIsFullyDeciphered(num) {
 
 const STORY_FILTERS = STORY_KEYWORDS.map(arr => RegExp(arr.join("|"), "gi"));
 
-function filterStory(string) {
+function filterStory(string, extraFilterIndex = -1) {
 	if (isAssimilated("ch") && player.ch.deciphering) return string;
 	const chaos = player.ch.best.toNumber();
 	let length = 0;
-	for (let index = 0; index < STORY_FILTERS.length; index++) {
+	for (let index = 0; index < NORMAL_STORY_LENGTH; index++) {
 		length += story[index].length;
 		if (chaos < length || !player.ch.deciphering) {
 			string = string.replace(STORY_FILTERS[index], match => randomStr(match.length));
 		};
+	};
+	if (extraFilterIndex >= 0) {
+		string = string.replace(STORY_FILTERS[extraFilterIndex], match => randomStr(match.length));
 	};
 	return string;
 };
@@ -1006,13 +1065,13 @@ function getChaosInfoBoxes() {
 		} else if (row == NORMAL_STORY_LENGTH) {
 			infoBoxes[boxID] = {
 				title: STORY_TITLES[row] + " [X]",
-				body() { return filterStory(run(story[row]).trim().replace(/\n\t/g, "<br><br>")) },
+				body() { return filterStory(run(story[row]).trim().replace(/\n\t/g, "<br><br>"), row) },
 				unlocked() { return inGlitchedAssimilationSearch() || isAssimilated("ch") },
 			};
 		} else {
 			infoBoxes[boxID] = {
-				title() { return STORY_TITLES[row] + (getBuyableAmount("pl", 21).gte(3) ? CHECK_MARK_HTML : "") },
-				body() { return filterStory(run(story[row]).trim().replace(/\n\t/g, "<br><br>")) },
+				title() { return STORY_TITLES[row] + (row == 16 ? " [X]" : (getBuyableAmount("pl", 21).gte(3) && player.ch.deciphering ? CHECK_MARK_HTML : "")) },
+				body() { return filterStory(run(story[row]).trim().replace(/\n\t/g, "<br><br>"), row) },
 				unlocked() { return getBuyableAmount("pl", 21).gte(row - NORMAL_STORY_LENGTH + 1) },
 			};
 		};
