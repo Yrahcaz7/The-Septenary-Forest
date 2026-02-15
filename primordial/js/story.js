@@ -841,6 +841,8 @@ const story = [
 	Each white point of light seemed to repulse the other white lights, making it harder to gather Chaos.
 	However, that also meant that the Chaos would no longer rip itself apart when exceeding the threshold the Being discovered previously.
 	Satisfied with this blessing in disguise, the Being continued its cycles, preparing for its next Planet.
+`, `
+	coming soon...
 `];
 
 const NORMAL_STORY_LENGTH = 13;
@@ -862,6 +864,7 @@ const STORY_TITLES = [
 	"The Observer",
 	"The Boundary of Reality",
 	"Forced Unification",
+	"Coming Soon",
 ];
 
 const STORY_COLORS = [
@@ -881,6 +884,7 @@ const STORY_COLORS = [
 	["#FFFFFF", "#BA0035", "#FFFFFF", "#BA0035"],
 	["#88CC44"],
 	["#88CC44", "#3C51AF"],
+	[],
 ];
 
 const STORY_KEYWORDS = [
@@ -900,6 +904,7 @@ const STORY_KEYWORDS = [
 	["stories"],
 	["real"],
 	["fuse"],
+	[],
 ];
 
 for (let index = 0; index < NORMAL_STORY_LENGTH; index++) {

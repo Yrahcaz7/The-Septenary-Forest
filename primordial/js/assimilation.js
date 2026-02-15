@@ -294,7 +294,18 @@ function getGlitch(tweak = false) {
 
 // gets glitch text in The Decipherer
 function getGlitchDecipherText() {
+	if (getBuyableAmount("pl", 31).gte(1)) return "knowledge";
 	return randomStr(9);
+};
+
+// gets the main text display of The Decipherer
+function getDeciphererDisplay() {
+	let text = "Your " + getGlitchDecipherText() + " is";
+	if (getBuyableAmount("pl", 31).gte(1)) text += " fully";
+	else text += " currently <h2 class='layer-q'>" + format(player.q.decipher) + "</h2>%";
+	text += " deciphered, granting <h2 class='layer-q'>" + formatWhole(player.q.insight) + "</h2> insight";
+	text += "<br><br>Deciphered amount decays over time with a decay factor of " + (hasUpgrade("q", 65) ? "0.1" : "0.001");
+	return text;
 };
 
 // gets glitch text in Attunement

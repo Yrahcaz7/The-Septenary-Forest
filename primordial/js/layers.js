@@ -775,7 +775,10 @@ addLayer("q", {
 		if (layers[resettingLayer].row > this.row) layerDataReset("q", keep);
 	},
 	update(diff) {
-		if (tmp.q.tabFormat["The Decipherer"].unlocked) {
+		if (getBuyableAmount("pl", 31).gte(1)) {
+			player.q.decipher = newDecimalInf();
+			player.q.insight = new Decimal("1e1000");
+		} else if (tmp.q.tabFormat["The Decipherer"].unlocked) {
 			// calculate gain
 			let gain = newDecimalZero();
 			if (hasBuyable("q", 11)) gain = gain.add(buyableEffect("q", 11));
@@ -1224,7 +1227,7 @@ addLayer("q", {
 			unlocked() { return hasUpgrade("q", 61) },
 		},
 		21: {
-			cost(x) { return new Decimal(5).pow(x) },
+			cost(x) { return new Decimal(getPurifiedDemonSouls() >= 15 ? 2 : 5).pow(x) },
 			title() { return "<b" + getColorClass(this, TITLE) + "Insight Into Insight" },
 			description: "multiplies insight gain based on the amount of this upgrade bought.",
 			canAfford() { return player.q.insight.gte(this.cost()) },
@@ -2077,6 +2080,7 @@ addLayer("ds", {
 				if (hasMilestone("ch", id)) gain = gain.mul(milestoneEffect("ch", id));
 			};
 			if (hasMilestone("mo", 8)) gain = gain.mul(milestoneEffect("mo", 8));
+			if (hasMilestone("mo", 10)) gain = gain.mul(milestoneEffect("mo", 10));
 		};
 		// return
 		return gain;
@@ -2369,6 +2373,9 @@ addLayer("ds", {
 				else if (completions == 11) text += "further improve the third purified souls effect";
 				else if (completions == 12) text += "improve the second purified souls effect again";
 				else if (completions == 13) text += "improve the second purified souls effect yet again";
+				else if (completions == 14) text += "reduce the cost scaling of <b" + getColorClass(this, REF, "q", true) + "Insight Into Insight</b>";
+				else if (completions == 15) text += "nothing";
+				else if (completions == 16) text += "coming soon...";
 				else text += "you have gotten all the rewards!";
 				return text;
 			},
@@ -7544,7 +7551,13 @@ addLayer("mo", {
 			},
 			10: {
 				requirement: 10_000,
-				effectDescription: "reduce the chaos cost exponent (0.835 -> 0.83)",
+				effect() { return new Decimal(1.45).pow(player.pl.buyables[21].add(player.pl.buyables[22]).add(player.pl.buyables[31]).sub(1)) },
+				effectDescription(eff) { return "reduce the chaos cost exponent (0.835 -> 0.83) and multiply Thread gain based on your Corrections (currently " + format(eff) + "x)" },
+			},
+			11: {
+				requirement: 17_000,
+				effectDescription: "coming soon...",
+				//effectDescription(eff) { return "multiply Thread gain based on your evil influence (currently " + format(eff) + "x)" },
 			},
 		};
 		const done = req => player.mo.points.gte(req);
@@ -7610,7 +7623,7 @@ addLayer("pl", {
 		if (hasBuyable("pl", 13)) eff = eff.mul(buyableEffect("pl", 13));
 		return eff;
 	},
-	effectDescription() { return "which generate <h2 class='layer-pl'>" + format(inChallenge("ds", 101) ? 0 : tmp.pl.effect) + "</h2> air per second" },
+	effectDescription() { return "which generates <h2 class='layer-pl'>" + format(inChallenge("ds", 101) ? 0 : tmp.pl.effect) + "</h2> air per second" },
 	doReset(resettingLayer) {
 		let keep = [];
 		if (layers[resettingLayer].row > this.row) layerDataReset("pl", keep);
@@ -7656,6 +7669,10 @@ addLayer("pl", {
 				requirement: 5,
 				effectDescription() { return "you can bulk 10x good influence and cellular life rebuyables, you can autobuy <b" + getColorClass(this, TITLE, "s") + "Sanctum </b><b" + getColorClass(this, TITLE, "mo") + "Synergy</b>, and keep all challenges on planet resets" },
 				toggles: [["mo", "auto_buyable_12"]],
+			},
+			5: {
+				requirement: 6,
+				effectDescription() { return "keep all upgrades on planet resets and unlock a new <b" + getColorClass(this, REF) + "Correction</b> type" },
 			},
 		};
 		const done = req => player.pl.points.gte(req);
@@ -7723,27 +7740,29 @@ addLayer("pl", {
 			description() {
 				const amt = getBuyableAmount(this.layer, this.id);
 				let text = "<br>";
-				if (amt.gte(3)) text += "the next correction is coming soon...";
+				if (amt.gte(4)) text += "the next correction is coming soon...";
+				else if (amt.gte(3)) text += "unlocks a new story segment";
 				else if (amt.gte(2)) text += "fixes the <b" + getColorClass(this, REF, "ch", true) + "Keywords</b> tab and unlocks a new story segment";
 				else if (amt.gte(1)) text += "fixes the <b" + getColorClass(this, REF, "ch", true) + "Story</b> tab and unlocks a new story segment";
 				else text += "makes <b" + getColorClass(this, REF, "ch", true) + "Tide of Science</b> count as a <b" + getColorClass(this, REF, "ch", true) + "Tide</b>";
 				return text;
 			},
 			canAfford() { return player.A.points.gte(this.cost()) },
-			purchaseLimit: 3,
+			purchaseLimit: 4,
 			buy() { addBuyables(this.layer, this.id, 1) },
 			costDisplay(cost) { return "Req: " + formatWhole(cost) + " achievements" },
 			style: {width: "260px", "min-height": "140px"},
 			unlocked() { return hasMilestone("pl", 3) },
 		},
 		22: {
-			costs: [316, 373, 480, 555, 705, 855],
+			costs: [316, 373, 480, 555, 705, 855, 995],
 			cost(x) { return this.costs[x] || Infinity },
 			title() { return "<b" + getColorClass(this, TITLE) + "Correction Type NAN-1-2" },
 			description() {
 				const amt = getBuyableAmount(this.layer, this.id);
 				let text = "<br>";
-				if (amt.gte(6)) text += "the next correction is coming soon...";
+				if (amt.gte(7)) text += "the next correction is coming soon...";
+				else if (amt.gte(6)) text += "further improves the achievement effect";
 				else if (amt.gte(5)) text += "makes the evil influence gain softcaps weaker (^0.3 --> ^0.4)";
 				else if (amt.gte(4)) text += "makes the evil influence gain softcaps weaker (^0.2 --> ^0.3)";
 				else if (amt.gte(3)) text += "fixes the second glitched achievement name and improves the achievement effect";
@@ -7758,6 +7777,23 @@ addLayer("pl", {
 			costDisplay(cost) { return "Req: " + formatWhole(cost) + " chaos" },
 			style: {width: "260px", "min-height": "140px"},
 			unlocked() { return hasMilestone("pl", 3) },
+		},
+		31: {
+			cost(x) { return new Decimal(1e60).pow(x).mul(1e240) },
+			title() { return "<b" + getColorClass(this, TITLE) + "Correction Type 17-A-R-ALL" },
+			description() {
+				const amt = getBuyableAmount(this.layer, this.id);
+				let text = "<br>";
+				if (amt.gte(1)) text += "the next correction is coming soon...";
+				else text += "fully deciphers your " + getGlitchDecipherText() + ", giving maximum insight";
+				return text;
+			},
+			canAfford() { return player.pl.air.gte(this.cost()) },
+			purchaseLimit: 1,
+			buy() { addBuyables(this.layer, this.id, 1) },
+			costDisplay(cost) { return "Req: " + format(cost) + " air" },
+			style: {width: "260px", "min-height": "140px"},
+			unlocked() { return hasMilestone("pl", 5) },
 		},
 	},
 	upgrades: {

@@ -27,7 +27,7 @@ function getRawTabContent(layer, name = "") {
 		content.push("blank");
 	} else if (layer == "q") {
 		if (name == "The Decipherer") {
-			content.push(["display-text", "Your " + getGlitchDecipherText() + ' is currently <h2 class="layer-q">' + format(player.q.decipher) + '</h2>% deciphered, granting <h2 class="layer-q">' + formatWhole(player.q.insight) + "</h2> insight<br><br>Deciphered amount decays over time with a decay factor of " + (hasUpgrade("q", 65) ? 0.1 : 0.001)]);
+			content.push(["display-text", getDeciphererDisplay()]);
 			content.push("blank");
 			content.push("buyables");
 		} else {
@@ -255,7 +255,7 @@ function getRawTabContent(layer, name = "") {
 		content.push("blank");
 	} else if (layer == "pl") {
 		if (name == "Correction") {
-			content.push(["buyables", [2]]);
+			content.push(["buyables", [2, 3]]);
 		} else if (name == "Atmosphere") {
 			content.push([prefix + "display-text", 'You have <h2 class="layer-pl">' + format(player.pl.air) + "</h2> air"]);
 			if (hasMilestone("pl", 1)) {

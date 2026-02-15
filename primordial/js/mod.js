@@ -16,7 +16,7 @@ function changelog() {
 	return `<h1>Changelog:</h1><br>
 		<br><h3>v4.0: The End is Near</h3><br>
 			- Added planets.<br>
-			- Added five milestones to planets.<br>
+			- Added six milestones to planets.<br>
 			- Added thirty-six upgrades to planets.<br>
 			- Added three rebuyables to planets.<br>
 			- Added two correction types to planets.<br>
@@ -328,16 +328,16 @@ function getInfluenceBulk() {
 };
 
 function getKeepFromPlanets(resettingLayer) {
+	let keep = [];
 	if (resettingLayer == "pl") {
-		let keep = [];
 		if (hasMilestone("pl", 3)) keep.push("milestones");
 		if (hasMilestone("pl", 4)) keep.push("challenges");
-		return keep;
+		if (hasMilestone("pl", 5)) keep.push("upgrades");
+	} else {
+		if (hasMilestone("pl", 0)) keep.push("milestones");
+		if (hasMilestone("pl", 1)) keep.push("challenges");
+		if (hasMilestone("pl", 2)) keep.push("upgrades");
 	};
-	let keep = [];
-	if (hasMilestone("pl", 0)) keep.push("milestones");
-	if (hasMilestone("pl", 1)) keep.push("challenges");
-	if (hasMilestone("pl", 2)) keep.push("upgrades");
 	return keep;
 };
 
@@ -421,7 +421,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return "You beat the game!<br>For now..." },
 ];
 
-const endPoints = new Decimal("e1e133");
+const endPoints = new Decimal("e1e146");
 
 function onLoad() {
 	calculateColorValue();
