@@ -28,9 +28,9 @@ A comprehensive list of the additional features in The Septenary Forest that are
 
 ## [`layoutInfo` Properties](trees-and-tree-customization.md#layoutinfo)
 
-- `orderBranches`: If `true`, the branch drawing is done in order according to their colors. (The theme colors are drawn first, in order: 0, then 1, then 2. Custom colors are drawn last and thus are always on top).
+- `orderBranches`: **optional**. If `true`, the branch drawing is done in order according to their colors. (The theme colors are drawn first, in order: 0, then 1, then 2. Custom colors are drawn last and thus are always on top).
 
-- `htmlBranches`: If `true`, branches are created using HTML instead of being drawn on a canvas. This solves two major problems that TMT's original branches have: the update delay while scrolling and the low resolution. NOTE: `orderBranches` has no effect when `htmlBranches` is `true`, due to technical limitations.
+- `htmlBranches`: **optional**. If `true`, branches are created using HTML instead of being drawn on a canvas. This solves two major problems that TMT's original branches have: the update delay while scrolling and the low resolution. NOTE: `orderBranches` has no effect when `htmlBranches` is `true`, due to technical limitations.
 
 ## General Features
 
