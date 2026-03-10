@@ -893,8 +893,8 @@ const story = [
 	Unwilling to lose its sapience, the entity tried to hold the shells together.
 	However, it only slowed the decay.
 	Thinking fast, a peculiar idea hit the entity.
-	If tried to fuse itself to all of the shells at once, maybe the shells would combine into something stable?
-	The entity couldn't think of a better plan, so it quickly placed itself in the center of the gathering of shells, overlapping all of them at once.
+	If it tried to fuse itself to all of the shells at once, maybe the shells would combine into something stable?
+	The entity couldn't think of a better plan, so it quickly expanded itself, its core overlapping all of the shells at once.
 	The entity felt like it was being ripped apart, but it tried to hold on as the shells gradually collapsed in on themselves...
 	...and everything converged into a single point, creating a new soul.
 	...

@@ -2079,8 +2079,9 @@ addLayer("ds", {
 			for (const id of [48, 49, 51, 52, 54, 55, 58]) {
 				if (hasMilestone("ch", id)) gain = gain.mul(milestoneEffect("ch", id));
 			};
-			if (hasMilestone("mo", 8)) gain = gain.mul(milestoneEffect("mo", 8));
-			if (hasMilestone("mo", 10)) gain = gain.mul(milestoneEffect("mo", 10));
+			for (const id of [8, 10, 11]) {
+				if (hasMilestone("mo", id)) gain = gain.mul(milestoneEffect("mo", id));
+			};
 		};
 		// return
 		return gain;
@@ -2346,7 +2347,7 @@ addLayer("ds", {
 				if (options.nerdMode) text += "Best: (" + format(player.ds.threadGainBest) + "/sec)<br>";
 				return text;
 			},
-			// use effects like this: `if (getPurifiedDemonSouls() >= x && challengeEffect("ds", 101)[y]) gain = gain.mul(challengeEffect("ds", 101)[y]);`
+			// use effects like this: `if (getPurifiedDemonSouls() >= (x + 1) && challengeEffect("ds", 101)[y]) gain = gain.mul(challengeEffect("ds", 101)[y]);`
 			rewardDescription() {
 				const completions = challengeCompletions(this.layer, this.id);
 				const effects = challengeEffect(this.layer, this.id);
@@ -2375,7 +2376,8 @@ addLayer("ds", {
 				else if (completions == 13) text += "improve the second purified souls effect yet again";
 				else if (completions == 14) text += "reduce the cost scaling of <b" + getColorClass(this, REF, "q", true) + "Insight Into Insight</b>";
 				else if (completions == 15) text += "nothing";
-				else if (completions == 16) text += "coming soon...";
+				else if (completions == 16) text += "reduce the cost scaling of <b" + getColorClass(this, REF, "w", true) + "Power of Good</b> if you have at least 1 limit broken";
+				else if (completions == 17) text += "nothing";
 				else text += "you have gotten all the rewards!";
 				return text;
 			},
@@ -6004,7 +6006,7 @@ addLayer("w", {
 		player.w.points.add(1).log10().add(1).pow(0.333),
 		player.w.points.add(1).pow(isAssimilated(this.layer) || player.mo.assimilating === this.layer ? 5 : 1.5),
 	]},
-	effectDescription() { return 'which multiplies point, essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class="layer-w">' + format(tmp.w.effect[0]) + '</h2>x; multiplies atom, sanctum, relic, molecule, good influence, and evil influence gain by <h2 class="layer-w">' + format(tmp.w.effect[1]) + '</h2>x; and multiplies light gain after hardcap by <h2 class="layer-w">' + format(tmp.w.effect[2]) + "</h2>x" },
+	effectDescription() { return "which multiplies point, essence, core, quark, subatomic particle, hex, demon soul, and prayer gain by <h2 class='layer-w'>" + format(tmp.w.effect[0]) + "</h2>x; multiplies atom, sanctum, relic, molecule, good influence, and evil influence gain by <h2 class='layer-w'>" + format(tmp.w.effect[1]) + "</h2>x; and multiplies light gain after hardcap by <h2 class='layer-w'>" + format(tmp.w.effect[2]) + "</h2>x" },
 	doReset(resettingLayer) {
 		if (hasMilestone("ch", 12) && resettingLayer == "ch") return;
 		let keep = ["auto_influence"];
@@ -6211,7 +6213,7 @@ addLayer("w", {
 		},
 		13: {
 			cost(x) {
-				if (player.h.limitsBroken >= 1) return new Decimal(1.1).pow(x).mul(10_000_000);
+				if (player.h.limitsBroken >= 1) return new Decimal(getPurifiedDemonSouls() >= 17 ? 1.05 : 1.1).pow(x).mul(10_000_000);
 				if (hasMilestone("w", 16)) return x.mul(50_000).add(320_000);
 				return x.mul(70_000).add(320_000);
 			},
@@ -7556,8 +7558,8 @@ addLayer("mo", {
 			},
 			11: {
 				requirement: 17_000,
-				effectDescription: "coming soon...",
-				//effectDescription(eff) { return "multiply Thread gain based on your evil influence (currently " + format(eff) + "x)" },
+				effect() { return player.ei.points.add(1).pow(0.5) },
+				effectDescription(eff) { return "multiply Thread gain based on your evil influence (currently " + format(eff) + "x)" },
 			},
 		};
 		const done = req => player.mo.points.gte(req);
@@ -7755,7 +7757,7 @@ addLayer("pl", {
 			unlocked() { return hasMilestone("pl", 3) },
 		},
 		22: {
-			costs: [316, 373, 480, 555, 705, 855, 995],
+			costs: [316, 373, 480, 555, 705, 855, 995], // 1272
 			cost(x) { return this.costs[x] || Infinity },
 			title() { return "<b" + getColorClass(this, TITLE) + "Correction Type NAN-1-2" },
 			description() {
