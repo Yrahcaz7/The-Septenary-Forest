@@ -12,6 +12,7 @@ addLayer("A", {
 		let base = 1.0005;
 		if (getBuyableAmount("pl", 22).gte(4)) base += 0.0005;
 		if (getBuyableAmount("pl", 22).gte(7)) base += 0.0004;
+		if (getBuyableAmount("pl", 22).gte(8)) base += 0.0006;
 		return new Decimal(base).pow(player.A.points);
 	},
 	effectDescription() {

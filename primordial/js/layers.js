@@ -2378,19 +2378,20 @@ addLayer("ds", {
 				else if (completions == 15) text += "nothing";
 				else if (completions == 16) text += "reduce the cost scaling of <b" + getColorClass(this, REF, "w", true) + "Power of Good</b> if you have at least 1 limit broken";
 				else if (completions == 17) text += "nothing";
+				else if (completions == 18) text += "improve the first purified souls effect yet again";
+				else if (completions == 19) text += "coming soon...";
 				else text += "you have gotten all the rewards!";
 				return text;
 			},
 			rewardEffect() {
 				let div1 = 10;
-				if (getPurifiedDemonSouls() >= 2) div1--;
-				if (getPurifiedDemonSouls() >= 4) div1--;
-				if (getPurifiedDemonSouls() >= 7) div1--;
+				for (const pair of [[2, 1], [4, 1], [7, 1], [19, 3]]) {
+					if (getPurifiedDemonSouls() >= pair[0]) div1 -= pair[1];
+				};
 				let pow2 = 0.2;
-				if (getPurifiedDemonSouls() >= 5) pow2 += 0.025;
-				if (getPurifiedDemonSouls() >= 9) pow2 += 0.025;
-				if (getPurifiedDemonSouls() >= 13) pow2 += 0.025;
-				if (getPurifiedDemonSouls() >= 14) pow2 += 0.1;
+				for (const pair of [[5, 0.025], [9, 0.025], [13, 0.025], [14, 0.1]]) {
+					if (getPurifiedDemonSouls() >= pair[0]) pow2 += pair[1];
+				};
 				let pow3 = 2;
 				if (getPurifiedDemonSouls() >= 8) pow3 += 0.5;
 				if (getPurifiedDemonSouls() >= 12) pow3 += 2.5;
@@ -4260,7 +4261,7 @@ addLayer("r", {
 	color: "#B9A975",
 	branches: ["gi"],
 	tooltip() {
-		if (options.nerdMode) return formatWhole(getActivatedRelics()) + " activated relics and " + formatWhole(player.r.points) + " total relics";
+		if (options.nerdMode && !relicsPermanentlyActive()) return formatWhole(getActivatedRelics()) + " activated relics and " + formatWhole(player.r.points) + " total relics";
 		return formatWhole(player.r.points) + " relics";
 	},
 	requires: 10,
@@ -4420,14 +4421,18 @@ addLayer("r", {
 		11: {
 			name() { return "<h3" + getColorClass(this, TITLE, "r", true) + "Activate Relics" },
 			buttonText: ["Activate", "Cannot activate", "Enter activation", "Enter activation"],
-			challengeDescription: "Temporarily converts all your point production into light production. Get enough light, and you can activate your relics for rewards.<br>",
+			challengeDescription() {
+				let text = "Temporarily converts all your point production into light production.";
+				if (!relicsPermanentlyActive()) text += " Get enough light, and you can activate your relics for rewards.";
+				return text + "<br>";
+			},
 			goalDescription() {
 				let text = "";
 				if (tmp.r.lightGain.gte(1e25) && !hasUpgrade("r", 13)) {
-					if (maxedChallenge(this.layer, this.id)) text = "You have " + format(player.r.light) + " light.<br>(" + format(tmp.r.lightGain) + "/sec - hardcapped at 1e25)<br>";
+					if (hasActivatedMaxRelics()) text = "You have " + format(player.r.light) + " light.<br>(" + format(tmp.r.lightGain) + "/sec - hardcapped at 1e25)<br>";
 					else text = "You have " + format(player.r.light) + "/" + format(getActivationReq()) + " light.<br>(" + format(tmp.r.lightGain) + "/sec - hardcapped at 1e25)<br>";
 				} else {
-					if (maxedChallenge(this.layer, this.id)) text = "You have " + format(player.r.light) + " light.<br>(" + format(tmp.r.lightGain) + "/sec)<br>";
+					if (hasActivatedMaxRelics()) text = "You have " + format(player.r.light) + " light.<br>(" + format(tmp.r.lightGain) + "/sec)<br>";
 					else text = "You have " + format(player.r.light) + "/" + format(getActivationReq()) + " light.<br>(" + format(tmp.r.lightGain) + "/sec)<br>";
 				};
 				if (options.nerdMode) text += "Best: (" + format(player.r.lightGainBest) + "/sec)<br>";
@@ -4438,13 +4443,14 @@ addLayer("r", {
 				const effects = challengeEffect(this.layer, this.id);
 				let text = "";
 				// current rewards
-				if (completions >= 13) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, multiply Sacrificial Ceremony\'s last effect, and also multiply relic gain (all based on your light)<br>Currently: ' + format(effects[0]) + "x,<br>^" + format(effects[1]) + (effects[1]?.eq(100) ? " (capped)" : "") + ",<br>" + format(effects[2]) + "x,<br>and " + format(effects[3]) + "x";
-				else if (completions >= 12) text += 'multiply relic\'s second and third effects and molecule gain, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(effects[0]) + "x,<br>^" + format(effects[1]) + (effects[1]?.eq(100) ? " (capped)" : "") + ",<br>and " + format(effects[2]) + "x";
-				else if (completions >= 5) text += 'multiply relic\'s second and third effects, exponentiate relic\'s first effect, and also multiply Sacrificial Ceremony\'s last effect (all based on your light)<br>Currently: ' + format(effects[0]) + "x,<br>^" + format(effects[1]) + (effects[1]?.eq(100) ? " (capped)" : "") + ",<br>and " + format(effects[2]) + "x";
-				else if (completions >= 4) text += 'multiply relic\'s second and third effects based on your light, and also exponentiate relic\'s first effect based on your light<br>Currently: ' + format(effects[0]) + "x<br>and ^" + format(effects[1]) + (effects[1]?.eq(100) ? " (capped)" : "");
-				else if (completions >= 1) text += 'multiply relic\'s second and third effects based on your light<br>Currently: ' + format(effects[0]) + "x";
+				if (completions >= 13) text += "multiply relic's second and third effects and molecule gain, exponentiate relic's first effect, multiply Sacrificial Ceremony's last effect, and also multiply relic gain (all based on your light)<br>Currently: " + format(effects[0]) + "x,<br>^" + format(effects[1]) + (effects[1]?.eq(100) ? " (capped)" : "") + ",<br>" + format(effects[2]) + "x,<br>and " + format(effects[3]) + "x";
+				else if (completions >= 12) text += "multiply relic's second and third effects and molecule gain, exponentiate relic's first effect, and also multiply Sacrificial Ceremony's last effect (all based on your light)<br>Currently: " + format(effects[0]) + "x,<br>^" + format(effects[1]) + (effects[1]?.eq(100) ? " (capped)" : "") + ",<br>and " + format(effects[2]) + "x";
+				else if (completions >= 5) text += "multiply relic's second and third effects, exponentiate relic's first effect, and also multiply Sacrificial Ceremony's last effect (all based on your light)<br>Currently: " + format(effects[0]) + "x,<br>^" + format(effects[1]) + (effects[1]?.eq(100) ? " (capped)" : "") + ",<br>and " + format(effects[2]) + "x";
+				else if (completions >= 4) text += "multiply relic's second and third effects based on your light, and also exponentiate relic's first effect based on your light<br>Currently: " + format(effects[0]) + "x<br>and ^" + format(effects[1]) + (effects[1]?.eq(100) ? " (capped)" : "");
+				else if (completions >= 1) text += "multiply relic's second and third effects based on your light<br>Currently: " + format(effects[0]) + "x";
 				else text += "nothing currently";
 				// next reward
+				if (relicsPermanentlyActive()) return text;
 				text += "<br><br>Next reward: ";
 				if (completions == 0) text += "multiply relic's second and third effects based on your light<br>Currently: " + format(effects[0]) + "x";
 				else if (completions == 1) text += "relic's third effect also affects point gain";
@@ -4512,13 +4518,18 @@ addLayer("r", {
 			},
 			canComplete() { return player.r.light.gte(getActivationReq()) && challengeCompletions(this.layer, this.id) < tmp.r.challenges[this.id].completionLimit },
 			completionLimit() { return player.r.points.toNumber() },
+			marked() { return hasActivatedMaxRelics() },
 			style() {
-				const num = player.r.light.add(1).log(2).div(getActivationReq().add(1).log(2)).mul(100).floor();
-				let BGcolor = "rgb(" + num + "," + num + "," + (num + 100) + ")";
-				if (num.gt(100)) BGcolor = "rgb(100,100,200)";
-				let textColor = "#B9A975";
-				if (colorValue[1] == "none") textColor = "#DFDFDF";
-				return {width: "450px", height: "450px", "background-color": BGcolor, color: textColor, "border-radius": "70px"};
+				const size = (relicsPermanentlyActive() ? "400px" : "450px");
+				let num = player.r.light.add(1).log(2).div(getActivationReq().add(1).log(2)).mul(100).floor().min(100);
+				if (hasActivatedMaxRelics()) num = 100;
+				return {
+					width: size,
+					height: size,
+					"background-color": "rgb(" + num + "," + num + "," + (num + 100) + ")",
+					color: (colorValue[1] == "none" ? "var(--color)" : "#B9A975"),
+					"border-radius": "70px",
+				};
 			},
 		},
 	},
@@ -4597,9 +4608,14 @@ addLayer("r", {
 			canAfford() { return new Decimal(getActivatedRelics()).gte(this.cost()) },
 			purchaseLimit: 99,
 			buy() { addBuyables(this.layer, this.id, 1) },
-			effect(x) { return new Decimal(1000).pow(x.add(buyableEffect("r", 21))) },
+			effect(x) {
+				let eff = new Decimal(1000).pow(x.add(buyableEffect("r", 21)));
+				if (eff.gte(softcaps.r_buyable_12[0])) eff = eff.div(softcaps.r_buyable_12[0]).pow(softcaps.r_buyable_12[1]).mul(softcaps.r_buyable_12[0]);
+				return eff;
+			},
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
+				if (eff.gte(softcaps.r_buyable_12[0])) text += " (softcapped)";
 				if (options.nerdMode) text += "<br>formula: 1,000^x";
 				return text;
 			},
@@ -4643,8 +4659,9 @@ addLayer("r", {
 			},
 			3: {
 				requirement: 2e13,
-				effect() { return new Decimal(getActivatedRelics()).add(1).pow(0.0252) },
-				effectDescription(eff) { return "multiply multicellular organism gain based on your activated relics (currently " + format(eff) + "x)" },
+				hardcap: 1.25,
+				effect() { return new Decimal(getActivatedRelics()).add(1).pow(0.0252).min(this.hardcap) },
+				effectDescription(eff) { return "multiply multicellular organism gain based on your activated relics (" + (eff.gte(this.hardcap) ? "hardcapped at" : "currently") + " " + format(eff) + "x)" },
 			},
 			4: {
 				requirement: 1e14,
@@ -4661,8 +4678,9 @@ addLayer("r", {
 			},
 			7: {
 				requirement: 2e17,
-				effect() { return new Decimal(getActivatedRelics()).add(1).pow(10) },
-				effectDescription(eff) { return "multiply atom gain based on your activated relics (currently " + format(eff) + "x)" },
+				hardcap: 1e50,
+				effect() { return new Decimal(getActivatedRelics()).add(1).pow(10).min(this.hardcap) },
+				effectDescription(eff) { return "multiply atom gain based on your activated relics (" + (eff.gte(this.hardcap) ? "hardcapped at" : "currently") + " " + format(eff) + "x)" },
 			},
 			8: {
 				requirement: 2e18,
@@ -7757,13 +7775,14 @@ addLayer("pl", {
 			unlocked() { return hasMilestone("pl", 3) },
 		},
 		22: {
-			costs: [316, 373, 480, 555, 705, 855, 995], // 1272
+			costs: [316, 373, 480, 555, 705, 855, 995, 1272],
 			cost(x) { return this.costs[x] || Infinity },
 			title() { return "<b" + getColorClass(this, TITLE) + "Correction Type NAN-1-2" },
 			description() {
 				const amt = getBuyableAmount(this.layer, this.id);
 				let text = "<br>";
-				if (amt.gte(7)) text += "the next correction is coming soon...";
+				if (amt.gte(8)) text += "the next correction is coming soon...";
+				else if (amt.gte(7)) text += "improves the achievement effect again";
 				else if (amt.gte(6)) text += "further improves the achievement effect";
 				else if (amt.gte(5)) text += "makes the evil influence gain softcaps weaker (^0.3 --> ^0.4)";
 				else if (amt.gte(4)) text += "makes the evil influence gain softcaps weaker (^0.2 --> ^0.3)";
@@ -7781,17 +7800,18 @@ addLayer("pl", {
 			unlocked() { return hasMilestone("pl", 3) },
 		},
 		31: {
-			cost(x) { return new Decimal(1e60).pow(x).mul(1e240) },
+			cost(x) { return new Decimal(1e30).pow(x.pow(2)).mul(1e240) },
 			title() { return "<b" + getColorClass(this, TITLE) + "Correction Type 17-A-R-ALL" },
 			description() {
 				const amt = getBuyableAmount(this.layer, this.id);
 				let text = "<br>";
-				if (amt.gte(1)) text += "the next correction is coming soon...";
+				if (amt.gte(2)) text += "the next correction is coming soon...";
+				else if (amt.gte(1)) text += "makes all of your relics always active";
 				else text += "fully deciphers your " + getGlitchDecipherText() + ", giving maximum insight";
 				return text;
 			},
 			canAfford() { return player.pl.air.gte(this.cost()) },
-			purchaseLimit: 1,
+			purchaseLimit: 2,
 			buy() { addBuyables(this.layer, this.id, 1) },
 			costDisplay(cost) { return "Req: " + format(cost) + " air" },
 			style: {width: "260px", "min-height": "140px"},

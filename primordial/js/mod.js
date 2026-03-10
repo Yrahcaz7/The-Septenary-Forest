@@ -265,7 +265,16 @@ function getDevotionBuyableBulk() {
 	return bulk;
 };
 
+function relicsPermanentlyActive() {
+	return getBuyableAmount("pl", 31).gte(2);
+}
+
+function hasActivatedMaxRelics() {
+	return maxedChallenge("r", 11) || relicsPermanentlyActive();
+};
+
 function getActivatedRelics() {
+	if (relicsPermanentlyActive()) return player.r.points.toNumber();
 	return Math.min(challengeCompletions("r", 11), player.r.points.toNumber());
 };
 
@@ -421,7 +430,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return "You beat the game!<br>For now..." },
 ];
 
-const endPoints = new Decimal("e1e150");
+const endPoints = new Decimal("e1e177");
 
 function onLoad() {
 	calculateColorValue();
