@@ -17,6 +17,7 @@ function getStartOptions() {
 		colorDisplay: 0,
 		extendPlaces: false,
 		disableGlitchText: false,
+		bgMode: 1,
 	});
 };
 
@@ -25,7 +26,7 @@ const optionGrid = [
 		{text: "Save game", onClick: save},
 		{opt: "autosave", text() {return "Autosave: " + formatOpt(options[this.opt])}, onClick: toggleOpt},
 		{text: "HARD RESET", onClick: hardReset},
-		{opt: "colorDisplayMode", text() {return "Color Text Mode: " + DISPLAY_MODES[options[this.opt]]}, onClick: adjustColorDispMode},
+		{opt: "colorDisplayMode", text() {return "Color Text Mode: " + COLOR_DISPLAY_MODES[options[this.opt]]}, onClick: adjustColorDispMode},
 	], [
 		{text: "Export save to clipboard", onClick: exportSave},
 		{text: "Import save", onClick: importSave},
@@ -45,6 +46,7 @@ const optionGrid = [
 		{opt: "hideMilestonePopups", text() {return "Show Milestone Popups: " + formatOpt(!options[this.opt])}, onClick: toggleOpt},
 		{opt: "nerdMode", text() {return "Nerd Mode: " + formatOpt(options[this.opt]) + " (you can also press - to toggle)"}, onClick: toggleOpt},
 		{text() {return (player.devSpeed == 0 ? "Unpause" : "Pause") + " (you can also press = to toggle)"}, onClick: togglePause},
+		{opt: "bgMode", text() {return "Background Mode: " + BG_MODES[options[this.opt]]}, onClick: changeBgMode},
 	],
 ];
 
@@ -74,21 +76,19 @@ function onKeyDown(key) {
 	if (key == "=" || key == "+") togglePause();
 };
 
-const DISPLAY_MODES = ["ALL (recommended)", "ONLY SPECIAL", "SPECIAL AND TITLES", "SPECIAL AND REFRENCES"];
+const COLOR_DISPLAY_MODES = ["ALL (recommended)", "ONLY SPECIAL", "SPECIAL AND TITLES", "SPECIAL AND REFRENCES"];
 
 const COLOR_DISPLAYS = ["ON - NORMAL (recommended)", "ON - ALWAYS DARK", "OFF (recommended for colorblind)"];
 
 let colorValue = [[true, true], "normal"];
 
 function adjustColorDispMode() {
-	options.colorDisplayMode++;
-	if (options.colorDisplayMode >= DISPLAY_MODES.length) options.colorDisplayMode = 0;
+	options.colorDisplayMode = (options.colorDisplayMode + 1) % COLOR_DISPLAY_MODES.length;
 	calculateColorValue();
 };
 
 function adjustColorDisp() {
-	options.colorDisplay++;
-	if (options.colorDisplay >= COLOR_DISPLAYS.length) options.colorDisplay = 0;
+	options.colorDisplay = (options.colorDisplay + 1) % COLOR_DISPLAYS.length;
 	calculateColorValue();
 };
 
@@ -118,4 +118,11 @@ function calculateColorValue() {
 			colorValue[1] = "none";
 			break;
 	};
+};
+
+const BG_MODES = ["FANCY - ALL", "FANCY - ONLY UNLOCKED", "PLAIN"];
+
+function changeBgMode() {
+	options.bgMode = (options.bgMode + 1) % BG_MODES.length;
+	refreshParticles();
 };

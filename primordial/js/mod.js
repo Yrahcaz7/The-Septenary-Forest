@@ -8,12 +8,16 @@ const modInfo = {
 };
 
 const VERSION = {
-	num: "4.0",
-	name: "The End is Near",
+	num: "4.1",
+	name: "Ever Closer",
 };
 
 function changelog() {
 	return `<h1>Changelog:</h1><br>
+		<br><h3>v4.1: Ever Closer</h3><br>
+			- Made the background fancy!<br>
+			- Added one option.<br>
+			- Many technical changes and fixes.<br>
 		<br><h3>v4.0: The End is Near</h3><br>
 			- Added planets.<br>
 			- Added six milestones to planets.<br>
@@ -429,7 +433,105 @@ const endPoints = new Decimal("e1e178");
 
 function onLoad() {
 	calculateColorValue();
+	generateParticles();
 };
+
+const generateParticles = (() => {
+	const minDist = 50;
+	const pointBulk = 5;
+	const cellSize = minDist / Math.SQRT2;
+	let points = [];
+	let activePoints = [];
+	let grid = [];
+	// if the point fits, returns true and adds the point
+	function addPoint(x, y) {
+		const coords = [Math.trunc(x / cellSize), Math.trunc(y / cellSize)];
+		for (let p_x = Math.max(coords[0] - 2, 0); p_x <= Math.min(coords[0] + 2, grid.length - 1); p_x++) {
+			for (let p_y = Math.max(coords[1] - 2, 0); p_y <= Math.min(coords[1] + 2, grid[p_x].length - 1); p_y++) {
+				const p_i = grid[p_x][p_y];
+				if (p_i >= 0 && (points[p_i][0] - x) ** 2 + (points[p_i][1] - y) ** 2 < minDist ** 2) {
+					return false;
+				};
+			};
+		};
+		const index = points.length;
+		points.push([x, y]);
+		activePoints.push(index);
+		grid[coords[0]][coords[1]] = index;
+		return true;
+	};
+	return () => {
+		// initialize variables
+		points = [];
+		activePoints = [];
+		grid = [];
+		for (let x = 0; x <= innerWidth / cellSize; x++) {
+			grid[x] = [];
+			for (let y = 0; y <= innerHeight / cellSize; y++) {
+				grid[x][y] = -1;
+			};
+		};
+		// generate points using Bridson’s algorithm for Poisson disk sampling
+		addPoint(innerWidth / 2, innerHeight / 2);
+		while (activePoints.length > 0) {
+			const p_i = activePoints.at(-1);
+			let pointsAddded = 0;
+			for (let i = 0; i < pointBulk; i++) {
+				const angle = Math.random() * 2 * Math.PI;
+				const dist = minDist + Math.random() * minDist;
+				const x = Math.min(Math.max(points[p_i][0] + dist * Math.cos(angle), 0), innerWidth);
+				const y = Math.min(Math.max(points[p_i][1] + dist * Math.sin(angle), 0), innerHeight);
+				if (addPoint(x, y)) {
+					pointsAddded++;
+				};
+			};
+			if (pointsAddded == 0) {
+				activePoints.pop();
+			};
+		};
+		// shuffle points using a modern Fisher–Yates shuffle
+		for (let i = points.length - 1; i > 0; i--) {
+			const j = Math.trunc(Math.random() * (i + 1));
+			[points[i], points[j]] = [points[j], points[i]];
+		}
+		// add a particle at each point, cycling through the layer colors
+		let data = {time: Infinity, image: "", speed: 0, maxOpacity: 0.8};
+		let styles = [];
+		for (const layer of LAYER_ORDER) {
+			if (options.bgMode != 1 || !layer || player[layer].unlocked) {
+				styles.push({background: "radial-gradient(" + (layer ? layers[layer].color : "var(--points)") + " 0%, transparent 66%)"});
+			};
+		};
+		for (let i = 0; i < points.length; i++) {
+			const size = 8 + Math.random() * 8;
+			data.x = points[i][0] - size / 2;
+			data.y = points[i][1] - size / 2;
+			data.width = size;
+			data.height = size;
+			data.style = styles[i % styles.length];
+			makeParticles(data);
+		};
+	};
+})();
+
+const refreshParticles = (() => {
+	let refreshing = false;
+	return () => {
+		if (refreshing) return;
+		refreshing = true;
+		document.getElementById("particle-container").style.setProperty("opacity", 0);
+		setTimeout(() => {
+			clearParticles();
+			document.getElementById("particle-container").style.setProperty("opacity", 1);
+			if (options.bgMode < 2) {
+				generateParticles();
+			};
+			refreshing = false;
+		}, 0.5 * 1000);
+	};
+})();
+
+const onKeepGoingPressed = generateParticles;
 
 function maxTickLength() {
 	return 1;

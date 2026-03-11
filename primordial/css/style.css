@@ -1,3 +1,9 @@
+/* Particles */
+#particle-container {
+	position: absolute;
+	z-index: -1000;
+}
+
 /* Achievements */
 .layer-A {
 	color: #A5BCC2;
