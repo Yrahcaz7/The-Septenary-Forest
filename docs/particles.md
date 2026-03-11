@@ -57,6 +57,8 @@ All distances are in pixels and angles are in degrees, with 0 being up and going
 
 - `layer`: When changing tabs, if leaving the `layer` tab, this particle will be erased.
 
+- `maxOpacity` (additional feature): When fading, the particle's opacity goes between 0 and `maxOpacity`. The opacity stays at `maxOpacity` at all other times. Default is 1 (fully opaque).
+
 - You can add other features to particles, but you must impliment their effects yourself.
 
 Function features: These stay as functions and are for more advanced things. They are optional.

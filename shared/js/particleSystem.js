@@ -83,6 +83,7 @@ const newParticles = {
 			fadeOutTime: 1,
 			fadeInTimer: 0,
 			fadeInTime: 0,
+			maxOpacity: 1,
 		};
 	},
 	shiny() {
@@ -105,6 +106,7 @@ const newParticles = {
 			fadeOutTime: 1,
 			fadeInTimer: 0,
 			fadeInTime: 0.5,
+			maxOpacity: 1,
 		};
 	},
 };
@@ -116,12 +118,12 @@ function updateMouse(event) {
 
 function getOpacity(particle) {
 	if (particle.time < particle.fadeOutTime && particle.fadeOutTime) {
-		return particle.time / particle.fadeOutTime;
+		return particle.time / particle.fadeOutTime * particle.maxOpacity;
 	};
 	if (particle.fadeInTimer > 0) {
-		return 1 - particle.fadeInTimer / particle.fadeInTime;
+		return (1 - particle.fadeInTimer / particle.fadeInTime) * particle.maxOpacity;
 	};
-	return 1;
+	return particle.maxOpacity;
 };
 
 function getParticleImage(particle, mainPage = true) {

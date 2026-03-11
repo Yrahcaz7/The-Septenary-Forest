@@ -84,6 +84,10 @@ NOTE: `display()` was renamed to `fullDisplay()` for consistency.
 
 - `costDisplay`: **OVERRIDE**. Overrides the cost display. Can be a function. If it is a function, it can have an argument `cost`, which holds the current cost of the upgrade (useful for improving performance when `cost` is a function). Can use basic HTML.
 
+## [Particle Features](particles.md)
+
+- `maxOpacity`: **optional**. When fading, the particle's opacity goes between 0 and `maxOpacity`. The opacity stays at `maxOpacity` at all other times. Default is 1 (fully opaque).
+
 ## Components
 
 For use in [custom tab layouts](custom-tab-layouts.md).
