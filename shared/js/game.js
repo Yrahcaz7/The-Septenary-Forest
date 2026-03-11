@@ -195,6 +195,9 @@ function doReset(layer, force = false, overrideResetsNothing = false) {
 		if (layers[layer].onPrestige && layers[layer].onPrestigeIsAfterGain) run(layers[layer].onPrestige, layers[layer], gain);
 		if (!player[layer].unlocked) {
 			player[layer].unlocked = true;
+			if (typeof onLayerUnlock === "function") {
+				onLayerUnlock(layer);
+			};
 			needCanvasUpdate = true;
 			if (tmp[layer].increaseUnlockOrder) {
 				lrs = tmp[layer].increaseUnlockOrder;
@@ -316,7 +319,7 @@ function gameLoop(diff) {
 		clearParticles();
 	};
 	if (maxTickLength) {
-		let limit = maxTickLength();
+		const limit = maxTickLength();
 		if (diff > limit) diff = limit;
 	};
 	addTime(diff);

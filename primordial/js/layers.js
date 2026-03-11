@@ -5989,6 +5989,8 @@ addLayer("w", {
 		if (!hasMilestone("w", 0)) player.m.unlocked = false;
 		if (!hasMilestone("w", 1)) player.gi.unlocked = false;
 		if (!hasMilestone("w", 2)) player.ei.unlocked = false;
+		onLayerLock();
+		needCanvasUpdate = true;
 	},
 	onPrestigeIsAfterGain: true,
 	gainExp() {
@@ -7192,8 +7194,8 @@ addLayer("ch", {
 			canComplete() { return player.ei.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions(this.layer, this.id) < tmp.ch.challenges[this.id].completionLimit},
 			completionLimit() { return (hasUpgrade("pl", 82) ? this.limitLimit : player.ch.points.div(2).floor().max(1).min(this.limitLimit).toNumber()) },
 			limitLimit: 20,
-			onEnter() { player.gi.unlocked = false },
-			onExit() { player.gi.unlocked = true },
+			onEnter() { player.gi.unlocked = false; onLayerLock() },
+			onExit() { player.gi.unlocked = true; onLayerUnlock() },
 			rewardDescription: "exponentiates point gain and demon soul gain multiplier based on completions",
 			rewardEffect() { return challengeCompletions(this.layer, this.id) / 100 + 1 },
 			rewardDisplay(eff) {
@@ -7221,8 +7223,8 @@ addLayer("ch", {
 			canComplete() { return player.gi.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions(this.layer, this.id) < tmp.ch.challenges[this.id].completionLimit},
 			completionLimit() { return (hasUpgrade("pl", 82) ? this.limitLimit : player.ch.points.div(2).floor().max(1).min(this.limitLimit).toNumber()) },
 			limitLimit: 32,
-			onEnter() { player.ei.unlocked = false },
-			onExit() { player.ei.unlocked = true },
+			onEnter() { player.ei.unlocked = false; onLayerLock() },
+			onExit() { player.ei.unlocked = true; onLayerUnlock() },
 			rewardDescription: "exponentiates point gain and prayer gain multiplier based on completions",
 			rewardEffect() {
 				if (hasMilestone("ch", 13)) return (challengeCompletions(this.layer, this.id) + 1) ** 0.2;
@@ -7256,8 +7258,8 @@ addLayer("ch", {
 			canComplete() { return player.m.points.gte(tmp.ch.challenges[this.id].goal) && challengeCompletions(this.layer, this.id) < tmp.ch.challenges[this.id].completionLimit},
 			completionLimit() { return (hasUpgrade("pl", 82) ? tmp.ch.challenges[this.id].limitLimit : player.ch.points.div(2).floor().max(1).min(tmp.ch.challenges[this.id].limitLimit).toNumber()) },
 			limitLimit() { return hasMilestone("ch", 47) ? 8 : 6 },
-			onEnter() { player.gi.unlocked = false; player.ei.unlocked = false },
-			onExit() { player.gi.unlocked = true; player.ei.unlocked = true },
+			onEnter() { player.gi.unlocked = false; player.ei.unlocked = false; onLayerLock() },
+			onExit() { player.gi.unlocked = true; player.ei.unlocked = true; onLayerUnlock() },
 			rewardDescription: "multiplies cellular life gain and protein gain based on completions",
 			rewardEffect() { return [new Decimal(1.2).pow(challengeCompletions(this.layer, this.id)), new Decimal(1e10).pow(challengeCompletions(this.layer, this.id) ** 2)] },
 			rewardDisplay(eff) {

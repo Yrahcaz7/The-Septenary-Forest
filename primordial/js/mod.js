@@ -531,7 +531,10 @@ const refreshParticles = (() => {
 	};
 })();
 
-const onKeepGoingPressed = generateParticles;
+const onKeepGoingPressed = refreshParticles;
+const onLayerUnlock = refreshParticles;
+const onLayerLock = refreshParticles;
+addEventListener("resize", refreshParticles);
 
 function maxTickLength() {
 	return 1;

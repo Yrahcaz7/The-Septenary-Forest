@@ -95,12 +95,16 @@ function lockNonAssimilatedLayers() {
 			player.mo.hadLayers.push(layer);
 		};
 	};
+	onLayerLock();
+	needCanvasUpdate = true;
 };
 
 function unlockNonAssimilatedLayers() {
 	for (const layer in player) {
 		if (player.mo.hadLayers.includes(layer)) player[layer].unlocked = true;
 	};
+	onLayerUnlock();
+	needCanvasUpdate = true;
 };
 
 function overrideTooltip(layer) {
