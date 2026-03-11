@@ -3069,8 +3069,7 @@ addLayer("p", {
 		if (hasMilestone("p", 2)) effEx = new Decimal(1.5);
 		if (hasMilestone("p", 3)) effEx = new Decimal(1.6);
 		let eff = effBoost.mul(player.p.points).pow(effEx);
-		let sc_start = SOFTCAPS.p_eff[0]();
-		if (eff.gt(sc_start)) eff = eff.div(sc_start).pow(SOFTCAPS.p_eff[1]()).mul(sc_start);
+		eff = softcap(eff, new Decimal(SOFTCAPS.p_eff[0]()), SOFTCAPS.p_eff[1]());
 		if (hasUpgrade("p", 71)) eff = eff.mul(upgradeEffect("p", 71));
 		return eff;
 	},
@@ -3499,7 +3498,7 @@ addLayer("p", {
 		},
 		71: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Divine Sanctums" },
-			description: "multiplies divinity gain after the softcap based on your sanctums",
+			description: "multiplies divinity gain after softcap based on your sanctums",
 			cost: 1e30,
 			effect() { return player.s.points.mul(30).add(1).pow(0.95) },
 			effectDisplay(eff) {
@@ -4316,9 +4315,7 @@ addLayer("r", {
 			effBoost3 = effBoost3.mul(challengeEffect("r", 11)[0]);
 		};
 		let eff1 = player.r.points.mul(effBoost1).add(1).pow(1.1).pow(effex1);
-		if (eff1.gt(SOFTCAPS.r_eff1[0]())) {
-			eff1 = eff1.div(SOFTCAPS.r_eff1[0]()).pow(SOFTCAPS.r_eff1[1]).mul(SOFTCAPS.r_eff1[0]());
-		};
+		eff1 = softcap(eff1, new Decimal(SOFTCAPS.r_eff1[0]()), SOFTCAPS.r_eff1[1]);
 		return [eff1, player.r.points.add(1).pow(0.5).mul(effBoost2), player.r.points.mul(100).add(1).pow(0.25).mul(effBoost3)];
 	},
 	effectDescription() {
@@ -4609,7 +4606,7 @@ addLayer("r", {
 			buy() { addBuyables(this.layer, this.id, 1) },
 			effect(x) {
 				let eff = new Decimal(1000).pow(x.add(buyableEffect("r", 21)));
-				if (eff.gte(SOFTCAPS.r_buyable_12[0])) eff = eff.div(SOFTCAPS.r_buyable_12[0]).pow(SOFTCAPS.r_buyable_12[1]).mul(SOFTCAPS.r_buyable_12[0]);
+				eff = softcap(eff, new Decimal(SOFTCAPS.r_buyable_12[0]), SOFTCAPS.r_buyable_12[1]);
 				return eff;
 			},
 			effectDisplay(eff) {
@@ -4752,8 +4749,7 @@ addLayer("m", {
 	},
 	effect() {
 		let eff = player.m.best.mul(0.5).add(1).pow(0.99);
-		const sc_start = SOFTCAPS.m_eff[0]();
-		if (eff.gt(sc_start)) eff = eff.div(sc_start).pow(SOFTCAPS.m_eff[1]()).mul(sc_start);
+		eff = softcap(eff, new Decimal(SOFTCAPS.m_eff[0]()), SOFTCAPS.m_eff[1]());
 		return eff;
 	},
 	effectDescription() { return 'which multiplies atom gain by <h2 class="layer-m">' + format(tmp.m.effect) + "</h2>x (based on best)" + (tmp.m.effect.gt(SOFTCAPS.m_eff[0]()) ? " (softcapped)" : '') },
@@ -5185,9 +5181,7 @@ addLayer("gi", {
 			return effBase.pow(player.gi.total.pow(1.454));
 		};
 		let eff = effBase.pow(player.gi.total);
-		if (eff.gt(SOFTCAPS.gi_eff[0]())) {
-			eff = eff.div(SOFTCAPS.gi_eff[0]()).pow(SOFTCAPS.gi_eff[1]).mul(SOFTCAPS.gi_eff[0]());
-		};
+		eff = softcap(eff, new Decimal(SOFTCAPS.gi_eff[0]()), SOFTCAPS.gi_eff[1]);
 		return eff;
 	},
 	effectDescription() {

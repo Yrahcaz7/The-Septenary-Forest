@@ -414,7 +414,7 @@ function getPointGen() {
 	// special nerf
 	if (inChallenge("ds", 32)) gain = gain.add(1).log10().add(1).log10();
 	// softcap
-	if (gain.gt(SOFTCAPS.points[0])) gain = gain.div(SOFTCAPS.points[0]).pow(SOFTCAPS.points[1]()).mul(SOFTCAPS.points[0]);
+	gain = softcap(gain, new Decimal(SOFTCAPS.points[0]), SOFTCAPS.points[1]());
 	// return
 	return gain;
 };
