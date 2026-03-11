@@ -2379,7 +2379,6 @@ addLayer("ds", {
 				else if (completions == 16) text += "reduce the cost scaling of <b" + getColorClass(this, REF, "w", true) + "Power of Good</b> if you have at least 1 limit broken";
 				else if (completions == 17) text += "nothing";
 				else if (completions == 18) text += "improve the first purified souls effect yet again";
-				else if (completions == 19) text += "coming soon...";
 				else text += "you have gotten all the rewards!";
 				return text;
 			},
@@ -7775,7 +7774,7 @@ addLayer("pl", {
 			unlocked() { return hasMilestone("pl", 3) },
 		},
 		22: {
-			costs: [316, 373, 480, 555, 705, 855, 995, 1272],
+			costs: [316, 373, 480, 555, 705, 855, 995, 1272], // 1490
 			cost(x) { return this.costs[x] || Infinity },
 			title() { return "<b" + getColorClass(this, TITLE) + "Correction Type NAN-1-2" },
 			description() {

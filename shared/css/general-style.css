@@ -45,7 +45,7 @@ ul {
 	cursor: default;
 }
 
-#points, .pointSoftcap {
+.points {
 	color: var(--points);
 	text-shadow: 0 0 10px var(--points);
 }

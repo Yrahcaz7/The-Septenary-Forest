@@ -1038,8 +1038,8 @@ function loadVue(mainPage = false) {
 			<div v-if="overridePointDisplay" v-html="overridePointDisplay"></div>
 			<div v-else>
 				<template v-if="player.points.lt('1e1000')">You have </template>
-				<h2 id="points">{{format(player.points)}}</h2>
-				<template v-if="player.points.lt('e1000000')">&nbsp;{{modInfo.pointsName || "points"}}</template>
+				<h2 class="points">{{format(player.points)}}</h2>
+				<template v-if="player.points.lt('e1000000')">{{" " + (modInfo.pointsName || "points")}}</template>
 				<div v-if="canGenPoints">
 					{{tmp.other.oompsMag !== 0 ?
 						format(tmp.other.oomps) + " OOM" + (tmp.other.oompsMag < 0 ? "^OOM" : (tmp.other.oompsMag > 1 ? "^" + tmp.other.oompsMag : "")) + "s"
