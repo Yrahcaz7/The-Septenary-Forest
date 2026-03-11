@@ -85,8 +85,8 @@ function loadVue(mainPage = false) {
 			</div>
 			<!-- particles -->
 			<div class="particle-container">
-				<template v-for="(particle, index) in particles">
-					<particle :data="particle" :index="index"></particle>
+				<template v-for="p in particles">
+					<particle :data="p"></particle>
 				</template>
 			</div>
 			<!-- layer tab -->

@@ -4,22 +4,17 @@ let mouseX = 0;
 let mouseY = 0;
 
 function makeParticles(data, amount = 1, type = "normal") {
-	for (let x = 0; x < amount; x++) {
+	for (let i = 0; i < amount; i++) {
 		const particle = newParticles[type]();
 		for (thing in data) {
-			switch (thing) {
-				case "onClick": // Functions that should be copied over
-				case "onMouseEnter":
-				case "onMouseLeave":
-				case "update":
-					particle[thing] = data[thing];
-					break;
-				default:
-					particle[thing] = run(data[thing], data, x);
+			if (thing == "onClick" || thing == "onMouseEnter" || thing == "onMouseLeave" || thing == "update") {
+				particle[thing] = data[thing]; // Functions that should be copied over
+			} else {
+				particle[thing] = run(data[thing], data, i);
 			};
 		};
 		if (data.dir === undefined) particle.dir = particle.angle;
-		particle.dir = particle.dir + (particle.spread * (x - amount / 2 + 0.5));
+		particle.dir = particle.dir + (particle.spread * (i - amount / 2 + 0.5));
 		if (particle.offset) {
 			particle.x += particle.offset * sin(particle.dir);
 			particle.y += particle.offset * cos(particle.dir) * -1;
@@ -124,9 +119,9 @@ function getOpacity(particle) {
 		return particle.time / particle.fadeOutTime;
 	};
 	if (particle.fadeInTimer > 0) {
-		return 1 - (particle.fadeInTimer / particle.fadeInTime);
+		return 1 - particle.fadeInTimer / particle.fadeInTime;
 	};
-	return 1
+	return 1;
 };
 
 function getParticleImage(particle, mainPage = true) {
@@ -143,7 +138,7 @@ function constructParticleStyle(particle, mainPage = true) {
 		height: particle.height + "px",
 		transform: "rotate(" + particle.angle + "deg)",
 		opacity: getOpacity(particle),
-		"pointer-events": (particle.onClick || particle.onHover ? "auto" : "none"),
+		"pointer-events": (particle.onClick || particle.onMouseOver ? "auto" : "none"),
 	};
 	if (particle.color) {
 		style["background-color"] = particle.color;
