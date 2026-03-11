@@ -25,7 +25,7 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `row`: The row of the layer, starting at 0. This affects where the node appears on the standard tree, and which resets affect the layer.
 
-    Using "side" instead of a number will cause the layer to appear off to the side as a smaller node (useful for achievements and statistics). Side layers are not affected by resets unless you add a doReset to them.
+    Using "side" instead of a number will cause the layer to appear off to the side as a smaller node (useful for achievements and statistics). Side layers are not affected by resets unless you add a `doReset` to them.
 
 - `displayRow`: **OVERRIDE**. Changes where the layer node appears without changing where it is in the reset order.
 
@@ -192,8 +192,14 @@ componentStyles: {
 
 - `getResetGain()`: **mostly for custom prestige type**. Returns how many points you should get if you reset now. You can call `getResetGain(this.layer, useType = "static")` or similar to calculate what your gain would be under another prestige type (provided you have all of the required features in the layer).
 
-- `getNextAt(canMax = false)`: **mostly for custom prestige type**. Returns how many of the base currency you need to get to the next point. `canMax` is an optional variable used with Static-ish layers to differentiate between if it's looking for the first point you can reset at, or the requirement for any gain at all (Supporting both is good). You can also call `getNextAt(this.layer, canMax=false, useType = "static")` or similar to calculate what your next at would be under another prestige type (provided you have all of the required features in the layer).
+- `getNextAt(canMax = false)`: **mostly for custom prestige type**. Returns how many of the base currency you need to get to the next point. `canMax` is an optional variable used with Static-ish layers to differentiate between if it's looking for the first point you can reset at, or the requirement for any gain at all (Supporting both is good). You can also call `getNextAt(this.layer, canMax = false, useType = "static")` or similar to calculate what your next at would be under another prestige type (provided you have all of the required features in the layer).
 
 - `canReset()`: **mostly for custom prestige type**. Returns true only if you have the resources required to do a prestige here.
 
 - `prestigeNotify()`: **mostly for custom prestige types**. Returns true if this layer should be subtly highlighted to indicate you can prestige for a meaningful gain.
+
+> Useful functions for implementing custom prestige types:
+>
+> - `softcap(value, cap, power = 0.5)`: Returns `value` softcapped to `power` beyond `cap`. (`value` and `cap` are Decimals, while `power` can be a number or a Decimal.) Useful for implementing softcaps in `getResetGain()`.
+>
+> - `inverseSoftcap(value, cap, power = 0.5)` (additional feature): Returns `value` reverse-softcapped by `power` beyond `cap`. (`value` and `cap` are Decimals, while `power` can be a number or a Decimal.) Useful for implementing softcaps in `getNextAt()`.

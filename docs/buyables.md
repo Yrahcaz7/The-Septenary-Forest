@@ -33,6 +33,7 @@ buyables: {
 > Additional functions for implementing `buy()` easier:
 >
 > - `buyStandardBuyable(obj, currencyLayer = obj.layer, currencyName = "points", bulk = 1, limitAmount = false)`: Buys a standard buyable that costs one currency. The default currency is "points" from the layer the buyable is in (this can be overriden with the `currencyLayer` and `currencyName` parameters). If `currencyLayer` is an empty string, no layer is used (e.g. just `player[currencyName]` instead of `player[currencyLayer][currencyName]`).
+>
 > - `buyMultiCurrencyBuyable(obj, currencyLayers = [], costless = false, bulk = 1, limitAmount = false)`: Buys a standard multi-currency buyable. The currencies all have to be "points" of different layers (the layer ids should be provided as an array for the `currencyLayers` argument). If the `costless` argument is true, the cost is not subtracted from each "points", instead the cost is added to the respective "total" values.
 >
 > **WARNING: The `bulk` parameter for these functions only changes the amount of the buyable gotten from the purchase, it does NOT increase the cost accordingly. Use `bulk` with care (or not at all).**

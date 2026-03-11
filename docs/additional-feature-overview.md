@@ -4,9 +4,11 @@ A comprehensive list of the additional features in The Septenary Forest that are
 
 ## Useful Functions
 
-- `hasBuyable(layer, id)`: Returns `true` if the player has one or more of the buyable.
+- [`hasBuyable(layer, id)`](buyables.md): Returns `true` if the player has one or more of the buyable.
 
-- `milestoneEffect(layer, id)`: Returns the current effects of the milestone, if any.
+- [`milestoneEffect(layer, id)`](milestones.md): Returns the current effects of the milestone, if any.
+
+- [`inverseSoftcap(value, cap, power = 0.5)`](layer-features.md#custom-prestige-type): Returns `value` reverse-softcapped by `power` beyond `cap`. (`value` and `cap` are Decimals, while `power` can be a number or a Decimal.) Useful for implementing custom prestige types.
 
 ## [Layer Features](layer-features.md)
 
@@ -131,6 +133,8 @@ For use in [custom tab layouts](custom-tab-layouts.md).
 - [Functions to simplify the implementation of the `buy()` method of buyables](buyables.md).
 
 - Additional [`startData()` values](layer-features.md) can be omitted (`unlocked` and sometimes `points`).
+
+- Uses Vue 3 instead of Vue 2. This is important because Vue 2 has reached its EOL.
 
 - The capability to easily make multiple trees in the same repository. Useful if you want to modify the files of the modding engine and have it apply to all of your trees.
 
