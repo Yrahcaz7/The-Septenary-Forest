@@ -40,11 +40,12 @@ td {
 }
 
 .treeRow {
-	margin-bottom: 50px;
+	display: none;
 }
 
-.treeRow:empty {
-	margin-bottom: 0;
+.treeRow:has(.treeNode) {
+	display: block;
+	margin-bottom: 50px;
 }
 
 .treeThing {

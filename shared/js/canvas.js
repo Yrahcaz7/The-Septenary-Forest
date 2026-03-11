@@ -98,7 +98,7 @@ function updateHTMLBranchStyles(branches, prefix) {
 			elt.style.setProperty(key, style[key]);
 		};
 	};
-}
+};
 
 function getHTMLBranchStyle(id1, data, prefix) {
 	let id2 = data;
@@ -116,9 +116,6 @@ function getHTMLBranchStyle(id1, data, prefix) {
 		id1 = prefix + id1;
 		id2 = prefix + id2;
 	};
-	if (!document.getElementById(id1) || !document.getElementById(id2)) {
-		return {visibility: "hidden"};
-	};
 	const start = document.getElementById(id1).getBoundingClientRect();
 	const end = document.getElementById(id2).getBoundingClientRect();
 	const x1 = start.x + (start.width / 2);
@@ -126,7 +123,6 @@ function getHTMLBranchStyle(id1, data, prefix) {
 	const x2 = end.x + (end.width / 2);
 	const y2 = end.y + (end.height / 2);
 	return {
-		visibility: "inherit",
 		left: (0 - width / 2) + "px",
 		width: width + "px",
 		height: Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2) + "px",

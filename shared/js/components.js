@@ -717,7 +717,7 @@ function loadVue(mainPage = false) {
 	// data = an array with the structure of the tree
 	addNormalComponent('tree', {
 		props: ['layer', 'data'],
-		data() {return {layoutInfo, tmp}},
+		data() {return {layoutInfo, tmp, nodeShown}},
 		methods: {
 			updateBranches() { updateHTMLBranchStyles(this.$refs.branch) },
 		},
@@ -726,7 +726,9 @@ function loadVue(mainPage = false) {
 				<div v-for="node in row" class="stackingContext">
 					<tree-node :node="node" :prev="layer"></tree-node>
 					<div v-if="layoutInfo.htmlBranches" class="branches">
-						<div v-for="branch in tmp[node].branches" class="branch" ref="branch" :data-id="node" :data-data="branch"></div>
+						<template v-for="branch in tmp[node].branches">
+							<div v-if="nodeShown(node) && nodeShown(Array.isArray(branch) ? branch[0] : branch)" class="branch" ref="branch" :data-id="node" :data-data="branch"></div>
+						</template>
 					</div>
 				</div>
 			</div>
@@ -773,7 +775,9 @@ function loadVue(mainPage = false) {
 				<div v-for="id in row" class="stackingContext">
 					<component v-if="tmp[layer][type + 's'][id] !== undefined && tmp[layer][type + 's'][id].unlocked" :is="type" :layer="layer" :data="id" :style="tmp[layer].componentStyles[type]" class="treeThing"></component>
 					<div v-if="layoutInfo.htmlBranches" class="branches">
-						<div v-for="branch in tmp[layer][type + 's'][id].branches" class="branch" ref="branch" :data-id="id" :data-data="branch"></div>
+						<template v-for="branch in tmp[layer][type + 's'][id].branches">
+							<div v-if="nodeShown(node) && nodeShown(Array.isArray(branch) ? branch[0] : branch)" class="branch" ref="branch" :data-id="id" :data-data="branch"></div>
+						</template>
 					</div>
 				</div>
 			</div>
