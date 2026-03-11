@@ -3069,13 +3069,13 @@ addLayer("p", {
 		if (hasMilestone("p", 2)) effEx = new Decimal(1.5);
 		if (hasMilestone("p", 3)) effEx = new Decimal(1.6);
 		let eff = effBoost.mul(player.p.points).pow(effEx);
-		let sc_start = softcaps.p_eff[0]();
-		if (eff.gt(sc_start)) eff = eff.div(sc_start).pow(softcaps.p_eff[1]()).mul(sc_start);
+		let sc_start = SOFTCAPS.p_eff[0]();
+		if (eff.gt(sc_start)) eff = eff.div(sc_start).pow(SOFTCAPS.p_eff[1]()).mul(sc_start);
 		if (hasUpgrade("p", 71)) eff = eff.mul(upgradeEffect("p", 71));
 		return eff;
 	},
 	effectDescription() {
-		if (tmp.p.effect.gt(softcaps.p_eff[0]())) return 'which are generating <h2 class="layer-p">' + format(tmp.p.effect) + "</h2> divinity/sec (softcapped)";
+		if (tmp.p.effect.gt(SOFTCAPS.p_eff[0]())) return 'which are generating <h2 class="layer-p">' + format(tmp.p.effect) + "</h2> divinity/sec (softcapped)";
 		return 'which are generating <h2 class="layer-p">' + format(tmp.p.effect) + "</h2> divinity/sec";
 	},
 	doReset(resettingLayer) {
@@ -4316,14 +4316,14 @@ addLayer("r", {
 			effBoost3 = effBoost3.mul(challengeEffect("r", 11)[0]);
 		};
 		let eff1 = player.r.points.mul(effBoost1).add(1).pow(1.1).pow(effex1);
-		if (eff1.gt(softcaps.r_eff1[0]())) {
-			eff1 = eff1.div(softcaps.r_eff1[0]()).pow(softcaps.r_eff1[1]).mul(softcaps.r_eff1[0]());
+		if (eff1.gt(SOFTCAPS.r_eff1[0]())) {
+			eff1 = eff1.div(SOFTCAPS.r_eff1[0]()).pow(SOFTCAPS.r_eff1[1]).mul(SOFTCAPS.r_eff1[0]());
 		};
 		return [eff1, player.r.points.add(1).pow(0.5).mul(effBoost2), player.r.points.mul(100).add(1).pow(0.25).mul(effBoost3)];
 	},
 	effectDescription() {
 		let text = ["", ""];
-		if (tmp.r.effect[0].gte(softcaps.r_eff1[0]())) text[0] = " (softcapped)";
+		if (tmp.r.effect[0].gte(SOFTCAPS.r_eff1[0]())) text[0] = " (softcapped)";
 		if (getActivatedRelics() >= 2) text[1] = "point and ";
 		return "which makes <b" + getColorClass(this, REF, "e", true) + "Essence Influence's</b> hardcap start <h2 class='layer-r'>" + format(tmp.r.effect[0]) + "</h2>x later" + text[0] + ", multiplies sanctum gain by <h2 class='layer-r'>" + format(tmp.r.effect[1]) + "</h2>x, and also multiplies " + text[1] + "essence gain by <h2 class='layer-r'>" + format(tmp.r.effect[2]) + "</h2>x";
 	},
@@ -4609,12 +4609,12 @@ addLayer("r", {
 			buy() { addBuyables(this.layer, this.id, 1) },
 			effect(x) {
 				let eff = new Decimal(1000).pow(x.add(buyableEffect("r", 21)));
-				if (eff.gte(softcaps.r_buyable_12[0])) eff = eff.div(softcaps.r_buyable_12[0]).pow(softcaps.r_buyable_12[1]).mul(softcaps.r_buyable_12[0]);
+				if (eff.gte(SOFTCAPS.r_buyable_12[0])) eff = eff.div(SOFTCAPS.r_buyable_12[0]).pow(SOFTCAPS.r_buyable_12[1]).mul(SOFTCAPS.r_buyable_12[0]);
 				return eff;
 			},
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
-				if (eff.gte(softcaps.r_buyable_12[0])) text += " (softcapped)";
+				if (eff.gte(SOFTCAPS.r_buyable_12[0])) text += " (softcapped)";
 				if (options.nerdMode) text += "<br>formula: 1,000^x";
 				return text;
 			},
@@ -4752,11 +4752,11 @@ addLayer("m", {
 	},
 	effect() {
 		let eff = player.m.best.mul(0.5).add(1).pow(0.99);
-		const sc_start = softcaps.m_eff[0]();
-		if (eff.gt(sc_start)) eff = eff.div(sc_start).pow(softcaps.m_eff[1]()).mul(sc_start);
+		const sc_start = SOFTCAPS.m_eff[0]();
+		if (eff.gt(sc_start)) eff = eff.div(sc_start).pow(SOFTCAPS.m_eff[1]()).mul(sc_start);
 		return eff;
 	},
-	effectDescription() { return 'which multiplies atom gain by <h2 class="layer-m">' + format(tmp.m.effect) + "</h2>x (based on best)" + (tmp.m.effect.gt(softcaps.m_eff[0]()) ? " (softcapped)" : '') },
+	effectDescription() { return 'which multiplies atom gain by <h2 class="layer-m">' + format(tmp.m.effect) + "</h2>x (based on best)" + (tmp.m.effect.gt(SOFTCAPS.m_eff[0]()) ? " (softcapped)" : '') },
 	doReset(resettingLayer) {
 		if (hasMilestone("w", 6) && resettingLayer == "w") return;
 		let keep = ["auto_upgrades"];
@@ -5185,8 +5185,8 @@ addLayer("gi", {
 			return effBase.pow(player.gi.total.pow(1.454));
 		};
 		let eff = effBase.pow(player.gi.total);
-		if (eff.gt(softcaps.gi_eff[0]())) {
-			eff = eff.div(softcaps.gi_eff[0]()).pow(softcaps.gi_eff[1]).mul(softcaps.gi_eff[0]());
+		if (eff.gt(SOFTCAPS.gi_eff[0]())) {
+			eff = eff.div(SOFTCAPS.gi_eff[0]()).pow(SOFTCAPS.gi_eff[1]).mul(SOFTCAPS.gi_eff[0]());
 		};
 		return eff;
 	},
@@ -5195,7 +5195,7 @@ addLayer("gi", {
 			return "which multiplies sanctum gain and glow gain by <h2 class='layer-gi'>" + format(tmp.gi.effect) + "</h2>x";
 		};
 		let text = "which multiplies prayer gain by <h2 class='layer-gi'>" + format(tmp.gi.effect) + "</h2>x (based on total)";
-		if (tmp.gi.effect.gte(softcaps.gi_eff[0]())) text += " (softcapped)";
+		if (tmp.gi.effect.gte(SOFTCAPS.gi_eff[0]())) text += " (softcapped)";
 		return text;
 	},
 	doReset(resettingLayer) {
@@ -7473,14 +7473,14 @@ addLayer("mo", {
 			cost(x) { return x.add(1).pow(3).add(106) },
 			effect(x) {
 				let eff = new Decimal(1.1).pow(x);
-				if (eff.gte(softcaps.mo_buyable_13[0]())) eff = eff.sub(softcaps.mo_buyable_13[0]()).div(softcaps.mo_buyable_13[1]()).add(softcaps.mo_buyable_13[0]());
+				if (eff.gte(SOFTCAPS.mo_buyable_13[0]())) eff = eff.sub(SOFTCAPS.mo_buyable_13[0]()).div(SOFTCAPS.mo_buyable_13[1]()).add(SOFTCAPS.mo_buyable_13[0]());
 				return eff;
 			},
 			title() { return "<b" + getColorClass(this, TITLE, "gi") + "Good Influence</b> <b" + getColorClass(this, TITLE) + "Synergy" },
 			description: "multiplies good influence gain based on the amount of this upgrade bought.",
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
-				if (eff.gte(softcaps.mo_buyable_13[0]())) text += " (softcapped)";
+				if (eff.gte(SOFTCAPS.mo_buyable_13[0]())) text += " (softcapped)";
 				if (options.nerdMode) text += "<br>formula: 1.1^x";
 				return text;
 			},
@@ -7799,7 +7799,7 @@ addLayer("pl", {
 			unlocked() { return hasMilestone("pl", 3) },
 		},
 		31: {
-			cost(x) { return new Decimal(1e30).pow(x.pow(2)).mul(1e240) },
+			cost(x) { return new Decimal(1e30).pow(x).mul(1e240) },
 			title() { return "<b" + getColorClass(this, TITLE) + "Correction Type 17-A-R-ALL" },
 			description() {
 				const amt = getBuyableAmount(this.layer, this.id);

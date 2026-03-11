@@ -19,7 +19,7 @@ function changelog() {
 			- Added six milestones to planets.<br>
 			- Added thirty-six upgrades to planets.<br>
 			- Added three rebuyables to planets.<br>
-			- Added two correction types to planets.<br>
+			- Added three correction types to planets.<br>
 			- Added ${randomStr(4)} to assimilation.<br>
 			- Added twenty-six milestones to chaos.<br>
 			- Added ${randomStr(4)} to story.<br>
@@ -351,8 +351,7 @@ function getKeepFromPlanets(resettingLayer) {
 };
 
 function canGenPoints() {
-	if (inChallenge("r", 11)) return false;
-	return true;
+	return !inChallenge("r", 11);
 };
 
 function getPointGen() {
@@ -415,11 +414,7 @@ function getPointGen() {
 	// special nerf
 	if (inChallenge("ds", 32)) gain = gain.add(1).log10().add(1).log10();
 	// softcap
-	if (gain.gt(softcaps.points[0])) {
-		let excessGain = gain.div(softcaps.points[0]);
-		excessGain = excessGain.pow(softcaps.points[1]());
-		gain = excessGain.mul(softcaps.points[0]);
-	};
+	if (gain.gt(SOFTCAPS.points[0])) gain = gain.div(SOFTCAPS.points[0]).pow(SOFTCAPS.points[1]()).mul(SOFTCAPS.points[0]);
 	// return
 	return gain;
 };
@@ -478,7 +473,7 @@ function fixOldSave(oldVersion) {
 			};
 		});
 	};
-	// remove unused vars
+	// delete unused vars
 	delete player.ghost0;
 	delete player.blank;
 	delete player.SC.softcaps;
