@@ -93,6 +93,8 @@ Here's a breakdown of what's in it:
 >
 >     In a layer with the id "p" where you have 10 prestige points, it would show "You have **10** Super **Ultra** prestige points" for the main point display instead of "You have **10** prestige points" (and in any other layer the main display would be the same).
 >
+> - `onKeepGoingPressed()`: **optional**. A function that runs when when the user presses the "keep going" button on the game completion screen, if it exists.
+>
 > - `currentlyText`: **OVERRIDE**. This replaces the text that says `"Currently: "` on all upgrades and buyables that use `effectDisplay` and all challenges that use `rewardDisplay`. Can use basic HTML. (Can also be function.)
 >
 > - `pausedDisplay`: **OVERRIDE**. Overrides the `devSpeed` display when `devSpeed` is `0`. Can be a function.

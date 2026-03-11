@@ -84,7 +84,7 @@ function loadVue(mainPage = false) {
 				</transition-group>
 			</div>
 			<!-- particles -->
-			<div class="particle-container">
+			<div id="particle-container">
 				<template v-for="p in particles">
 					<particle :data="p"></particle>
 				</template>
@@ -1125,7 +1125,7 @@ function loadVue(mainPage = false) {
 			constructParticleStyle(data, ${mainPage}),
 			data.style,
 		]" @click="run(data.onClick, data)" @mouseenter="run(data.onMouseOver, data)" @mouseleave="run(data.onMouseLeave, data)">
-			<svg v-if="data.color" style="display: none">
+			<svg v-if="data.color" viewBox="0 0 1 1">
 				<mask :id="'pmask' + data.id">
 					<image id="img" :href="getParticleImage(data, ${mainPage})" x="0" y="0" :width="data.width" :height="data.height"></image>
 				</mask>

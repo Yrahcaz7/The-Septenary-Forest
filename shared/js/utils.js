@@ -206,6 +206,9 @@ function layerUnlocked(layer) {
 function keepGoing() {
 	player.keepGoing = true;
 	needCanvasUpdate = true;
+	if (typeof onKeepGoingPressed === "function") {
+		onKeepGoingPressed();
+	};
 };
 
 function toNumber(x) {
