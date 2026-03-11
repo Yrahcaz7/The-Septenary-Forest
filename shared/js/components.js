@@ -717,7 +717,7 @@ function loadVue(mainPage = false) {
 	// data = an array with the structure of the tree
 	addNormalComponent('tree', {
 		props: ['layer', 'data'],
-		data() {return {layoutInfo, tmp, nodeShown}},
+		data() {return {layoutInfo, tmp, nodeShown, getNormalHTMLBranchStyles}},
 		methods: {
 			updateBranches() { updateHTMLBranchStyles(this.$refs.branch) },
 		},
@@ -727,7 +727,7 @@ function loadVue(mainPage = false) {
 					<tree-node :node="node" :prev="layer"></tree-node>
 					<div v-if="layoutInfo.htmlBranches" class="branches">
 						<template v-for="branch in tmp[node].branches">
-							<div v-if="nodeShown(node) && nodeShown(Array.isArray(branch) ? branch[0] : branch)" class="branch" ref="branch" :data-id="node" :data-data="branch"></div>
+							<div v-if="nodeShown(node) && nodeShown(Array.isArray(branch) ? branch[0] : branch)" class="branch" :style="getNormalHTMLBranchStyles(branch)" ref="branch" :data-id="node" :data-data="branch"></div>
 						</template>
 					</div>
 				</div>
@@ -766,7 +766,7 @@ function loadVue(mainPage = false) {
 	// data = an array with the structure of the tree
 	addNormalComponent('thing-tree', {
 		props: ['layer', 'data', 'type'],
-		data() {return {tmp, layoutInfo}},
+		data() {return {tmp, layoutInfo, getNormalHTMLBranchStyles}},
 		methods: {
 			updateBranches() { updateHTMLBranchStyles(this.$refs.branch, this.type + "-" + this.layer + "-") },
 		},
@@ -776,7 +776,7 @@ function loadVue(mainPage = false) {
 					<component v-if="tmp[layer][type + 's'][id] !== undefined && tmp[layer][type + 's'][id].unlocked" :is="type" :layer="layer" :data="id" :style="tmp[layer].componentStyles[type]" class="treeThing"></component>
 					<div v-if="layoutInfo.htmlBranches" class="branches">
 						<template v-for="branch in tmp[layer][type + 's'][id].branches">
-							<div v-if="nodeShown(node) && nodeShown(Array.isArray(branch) ? branch[0] : branch)" class="branch" ref="branch" :data-id="id" :data-data="branch"></div>
+							<div v-if="nodeShown(node) && nodeShown(Array.isArray(branch) ? branch[0] : branch)" class="branch" :style="getNormalHTMLBranchStyles(branch)" ref="branch" :data-id="id" :data-data="branch"></div>
 						</template>
 					</div>
 				</div>

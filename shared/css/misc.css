@@ -76,7 +76,7 @@
 }
 
 .branch {
-	transition-duration: 0s;
+	transition: background-color 0.5s;
 	position: absolute;
 }
 
