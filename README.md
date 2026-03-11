@@ -6,4 +6,4 @@ I have added various features and changed some things in the base TMT structure 
 
 Due to this, I maintain my own [documentation](docs/tutorials/getting-started.md), which should be used instead of TMT's if you are forking this repo to make your own mod.
 
-[You can see the full list changes here.](docs/additional-feature-overview.md)
+[You can see the full list of changes here.](docs/additional-feature-overview.md)
