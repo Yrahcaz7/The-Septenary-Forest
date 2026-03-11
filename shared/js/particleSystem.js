@@ -125,7 +125,7 @@ function getOpacity(particle) {
 };
 
 function getParticleImage(particle, mainPage = true) {
-	if (particle.image) return particle.image;
+	if (particle.image !== undefined) return particle.image;
 	if (mainPage) return "shared/images/particle.png";
 	return "../shared/images/particle.png";
 };
@@ -159,9 +159,9 @@ function clearParticles(check = true) {
 };
 
 // Trig with degrees
-function sin(x) {return Math.sin(x * Math.PI / 180)};
-function cos(x) {return Math.cos(x * Math.PI / 180)};
-function tan(x) {return Math.tan(x * Math.PI / 180)};
-function asin(x) {return Math.asin(x) * 180 / Math.PI};
-function acos(x) {return Math.acos(x) * 180 / Math.PI};
-function atan(x) {return Math.atan(x) * 180 / Math.PI};
+function sin(x) { return Math.sin(x * Math.PI / 180) };
+function cos(x) { return Math.cos(x * Math.PI / 180) };
+function tan(x) { return Math.tan(x * Math.PI / 180) };
+function asin(x) { return Math.asin(x) * 180 / Math.PI };
+function acos(x) { return Math.acos(x) * 180 / Math.PI };
+function atan(x) { return Math.atan(x) * 180 / Math.PI };

@@ -1121,13 +1121,13 @@ function loadVue(mainPage = false) {
 	addNormalComponent('particle', {
 		props: ['data'],
 		data() {return {constructParticleStyle, run, getParticleImage}},
-		template: template(`<div class='particle instant' :style="[
+		template: template(`<div class="particle instant" :style="[
 			constructParticleStyle(data, ${mainPage}),
 			data.style,
 		]" @click="run(data.onClick, data)" @mouseenter="run(data.onMouseOver, data)" @mouseleave="run(data.onMouseLeave, data)">
 			<svg v-if="data.color" viewBox="0 0 1 1">
 				<mask :id="'pmask' + data.id">
-					<image id="img" :href="getParticleImage(data, ${mainPage})" x="0" y="0" :width="data.width" :height="data.height"></image>
+					<image :href="getParticleImage(data, ${mainPage})" x="0" y="0" :width="data.width" :height="data.height"></image>
 				</mask>
 			</svg>
 			<span v-if="data.text" v-html="data.text"></span>

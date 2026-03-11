@@ -27,7 +27,7 @@ All distances are in pixels and angles are in degrees, with 0 being up and going
 
 - `fadeInTime`: The amount of seconds that fading in should take (part of the total lifetime). Default is 0.
 
-- `image`: The image the particle should display. `""` will display no image. Default is a generic particle.
+- `image`: The image the particle should display. An empty string (`""`) will display no image. Default is a generic particle.
 
 - `text`: Displays text on the particle. Can use basic HTML.
 

@@ -379,10 +379,14 @@ function hardReset(resetOptions = false) {
 let ticking = false;
 
 const INTERVAL = setInterval(() => {
-	if (player === undefined || tmp === undefined || ticking || (tmp.gameEnded && !player.keepGoing)) return;
-	ticking = true;
+	if (player === undefined || tmp === undefined || ticking) return;
 	const now = Date.now();
-	let diff = (now - player.time) / 1e3;
+	if (tmp.gameEnded && !player.keepGoing) {
+		player.time = now;
+		return;
+	};
+	ticking = true;
+	let diff = (now - player.time) / 1000;
 	const trueDiff = diff;
 	if (player.offTime !== undefined) {
 		if (player.offTime.remain > modInfo.offlineLimit * 3600) player.offTime.remain = modInfo.offlineLimit * 3600;
