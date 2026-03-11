@@ -53,8 +53,6 @@ function updateWidth() {
 	let splitScreen = innerWidth >= 1024;
 	if (options.forceOneTab) splitScreen = false;
 	if (player.navTab === "none") splitScreen = true;
-	tmp.other.screenWidth = innerWidth;
-	tmp.other.screenHeight = innerHeight;
 	tmp.other.splitScreen = splitScreen;
 	tmp.other.lastPoints = player.points;
 };

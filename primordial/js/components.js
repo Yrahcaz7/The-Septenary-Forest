@@ -129,7 +129,7 @@ const customComponents = {
 		data() {return {player, glitchify, tmp, format, formatWhole, layers, run}},
 		computed: {
 			extraMainDisplay() {
-				if (typeof extraMainDisplay === 'function') return extraMainDisplay(this.layer);
+				if (typeof extraMainDisplay === "function") return extraMainDisplay(this.layer);
 				return "";
 			},
 			effectDescription() {
@@ -200,7 +200,7 @@ const customComponents = {
 				(tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].buyables[data].color ?? tmp[layer].color} : {}),
 				tmp[layer].componentStyles.buyable,
 				tmp[layer].buyables[data].style,
-			]" @click="interval ? null : buyBuyable(layer, data)" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart.passive="start" @touchend="stop" @touchcancel="stop">
+			]" @click="interval ? null : buyBuyable(layer, data)" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
 				<template v-if="tmp[layer].buyables[data].title">
 					<h2 v-html="tmp[layer].buyables[data].title"></h2><br>
 				</template>
@@ -252,7 +252,7 @@ const customComponents = {
 		}" :style="[
 			(tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].clickables[data].color ?? tmp[layer].color} : {}),
 			tmp[layer].clickables[data].style,
-		]" @click="interval ? null : clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart.passive="start" @touchend="stop" @touchcancel="stop">
+		]" @click="interval ? null : clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
 			<template v-if="tmp[layer].clickables[data].title">
 				<h2 v-html="tmp[layer].clickables[data].title"></h2><br>
 			</template>

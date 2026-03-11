@@ -91,8 +91,8 @@ const newParticles = {
 		return {
 			time: 10,
 			id: particleID,
-			x: Math.random() * (tmp.other.screenWidth - 100) + 50,
-			y: Math.random() * (tmp.other.screenHeight - 100) + 50,
+			x: Math.random() * (innerWidth - 100) + 50,
+			y: Math.random() * (innerHeight - 100) + 50,
 			width: 50,
 			height: 50,
 			angle: 0,

@@ -28,7 +28,6 @@ function setupTemp() {
 	tmp.pointGen = {};
 	tmp.backgroundStyle = {};
 	tmp.displayThings = [];
-	tmp.scrolled = 0;
 	tmp.gameEnded = false;
 	funcs = {};
 	setupTempData(layers, tmp, funcs);

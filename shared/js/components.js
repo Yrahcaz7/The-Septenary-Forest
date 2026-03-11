@@ -34,22 +34,22 @@ function loadVue(mainPage = false) {
 				<h2>{{modInfo.name}} {{VERSION.withoutName}}</h2><br><br>
 				<h3 v-html="modInfo.winText"></h3><br><br>
 				<div v-if="!player.timePlayedReset">It took you {{formatTime(player.timePlayed)}} to beat the game.</div><br>
-				<button class="longUpg can" style="margin-right: 18px" onclick="hardReset(true)">Play Again</button><button class="longUpg can" onclick="keepGoing()">Keep Going</button><br><br>
+				<button class="longUpg can" style="margin-right: 18px" @click="hardReset(true)">Play Again</button><button class="longUpg can" @click="keepGoing()">Keep Going</button><br><br>
 				<span v-if="modInfo.discordLink"><a class="link" :href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br></span>
 				<a class="link" href="https://discord.gg/F3xveHV" target="_blank" :style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a><br><br>
 				<a class="link" href="https://discord.gg/wwQfgPa" target="_blank" style="font-size: 16px">Main Prestige Tree server</a><br><br>
 			</div>
 			<!-- miscellaneous buttons -->
-			<div id="treeOverlay" v-if="!gameEnded && (player.tab === 'none' || tmp.other.splitScreen || !readData(layoutInfo.showTree))" onscroll="resizeCanvas()" :class="{
+			<div id="treeOverlay" v-if="!gameEnded && (player.tab === 'none' || tmp.other.splitScreen || !readData(layoutInfo.showTree))" @scroll.passive="resizeCanvas()" :class="{
 				treeOverlay: true,
 				fullWidth: player.tab === 'none' || player.navTab === 'none',
 				col: player.tab !== 'none' && player.navTab !== 'none',
 				left: player.tab !== 'none' && player.navTab !== 'none',
 			}" :style="{'margin-top': !readData(layoutInfo.showTree) && player.tab == 'info-tab' ? '50px' : ''}">
-				<div id="version" onclick="showTab('changelog-tab')" class="overlayThing" style="margin-right: 13px">{{VERSION.withoutName}}</div>
-				<button v-if="((player.navTab == 'none' && (tmp[player.tab].row == 'side' || tmp[player.tab].row == 'otherside' || player[player.tab].prevTab)) || player[player.navTab]?.prevTab)" class="big back overlayThing" onclick="goBack(player.navTab === 'none' ? player.tab : player.navTab)">&#8592;</button>
-				<img id="optionWheel" class="overlayThing" v-if="player.tab != 'options-tab'" src="${mainPage ? "" : "../"}shared/images/options_wheel.png" onclick="showTab('options-tab')">
-				<div id="info" v-if="player.tab != 'info-tab'" class="overlayThing" onclick="showTab('info-tab')">i</div>
+				<div id="version" @click="showTab('changelog-tab')" class="overlayThing" style="margin-right: 13px">{{VERSION.withoutName}}</div>
+				<button v-if="((player.navTab == 'none' && (tmp[player.tab].row == 'side' || tmp[player.tab].row == 'otherside' || player[player.tab].prevTab)) || player[player.navTab]?.prevTab)" class="big back overlayThing" @click="goBack(player.navTab === 'none' ? player.tab : player.navTab)">&#8592;</button>
+				<img id="optionWheel" class="overlayThing" v-if="player.tab != 'options-tab'" src="${mainPage ? "" : "../"}shared/images/options_wheel.png" @click="showTab('options-tab')">
+				<div id="info" v-if="player.tab != 'info-tab'" class="overlayThing" @click="showTab('info-tab')">i</div>
 				<div id="discord" class="overlayThing" style="z-index: 30001">
 					<img src="${mainPage ? "" : "../"}shared/images/discord.png">
 					<ul id="discordLinks">
@@ -64,7 +64,7 @@ function loadVue(mainPage = false) {
 				</div>
 			</div>
 			<!-- tree tab -->
-			<div v-if="!gameEnded && (player.tab === 'none' || tmp.other.splitScreen)" id="treeTab" onscroll="resizeCanvas()" :class="{
+			<div v-if="!gameEnded && (player.tab === 'none' || tmp.other.splitScreen)" id="treeTab" @scroll.passive="resizeCanvas()" :class="{
 				fullWidth: player.tab === 'none' || player.navTab === 'none',
 				col: player.tab !== 'none' && player.navTab !== 'none',
 				left: player.tab !== 'none' && player.navTab !== 'none',
@@ -90,7 +90,7 @@ function loadVue(mainPage = false) {
 				</template>
 			</div>
 			<!-- layer tab -->
-			<div v-if="player.navTab !== 'none' && player.tab !== 'none' && !gameEnded" onscroll="resizeCanvas()" :class="{
+			<div v-if="player.navTab !== 'none' && player.tab !== 'none' && !gameEnded" @scroll.passive="resizeCanvas()" :class="{
 				fullWidth: player.navTab === 'none' || !tmp.other.splitScreen || !readData(layoutInfo.showTree),
 				col: player.navTab !== 'none',
 				right: player.navTab !== 'none',
@@ -439,7 +439,7 @@ function loadVue(mainPage = false) {
 				(tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].buyables[data].color ?? tmp[layer].color} : {}),
 				tmp[layer].componentStyles.buyable,
 				tmp[layer].buyables[data].style,
-			]" @click="interval ? null : buyBuyable(layer, data)" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart.passive="start" @touchend="stop" @touchcancel="stop">
+			]" @click="interval ? null : buyBuyable(layer, data)" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
 				<template v-if="tmp[layer].buyables[data].title">
 					<h2 v-html="tmp[layer].buyables[data].title"></h2><br>
 				</template>
@@ -522,7 +522,7 @@ function loadVue(mainPage = false) {
 		}" :style="[
 			(tmp[layer].clickables[data].canClick ? {'background-color': tmp[layer].clickables[data].color ?? tmp[layer].color} : {}),
 			tmp[layer].clickables[data].style,
-		]" @click="interval ? null : clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart.passive="start" @touchend="stop" @touchcancel="stop">
+		]" @click="interval ? null : clickClickable(layer, data)" :id='"clickable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
 			<template v-if="tmp[layer].clickables[data].title">
 				<h2 v-html="tmp[layer].clickables[data].title"></h2><br>
 			</template>
@@ -607,7 +607,7 @@ function loadVue(mainPage = false) {
 		}" :style="[
 			(canClick ? {'background-color': tmp[layer].color} : {}),
 			gridRun(layer, 'getStyle', player[this.layer].grid[this.data], this.data),
-		]" @click="clickGrid(layer, data)" @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart.passive="start" @touchend="stop" @touchcancel="stop">
+		]" @click="clickGrid(layer, data)" @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
 			<span v-if="layers[layer].grid.getTitle">
 				<h3 v-html="gridRun(this.layer, 'getTitle', player[this.layer].grid[this.data], this.data)"></h3><br>
 			</span>
@@ -1070,7 +1070,7 @@ function loadVue(mainPage = false) {
 			</template><br>
 			The Modding Tree <a href="https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md" target="_blank" class="link" style="font-size: 14px; display: inline">{{TMT_VERSION.tmtNum}}</a> by Acamaeda and FlamemasterNXF<br>
 			The Prestige Tree made by Jacorb and Aarex<br><br>
-			<div class="link" onclick="showTab('changelog-tab')">Changelog</div><br><br>
+			<div class="link" @click="showTab('changelog-tab')">Changelog</div><br><br>
 			<span v-if="modInfo.discordLink">
 				<a class="link" :href="modInfo.discordLink" target="_blank">{{modInfo.discordName}}</a><br><br>
 			</span>
@@ -1092,29 +1092,26 @@ function loadVue(mainPage = false) {
 
 	addNormalComponent('options-tab', {
 		data() {return {optionGrid, run}},
-		template: (() => {
-			let template = `<table><tbody>`;
-			for (let row = 0; row < optionGrid.length; row++) {
-				template += `<tr>`;
-				for (let index = 0; index < optionGrid[row].length; index++) {
-					template += `<td><button class="opt"`;
-					if (optionGrid[row][index].onClick) {
-						template += ` onclick="optionGrid[${row}][${index}].onClick(`;
-						if (optionGrid[row][index].onClick === toggleOpt && optionGrid[row][index].opt) {
-							template += `'${optionGrid[row][index].opt}'`;
-						};
-						template += `)"`;
-					};
-					template += `>`;
-					if (optionGrid[row][index].text) {
-						template += `{{run(optionGrid[${row}][${index}].text, optionGrid[${row}][${index}])}}`;
-					};
-					template += `</button></td>`;
+		methods: {
+			onClick(item) {
+				if (item.onClick === toggleOpt && item.opt) {
+					item.onClick(item.opt);
+				} else if (item.onClick instanceof Function) {
+					item.onClick();
 				};
-				template += `</tr>`;
-			};
-			return template + `</tbody></table>`;
-		})(),
+			},
+		},
+		template: template(`<table>
+			<tbody>
+				<tr v-for="row in optionGrid">
+					<td v-for="item in row">
+						<button class="opt" @click="onClick(item)">
+							{{run(item.text, item) ?? ""}}
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>`),
 	});
 
 	addNormalComponent('tooltip', {
