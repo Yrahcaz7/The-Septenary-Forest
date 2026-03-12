@@ -2379,6 +2379,7 @@ addLayer("ds", {
 				else if (completions == 16) text += "reduce the cost scaling of <b" + getColorClass(this, REF, "w", true) + "Power of Good</b> if you have at least 1 limit broken";
 				else if (completions == 17) text += "nothing";
 				else if (completions == 18) text += "improve the first purified souls effect yet again";
+				else if (completions == 19) text += "coming soon...";
 				else text += "you have gotten all the rewards!";
 				return text;
 			},
@@ -4606,12 +4607,12 @@ addLayer("r", {
 			buy() { addBuyables(this.layer, this.id, 1) },
 			effect(x) {
 				let eff = new Decimal(1000).pow(x.add(buyableEffect("r", 21)));
-				eff = softcap(eff, new Decimal(SOFTCAPS.r_buyable_12[0]), SOFTCAPS.r_buyable_12[1]);
+				eff = softcap(eff, new Decimal(SOFTCAPS.r_buyable_12[0]()), SOFTCAPS.r_buyable_12[1]);
 				return eff;
 			},
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
-				if (eff.gte(SOFTCAPS.r_buyable_12[0])) text += " (softcapped)";
+				if (eff.gte(SOFTCAPS.r_buyable_12[0]())) text += " (softcapped)";
 				if (options.nerdMode) text += "<br>formula: 1,000^x";
 				return text;
 			},
@@ -5139,6 +5140,7 @@ addLayer("gi", {
 		if (hasBuyable("w", 22)) gain = gain.mul(buyableEffect("w", 22));
 		if (hasBuyable("mo", 13)) gain = gain.mul(buyableEffect("mo", 13));
 		if (hasBuyable("pl", 11)) gain = gain.mul(buyableEffect("pl", 11));
+		if (hasMilestone("mo", 12)) gain = gain.mul(milestoneEffect("mo", 12));
 		return gain;
 	},
 	autoPrestige() { return (hasMilestone("w", 1) || ((isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasMilestone("gi", 16)) || hasUpgrade("pl", 64)) && (!hasMilestone("cl", 0) || player.gi.auto_prestige) },
@@ -7574,6 +7576,11 @@ addLayer("mo", {
 				effect() { return player.ei.points.add(1).pow(0.5) },
 				effectDescription(eff) { return "multiply Thread gain based on your evil influence (currently " + format(eff) + "x)" },
 			},
+			12: {
+				requirement: 21_112,
+				effect() { return new Decimal(getPurifiedDemonSouls()).add(1).log10().add(1) },
+				effectDescription(eff) { return "multiply good influence gain based on your purified demon souls (currently " + format(eff) + "x)" },
+			},
 		};
 		const done = req => player.mo.points.gte(req);
 		const unlocked = () => isAssimilated("mo");
@@ -7746,7 +7753,7 @@ addLayer("pl", {
 				if (options.nerdMode) text += "<br>formula: (log10(x+1)+1)^y";
 				return text;
 			},
-			costDisplay(cost) { return "Req: " + formatWhole(cost) + " chaos" },
+			costDisplay(cost) { return "Req: " + formatWhole(cost.ceil()) + " chaos" },
 			unlocked() { return hasMilestone("pl", 2) },
 		},
 		21: {
@@ -7770,13 +7777,14 @@ addLayer("pl", {
 			unlocked() { return hasMilestone("pl", 3) },
 		},
 		22: {
-			costs: [316, 373, 480, 555, 705, 855, 995, 1272], // 1490
+			costs: [316, 373, 480, 555, 705, 855, 995, 1272, 1490],
 			cost(x) { return this.costs[x] || Infinity },
 			title() { return "<b" + getColorClass(this, TITLE) + "Correction Type NAN-1-2" },
 			description() {
 				const amt = getBuyableAmount(this.layer, this.id);
 				let text = "<br>";
-				if (amt.gte(8)) text += "the next correction is coming soon...";
+				if (amt.gte(9)) text += "the next correction is coming soon...";
+				else if (amt.gte(8)) text += "removes the <b" + getColorClass(this, REF, "r") + "Gleaming Relics</b> effect softcap";
 				else if (amt.gte(7)) text += "improves the achievement effect again";
 				else if (amt.gte(6)) text += "further improves the achievement effect";
 				else if (amt.gte(5)) text += "makes the evil influence gain softcaps weaker (^0.3 --> ^0.4)";

@@ -15,6 +15,7 @@ const VERSION = {
 function changelog() {
 	return `<h1>Changelog:</h1><br>
 		<br><h3>v4.1: Ever Closer</h3><br>
+			- Added one Attunement Tier.<br>
 			- Made the background fancy!<br>
 			- Added one option.<br>
 			- Many technical changes and fixes.<br>
@@ -25,6 +26,7 @@ function changelog() {
 			- Added three rebuyables to planets.<br>
 			- Added three correction types to planets.<br>
 			- Added ${randomStr(4)} to assimilation.<br>
+			- Added twelve Attunement Tiers.<br>
 			- Added twenty-six milestones to chaos.<br>
 			- Added ${randomStr(4)} to story.<br>
 			- Added eight achievements.<br>
@@ -278,7 +280,7 @@ function hasActivatedMaxRelics() {
 };
 
 function getActivatedRelics() {
-	if (relicsPermanentlyActive()) return player.r.points.toNumber();
+	if (relicsPermanentlyActive()) return player.r.points;
 	return Math.min(challengeCompletions("r", 11), player.r.points.toNumber());
 };
 
@@ -301,7 +303,7 @@ function getPurifiedDemonSouls() {
 };
 
 function getPurificationReq() {
-	return new Decimal(1000).pow(getPurifiedDemonSouls() + 1);
+	return new Decimal(1000).pow(new Decimal(getPurifiedDemonSouls()).add(1));
 };
 
 function getQuarkBuyableBulk() {
@@ -429,7 +431,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return "You beat the game!<br>For now..." },
 ];
 
-const endPoints = new Decimal("e1e178");
+const endPoints = new Decimal("e1e195");
 
 function onLoad() {
 	calculateColorValue();

@@ -71,7 +71,7 @@ function togglePause() {
 };
 
 function onKeyDown(key) {
-	if (focused) return;
+	if (focused || ctrlDown) return;
 	if (key == "-" || key == "_") options.nerdMode = !options.nerdMode;
 	if (key == "=" || key == "+") togglePause();
 };

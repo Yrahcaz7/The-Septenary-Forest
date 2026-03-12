@@ -25,7 +25,10 @@ const SOFTCAPS = {
 		if (hasMilestone("gi", 18) && player.h.limitsBroken >= 4) return Infinity;
 		return "1e2500";
 	}, 0.6666666666666666],
-	r_buyable_12: [1e200, 0.5],
+	r_buyable_12: [() => {
+		if (getBuyableAmount("pl", 22).gte(9)) return Infinity;
+		return 1e200;
+	}, 0.5],
 	mo_buyable_13: [() => {
 		if (getBuyableAmount("pl", 22).gte(2)) return Infinity;
 		return 1.22;
@@ -89,7 +92,7 @@ addLayer("SC", (() => {
 			if (tmp.gi.effect.gte(SOFTCAPS.gi_eff[0]()) && !tmp.gi.deactivated) {
 				registerActiveSoftcap("gi_eff");
 			};
-			if (buyableEffect("r", 12).gte(SOFTCAPS.r_buyable_12[0]) && !tmp.r.deactivated) {
+			if (buyableEffect("r", 12).gte(SOFTCAPS.r_buyable_12[0]()) && !tmp.r.deactivated) {
 				registerActiveSoftcap("r_buyable_12");
 			};
 			if (buyableEffect("mo", 13).gte(SOFTCAPS.mo_buyable_13[0]()) && !tmp.mo.deactivated) {
@@ -115,7 +118,7 @@ addLayer("SC", (() => {
 				if (activeSoftcaps.r_eff1) text += "<br><h2 class='layer-r'>Relic's First Effect Softcap</h2><br>starts at " + format(SOFTCAPS.r_eff1[0]()) + ", effect to ^" + format(SOFTCAPS.r_eff1[1]) + "<br>";
 				if (activeSoftcaps.m_eff) text += "<br><h2 class='layer-m'>Molecule Effect Softcap</h2><br>starts at " + format(SOFTCAPS.m_eff[0]()) + ", effect to ^" + format(SOFTCAPS.m_eff[1]()) + "<br>";
 				if (activeSoftcaps.gi_eff) text += "<br><h2 class='layer-gi'>Good Influence Effect Softcap</h2><br>starts at " + format(SOFTCAPS.gi_eff[0]()) + ", effect to ^" + format(SOFTCAPS.gi_eff[1]) + "<br>";
-				if (activeSoftcaps.r_buyable_12) text += "<br><h2 class='layer-r'>Gleaming Relics Effect Softcap</h2><br>starts at " + format(SOFTCAPS.r_buyable_12[0]) + ", effect ^" + format(SOFTCAPS.r_buyable_12[1]) + "<br>";
+				if (activeSoftcaps.r_buyable_12) text += "<br><h2 class='layer-r'>Gleaming Relics Effect Softcap</h2><br>starts at " + format(SOFTCAPS.r_buyable_12[0]()) + ", effect ^" + format(SOFTCAPS.r_buyable_12[1]) + "<br>";
 				if (activeSoftcaps.mo_buyable_13) text += "<br><h2 class='layer-mo'><b class='layer-gi'>Good Influence</b> Synergy Effect Softcap</h2><br>starts at " + format(SOFTCAPS.mo_buyable_13[0]()) + ", effect /" + format(SOFTCAPS.mo_buyable_13[1]()) + "<br>";
 				return text;
 			}],
