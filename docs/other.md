@@ -28,4 +28,4 @@ If you want any of the options to also be toggled by a keybind, you can use the 
 
     `focused` indicates if the player has a text input focused. Most keybinds should usually be disabled when this is true.
 
-    `shiftDown` and `ctrlDown` indicate if the player has the shift key or control key pressed down, respectively.
+    `shiftDown` indicates if the player has the shift key pressed down, while `ctrlDown` indicates if the player has the control key or the meta key pressed down.

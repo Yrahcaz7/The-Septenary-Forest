@@ -42,7 +42,7 @@ You can make almost any value dynamic by using a function in its place, includin
     ```js
     hotkeys: [
         {
-            key: "p", // What the hotkey button is. Use uppercase if it's combined with shift, or "ctrl+x" for holding down ctrl.
+            key: "p", // What the hotkey button is. Use uppercase if it's combined with shift, or "ctrl+x" for holding down the control key or the meta key.
             description: "p: reset your points for prestige points", // The description of the hotkey that is displayed in the game's How To Play tab
             onPress() { if (player.p.unlocked) doReset("p") },
             unlocked() { return hasMilestone("p", 3) } // Determines if you can use the hotkey, optional

@@ -280,14 +280,14 @@ let ctrlDown = false;
 document.onkeydown = e => {
 	if (player === undefined) return;
 	shiftDown = e.shiftKey;
-	ctrlDown = e.ctrlKey;
+	ctrlDown = e.ctrlKey || e.metaKey;
 	if (tmp.gameEnded && !player.keepGoing) return;
 	let key = e.key;
 	if (typeof onKeyDown === "function") {
 		onKeyDown(key);
 	};
 	if (focused) return;
-	if (ctrlDown) key = 'ctrl+' + key;
+	if (ctrlDown) key = "ctrl+" + key;
 	if (ctrlDown && hotkeys[key]) e.preventDefault();
 	if (hotkeys[key]) {
 		const k = hotkeys[key];
@@ -297,7 +297,7 @@ document.onkeydown = e => {
 
 document.onkeyup = e => {
 	shiftDown = e.shiftKey;
-	ctrlDown = e.ctrlKey;
+	ctrlDown = e.ctrlKey || e.metaKey;
 };
 
 function isPlainObject(obj) {
