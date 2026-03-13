@@ -360,36 +360,6 @@ function canGenPoints() {
 	return !inChallenge("r", 11);
 };
 
-/**
- * Returns a version of `num` that has the specified upgrades applied to it.
- * @param {Decimal} num - The Decimal to use. This may or may not be mutated, so don't rely on it.
- * @param {Object.<string, number[]>} upgrades - An object where keys are layer ids and values are arrays of upgrade ids.
- * @param {string} operation - The operation that the upgrades perform. Must be a valid Decimal function name. Defaults to `"mul"`.
- */
-function applyUpgrades(num, upgrades, operation = "mul") {
-	for (const layer in upgrades) {
-		for (const id of upgrades[layer]) {
-			if (hasUpgrade(layer, id)) num = num[operation](upgradeEffect(layer, id));
-		};
-	};
-	return num;
-};
-
-/**
- * Returns a version of `num` that has the upgrade sequence defined by `layer` and `ids` applied to it.
- * @param {Decimal} num - The Decimal to use. This may or may not be mutated, so don't rely on it.
- * @param {string} layer - The layer that contains the upgrade sequence.
- * @param {number[]} ids - An array containing the id of each upgrade in the sequence, in order.
- * @param {string} operation - The operation that the upgrades perform. Must be a valid Decimal function name. Defaults to `"mul"`.
- */
-function applyUpgradeSquence(num, layer, ids, operation = "mul") {
-	for (const id of ids) {
-		if (!hasUpgrade(layer, id)) break;
-		num = num[operation](upgradeEffect(layer, id));
-	};
-	return num;
-};
-
 function getPointGen() {
 	// init
 	let gain = newDecimalOne();

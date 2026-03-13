@@ -110,15 +110,7 @@ For use in [custom tab layouts](custom-tab-layouts.md).
 
 - `overridePointDisplay()`: **OVERRIDE**. What this function returns overrides the point display at the top of the page. Any extra display things will still be displayed; this just replaces the point and point per second display. If it returns a [falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) value, however, it will use the default.
 
-- `extraMainDisplay(layer)`: **optional**. What this function returns adds to the main point display of each layer. It inserts it after the amount, but before the name. (Can use basic HTML.) For example, if you had:
-
-    ```js
-    function extraMainDisplay(layer) {
-        if (layer == "p") return "Super <b>Ultra</b> ";
-    };
-    ```
-
-    In a layer with the id "p" where you have 10 prestige points, it would show "You have **10** Super **Ultra** prestige points" for the main point display instead of "You have **10** prestige points" (and in any other layer the main display would be the same).
+- `extraMainDisplay(layer)`: **optional**. What this function returns adds to the main point display of each layer. It inserts it after the amount, but before the name. (Can use basic HTML.) [See an example here.](main-mod-info.md#less-important-things)
 
 - `onLayerUnlock(layer)`: **optional**. This function is called whenever any layer is unlocked.
 
@@ -128,9 +120,19 @@ For use in [custom tab layouts](custom-tab-layouts.md).
 
 - `pausedDisplay`: **OVERRIDE**. Overrides the `devSpeed` display when `devSpeed` is `0`. Can be a function.
 
+## [Tree-Related Functions](trees-and-tree-customization.md#overriding-functions-additional-features)
+
 - `overrideTooltip(layer)`: **OVERRIDE**. What this function returns overrides all tree node tooltips. You can use the layer parameter to make it only apply to certain layers. If it returns a [falsy](https://developer.mozilla.org/en-US/docs/Glossary/Falsy) value, however, it will use the default.
 
 - `overrideTreeNodeClick(layer)`: **OVERRIDE**. This function should return another function based on `layer`, which overrides what happens when you click that layer's tree node. If it does not return a function, it will use the default (which, if it is a layer, is going to that layer's tab).
+
+## Miscellaneous Functions
+
+[These functions have example usages here.](other.md#miscellaneous-functions-additional-features)
+
+- `applyUpgrades(num, upgrades, operation = "mul")`: Returns a version of `num` that has the specified upgrades applied to it. `upgrades` is an object where keys are layer ids and values are arrays of upgrade ids. `operation` is the operation that the upgrades perform (it must be a valid Decimal function name).
+
+- `applyUpgradeSquence(num, layer, ids, operation = "mul")`: Returns a version of `num` that has the upgrade sequence defined by `layer` and `ids` applied to it. `layer` is the id of the layer that contains the upgrade sequence. `ids` is an array containing the id of each upgrade in the sequence, in order. `operation` is the operation that the upgrades perform (it must be a valid Decimal function name).
 
 ## Other
 

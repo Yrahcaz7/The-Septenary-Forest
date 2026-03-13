@@ -207,8 +207,16 @@ function gridEffect(layer, id) {
 	return gridRun(layer, "getEffect", player[layer].grid[id], id);
 };
 
-//#region buying
+//#region other
 
+/**
+ * Purchases a standard buyable that costs one currency.
+ * @param {{layer: string, id: string}} obj - The TMT buyable to purchase.
+ * @param {string} currencyLayer - The id of the layer that the currency is in. Use an empty string if it is not in a layer. Defaults to `obj.layer`.
+ * @param {string} currencyName - The name of the currency. Defaults to `"points"`.
+ * @param {number} bulk - The amount of the buyable the player should get from the purchase. Defaults to `1`.
+ * @param {boolean} limitAmount - If true, the buyable amount is capped at its `purchaseLimit`.
+ */
 function buyStandardBuyable(obj, currencyLayer = obj.layer, currencyName = "points", bulk = 1, limitAmount = false) {
 	if ((modInfo.friendlyErrors === undefined || modInfo.friendlyErrors) && (!layers[obj.layer]?.buyables || !layers[obj.layer].buyables[obj.id])) {
 		console.warn("There was an attempt to use buyStandardBuyable() on a buyable with id '" + obj.id + "' in layer '" + obj.layer + "', but that " + (layers[obj.layer] ? (layers[obj.layer].buyables ? "buyable does not exist" : "layer does not have any buyables") : "layer does not exist") + ".");
@@ -229,6 +237,14 @@ function buyStandardBuyable(obj, currencyLayer = obj.layer, currencyName = "poin
 	};
 };
 
+/**
+ * Purchases a standard multi-currency buyable.
+ * @param {{layer: string, id: string}} obj - The TMT buyable to purchase.
+ * @param {string[]} currencyLayers - An array containing the id of each layer that each currency is in. Defaults to an empty array.
+ * @param {boolean} costless - If true, the cost is not subtracted from each "points", instead the cost is added to the respective "total" values.
+ * @param {number} bulk - The amount of the buyable the player should get from the purchase. Defaults to `1`.
+ * @param {boolean} limitAmount - If true, the buyable amount is capped at its `purchaseLimit`.
+ */
 function buyMultiCurrencyBuyable(obj, currencyLayers = [], costless = false, bulk = 1, limitAmount = false) {
 	if ((modInfo.friendlyErrors === undefined || modInfo.friendlyErrors) && (!layers[obj.layer]?.buyables || !layers[obj.layer].buyables[obj.id])) {
 		console.warn("There was an attempt to use buyMultiCurrencyBuyable() on a buyable with id '" + obj.id + "' in layer '" + obj.layer + "', but that " + (layers[obj.layer] ? (layers[obj.layer].buyables ? "buyable does not exist" : "layer does not have any buyables") : "layer does not exist") + ".");
@@ -252,4 +268,34 @@ function buyMultiCurrencyBuyable(obj, currencyLayers = [], costless = false, bul
 	} else {
 		player[obj.layer].buyables[obj.id] = player[obj.layer].buyables[obj.id].add(bulk);
 	};
+};
+
+/**
+ * Returns a version of `num` that has the specified upgrades applied to it.
+ * @param {Decimal} num - The Decimal to use. This may or may not be mutated, so don't rely on it.
+ * @param {Object.<string, number[]>} upgrades - An object where keys are layer ids and values are arrays of upgrade ids.
+ * @param {string} operation - The operation that the upgrades perform. Must be a valid Decimal function name. Defaults to `"mul"`.
+ */
+function applyUpgrades(num, upgrades, operation = "mul") {
+	for (const layer in upgrades) {
+		for (const id of upgrades[layer]) {
+			if (hasUpgrade(layer, id)) num = num[operation](upgradeEffect(layer, id));
+		};
+	};
+	return num;
+};
+
+/**
+ * Returns a version of `num` that has the upgrade sequence defined by `layer` and `ids` applied to it.
+ * @param {Decimal} num - The Decimal to use. This may or may not be mutated, so don't rely on it.
+ * @param {string} layer - The id of the layer that contains the upgrade sequence.
+ * @param {number[]} ids - An array containing the id of each upgrade in the sequence, in order.
+ * @param {string} operation - The operation that the upgrades perform. Must be a valid Decimal function name. Defaults to `"mul"`.
+ */
+function applyUpgradeSquence(num, layer, ids, operation = "mul") {
+	for (const id of ids) {
+		if (!hasUpgrade(layer, id)) break;
+		num = num[operation](upgradeEffect(layer, id));
+	};
+	return num;
 };
