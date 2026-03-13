@@ -1950,12 +1950,7 @@ addLayer("ds", {
 		// init
 		let mult = newDecimalOne();
 		// mul
-		if (hasUpgrade("ds", 31)) mult = mult.mul(upgradeEffect("ds", 31));
-		if (hasUpgrade("a", 11)) mult = mult.mul(upgradeEffect("a", 11));
-		if (hasUpgrade("a", 42)) mult = mult.mul(upgradeEffect("a", 42));
-		if (hasUpgrade("a", 71)) mult = mult.mul(upgradeEffect("a", 71));
-		if (hasUpgrade("m", 12)) mult = mult.mul(upgradeEffect("m", 12));
-		if (hasUpgrade("m", 33)) mult = mult.mul(upgradeEffect("m", 33));
+		mult = applyUpgrades(mult, {ds: [31], a: [11, 42, 71], m: [12, 33]});
 		if (hasChallenge("ds", 11)) mult = mult.mul(challengeEffect("ds", 11));
 		if (hasChallenge("ds", 12)) mult = mult.mul(challengeEffect("ds", 12));
 		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
@@ -2379,12 +2374,7 @@ addLayer("a", {
 	gainExp() {
 		let gain = newDecimalOne();
 		if (hasBuyable("q", 12)) gain = gain.mul(buyableEffect("q", 12));
-		if (hasUpgrade("a", 22)) gain = gain.mul(upgradeEffect("a", 22));
-		if (hasUpgrade("a", 32)) gain = gain.mul(upgradeEffect("a", 32));
-		if (hasUpgrade("a", 33)) gain = gain.mul(upgradeEffect("a", 33));
-		if (hasUpgrade("a", 61)) gain = gain.mul(upgradeEffect("a", 61));
-		if (hasUpgrade("a", 62)) gain = gain.mul(upgradeEffect("a", 62));
-		if (hasUpgrade("a", 72)) gain = gain.mul(upgradeEffect("a", 72));
+		gain = applyUpgrades(gain, {a: [22, 32, 33, 61, 62, 72]});
 		if (hasChallenge("ds", 22)) gain = gain.mul(1.5);
 		if (hasMilestone("r", 7)) gain = gain.mul(milestoneEffect("r", 7));
 		if (tmp.m.effect.gt(1) && !tmp.m.deactivated) gain = gain.mul(tmp.m.effect);
@@ -2527,20 +2517,20 @@ addLayer("a", {
 		11: {
 			title() { return "<b" + getColorClass(this, TITLE) + "The Demon of the Atom" },
 			description() {
-				if (hasMilestone("m", 11)) return "multiplies demon soul gain by 1,000x";
+				if (hasMilestone("m", 11)) return "multiplies demon soul gain by " + formatWhole(this.hardcap) + "x";
 				return "multiplies demon soul gain based on your atoms";
 			},
 			cost: 1,
+			hardcap: new Decimal(1000),
 			effect() {
 				const eff = player.a.points.add(1).pow(0.5);
-				const hardcap = new Decimal(1000);
-				if (eff.gt(hardcap) || hasMilestone("m", 11)) return hardcap;
+				if (eff.gt(this.hardcap) || hasMilestone("m", 11)) return this.hardcap;
 				return eff;
 			},
 			effectDisplay(eff) {
 				if (hasMilestone("m", 11)) return "max effect";
 				let text = format(eff) + "x";
-				if (eff.gte(1000)) text += "<br>(hardcapped)";
+				if (eff.gte(this.hardcap)) text += "<br>(hardcapped)";
 				if (options.nerdMode) text += "<br>formula: (x+1)^0.5";
 				return text;
 			},

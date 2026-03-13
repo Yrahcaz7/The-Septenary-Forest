@@ -776,7 +776,7 @@ function loadVue(mainPage = false) {
 					<component v-if="tmp[layer][type + 's'][id] !== undefined && tmp[layer][type + 's'][id].unlocked" :is="type" :layer="layer" :data="id" :style="tmp[layer].componentStyles[type]" class="treeThing"></component>
 					<div v-if="layoutInfo.htmlBranches" class="branches">
 						<template v-for="branch in tmp[layer][type + 's'][id].branches">
-							<div v-if="nodeShown(node) && nodeShown(Array.isArray(branch) ? branch[0] : branch)" class="branch" :style="getNormalHTMLBranchStyles(branch)" ref="branch" :data-id="id" :data-data="branch"></div>
+							<div v-if="tmp[layer][type + 's'][Array.isArray(branch) ? branch[0] : branch].unlocked" class="branch" :style="getNormalHTMLBranchStyles(branch)" ref="branch" :data-id="id" :data-data="branch"></div>
 						</template>
 					</div>
 				</div>

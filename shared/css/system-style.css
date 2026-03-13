@@ -43,7 +43,7 @@ td {
 	display: none;
 }
 
-.treeRow:has(.treeNode) {
+.treeRow:has(.treeNode), .treeRow:has(.treeThing) {
 	display: block;
 	margin-bottom: 50px;
 }
