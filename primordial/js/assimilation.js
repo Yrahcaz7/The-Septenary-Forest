@@ -265,8 +265,8 @@ function extraMainDisplay(layer) {
 	if (isAssimilated(layer)) return "<b class='layer-mo'>Assimilated</b> ";
 };
 
-// gets that glitchy text variable
-function getGlitch(tweak = false) {
+// gets the glitched "knowledge" variable
+function getGlitchKnowledge(tweak = false) {
 	// rounding
 	let round = 0;
 	if (hasUpgrade("q", 62)) round += 2.5;
@@ -285,15 +285,15 @@ function getGlitch(tweak = false) {
 	if (hasUpgrade("q", 65)) frequency *= 2;
 	// calculate
 	const val = Math.sin(player.timePlayed / (2 / frequency));
-	// with rounding (based on the answer found here: https://math.stackexchange.com/a/107491)
+	// with rounding (based on the mathematics stack exchange answer found here: https://math.stackexchange.com/a/107491)
 	if (round) {
 		const result = val * Math.sqrt((1 + (round ** 2)) / (1 + ((round ** 2) * (val ** 2))));
 		if (tweak && hasMilestone("ch", 13)) return new Decimal(1.395e12).mul((result + skew) * mult).add(1);
-		return player.points.max(player.q.basePointTotal).add(1).log10().mul((result + skew) * mult).add(1);
+		return player.points.max(player.q.basePointBest).add(1).log10().mul((result + skew) * mult).add(1);
 	};
 	// without rounding
 	if (tweak && hasMilestone("ch", 13)) return new Decimal(1.395e12).mul((val + skew) * mult).add(1);
-	return player.points.max(player.q.basePointTotal).add(1).log10().mul((val + skew) * mult).add(1);
+	return player.points.max(player.q.basePointBest).add(1).log10().mul((val + skew) * mult).add(1);
 };
 
 // gets glitch text in The Decipherer

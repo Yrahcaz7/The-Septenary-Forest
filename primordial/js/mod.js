@@ -572,6 +572,10 @@ function fixOldSave(oldVersion) {
 	delete player.cl.protein_gain;
 	delete options.css;
 	// rename vars
+	if (player.q.basePointTotal !== undefined) {
+		player.q.basePointBest = player.q.basePointTotal;
+		delete player.q.basePointTotal;
+	};
 	if (player.p.hymn !== undefined) {
 		player.p.hymns = player.p.hymn;
 		delete player.p.hymn;

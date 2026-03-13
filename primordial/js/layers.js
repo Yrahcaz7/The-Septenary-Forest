@@ -636,7 +636,7 @@ addLayer("q", {
 		points: newDecimalZero(),
 		best: newDecimalZero(),
 		total: newDecimalZero(),
-		basePointTotal: newDecimalZero(),
+		basePointBest: newDecimalZero(),
 		decipher: newDecimalZero(),
 		insight: newDecimalZero(),
 		auto_upgrades: false,
@@ -662,27 +662,12 @@ addLayer("q", {
 		// init
 		let mult = newDecimalOne();
 		// mul
-		if (hasUpgrade("c", 13)) mult = mult.mul(upgradeEffect("c", 13));
-		if (hasUpgrade("q", 11)) mult = mult.mul(upgradeEffect("q", 11));
-		if (hasUpgrade("q", 21)) mult = mult.mul(upgradeEffect("q", 21));
-		if (hasUpgrade("q", 22)) mult = mult.mul(upgradeEffect("q", 22));
+		mult = applyUpgrades(mult, {c: [13], q: [11, 21, 22, 45, 52], h: [34], a: [41], m: [13]});
 		if (hasUpgrade("q", 12) && hasUpgrade("q", 23)) {
 			mult = mult.mul(upgradeEffect("q", 23));
-			if (hasUpgrade("q", 24)) {
-				mult = mult.mul(upgradeEffect("q", 24));
-				if (hasUpgrade("q", 25)) {
-					mult = mult.mul(upgradeEffect("q", 25));
-					if (hasUpgrade("q", 31)) mult = mult.mul(upgradeEffect("q", 31));
-		}}};
-		if (hasUpgrade("q", 42)) {
-			mult = mult.mul(upgradeEffect("q", 42));
-			if (hasUpgrade("q", 44)) mult = mult.mul(upgradeEffect("q", 44));
+			mult = applyUpgradeSquence(mult, "q", [24, 25, 31]);
 		};
-		if (hasUpgrade("q", 45)) mult = mult.mul(upgradeEffect("q", 45));
-		if (hasUpgrade("q", 52)) mult = mult.mul(upgradeEffect("q", 52));
-		if (hasUpgrade("h", 34)) mult = mult.mul(2);
-		if (hasUpgrade("a", 41)) mult = mult.mul(upgradeEffect("a", 41));
-		if (hasUpgrade("m", 13)) mult = mult.mul(upgradeEffect("m", 13));
+		mult = applyUpgradeSquence(mult, "q", [42, 44]);
 		if (hasBuyable("sp", 11)) mult = mult.mul(buyableEffect("sp", 11)[0]);
 		if (hasUpgrade("ds", 21) && hasUpgrade("ds", 23)) mult = mult.mul(player.A.points.pow(2).div(100));
 		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
@@ -768,7 +753,7 @@ addLayer("q", {
 			player.q.decipher = newDecimalZero();
 			player.q.insight = newDecimalZero();
 		};
-		if (player.points.gt(player.q.basePointTotal)) player.q.basePointTotal = player.points;
+		if (player.points.gt(player.q.basePointBest)) player.q.basePointBest = player.points;
 	},
 	tabFormat: {
 		"Quark Central": {
@@ -1055,10 +1040,7 @@ addLayer("q", {
 			title() { return "<b" + getColorClass(this, TITLE) + "Mystery Quark" },
 			description() { return "multiplies quark gain based on your " + getGlitchDecipherText() },
 			cost: "1e1048",
-			effect() {
-				if (hasUpgrade("q", 54)) return getGlitch().pow(12.5);
-				return getGlitch().pow(5);
-			},
+			effect() { return getGlitchKnowledge().pow(hasUpgrade("q", 54) ? 12.5 : 5) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: ???";
@@ -1079,10 +1061,10 @@ addLayer("q", {
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade("q", 53) },
 		},
 		55: {
-			title() { return "<b" + getColorClass(this, TITLE) + 'What\'s the Point?' },
+			title() { return "<b" + getColorClass(this, TITLE) + "What's the Point?" },
 			description() { return "multiplies point gain based on your " + getGlitchDecipherText() },
 			cost: "1e1295",
-			effect() { return getGlitch().pow(21) },
+			effect() { return getGlitchKnowledge().pow(21) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: ???";
@@ -1106,7 +1088,7 @@ addLayer("q", {
 			title() { return "<b" + getColorClass(this, TITLE) + "Estimation on Point" },
 			description() { return "exponentiates point gain multiplier based on your " + getGlitchDecipherText() },
 			cost: "e8.34e10",
-			effect() { return getGlitch().log10().add(1).pow(0.05) },
+			effect() { return getGlitchKnowledge().log10().add(1).pow(0.05) },
 			effectDisplay(eff) {
 				let text = "^" + format(eff);
 				if (options.nerdMode) text += "<br>formula: ???";
@@ -1139,9 +1121,9 @@ addLayer("q", {
 			purchaseLimit() { return player.h.limitsBroken >= 3 ? 1000 : 99 },
 			buy() { buyStandardBuyable(this, "q", "points", getQuarkBuyableBulk(), true) },
 			effect(x) {
-				if (hasUpgrade("q", 64)) return new Decimal(100).pow(x).div(getGlitch(true).pow(92))
-				if (hasUpgrade("q", 62)) return new Decimal(100).pow(x).div(getGlitch(true).pow(97.25))
-				return new Decimal(100).pow(x).div(getGlitch(true).pow(100));
+				if (hasUpgrade("q", 64)) return new Decimal(100).pow(x).div(getGlitchKnowledge(true).pow(92))
+				if (hasUpgrade("q", 62)) return new Decimal(100).pow(x).div(getGlitchKnowledge(true).pow(97.25))
+				return new Decimal(100).pow(x).div(getGlitchKnowledge(true).pow(100));
 			},
 			effectDisplay(eff) {
 				let text = "+" + format(eff) + "%";
