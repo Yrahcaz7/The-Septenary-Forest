@@ -1272,11 +1272,7 @@ addLayer("sp", {
 		// init
 		let gain = newDecimalOne();
 		// mul
-		if (hasUpgrade("q", 43)) gain = gain.mul(upgradeEffect("q", 43));
-		if (hasUpgrade("sp", 31)) gain = gain.mul(2.5);
-		if (hasUpgrade("h", 63)) gain = gain.mul(upgradeEffect("h", 63));
-		if (hasUpgrade("a", 22)) gain = gain.mul(upgradeEffect("a", 22));
-		if (hasUpgrade("a", 31)) gain = gain.mul(upgradeEffect("a", 31));
+		gain = applyUpgrades(gain, {q: [43], sp: [31], h: [63], a: [22, 31]});
 		if (hasBuyable("ds", 11)) gain = gain.mul(buyableEffect("ds", 11)[1]);
 		if (hasBuyable("d", 21)) gain = gain.mul(buyableEffect("d", 21)[1]);
 		if (hasUpgrade("a", 51)) gain = gain.mul(player.A.points.pow(2.5).div(100));
@@ -1450,6 +1446,7 @@ addLayer("sp", {
 				return "multiplies subatomic particle gain by 2.5x, exponentiates subatomic particle gain multiplier by ^3.36, and subatomic particles reset nothing";
 			},
 			cost() { return player.mo.assimilating === this.layer ? 88888 : "e2.66e9" },
+			effect: 2.5,
 			style: {width: "150px", height: "150px"},
 			unlocked() { return hasUpgrade("sp", 21) && hasUpgrade("sp", 22) && hasUpgrade("sp", 23) && (isAssimilated(this.layer) || player.mo.assimilating === this.layer) },
 		},
@@ -1486,20 +1483,9 @@ addLayer("h", {
 		// init
 		let mult = newDecimalOne();
 		// mul
-		if (hasUpgrade("h", 12)) {
-			mult = mult.mul(upgradeEffect("h", 12));
-			if (hasUpgrade("h", 22)) {
-				mult = mult.mul(upgradeEffect("h", 22));
-				if (hasUpgrade("h", 32)) {
-					mult = mult.mul(upgradeEffect("h", 32));
-					if (hasUpgrade("h", 42)) mult = mult.mul(upgradeEffect("h", 42));
-		}}};
-		if (hasUpgrade("h", 14)) mult = mult.mul(4);
-		if (hasUpgrade("h", 62)) mult = mult.mul(upgradeEffect("h", 62));
-		if (hasUpgrade("h", 71)) mult = mult.mul(upgradeEffect("h", 71));
+		mult = applyUpgradeSquence(mult, "h", [12, 22, 32, 42]);
+		mult = applyUpgrades(mult, {h: [14, 62, 71], p: [12], m: [23]});
 		if (hasUpgrade("h", 11) && hasUpgrade("ds", 11)) mult = mult.mul(upgradeEffect("h", 11));
-		if (hasUpgrade("p", 12)) mult = mult.mul(1.05);
-		if (hasUpgrade("m", 23)) mult = mult.mul(upgradeEffect("m", 23));
 		if (hasBuyable("ds", 11)) mult = mult.mul(buyableEffect("ds", 11)[0]);
 		if (hasChallenge("ds", 11)) mult = mult.mul(challengeEffect("ds", 11));
 		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
@@ -2208,7 +2194,7 @@ addLayer("ds", {
 		},
 		12: {
 			name() { return "<h3" + getColorClass(this, REF) + "Hellfire" },
-			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1,000,000<br> - Hex gain is divided by 1e10<br> - Subatomic Particle gain is divided by the number of Quarks",
+			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1,000,000<br> - Hex gain is divided by 1e10<br> - Subatomic Particle gain is divided based on your Quarks",
 			goalDescription() {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) {
 					return format("1e1127") + " hexes";
@@ -2254,7 +2240,7 @@ addLayer("ds", {
 		},
 		22: {
 			name() { return "<h3" + getColorClass(this, REF) + "Dreaded Science" },
-			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1e10<br> - Quark and Subatomic Particle gain is divided by 1e40<br>",
+			challengeDescription: " - Forces a Demon Soul reset<br> - Point gain is divided by 1e10<br> - Quark gain and Subatomic Particle gain are divided by 1e40<br>",
 			goalDescription() {
 				if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) {
 					return format("1e1195") + " hexes<br>";
@@ -3146,6 +3132,7 @@ addLayer("p", {
 			title() { return "<b" + getColorClass(this, TITLE) + "Heretic Leniency" },
 			description: "multiplies hex gain by 1.05",
 			cost: 10,
+			effect: 1.05,
 		},
 		13: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Essence of Divinity" },
