@@ -63,7 +63,7 @@ addLayer("e", {
 				gen += upgradeEffect("h", id);
 			};
 		};
-		if (hasUpgrade("pl", 12)) gen += 0.1;
+		if (hasUpgrade("pl", 12)) gen += upgradeEffect("pl", 12);
 		return gen;
 	},
 	automate() {
@@ -357,7 +357,7 @@ addLayer("c", {
 			gen += upgradeEffect(upg[0], upg[1]);
 		};
 		if (hasUpgrade("c", 41)) gen += upgradeEffect("c", 41).div(100).toNumber();
-		if (hasUpgrade("pl", 14)) gen += 0.1;
+		if (hasUpgrade("pl", 14)) gen += upgradeEffect("pl", 14);
 		return gen;
 	},
 	automate() {
@@ -685,10 +685,10 @@ addLayer("q", {
 	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
-		if (hasUpgrade("q", 51)) gen += 1e28;
+		if (hasUpgrade("q", 51)) gen += upgradeEffect("q", 51);
 		if (hasMilestone("a", 8)) gen += 0.01;
 		if (hasMilestone("a", 9)) gen += 0.09;
-		if (hasUpgrade("pl", 22)) gen += 0.1;
+		if (hasUpgrade("pl", 22)) gen += upgradeEffect("pl", 22);
 		return gen;
 	},
 	automate() {
@@ -1034,6 +1034,7 @@ addLayer("q", {
 			title() { return "<b" + getColorClass(this, TITLE) + "Quark of the Flow" },
 			description: "gain +1e30% of your quark gain per second",
 			cost: "1e825",
+			effect: 1e28,
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade("q", 45) },
 		},
 		52: {
@@ -1513,9 +1514,9 @@ addLayer("h", {
 	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
-		if (hasUpgrade("h", 74)) gen += 6e64;
-		if (hasMilestone("s", 9)) gen += 0.001;
-		if (hasUpgrade("pl", 32)) gen += 0.1;
+		if (hasUpgrade("h", 74)) gen += upgradeEffect("h", 74);
+		if (hasMilestone("s", 9)) gen += milestoneEffect("s", 9);
+		if (hasUpgrade("pl", 32)) gen += upgradeEffect("pl", 32);
 		return gen;
 	},
 	automate() {
@@ -1845,6 +1846,7 @@ addLayer("h", {
 			title() { return "<b" + getColorClass(this, TITLE) + "Hex of the Flow" },
 			description: "gain +6e66% of your hex gain per second",
 			cost: "1e977",
+			effect: 6e64,
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade("h", 61) && hasUpgrade("h", 62) && hasUpgrade("h", 63) && hasUpgrade("h", 64) },
 		},
 		81: {
@@ -1968,8 +1970,8 @@ addLayer("ds", {
 	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
-		if (hasMilestone("s", 10)) gen += 0.00001;
-		if (hasUpgrade("pl", 34)) gen += 0.1;
+		if (hasMilestone("s", 10)) gen += milestoneEffect("s", 10);
+		if (hasUpgrade("pl", 34)) gen += upgradeEffect("pl", 34);
 		return gen;
 	},
 	automate() {
@@ -2910,19 +2912,12 @@ addLayer("p", {
 		// init
 		let mult = newDecimalOne();
 		// mult
-		if (hasUpgrade("p", 15)) mult = mult.mul(upgradeEffect("p", 15));
-		if (hasUpgrade("p", 21)) mult = mult.mul(upgradeEffect("p", 21));
+		mult = applyUpgrades(mult, {p: [15, 21, 73, 81], pl: [44]});
 		if (hasUpgrade("ds", 21) && hasUpgrade("ds", 23) && hasUpgrade("ds", 24) && hasUpgrade("p", 31)) mult = mult.mul(player.A.points.pow(2).div(100));
 		if (hasUpgrade("p", 41)) mult = mult.mul(tmp.p.hymnEffect);
-		if (hasUpgrade("p", 62)) {
-			mult = mult.mul(upgradeEffect("p", 62));
-			if (hasUpgrade("p", 63)) mult = mult.mul(upgradeEffect("p", 63));
-		};
-		if (hasUpgrade("p", 73)) mult = mult.mul(upgradeEffect("p", 73));
-		if (hasUpgrade("p", 81)) mult = mult.mul(upgradeEffect("p", 81));
+		mult = applyUpgradeSquence(mult, "p", [62, 63]);
 		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated && !(hasMilestone("gi", 19) && player.h.limitsBroken >= 4)) mult = mult.mul(tmp.gi.effect);
 		if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) mult = mult.mul(tmp.w.effect[0]);
-		if (hasUpgrade("pl", 44)) mult = mult.mul(upgradeEffect("pl", 44));
 		// pow
 		if (hasChallenge("ch", 12)) mult = mult.pow(challengeEffect("ch", 12));
 		// return
@@ -2933,10 +2928,8 @@ addLayer("p", {
 	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
-		if (hasMilestone("s", 7)) {
-			gen += 0.005;
-			if (hasMilestone("s", 15)) gen += 0.045;
-		};
+		if (hasMilestone("s", 7)) gen += milestoneEffect("s", 7);
+		if (hasMilestone("s", 15)) gen += milestoneEffect("s", 15);
 		return gen;
 	},
 	automate() {
@@ -2990,23 +2983,17 @@ addLayer("p", {
 	},
 	effect() {
 		let effBoost = new Decimal(0.01);
-		let effEx = newDecimalOne();
-		if (hasMilestone("p", 1)) effBoost = effBoost.mul(2);
-		if (hasUpgrade("p", 13)) effBoost = effBoost.mul(upgradeEffect("p", 13));
-		if (hasUpgrade("p", 32)) effBoost = effBoost.mul(upgradeEffect("p", 32));
-		if (hasUpgrade("p", 33)) effBoost = effBoost.mul(upgradeEffect("p", 33));
-		if (hasUpgrade("p", 42)) effBoost = effBoost.mul(upgradeEffect("p", 42));
-		if (hasMilestone("p", 2)) effEx = new Decimal(1.5);
-		if (hasMilestone("p", 3)) effEx = new Decimal(1.6);
-		let eff = effBoost.mul(player.p.points).pow(effEx);
+		let effExp = 1;
+		if (hasMilestone("p", 1)) effBoost = effBoost.mul(milestoneEffect("p", 1));
+		effBoost = applyUpgrades(effBoost, {p: [13, 32, 33, 42]});
+		if (hasMilestone("p", 2)) effExp = 1.5;
+		if (hasMilestone("p", 3)) effExp = 1.6;
+		let eff = effBoost.mul(player.p.points).pow(effExp);
 		eff = softcap(eff, new Decimal(SOFTCAPS.p_eff[0]()), SOFTCAPS.p_eff[1]());
 		if (hasUpgrade("p", 71)) eff = eff.mul(upgradeEffect("p", 71));
 		return eff;
 	},
-	effectDescription() {
-		if (tmp.p.effect.gt(SOFTCAPS.p_eff[0]())) return 'which are generating <h2 class="layer-p">' + format(tmp.p.effect) + "</h2> divinity/sec (softcapped)";
-		return 'which are generating <h2 class="layer-p">' + format(tmp.p.effect) + "</h2> divinity/sec";
-	},
+	effectDescription() { return "which are generating <h2 class='layer-p'>" + format(tmp.p.effect) + "</h2> divinity/sec" + (tmp.p.effect.gt(SOFTCAPS.p_eff[0]()) ? " (softcapped)" : "") },
 	doReset(resettingLayer) {
 		if (hasMilestone("ei", 3) && resettingLayer == "ei") return;
 		if (hasMilestone("w", 10) && resettingLayer == "w") return;
@@ -3041,8 +3028,8 @@ addLayer("p", {
 			player.p.divinity = player.p.divinity.add(tmp.p.effect.mul(diff));
 		};
 		if (hasMilestone("s", 8)) {
-			let gen = 0.002;
-			if (hasMilestone("s", 16)) gen += 0.023;
+			let gen = milestoneEffect("s", 8);
+			if (hasMilestone("s", 16)) gen += milestoneEffect("s", 16);
 			if (hasUpgrade("p", 22)) {
 				let mult = newDecimalOne();
 				if (hasUpgrade("p", 61)) mult = mult.mul(upgradeEffect("p", 61));
@@ -3079,6 +3066,7 @@ addLayer("p", {
 			1: {
 				requirement: 20,
 				effectDescription: "prayers generate twice as much divinity",
+				effect: 2,
 			},
 			2: {
 				requirements: [2500, 250],
@@ -3672,19 +3660,23 @@ addLayer("s", {
 			},
 			7: {
 				requirement: 8,
-				effectDescription: "gain 0.5% of your prayer gain per second",
+				effectDescription: "gain +0.5% of your prayer gain per second",
+				effect: 0.005,
 			},
 			8: {
 				requirement: 9,
-				effectDescription: "gain 0.2% of your holiness and hymn gain per second",
+				effectDescription: "gain +0.2% of your holiness and hymn gain per second",
+				effect: 0.002,
 			},
 			9: {
 				requirement: 10,
-				effectDescription: "gain 0.1% of your hex gain per second",
+				effectDescription: "gain +0.1% of your hex gain per second",
+				effect: 0.001,
 			},
 			10: {
 				requirement: 14,
-				effectDescription: "gain 0.001% of your demon soul gain per second",
+				effectDescription: "gain +0.001% of your demon soul gain per second",
+				effect: 0.00001,
 			},
 			11: {
 				requirement: 16,
@@ -3705,10 +3697,12 @@ addLayer("s", {
 			15: {
 				requirement: 24,
 				effectDescription: "gain +4.5% of prayer gain per second",
+				effect: 0.045,
 			},
 			16: {
 				requirement: 25,
 				effectDescription: "gain +2.3% of holiness and hymn gain per second",
+				effect: 0.023,
 			},
 			17: {
 				requirement: 26,
@@ -3929,9 +3923,9 @@ addLayer("d", {
 	},
 	doReset(resettingLayer) {},
 	update(diff) {
-		if (player.d.buyables[11].gt(tmp.d.buyables[11].purchaseLimit)) player.d.buyables[11] = new Decimal(tmp.d.buyables[11].purchaseLimit);
-		if (player.d.buyables[12].gt(tmp.d.buyables[12].purchaseLimit)) player.d.buyables[12] = new Decimal(tmp.d.buyables[12].purchaseLimit);
-		if (player.d.buyables[21].gt(tmp.d.buyables[21].purchaseLimit)) player.d.buyables[21] = new Decimal(tmp.d.buyables[21].purchaseLimit);
+		for (const id of [11, 12, 21]) {
+			if (player.d.buyables[id].gt(tmp.d.buyables[id].purchaseLimit)) player.d.buyables[id] = new Decimal(tmp.d.buyables[id].purchaseLimit);
+		};
 	},
 	devotion() { return tmp.d.buyables[11].devotion.add(tmp.d.buyables[12].devotion).add(tmp.d.buyables[21].devotion) },
 	devotionEffect() {
@@ -7768,6 +7762,7 @@ addLayer("pl", {
 		12: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Airy Essence</b>" },
 			description: "gains 10% of your essence gain per second",
+			effect: 0.1,
 			cost: 5,
 			currencyInternalName: "air",
 			currencyLayer: "pl",
@@ -7788,6 +7783,7 @@ addLayer("pl", {
 		14: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Airy Cores</b>" },
 			description: "gains 10% of your core gain per second",
+			effect: 0.1,
 			cost: 20,
 			currencyInternalName: "air",
 			currencyLayer: "pl",
@@ -7808,6 +7804,7 @@ addLayer("pl", {
 		22: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Airy Quarks</b>" },
 			description: "gains 10% of your quark gain per second",
+			effect: 0.1,
 			cost: 200,
 			currencyInternalName: "air",
 			currencyLayer: "pl",
@@ -7848,6 +7845,7 @@ addLayer("pl", {
 		32: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Airy Hexes</b>" },
 			description: "gains 10% of your hex gain per second",
+			effect: 0.1,
 			cost: 40_000,
 			currencyInternalName: "air",
 			currencyLayer: "pl",
@@ -7868,6 +7866,7 @@ addLayer("pl", {
 		34: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Airy Souls</b>" },
 			description: "gains 10% of your demon soul gain per second",
+			effect: 0.1,
 			cost: 800_000,
 			currencyInternalName: "air",
 			currencyLayer: "pl",
