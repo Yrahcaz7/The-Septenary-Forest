@@ -28,7 +28,7 @@
 .fill {
 	background-color: var(--color);
 	z-index: 2;
-    position: absolute;
+	position: absolute;
 	overflow: hidden;
 	margin-left: -0.5px;
 	transition-duration: 0.2s;

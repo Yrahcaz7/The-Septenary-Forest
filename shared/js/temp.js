@@ -47,7 +47,7 @@ function setupTemp() {
 		oomps: newDecimalZero(),
 		screenWidth: 0,
 		screenHeight: 0,
-    };
+	};
 	updateWidth();
 	temp = tmp;
 };

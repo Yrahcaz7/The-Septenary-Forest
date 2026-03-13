@@ -425,7 +425,7 @@ function loadVue(mainPage = false) {
 			stop() {
 				clearInterval(this.interval);
 				this.interval = false;
-			  	this.time = 0;
+				this.time = 0;
 			},
 		},
 		template: template(`<div v-if="tmp[layer].buyables && tmp[layer].buyables[data] !== undefined && tmp[layer].buyables[data].unlocked" style="display: grid">
@@ -511,7 +511,7 @@ function loadVue(mainPage = false) {
 			stop() {
 				clearInterval(this.interval);
 				this.interval = false;
-			  	this.time = 0;
+				this.time = 0;
 			},
 		},
 		template: template(`<button v-if="tmp[layer].clickables && tmp[layer].clickables[data] !== undefined && tmp[layer].clickables[data].unlocked" :class="{
@@ -596,7 +596,7 @@ function loadVue(mainPage = false) {
 			stop() {
 				clearInterval(this.interval);
 				this.interval = false;
-			  	this.time = 0;
+				this.time = 0;
 			},
 		},
 		template: template(`<button v-if="tmp[layer].grid && player[layer].grid[data] !== undefined && run(layers[layer].grid.getUnlocked, layers[layer].grid, data)" :class="{

@@ -622,7 +622,7 @@ addLayer("c", {
 		42: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Core of Recursion" },
 			description: "multiplies core gain based on your cores",
-			effect() { return  player.c.points.add(1).log10().add(1).pow(80) },
+			effect() { return player.c.points.add(1).log10().add(1).pow(80) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: (log10(x+1)+1)^80";
@@ -1751,7 +1751,7 @@ addLayer("h", {
 			title() { return "<b" + getColorClass(this, TITLE) + "Numero Hex" },
 			description() { return "multiplies the effect of <b" + getColorClass(this, REF) + "Hex Numerals</b> based on your hexes" },
 			cost: 7500000,
-			effect() { return  player.points.add(1).pow(0.0001) },
+			effect() { return player.points.add(1).pow(0.0001) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: (x+1)^0.0001";
@@ -1763,7 +1763,7 @@ addLayer("h", {
 			title() { return "<b" + getColorClass(this, TITLE) + "Ultra Hexes" },
 			description() { return "multiplies the effect of <b" + getColorClass(this, REF) + "Extreme Hexes</b> based on your hexes" },
 			cost: 15000000,
-			effect() { return  player.h.points.add(1).pow(0.001) },
+			effect() { return player.h.points.add(1).pow(0.001) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: (x+1)^0.001";
@@ -4047,7 +4047,7 @@ addLayer("d", {
 				return getBuyableAmount(this.layer, this.id).mul(0.5);
 			},
 			effectDisplay(eff) { return format(eff) + "x" },
-			costDisplay(cost) { return "Devotion Reward: " + format(this.devotion()) + "<br><br>" + (hasMilestone("s", 34) ? "Req" : "Cost") + ": "  + formatWhole(cost) + " sanctums" },
+			costDisplay(cost) { return "Devotion Reward: " + format(this.devotion()) + "<br><br>" + (hasMilestone("s", 34) ? "Req" : "Cost") + ": " + formatWhole(cost) + " sanctums" },
 			boughtDisplay(x) { return "Times Sacrificed:" + (formatWhole(x).length >= 8 ? "<br>" : " ") + formatWhole(x) + "<br>/" + formatWhole(this.purchaseLimit) },
 			style() {
 				let backColors = "#224400, #336600";
@@ -5575,16 +5575,16 @@ addLayer("ei", {
 			unlocked() { return hasUpgrade("ei", 11) },
 		},
 		13: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "More Evil" },
+			title() { return "<b" + getColorClass(this, TITLE) + "More Evil" },
 			description: "reduces evil influence cost scaling<br>12 --> 7.75",
 			cost: 3,
 			unlocked() { return hasUpgrade("ei", 12) },
 		},
 		14: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Rising Conflict" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Rising Conflict" },
 			description: "multiplies evil power gain based on your good influence",
 			cost: 4,
-			effect() { return  player.gi.points.add(1).pow(0.75) },
+			effect() { return player.gi.points.add(1).pow(0.75) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: (x+1)^0.75";
@@ -5593,16 +5593,16 @@ addLayer("ei", {
 			unlocked() { return hasUpgrade("ei", 13) },
 		},
 		15: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Evil Laughter" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Evil Laughter" },
 			description: 'increases evil power\'s base gain<br>2 --> 4',
 			cost: 4,
 			unlocked() { return hasUpgrade("ei", 14) },
 		},
 		21: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "The Cycle Continues" },
-			description() { return  "multiplies the effect of <b" + getColorClass(this, REF) + "Cycle of Evil</b> based on your evil power" },
+			title() { return "<b" + getColorClass(this, TITLE) + "The Cycle Continues" },
+			description() { return "multiplies the effect of <b" + getColorClass(this, REF) + "Cycle of Evil</b> based on your evil power" },
 			cost: 4,
-			effect() { return  player.ei.power.add(1).log10().add(1) },
+			effect() { return player.ei.power.add(1).log10().add(1) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: log10(x+1)+1";
@@ -5611,10 +5611,10 @@ addLayer("ei", {
 			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		22: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Stronger Evil" },
-			description() { return  "multiplies the effect of <b" + getColorClass(this, REF) + "Evil Power Up</b> based on your evil power" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Stronger Evil" },
+			description() { return "multiplies the effect of <b" + getColorClass(this, REF) + "Evil Power Up</b> based on your evil power" },
 			cost: 5,
-			effect() { return  player.ei.power.add(1).pow(0.2) },
+			effect() { return player.ei.power.add(1).pow(0.2) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: (x+1)^0.2";
@@ -5623,16 +5623,16 @@ addLayer("ei", {
 			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		23: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Even More Evil" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Even More Evil" },
 			description: "reduces evil influence cost scaling<br>7.75 --> 7.25",
 			cost: 5,
 			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		24: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Daredevil" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Daredevil" },
 			description: "multiplies good influence gain based on your evil power",
 			cost: 6,
-			effect() { return  player.ei.power.add(1).log10().add(1).pow(0.0175) },
+			effect() { return player.ei.power.add(1).log10().add(1).pow(0.0175) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: (log10(x+1)+1)^0.0175";
@@ -5641,16 +5641,16 @@ addLayer("ei", {
 			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		25: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "The Evil Eye" },
+			title() { return "<b" + getColorClass(this, TITLE) + "The Evil Eye" },
 			description: 'increases evil power\'s base gain<br>4 --> 6',
 			cost: 6,
 			unlocked() { return player.ei.upgrades.length >= 5 },
 		},
 		31: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Demonic Cycle" },
-			description() { return  "multiplies the effect of <b" + getColorClass(this, REF) + "The Cycle Continues</b> based on your demon souls" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Demonic Cycle" },
+			description() { return "multiplies the effect of <b" + getColorClass(this, REF) + "The Cycle Continues</b> based on your demon souls" },
 			cost: 6,
-			effect() { return  player.ds.points.add(1).log10().add(1).pow(0.02) },
+			effect() { return player.ds.points.add(1).log10().add(1).pow(0.02) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: (log10(x+1)+1)^0.02";
@@ -5659,10 +5659,10 @@ addLayer("ei", {
 			unlocked() { return player.ei.upgrades.length >= 10 },
 		},
 		32: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Demonic Evil" },
-			description() { return  "multiplies the effect of <b" + getColorClass(this, REF) + "Stronger Evil</b> based on your demon souls" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Demonic Evil" },
+			description() { return "multiplies the effect of <b" + getColorClass(this, REF) + "Stronger Evil</b> based on your demon souls" },
 			cost: 7,
-			effect() { return  player.ds.points.add(1).log10().add(1).pow(0.9) },
+			effect() { return player.ds.points.add(1).log10().add(1).pow(0.9) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: (log10(x+1)+1)^0.9";
@@ -5671,16 +5671,16 @@ addLayer("ei", {
 			unlocked() { return player.ei.upgrades.length >= 10 },
 		},
 		33: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Evil Gathering" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Evil Gathering" },
 			description: "reduces evil influence cost scaling<br>7.25 --> 7",
 			cost: 7,
 			unlocked() { return player.ei.upgrades.length >= 10 },
 		},
 		34: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Greedy Evil" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Greedy Evil" },
 			description: "multiplies relic gain based on your evil power",
 			cost: 8,
-			effect() { return  player.ei.power.add(1).log10().add(1).pow(0.01) },
+			effect() { return player.ei.power.add(1).log10().add(1).pow(0.01) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: (log10(x+1)+1)^0.01";
@@ -5689,16 +5689,16 @@ addLayer("ei", {
 			unlocked() { return player.ei.upgrades.length >= 10 },
 		},
 		35: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Innate Evil" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Innate Evil" },
 			description: 'increases evil power\'s base gain<br>6 --> 8',
 			cost: 8,
 			unlocked() { return player.ei.upgrades.length >= 10 },
 		},
 		41: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Longer Cycle" },
-			description() { return  "multiplies the effect of <b" + getColorClass(this, REF) + "Demonic Cycle</b> based on your evil power" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Longer Cycle" },
+			description() { return "multiplies the effect of <b" + getColorClass(this, REF) + "Demonic Cycle</b> based on your evil power" },
 			cost: 8,
-			effect() { return  player.ei.power.add(1).log10().add(1).pow(0.06) },
+			effect() { return player.ei.power.add(1).log10().add(1).pow(0.06) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: (log10(x+1)+1)^0.06";
@@ -5707,10 +5707,10 @@ addLayer("ei", {
 			unlocked() { return player.ei.upgrades.length >= 15 },
 		},
 		42: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Crimson Evil" },
-			description() { return  "multiplies the effect of <b" + getColorClass(this, REF) + "Demonic Evil</b> based on your demon souls" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Crimson Evil" },
+			description() { return "multiplies the effect of <b" + getColorClass(this, REF) + "Demonic Evil</b> based on your demon souls" },
 			cost: 9,
-			effect() { return  player.ds.points.add(1).log10().add(1).pow(0.5) },
+			effect() { return player.ds.points.add(1).log10().add(1).pow(0.5) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: (log10(x+1)+1)^0.5";
@@ -5719,16 +5719,16 @@ addLayer("ei", {
 			unlocked() { return player.ei.upgrades.length >= 15 },
 		},
 		43: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Evil Condensing" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Evil Condensing" },
 			description: "reduces evil influence cost scaling<br>7 --> 6.75",
 			cost: 9,
 			unlocked() { return player.ei.upgrades.length >= 15 },
 		},
 		44: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Evil Infiltration" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Evil Infiltration" },
 			description: "multiplies evil power gain based on your sanctums",
 			cost: 10,
-			effect() { return  player.s.points.add(1).log10().add(1).pow(4) },
+			effect() { return player.s.points.add(1).log10().add(1).pow(4) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: (log10(x+1)+1)^4";
@@ -5737,16 +5737,16 @@ addLayer("ei", {
 			unlocked() { return player.ei.upgrades.length >= 15 },
 		},
 		45: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Evil Schemes" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Evil Schemes" },
 			description: 'increases evil power\'s base gain<br>8 --> 10',
 			cost: 10,
 			unlocked() { return player.ei.upgrades.length >= 15 },
 		},
 		52: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Bloody Evil" },
-			description() { return  "multiplies the effect of <b" + getColorClass(this, REF) + "Crimson Evil</b> based on your evil power" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Bloody Evil" },
+			description() { return "multiplies the effect of <b" + getColorClass(this, REF) + "Crimson Evil</b> based on your evil power" },
 			cost: 11,
-			effect() { return  player.ei.power.add(1).pow(0.15) },
+			effect() { return player.ei.power.add(1).pow(0.15) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: (x+1)^0.15";
@@ -5755,16 +5755,16 @@ addLayer("ei", {
 			unlocked() { return player.ei.upgrades.length >= 20 },
 		},
 		53: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Amassing Evil" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Amassing Evil" },
 			description: "reduces evil influence cost scaling<br>6.75 --> 6.55",
 			cost: 12,
 			unlocked() { return player.ei.upgrades.length >= 20 },
 		},
 		54: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Determination" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Determination" },
 			description: "multiplies evil influence gain based on your good influence",
 			cost: 13,
-			effect() { return  player.gi.points.add(1).log10().add(1).pow(0.8) },
+			effect() { return player.gi.points.add(1).log10().add(1).pow(0.8) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: (log10(x+1)+1)^0.8";
@@ -5773,10 +5773,10 @@ addLayer("ei", {
 			unlocked() { return player.ei.upgrades.length >= 20 },
 		},
 		62: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Empower Evil" },
-			description() { return  "multiplies the effect of <b" + getColorClass(this, REF) + "Bloody Evil</b> based on your evil power" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Empower Evil" },
+			description() { return "multiplies the effect of <b" + getColorClass(this, REF) + "Bloody Evil</b> based on your evil power" },
 			cost: 15,
-			effect() { return  player.ei.power.add(1).pow(0.1) },
+			effect() { return player.ei.power.add(1).pow(0.1) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: (x+1)^0.1";
@@ -5785,16 +5785,16 @@ addLayer("ei", {
 			unlocked() { return player.ei.upgrades.length >= 23 },
 		},
 		63: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Army of Evil" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Army of Evil" },
 			description: "reduces evil influence cost scaling<br>6.55 --> 6.45",
 			cost: 16,
 			unlocked() { return player.ei.upgrades.length >= 23 },
 		},
 		64: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Evil Rituals" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Evil Rituals" },
 			description: "multiplies evil influence gain based on your sanctums",
 			cost: 17,
-			effect() { return  player.gi.points.add(1).log10().add(1).pow(0.55) },
+			effect() { return player.gi.points.add(1).log10().add(1).pow(0.55) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: (log10(x+1)+1)^0.55";
@@ -5803,10 +5803,10 @@ addLayer("ei", {
 			unlocked() { return player.ei.upgrades.length >= 23 },
 		},
 		72: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Powerful Evil" },
-			description() { return  "multiplies the effect of <b" + getColorClass(this, REF) + "Empower Evil</b> based on your evil power" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Powerful Evil" },
+			description() { return "multiplies the effect of <b" + getColorClass(this, REF) + "Empower Evil</b> based on your evil power" },
 			cost: 19,
-			effect() { return  player.ei.power.add(1).pow(0.145) },
+			effect() { return player.ei.power.add(1).pow(0.145) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: (x+1)^0.145";
@@ -5815,16 +5815,16 @@ addLayer("ei", {
 			unlocked() { return player.ei.upgrades.length >= 26 },
 		},
 		73: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Evil Kingdom" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Evil Kingdom" },
 			description: "reduces evil influence cost scaling<br>6.45 --> 6.25",
 			cost: 22,
 			unlocked() { return player.ei.upgrades.length >= 26 },
 		},
 		74: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Evil Prayers" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Evil Prayers" },
 			description: "multiplies evil power gain based on your prayers",
 			cost: 25,
-			effect() { return  player.p.points.add(1).log10().add(1).pow(3.6) },
+			effect() { return player.p.points.add(1).log10().add(1).pow(3.6) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
 				if (options.nerdMode) text += "<br>formula: (log10(x+1)+1)^3.6";
@@ -5833,7 +5833,7 @@ addLayer("ei", {
 			unlocked() { return player.ei.upgrades.length >= 26 },
 		},
 		83: {
-			title() { return  "<b" + getColorClass(this, TITLE) + "Infinite Evil" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Infinite Evil" },
 			description: "reduces evil influence cost scaling<br>6.25 --> 5.75",
 			cost: 30,
 			unlocked() { return player.ei.upgrades.length >= 29 },

@@ -295,5 +295,5 @@ const SAVE_INTERVAL = setInterval(() => {
 }, 5000);
 
 onbeforeunload = () => {
-    if (player.autosave) save();
+	if (player.autosave) save();
 };
