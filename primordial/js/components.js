@@ -78,7 +78,7 @@ const customComponents = {
 	'glitch-milestones': {
 		props: ['layer', 'data'],
 		data() {return {tmp, milestoneShown}},
-		template: template(`<div v-if="tmp[layer].milestones">
+		template: template(`<div v-if="tmp[layer].milestones" class="milestones">
 			<table>
 				<tbody>
 					<template v-for="id in (data === undefined ? Object.keys(tmp[layer].milestones) : data)">
@@ -186,7 +186,7 @@ const customComponents = {
 			stop() {
 				clearInterval(this.interval);
 				this.interval = false;
-			  	this.time = 0;
+				this.time = 0;
 			},
 		},
 		template: template(`<div v-if="tmp[layer].buyables && tmp[layer].buyables[data] !== undefined && tmp[layer].buyables[data].unlocked" style="display: grid">
@@ -241,7 +241,7 @@ const customComponents = {
 			stop() {
 				clearInterval(this.interval);
 				this.interval = false;
-			  	this.time = 0;
+				this.time = 0;
 			},
 		},
 		template: template(`<button v-if="tmp[layer].clickables && tmp[layer].clickables[data] !== undefined && tmp[layer].clickables[data].unlocked" :class="{

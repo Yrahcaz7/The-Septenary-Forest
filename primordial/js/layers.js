@@ -25,30 +25,18 @@ addLayer("e", {
 		// init
 		let mult = newDecimalOne();
 		// mul
-		if (hasUpgrade("e", 13)) mult = mult.mul(upgradeEffect("e", 13));
-		if (hasUpgrade("e", 22)) {
-			mult = mult.mul(upgradeEffect("e", 22));
-			if (hasUpgrade("e", 41)) {
-				mult = mult.mul(upgradeEffect("e", 41));
-				if (hasUpgrade("e", 42)) mult = mult.mul(upgradeEffect("e", 42));
-		}};
-		if (hasUpgrade("c", 11)) mult = mult.mul(upgradeEffect("c", 11));
+		mult = applyUpgrades(mult, {e: [13], c: [11], q: [32], a: [73], p: [11, 83], m: [11, 22]});
+		mult = applyUpgradeSquence(mult, "e", [22, 41, 42]);
 		if (hasUpgrade("q", 12) && hasUpgrade("q", 14)) {
 			mult = mult.mul(upgradeEffect("q", 14));
 			if (hasUpgrade("q", 15)) mult = mult.mul(upgradeEffect("q", 15));
 		};
-		if (hasUpgrade("q", 32)) mult = mult.mul(upgradeEffect("q", 32));
-		if (hasUpgrade("a", 73)) mult = mult.mul(upgradeEffect("a", 73));
-		if (hasUpgrade("p", 11)) mult = mult.mul(upgradeEffect("p", 11));
-		if (hasUpgrade("m", 11)) mult = mult.mul(upgradeEffect("m", 11));
-		if (hasUpgrade("m", 22)) mult = mult.mul(upgradeEffect("m", 22));
 		if (hasBuyable("e", 11)) mult = mult.mul(buyableEffect("e", 11));
 		if (hasBuyable("e", 12)) mult = mult.mul(buyableEffect("e", 12)[1]);
 		if (hasBuyable("c", 12)) mult = mult.mul(buyableEffect("c", 12));
 		if (hasBuyable("sp", 12)) mult = mult.mul(buyableEffect("sp", 12)[0]);
 		if (hasBuyable("gi", 12)) mult = mult.mul(buyableEffect("gi", 12));
 		if (hasUpgrade("p", 22)) mult = mult.mul(player.p.holiness.add(1).pow(0.055));
-		if (hasUpgrade("p", 83)) mult = mult.mul(upgradeEffect("p", 83));
 		if (tmp.s.effect.gt(1) && !tmp.s.deactivated) mult = mult.mul(tmp.s.effect);
 		if (new Decimal(tmp.r.effect[2]).gt(1) && !tmp.r.deactivated) mult = mult.mul(tmp.r.effect[2]);
 		if (hasUpgrade("ds", 21)) mult = mult.mul(player.A.points.mul(0.2));
@@ -70,15 +58,11 @@ addLayer("e", {
 		if (hasUpgrade("e", 43)) gen += 2e20;
 		if (hasMilestone("c", 3)) {
 			gen += 0.5;
-			if (hasUpgrade("h", 51)) {
+			for (const id of [51, 54, 61, 64]) {
+				if (!hasUpgrade("h", id)) break;
 				gen += 0.25;
-				if (hasUpgrade("h", 54)) {
-					gen += 0.25;
-					if (hasUpgrade("h", 61)) {
-						gen += 0.25;
-						if (hasUpgrade("h", 64)) {
-							gen += 0.25;
-		}}}}};
+			};
+		};
 		if (hasUpgrade("pl", 12)) gen += 0.1;
 		return gen;
 	},
@@ -246,7 +230,7 @@ addLayer("e", {
 			unlocked() { return hasUpgrade("e", 22) },
 		},
 		31: {
-			title() { return "<b" + getColorClass(this, TITLE) + "Infinite Recursion" },
+			title() { return "<b" + getColorClass(this, TITLE) + "Higher Order" },
 			description() { return "boosts the effect of <b" + getColorClass(this, REF) + "Recurring Recursion</b> based on your points" },
 			cost: 1e11,
 			effect() { return player.points.add(1).pow(0.01) },
@@ -271,7 +255,7 @@ addLayer("e", {
 		},
 		33: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Essence Network" },
-			description() { return "boosts the effect of <b" + getColorClass(this, REF) + "Essence Influence</b> based on your essence" },
+			description() { return "boosts the effect of <b" + getColorClass(this, REF) + "Essence Influence</b> (after hardcap) based on your essence" },
 			cost: 5e55,
 			effect() { return player.e.points.add(1).pow(0.025) },
 			effectDisplay(eff) {
@@ -1634,19 +1618,12 @@ addLayer("h", {
 	upgrades: {
 		11: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Hex Leak" },
-			description() {
-				if (hasUpgrade("ds", 11)) return "multiplies point and hex gain based on your hexes";
-				return "multiplies point gain based on your hexes";
-			},
+			description() { return "multiplies point gain" + (hasUpgrade("ds", 11) ? " and hex gain" : "") + " based on your hexes" },
 			cost: 1,
-			effect() { return  player.h.points.add(1).pow(0.005) },
+			effect() { return player.h.points.add(1).pow(0.005) },
 			effectDisplay(eff) {
 				let text = format(eff) + "x";
-				if (hasUpgrade("ds", 11)) text += "<br>and " + format(eff) + "x";
-				if (options.nerdMode) {
-					if (hasUpgrade("ds", 11)) text += "<br>formula (for both): (x+1)^0.005";
-					else text += "<br>formula: (x+1)^0.005";
-				};
+				if (options.nerdMode) text += "<br>formula: (x+1)^0.005";
 				return text;
 			},
 		},

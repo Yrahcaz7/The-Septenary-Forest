@@ -360,53 +360,52 @@ function canGenPoints() {
 	return !inChallenge("r", 11);
 };
 
+/**
+ * Returns a version of `num` that has the specified upgrades applied to it.
+ * @param {Decimal} num - The Decimal to use. This may or may not be mutated, so don't rely on it.
+ * @param {Object.<string, number[]>} upgrades - An object where keys are layer ids and values are arrays of upgrade ids.
+ * @param {string} operation - The operation that the upgrades perform. Must be a valid Decimal function name. Defaults to `"mul"`.
+ */
+function applyUpgrades(num, upgrades, operation = "mul") {
+	for (const layer in upgrades) {
+		for (const id of upgrades[layer]) {
+			if (hasUpgrade(layer, id)) num = num[operation](upgradeEffect(layer, id));
+		};
+	};
+	return num;
+};
+
+/**
+ * Returns a version of `num` that has the upgrade sequence defined by `layer` and `ids` applied to it.
+ * @param {Decimal} num - The Decimal to use. This may or may not be mutated, so don't rely on it.
+ * @param {string} layer - The layer that contains the upgrade sequence.
+ * @param {number[]} ids - An array containing the id of each upgrade in the sequence, in order.
+ * @param {string} operation - The operation that the upgrades perform. Must be a valid Decimal function name. Defaults to `"mul"`.
+ */
+function applyUpgradeSquence(num, layer, ids, operation = "mul") {
+	for (const id of ids) {
+		if (!hasUpgrade(layer, id)) break;
+		num = num[operation](upgradeEffect(layer, id));
+	};
+	return num;
+};
+
 function getPointGen() {
 	// init
 	let gain = newDecimalOne();
 	// mul
 	if (hasUpgrade("e", 11)) gain = gain.mul(1.5);
-	if (hasUpgrade("e", 12)) {
-		gain = gain.mul(upgradeEffect("e", 12));
-		if (hasUpgrade("e", 33)) gain = gain.mul(upgradeEffect("e", 33));
+	for (const sequence of [["e", [12, 33]], ["e", [21, 23, 31]], ["q", [12, 13]], ["q", [34, 35, 41]], ["h", [11, 21, 31, 41]]]) {
+		gain = applyUpgradeSquence(gain, ...sequence);
 	};
-	if (hasUpgrade("e", 21)) {
-		gain = gain.mul(upgradeEffect("e", 21));
-		if (hasUpgrade("e", 23)) {
-			gain = gain.mul(upgradeEffect("e", 23));
-			if (hasUpgrade("e", 31)) gain = gain.mul(upgradeEffect("e", 31));
-	}};
-	if (hasUpgrade("e", 32)) gain = gain.mul(upgradeEffect("e", 32));
-	if (hasUpgrade("q", 12)) {
-		gain = gain.mul(upgradeEffect("q", 12));
-		if (hasUpgrade("q", 13)) gain = gain.mul(upgradeEffect("q", 13));
-	};
-	if (hasUpgrade("q", 34)) {
-		gain = gain.mul(upgradeEffect("q", 34));
-		if (hasUpgrade("q", 35)) {
-			gain = gain.mul(upgradeEffect("q", 35));
-			if (hasUpgrade("q", 41)) gain = gain.mul(upgradeEffect("q", 41));
-	}};
-	if (hasUpgrade("q", 55)) gain = gain.mul(upgradeEffect("q", 55));
-	if (hasUpgrade("h", 11)) {
-		gain = gain.mul(upgradeEffect("h", 11));
-		if (hasUpgrade("h", 21)) {
-			gain = gain.mul(upgradeEffect("h", 21));
-			if (hasUpgrade("h", 31)) {
-				gain = gain.mul(upgradeEffect("h", 31));
-				if (hasUpgrade("h", 41)) gain = gain.mul(upgradeEffect("h", 41));
-	}}};
-	if (hasUpgrade("h", 73)) gain = gain.mul(upgradeEffect("h", 73));
-	if (hasUpgrade("p", 72)) gain = gain.mul(upgradeEffect("p", 72));
-	if (hasUpgrade("m", 52)) gain = gain.mul(upgradeEffect("m", 52));
+	gain = applyUpgrades(gain, {e: [32], q: [55], h: [73], p: [72, 82], m: [52], pl: [11]});
 	if (hasBuyable("c", 11)) gain = gain.mul(buyableEffect("c", 11));
 	if (hasBuyable("sp", 13)) gain = gain.mul(buyableEffect("sp", 13)[0]);
 	if (player.p.unlocked && !tmp.p.deactivated) gain = gain.mul(player.p.divinity.add(1).pow(0.1));
-	if (hasUpgrade("p", 82)) gain = gain.mul(upgradeEffect("p", 82));
 	if (getActivatedRelics() >= 2) gain = gain.mul(tmp.r.effect[2]);
 	if (hasUpgrade("ds", 21) && hasUpgrade("ds", 24)) gain = gain.mul(player.A.points.mul(0.2));
 	else gain = gain.mul(player.A.points.mul(0.1).add(1));
 	if (new Decimal(tmp.w.effect[0]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[0]);
-	if (hasUpgrade("pl", 11)) gain = gain.mul(upgradeEffect("pl", 11));
 	// div
 	if (hasBuyable("sp", 12)) gain = gain.mul(buyableEffect("sp", 12)[1]);
 	if (inChallenge("ds", 11)) gain = gain.div(10_000);
