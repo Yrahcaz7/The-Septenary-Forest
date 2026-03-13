@@ -304,7 +304,7 @@ function loadVue(mainPage = false) {
 	addNormalComponent('milestones', {
 		props: ['layer', 'data'],
 		data() {return {tmp, milestoneShown}},
-		template: template(`<div v-if="tmp[layer].milestones">
+		template: template(`<div v-if="tmp[layer].milestones" class="milestones">
 			<table>
 				<tbody>
 					<template v-for="id in (data === undefined ? Object.keys(tmp[layer].milestones) : data)">
