@@ -1939,6 +1939,10 @@ addLayer("ds", {
 	}},
 	color: "#BA0035",
 	branches: ["ei"],
+	tooltip() {
+		if (options.nerdMode && tmp.ds.tabFormat.Purification.unlocked) return formatWhole(getPurifiedDemonSouls()) + " purified demon souls and " + formatWhole(player.ds.points) + " total demon souls";
+		return formatWhole(player.ds.points) + " demon souls";
+	},
 	requires: 1e60,
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
