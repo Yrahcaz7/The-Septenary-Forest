@@ -60,7 +60,7 @@ addLayer("e", {
 			gen += 0.5;
 			for (const id of [51, 54, 61, 64]) {
 				if (!hasUpgrade("h", id)) break;
-				gen += 0.25;
+				gen += upgradeEffect("h", id);
 			};
 		};
 		if (hasUpgrade("pl", 12)) gen += 0.1;
@@ -159,9 +159,10 @@ addLayer("e", {
 	},
 	upgrades: {
 		11: {
-			title() { return "<b" + getColorClass(this, TITLE) + "Faster Points" },
+			title() { return "<b" + getColorClass(this, TITLE) + "More Points" },
 			description: "multiplies point gain by 1.5",
 			cost: 1,
+			effect: 1.5,
 		},
 		12: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Essence Influence" },
@@ -327,23 +328,10 @@ addLayer("c", {
 		// init
 		let mult = newDecimalOne();
 		// mul
-		if (hasUpgrade("e", 32)) mult = mult.mul(upgradeEffect("e", 32));
-		if (hasUpgrade("c", 12)) mult = mult.mul(upgradeEffect("c", 12));
-		if (hasUpgrade("c", 42)) mult = mult.mul(upgradeEffect("c", 42));
-		if (hasUpgrade("q", 21)) {
-			mult = mult.mul(upgradeEffect("q", 21));
-			if (hasUpgrade("q", 22)) mult = mult.mul(upgradeEffect("q", 22));
+		mult = applyUpgrades(mult, {e: [32], c: [12, 42], q: [33], h: [24, 72], m: [21]});
+		for (const sequence of [["q", [21, 22]], ["h", [13, 23, 33]]]) {
+			mult = applyUpgradeSquence(mult, ...sequence);
 		};
-		if (hasUpgrade("q", 33)) mult = mult.mul(upgradeEffect("q", 33));
-		if (hasUpgrade("h", 13)) {
-			mult = mult.mul(upgradeEffect("h", 13));
-			if (hasUpgrade("h", 23)) {
-				mult = mult.mul(upgradeEffect("h", 23));
-				if (hasUpgrade("h", 33)) mult = mult.mul(upgradeEffect("h", 33));
-		}};
-		if (hasUpgrade("h", 24)) mult = mult.mul(3);
-		if (hasUpgrade("h", 72)) mult = mult.mul(upgradeEffect("h", 72));
-		if (hasUpgrade("m", 21)) mult = mult.mul(upgradeEffect("m", 21));
 		if (hasBuyable("e", 12)) mult = mult.mul(buyableEffect("e", 12)[0]);
 		if (hasBuyable("c", 13)) mult = mult.mul(buyableEffect("c", 13));
 		if (hasUpgrade("ds", 21) && hasUpgrade("ds", 23)) mult = mult.mul(player.A.points.pow(2).div(100));
@@ -364,15 +352,10 @@ addLayer("c", {
 	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
-		if (hasUpgrade("h", 43)) {
-			gen += 0.01;
-			if (hasUpgrade("h", 44)) {
-				gen += 0.09;
-				if (hasUpgrade("h", 52)) {
-					gen += 0.15;
-					if (hasUpgrade("c", 33)) {
-						gen += 0.25;
-		}}}};
+		for (const upg of [["h", 43], ["h", 44], ["h", 52], ["c", 33]]) {
+			if (!hasUpgrade(upg[0], upg[1])) break;
+			gen += upgradeEffect(upg[0], upg[1]);
+		};
 		if (hasUpgrade("c", 41)) gen += upgradeEffect("c", 41).div(100).toNumber();
 		if (hasUpgrade("pl", 14)) gen += 0.1;
 		return gen;
@@ -602,8 +585,9 @@ addLayer("c", {
 		},
 		33: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Core Liberation" },
-			description() { return "if you own <b" + getColorClass(this, REF, "h") + "Core Production Line</b> and all subsequent upgrades, gain +25% of your core gain per second" },
+			description() { return "gains +25% of your core gain per second if you own <b" + getColorClass(this, REF, "h") + "Core Production Line</b> and all subsequent upgrades" },
 			cost: 1e80,
+			effect: 0.25,
 			unlocked() { return (hasUpgrade("h", 53) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade("c", 32) },
 		},
 		41: {
@@ -1658,6 +1642,7 @@ addLayer("h", {
 		14: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Boost Hexes" },
 			description: "quadruples hex gain",
+			effect: 4,
 			cost: 25,
 		},
 		21: {
@@ -1702,6 +1687,7 @@ addLayer("h", {
 		24: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Boost Cores" },
 			description: "triples core gain",
+			effect: 3,
 			cost: 25000,
 			unlocked() { return hasUpgrade("h", 11) && hasUpgrade("h", 12) && hasUpgrade("h", 13) && hasUpgrade("h", 14) },
 		},
@@ -1744,6 +1730,7 @@ addLayer("h", {
 		34: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Boost Quarks" },
 			description: "doubles quark gain",
+			effect: 2,
 			cost: 2500000,
 			unlocked() { return hasUpgrade("h", 21) && hasUpgrade("h", 22) && hasUpgrade("h", 23) && hasUpgrade("h", 24) },
 		},
@@ -1773,26 +1760,30 @@ addLayer("h", {
 		},
 		43: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Core Continuation" },
-			description: "gains 1% of core gain per second",
+			description: "gains +1% of your core gain per second",
 			cost: 45000000,
+			effect: 0.01,
 			unlocked() { return hasUpgrade("h", 31) && hasUpgrade("h", 32) && hasUpgrade("h", 33) && hasUpgrade("h", 34) },
 		},
 		44: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Rapid Cores" },
 			description() { return "increases the effect of <b" + getColorClass(this, REF) + "Core Continuation</b> by 9% (total: 10%)" },
 			cost: 75000000,
+			effect: 0.09,
 			unlocked() { return hasUpgrade("h", 31) && hasUpgrade("h", 32) && hasUpgrade("h", 33) && hasUpgrade("h", 34) },
 		},
 		51: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Faster Essence" },
-			description() { return "increases essence gain per second by 25% if you have the <b" + getColorClass(this, REF, "c") + "1e64 cores milestone</b> (total: 75%)" },
+			description() { return "gains +25% of your essence gain per second if you have the <b" + getColorClass(this, REF, "c") + "1e64 cores milestone</b> (total: 75%)" },
 			cost: 9e90,
+			effect: 0.25,
 			unlocked() { return (hasUpgrade("ds", 11) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade("h", 41) && hasUpgrade("h", 42) && hasUpgrade("h", 43) && hasUpgrade("h", 44) },
 		},
 		52: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Core Production Line" },
 			description() { return "increases the effect of <b" + getColorClass(this, REF) + "Rapid Cores</b> by 15% (total: 25%)" },
 			cost: 250000000,
+			effect: 0.15,
 			unlocked() { return hasUpgrade("h", 41) && hasUpgrade("h", 42) && hasUpgrade("h", 43) && hasUpgrade("h", 44) },
 		},
 		53: {
@@ -1805,12 +1796,14 @@ addLayer("h", {
 			title() { return "<b" + getColorClass(this, TITLE) + "Fastest Essence" },
 			description() { return "increases the effect of <b" + getColorClass(this, REF) + "Faster Essence</b> by 25% (total: 100%)" },
 			cost: 9.5e95,
+			effect: 0.25,
 			unlocked() { return (hasUpgrade("ds", 11) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade("h", 41) && hasUpgrade("h", 42) && hasUpgrade("h", 43) && hasUpgrade("h", 44) },
 		},
 		61: {
 			title() { return "<b" + getColorClass(this, TITLE) + "Essence Overdrive" },
 			description() { return "increases the effect of <b" + getColorClass(this, REF) + "Fastest Essence</b> by 25% (total: 125%)" },
 			cost: 1e100,
+			effect: 0.25,
 			unlocked() { return (hasUpgrade("ds", 12) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade("h", 51) && hasUpgrade("h", 52) && hasUpgrade("h", 53) && hasUpgrade("h", 54) },
 		},
 		62: {
@@ -1841,6 +1834,7 @@ addLayer("h", {
 			title() { return "<b" + getColorClass(this, TITLE) + "Potential Essence Potential" },
 			description() { return "increases the effect of <b" + getColorClass(this, REF) + "Essence Overdrive</b> by 25% (total: 150%)" },
 			cost: 1.11e111,
+			effect: 0.25,
 			unlocked() { return (hasUpgrade("ds", 12) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade("h", 51) && hasUpgrade("h", 52) && hasUpgrade("h", 53) && hasUpgrade("h", 54) },
 		},
 		71: {

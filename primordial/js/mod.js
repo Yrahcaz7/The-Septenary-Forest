@@ -364,8 +364,7 @@ function getPointGen() {
 	// init
 	let gain = newDecimalOne();
 	// mul
-	if (hasUpgrade("e", 11)) gain = gain.mul(1.5);
-	for (const sequence of [["e", [12, 33]], ["e", [21, 23, 31]], ["q", [12, 13]], ["q", [34, 35, 41]], ["h", [11, 21, 31, 41]]]) {
+	for (const sequence of [["e", [11, 12, 33]], ["e", [21, 23, 31]], ["q", [12, 13]], ["q", [34, 35, 41]], ["h", [11, 21, 31, 41]]]) {
 		gain = applyUpgradeSquence(gain, ...sequence);
 	};
 	gain = applyUpgrades(gain, {e: [32], q: [55], h: [73], p: [72, 82], m: [52], pl: [11]});
