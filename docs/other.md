@@ -54,6 +54,8 @@ These are some helpful functions for simplifing your code. If you find that your
 
 - `applyBuyables(num, buyables, operation = "mul")`: The same as `applyUpgrades()`, except for buyables instead of upgrades.
 
+- `applyMilestones(num, milestones, operation = "mul")`: The same as `applyUpgrades()`, except for milestones instead of upgrades.
+
 - `applyUpgradeSquence(num, layer, ids, operation = "mul")`: Returns a version of `num` that has the upgrade sequence defined by `layer` and `ids` applied to it. `layer` is the id of the layer that contains the upgrade sequence. `ids` is an array containing the id of each upgrade in the sequence, in order. `operation` is the operation that the upgrades perform (it must be a valid Decimal function name).
 
     Take, for example, the following code:

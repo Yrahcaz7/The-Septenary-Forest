@@ -301,6 +301,21 @@ function applyBuyables(num, buyables, operation = "mul") {
 };
 
 /**
+ * Returns a version of `num` that has the specified milestones applied to it.
+ * @param {Decimal} num - The Decimal to use. This may or may not be mutated, so don't rely on it.
+ * @param {Object.<string, number[]>} milestones - An object where keys are layer ids and values are arrays of milestone ids.
+ * @param {string} operation - The operation that the milestones perform. Must be a valid Decimal function name. Defaults to `"mul"`.
+ */
+function applyMilestones(num, milestones, operation = "mul") {
+	for (const layer in milestones) {
+		for (const id of milestones[layer]) {
+			if (hasMilestone(layer, id)) num = num[operation](milestoneEffect(layer, id));
+		};
+	};
+	return num;
+};
+
+/**
  * Returns a version of `num` that has the upgrade sequence defined by `layer` and `ids` applied to it.
  * @param {Decimal} num - The Decimal to use. This may or may not be mutated, so don't rely on it.
  * @param {string} layer - The id of the layer that contains the upgrade sequence.
