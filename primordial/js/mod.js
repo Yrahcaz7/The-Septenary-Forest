@@ -15,7 +15,8 @@ const VERSION = {
 function changelog() {
 	return `<h1>Changelog:</h1><br>
 		<br><h3>v4.1: Ever Closer</h3><br>
-			- Added one Attunement Tier.<br>
+			- Added one milestone to planets.<br>
+			- Added three Attunement Tiers.<br>
 			- Made the background fancy!<br>
 			- Added one option.<br>
 			- Many technical changes and fixes.<br>
@@ -219,7 +220,7 @@ function getColorClass(obj, type, layer = obj.layer, plain = false) {
 	if (!colorValue[0][type] || colorValue[1] == "none" || obj.layer === undefined) {
 		return ">";
 	};
-	if (colorValue[1] == "dark" || layer == "q" || layer == "h" || layer == "r" || layer == "w" || layer == "mo") {
+	if (colorValue[1] == "dark" || layer == "q" || layer == "h" || layer == "r" || layer == "ei" || layer == "w" || layer == "mo") {
 		if (plain) return ` class="layer-${layer}">`;
 		return ` class="layer-${layer}-dark">`;
 	};
@@ -273,7 +274,7 @@ function getDevotionBuyableBulk() {
 
 function relicsPermanentlyActive() {
 	return getBuyableAmount("pl", 31).gte(2);
-}
+};
 
 function hasActivatedMaxRelics() {
 	return maxedChallenge("r", 11) || relicsPermanentlyActive();
@@ -319,6 +320,7 @@ function buyGoodInfluenceBuyable(obj) {
 		if (hasMilestone("ch", 51)) bulk *= 10;
 		if (hasMilestone("pl", 1)) bulk *= 10;
 		if (hasMilestone("pl", 4)) bulk *= 10;
+		if (hasMilestone("pl", 6)) bulk *= 10;
 		player.gi.total = player.gi.total.add(obj.cost().mul(bulk ** 1.1));
 		player[obj.layer].buyables[obj.id] = player[obj.layer].buyables[obj.id].add(bulk).min(tmp[obj.layer].buyables[obj.id].purchaseLimit);
 	} else {
@@ -333,12 +335,14 @@ function getCellularLifeBuyableBulk() {
 	if (hasMilestone("ch", 30)) bulk *= 10;
 	if (hasMilestone("pl", 2)) bulk *= 10;
 	if (hasMilestone("pl", 4)) bulk *= 10;
+	if (hasMilestone("pl", 6)) bulk *= 2;
 	return bulk;
 };
 
 function getInfluenceBulk() {
 	let bulk = 1;
 	if (hasMilestone("pl", 3)) bulk *= 5;
+	if (hasMilestone("pl", 6)) bulk *= 2;
 	return bulk;
 };
 
@@ -399,7 +403,7 @@ const displayThings = [
 	() => { if (tmp.gameEnded) return "You beat the game!<br>For now..." },
 ];
 
-const endPoints = new Decimal("e1e195");
+const endPoints = new Decimal("e1e264");
 
 function onLoad() {
 	calculateColorValue();

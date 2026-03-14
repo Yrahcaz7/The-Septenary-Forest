@@ -41,7 +41,7 @@ const SOFTCAPS = {
 };
 
 addLayer("SC", (() => {
-	const LAYERS_WITH_GAIN_SOFTCAPS = ["e", "c", "q", "h", "ds", "p", "m", "ei"];
+	const LAYERS_WITH_GAIN_SOFTCAPS = ["e", "c", "q", "h", "ds", "p", "r", "m", "ei", "mo"];
 	let activeSoftcaps = {};
 	function registerActiveSoftcap(id) {
 		activeSoftcaps[id] = (activeSoftcaps[id] || 0) + 1;

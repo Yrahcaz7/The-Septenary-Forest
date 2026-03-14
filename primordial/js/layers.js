@@ -2315,7 +2315,7 @@ addLayer("ds", {
 				else if (completions == 16) text += "reduce the cost scaling of <b" + getColorClass(this, REF, "w", true) + "Power of Good</b> if you have at least 1 limit broken";
 				else if (completions == 17) text += "nothing";
 				else if (completions == 18) text += "improve the first purified souls effect yet again";
-				else if (completions == 19) text += "coming soon...";
+				else if (completions == 19) text += "further improve the fourth purified souls effect";
 				else text += "you have gotten all the rewards!";
 				return text;
 			},
@@ -2333,6 +2333,7 @@ addLayer("ds", {
 				if (getPurifiedDemonSouls() >= 12) pow3 += 2.5;
 				let pow4 = 1;
 				if (getPurifiedDemonSouls() >= 11) pow4 += 2;
+				if (getPurifiedDemonSouls() >= 20) pow4 += 7;
 				return [
 					player.ds.threads.add(1).log10().div(div1).add(1),
 					player.ds.threads.add(1).log10().add(1).pow(pow2),
@@ -2922,6 +2923,7 @@ addLayer("p", {
 		// return
 		return mult;
 	},
+	logged() { return inChallenge("ei", 31) },
 	hotkeys: [{key: "p", description: "P: Reset for prayers", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.a.unlocked || player.p.unlocked },
 	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
@@ -3539,7 +3541,7 @@ addLayer("s", {
 	}},
 	color: "#AAFF00",
 	branches: ["r", "gi"],
-	requires: 1e15,
+	requires() { return inChallenge("ei", 31) ? 1e13 : 1e15 },
 	marked() { return isAssimilated(this.layer) },
 	shouldNotify() { return isAssimilated(this.layer) && getClickableState("mo", 11) && player.mo.assimilating === null },
 	glowColor() { if (this.shouldNotify()) return this.color },
@@ -3567,6 +3569,8 @@ addLayer("s", {
 		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated && hasMilestone("gi", 19) && player.h.limitsBroken >= 4 && tmp.gi.effect.lte(1e100)) gain = gain.mul(tmp.gi.effect);
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
 		if (hasBuyable("mo", 12)) gain = gain.mul(buyableEffect("mo", 12));
+		gain = applyMilestones(gain, {mo: [13, 14]});
+		if (hasChallenge("ei", 31)) gain = gain.mul(challengeEffect("ei", 31));
 		if (hasUpgrade("pl", 52)) gain = gain.mul(upgradeEffect("pl", 52));
 		return gain;
 	},
@@ -3575,7 +3579,7 @@ addLayer("s", {
 	layerShown() { return player.p.unlocked || player.s.unlocked },
 	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	effect() { return new Decimal(2).pow(player.s.points) },
-	effectDescription() { return 'which multiplies essence gain by <h2 class="layer-s">' + format(tmp.s.effect) + "</h2>x" },
+	effectDescription() { return "which multiplies essence gain by <h2 class='layer-s'>" + format(tmp.s.effect) + "</h2>x" },
 	doReset(resettingLayer) {
 		if (hasMilestone("s", 12) && resettingLayer == "a") return;
 		if (hasMilestone("w", 11) && resettingLayer == "w") return;
@@ -4207,6 +4211,8 @@ addLayer("r", {
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
 		return gain;
 	},
+	softcap: new Decimal("1e333"),
+	softcapPower: 0.5,
 	autoPrestige() { return hasMilestone("w", 4) },
 	hotkeys: [{key: "r", description: "R: Reset for relics", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.s.unlocked || player.r.unlocked },
@@ -5359,7 +5365,9 @@ addLayer("ei", {
 	softcaps: [new Decimal(25_000_000), new Decimal(50_000_000), new Decimal(100_000_000)],
 	softcapPowers() {
 		let power = 0.1;
-		if (getBuyableAmount("pl", 22).gte(6)) {
+		if (getBuyableAmount("pl", 22).gte(10)) {
+			power = 0.41;
+		} else if (getBuyableAmount("pl", 22).gte(6)) {
 			power = 0.4;
 		} else if (getBuyableAmount("pl", 22).gte(5)) {
 			power = 0.3;
@@ -5396,6 +5404,8 @@ addLayer("ei", {
 		// exp
 		if (hasChallenge("ei", 11)) eff1 = eff1.pow(challengeEffect("ei", 11));
 		if (hasChallenge("ei", 12)) eff1 = eff1.pow(challengeEffect("ei", 12));
+		// special nerf
+		if (inChallenge("ei", 31)) eff1 = eff1.add(1).log10();
 		// second effect
 		let eff2 = newDecimalOne();
 		if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) {
@@ -5772,7 +5782,7 @@ addLayer("ei", {
 	challenges: {
 		11: {
 			name() { return "<h3" + getColorClass(this, TITLE) + "Build the Gate" },
-			challengeDescription: " - Resets evil influence milestones<br> - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Forces an evil influence reset<br> - Divides evil power gain by 1,000<br>",
+			challengeDescription: "- Resets evil influence milestones<br>- Resets evil influence upgrades<br>- Resets your evil power to 0<br>- Forces an evil influence reset<br>- Divides evil power gain by 1,000<br>",
 			goalDescription: "1e230 evil power<br>",
 			canComplete() { return player.ei.power.gte(1e230) },
 			onEnter() {
@@ -5787,7 +5797,7 @@ addLayer("ei", {
 		},
 		12: {
 			name() { return "<h3" + getColorClass(this, TITLE) + "Power the Gate" },
-			challengeDescription: " - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Forces an evil influence reset<br> - Divides evil power gain by 1e8",
+			challengeDescription: "- Resets evil influence upgrades<br>- Resets your evil power to 0<br>- Forces an evil influence reset<br>- Divides evil power gain by 1e8",
 			goalDescription: "1e21 evil power",
 			canComplete() { return player.ei.power.gte(1e21) },
 			onEnter() {
@@ -5802,7 +5812,7 @@ addLayer("ei", {
 		},
 		21: {
 			name() { return "<h3" + getColorClass(this, TITLE) + "Enter the Gate" },
-			challengeDescription: " - Resets evil influence upgrades<br> - Resets your evil power to 0<br> - Resets your relics to 0<br> - Divides evil power gain by 1e15<br>",
+			challengeDescription: "- Resets evil influence upgrades<br>- Resets your evil power to 0<br>- Resets your relics to 0<br>- Divides evil power gain by 1e15<br>",
 			goalDescription: "1e18 evil power and 93 relics<br>",
 			canComplete() { return player.ei.power.gte(1e18) && player.r.points.gte(93) },
 			onEnter() {
@@ -5825,7 +5835,7 @@ addLayer("ei", {
 		},
 		22: {
 			name() { return "<h3" + getColorClass(this, TITLE) + "And Repeat" },
-			challengeDescription() { return "Endure the negative effects of all the previous <b" + getColorClass(this, REF) + "Gate of Evil</b> challenges.<br>(It is recommended to turn the evil influence upgrade autobuyer off.)<br>" },
+			challengeDescription() { return "Endure the negative effects of all the previous <b" + getColorClass(this, REF) + "Gate of Evil</b> challenges except the forced evil influence reset.<br>(It is recommended to turn the evil influence upgrade autobuyer off.)<br>" },
 			goalDescription: "1e500 evil power and 144 relics<br>",
 			canComplete() { return player.ei.power.gte("1e500") && player.r.points.gte(144) },
 			onEnter() {
@@ -5841,6 +5851,38 @@ addLayer("ei", {
 			countsAs: [11, 12, 21],
 			noAutoExit: true,
 			unlocked() { return hasChallenge("ei", 21) && (hasMilestone("w", 1) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) },
+		},
+		31: {
+			name() { return "<h3" + getColorClass(this, TITLE) + "A Demonic Deal" },
+			challengeDescription: "- Forces a chaos reset<br>- Evil power gain is log10(gain+1)<br>- Prayer gain is log10(gain+1)<br>- Sanctum requirement is set to 1e13<br>",
+			goalDescription: "1.5e327 relics<br>",
+			canComplete() { return player.r.points.gte("1.5e327") },
+			onEnter() {
+				player.ei.activeChallenge = null; // act like the player is not in this challenge while resetting
+				doReset("ch", true, true);
+			},
+			rewardDescription: "Multiply sanctum gain based<br>on your evil power",
+			rewardEffect() { return player.ei.power.add(1).log10().add(1).pow(6) },
+			rewardDisplay(eff) {
+				let text = format(eff) + "x";
+				if (options.nerdMode) text += "<br>formula: (log10(x+1)+1)^6";
+				return text;
+			},
+			noAutoExit: true,
+			unlocked() { return getBuyableAmount("pl", 31).gte(3) },
+		},
+		32: {
+			name() { return "<h3" + getColorClass(this, TITLE) + "Coming Soon" },
+			challengeDescription: "- Forces a chaos reset<br>",
+			goalDescription: "???<br>",
+			canComplete() { return false },
+			onEnter() {
+				player.ei.activeChallenge = null; // act like the player is not in this challenge while resetting
+				doReset("ch", true, true);
+			},
+			rewardDescription: "???",
+			noAutoExit: true,
+			unlocked() { return getBuyableAmount("pl", 31).gte(3) },
 		},
 	},
 });
@@ -7228,6 +7270,8 @@ addLayer("mo", {
 		gain = applyMilestones(gain, {r: [3, 6, 8], ch: [16]});
 		return gain;
 	},
+	softcap: new Decimal(40_000),
+	softcapPower: 0.5,
 	autoPrestige() { return hasUpgrade("pl", 84) },
 	hotkeys: [{key: "o", description: "O: Reset for multicellular organisms", onPress() { if (canReset(this.layer)) doReset(this.layer) }}],
 	layerShown() { return player.ch.unlocked || player.mo.unlocked },
@@ -7485,6 +7529,16 @@ addLayer("mo", {
 				effect() { return new Decimal(getPurifiedDemonSouls()).add(1).log10().add(1) },
 				effectDescription(eff) { return "multiply good influence gain based on your purified demon souls (currently " + format(eff) + "x)" },
 			},
+			13: {
+				requirement: 39_111,
+				effect() { return new Decimal(getPurifiedDemonSouls()).add(1).pow(0.5) },
+				effectDescription(eff) { return "multiply sanctum gain based on your purified demon souls (currently " + format(eff) + "x)" },
+			},
+			14: {
+				requirement: 60_000,
+				effect() { return player.mo.points.add(1).pow(0.5) },
+				effectDescription(eff) { return "multiply sanctum gain based on your " + getGlitchAttuneText() + "s (currently " + format(eff) + "x)" },
+			},
 		};
 		const done = req => player.mo.points.gte(req);
 		const unlocked = () => isAssimilated("mo");
@@ -7533,7 +7587,7 @@ addLayer("pl", {
 	type: "static",
 	base: 2,
 	exponent() { return (hasMilestone("mo", 4) ? 1.37 : 1.46) },
-	canBuyMax: false,
+	canBuyMax: true,
 	gainExp() {
 		let gain = newDecimalOne();
 		return gain;
@@ -7587,7 +7641,7 @@ addLayer("pl", {
 			},
 			3: {
 				requirement: 4,
-				effectDescription() { return "you can bulk 5x war rebuyables, keep all milestones on planet resets, and unlock <b" + getColorClass(this, REF) + "Correction</b>, a new tab" },
+				effectDescription() { return "you can bulk 5x <b" + getColorClass(this, REF, "w") + "Influences</b>, keep all milestones on planet resets, and unlock <b" + getColorClass(this, REF) + "Correction</b>, a new tab" },
 			},
 			4: {
 				requirement: 5,
@@ -7597,6 +7651,10 @@ addLayer("pl", {
 			5: {
 				requirement: 6,
 				effectDescription() { return "keep all upgrades on planet resets and unlock a new <b" + getColorClass(this, REF) + "Correction</b> type" },
+			},
+			6: {
+				requirement: 7,
+				effectDescription() { return "you can bulk 2x <b" + getColorClass(this, REF, "w") + "Influences</b>, you can bulk 10x good influence rebuyables, you can bulk 2x cellular life rebuyables, and unlock ???" },
 			},
 		};
 		const done = req => player.pl.points.gte(req);
@@ -7679,13 +7737,15 @@ addLayer("pl", {
 			unlocked() { return hasMilestone("pl", 3) },
 		},
 		22: {
-			costs: [316, 373, 480, 555, 705, 855, 995, 1272, 1490],
+			costs: [316, 373, 480, 555, 705, 855, 995, 1272, 1490, 1833, 2100], // 2400
 			cost(x) { return this.costs[x] || Infinity },
 			title() { return "<b" + getColorClass(this, TITLE) + "Correction Type NAN-1-2" },
 			description() {
 				const amt = getBuyableAmount(this.layer, this.id);
 				let text = "<br>";
-				if (amt.gte(9)) text += "the next correction is coming soon...";
+				if (amt.gte(11)) text += "the next correction is coming soon...";
+				else if (amt.gte(10)) text += "improves the achievement effect yet again";
+				else if (amt.gte(9)) text += "makes the evil influence gain softcaps weaker (^0.4 --> ^0.41)";
 				else if (amt.gte(8)) text += "removes the <b" + getColorClass(this, REF, "r") + "Gleaming Relics</b> effect softcap";
 				else if (amt.gte(7)) text += "improves the achievement effect again";
 				else if (amt.gte(6)) text += "further improves the achievement effect";
@@ -7705,18 +7765,19 @@ addLayer("pl", {
 			unlocked() { return hasMilestone("pl", 3) },
 		},
 		31: {
-			cost(x) { return new Decimal(1e30).pow(x).mul(1e240) },
+			cost(x) { return new Decimal(x.gte(3) ? 1e40 : 1e30).pow(x).mul(1e240) },
 			title() { return "<b" + getColorClass(this, TITLE) + "Correction Type 17-A-R-ALL" },
 			description() {
 				const amt = getBuyableAmount(this.layer, this.id);
 				let text = "<br>";
-				if (amt.gte(2)) text += "the next correction is coming soon...";
+				if (amt.gte(3)) text += "the next correction is coming soon...";
+				else if (amt.gte(2)) text += "unlocks two new evil influence challenges";
 				else if (amt.gte(1)) text += "makes all of your relics always active";
 				else text += "fully deciphers your " + getGlitchDecipherText() + ", giving maximum insight";
 				return text;
 			},
 			canAfford() { return player.pl.air.gte(this.cost()) },
-			purchaseLimit: 2,
+			purchaseLimit: 3,
 			buy() { addBuyables(this.layer, this.id, 1) },
 			costDisplay(cost) { return "Req: " + format(cost) + " air" },
 			style: {width: "260px", "min-height": "140px"},
