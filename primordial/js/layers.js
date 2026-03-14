@@ -2016,12 +2016,7 @@ addLayer("ds", {
 			if (hasMilestone("ch", 45)) gain = gain.add(tmp.pl.effect.add(1).pow(0.1));
 			else gain = gain.add(tmp.pl.effect.add(1).log10());
 			// mul
-			for (const id of [48, 49, 51, 52, 54, 55, 58]) {
-				if (hasMilestone("ch", id)) gain = gain.mul(milestoneEffect("ch", id));
-			};
-			for (const id of [8, 10, 11]) {
-				if (hasMilestone("mo", id)) gain = gain.mul(milestoneEffect("mo", id));
-			};
+			gain = applyMilestones(gain, {ch: [48, 49, 51, 52, 54, 55, 58], mo: [8, 10, 11]});
 		};
 		// return
 		return gain;
@@ -7230,10 +7225,7 @@ addLayer("mo", {
 	gainExp() {
 		let gain = newDecimalOne();
 		gain = applyBuyables(gain, {w: [23], mo: [22]});
-		if (hasMilestone("r", 3)) gain = gain.mul(milestoneEffect("r", 3));
-		if (hasMilestone("r", 6)) gain = gain.mul(milestoneEffect("r", 6));
-		if (hasMilestone("r", 8)) gain = gain.mul(milestoneEffect("r", 8));
-		if (hasMilestone("ch", 16)) gain = gain.mul(milestoneEffect("ch", 16));
+		gain = applyMilestones(gain, {r: [3, 6, 8], ch: [16]});
 		return gain;
 	},
 	autoPrestige() { return hasUpgrade("pl", 84) },
