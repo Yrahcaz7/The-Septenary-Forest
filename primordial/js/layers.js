@@ -31,11 +31,9 @@ addLayer("e", {
 			mult = mult.mul(upgradeEffect("q", 14));
 			if (hasUpgrade("q", 15)) mult = mult.mul(upgradeEffect("q", 15));
 		};
-		if (hasBuyable("e", 11)) mult = mult.mul(buyableEffect("e", 11));
+		mult = applyBuyables(mult, {e: [11], c: [12], gi: [12]});
 		if (hasBuyable("e", 12)) mult = mult.mul(buyableEffect("e", 12)[1]);
-		if (hasBuyable("c", 12)) mult = mult.mul(buyableEffect("c", 12));
 		if (hasBuyable("sp", 12)) mult = mult.mul(buyableEffect("sp", 12)[0]);
-		if (hasBuyable("gi", 12)) mult = mult.mul(buyableEffect("gi", 12));
 		if (hasUpgrade("p", 22)) mult = mult.mul(player.p.holiness.add(1).pow(0.055));
 		if (tmp.s.effect.gt(1) && !tmp.s.deactivated) mult = mult.mul(tmp.s.effect);
 		if (new Decimal(tmp.r.effect[2]).gt(1) && !tmp.r.deactivated) mult = mult.mul(tmp.r.effect[2]);
@@ -55,9 +53,9 @@ addLayer("e", {
 	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
-		if (hasUpgrade("e", 43)) gen += 2e20;
+		if (hasUpgrade("e", 43)) gen += upgradeEffect("e", 43);
 		if (hasMilestone("c", 3)) {
-			gen += 0.5;
+			gen += milestoneEffect("c", 3);
 			for (const id of [51, 54, 61, 64]) {
 				if (!hasUpgrade("h", id)) break;
 				gen += upgradeEffect("h", id);
@@ -294,6 +292,7 @@ addLayer("e", {
 			title() { return "<b" + getColorClass(this, TITLE) + "Essence of the Flow" },
 			description: "gain +2e22% of your essence gain per second",
 			cost: "1e1111",
+			effect: 2e20,
 			unlocked() { return (isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasUpgrade("e", 42) },
 		},
 	},
@@ -356,7 +355,7 @@ addLayer("c", {
 			if (!hasUpgrade(upg[0], upg[1])) break;
 			gen += upgradeEffect(upg[0], upg[1]);
 		};
-		if (hasUpgrade("c", 41)) gen += upgradeEffect("c", 41).div(100).toNumber();
+		if (hasUpgrade("c", 41)) gen += upgradeEffect("c", 41);
 		if (hasUpgrade("pl", 14)) gen += upgradeEffect("pl", 14);
 		return gen;
 	},
@@ -417,8 +416,9 @@ addLayer("c", {
 			},
 			3: {
 				requirement: 1e64,
+				effect: 0.5,
 				effectDescription: "gain 50% of your essence gain per second",
-				unlocked() { return player.c.best.gte(1e60) || player.h.unlocked },
+				unlocked() { return player.c.best.gte(1e60) || player.h.unlocked || player.w.unlocked },
 			},
 		};
 		const done = req => player.c.points.gte(req);
@@ -594,10 +594,10 @@ addLayer("c", {
 			title() { return "<b" + getColorClass(this, TITLE) + "Core of the Flow" },
 			description: "gain more of your core gain per second based on your cores",
 			cost: 1e145,
-			effect() { return player.c.points.add(1).log10().add(1).pow(13.3).min(1e36) },
+			effect() { return player.c.points.add(1).log10().add(1).pow(13.3).div(100).min(1e34).toNumber() },
 			effectDisplay(eff) {
-				let text = "+" + format(eff) + "%";
-				if (eff.gte(1e36)) text += " (maxed)";
+				let text = "+" + format(eff * 100) + "%";
+				if (eff >= 1e34) text += " (maxed)";
 				if (options.nerdMode) text += "<br>formula: (log10(x+1)+1)^13.3";
 				return text;
 			},
@@ -686,8 +686,8 @@ addLayer("q", {
 	passiveGeneration() {
 		let gen = 0;
 		if (hasUpgrade("q", 51)) gen += upgradeEffect("q", 51);
-		if (hasMilestone("a", 8)) gen += 0.01;
-		if (hasMilestone("a", 9)) gen += 0.09;
+		if (hasMilestone("a", 8)) gen += milestoneEffect("a", 8);
+		if (hasMilestone("a", 9)) gen += milestoneEffect("a", 9);
 		if (hasUpgrade("pl", 22)) gen += upgradeEffect("pl", 22);
 		return gen;
 	},
@@ -2253,6 +2253,7 @@ addLayer("ds", {
 				return hasUpgrade("a", 51);
 			},
 			rewardDescription: "multiply atom gain by 1.5",
+			rewardEffect: 1.5,
 			doReset: true,
 			unlocked() { return (hasMilestone("a", 7) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) && hasChallenge("ds", 21) },
 		},
@@ -2379,17 +2380,14 @@ addLayer("a", {
 	canBuyMax() { return true },
 	gainExp() {
 		let gain = newDecimalOne();
-		if (hasBuyable("q", 12)) gain = gain.mul(buyableEffect("q", 12));
+		gain = applyBuyables(gain, {q: [12], cl: [33, 52], mo: [11]});
 		gain = applyUpgrades(gain, {a: [22, 32, 33, 61, 62, 72]});
-		if (hasChallenge("ds", 22)) gain = gain.mul(1.5);
+		if (hasChallenge("ds", 22)) gain = gain.mul(challengeEffect("ds", 22));
 		if (hasMilestone("r", 7)) gain = gain.mul(milestoneEffect("r", 7));
 		if (tmp.m.effect.gt(1) && !tmp.m.deactivated) gain = gain.mul(tmp.m.effect);
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
 		if (hasBuyable("w", 21) && hasMilestone("ch", 35)) gain = gain.mul(buyableEffect("w", 21));
 		if (hasBuyable("cl", 11)) gain = gain.mul(buyableEffect("cl", 11)[1]);
-		if (hasBuyable("cl", 33)) gain = gain.mul(buyableEffect("cl", 33));
-		if (hasBuyable("cl", 52)) gain = gain.mul(buyableEffect("cl", 52));
-		if (hasBuyable("mo", 11)) gain = gain.mul(buyableEffect("mo", 11));
 		return gain;
 	},
 	autoPrestige() { return hasMilestone("a", 15) || hasUpgrade("pl", 42) },
@@ -2469,10 +2467,12 @@ addLayer("a", {
 			},
 			8: {
 				requirements: [10, 75],
+				effect: 0.01,
 				effectDescription: "gain 1% of quark gain per second",
 			},
 			9: {
 				requirements: [25, 125],
+				effect: 0.09,
 				effectDescription: "gain +9% of quark gain per second (total: 10%)",
 			},
 			10: {
@@ -2990,8 +2990,8 @@ addLayer("p", {
 		let effExp = 1;
 		if (hasMilestone("p", 1)) effBoost = effBoost.mul(milestoneEffect("p", 1));
 		effBoost = applyUpgrades(effBoost, {p: [13, 32, 33, 42]});
-		if (hasMilestone("p", 2)) effExp = 1.5;
-		if (hasMilestone("p", 3)) effExp = 1.6;
+		if (hasMilestone("p", 2)) effExp += milestoneEffect("p", 2);
+		if (hasMilestone("p", 3)) effExp += milestoneEffect("p", 3);
 		let eff = effBoost.mul(player.p.points).pow(effExp);
 		eff = softcap(eff, new Decimal(SOFTCAPS.p_eff[0]()), SOFTCAPS.p_eff[1]());
 		if (hasUpgrade("p", 71)) eff = eff.mul(upgradeEffect("p", 71));
@@ -3074,12 +3074,14 @@ addLayer("p", {
 			},
 			2: {
 				requirements: [2500, 250],
-				effectDescription: "divinity gain is raised to the power of 1.5",
+				effect: 0.5,
+				effectDescription: "increase the divinity gain exponent by 0.5",
 				unlocked() { return hasUpgrade("p", 41) || player.s.unlocked },
 			},
 			3: {
 				requirement: 1e55,
-				effectDescription: "divinity gain is raised to the power of 1.6 instead of 1.5",
+				effect: 0.1,
+				effectDescription: "increase the divinity gain exponent by 0.1",
 				unlocked() { return hasMilestone("p", 2) || player.s.unlocked },
 			},
 		};
@@ -3885,6 +3887,7 @@ addLayer("d", {
 	layerShown() { return false },
 	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun("s") },
 	automate() {
+		updateBuyableTemp("d");
 		if (hasMilestone("cl", 1) && player.s.no_speed_but_more_bulk) {
 			if (hasMilestone("s", 19) && player.s.auto_worship) buyBuyable("d", 11);
 			if (hasMilestone("s", 38) && player.s.auto_sacrifice) buyBuyable("d", 12);
@@ -4067,6 +4070,7 @@ addLayer("g", {
 	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun("s")},
 	automate() {
 		if (hasMilestone("ch", 24) && player.s.auto_glow) {
+			updateBuyableTemp("g");
 			buyBuyable("g", 11);
 			buyBuyable("g", 12);
 			buyBuyable("g", 21);
@@ -4079,10 +4083,10 @@ addLayer("g", {
 		// mul
 		if (hasUpgrade("gi", 13)) gain = gain.mul(upgradeEffect("gi", 13));
 		if (tmp.gi.effect.gt(1) && !tmp.gi.deactivated && hasMilestone("gi", 19) && player.h.limitsBroken >= 4 && tmp.gi.effect.lte(1e100)) gain = gain.mul(tmp.gi.effect);
-		if (hasMilestone("ch", 21)) gain = gain.mul(10);
+		if (hasMilestone("ch", 21)) gain = gain.mul(milestoneEffect("ch", 21));
 		if (hasBuyable("r", 11)) gain = gain.mul(buyableEffect("r", 11));
 		// pow
-		if (hasChallenge("ei", 21) && (isAssimilated("ei") || player.mo.assimilating === "ei")) gain = gain.pow(1.1);
+		if (hasChallenge("ei", 21) && (isAssimilated("ei") || player.mo.assimilating === "ei")) gain = gain.pow(challengeEffect("ei", 21));
 		// return
 		return gain;
 	},
@@ -4305,11 +4309,9 @@ addLayer("r", {
 		};
 		// add portion of best
 		let portion = 0;
-		if (hasMilestone("m", 17)) portion = 0.1;
-		else if (hasMilestone("m", 16)) portion = 0.05;
-		else if (hasMilestone("m", 15)) portion = 0.025;
-		else if (hasMilestone("m", 7)) portion = 0.01;
-		else if (hasMilestone("m", 3)) portion = 0.001;
+		for (const id of [3, 7, 15, 16, 17]) {
+			if (hasMilestone("m", id)) portion += milestoneEffect("m", id);
+		};
 		if (portion > 0) {
 			gain = gain.add(player.r.lightGainBest.mul(portion));
 		};
@@ -4661,9 +4663,9 @@ addLayer("m", {
 	deactivated() { return getClickableState("mo", 11) && !canEnterAssimilationRun(this.layer)},
 	passiveGeneration() {
 		let gen = 0;
-		if (hasMilestone("m", 20)) gen += 0.1;
-		if (hasMilestone("m", 21)) gen += 0.4;
-		if (hasMilestone("pl", 1)) gen += 0.1;
+		if (hasMilestone("m", 20)) gen += milestoneEffect("m", 20);
+		if (hasMilestone("m", 21)) gen += milestoneEffect("m", 21);
+		if (hasMilestone("pl", 1)) gen += milestoneEffect("pl", 1);
 		return gen;
 	},
 	automate() {
@@ -4726,7 +4728,8 @@ addLayer("m", {
 			},
 			3: {
 				requirement: 4,
-				effectDescription: "gain 0.1% of your best light gain per second",
+				effect: 0.001,
+				effectDescription: "gain +0.1% of your best light gain per second",
 			},
 			4: {
 				requirement: 5,
@@ -4745,7 +4748,8 @@ addLayer("m", {
 			},
 			7: {
 				requirement: 15,
-				effectDescription: "gain +0.9% of your best light gain per second",
+				effect: 0.009,
+				effectDescription: "gain +0.9% of your best light gain per second (total: 1%)",
 			},
 			8: {
 				requirement: 25,
@@ -4777,31 +4781,36 @@ addLayer("m", {
 			},
 			15: {
 				requirement: 15_000_000,
-				effectDescription: "gain +1.5% of your best light gain per second",
+				effect: 0.015,
+				effectDescription: "gain +1.5% of your best light gain per second (total: 2.5%)",
 			},
 			16: {
 				requirement: 450_000_000,
-				effectDescription: "gain +2.5% of your best light gain per second",
+				effect: 0.025,
+				effectDescription: "gain +2.5% of your best light gain per second (total: 5%)",
 			},
 			17: {
 				requirement: 2.5e10,
-				effectDescription: "gain +5% of your best light gain per second",
+				effect: 0.05,
+				effectDescription: "gain +5% of your best light gain per second (total: 10%)",
 			},
 			18: {
 				requirement: 2.5e12,
-				effectDescription: "keep 25 more sanctums (30 total) on molecule resets",
+				effectDescription: "keep 25 more sanctums on molecule resets (total: 30)",
 			},
 			19: {
 				requirement: 4e14,
-				effectDescription: "keep 185 more sanctums (215 total) on molecule resets",
+				effectDescription: "keep 185 more sanctums on molecule resets (total: 215)",
 			},
 			20: {
 				requirement: 7.5e16,
+				effect: 0.1,
 				effectDescription: "gain +10% of your molecule gain per second",
 			},
 			21: {
 				requirement: 1.5e19,
-				effectDescription: "gain +40% of your molecule gain per second",
+				effect: 0.4,
+				effectDescription: "gain +40% of your molecule gain per second (total: 50%)",
 			},
 		};
 		const done = req => player.m.total.gte(req);
@@ -5057,10 +5066,7 @@ addLayer("gi", {
 		if (hasUpgrade("ei", 24)) gain = gain.mul(upgradeEffect("ei", 24));
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
 		if (hasBuyable("w", 11)) gain = gain.mul(buyableEffect("w", 11)[0]);
-		if (hasBuyable("w", 13)) gain = gain.mul(buyableEffect("w", 13));
-		if (hasBuyable("w", 22)) gain = gain.mul(buyableEffect("w", 22));
-		if (hasBuyable("mo", 13)) gain = gain.mul(buyableEffect("mo", 13));
-		if (hasBuyable("pl", 11)) gain = gain.mul(buyableEffect("pl", 11));
+		gain = applyBuyables(gain, {w: [13, 22], mo: [13], pl: [11]});
 		if (hasMilestone("mo", 12)) gain = gain.mul(milestoneEffect("mo", 12));
 		return gain;
 	},
@@ -5346,11 +5352,10 @@ addLayer("ei", {
 	gainExp() {
 		let gain = newDecimalOne();
 		gain = applyUpgrades(gain, {ei: [11, 21, 31, 41, 54, 64]});
-		if (hasChallenge("ei", 22)) gain = gain.mul(1.75);
+		if (hasChallenge("ei", 22)) gain = gain.mul(challengeEffect("ei", 22));
 		if (new Decimal(tmp.w.effect[1]).gt(1) && !tmp.w.deactivated) gain = gain.mul(tmp.w.effect[1]);
 		if (hasBuyable("w", 11)) gain = gain.mul(buyableEffect("w", 11)[1]);
-		if (hasBuyable("w", 12)) gain = gain.mul(buyableEffect("w", 12));
-		if (hasBuyable("cl", 53)) gain = gain.mul(buyableEffect("cl", 53));
+		gain = applyBuyables(gain, {w: [12], cl: [53]});
 		if (inChallenge("ch", 11)) gain = gain.mul(1.1);
 		if (hasMilestone("ch", 17)) gain = gain.mul(milestoneEffect("ch", 16));
 		if (player.h.limitsBroken > 0) gain = gain.div(tmp.h.clickables[11].nerf);
@@ -5394,8 +5399,8 @@ addLayer("ei", {
 		if (inChallenge("ei", 12)) eff1 = eff1.div(100_000_000);
 		if (inChallenge("ei", 21)) eff1 = eff1.div(1e15);
 		// exp
-		if (hasChallenge("ei", 11)) eff1 = eff1.pow(1.075);
-		if (hasChallenge("ei", 12)) eff1 = eff1.pow(1.075);
+		if (hasChallenge("ei", 11)) eff1 = eff1.pow(challengeEffect("ei", 11));
+		if (hasChallenge("ei", 12)) eff1 = eff1.pow(challengeEffect("ei", 12));
 		// second effect
 		let eff2 = newDecimalOne();
 		if (isAssimilated(this.layer) || player.mo.assimilating === this.layer) {
@@ -5781,6 +5786,7 @@ addLayer("ei", {
 				player.ei.power = newDecimalZero();
 			},
 			rewardDescription: "exponentiate evil power<br>gain by ^1.075",
+			rewardEffect: 1.075,
 			doReset: true,
 			noAutoExit: true,
 		},
@@ -5794,6 +5800,7 @@ addLayer("ei", {
 				player.ei.power = newDecimalZero();
 			},
 			rewardDescription() { return "evil influence resets nothing, all <b" + getColorClass(this, REF, "s") + "Devotion</b> autobuyers can bulk<br>buy 5x, and exponentiate evil<br>power gain by ^1.075" },
+			rewardEffect: 1.075,
 			doReset: true,
 			noAutoExit: true,
 			unlocked() { return hasChallenge("ei", 11) },
@@ -5817,6 +5824,7 @@ addLayer("ei", {
 				};
 				return text;
 			},
+			rewardEffect: 1.1,
 			noAutoExit: true,
 			unlocked() { return hasChallenge("ei", 12) },
 		},
@@ -5834,6 +5842,7 @@ addLayer("ei", {
 				player.r.total = newDecimalZero();
 			},
 			rewardDescription: "multiply evil influence<br>gain by 1.75x",
+			rewardEffect: 1.75,
 			countsAs: [11, 12, 21],
 			noAutoExit: true,
 			unlocked() { return hasChallenge("ei", 21) && (hasMilestone("w", 1) || isAssimilated(this.layer) || player.mo.assimilating === this.layer) },
@@ -6335,11 +6344,8 @@ addLayer("cl", {
 		if (hasBuyable("cl", 31)) conv = conv.add(buyableEffect("cl", 31));
 		else if (!tmp.cl.deactivated) conv = conv.add(1);
 		// mul
-		if (hasBuyable("cl", 32)) conv = conv.mul(buyableEffect("cl", 32));
-		if (hasBuyable("cl", 41)) conv = conv.mul(buyableEffect("cl", 41));
-		if (hasBuyable("cl", 42)) conv = conv.mul(buyableEffect("cl", 42));
+		conv = applyBuyables(conv, {cl: [32, 41, 42, 51]});
 		if (hasBuyable("cl", 43)) conv = conv.mul(buyableEffect("cl", 43)[1]);
-		if (hasBuyable("cl", 51)) conv = conv.mul(buyableEffect("cl", 51));
 		if (hasChallenge("ch", 21)) conv = conv.mul(challengeEffect("ch", 21)[1]);
 		if (new Decimal(tmp.ch.effect[2]).gt(1) && !tmp.ch.deactivated) conv = conv.mul(tmp.ch.effect[2]);
 		// return
@@ -6765,8 +6771,7 @@ addLayer("ch", {
 	canBuyMax() { return hasMilestone("pl", 0) },
 	gainExp() {
 		let gain = newDecimalOne();
-		if (hasBuyable("q", 23)) gain = gain.mul(buyableEffect("q", 23));
-		if (hasBuyable("mo", 21)) gain = gain.mul(buyableEffect("mo", 21));
+		gain = applyBuyables(gain, {q: [23], mo: [21]});
 		if (getBuyableAmount("pl", 22).gte(3)) gain = gain.mul(tmp.A.effect);
 		return gain;
 	},
@@ -6914,6 +6919,7 @@ addLayer("ch", {
 			},
 			21: {
 				requirement: 57,
+				effect: 10,
 				effectDescription() { return "you gain 10x glow, improve the effect formula of the <b" + getColorClass(this, REF) + "42 chaos milestone</b>, and you can buy max multicellular organisms" },
 			},
 			22: {
@@ -7223,12 +7229,11 @@ addLayer("mo", {
 	canBuyMax() { return hasMilestone("ch", 21) || hasUpgrade("pl", 84) },
 	gainExp() {
 		let gain = newDecimalOne();
-		if (hasBuyable("w", 23)) gain = gain.mul(buyableEffect("w", 23));
+		gain = applyBuyables(gain, {w: [23], mo: [22]});
 		if (hasMilestone("r", 3)) gain = gain.mul(milestoneEffect("r", 3));
 		if (hasMilestone("r", 6)) gain = gain.mul(milestoneEffect("r", 6));
 		if (hasMilestone("r", 8)) gain = gain.mul(milestoneEffect("r", 8));
 		if (hasMilestone("ch", 16)) gain = gain.mul(milestoneEffect("ch", 16));
-		if (hasBuyable("mo", 22)) gain = gain.mul(buyableEffect("mo", 22));
 		return gain;
 	},
 	autoPrestige() { return hasUpgrade("pl", 84) },
@@ -7545,11 +7550,8 @@ addLayer("pl", {
 	layerShown() { return getClickableState("mo", 21) || player.pl.unlocked },
 	effect() {
 		let eff = player.pl.points.div(10);
-		for (const id of [13, 21, 23, 31, 33, 41, 43, 51, 53, 61, 63, 71, 73, 81, 83, 91, 93]) {
-			if (hasUpgrade("pl", id)) eff = eff.mul(upgradeEffect("pl", id));
-		};
-		if (hasBuyable("pl", 12)) eff = eff.mul(buyableEffect("pl", 12));
-		if (hasBuyable("pl", 13)) eff = eff.mul(buyableEffect("pl", 13));
+		eff = applyUpgrades(eff, {pl: [13, 21, 23, 31, 33, 41, 43, 51, 53, 61, 63, 71, 73, 81, 83, 91, 93]});
+		eff = applyBuyables(eff, {pl: [12, 13]});
 		return eff;
 	},
 	effectDescription() { return "which generates <h2 class='layer-pl'>" + format(inChallenge("ds", 101) ? 0 : tmp.pl.effect) + "</h2> air per second" },
@@ -7583,6 +7585,7 @@ addLayer("pl", {
 			},
 			1: {
 				requirement: 2,
+				effect: 0.1,
 				effectDescription() { return "you can bulk 10x relic activation, gain +10% of your molecule gain per second, you can bulk 10x good influence rebuyables if you have the <b" + getColorClass(this, REF, "ch", true) + "78 chaos milestone</b>, keep all challenges on lesser resets, and unlock air rebuyables" },
 			},
 			2: {
