@@ -716,7 +716,8 @@ addLayer('d', {
 			return;
 		};
 		player.d.meta = (player.d.number.toNumber()).toString(getNumberBase());
-		player.d.meta = '0'.repeat(tmp.d.grid.cols - player.d.meta.length) + player.d.meta;
+		const padding = Math.max(0, tmp.d.grid.cols - player.d.meta.length);
+        player.d.meta = '0'.repeat(padding) + player.d.meta;
 	},
 	automate() {
 		for (let num = 0; num < (hasUpgrade('gn', 32) && !inChallenge('i', 32) ? 2 : 1); num++) {
