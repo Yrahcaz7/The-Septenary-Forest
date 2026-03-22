@@ -95,11 +95,11 @@ addLayer("ec", {
 		};
 		// ANACHRONISM rewards
 		if (hasChallenge("ec", 11)) {
-			let rewards = "";
+			let rewards = "ANACHRONISM rewards:";
 			for (let index = 0; index < challengeCompletions("ec", 11); index++) {
-				if (index > 0) rewards += "<br>";
+				rewards += "<br>";
 				const reward = layers.ec.challenges[11].rewards[index];
-				rewards += layers.ec.challenges[11].name(index + 1) + " reward: " + (reward instanceof Function ? reward() : reward);
+				rewards += layers.ec.challenges[11].name(index + 1, true) + ": " + (reward instanceof Function ? reward() : reward);
 			};
 			arr.push(["display-text", rewards], "blank");
 		};
@@ -126,8 +126,9 @@ addLayer("ec", {
 	},
 	challenges: {
 		11: {
-			name(x = Math.min(challengeCompletions("ec", 11) + 1, tmp.ec.challenges[11].completionLimit)) {
-				let text = "ANACHRONISM ";
+			name(x = Math.min(challengeCompletions("ec", 11) + 1, tmp.ec.challenges[11].completionLimit), short = false) {
+				let text = "";
+				if (!short) text += "ANACHRONISM ";
 				if (x >= 10) text += ["X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"][Math.floor(x / 10) % 10 - 1];
 				if (x % 10 >= 1) text += ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"][x % 10 - 1];
 				return text;

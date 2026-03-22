@@ -88,7 +88,7 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added the growth layer.<br>
 		- Added fifteen enhancements.<br>
 		- Added fifteen upgrades.<br>
-	<br><h3>v1.0 - Stimulations</h3><br>
+	<br><h3>v1.0 - Stimulated</h3><br>
 		- Added the stimulation layer.<br>
 		- Added fifteen upgrades.<div>
 <br>`;
