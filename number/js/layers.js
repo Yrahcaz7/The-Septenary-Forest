@@ -1850,13 +1850,13 @@ addLayer('i', {
 		14: {
 			requirementDescription: "13 intelligence and 9 Feat of History completions",
 			effectDescription: "improve intelligence effect formula (100^x --> 1,000^x)",
-			done() { return player.i.points.gte(13) && challengeCompletions('i', 12) >= 9 },
+			done() { return player.i.points.gte(13) && challengeCompletions('i', 21) >= 9 },
 			unlocked() { return hasMilestone('i', this.id - 1) || hasMilestone('i', this.id) },
 		},
 		15: {
 			requirementDescription: "13 intelligence and 15 Feat of History completions",
 			effectDescription: "the intelligence effect also applies to roman numeral gain",
-			done() { return player.i.points.gte(13) && challengeCompletions('i', 12) >= 15 },
+			done() { return player.i.points.gte(13) && challengeCompletions('i', 21) >= 15 },
 			unlocked() { return hasMilestone('i', this.id - 1) || hasMilestone('i', this.id) },
 		},
 		16: {
