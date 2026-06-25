@@ -29,7 +29,7 @@ const customComponents = {
 };
 ```
 
-This example makes a new prestige-button-like element called "assimilate-button" (similar to the mastery buttons in the original TPT).
+This example makes a new prestige-button-like element called "assimilate-button" (similar to the mastery buttons in The Prestige Tree).
 
 The `props` attribute always starts with "layer".
 This `layer` value is the id of the layer that the component is in.

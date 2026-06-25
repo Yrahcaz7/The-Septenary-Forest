@@ -24,17 +24,23 @@ achievements: {
 
 Usually, each achievement should have an id where the first digit is the row and the second digit is the column.
 
-Achievement features:
+## Achievement features
 
-- `name`: **optional**. displayed at the top of the achievement. The only visible text. It can also be a function that returns updating text. Can use basic HTML.
+- `name`: **optional**. Displayed at the top of the achievement.
+    It can also be a function that returns updating text. (Can use basic HTML.)
 
 - `done()`: A function returning a boolean to determine if the achievement should be awarded.
 
-- `tooltip`: Default tooltip for the achievement, appears when it is hovered over. Should convey the goal and any reward for completing the achievement. It can also be a function that returns updating text. Can use basic HTML. Setting this to `""` disables the tooltip.
+- `tooltip`: Default tooltip for the achievement; appears when it is hovered over.
+    Should convey the goal and any reward for completing the achievement.
+    It can also be a function that returns updating text. (Can use basic HTML.)
+    Setting this to `""` disables the tooltip.
 
-- `effect()`: **optional**. A function that calculates and returns the current values of any bonuses from the achievement. Can return a value or an object containing multiple values.
+- `effect()`: **optional**. A function that calculates and returns the current values of any bonuses from the achievement.
+    Can return a value or an object containing multiple values.
 
-- `unlocked()`: **optional**. A function returning a bool to determine if the achievement is visible or not. Default is unlocked.
+- `unlocked()`: **optional**. A function returning a bool to determine if the achievement is visible or not.
+    Default is always unlocked.
 
 - `onComplete()`: **optional**. This function will be called when the achievement is completed.
 
@@ -48,14 +54,20 @@ Achievement features:
 
 - `id`: **assigned automagically**. It's the "key" which the achievement was stored under, for convenient access. The achievement in the example's id is 11.
 
-- `goalTooltip`: **optional, deprecated**. Appears when the achievement is hovered over and locked, overrides the basic tooltip. This is to display the goal (or a hint). It can also be a function that returns updating text. Can use basic HTML.
+- `goalTooltip`: **optional, deprecated**. Appears when the achievement is hovered over and locked, overrides the basic tooltip.
+    This is to display the goal (or a hint).
+    It can also be a function that returns updating text. (Can use basic HTML.)
 
-- `doneTooltip`: **optional, deprecated**. Appears when the achievement is hovered over and completed, overrides the basic tooltip. This can display what the player achieved (the goal), and the rewards, if any. It can also be a function that returns updating text. Can use basic HTML.
+- `doneTooltip`: **optional, deprecated**. Appears when the achievement is hovered over and completed, overrides the basic tooltip.
+    This can display what the player achieved (the goal), and the rewards, if any.
+    It can also be a function that returns updating text. (Can use basic HTML.)
 
-Popup features:
+## Popup features
 
-> - `popupTitle` (additional feature): **optional**. The title of the popup generated when the achievement is gotten. If not present, the popup's title is "Achievement Unlocked!"
+> - `popupTitle` (additional feature): **optional**. The title of the popup generated when the achievement is gotten.
+>     The default title is "Achievement Unlocked!"
 >
-> - `popupColor` (additional feature): **optional**. The color of the popup generated when the achievement is gotten. If not present, the popup's color is the layer's color.
+> - `popupColor` (additional feature): **optional**. The color of the popup generated when the achievement is gotten.
+>     The default color is the layer's color.
 
 You can disable achievement popups by adding `achievementsPopups: false` to the layer.

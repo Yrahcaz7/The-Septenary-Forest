@@ -254,13 +254,13 @@ function loadVue(mainPage = false) {
 		template: template(/*html*/`<hr class="instant hl" :style="data ? {width: data} : {}">`),
 	});
 
-	// data = height in px, by default is bad
+	// data = height in px, default is bad
 	addNormalComponent('v-line', {
 		props: ['layer', 'data'],
 		template: template(/*html*/`<div class="instant vl" :style="data ? {height: data} : {}"></div>`),
 	});
 
-	// data = array of rows to include, by default is all
+	// data = array of rows to include, default is all
 	addNormalComponent('challenges', {
 		props: ['layer', 'data'],
 		data() { return {tmp} },
@@ -320,7 +320,7 @@ function loadVue(mainPage = false) {
 		</div>`),
 	});
 
-	// data = array of rows to include, by default is all
+	// data = array of rows to include, default is all
 	addNormalComponent('upgrades', {
 		props: ['layer', 'data'],
 		data() { return {tmp} },
@@ -375,7 +375,7 @@ function loadVue(mainPage = false) {
 		</button>`),
 	});
 
-	// data = array of rows to include, by default is all
+	// data = array of rows to include, default is all
 	addNormalComponent('milestones', {
 		props: ['layer', 'data'],
 		data() { return {tmp, milestoneShown} },
@@ -492,7 +492,7 @@ function loadVue(mainPage = false) {
 		</div>`),
 	});
 
-	// data = array of rows to include, by default is all
+	// data = array of rows to include, default is all
 	addNormalComponent('buyables', {
 		props: ['layer', 'data'],
 		data() { return {tmp} },
@@ -616,7 +616,7 @@ function loadVue(mainPage = false) {
 		</div>`),
 	});
 
-	// data = array of rows to include, by default is all
+	// data = array of rows to include, default is all
 	addNormalComponent('clickables', {
 		props: ['layer', 'data'],
 		data() { return {tmp} },
@@ -701,7 +701,7 @@ function loadVue(mainPage = false) {
 		</button>`),
 	});
 
-	// data = array of rows to include, by default is all
+	// data = array of rows to include, default is all
 	addNormalComponent('grid', {
 		props: ['layer', 'data'],
 		data() { return {tmp, run, layers} },
@@ -844,7 +844,7 @@ function loadVue(mainPage = false) {
 		</div>`),
 	});
 
-	// data = array of rows to include, by default is all
+	// data = array of rows to include, default is all
 	addNormalComponent('achievements', {
 		props: ['layer', 'data'],
 		data() { return {tmp} },

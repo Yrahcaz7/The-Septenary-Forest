@@ -6,10 +6,10 @@ Note: `newDecimalZero()` and `newDecimalOne()` are just more optimized versions 
 
 ```js
 addLayer("p", {
-    name: "prestige",                       // This is optional and is only used in a few places. If absent it just uses the layer id.
+    name: "prestige",                       // This is optional and is only used in a few places. Default is the layer id.
     symbol: "P",                            // This appears on the layer's node. Default is the id with the first letter capitalized.
     row: 0,                                 // The row this layer is on in the tree (0 is the first row).
-    position: 0,                            // Horizontal position within a row. By default sorts in alphabetical order by layer id.
+    position: 0,                            // Horizontal position within a row. Default is sorted in alphabetical order by layer id.
 
     startData() { return {                  // startData is a function that returns default data for a layer. 
         unlocked: true,                     // You can add more variables here to add them to your layer.

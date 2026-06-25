@@ -1,41 +1,63 @@
 # Layer Features
 
-This is a more comprehensive list of established features to add to layers. You can add more freely, if you want to have other functions or values associated with your layer. These have special functionality, though.
+This is a more comprehensive list of established features to add to layers.
+You can add more freely, if you want to have other functions or values associated with your layer.
+These have special functionality, though.
 
 You can make almost any value dynamic by using a function in its place, including all display strings and styling/color features.
 
 ## Layer Definition features
 
-- `layer`: **assigned automagically**. It's the same value as the name of this layer, so you can do `player[this.layer].points` or similar to access the saved value. It makes copying code to new layers easier. It is also assigned to all upgrades and buyables and such.
+- `layer`: **assigned automagically**. It's the same value as the name of this layer, so you can do `player[this.layer].points` or similar to access the saved value.
+    It makes copying code to new layers easier.
+    It is also assigned to all upgrades, buyables, and such.
 
-- `name`: **optional**. Used in reset confirmations (and the default infobox title). If absent, it just uses the layer's id.
+- `name`: **optional**. Used in reset confirmations (and the default infobox title).
+    Default is the layer's id.
 
-- `startData()`: A function to return the default save data for this layer. Add any variables you have to it. Make sure to use `Decimal` values rather than normal numbers.
+- `startData()`: A function to return the default save data for this layer.
+    Add any variables you have to it.
+    Make sure to use `Decimal` values rather than normal numbers.
 
     Standard values:
 
-    - `unlocked`: **optional**. A boolean determining if this layer is unlocked or not. Defaults to true.
-    - `points`: A `Decimal`, the main currency for the layer. (Can be omitted if the layer does not have a main currency and its presige type is `none`.)
-    - `total`: **optional**. A `Decimal`, tracks total amount of main prestige currency. Always tracked if you use `points`, but only shown if you add it here.
-    - `best`: **optional**. A `Decimal`, tracks highest amount of main prestige currency. Always tracked if you use `points`, but only shown if you add it here.
+    - `unlocked`: **optional**. A boolean determining if this layer is unlocked or not.
+        Default is `true`.
+    - `points`: A `Decimal`, the main currency for the layer.
+        (Can be omitted if the layer does not have a main currency and its presige type is `none`.)
+    - `total`: **optional**. A `Decimal`, tracks total amount of main prestige currency.
+        Always tracked if you use `points`, but only shown if you add it here.
+    - `best`: **optional**. A `Decimal`, tracks highest amount of main prestige currency.
+        Always tracked if you use `points`, but only shown if you add it here.
     - `unlockOrder`: **optional**. Used to keep track of relevant layers unlocked before this one.
     - `resetTime`: **optional**. A number, time since this layer was last prestiged (or reset by another layer).
 
-- `color`: A color associated with this layer, used in many places. (A string in hex format with a `#`.)
+- `color`: A color associated with this layer, used in many places.
+    (A string in hex format with a `#`.)
+    Can be a function.
 
-- `row`: The row of the layer, starting at 0. This affects where the node appears on the standard tree, and which resets affect the layer.
+- `row`: The row of the layer, starting at 0.
+    This affects where the node appears on the standard tree, and which resets affect the layer.
 
-    Using "side" instead of a number will cause the layer to appear off to the side as a smaller node (useful for achievements and statistics). Side layers are not affected by resets unless you add a `doReset` to them.
+    Using "side" instead of a number will cause the layer to appear off to the side as a smaller node (useful for achievements and statistics).
+    Side layers are not affected by resets unless you add a `doReset` to them.
 
 - `displayRow`: **OVERRIDE**. Changes where the layer node appears without changing where it is in the reset order.
 
-- `resource`: Name of the main currency you gain by resetting on this layer. (Can be omitted if the layer does not have a main currency and its presige type is `none`.)
+- `resource`: Name of the main currency you gain by resetting on this layer.
+    (Can be omitted if the layer does not have a main currency and its presige type is `none`.)
 
-- `effect()`: **optional**. A function that calculates and returns the current values of any bonuses inherent to the main currency. Can return a value or an object containing multiple values. *You will also have to implement the effect where it is applied.*
+- `effect()`: **optional**. A function that calculates and returns the current values of any bonuses inherent to the main currency.
+    Can return a value or an object containing multiple values.
+    *You will also have to implement the effect where it is applied.*
 
-- `effectDescription()`: **optional**. A function that returns a description of this effect. If the text stays constant, it can just be a string.
+- `effectDescription()`: **optional**. A function that returns a description of this effect.
+    If the text stays constant, it can just be a string.
 
-- `layerShown()`: **optional**. A function returning a boolean which determines if this layer's node should be visible on the tree. (If the value stays constant, it can just be a boolean.) It can also return "ghost", which will hide the layer, but its node will still take up space in the tree. Defaults to true.
+- `layerShown()`: **optional**. A function returning a boolean which determines if this layer's node should be visible on the tree.
+    (If the value stays constant, it can just be a boolean.)
+    It can also return "ghost", which will hide the layer, but its node will still take up space in the tree.
+    Default is `true`.
 
 - `hotkeys`: **optional**. An array containing information on any hotkeys associated with this layer:
 
@@ -52,154 +74,236 @@ You can make almost any value dynamic by using a function in its place, includin
 
 - `style`: **optional**. A "CSS object" where the keys are CSS attributes, containing any CSS that should affect this layer's entire tab.
 
-- `tabFormat`: **optional**. Use this if you want to add extra things to your tab or change the layout. [See here for more info.](custom-tab-layouts.md)
+- `tabFormat`: **optional**. Use this if you want to add extra things to your tab or change the layout.
+    [See here for more info.](custom-tab-layouts.md)
 
-- `midsection`: **optional**. An alternative to `tabFormat`, which is inserted in between Milestones and Buyables in the standard tab layout. (cannot do subtabs)
+- `midsection`: **optional**. An alternative to `tabFormat`, which is inserted in between Milestones and Buyables in the standard tab layout.
+    (You cannot put subtabs in here.)
 
-## Big features (all optional)
+## Big features
 
-- `upgrades`: A set of one-time purchases which can have unique upgrade conditions, currency costs, and bonuses. [See here for more info.](upgrades.md)
+All of these are optional.
 
-- `milestones`: A list of bonuses gained upon reaching certain thresholds of a resource. Often used for automation/QOL. [See here for more info.](milestones.md)
+- `upgrades`: A set of one-time purchases which can have unique upgrade conditions, currency costs, and bonuses.
+    [See here for more info.](upgrades.md)
 
-- `challenges`: The player can enter challenges, which make the game harder. If they reach a goal and beat the challenge, they recieve a bonus. [See here for more info.](challenges.md)
+- `milestones`: A list of bonuses gained upon reaching certain thresholds of a resource.
+    Often used for automation/QOL.
+    [See here for more info.](milestones.md)
 
-- `buyables`: Effectively upgrades that can be bought multiple times, and are optionally respeccable. Many uses. [See here for more info.](buyables.md)
+- `challenges`: The player can enter challenges, which make the game harder.
+    If they reach a goal and beat the challenge, they recieve a bonus.
+    [See here for more info.](challenges.md)
 
-- `clickables`: Extremely versatile and generalized buttons which can only be clicked sometimes. [See here for more info.](clickables.md)
+- `buyables`: Effectively upgrades that can be bought multiple times, and are optionally respec-able.
+    There are many uses for these.
+    [See here for more info.](buyables.md)
 
-- `microtabs`: An area that functions like a set of subtabs, with buttons at the top changing the content within. (Advanced) [See here for more info.](subtabs-and-microtabs.md)
+- `clickables`: Extremely versatile and generalized buttons which can only be clicked sometimes.
+    [See here for more info.](clickables.md)
 
-- `bars`: Display some information as a progress bar, gague, or similar. They are highly customizable, and can be vertical as well. [See here for more info.](bars.md)
+- `microtabs`: An area that functions like a set of subtabs, with buttons at the top changing the content within.
+    (Advanced) [See here for more info.](subtabs-and-microtabs.md)
 
-- `achievements`: Kind of like milestones, but with a different display style and some other differences. Extra features are on the way at a later date! [See here for more info.](achievements.md)
+- `bars`: Display some information as a progress bar, gauge, or similar.
+    They are highly customizable, and can be vertical as well.
+    [See here for more info.](bars.md)
 
-- `achievementPopups`, `milestonePopups`: **optional**. If false, disables the popup message when you get an achievement/milestone in this layer. True by default.
+- `achievements`: Kind of like milestones, but with a different display style and some other differences.
+    [See here for more info.](achievements.md)
 
-- `infoboxes`: Displays some text in a box that can be shown or hidden. [See here for more info.](infoboxes.md)
+- `achievementPopups`, `milestonePopups`: If `false`, disables the popup message when you get an achievement/milestone in this layer.
+    Default is `true`.
 
-- `grid`: A grid of buttons that behave the same, but have their own data. [See here for more info.](grids.md)
+- `infoboxes`: Displays some text in a box that can be shown or hidden.
+    [See here for more info.](infoboxes.md)
+
+- `grid`: A grid of buttons that behave the same, but have their own data.
+    [See here for more info.](grids.md)
 
 ## Prestige formula features
 
-- `type`: **optional**. Determines which prestige formula you use. Defaults to "none".
+- `type`: **optional**. Determines which prestige formula the layer uses. Default is `"none"`.
 
-    - `"normal"`: The amount of currency you gain is independent of its current amount (like Prestige Points in TPT). The formula before bonuses is based on `baseResource^exponent`
-    - `"static"`: The cost is dependent on your total after reset (like Boosters and Generators in TPT). The formula before bonuses is based on `base^(x^exponent)`
-    - `"custom"`: You can define everything, from the calculations to the text on the button, yourself. (See more at the bottom)
+    - `"normal"`: The amount of currency you gain is independent of its current amount (like Prestige Points in TPT).
+        The formula before bonuses is based on `baseResource^exponent`.
+    - `"static"`: The cost is dependent on your total after reset (like Boosters and Generators in TPT).
+        The formula before bonuses is based on `base^(x^exponent)`.
+    - `"custom"`: You can define everything, from the calculations to the text on the button, yourself.
+        ([See more at the bottom](#custom-prestige-type).)
     - `"none"`: This layer does not prestige, and therefore does not need any of the other features in this section.
 
 - `baseResource`: The name of the resource that determines how much of the main currency you gain on reset.
 
 - `baseAmount()`: A function that gets the current value of the base resource.
 
-- `requires`: A `Decimal`, the amount of the base needed to gain 1 of the prestige currency. Also the amount required to unlock the layer. You can instead make this a function, to make it harder if another layer was unlocked first (based on unlockOrder).
+- `requires`: A `Decimal`, the amount of the base needed to gain 1 of the prestige currency.
+    Also the amount required to unlock the layer.
+    You can make this a function to, for example, make it harder to unlock if another layer was unlocked first (based on `unlockOrder`).
 
-- `exponent`: Used as described above.
+- `exponent`: Used in the prestige formulas as described above.
 
-- `base`: **sometimes required**. Required for "static" layers, used as described above. If absent, defaults to 2. Must be greater than 1.
+- `base`: **sometimes required**. Required for "static" layers, used as described above. Default is `2`. Must be greater than `1`.
 
-- `roundUpCost`: **optional**. A boolean, which is true if the resource cost needs to be rounded up. (Use if the base resource is a "static" currency.)
+- `roundUpCost`: **optional**. A boolean, which is `true` if the resource cost needs to be rounded up.
+    (Use this if the base resource is a "static" currency.)
 
 - `gainMult()`, `gainExp()`: **optional**. For normal layers, these functions calculate the multiplier and exponent on resource gain from upgrades and boosts and such. Plug in most bonuses here.
-    For static layers, they instead multiply and root the cost of the resource. (So to make a boost you want to make gainMult smaller and gainExp larger.)
+    For static layers, they instead multiply and root the **cost** of the resource, respectively.
+    (So to make a boost you want to make `gainMult` smaller and `gainExp` larger.)
 
-- `directMult()`: **optional**. Directly multiplies the resource gain, after exponents and softcaps. For static layers, actually multiplies resource gain instead of reducing the cost.
+- `directMult()`: **optional**. Directly multiplies the resource gain, after exponents and softcaps.
+    For static layers, actually multiplies resource gain instead of reducing the cost.
 
 - `softcap`, `softcapPower`: **optional**. Gain beyond `softcap` points is put to the `softcapPower`th power.
     For normal layers, the default for `softcap` is `e1e7`, and for other types of layers, the default for `softcap` is `Infinity`.
     The default for `softcapPower` is always `0.5`.
 
-> - `softcaps`, `softcapPowers` (additional features): **OVERRIDE**. These are just like `softcap` and `softcapPower`, except they are arrays of values, allowing for multiple softcaps instead of just one. If either of these are missing or is an empty array, `softcap` and `softcapPower` are used instead. Both can also be functions that return an array, rather than an array itself.
+> - `softcaps`, `softcapPowers` (additional features): **OVERRIDE**. These are just like `softcap` and `softcapPower`, except they are arrays of values, allowing for multiple softcaps instead of just one.
+>     If either of these are missing or is an empty array, `softcap` and `softcapPower` are used instead.
+>     Both can also be functions that return an array, rather than an array itself.
 
 ## Other prestige-related features
 
-- `canBuyMax()`: **sometimes required**. Required for static layers. Function used to determine if buying max is permitted.
+- `canBuyMax()`: **sometimes required**. Required for static layers.
+    Function used to determine if buying max is permitted.
 
-- `onPrestige(gain)`: **optional**. A function that triggers when this layer prestiges, just before you gain the currency. Can be used to have secondary resource gain on prestige, or to recalculate things or whatnot.
+- `onPrestige(gain)`: **optional**. A function that triggers when this layer prestiges, just before you gain the currency.
+    Can be used to have secondary resource gain on prestige, or to recalculate things or whatnot.
 
-> - `onPrestigeIsAfterGain` (additional feature): **optional**. A boolean indicating whether this layer's `onPrestige()` function triggers after prestige resource gain but before resetting anything (this also means that any relevant milestones and achievements will be updated to reflect the gain). Defaults to `false`, which makes `onPrestige()` trigger before both gain and reset.
+> - `onPrestigeIsAfterGain` (additional feature): **optional**. A boolean indicating whether this layer's `onPrestige()` function triggers after prestige resource gain but before resetting anything.
+>     (This also means that any relevant milestones and achievements will be updated to reflect the gain.)
+>     Default is `false`, which makes `onPrestige()` trigger before both gain and reset.
 
 - `resetDescription`: **optional**. Use this to replace `"Reset for "` on the Prestige button with something else.
 
-- `prestigeButtonText()`: **sometimes required**. Use this to make the entirety of the text a Prestige button contains. Only required for custom layers, but usable by all types.
+- `prestigeButtonText()`: **sometimes required**. Use this to set the entirety of the text a Prestige button contains.
+    Only required for custom layers, but usable by all types.
 
-- `passiveGeneration()`: **optional**. Returns a regular number. You automatically generate your gain times this number every second (does nothing if absent). This is good for automating normal layers.
+- `passiveGeneration()`: **optional**. Returns a regular number.
+    You automatically generate your gain times this number every second (does nothing if absent).
+    This is good for automating normal layers.
 
-- `autoPrestige()`: **optional**. Returns a boolean. If it is true, the layer will always automatically do a prestige if it can. This is good for automating static layers.
+- `autoPrestige()`: **optional**. Returns a boolean.
+    If it is `true`, the layer will always automatically do a prestige if it can.
+    This is good for automating static layers.
 
-> - `logged` (additional feature): **optional**. For normal layers, if this is a [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) value, the resource gain becomes the log of the previous gain plus one. If it is exactly `true`, the log base is `10`, otherwise the log base is `new Decimal(logged)`. Can also be a function. **Has no effect on static layers.**
+> - `logged` (additional feature): **optional**. For normal layers, if this is a [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) value, the resource gain becomes the log of the previous gain plus one.
+>     If it is exactly `true`, the log base is `10`, otherwise the log base is `new Decimal(logged)`.
+>     Can also be a function. **Has no effect on static layers.**
 
 ## Tree/node features
 
-- `symbol`: **optional**. The text that appears on this layer's node. Default is the layer id with the first letter capitalized.
+- `symbol`: **optional**. The text that appears on this layer's node.
+    Default is the layer id with the first letter capitalized.
 
-- `image`: **OVERRIDE**. The url (local or global) of an image that goes on the node. (Overrides symbol)
+- `image`: **OVERRIDE**. The URL (local or global) of an image that goes on the node.
+    Overrides `symbol`.
 
-- `position`: **optional**. Determines the horizontal position of the layer in its row in a standard tree. By default, it uses the layer id, and layers are sorted in alphabetical order.
+- `position`: **optional**. Determines the horizontal position of the layer in its row in a standard tree.
+    By default, it uses the layer id, and layers are sorted in alphabetical order.
 
-- `branches`: **optional**. An array of layer/node ids. On a tree, a line will appear from this layer to all of the layers in the list. Alternatively, an entry in the array can be a 2-element array consisting of the layer id and a color value. The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors). A third element in the array optionally specifies line width.
+- `branches`: **optional**. An array of layer/node ids.
+    On a tree, a line will appear from this layer to all of the layers in the list.
+    Alternatively, an entry in the array can be a 2-element array consisting of the layer id and a color value.
+    The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors).
+    A third element in the array optionally specifies line width.
 
 - `nodeStyle`: **optional**. A CSS object, where the keys are CSS attributes, which styles this layer's node on the tree.
 
-- `tooltip()` / `tooltipLocked()`: **optional**. Functions that return text, which is the tooltip for the node when the layer is unlocked or locked, respectively. By default the tooltips behave the same as in the original Prestige Tree.
+- `tooltip()`, `tooltipLocked()`: **optional**. Functions that return text, which is the tooltip for the node when the layer is unlocked or locked, respectively.
+    By default, the tooltips behave the same as in the original Prestige Tree.
     If the value is `""`, the tooltip will be disabled.
 
-- `marked`: **optional**. Adds a mark to the corner of the node. If it's `true` it will be a star, but it can also be an image URL.
+- `marked`: **optional**. Adds a mark to the corner of the node.
+    If it's `true` it will be a star, but it can also be an image URL.
 
-> - `alias` (additional feature): **optional**. An object (e.g. `{}`). Adds another tree node that refers to the same layer, with overrides for some layer features. Useful for adding a shortcut to a frequently used layer if your tree get very big.
+> - `alias` (additional feature): **optional**. An object (e.g. `{}`).
+>     Adds another tree node that refers to the same layer, with overrides for some layer features.
+>     Useful for adding a shortcut to a frequently used layer if your tree gets very big.
 >
->    Overrides you can put on the alias object: `row`, `displayRow`, `symbol`, `position`, and `nodeStyle`. (The alias's `displayRow` defaults to the alias's `row`, or if it is not present, the layer's `displayRow`.)
+>     Overrides you can put on the alias object: `row`, `displayRow`, `symbol`, `position`, and `nodeStyle`.
+>     (The alias's `displayRow` defaults to the alias's `row`, or if it is not present, the layer's `displayRow`.)
 
 ## Other features
 
-- `doReset(resettingLayer)`: **optional**. Is triggered when a layer on a row greater than or equal to this one does a reset. The default behavior is to reset everything on the row, but only if it was triggered by a layer in a higher row. `doReset` is always called for side layers, but for these the default behavior is to reset nothing.
+- `doReset(resettingLayer)`: **optional**. Is triggered when a layer on a row greater than or equal to this one does a reset.
+    Default is to reset everything on the row, but only if it was triggered by a layer in a higher row.
+    `doReset` is always called for side layers, but for these the default is to reset nothing.
 
-    If you want to keep things, determine what to keep based on `resettingLayer`, `milestones`, and such, then call `layerDataReset(layer, keep)`, where `layer` is this layer, and `keep` is an array of the names of things to keep. It can include things like "points", "best", "total" (for this layer's prestige currency), "upgrades",  any unique variables like "generatorPower", etc. If you want to only keep specific upgrades or something like that, save them in a separate variable, then call `layerDataReset`, and then set `player[this.layer].upgrades` to the saved upgrades.
+    If you want to keep things, determine what to keep based on `resettingLayer`, `milestones`, and such, then call `layerDataReset(layer, keep)`, where `layer` is this layer, and `keep` is an array of the names of things to keep.
+    It can include things like "points", "best", "total" (for this layer's prestige currency), "upgrades", any unique variables like "generatorPower", etc.
+    If you want to only keep specific upgrades or something like that, save them in a separate variable, then call `layerDataReset`, and then set `player[this.layer].upgrades` to the saved upgrades.
 
-- `update(diff)`: **optional**. This function is called every game tick. Use it for any passive resource production or time-based things. `diff` is the time since the last tick.
+- `update(diff)`: **optional**. This function is called every game tick.
+    Use it for any passive resource production or time-based things.
+    `diff` is the time since the last tick.
 
-- `autoUpgrade`: **optional**. A boolean value. If true, the game will attempt to buy this layer's upgrades every tick. Defaults to false.
+- `autoUpgrade`: **optional**. A boolean value.
+    If `true`, the game will attempt to buy this layer's upgrades every tick.
+    Default is `false`.
 
-- `automate()`: **optional**. This function is called every game tick, after production. Use it to activate automation things that aren't otherwise supported.
+- `automate()`: **optional**. This function is called every game tick, after production.
+    Use it to activate automation things that aren't otherwise supported.
 
-- `resetsNothing`: **optional**. Returns true if this layer shouldn't trigger any resets when you prestige.
+- `resetsNothing`: **optional**. Returns `true` if this layer shouldn't trigger any resets when you prestige.
 
-- `increaseUnlockOrder`: **optional**. An array of layer ids. When this layer is unlocked for the first time, the `unlockOrder` value for any not-yet-unlocked layers in this list increases. This can be used to make them harder to unlock.
+- `increaseUnlockOrder`: **optional**. An array of layer ids.
+    When this layer is unlocked for the first time, the `unlockOrder` value for any not-yet-unlocked layers in this list increases.
+    This can be used to make them harder to unlock.
 
-- `shouldNotify`: **optional**. A function to return true if this layer should be highlighted in the tree. The layer will automatically be highlighted if you can buy an upgrade whether you have this or not.
+- `shouldNotify`: **optional**. Returns `true` if this layer should be highlighted in the tree.
+    The layer will automatically be highlighted if you can buy an upgrade whether you have this or not.
 
-- `glowColor`: **optional**. The color that this layer will be highlighted if it should notify. The default is red. You can use this if you want several different notification types!
+- `glowColor`: **optional**. The color that this layer will be highlighted if it should notify.
+    Default is red.
+    You can use this if you want several different notification types!
 
-- `componentStyles`: **optional**. An object that contains a set of CSS objects (they can be functions that return a CSS object as well). Each of these will be applied to any components on the layer with the type of its id. Example:
+- `componentStyles`: **optional**. An object that contains a set of CSS objects (they can be functions that return a CSS object as well).
+    Each of these will be applied to any components on the layer with the type of its id.
+    Example:
 
-```js
-componentStyles: {
-    challenge() { if (options.smallChallenges) return {height: "200px"} },
-    "prestige-button": {color: "#AA66AA"},
-}
-```
+    ```js
+    componentStyles: {
+        challenge() { if (options.smallChallenges) return {height: "200px"} },
+        "prestige-button": {color: "#AA66AA"},
+    }
+    ```
 
-- `leftTab`: **optional**. A boolean value. If true, this layer will use the left tab instead of the right tab.
+- `leftTab`: **optional**. A boolean value.
+    If `true`, this layer will use the left tab instead of the right tab.
 
-- `previousTab`: **optional**. A layer's id. If a layer has a previousTab, the layer will always have a back arrow and pressing the back arrow on this layer will take you to the layer with this id.
+- `previousTab`: **optional**. A layer's id.
+    If a layer has a `previousTab`, the layer will always have a back arrow and pressing the back arrow on this layer will take you to the layer with this id.
 
-- `deactivated`: **optional**. A boolean value. If true, `hasUpgrade`, `hasMilestone`, `hasAchievement`, `hasChallenge`, and `hasBuyable` will return false for things in the layer, and you will be unable to buy or click things, or gain achievements/milestones on the layer. You will have to disable clickable effects, the innate layer effect, and possibly other things yourself.
+- `deactivated`: **optional**. A boolean value.
+    If true, `hasUpgrade`, `hasMilestone`, `hasAchievement`, `hasChallenge`, and `hasBuyable` will return `false` for things in the layer.
+    You will be unable to buy or click things, or gain achievements/milestones on the layer.
+    You will have to disable clickable effects, the innate layer effect, and possibly other things yourself.
 
 ## Custom Prestige type
 
-(All of these can also be used by other prestige types)
+(All of these can also be used by other prestige types.)
 
-- `getResetGain()`: **mostly for custom prestige type**. Returns how many points you should get if you reset now. You can call `getResetGain(this.layer, useType = "static")` or similar to calculate what your gain would be under another prestige type (provided you have all of the required features in the layer).
+- `getResetGain()`: **mostly for custom prestige type**. Returns how many points you should get if you reset now.
 
-- `getNextAt(canMax = false)`: **mostly for custom prestige type**. Returns how many of the base currency you need to get to the next point. `canMax` is an optional variable used with Static-ish layers to differentiate between if it's looking for the first point you can reset at, or the requirement for any gain at all (Supporting both is good). You can also call `getNextAt(this.layer, canMax = false, useType = "static")` or similar to calculate what your next at would be under another prestige type (provided you have all of the required features in the layer).
+    You can call `getResetGain(this.layer, useType = "static")` to calculate what your gain would be under another prestige type (provided you have all of the required features in the layer).
 
-- `canReset()`: **mostly for custom prestige type**. Returns true only if you have the resources required to do a prestige here.
+- `getNextAt(canMax = false)`: **mostly for custom prestige type**. Returns how many of the base currency you need to get to the next point.
+    `canMax` is an optional variable used with static-ish layers to differentiate between if it's looking for the first point you can reset at, or the requirement for any gain at all (supporting both is good).
 
-- `prestigeNotify()`: **mostly for custom prestige types**. Returns true if this layer should be subtly highlighted to indicate you can prestige for a meaningful gain.
+    You can also call `getNextAt(this.layer, canMax = false, useType = "static")` to calculate what your next at would be under another prestige type (provided you have all of the required features in the layer).
 
-> Useful functions for implementing custom prestige types:
->
-> - `softcap(value, cap, power = 0.5)`: Returns `value` softcapped to `power` beyond `cap`. (`value` and `cap` are Decimals, while `power` can be a number or a Decimal.) Useful for implementing softcaps in `getResetGain()`.
->
-> - `inverseSoftcap(value, cap, power = 0.5)` (additional feature): Returns `value` reverse-softcapped by `power` beyond `cap`. (`value` and `cap` are Decimals, while `power` can be a number or a Decimal.) Useful for implementing softcaps in `getNextAt()`.
+- `canReset()`: **mostly for custom prestige type**. Returns `true` only if you have the resources required to do a prestige here.
+
+- `prestigeNotify()`: **mostly for custom prestige types**. Returns `true` if this layer should be subtly highlighted to indicate you can prestige for a meaningful gain.
+
+Useful functions for implementing custom prestige types:
+
+- `softcap(value, cap, power = 0.5)`: Returns `value` softcapped to `power` beyond `cap`.
+    (`value` and `cap` are Decimals, while `power` can be a number or a Decimal.)
+    Useful for implementing softcaps in `getResetGain()`.
+
+> - `inverseSoftcap(value, cap, power = 0.5)` (additional feature): Returns `value` reverse-softcapped by `power` beyond `cap`.
+>     (`value` and `cap` are Decimals, while `power` can be a number or a Decimal.)
+>     Useful for implementing softcaps in `getNextAt()`.

@@ -12,45 +12,64 @@ Milestones should be formatted like this:
 ```js
 milestones: {
     0: {
-        requirementDescription: "123 waffles",
+        requirementDescription: "123 total waffles",
         effectDescription: "blah",
-        done() { return player.w.points.gte(123) },
+        done() { return player.w.total.gte(123) },
         etc
     },
     etc
 }
 ```
 
-Milestone features:
+## Milestone features
 
-- `requirementDescription`: A string describing the requirement for unlocking this milestone. Suggestion: Use a "total". It can also be a function that returns updating text. Can use basic HTML.
+- `requirementDescription`: A string describing the requirement for unlocking this milestone.
+    (Suggestion: Use a "total".)
+    It can also be a function that returns updating text.
+    (Can use basic HTML.)
 
-- `effectDescription`: A string describing the reward for having the milestone. *You will have to implement the reward elsewhere.* It can also be a function that returns updating text. Can use basic HTML. (Additional feature: When `effectDescription` is a function, it can have an argument `eff`, which holds the current effect of the milestone.)
+- `effectDescription`: A string describing the reward for having the milestone.
+    *You will have to implement the reward elsewhere.*
+    It can also be a function that returns updating text.
+    (Can use basic HTML.)
+    Additional feature: When `effectDescription` is a function, it can have an argument `eff`, which holds the current effect of the milestone.
 
 - `done()`: A function returning a boolean to determine if the milestone should be awarded.
 
 - `onComplete()`: **optional**. This function will be called when the milestone is completed.
 
-> - `effect()` (additional feature): **optional**. A function that calculates and returns the current values of any bonuses from the milestone. Can return a value or an object containing multiple values.
+> - `effect()` (additional feature): **optional**. A function that calculates and returns the current values of any bonuses from the milestone.
+    Can return a value or an object containing multiple values.
 
-- `toggles`: **optional**. Creates toggle buttons that appear on the milestone when it is unlocked. The toggles can toggle a given boolean value in a layer. It is defined as an array of paired items, one pair per toggle. The first is the internal name of the layer the value being toggled is stored in, and the second is the internal name of the variable to toggle. (e.g. `[["b", "auto"], ["g", "auto"]]`)
+- `toggles`: **optional**. Creates toggle buttons that appear on the milestone when it is unlocked.
+    The toggles can toggle a given boolean value in a layer.
+    It is defined as an array of paired items, one pair per toggle.
+    The first is the internal name of the layer the value being toggled is stored in, and the second is the internal name of the variable to toggle (e.g. `[["b", "auto"], ["g", "auto"]]`).
 
-    **Tip:** Toggles are not de-set if the milestone becomes locked! In this case, you should also check if the player has the milestone.
+    **Important note:** Toggles are not de-set if the milestone becomes locked!
+    In this case, you should also check if the player has the milestone.
 
 - `style`: **optional**. Applies CSS to this milestone, in the form of an object where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
 
-- `unlocked()`: **optional**. A function returning a boolean to determine if the milestone should be shown. If absent, it is always shown.
+- `unlocked()`: **optional**. A function returning a boolean to determine if the milestone should be shown.
+    Default is always unlocked.
 
-- `tooltip`: **optional**. Adds a tooltip to this milestone, appears when it is hovered over. Can use basic HTML. Default is no tooltip. If this returns an empty value, that also disables the tooltip.
+- `tooltip`: **optional**. Adds a tooltip to this milestone, appears when it is hovered over.
+    (Can use basic HTML.)
+    Default is no tooltip.
+    If this returns an empty value, that also disables the tooltip.
 
 - `layer`: **assigned automagically**. It's the same value as the name of this layer, so you can do `player[this.layer].points` or similar.
 
-- `id`: **assigned automagically**. It's the "key" which the milestone was stored under, for convenient access. The milestone in the example's id is 0.
+- `id`: **assigned automagically**. It's the "key" which the milestone was stored under, for convenient access.
+    The milestone in the example's id is 0.
 
-Popup features:
+## Popup features
 
-> - `popupTitle` (additional feature): **optional**. The title of the popup generated when the milestone is gotten. If not present, the popup's title is "Milestone Achieved!"
+> - `popupTitle` (additional feature): **optional**. The title of the popup generated when the milestone is gotten.
+>     Default is "Milestone Achieved!"
 >
-> - `popupColor` (additional feature): **optional**. The color of the popup generated when the milestone is gotten. If not present, the popup's color is the layer's color.
+> - `popupColor` (additional feature): **optional**. The color of the popup generated when the milestone is gotten.
+>     Default is the layer's color.
 
 You can disable milestone popups by adding `milestonePopups: false` to the layer.

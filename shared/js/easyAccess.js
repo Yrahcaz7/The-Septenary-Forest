@@ -212,9 +212,9 @@ function gridEffect(layer, id) {
 /**
  * Purchases a standard buyable that costs one currency.
  * @param {{layer: string, id: string}} obj - The TMT buyable to purchase.
- * @param {string} currencyLayer - The id of the layer that the currency is in. Use an empty string if it is not in a layer. Defaults to `obj.layer`.
- * @param {string} currencyName - The name of the currency. Defaults to `"points"`.
- * @param {number} bulk - The amount of the buyable the player should get from the purchase. Defaults to `1`.
+ * @param {string} currencyLayer - The id of the layer that the currency is in. Use an empty string if it is not in a layer. Default is `obj.layer`.
+ * @param {string} currencyName - The name of the currency. Default is `"points"`.
+ * @param {number} bulk - The amount of the buyable the player should get from the purchase. Default is `1`.
  * @param {boolean} limitAmount - If true, the buyable amount is capped at its `purchaseLimit`.
  */
 function buyStandardBuyable(obj, currencyLayer = obj.layer, currencyName = "points", bulk = 1, limitAmount = false) {
@@ -240,9 +240,9 @@ function buyStandardBuyable(obj, currencyLayer = obj.layer, currencyName = "poin
 /**
  * Purchases a standard multi-currency buyable.
  * @param {{layer: string, id: string}} obj - The TMT buyable to purchase.
- * @param {string[]} currencyLayers - An array containing the id of each layer that each currency is in. Defaults to an empty array.
+ * @param {string[]} currencyLayers - An array containing the id of each layer that each currency is in. Default is an empty array.
  * @param {boolean} costless - If true, the cost is not subtracted from each "points", instead the cost is added to the respective "total" values.
- * @param {number} bulk - The amount of the buyable the player should get from the purchase. Defaults to `1`.
+ * @param {number} bulk - The amount of the buyable the player should get from the purchase. Default is `1`.
  * @param {boolean} limitAmount - If true, the buyable amount is capped at its `purchaseLimit`.
  */
 function buyMultiCurrencyBuyable(obj, currencyLayers = [], costless = false, bulk = 1, limitAmount = false) {
@@ -274,7 +274,7 @@ function buyMultiCurrencyBuyable(obj, currencyLayers = [], costless = false, bul
  * Returns a version of `num` that has the specified upgrades applied to it.
  * @param {Decimal} num - The Decimal to use. This may or may not be mutated, so don't rely on it.
  * @param {Object.<string, number[]>} upgrades - An object where keys are layer ids and values are arrays of upgrade ids.
- * @param {string} operation - The operation that the upgrades perform. Must be a valid Decimal function name. Defaults to `"mul"`.
+ * @param {string} operation - The operation that the upgrades perform. Must be a valid Decimal function name. Default is `"mul"`.
  */
 function applyUpgrades(num, upgrades, operation = "mul") {
 	for (const layer in upgrades) {
@@ -289,7 +289,7 @@ function applyUpgrades(num, upgrades, operation = "mul") {
  * Returns a version of `num` that has the specified buyables applied to it.
  * @param {Decimal} num - The Decimal to use. This may or may not be mutated, so don't rely on it.
  * @param {Object.<string, number[]>} buyables - An object where keys are layer ids and values are arrays of buyable ids.
- * @param {string} operation - The operation that the buyables perform. Must be a valid Decimal function name. Defaults to `"mul"`.
+ * @param {string} operation - The operation that the buyables perform. Must be a valid Decimal function name. Default is `"mul"`.
  */
 function applyBuyables(num, buyables, operation = "mul") {
 	for (const layer in buyables) {
@@ -304,7 +304,7 @@ function applyBuyables(num, buyables, operation = "mul") {
  * Returns a version of `num` that has the specified milestones applied to it.
  * @param {Decimal} num - The Decimal to use. This may or may not be mutated, so don't rely on it.
  * @param {Object.<string, number[]>} milestones - An object where keys are layer ids and values are arrays of milestone ids.
- * @param {string} operation - The operation that the milestones perform. Must be a valid Decimal function name. Defaults to `"mul"`.
+ * @param {string} operation - The operation that the milestones perform. Must be a valid Decimal function name. Default is `"mul"`.
  */
 function applyMilestones(num, milestones, operation = "mul") {
 	for (const layer in milestones) {
@@ -320,7 +320,7 @@ function applyMilestones(num, milestones, operation = "mul") {
  * @param {Decimal} num - The Decimal to use. This may or may not be mutated, so don't rely on it.
  * @param {string} layer - The id of the layer that contains the upgrade sequence.
  * @param {number[]} ids - An array containing the id of each upgrade in the sequence, in order.
- * @param {string} operation - The operation that the upgrades perform. Must be a valid Decimal function name. Defaults to `"mul"`.
+ * @param {string} operation - The operation that the upgrades perform. Must be a valid Decimal function name. Default is `"mul"`.
  */
 function applyUpgradeSquence(num, layer, ids, operation = "mul") {
 	for (const id of ids) {

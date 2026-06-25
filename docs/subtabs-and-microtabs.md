@@ -1,8 +1,10 @@
 # Subtabs and Microtabs
 
-Subtabs are separate sections of a tab that you can view by selecting one at the top of the tab. Microtabs are smaller areas that function in much the same way. You can also embed layers inside of subtabs/microtabs.
+Subtabs are separate sections of a tab that you can view by selecting one at the top of the tab.
+Microtabs are smaller areas that function in much the same way.
+You can also embed layers inside of subtabs/microtabs.
 
-Subtabs are defined by using the tab format like this, where each element of tabFormat is given the name of that subtab:
+Subtabs are defined by using the tab format like this, where each element of `tabFormat` is given the name of that subtab:
 
 ```js
 tabFormat: {
@@ -18,7 +20,9 @@ tabFormat: {
 }
 ```
 
-Microtabs are defined similarly, and use the same features, but are defined in the "microtabs" feature. Each entry is a group of tabs which will appear in a microtabs component. The first set, "stuff", has 2 tabs, and the second, "otherStuff", has none.
+Microtabs are defined similarly, and use the same features, but are defined in the `microtabs` feature.
+Each entry is a group of tabs which will appear in a microtabs component.
+The first set, "stuff", has 2 tabs, and the second, "otherStuff", has none.
 
 ```js
 microtabs: {
@@ -38,7 +42,7 @@ microtabs: {
 }
 ```
 
-Normal subtabs and microtab subtabs both use the same features:
+Normal subtabs and microtab subtabs both use the same features.
 
 ## Features
 
@@ -48,10 +52,15 @@ Normal subtabs and microtab subtabs both use the same features:
 
 - `buttonStyle`: **optional**. A CSS object, which affects the appearance of the button for that subtab.
 
-- `unlocked()`: **optional**. A function to determine if the button for this subtab should be visible. By default, a subtab is always unlocked. You can't use the "this" keyword in this function.
+- `unlocked()`: **optional**. A function to determine if the button for this subtab should be visible.
+    Default is always unlocked.
+    **Important note:** You can't use the `this` keyword inside `unlocked()`.
 
 - `shouldNotify()`, `prestigeNotify()`: **optional**. If true, the tab button will be highlighted to notify the player that there is something there.
 
-- `glowColor`: **optional**. Specifies the color that the subtab glows. If this subtab is causing the main layer to node glow (and it wouldn't otherwise) the node also glows this color. Is NOT overridden by embedding a layer.
+- `glowColor`: **optional**. Specifies the color that the subtab glows.
+    If this subtab is causing the main layer to node glow (and it wouldn't otherwise) the node also glows this color.
+    Is **not** overridden by embedding a layer.
 
-- `embedLayer`: **SIGNIFICANT**. The id of another layer. If you have this, it will override "content", "style" and "shouldNotify", instead displaying the entire layer in the subtab.
+- `embedLayer`: **SIGNIFICANT**. The id of another layer.
+    If you have this, it will override `content`, `style` and `shouldNotify`, instead displaying the entire layer in the subtab.
