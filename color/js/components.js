@@ -1,7 +1,7 @@
 const customComponents = {
 	'node-mark': {
 		props: {layer: {}, data: {}, offset: {default: 0}, scale: {default: 1}},
-		template: template(`<div v-if='data'>
+		template: template(/*html*/`<div v-if='data'>
 			<div v-if='data === "moon"'>
 				<div class='moon num1' :style='{
 					left: (offset - 25) + "px",

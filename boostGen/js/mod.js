@@ -66,7 +66,7 @@ const productionCap = 100; // 100 seconds
 
 const endgameBoosters = new Decimal(2900);
 
-function addedPlayerData() { return {}};
+function addedPlayerData() { return {} };
 
 const displayThings = [
 	() => {
