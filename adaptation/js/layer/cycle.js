@@ -110,7 +110,7 @@ addLayer("cy", {
 			(player.cy.points.gte(5) ? player.cy.power.add(1).pow(powerEff1Exp) : newDecimalOne()),
 			(player.cy.points.gte(5) ? player.cy.power.add(1).pow(powerEff2Exp) : newDecimalOne()),
 			(player.cy.points.gte(5) ? player.cy.power.add(1).log10().mul(10) : newDecimalZero()),
-			(player.cy.cores.gt(0) ? player.cy.cores.add(tmp.em.effect[7] ? tmp.em.effect[7] : 0).pow(2).div(100).add(1) : newDecimalOne()),
+			(player.cy.cores.gt(0) ? player.cy.cores.add(tmp.em.effect[7] || 0).pow(2).div(100).add(1) : newDecimalOne()),
 		];
 	},
 	effectDescription() {return "which are increasing continent and leader amounts in their effects by +" + formatWhole(tmp.cy.effect[0]) + " and directly multiplying revolution gain by " + format(tmp.cy.effect[1]) + "x"},

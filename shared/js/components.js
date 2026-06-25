@@ -93,7 +93,7 @@ function loadVue(mainPage = false) {
 				</div>
 				<overlay-head v-if="!gameEnded"></overlay-head>
 				<div class="upgCol sideLayers">
-					<tree-node v-for="node in OTHER_LAYERS.side" :node='node' size="small"></tree-node>
+					<tree-node v-for="node in OTHER_LAYERS.side" :node size="small"></tree-node>
 				</div>
 			</div>
 			<!-- tree tab -->
@@ -113,7 +113,7 @@ function loadVue(mainPage = false) {
 			<!-- popups -->
 			<div class="popup-container">
 				<transition-group name="fade">
-					<div v-for="(popup, index) in activePopups" class="popup" :class="popup.type" :key="'p' + popup.id" @click="() => activePopups.splice(index, 1)" :style="popup.color ? {'background-color': popup.color} : {}">
+					<div v-for="(popup, index) in activePopups" class="popup" :class="popup.type" :key="'p' + popup.id" @click="activePopups.splice(index, 1)" :style="popup.color ? {'background-color': popup.color} : {}">
 						<h3>{{ popup.title }}</h3>
 						<br>
 						<h2 v-html="popup.message"></h2>
@@ -137,7 +137,7 @@ function loadVue(mainPage = false) {
 				tab: true,
 			}">
 				<template v-for="layer in LAYERS">
-					<layer-tab v-if="player.tab == layer" :layer="layer" back="none" spacing="50px"></layer-tab>
+					<layer-tab v-if="player.tab == layer" :layer back="none" spacing="50px"></layer-tab>
 				</template>
 				<bg :layer="player.tab"></bg>
 			</div>
@@ -192,9 +192,9 @@ function loadVue(mainPage = false) {
 		data() { return {tmp} },
 		template: template(/*html*/`<div class="upgRow instant">
 			<div v-for="item in data">
-				<component v-if="!Array.isArray(item)" :is="item" :layer="layer" :style="tmp[layer].componentStyles[item]"></component>
-				<component v-else-if="item.length == 3" :is="item[0]" :layer="layer" :data="item[1]" :style="[tmp[layer].componentStyles[item[0]], (item[2] ? item[2] : {})]"></component>
-				<component v-else-if="item.length == 2" :is="item[0]" :layer="layer" :data="item[1]" :style="tmp[layer].componentStyles[item[0]]"></component>
+				<component v-if="!Array.isArray(item)" :is="item" :layer :style="tmp[layer].componentStyles[item]"></component>
+				<component v-else-if="item.length == 3" :is="item[0]" :layer :data="item[1]" :style="[tmp[layer].componentStyles[item[0]], item[2] || {}]"></component>
+				<component v-else-if="item.length == 2" :is="item[0]" :layer :data="item[1]" :style="tmp[layer].componentStyles[item[0]]"></component>
 			</div>
 		</div>`),
 	});
@@ -206,9 +206,9 @@ function loadVue(mainPage = false) {
 		template: template(/*html*/`<div class="upgCol instant">
 			<template v-for="item in data">
 				<template v-if="item">
-					<component v-if="!Array.isArray(item)" :is="item" :layer="layer" :style="tmp[layer].componentStyles[item]"></component>
-					<component v-else-if="item.length == 2" :is="item[0]" :layer="layer" :data="item[1]" :style="tmp[layer].componentStyles[item[0]]"></component>
-					<component v-else-if="item.length == 3" :is="item[0]" :layer="layer" :data="item[1]" :style="[
+					<component v-if="!Array.isArray(item)" :is="item" :layer :style="tmp[layer].componentStyles[item]"></component>
+					<component v-else-if="item.length == 2" :is="item[0]" :layer :data="item[1]" :style="tmp[layer].componentStyles[item[0]]"></component>
+					<component v-else-if="item.length == 3" :is="item[0]" :layer :data="item[1]" :style="[
 						tmp[layer].componentStyles[item[0]],
 						item[2] || {},
 					]"></component>
@@ -270,7 +270,7 @@ function loadVue(mainPage = false) {
 					<challenge v-if="
 						tmp[layer].challenges[row * 10 + col] !== undefined
 						&& tmp[layer].challenges[row * 10 + col].unlocked
-					" :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.challenge"></challenge>
+					" :layer :data="row * 10 + col" :style="tmp[layer].componentStyles.challenge"></challenge>
 				</template>
 			</div>
 		</div>`),
@@ -316,7 +316,7 @@ function loadVue(mainPage = false) {
 					"></span>
 				</template>
 			</template>
-			<node-mark :layer="layer" :data="tmp[layer].challenges[data].marked" :offset="20" :scale="1.5"></node-mark>
+			<node-mark :layer :data="tmp[layer].challenges[data].marked" :offset="20" :scale="1.5"></node-mark>
 		</div>`),
 	});
 
@@ -330,7 +330,7 @@ function loadVue(mainPage = false) {
 					<upgrade v-if="
 						tmp[layer].upgrades[row * 10 + col] !== undefined
 						&& tmp[layer].upgrades[row * 10 + col].unlocked
-					" :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.upgrade"></upgrade>
+					" :layer :data="row * 10 + col" :style="tmp[layer].componentStyles.upgrade"></upgrade>
 				</template>
 			</div>
 		</div>`),
@@ -383,7 +383,7 @@ function loadVue(mainPage = false) {
 			<table><tbody>
 				<template v-for="id in (data === undefined ? Object.keys(tmp[layer].milestones) : data)">
 					<tr v-if="tmp[layer].milestones[id] !== undefined && tmp[layer].milestones[id].unlocked && milestoneShown(layer, id)">
-						<milestone :layer="layer" :data="id" :style="tmp[layer].componentStyles.milestone"></milestone>
+						<milestone :layer :data="id" :style="tmp[layer].componentStyles.milestone"></milestone>
 					</tr>
 				</template>
 			</tbody></table>
@@ -412,7 +412,7 @@ function loadVue(mainPage = false) {
 			<tooltip v-if="tmp[layer].milestones[data].tooltip" :text="tmp[layer].milestones[data].tooltip"></tooltip>
 			<template v-if="tmp[layer].milestones[data].toggles && hasMilestone(layer, data)">
 				<template v-for="toggle in tmp[layer].milestones[data].toggles">
-					<toggle :layer="layer" :data="toggle" :style="tmp[layer].componentStyles.toggle"></toggle>&nbsp;
+					<toggle :layer :data="toggle" :style="tmp[layer].componentStyles.toggle"></toggle>&nbsp;
 				</template>
 			</template>
 		</td>`),
@@ -500,7 +500,7 @@ function loadVue(mainPage = false) {
 			<respec-button v-if="
 				tmp[layer].buyables.respec
 				&& !(tmp[layer].buyables.showRespec !== undefined && tmp[layer].buyables.showRespec == false)
-			" :layer="layer" :style="[
+			" :layer :style="[
 				{'margin-bottom': '12px'},
 				tmp[layer].componentStyles['respec-button'],
 			]"></respec-button>
@@ -509,7 +509,7 @@ function loadVue(mainPage = false) {
 					<buyable v-if="
 						tmp[layer].buyables[row * 10 + col] !== undefined
 						&& tmp[layer].buyables[row * 10 + col].unlocked
-					" :layer="layer" :data="row * 10 + col" style="margin: 0 7px"></buyable>
+					" :layer :data="row * 10 + col" style="margin: 0 7px"></buyable>
 				</template>
 				<br>
 			</div>
@@ -573,7 +573,7 @@ function loadVue(mainPage = false) {
 						Bought: {{ formatWhole(player[layer].buyables[data]) }}{{ newDecimalInf().neq(tmp[layer].buyables[data].purchaseLimit) ? "/" + formatWhole(tmp[layer].buyables[data].purchaseLimit) : "" }}
 					</template>
 				</template>
-				<node-mark :layer="layer" :data='tmp[layer].buyables[data].marked'></node-mark>
+				<node-mark :layer :data='tmp[layer].buyables[data].marked'></node-mark>
 				<tooltip v-if="tmp[layer].buyables[data].tooltip" :text="tmp[layer].buyables[data].tooltip"></tooltip>
 			</button>
 			<br v-if="(
@@ -586,11 +586,11 @@ function loadVue(mainPage = false) {
 			<sell-one v-if="
 				tmp[layer].buyables[data].sellOne
 				&& (tmp[layer].buyables[data].canSellOne === undefined || tmp[layer].buyables[data].canSellOne)
-			" :layer="layer" :data="data" :style="tmp[layer].componentStyles['sell-one']"></sell-one>
+			" :layer :data :style="tmp[layer].componentStyles['sell-one']"></sell-one>
 			<sell-all v-if="
 				tmp[layer].buyables[data].sellAll
 				&& (tmp[layer].buyables[data].canSellAll === undefined || tmp[layer].buyables[data].canSellAll)
-			" :layer="layer" :data="data" :style="tmp[layer].componentStyles['sell-all']"></sell-all>
+			" :layer :data :style="tmp[layer].componentStyles['sell-all']"></sell-all>
 		</div>`),
 	});
 
@@ -624,7 +624,7 @@ function loadVue(mainPage = false) {
 			<master-button v-if="
 				tmp[layer].clickables.masterButtonPress
 				&& (tmp[layer].clickables.showMasterButton === undefined || tmp[layer].clickables.showMasterButton)
-			" :layer="layer" :style="[
+			" :layer :style="[
 				{'margin-bottom': '12px'},
 				tmp[layer].componentStyles['master-button'],
 			]"></master-button>
@@ -633,7 +633,7 @@ function loadVue(mainPage = false) {
 					<clickable v-if="
 						tmp[layer].clickables[row * 10 + col] !== undefined
 						&& tmp[layer].clickables[row * 10 + col].unlocked
-					" :layer="layer" :data="row * 10 + col" :style="[
+					" :layer :data="row * 10 + col" :style="[
 						{margin: '0 7px'},
 						tmp[layer].componentStyles.clickable
 					]"></clickable>
@@ -680,7 +680,7 @@ function loadVue(mainPage = false) {
 				<br>
 			</template>
 			<span style="white-space: pre-line" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
-			<node-mark :layer="layer" :data="tmp[layer].clickables[data].marked"></node-mark>
+			<node-mark :layer :data="tmp[layer].clickables[data].marked"></node-mark>
 			<tooltip v-if="tmp[layer].clickables[data].tooltip" :text="tmp[layer].clickables[data].tooltip"></tooltip>
 		</button>`),
 	});
@@ -708,7 +708,7 @@ function loadVue(mainPage = false) {
 		template: template(/*html*/`<div v-if="tmp[layer].grid" class="upgCol">
 			<div v-for="row in (data === undefined ? tmp[layer].grid.rows : data)" class="upgRow">
 				<template v-for="col in tmp[layer].grid.cols">
-					<gridable v-if="run(layers[layer].grid.getUnlocked, layers[layer].grid, row * 100 + col)" :layer="layer" :data="row * 100 + col" :style="[
+					<gridable v-if="run(layers[layer].grid.getUnlocked, layers[layer].grid, row * 100 + col)" :layer :data="row * 100 + col" :style="[
 						{margin: '1px'},
 						tmp[layer].componentStyles.gridable
 					]"></gridable>
@@ -733,7 +733,7 @@ function loadVue(mainPage = false) {
 				: Math.min(tmp[layer].grid.rows, tmp[layer].grid.maxRows)
 			)" class="upgRow" style="max-width: none; flex-wrap: nowrap; justify-content: initial">
 				<template v-for="col in Math.min(tmp[layer].grid.cols, tmp[layer].grid.maxCols)">
-					<gridable v-if="run(layers[layer].grid.getUnlocked, layers[layer].grid, row * 100 + col)" :layer="layer" :data="row * 100 + col" :style="[
+					<gridable v-if="run(layers[layer].grid.getUnlocked, layers[layer].grid, row * 100 + col)" :layer :data="row * 100 + col" :style="[
 						{margin: '1px'},
 						tmp[layer].componentStyles.gridable
 					]"></gridable>
@@ -799,10 +799,10 @@ function loadVue(mainPage = false) {
 		},
 		template: template(/*html*/`<div v-if="tmp[layer].microtabs" style="border-style: solid">
 			<div class="upgCol instant">
-				<tab-buttons :layer="layer" :data="tmp[layer].microtabs[data]" :name="data" :style="tmp[layer].componentStyles['tab-buttons']"></tab-buttons>
+				<tab-buttons :layer :data="tmp[layer].microtabs[data]" :name="data" :style="tmp[layer].componentStyles['tab-buttons']"></tab-buttons>
 			</div>
 			<layer-tab v-if="tmp[layer].microtabs[data][player.subtabs[layer][data]].embedLayer" :layer="tmp[layer].microtabs[data][player.subtabs[layer][data]].embedLayer" :embedded="true"></layer-tab>
-			<column v-else :style="tmp[layer].microtabs[data][player.subtabs[layer][data]].style" :layer="layer" :data="tmp[layer].microtabs[data][player.subtabs[layer][data]].content"></column>
+			<column v-else :style="tmp[layer].microtabs[data][player.subtabs[layer][data]].style" :layer :data="tmp[layer].microtabs[data][player.subtabs[layer][data]].content"></column>
 		</div>`),
 	});
 
@@ -854,7 +854,7 @@ function loadVue(mainPage = false) {
 					<achievement v-if="
 						tmp[layer].achievements[row * 10 + col] !== undefined
 						&& tmp[layer].achievements[row * 10 + col].unlocked
-					" :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.achievement"></achievement>
+					" :layer :data="row * 10 + col" :style="tmp[layer].componentStyles.achievement"></achievement>
 				</template>
 			</div>
 		</div>`),
@@ -907,7 +907,7 @@ function loadVue(mainPage = false) {
 		template: template(/*html*/`<div>
 			<div v-for="row in data" class="treeRow">
 				<div v-for="node in row" class="stackingContext">
-					<tree-node :node="node" :prev="layer"></tree-node>
+					<tree-node :node :prev="layer"></tree-node>
 					<div v-if="layoutInfo.htmlBranches" class="branches">
 						<template v-for="branch in tmp[node].branches">
 							<div v-if="
@@ -934,19 +934,19 @@ function loadVue(mainPage = false) {
 	// data = an array with the structure of the tree
 	addNormalComponent('upgrade-tree', {
 		props: ['layer', 'data'],
-		template: template(/*html*/`<thing-tree :layer="layer" :data="data" type="upgrade"></thing-tree>`),
+		template: template(/*html*/`<thing-tree :layer :data type="upgrade"></thing-tree>`),
 	});
 
 	// data = an array with the structure of the tree
 	addNormalComponent('buyable-tree', {
 		props: ['layer', 'data'],
-		template: template(/*html*/`<thing-tree :layer="layer" :data="data" type="buyable"></thing-tree>`),
+		template: template(/*html*/`<thing-tree :layer :data type="buyable"></thing-tree>`),
 	});
 
 	// data = an array with the structure of the tree
 	addNormalComponent('clickable-tree', {
 		props: ['layer', 'data'],
-		template: template(/*html*/`<thing-tree :layer="layer" :data="data" type="clickable"></thing-tree>`),
+		template: template(/*html*/`<thing-tree :layer :data type="clickable"></thing-tree>`),
 	});
 
 	// data = an array with the structure of the tree
@@ -962,7 +962,7 @@ function loadVue(mainPage = false) {
 					<component v-if="
 						tmp[layer][type + 's'][id] !== undefined
 						&& tmp[layer][type + 's'][id].unlocked
-					" :is="type" :layer="layer" :data="id" :style="tmp[layer].componentStyles[type]" class="treeThing"></component>
+					" :is="type" :layer :data="id" :style="tmp[layer].componentStyles[type]" class="treeThing"></component>
 					<div v-if="layoutInfo.htmlBranches" class="branches">
 						<template v-for="branch in tmp[layer][type + 's'][id].branches">
 							<div v-if="
@@ -1122,7 +1122,7 @@ function loadVue(mainPage = false) {
 						return formatWhole(player[this.layer].points) + ' ' + tmp[this.layer].resource;
 					};
 					if (tmp[this.layer].tooltipLocked) return tmp[this.layer].tooltipLocked;
-					if (tmp[this.layer].deactivated) return (tmp[this.layer].name ? tmp[this.layer].name : tmp[this.layer].resource) + ' is deactivated';
+					if (tmp[this.layer].deactivated) return (tmp[this.layer].name || tmp[this.layer].resource) + ' is deactivated';
 					return 'Reach ' + formatWhole(tmp[this.layer].requires) + ' ' + tmp[this.layer].baseResource + ' to unlock (You have ' + formatWhole(tmp[this.layer].baseAmount) + ' ' + tmp[this.layer].baseResource + ')';
 				};
 				if (tmp[this.layer].canClick) {
@@ -1163,7 +1163,7 @@ function loadVue(mainPage = false) {
 		}" :style="constructNodeStyle(layer, isAlias)">
 			<span class="nodeLabel" v-html="(symbol && tmp[layer].image === undefined) ? symbol : ''"></span>
 			<tooltip v-if="tooltipText" :text="tooltipText"></tooltip>
-			<node-mark :layer='layer' :data='tmp[layer].marked'></node-mark>
+			<node-mark :layer :data='tmp[layer].marked'></node-mark>
 		</button>`),
 	});
 
@@ -1182,7 +1182,7 @@ function loadVue(mainPage = false) {
 			<template v-if="tmp[layer].tabFormat">
 				<template v-if="Array.isArray(tmp[layer].tabFormat)">
 					<div v-if="spacing" :style="{height: spacing}"></div>
-					<column :layer="layer" :data="tmp[layer].tabFormat"></column>
+					<column :layer :data="tmp[layer].tabFormat"></column>
 				</template>
 				<template v-else>
 					<div class="upgCol" :style="{
@@ -1190,30 +1190,30 @@ function loadVue(mainPage = false) {
 						'margin-top': (embedded ? '-10px' : 0),
 						'margin-bottom': '24px',
 					}">
-						<tab-buttons :style="tmp[layer].componentStyles['tab-buttons']" :layer="layer" :data="tmp[layer].tabFormat" name="mainTabs"></tab-buttons>
+						<tab-buttons :style="tmp[layer].componentStyles['tab-buttons']" :layer :data="tmp[layer].tabFormat" name="mainTabs"></tab-buttons>
 					</div>
 					<layer-tab v-if="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].embedLayer" :layer="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].embedLayer" :embedded="true"></layer-tab>
-					<column v-else :layer="layer" :data="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].content"></column>
+					<column v-else :layer :data="tmp[layer].tabFormat[player.subtabs[layer].mainTabs].content"></column>
 				</template>
 			</template>
 			<template v-else>
 				<div v-if="spacing" :style="{height: spacing}"></div>
-				<infobox v-if="tmp[layer].infoboxes" :layer="layer" :data="Object.keys(tmp[layer].infoboxes)[0]"></infobox>
-				<main-display :style="tmp[layer].componentStyles['main-display']" :layer="layer"></main-display>
+				<infobox v-if="tmp[layer].infoboxes" :layer :data="Object.keys(tmp[layer].infoboxes)[0]"></infobox>
+				<main-display :style="tmp[layer].componentStyles['main-display']" :layer></main-display>
 				<div v-if="tmp[layer].type !== 'none'">
-					<prestige-button :style="tmp[layer].componentStyles['prestige-button']" :layer="layer"></prestige-button>
+					<prestige-button :style="tmp[layer].componentStyles['prestige-button']" :layer></prestige-button>
 				</div>
-				<resource-display :style="tmp[layer].componentStyles['resource-display']" :layer="layer">
+				<resource-display :style="tmp[layer].componentStyles['resource-display']" :layer>
 				</resource-display>
-				<milestones :style="tmp[layer].componentStyles.milestones" :layer="layer"></milestones>
+				<milestones :style="tmp[layer].componentStyles.milestones" :layer></milestones>
 				<div v-if="Array.isArray(tmp[layer].midsection)">
-					<column :layer="layer" :data="tmp[layer].midsection"></column>
+					<column :layer :data="tmp[layer].midsection"></column>
 				</div>
-				<clickables :style="tmp[layer].componentStyles.clickables" :layer="layer"></clickables>
-				<buyables :style="tmp[layer].componentStyles.buyables" :layer="layer"></buyables>
-				<upgrades :style="tmp[layer].componentStyles.upgrades" :layer="layer"></upgrades>
-				<challenges :style="tmp[layer].componentStyles.challenges" :layer="layer"></challenges>
-				<achievements :style="tmp[layer].componentStyles.achievements" :layer="layer"></achievements>
+				<clickables :style="tmp[layer].componentStyles.clickables" :layer></clickables>
+				<buyables :style="tmp[layer].componentStyles.buyables" :layer></buyables>
+				<upgrades :style="tmp[layer].componentStyles.upgrades" :layer></upgrades>
+				<challenges :style="tmp[layer].componentStyles.challenges" :layer></challenges>
+				<achievements :style="tmp[layer].componentStyles.achievements" :layer></achievements>
 				<br><br>
 			</template>
 		</div>`),

@@ -45,7 +45,7 @@ const customComponents = {
 					<glitch-upgrade v-if="
 						tmp[layer].upgrades[row * 10 + col] !== undefined
 						&& tmp[layer].upgrades[row * 10 + col].unlocked
-					" :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.upgrade"></glitch-upgrade>
+					" :layer :data="row * 10 + col" :style="tmp[layer].componentStyles.upgrade"></glitch-upgrade>
 				</template>
 			</div>
 		</div>`),
@@ -94,7 +94,7 @@ const customComponents = {
 			<table><tbody>
 				<template v-for="id in (data === undefined ? Object.keys(tmp[layer].milestones) : data)">
 					<tr v-if="tmp[layer].milestones[id] !== undefined && tmp[layer].milestones[id].unlocked && milestoneShown(layer, id)">
-						<glitch-milestone :layer="layer" :data="id" :style="tmp[layer].componentStyles.milestone"></glitch-milestone>
+						<glitch-milestone :layer :data="id" :style="tmp[layer].componentStyles.milestone"></glitch-milestone>
 					</tr>
 				</template>
 			</tbody></table>
@@ -120,7 +120,7 @@ const customComponents = {
 			<br>
 			<tooltip v-if="tmp[layer].milestones[data].tooltip" v-html="glitchify(tmp[layer].milestones[data].tooltip)"></tooltip>
 			<template v-if="tmp[layer].milestones[data].toggles && hasMilestone(layer, data)" v-for="toggle in tmp[layer].milestones[data].toggles">
-				<glitch-toggle :layer="layer" :data="toggle" :style="tmp[layer].componentStyles.toggle"></glitch-toggle>&nbsp;
+				<glitch-toggle :layer :data="toggle" :style="tmp[layer].componentStyles.toggle"></glitch-toggle>&nbsp;
 			</template>
 		</td>`),
 	},
@@ -184,7 +184,7 @@ const customComponents = {
 			<respec-button v-if="
 				tmp[layer].buyables.respec
 				&& !(tmp[layer].buyables.showRespec !== undefined && tmp[layer].buyables.showRespec == false)
-			" :layer="layer" :style="[
+			" :layer :style="[
 				{'margin-bottom': '12px'},
 				tmp[layer].componentStyles['respec-button'],
 			]"></respec-button>
@@ -193,7 +193,7 @@ const customComponents = {
 					<glitch-buyable v-if="
 						tmp[layer].buyables[row * 10 + col] !== undefined
 						&& tmp[layer].buyables[row * 10 + col].unlocked
-					" :layer="layer" :data="row * 10 + col" style="margin: 0 7px"></glitch-buyable>
+					" :layer :data="row * 10 + col" style="margin: 0 7px"></glitch-buyable>
 				</template>
 				<br>
 			</div>
@@ -251,7 +251,7 @@ const customComponents = {
 					<span v-if="layers[layer].buyables[data].boughtDisplay" v-html="glitchify(run(layers[layer].buyables[data].boughtDisplay, layers[layer].buyables[data], player[layer].buyables[data]))"></span>
 					<span v-else v-html="glitchify('Bought: ' + formatWhole(player[layer].buyables[data]) + (newDecimalInf().neq(tmp[layer].buyables[data].purchaseLimit) ? '/' + formatWhole(tmp[layer].buyables[data].purchaseLimit) : ''))"></span>
 				</template>
-				<node-mark :layer="layer" :data='tmp[layer].buyables[data].marked'></node-mark>
+				<node-mark :layer :data='tmp[layer].buyables[data].marked'></node-mark>
 				<tooltip v-if="tmp[layer].buyables[data].tooltip" v-html="glitchify(tmp[layer].buyables[data].tooltip)"></tooltip>
 			</button>
 			<br v-if="(
@@ -264,11 +264,11 @@ const customComponents = {
 			<sell-one v-if="
 				tmp[layer].buyables[data].sellOne
 				&& (tmp[layer].buyables[data].canSellOne === undefined || tmp[layer].buyables[data].canSellOne)
-			" :layer="layer" :data="data" :style="tmp[layer].componentStyles['sell-one']"></sell-one>
+			" :layer :data :style="tmp[layer].componentStyles['sell-one']"></sell-one>
 			<sell-all v-if="
 				tmp[layer].buyables[data].sellAll
 				&& (tmp[layer].buyables[data].canSellAll === undefined || tmp[layer].buyables[data].canSellAll)
-			" :layer="layer" :data="data" :style="tmp[layer].componentStyles['sell-all']"></sell-all>
+			" :layer :data :style="tmp[layer].componentStyles['sell-all']"></sell-all>
 		</div>`),
 	},
 	'glitch-clickable': {
@@ -307,7 +307,7 @@ const customComponents = {
 				<br>
 			</template>
 			<span style="white-space: pre-line" v-html="glitchify(run(layers[layer].clickables[data].display, layers[layer].clickables[data]))"></span>
-			<node-mark :layer="layer" :data='tmp[layer].clickables[data].marked'></node-mark>
+			<node-mark :layer :data='tmp[layer].clickables[data].marked'></node-mark>
 			<tooltip v-if="tmp[layer].clickables[data].tooltip" v-html="glitchify(tmp[layer].clickables[data].tooltip)"></tooltip>
 		</button>`),
 	},
@@ -320,7 +320,7 @@ const customComponents = {
 					<glitch-achievement v-if="
 						tmp[layer].achievements[row * 10 + col] !== undefined
 						&& tmp[layer].achievements[row * 10 + col].unlocked
-					" :layer="layer" :data="row * 10 + col" :style="tmp[layer].componentStyles.achievement"></glitch-achievement>
+					" :layer :data="row * 10 + col" :style="tmp[layer].componentStyles.achievement"></glitch-achievement>
 				</template>
 			</div>
 		</div>`),

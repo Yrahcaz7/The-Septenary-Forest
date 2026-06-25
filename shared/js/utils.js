@@ -2,7 +2,7 @@
 
 function respecBuyables(layer, ...args) {
 	if (!layers[layer].buyables || !layers[layer].buyables.respec) return;
-	if (!player[layer].noRespecConfirm && !confirm(tmp[layer].buyables.respecMessage || 'Are you sure you want to respec? This will force you to do a "' + (tmp[layer].name ? tmp[layer].name : layer) + '" reset as well!')) return;
+	if (!player[layer].noRespecConfirm && !confirm(tmp[layer].buyables.respecMessage || 'Are you sure you want to respec? This will force you to do a "' + (tmp[layer].name || layer) + '" reset as well!')) return;
 	run(layers[layer].buyables.respec, layers[layer].buyables, ...args);
 	updateBuyableTemp(layer);
 	document.activeElement.blur();
@@ -322,7 +322,7 @@ let activePopups = Vue.reactive([]);
 let popupID = 0;
 
 // Function to show popups
-function doPopup(type = 'none', text = 'This is a test popup.', title = '', timer = 3, color = '') {
+function doPopup(type = 'none', text = 'Uh...', title = '', timer = 3, color = '#ccc') {
 	switch (type) {
 		case 'achievement':
 			popupTitle = 'Achievement Unlocked!';
