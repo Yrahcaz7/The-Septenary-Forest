@@ -3,7 +3,10 @@
 ## CSS
 
 A good way to give your game a unique feel is to customize its appearance.
-Modifying the CSS files helps you to do that on a global level.
+Some good ways to do this are using the `componentStyles` property on layers and the `style` properties on Big Features.
+These styles have CSS in the form of an object where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
+
+You can also modify the CSS files to make global changes to all your styles.
 The CSS is broken up into several files to make it easier to find what is relevant to you.
 
 CSS tip: Every component is automatically given a CSS class with the same name as its layer id.
@@ -27,7 +30,7 @@ The following features go on individual option objects:
 - `opt`: **optional**. The name of the corresponding option as a string.
 
 - `text`: **optional**. The text to display on the option.
-    Can be a function that returns updating text.
+    Can be a function.
 
 - `onClick()`: **optional**. The function to call when the option button is clicked.
     If this is `toggleOpt`, the `opt` argument will be set to the value of `opt` if it exists.

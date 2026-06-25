@@ -33,7 +33,7 @@ If none of these fit your needs, you can [create your own components](custom-com
 
 - `display-text`, `raw-html`: Displays some text (can use basic HTML).
     The argument is the text to display.
-    It can also be a function that returns updating text.
+    Can also be a function.
 
 - `display-image`: Displays an image.
     The argument is the url of the image.

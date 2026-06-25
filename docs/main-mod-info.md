@@ -10,7 +10,7 @@ Here's a breakdown of what's in it:
     - `id`: The id for your mod, a unique string that is used to determine savefile location.
         Be sure to set it when you start making a mod, and don't change it later because it will erase all saves.
     - `author`: The name of the author, displayed in the info tab.
-    - `pointsName`: **optional**. This changes what is displayed instead of "points" for the main currency.
+    - `pointsName`: **optional**. This changes what is displayed instead of "points" for the mod's base points.
         (It does not affect it in the code.)
     - `modFiles`: An array of relative file paths which will be loaded for this mod.
         Using smaller files makes it easier to find what you're looking for.
@@ -99,7 +99,8 @@ Here's a breakdown of what's in it:
 
 ## Less important things
 
-- `backgroundStyle`: **optional**. A CSS object containing the styling for the background of the full game. Can be a function.
+- `backgroundStyle`: **optional**. A ["CSS object"](other.md#css) which styles the background of the full game.
+    Can be a function.
 
 - `maxTickLength()`: Returns the maximum tick length in seconds.
     Only really useful if you have something that reduces over time, which long ticks mess up (usually a challenge).

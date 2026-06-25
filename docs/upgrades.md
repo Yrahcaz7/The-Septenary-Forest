@@ -26,11 +26,11 @@ Usually, upgrades should have an id where the first digit is the row and the sec
 ## Features
 
 - `title`: **optional**. Displayed at the top in a larger font.
-    It can also be a function that returns updating text. (Can use basic HTML.)
+    Can also be a function. (Can use basic HTML.)
 
 - `description`: A description of the upgrade's effect.
     *You will also have to implement the effect where it is applied.*
-    It can also be a function that returns updating text. (Can use basic HTML.)
+    Can also be a function. (Can use basic HTML.)
 
 - `effect()`: **optional**. A function that calculates and returns the current values of any bonuses from the upgrade.
     Can return a value or an object containing multiple values.
@@ -52,7 +52,7 @@ Usually, upgrades should have an id where the first digit is the row and the sec
 - `onPurchase()`: **optional**. This function will be called when the upgrade is purchased.
     Good for upgrades like "makes this layer act like it was unlocked first".
 
-- `style`: **optional**. Applies CSS to this upgrade, in the form of an object where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
+- `style`: **optional**. A ["CSS object"](other.md#css) which styles this upgrade.
 
 - `tooltip`: **optional**. Adds a tooltip to this upgrade, appears when it is hovered over.
     (Can use basic HTML.)
@@ -83,7 +83,7 @@ You can include these to change them (but it needs to be a `Decimal`):
     If this is present and `currencyDisplayName` is absent, the display name defaults to `currencyInternalName`.
 
 - `currencyLayer`: **optional**. The internal name of the layer that currency is stored in.
-    If it's not in a layer (like the main currency), omit.
+    If it's not in a layer (like the mod's base points), omit.
     If it's not stored directly in a layer, instead use the next feature.
 
 - `currencyLocation`: **optional**. If your currency is stored in something inside a layer (e.g. a buyable's amount), you can access it this way.

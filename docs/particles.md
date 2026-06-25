@@ -45,7 +45,7 @@ All distances are in pixels and angles are in degrees, with `0` being up and goi
 
 - `text`: Displays text on the particle. (Can use basic HTML.)
 
-- `style`: Lets you apply other CSS styling to the particle.
+- `style`: A ["CSS object"](other.md#css) which styles the particle.
 
 - `width`, `height`: The dimensions of the particle.
     Default is `35` for both.

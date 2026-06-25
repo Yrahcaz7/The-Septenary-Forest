@@ -78,7 +78,7 @@ Features on the main buyables/challenges/clickables/grid object:
 
 - `description`: A description of the buyable's effect.
     *You will also have to implement the effect where it is applied.*
-    It can also be a function that returns updating text. (Can use basic HTML.)
+    Can also be a function. (Can use basic HTML.)
 
 - `effectDisplay(eff)`: **optional**. A function that returns a display of the current effects of the buyable with formatting.
     The `eff` argument holds the current effect of the buyable.

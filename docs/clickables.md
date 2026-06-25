@@ -29,7 +29,7 @@ clickables: {
 ## Features
 
 - `title`: **optional**. Displayed at the top in a larger font.
-    It can also be a function that returns updating text.
+    Can also be a function.
 
 - `effect()`: **optional**. A function that calculates and returns the current values of bonuses of this clickable.
     Can return a value or an object containing multiple values.
@@ -46,7 +46,7 @@ clickables: {
 
 - `onHold()`: **optional** A function that is called 20x/sec when the button is held for at least 0.25 seconds.
 
-- `style`: **optional**. Applies CSS to this clickable, in the form of an object where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
+- `style`: **optional**. A ["CSS object"](other.md#css) which styles this clickable.
 
 - `marked`: **optional** Adds a mark to the corner of the clickable.
     If it's `true` it will be a star, but it can also be an image URL.

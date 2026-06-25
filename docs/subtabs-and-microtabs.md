@@ -48,9 +48,7 @@ Normal subtabs and microtab subtabs both use the same features.
 
 - `content`: The tab layout code for the subtab, in [the tab layout format](custom-tab-layouts.md).
 
-- `style`: **optional**. Applies CSS to the whole subtab when switched to, in the form of an "CSS Object", where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
-
-- `buttonStyle`: **optional**. A CSS object, which affects the appearance of the button for that subtab.
+- `style`, `buttonStyle`: **optional**. A ["CSS object"](other.md#css) which styles the whole subtab or the subtab's button, respectively.
 
 - `unlocked()`: **optional**. A function to determine if the button for this subtab should be visible.
     Default is always unlocked.

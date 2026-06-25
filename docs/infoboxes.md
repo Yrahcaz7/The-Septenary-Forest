@@ -23,8 +23,7 @@ infoboxes: {
 
 - `body`: The text displayed inside the box. Can be a function to be dynamic. (Can use basic HTML.)
 
-- `style`, `titleStyle`, `bodyStyle`: **optional**. Apply CSS to the whole infobox, the title button, or the body, respectively.
-    The CSS is in the form of an object where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
+- `style`, `titleStyle`, `bodyStyle`: **optional**. A ["CSS object"](other.md#css) which styles the whole infobox, the title button, or the infobox's body, respectively.
 
 - `unlocked()`: **optional**. A function returning a bool to determine if the infobox is visible or not.
     Default is always unlocked.

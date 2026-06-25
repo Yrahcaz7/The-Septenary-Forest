@@ -72,7 +72,7 @@ You can make almost any value dynamic by using a function in its place, includin
     ]
     ```
 
-- `style`: **optional**. A "CSS object" where the keys are CSS attributes, containing any CSS that should affect this layer's entire tab.
+- `style`: **optional**. A ["CSS object"](other.md#css) which styles this layer's entire tab.
 
 - `tabFormat`: **optional**. Use this if you want to add extra things to your tab or change the layout.
     [See here for more info.](custom-tab-layouts.md)
@@ -209,7 +209,7 @@ All of these are optional.
     The color value can either be a string with a hex color code, or a number from 1-3 (theme-affected colors).
     A third element in the array optionally specifies line width.
 
-- `nodeStyle`: **optional**. A CSS object, where the keys are CSS attributes, which styles this layer's node on the tree.
+- `nodeStyle`: **optional**. A ["CSS object"](other.md#css) which styles this layer's node on the tree.
 
 - `tooltip()`, `tooltipLocked()`: **optional**. Functions that return text, which is the tooltip for the node when the layer is unlocked or locked, respectively.
     By default, the tooltips behave the same as in the original Prestige Tree.

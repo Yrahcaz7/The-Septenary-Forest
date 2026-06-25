@@ -9,7 +9,7 @@ Let's get started!
 Open [`mod.js`](/js/mod.js).
 This is where you define things that are for the mod in general, as opposed to layer-specific.
 For now, in `modInfo`, you can set the mod name and author name.
-You can also change the points name, which changes what the game calls your basic points (but they're still referred to as `player.points` in the code).
+You can also change the points name, which changes what the game calls your base points (but they're still referred to as `player.points` in the code).
 **Be sure that you set a mod id as well**.
 
 One suggestion: When you're testing your mod, you should turn off offline progress in the in-game settings.

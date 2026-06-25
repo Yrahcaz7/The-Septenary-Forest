@@ -31,10 +31,10 @@ Usually, each challenge should have an id where the first digit is the row and t
 
 - `challengeDescription`: A description of what makes the challenge a challenge.
     *You will need to implement these elsewhere.*
-    It can also be a function that returns updating text. (Can use basic HTML.)
+    Can also be a function. (Can use basic HTML.)
 
 - `goalDescription`: A description of the win condition for the challenge.
-    It can also be a function that returns updating text. (Can use basic HTML.)
+    Can also be a function. (Can use basic HTML.)
     Optional if using the old goal system.
 
 - `canComplete()`: A function that returns true if you meet the win condition for the challenge.
@@ -43,7 +43,7 @@ Usually, each challenge should have an id where the first digit is the row and t
 
 - `rewardDescription`: A description of the reward's effect.
     *You will also have to implement the effect where it is applied.*
-    It can also be a function that returns updating text. (Can use basic HTML.)
+    Can also be a function. (Can use basic HTML.)
 
 - `rewardEffect()`: **optional**. A function that calculates and returns the current values of any bonuses from the reward.
     Can return a value or an object containing multiple values. (Can use basic HTML.)
@@ -70,7 +70,7 @@ Usually, each challenge should have an id where the first digit is the row and t
 
 - `completionLimit`: **optional**. The amount of times you can complete this challenge. Default is 1 completion.
 
-- `style`: **optional**. Applies CSS to this challenge, in the form of an object where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
+- `style`: **optional**. A ["CSS object"](other.md#css) which styles this challenge.
 
 - `marked`: **optional** Adds a mark to the corner of the challenge.
     If it's `true` it will be a star, but it can also be an image URL.

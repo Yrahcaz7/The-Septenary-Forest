@@ -25,12 +25,12 @@ milestones: {
 
 - `requirementDescription`: A string describing the requirement for unlocking this milestone.
     (Suggestion: Use a "total".)
-    It can also be a function that returns updating text.
+    Can also be a function.
     (Can use basic HTML.)
 
 - `effectDescription`: A string describing the reward for having the milestone.
     *You will have to implement the reward elsewhere.*
-    It can also be a function that returns updating text.
+    Can also be a function.
     (Can use basic HTML.)
     Additional feature: When `effectDescription` is a function, it can have an argument `eff`, which holds the current effect of the milestone.
 
@@ -49,7 +49,7 @@ milestones: {
     **Important note:** Toggles are not de-set if the milestone becomes locked!
     In this case, you should also check if the player has the milestone.
 
-- `style`: **optional**. Applies CSS to this milestone, in the form of an object where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
+- `style`: **optional**. A ["CSS object"](other.md#css) which styles this milestone.
 
 - `unlocked()`: **optional**. A function returning a boolean to determine if the milestone should be shown.
     Default is always unlocked.

@@ -66,11 +66,11 @@ buyables: {
 ## Features
 
 - `title`: **optional**. Displayed at the top in a larger font.
-    It can also be a function that returns updating text. (Can use basic HTML.)
+    Can also be a function. (Can use basic HTML.)
 
 > - `description` (additional feature): A description of the buyable's effect.
 >     *You will also have to implement the effect where it is applied.*
->     It can also be a function that returns updating text. (Can use basic HTML.)
+>     Can also be a function. (Can use basic HTML.)
 
 - `effect()`: **optional**. A function that calculates and returns the current values of bonuses of this buyable.
     Can have an optional argument `x` to calculate the effect of having `x` of the buyable. (`x` is a `Decimal`).
@@ -105,7 +105,7 @@ buyables: {
 
 - `buyMax()`: **optional**. A function that implements buying as many of the buyable as possible.
 
-- `style`: **optional**. Applies CSS to this buyable, in the form of an object where the keys are CSS attributes, and the values are the values for those attributes (both as strings).
+- `style`: **optional**. A ["CSS object"](other.md#css) which styles this buyable.
 
 - `purchaseLimit`: **optional**. The limit on how many of the buyable can be bought.
     Default is no limit.
