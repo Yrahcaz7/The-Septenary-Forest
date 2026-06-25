@@ -866,7 +866,7 @@ function loadVue(mainPage = false) {
 		data() { return {tmp, hasAchievement, achievementStyle} },
 		computed: {
 			tooltipText() {
-				if (tmp[this.layer].achievements[this.data].tooltip == '') return false;
+				if (tmp[this.layer].achievements[this.data].tooltip === "") return false;
 				if (hasAchievement(this.layer, this.data)) {
 					if (tmp[this.layer].achievements[this.data].doneTooltip) return tmp[this.layer].achievements[this.data].doneTooltip;
 					if (tmp[this.layer].achievements[this.data].tooltip) return tmp[this.layer].achievements[this.data].tooltip;
@@ -888,7 +888,7 @@ function loadVue(mainPage = false) {
 			locked: !hasAchievement(layer, data),
 			bought: hasAchievement(layer, data),
 		}" :style="achievementStyle(layer, data)">
-			<tooltip :text="tooltipText"></tooltip>
+			<tooltip v-if="tooltipText" :text="tooltipText"></tooltip>
 			<span v-if="tmp[layer].achievements[data].name">
 				<br>
 				<h3 :style="tmp[layer].achievements[data].textStyle" v-html="tmp[layer].achievements[data].name"></h3>
@@ -1115,6 +1115,9 @@ function loadVue(mainPage = false) {
 			tooltipText() {
 				if (typeof overrideTooltip === 'function' && overrideTooltip(this.layer)) {
 					return overrideTooltip(this.layer);
+				};
+				if (tmp[this.layer].tooltip === "") {
+					return false;
 				};
 				if (tmp[this.layer].isLayer) {
 					if (player[this.layer].unlocked) {

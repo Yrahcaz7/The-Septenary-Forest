@@ -84,7 +84,7 @@ const customComponents = {
 				<span v-if="layers[layer].upgrades[data].costDisplay" v-html="glitchify(run(layers[layer].upgrades[data].costDisplay, layers[layer].upgrades[data], tmp[layer].upgrades[data].cost))"></span>
 				<span v-else v-html="glitchify('Cost: ' + formatWhole(tmp[layer].upgrades[data].cost) + ' ' + (tmp[layer].upgrades[data].currencyDisplayName || tmp[layer].upgrades[data].currencyInternalName || tmp[layer].resource))"></span>
 			</template>
-			<tooltip v-if="tmp[layer].upgrades[data].tooltip" v-html="glitchify(tmp[layer].upgrades[data].tooltip)"></tooltip>
+			<tooltip v-if="tmp[layer].upgrades[data].tooltip" :text="glitchify(tmp[layer].upgrades[data].tooltip)"></tooltip>
 		</button>`),
 	},
 	'glitch-milestones': {
@@ -118,7 +118,7 @@ const customComponents = {
 			<br>
 			<span v-html="glitchify(run(layers[layer].milestones[data].effectDescription, layers[layer].milestones[data], tmp[layer].milestones[data].effect))"></span>
 			<br>
-			<tooltip v-if="tmp[layer].milestones[data].tooltip" v-html="glitchify(tmp[layer].milestones[data].tooltip)"></tooltip>
+			<tooltip v-if="tmp[layer].milestones[data].tooltip" :text="glitchify(tmp[layer].milestones[data].tooltip)"></tooltip>
 			<template v-if="tmp[layer].milestones[data].toggles && hasMilestone(layer, data)" v-for="toggle in tmp[layer].milestones[data].toggles">
 				<glitch-toggle :layer :data="toggle" :style="tmp[layer].componentStyles.toggle"></glitch-toggle>&nbsp;
 			</template>
@@ -252,7 +252,7 @@ const customComponents = {
 					<span v-else v-html="glitchify('Bought: ' + formatWhole(player[layer].buyables[data]) + (newDecimalInf().neq(tmp[layer].buyables[data].purchaseLimit) ? '/' + formatWhole(tmp[layer].buyables[data].purchaseLimit) : ''))"></span>
 				</template>
 				<node-mark :layer :data='tmp[layer].buyables[data].marked'></node-mark>
-				<tooltip v-if="tmp[layer].buyables[data].tooltip" v-html="glitchify(tmp[layer].buyables[data].tooltip)"></tooltip>
+				<tooltip v-if="tmp[layer].buyables[data].tooltip" :text="glitchify(tmp[layer].buyables[data].tooltip)"></tooltip>
 			</button>
 			<br v-if="(
 				tmp[layer].buyables[data].sellOne
@@ -330,7 +330,7 @@ const customComponents = {
 		data() { return {tmp, hasAchievement, achievementStyle, glitchify} },
 		computed: {
 			tooltipText() {
-				if (tmp[this.layer].achievements[this.data].tooltip == "") return false;
+				if (tmp[this.layer].achievements[this.data].tooltip === "") return false;
 				if (hasAchievement(this.layer, this.data)) {
 					if (tmp[this.layer].achievements[this.data].doneTooltip) return tmp[this.layer].achievements[this.data].doneTooltip;
 					if (tmp[this.layer].achievements[this.data].tooltip) return tmp[this.layer].achievements[this.data].tooltip;
@@ -352,7 +352,7 @@ const customComponents = {
 			locked: !hasAchievement(layer, data),
 			bought: hasAchievement(layer, data),
 		}" :style="achievementStyle(layer, data)">
-			<tooltip v-html="glitchify(tooltipText)"></tooltip>
+			<tooltip v-if="tooltipText" :text="glitchify(tooltipText)"></tooltip>
 			<span v-if="tmp[layer].achievements[data].name">
 				<br>
 				<h3 :style="tmp[layer].achievements[data].textStyle" v-html="glitchify(tmp[layer].achievements[data].name)"></h3>
