@@ -520,6 +520,11 @@ function loadVue(mainPage = false) {
 	addNormalComponent('buyable', {
 		props: ['layer', 'data'],
 		data() { return {tmp, player, interval: false, buyBuyable, layers, run, getCurrentlyText, formatWhole, newDecimalInf, time: 0} },
+		computed: {
+			tempBuyable() { return tmp[this.layer].buyables[this.data] },
+			canSellOne() { return this.tempBuyable.sellOne && (this.tempBuyable.canSellOne === undefined || this.tempBuyable.canSellOne) },
+			canSellAll() { return this.tempBuyable.sellAll && (this.tempBuyable.canSellAll === undefined || this.tempBuyable.canSellAll) },
+		},
 		methods: {
 			start() {
 				if (this.interval) return;
@@ -536,61 +541,49 @@ function loadVue(mainPage = false) {
 		},
 		template: template(/*html*/`<div v-if="
 			tmp[layer].buyables
-			&& tmp[layer].buyables[data] !== undefined
-			&& tmp[layer].buyables[data].unlocked
+			&& tempBuyable !== undefined
+			&& tempBuyable.unlocked
 		" style="display: grid">
 			<button :class="{
 				buyable: true,
 				tooltipBox: true,
-				can: tmp[layer].buyables[data].canBuy,
-				locked: !tmp[layer].buyables[data].canBuy,
-				bought: player[layer].buyables[data].gte(tmp[layer].buyables[data].purchaseLimit),
+				can: tempBuyable.canBuy,
+				locked: !tempBuyable.canBuy,
+				bought: player[layer].buyables[data].gte(tempBuyable.purchaseLimit),
 			}" :style="[
-				(tmp[layer].buyables[data].canBuy ? {'background-color': tmp[layer].buyables[data].color ?? tmp[layer].color} : {}),
+				(tempBuyable.canBuy ? {'background-color': tempBuyable.color ?? tmp[layer].color} : {}),
 				tmp[layer].componentStyles.buyable,
-				tmp[layer].buyables[data].style,
+				tempBuyable.style,
 			]" @click="interval ? null : buyBuyable(layer, data)" :id='"buyable-" + layer + "-" + data' @mousedown="start" @mouseleave="stop" @mouseup="stop" @touchstart="start" @touchend="stop" @touchcancel="stop">
-				<template v-if="tmp[layer].buyables[data].title">
-					<h2 v-html="tmp[layer].buyables[data].title"></h2>
+				<template v-if="tempBuyable.title">
+					<h2 v-html="tempBuyable.title"></h2>
 					<br>
 				</template>
 				<span v-if="layers[layer].buyables[data].fullDisplay" style="white-space: pre-line" v-html="run(layers[layer].buyables[data].fullDisplay, layers[layer].buyables[data])"></span>
 				<template v-else>
-					<span v-html="tmp[layer].buyables[data].description"></span>
+					<span v-html="tempBuyable.description"></span>
 					<template v-if="layers[layer].buyables[data].effectDisplay">
 						<br><br>
 						<span v-html="getCurrentlyText()"></span>
-						<span v-html="run(layers[layer].buyables[data].effectDisplay, layers[layer].buyables[data], tmp[layer].buyables[data].effect)"></span>
+						<span v-html="run(layers[layer].buyables[data].effectDisplay, layers[layer].buyables[data], tempBuyable.effect)"></span>
 					</template>
 					<br><br>
-					<span v-if="layers[layer].buyables[data].costDisplay" v-html="run(layers[layer].buyables[data].costDisplay, layers[layer].buyables[data], tmp[layer].buyables[data].cost)"></span>
+					<span v-if="layers[layer].buyables[data].costDisplay" v-html="run(layers[layer].buyables[data].costDisplay, layers[layer].buyables[data], tempBuyable.cost)"></span>
 					<template v-else>
-						Cost: {{ formatWhole(tmp[layer].buyables[data].cost) }} {{ tmp[layer].buyables[data].currencyDisplayName || tmp[layer].resource }}
+						Cost: {{ formatWhole(tempBuyable.cost) }} {{ tempBuyable.currencyDisplayName || tmp[layer].resource }}
 					</template>
 					<br><br>
 					<span v-if="layers[layer].buyables[data].boughtDisplay" v-html="run(layers[layer].buyables[data].boughtDisplay, layers[layer].buyables[data], player[layer].buyables[data])"></span>
 					<template v-else>
-						Bought: {{ formatWhole(player[layer].buyables[data]) }}{{ newDecimalInf().neq(tmp[layer].buyables[data].purchaseLimit) ? "/" + formatWhole(tmp[layer].buyables[data].purchaseLimit) : "" }}
+						Bought: {{ formatWhole(player[layer].buyables[data]) }}{{ newDecimalInf().neq(tempBuyable.purchaseLimit) ? "/" + formatWhole(tempBuyable.purchaseLimit) : "" }}
 					</template>
 				</template>
-				<node-mark :layer :data='tmp[layer].buyables[data].marked'></node-mark>
-				<tooltip v-if="tmp[layer].buyables[data].tooltip" :text="tmp[layer].buyables[data].tooltip"></tooltip>
+				<node-mark :layer :data='tempBuyable.marked'></node-mark>
+				<tooltip v-if="tempBuyable.tooltip" :text="tempBuyable.tooltip"></tooltip>
 			</button>
-			<br v-if="(
-				tmp[layer].buyables[data].sellOne
-				&& (tmp[layer].buyables[data].canSellOne === undefined || tmp[layer].buyables[data].canSellOne)
-			) || (
-				tmp[layer].buyables[data].sellAll
-				&& (tmp[layer].buyables[data].canSellAll === undefined || tmp[layer].buyables[data].canSellAll)
-			)">
-			<sell-one v-if="
-				tmp[layer].buyables[data].sellOne
-				&& (tmp[layer].buyables[data].canSellOne === undefined || tmp[layer].buyables[data].canSellOne)
-			" :layer :data :style="tmp[layer].componentStyles['sell-one']"></sell-one>
-			<sell-all v-if="
-				tmp[layer].buyables[data].sellAll
-				&& (tmp[layer].buyables[data].canSellAll === undefined || tmp[layer].buyables[data].canSellAll)
-			" :layer :data :style="tmp[layer].componentStyles['sell-all']"></sell-all>
+			<br v-if="canSellOne || canSellAll">
+			<sell-one v-if="canSellOne" :layer :data :style="tmp[layer].componentStyles['sell-one']"></sell-one>
+			<sell-all v-if="canSellAll" :layer :data :style="tmp[layer].componentStyles['sell-all']"></sell-all>
 		</div>`),
 	});
 
