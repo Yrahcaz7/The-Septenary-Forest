@@ -1169,9 +1169,7 @@ function loadVue(mainPage = false) {
 		props: ['layer', 'back', 'spacing', 'embedded'],
 		data() { return {tmp, player, goBack} },
 		template: template(/*html*/`<div :style="[
-			(tmp[layer].style ?
-				tmp[layer].style
-				: {}),
+			tmp[layer].style || {},
 			(tmp[layer].tabFormat && !Array.isArray(tmp[layer].tabFormat)) ?
 				tmp[layer].tabFormat[player.subtabs[layer].mainTabs].style
 				: {}
@@ -1225,17 +1223,21 @@ function loadVue(mainPage = false) {
 				if (typeof pausedDisplay !== 'undefined') return pausedDisplay;
 			},
 			overridePointDisplay() {
-				if (typeof overridePointDisplay === 'function') return overridePointDisplay() || "";
-				return "";
+				if (typeof overridePointDisplay === 'function') return overridePointDisplay();
 			},
 			canGenPoints() {
 				if (typeof canGenPoints === 'function') return canGenPoints();
 				if (typeof canGenPoints !== 'undefined') return canGenPoints;
 				return true;
 			},
-			pointGen() {
-				if (typeof getPointGen === 'function') return getPointGen();
-				return newDecimalZero();
+			pointGenDisplay() {
+				if (tmp.other.oompsMag !== 0) {
+					if (tmp.other.oompsMag < 0) return format(tmp.other.oomps) + " OOM^OOMs/sec";
+					if (tmp.other.oompsMag > 1) return format(tmp.other.oomps) + " OOM^" + tmp.other.oompsMag + "s/sec";
+					return format(tmp.other.oomps) + " OOMs/sec";
+				};
+				if (typeof getPointGen === 'function') return format(getPointGen()) + "/sec";
+				return "0/sec";
 			},
 		},
 		template: template(/*html*/`<div class="overlayThing" style="
@@ -1259,14 +1261,7 @@ function loadVue(mainPage = false) {
 				<template v-if="player.points.lt('1e1000')">You have </template>
 				<h2 class="points">{{ format(player.points) }}</h2>
 				<template v-if="player.points.lt('e1000000')">{{ " " + (modInfo.pointsName || "points") }}</template>
-				<div v-if="canGenPoints">
-					{{ tmp.other.oompsMag !== 0 ?
-						format(tmp.other.oomps) + " OOM" + (tmp.other.oompsMag < 0 ?
-							"^OOM"
-							: (tmp.other.oompsMag > 1 ? "^" + tmp.other.oompsMag : "")) + "s"
-						: format(pointGen)
-					}}/sec
-				</div>
+				<div v-if="canGenPoints">{{ pointGenDisplay }}</div>
 			</div>
 			<template v-for="thing in tmp.displayThings">
 				<div v-if="thing" v-html="thing"></div>
