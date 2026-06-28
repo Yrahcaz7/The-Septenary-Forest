@@ -81,23 +81,15 @@
 }
 
 a {
-	color: #007fff;
-	-webkit-text-decoration-line: none;
-	-moz-text-decoration-line: none;
-	text-decoration-line: none;
-	text-decoration: none;
-	cursor: pointer;
-}
-
-.link {
 	display: inline-block;
 	font-size: 20px;
 	color: #41f5f5;
 	cursor: pointer;
 	font-family: "Lucida Console", "Courier New", monospace;
+	text-decoration: none;
 }
 
-.link:hover {
+a:hover {
 	transform: scale(1.2);
 	text-shadow: 5px 0 10px #02f2f2, -3px 0 12px #02f2f2;
 }

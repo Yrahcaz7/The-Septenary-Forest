@@ -45,12 +45,12 @@ function loadVue(mainPage = false) {
 				<button class="longUpg can" @click="keepGoing()">Keep Going</button>
 				<br><br>
 				<span v-if="modInfo.discordLink">
-					<a class="link" :href="modInfo.discordLink" target="_blank">{{ modInfo.discordName }}</a>
+					<a :href="modInfo.discordLink" target="_blank">{{ modInfo.discordName }}</a>
 					<br>
 				</span>
-				<a class="link" href="https://discord.gg/F3xveHV" target="_blank" :style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a>
+				<a href="https://discord.gg/F3xveHV" target="_blank" :style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a>
 				<br><br>
-				<a class="link" href="https://discord.gg/wwQfgPa" target="_blank" style="font-size: 16px">Main Prestige Tree server</a>
+				<a href="https://discord.gg/wwQfgPa" target="_blank" style="font-size: 16px">Main Prestige Tree server</a>
 				<br><br>
 			</div>
 			<!-- miscellaneous buttons -->
@@ -79,15 +79,15 @@ function loadVue(mainPage = false) {
 					<img src="${mainPage ? "" : "../"}shared/images/discord.png">
 					<ul id="discordLinks">
 						<li v-if="modInfo.discordLink">
-							<a class="link" :href="modInfo.discordLink" target="_blank">{{ modInfo.discordName }}</a>
+							<a :href="modInfo.discordLink" target="_blank">{{ modInfo.discordName }}</a>
 							<br>
 						</li>
 						<li>
-							<a class="link" href="https://discord.gg/F3xveHV" target="_blank" :style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a>
+							<a href="https://discord.gg/F3xveHV" target="_blank" :style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a>
 							<br>
 						</li>
 						<li>
-							<a class="link" href="https://discord.gg/wwQfgPa" target="_blank" style="font-size: 16px">Main Prestige Tree server</a>
+							<a href="https://discord.gg/wwQfgPa" target="_blank" style="font-size: 16px">Main Prestige Tree server</a>
 						</li>
 					</ul>
 				</div>
@@ -1281,19 +1281,19 @@ function loadVue(mainPage = false) {
 				Made by {{ modInfo.author }}<br>
 			</template>
 			<br>
-			The Modding Tree <a href="https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md" target="_blank" class="link" style="font-size: 14px; display: inline">{{ TMT_VERSION.tmtNum }}</a> by Acamaeda and FlamemasterNXF
+			The Modding Tree <a href="https://github.com/Acamaeda/The-Modding-Tree/blob/master/changelog.md" target="_blank" style="font-size: 14px; display: inline">{{ TMT_VERSION.tmtNum }}</a> by Acamaeda and FlamemasterNXF
 			<br>
 			The Prestige Tree made by Jacorb and Aarex
 			<br><br>
-			<div class="link" @click="showTab('changelog-tab')">Changelog</div>
+			<a @click="showTab('changelog-tab')">Changelog</a>
 			<br><br>
 			<span v-if="modInfo.discordLink">
-				<a class="link" :href="modInfo.discordLink" target="_blank">{{ modInfo.discordName }}</a>
+				<a :href="modInfo.discordLink" target="_blank">{{ modInfo.discordName }}</a>
 				<br><br>
 			</span>
-			<a class="link" href="https://discord.gg/F3xveHV" target="_blank" :style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a>
+			<a href="https://discord.gg/F3xveHV" target="_blank" :style="modInfo.discordLink ? {'font-size': '16px'} : {}">The Modding Tree Discord</a>
 			<br><br>
-			<a class="link" href="https://discord.gg/wwQfgPa" target="_blank" style="font-size: 16px">Main Prestige Tree server</a>
+			<a href="https://discord.gg/wwQfgPa" target="_blank" style="font-size: 16px">Main Prestige Tree server</a>
 			<br>
 			<template v-if="endPoints !== undefined">
 				<br>Current Endgame: {{ format(endPoints) }} {{ modInfo.pointsName || "points" }}<br>
@@ -1309,7 +1309,7 @@ function loadVue(mainPage = false) {
 				</template>
 			</template>
 			<br>
-			${mainPage ? `` : `<a class="link" href="../index.html">Back to main page</a><br><br>`}
+			${mainPage ? `` : `<a href="../index.html">Back to main page</a><br><br>`}
 		</div>`),
 	});
 

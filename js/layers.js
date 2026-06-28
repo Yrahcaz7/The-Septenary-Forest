@@ -86,7 +86,7 @@ addLayer("t", {
 					let text = "<h2>Discovered Trees:</h2>";
 					if (player.t.best.eq(0)) text += "<br><br><h3>None yet!</h3>";
 					for (let index = 0; index < player.t.best.min(trees.length).toNumber(); index++) {
-						text += "<br><br><a class='link' href='" + trees[index][0] + "/index.html'>#" + (index + 1) + ": " + trees[index][1] + "</a>";
+						text += "<br><br><a href='" + trees[index][0] + "/index.html'>#" + (index + 1) + ": " + trees[index][1] + "</a>";
 					};
 					if (player.t.best.gte(trees.length)) text += "<br><br><h3>All trees discovered!</h3><br>(At least for now...)";
 					return text;
