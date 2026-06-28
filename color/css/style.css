@@ -3,19 +3,6 @@
 	--rainbowline: linear-gradient(90deg, magenta, red, yellow, lime, cyan, blue, magenta, red, yellow, lime, cyan, blue, magenta);
 }
 
-.rainbowline-backround {
-	padding-top: 0.9em;
-	height: calc(100% - 0.9em);
-	width: 100%;
-	left: 0;
-	top: 0;
-	position: absolute;
-	background: var(--rainbowline);
-	background-size: 200%;
-	border-radius: 50%;
-	animation: 3s linear infinite rainbowline;
-}
-
 .rainbowvalue-text {
 	background: transparent;
 	color: white;

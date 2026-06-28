@@ -369,9 +369,11 @@ function loadVue(mainPage = false) {
 				</template>
 				<br><br>
 				<span v-if="layers[layer].upgrades[data].costDisplay" v-html="run(layers[layer].upgrades[data].costDisplay, layers[layer].upgrades[data], tmp[layer].upgrades[data].cost)"></span>
-				<template v-else>Cost: {{ formatWhole(tmp[layer].upgrades[data].cost) }} {{ tmp[layer].upgrades[data].currencyDisplayName || tmp[layer].upgrades[data].currencyInternalName || tmp[layer].resource }}</template>
+				<template v-else>
+					Cost: {{ formatWhole(tmp[layer].upgrades[data].cost) }} {{ tmp[layer].upgrades[data].currencyDisplayName || tmp[layer].upgrades[data].currencyInternalName || tmp[layer].resource }}
+				</template>
 			</template>
-			<tooltip v-if="tmp[layer].upgrades[data].tooltip" :text="tmp[layer].upgrades[data].tooltip"></tooltip>
+			<tooltip :text="tmp[layer].upgrades[data].tooltip"></tooltip>
 		</button>`),
 	});
 
@@ -409,7 +411,7 @@ function loadVue(mainPage = false) {
 			<br>
 			<span v-html="run(layers[layer].milestones[data].effectDescription, layers[layer].milestones[data], tmp[layer].milestones[data].effect)"></span>
 			<br>
-			<tooltip v-if="tmp[layer].milestones[data].tooltip" :text="tmp[layer].milestones[data].tooltip"></tooltip>
+			<tooltip :text="tmp[layer].milestones[data].tooltip"></tooltip>
 			<template v-if="tmp[layer].milestones[data].toggles && hasMilestone(layer, data)">
 				<template v-for="toggle in tmp[layer].milestones[data].toggles">
 					<toggle :layer :data="toggle" :style="tmp[layer].componentStyles.toggle"></toggle>&nbsp;
@@ -579,7 +581,7 @@ function loadVue(mainPage = false) {
 					</template>
 				</template>
 				<node-mark :layer :data='tempBuyable.marked'></node-mark>
-				<tooltip v-if="tempBuyable.tooltip" :text="tempBuyable.tooltip"></tooltip>
+				<tooltip :text="tempBuyable.tooltip"></tooltip>
 			</button>
 			<br v-if="canSellOne || canSellAll">
 			<sell-one v-if="canSellOne" :layer :data :style="tmp[layer].componentStyles['sell-one']"></sell-one>
@@ -674,7 +676,7 @@ function loadVue(mainPage = false) {
 			</template>
 			<span style="white-space: pre-line" v-html="run(layers[layer].clickables[data].display, layers[layer].clickables[data])"></span>
 			<node-mark :layer :data="tmp[layer].clickables[data].marked"></node-mark>
-			<tooltip v-if="tmp[layer].clickables[data].tooltip" :text="tmp[layer].clickables[data].tooltip"></tooltip>
+			<tooltip :text="tmp[layer].clickables[data].tooltip"></tooltip>
 		</button>`),
 	});
 
@@ -779,7 +781,7 @@ function loadVue(mainPage = false) {
 				<br>
 			</span>
 			<span style="white-space: pre-line" v-html="gridRun(this.layer, 'getDisplay', player[this.layer].grid[this.data], this.data)"></span>
-			<tooltip v-if="layers[layer].grid.getTooltip" :text="gridRun(this.layer, 'getTooltip', player[this.layer].grid[this.data], this.data)"></tooltip>
+			<tooltip :text="gridRun(this.layer, 'getTooltip', player[this.layer].grid[this.data], this.data)"></tooltip>
 		</button>`),
 	});
 
@@ -859,15 +861,15 @@ function loadVue(mainPage = false) {
 		data() { return {tmp, hasAchievement, achievementStyle} },
 		computed: {
 			tooltipText() {
-				if (tmp[this.layer].achievements[this.data].tooltip === "") return false;
+				if (tmp[this.layer].achievements[this.data].tooltip === "") return "";
 				if (hasAchievement(this.layer, this.data)) {
 					if (tmp[this.layer].achievements[this.data].doneTooltip) return tmp[this.layer].achievements[this.data].doneTooltip;
 					if (tmp[this.layer].achievements[this.data].tooltip) return tmp[this.layer].achievements[this.data].tooltip;
-					return 'You did it!';
+					return "You did it!";
 				};
 				if (tmp[this.layer].achievements[this.data].goalTooltip) return tmp[this.layer].achievements[this.data].goalTooltip;
 				if (tmp[this.layer].achievements[this.data].tooltip) return tmp[this.layer].achievements[this.data].tooltip;
-				return 'LOCKED';
+				return "LOCKED";
 			},
 		},
 		template: template(/*html*/`<div v-if="
@@ -881,7 +883,7 @@ function loadVue(mainPage = false) {
 			locked: !hasAchievement(layer, data),
 			bought: hasAchievement(layer, data),
 		}" :style="achievementStyle(layer, data)">
-			<tooltip v-if="tooltipText" :text="tooltipText"></tooltip>
+			<tooltip :text="tooltipText"></tooltip>
 			<span v-if="tmp[layer].achievements[data].name">
 				<br>
 				<h3 :style="tmp[layer].achievements[data].textStyle" v-html="tmp[layer].achievements[data].name"></h3>
@@ -1158,7 +1160,7 @@ function loadVue(mainPage = false) {
 			can: (tmp[layer].isLayer ? (player[layer].unlocked || tmp[layer].canReset) : tmp[layer].canClick),
 		}" :style="constructNodeStyle(layer, isAlias)">
 			<span class="nodeLabel" v-html="(symbol && tmp[layer].image === undefined) ? symbol : ''"></span>
-			<tooltip v-if="tooltipText" :text="tooltipText"></tooltip>
+			<tooltip :text="tooltipText"></tooltip>
 			<node-mark :layer :data='tmp[layer].marked'></node-mark>
 		</button>`),
 	});
@@ -1340,7 +1342,7 @@ function loadVue(mainPage = false) {
 
 	addNormalComponent('tooltip', {
 		props: ['text'],
-		template: template(/*html*/`<div class="tooltip" v-html="text"></div>`),
+		template: template(/*html*/`<div v-if="text" class="tooltip" v-html="text"></div>`),
 	});
 
 	addNormalComponent('particle', {

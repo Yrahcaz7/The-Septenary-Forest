@@ -270,7 +270,7 @@ function getAverageCoinGain() {
 
 addLayer("c", {
 	name: "Colors",
-	symbol: "<span class='rainbowline-backround'></span>",
+	symbol: "C",
 	row: 0,
 	position: 0,
 	startData() { return {
@@ -280,7 +280,11 @@ addLayer("c", {
 		time: Array.from({length: COLORS.length}, () => newDecimalZero()),
 	}},
 	color: "#ffffff",
-	nodeStyle: {border: "0px transparent"},
+	nodeStyle: {
+		background: "var(--rainbowline)",
+		"background-size": "200%",
+		animation: "3s linear infinite rainbowline",
+	},
 	tooltip() { return formatWhole(player.c.colors) + " colors unlocked" },
 	doReset(resettingLayer) {
 		const keep = [];
