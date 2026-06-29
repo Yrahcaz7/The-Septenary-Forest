@@ -12,6 +12,14 @@ A comprehensive list of the additional features in The Septenary Forest that are
     (`value` and `cap` are Decimals, while `power` can be a number or a Decimal.)
     Useful for implementing custom prestige types.
 
+- `restoreSavesFrom(gameSaveName, optionsSaveName)`: Restores the saved game data from `gameSaveName` and the saved options data from `optionsSaveName`, if they exist.
+    A good use for this is putting it in `fixOldSave()` to restore player data after you change the mod's id.
+    (Either parameter can be omitted, making the function not try to restore that item.)
+
+    If you don't know the names of the saves, you can look at the values in the array returned by `Object.keys(localStorage)`.
+    There should be two strings containing your old mod id.
+    The options save is the one with "options" in the name, and the other one is the game save.
+
 ## [Layer Features](layer-features.md)
 
 - `softcaps`, `softcapPowers`: **OVERRIDE**. These are just like `softcap` and `softcapPower`, except they are arrays of values, allowing for multiple softcaps instead of just one.
@@ -37,7 +45,7 @@ A comprehensive list of the additional features in The Septenary Forest that are
 ## [`modInfo` Properties](main-mod-info.md)
 
 - `useNewSaveSyntax`: **optional**. This combines the author name and the mod id to create a unique internal id.
-    Any spaces in the name or id are treated as dashes.
+    Any combinations of whitespace in the name or id are treated as dashes.
     Similar to `id`, you shouldn't change this later (and if you use this, you shouldn't change `author` later, either).
     This is enabled by default.
 
@@ -94,7 +102,7 @@ Features on the main buyables/challenges/clickables/grid object:
     The `x` argument holds the amount of the buyable the player has.
 
 **Important note:** In TMT, buyables have a method called `display()`.
-    Here it has been renamed to `fullDisplay()` for consistency with the other Big Features.
+Here it has been renamed to `fullDisplay()` for consistency with the other Big Features.
 
 ## [Challenge Features](challenges.md)
 

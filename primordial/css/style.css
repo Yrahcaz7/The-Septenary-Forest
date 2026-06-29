@@ -4,6 +4,11 @@
 	z-index: -1000;
 }
 
+/* Tabs */
+.tabButton {
+	background-color: #000000;
+}
+
 /* Achievements */
 .layer-A {
 	color: #A5BCC2;

@@ -20,7 +20,7 @@ E.g. if layer `p`'s `baseAmount` is based on points, `layers.p.baseAmount` is a 
 If the player currently has 54 points, `temp.p.baseAmount` would be 54 (as a `Decimal`).
 You can use `temp` to improve performance.
 
-## Custom options (additional feature)
+## Custom Options (additional feature)
 
 For each tree, there is an options file (`options.js`).
 To add a new option, go to that file and add a new property to the object returned from `getStartOptions()` and a corresponding option object to `optionGrid`.

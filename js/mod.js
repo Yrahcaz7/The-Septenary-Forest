@@ -1,6 +1,6 @@
 const modInfo = {
 	name: "The Septenary Forest",
-	id: "Yrahcaz7/The-Septenary-Forest",
+	id: "The-Septenary-Forest",
 	author: "Yrahcaz7",
 	pointsName: "points",
 	modFiles: ["tree.js", "options.js", "layers.js"],
@@ -8,7 +8,6 @@ const modInfo = {
 	discordLink: "",
 	initialStartPoints: newDecimalZero(),
 	offlineLimit: 1, // in hours
-	useNewSaveSyntax: false,
 };
 
 const VERSION = {
@@ -21,9 +20,8 @@ const changelog = `<h1>Changelog:</h1><br>
 		- Added a new tab: Wood.<br>
 		- Added chopping and auto-chopping.<br>
 		- Added twelve wood upgrades.<br>
-		- Finished unifying the trees.<br>
-	<br><h3>v0.0 Beta: UNIFICATION</h3><br>
-		- Started unifying the trees.<br>
+	<br><h3>v0.0: UNIFICATION</h3><br>
+		- Unified the trees.<br>
 		- Upgraded from Vue 2 to Vue 3.<br>
 		- Added some new custom features.<br>
 		- Documented many custom features.<br>
@@ -56,7 +54,9 @@ function getPointGen() {
 };
 
 // added player[data]
-function addedPlayerData() {return {}};
+function addedPlayerData() {
+	return {};
+};
 
 // display extra things at the top of the page
 const displayThings = ["<br>Current endgame: 11 wood upgrades and 6 best trees"];
@@ -81,4 +81,7 @@ function maxTickLength() {
 };
 
 // bugfixes or inflation capping for old saves
-function fixOldSave(oldVersion) {};
+function fixOldSave(oldVersion) {
+	const id = getModID();
+	restoreSavesFrom(id, id + "_options");
+};

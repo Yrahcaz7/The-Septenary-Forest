@@ -253,14 +253,16 @@ function exportSave() {
 };
 
 function importSave(imported = undefined, forced = false) {
-	if (imported === undefined) imported = prompt("Paste your save here");
+	if (imported === undefined) {
+		imported = prompt("Paste your save here");
+	};
 	try {
-		const tempPlr = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(atob(imported))));
-		if (tempPlr.versionType !== getModID() && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")) {
+		const tempPlayer = Object.assign(getStartPlayer(), JSON.parse(decodeURIComponent(atob(imported))));
+		if (tempPlayer.versionType !== getModID() && !forced && !confirm("This save appears to be for a different mod! Are you sure you want to import?")) {
 			return; // Wrong save. Use "forced" to force it to accept.
 		};
 		clearInterval(INTERVAL);
-		player = tempPlr;
+		player = tempPlayer;
 		player.versionType = getModID();
 		fixSave();
 		versionCheck();
@@ -287,6 +289,24 @@ function versionCheck() {
 	else delete player.pre;
 	if (VERSION.beta) player.beta = VERSION.beta;
 	else delete player.beta;
+};
+
+function restoreSavesFrom(gameSaveName, optionsSaveName) {
+	if (optionsSaveName) {
+		const oldOptions = localStorage.getItem(optionsSaveName);
+		if (oldOptions) {
+			localStorage.setItem(getModID() + (modInfo.useNewSaveSyntax === undefined || modInfo.useNewSaveSyntax ? "/" : "_") + "options", oldOptions);
+			localStorage.removeItem(optionsSaveName);
+			loadOptions();
+		};
+	};
+	if (gameSaveName) {
+		const oldSave = localStorage.getItem(gameSaveName);
+		if (oldSave) {
+			localStorage.removeItem(gameSaveName);
+			importSave(oldSave, true); // reloads the page
+		};
+	};
 };
 
 const SAVE_INTERVAL = setInterval(() => {

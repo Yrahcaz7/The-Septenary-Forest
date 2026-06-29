@@ -9,6 +9,7 @@ Here's a breakdown of what's in it:
     - `name`: The name of your mod. (A string.)
     - `id`: The id for your mod, a unique string that is used to determine savefile location.
         Be sure to set it when you start making a mod, and don't change it later because it will erase all saves.
+        (If you accidentally do so, you can use [`restoreSavesFrom()`](additional-feature-overview.md#useful-functions).)
     - `author`: The name of the author, displayed in the info tab.
     - `pointsName`: **optional**. This changes what is displayed instead of "points" for the mod's base points.
         (It does not affect it in the code.)
@@ -23,7 +24,7 @@ Here's a breakdown of what's in it:
         (This is also a good reason why you should disable offline time on your own savefile when developing a mod.)
     - `initialStartPoints`: **optional**. A `Decimal` for the amount of points a new player should start with.
     - `useNewSaveSyntax` (additional feature): **optional**. This combines the `author` name and the mod `id` to create a unique internal id.
-        Any spaces in the name or id are treated as dashes.
+        Any combinations of whitespace in the name or id are treated as dashes.
         Similar to `id`, you shouldn't change this later (and if you use this, you shouldn't change `author` later, either).
         This is enabled by default.
     - `friendlyErrors` (additional feature): **optional**. When this is `false`, it disables my custom friendly errors and warnings that try to detect when things have gone wrong.
@@ -36,7 +37,8 @@ Here's a breakdown of what's in it:
     - `pre`: **optional**. The prerelease version number, if it is a prerelease.
     - `beta`: **optional**. The beta version number, if it is beta.
 
-- `changelog` is the HTML displayed in the changelog tab.
+- `changelog`. Sets the HTML displayed in the changelog tab.
+    Can be a function.
 
 - `doNotCallTheseFunctionsEveryTick`: **optional**. This is very important if you are adding non-standard functions.
     TMT calls every function anywhere in "layers" every tick to store the result, unless specifically told not to.
