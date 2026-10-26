@@ -13,7 +13,7 @@ const story = [
 	The Being tried and tried.
 	And a glowing green spark appeared.
 `, `
-	The Being was facinated by this spark.
+	The Being was fascinated by this spark.
 	The only thing in the void of nothingness.
 	The Being thought and thought what to name it.
 	And another spark appeared.
@@ -33,7 +33,7 @@ const story = [
 	But that was not it. Something was still missing.
 `, `
 	The cycle slowed, and the Being became disheartened.
-	But then, an idea occured to the Being.
+	But then, an idea occurred to the Being.
 	There is only Essence; but what is that Essence of?
 	The Being delved deep into its thoughts.
 	Down to the very core of its being.
@@ -57,7 +57,7 @@ const story = [
 	"I... I've found it! Haha! I was right!"
 	The scientist reveled in pleasure at finally proving his theory.
 	"The thing smaller than a quark... the essence of the universe!"
-	The scientist couldn't contain his exitement and started running around his lab. The lab was very messy, but he knew exactly where was safe and where was a death-by-slipping zone.
+	The scientist couldn't contain his excitement and started running around his lab. The lab was very messy, but he knew exactly where was safe and where was a death-by-slipping zone.
 `, `
 	"All I need to do now is submit my findings to the Committee!"
 	The scientist started hurriedly packing up one of his samples.
@@ -79,7 +79,7 @@ const story = [
 	The scientist picked up what looked like a mass of goo and teeth, and began staring at it.
 	"What was it called again? A septenagipoda?"
 	...
-	By the time the scientist had put everything in the spacecraft in neat piles, it had arrived at the Comittee.
+	By the time the scientist had put everything in the spacecraft in neat piles, it had arrived at the Committee.
 `, `
 	"Well, here goes nothing!"
 	The scientist opened the door, and jumped out of the spacecraft.
@@ -91,9 +91,9 @@ const story = [
 `, `
 	The scientist entered the building, and then the floor started moving up very quickly.
 	"I remember the first time I came here... throwing up my lunch was not very pleasant. Got fined for it too."
-	As the elevator stopped, part of the wall slid upwards, revealing the chamber of the Comittee.
+	As the elevator stopped, part of the wall slid upwards, revealing the chamber of the Committee.
 	Meanwhile, at the scientist's lab, an unfriendly visitor opened the door.
-	The visitor looked completely robotic, even though there existed sufficently advanced technology to hide the fact.
+	The visitor looked completely robotic, even though there existed sufficiently advanced technology to hide the fact.
 	The visitor began searching through the scientist's samples...
 `, `
 	The visitor found what they were looking for; a sample of the essence.
@@ -101,23 +101,23 @@ const story = [
 	The visitor didn't know, however, that some types of essence are highly reactive with each other...
 	<br><br>And suddenly everything was bathed in a pitch-black light.
 `, `
-	<br><br>Meanwhile, the scientist was presenting his findings to the Comittee, and was getting a lot of skeptical looks.
-	Comittee member: "And how, exactly, do you know that everthing is made up of this?"
+	<br><br>Meanwhile, the scientist was presenting his findings to the Committee, and was getting a lot of skeptical looks.
+	Committee member: "And how, exactly, do you know that everything is made up of this?"
 	Scientist: "I have already found evidence of four flavors of quarks being made up of essence. Right here, I have a sample of a bottom quark."
-	Comittee member: "I know that, but what about the others?"
+	Committee member: "I know that, but what about the others?"
 	Scientist: "I don't see any point in arguing about this."
-	Comittee member: "Oh really? The files say that you, LS14H, have faked a discovery before!"
+	Committee member: "Oh really? The files say that you, LS14H, have faked a discovery before!"
 	Suddenly, the scientist's sample broke its container, as something similar to an explosion seemed to occur.
 `, `
-	The scientist dissapeared in an instant upon contact, and then the strange explosion shrank back down again.
-	The Comittee barely had any time to wonder what just happened, as black light broke through the side of the building...
+	The scientist disappeared in an instant upon contact, and then the strange explosion shrank back down again.
+	The Committee barely had any time to wonder what just happened, as black light broke through the side of the building...
 	<br><br>And then everything was gone.
 `], [`
 	The Being remembered.
 	Remembered the times of old.
 	When the world was not just a void.
 	The world was completely different back then.
-	"Why... did everything dissapear?"
+	"Why... did everything disappear?"
 	"Why... am I the only being left?"
 `, `
 	The Being decided that thinking about that was useless.
@@ -230,7 +230,7 @@ const story = [
 	Barely anything had to be reset to pray for light.
 	The Being finally found a respite in the lonely void.
 	The Being did not know who responded to its Prayers...
-	But it felt grateful towards that unkown existence.
+	But it felt grateful towards that unknown existence.
 `, `
 	The Being was filled with happiness.
 	It began filling the void with divinity and holiness.
@@ -247,7 +247,7 @@ const story = [
 	<b>--- 37th sunset ---</b>
 	Today, I found some ruins of human structures.
 	There was some paper and ink in some of the fallen houses.
-	I still can't remember anything before the first sunrise, but I'm writing my discoveries now so I don't forget agin.
+	I still can't remember anything before the first sunrise, but I'm writing my discoveries now so I don't forget again.
 	I can't find any corpses here, though, which is odd.
 `, `
 	<b>--- 61st sunset ---</b>
@@ -289,7 +289,7 @@ const story = [
 	I haven't been able to write much recently because I have been so busy.
 	But if the citizens are content, that is enough for me.
 	Leading over a thousand people is truly very, very tiring.
-	I can't belive it has already been over a year since that fateful day...
+	I can't believe it has already been over a year since that fateful day...
 	Anyway, new tribes and refugees have joined us recently.
 	The new citizens seem to look up to me and keep calling me Tzar.
 	I'll have to ask one what that word means tomorrow.
@@ -306,7 +306,7 @@ const story = [
 	A great structure consisting of innumerable Prayers.
 	This structure radiated bright green light throughout the void.
 	The Being recalled this feeling of basking in this light...
-	This spring green light, representing warmpth.
+	This spring green light, representing warmth.
 `, `
 	The Being decided to name this new structure a Sanctum.
 	Then, the Being set off to create more.
@@ -331,7 +331,7 @@ const story = [
 	As this process continued, more and more light blossomed.
 	The light reached further and further, expanding outwards.
 `, `
-	The Being was filled with warmpth like never before.
+	The Being was filled with warmth like never before.
 	It continued on, working harder and harder.
 	However, things began to slow.
 	The new Relics started needing too much light to empower.
@@ -341,7 +341,7 @@ const story = [
 	The Being started to become disheartened.
 	However, when it barely managed to activate one more Relic...
 	The Being saw that the Relic was filled with glowing words.
-	As the Being read the text, it realised what it was missing...
+	As the Being read the text, it realized what it was missing...
 `], [`
 	The Atoms that the Being previously disregarded,
 	Could build many different important things.
@@ -403,7 +403,7 @@ const story = [
 	Until they arrived at their star.
 `, `
 	The Sun was confused, with his memories gradually seeping away.
-	He no longer remembered the Wanderer, only having a vauge sense of familiarity.
+	He no longer remembered the Wanderer, only having a vague sense of familiarity.
 	But the Wanderer calmly chatted with the Sun, easing his anxiety.
 	Internally, however, the Wanderer's heart was constantly tearing apart and healing.
 `, `
@@ -413,10 +413,10 @@ const story = [
 	The sun that had lost the Sun.
 `, `
 	...
-	Eventually, the Wanderer felt a distubance.
+	Eventually, the Wanderer felt a disturbance.
 	They had a nagging feeling that the Sun was about to be born.
-	The Wanderer starting heading towards the origin of that feeling, but then they stopped.
-	They realised that if they fused with that space, they would be stealing time from the Sun.
+	The Wanderer started heading towards the origin of that feeling, but then they stopped.
+	They realized that if they fused with that space, they would be stealing time from the Sun.
 	Thus, the Wanderer quickly diverted their path to an empty space nearby.
 `, `
 	As the Wanderer descended, the forces of the world tried to repel them.
@@ -520,7 +520,7 @@ const story = [
 	The corridor was eerily silent, the only noises being Nisp's mumbling and footsteps.
 `, `
 	As Nisp trodded along, the straight accordion hallway suddenly bent leftwards.
-	Unsuprised, Nisp continued walking as if it was a normal, daily occurence.
+	Unsurprised, Nisp continued walking as if it was a normal, daily occurrence.
 	After a while, Nisp finally reached a bright green door with no handle.
 	At around head height on the door, there was a strange gray circle affixed.
 `, `
@@ -537,9 +537,9 @@ const story = [
 	Figure: "A pleasant surprise. How much did your repairs cost?"
 `, `
 	Nisp: "1,403 points, boss."
-	Figure: "Alright. After confirming the amount, you shall recieve 51,403 points."
+	Figure: "Alright. After confirming the amount, you shall receive 51,403 points."
 	Nisp: "Fi- Fifty thousand?"
-	Figure: "Correct. The previously offered reward of 10,000 did not properly account for the danger the mission contained. In accordance with this, regardless of the mission's success, all participating units shall receive the inital offer, and succeeding units will recieve five times as much."
+	Figure: "Correct. The previously offered reward of 10,000 did not properly account for the danger the mission contained. In accordance with this, regardless of the mission's success, all participating units shall receive the initial offer, and succeeding units will receive five times as much."
 `, `
 	The sudden influx of wealth made Nisp feel what they called "giddy."
 	Nisp quickly opened the hatch in their head, took out the sample, and handed it to the dark-blue figure.
@@ -549,7 +549,7 @@ const story = [
 `, `
 	The figure quickly dismissed Nisp after the handover was complete.
 	Stepping back out of the door they used to enter, Nisp found that it was no connected to the residential building.
-	Walking though the pink acordion hallway, Nisp was filled with what they called "hope."
+	Walking though the pink accordion hallway, Nisp was filled with what they called "hope."
 	With their savings so far plus the reward from the mission they just completed, they could now afford to transfer their core into a new vessel, completely escaping the restrictions that came from being lower-class.
 `, `
 	Now, Nisp truly thought that joining the Worldwalkers was the right choice.
@@ -561,7 +561,7 @@ const story = [
 	Its difficulty paled in comparison to some of the missions they took on previously.
 	No matter how much Nisp thought about it, they couldn't figure it out.
 	Thus, Nisp decided to trust their intuition and quit their job, going into hiding as soon as they got their pay.
-	After all, their intuition for danger was the one thing about them that had ever recieved any praise.
+	After all, their intuition for danger was the one thing about them that had ever received any praise.
 `], [`
 	"Where am I?"
 	"What am I?"
@@ -577,7 +577,7 @@ const story = [
 	The Being circled the light, inspecting it closely.
 `, `
 	The Being tried to remember something, <i>anything</i> about the void and the light.
-	Suddenly, bright green lights flared all throuout the Being's vision.
+	Suddenly, bright green lights flared all throughout the Being's vision.
 	Startled, the Being tried to comprehend what was happening.
 	In response, more and more green began filling the void.
 	After a bit, the Being began to understand the nature of the green light.
@@ -585,7 +585,7 @@ const story = [
 	The light came into existence whenever the Being thought deeply about anything.
 	It was as if the green light was the embodiment of thought.
 	As the Being went about creating more and more green lights, something stirred within its subconscious.
-	A piece of knowledge wormed it way into the Being's mind: this green light was called Essence.
+	A piece of knowledge wormed its way into the Being's mind: this green light was called Essence.
 	Suddenly, the Being had a strange sense of déjà vu.
 `, `
 	It seemed as if all of this had happened before.
@@ -595,14 +595,14 @@ const story = [
 	As the Being's consciousness slipped away, the vestiges of its vision turned bright yellow.
 `, `
 	...
-	As the Being came to, it noticed a small yellow light besides the pure white one.
+	As the Being came to, it noticed a small yellow light beside the pure white one.
 	The Being somehow immediately knew that this was its Core.
 	However, within itself, there was now a new, stronger Core.
 	The Being still felt puzzled, but it gradually sensed more of its knowledge returning.
-	It now realized that in order to recover its memories, it needed to follow those strange instictive feelings.
+	It now realized that in order to recover its memories, it needed to follow those strange instinctive feelings.
 `, `
 	As the Being accumulated more Essence, it refreshed its Core once again.
-	As it repeated the process, more and more subsidary Cores broke off during the transition.
+	As it repeated the process, more and more subsidiary Cores broke off during the transition.
 	The void began to fill with a vibrant yellow.
 	Soon enough, the Being felt something emerging from its memories, and it fused all its Essence into it.
 	Thus, the thought became reality, and a pink light emerged in the void.
@@ -616,7 +616,7 @@ const story = [
 	Hexes; Demon Souls; Atoms. Three new colors quickly blossomed.
 	Prayers; Sanctums; Relics. A new path emerged from Essence.
 	Molecules; Good Influence; Evil Influence. Thirteen colors now (besides the white).
-	The Being followed the exact path its memories layed out for it, quickly forming many new colors.
+	The Being followed the exact path its memories laid out for it, quickly forming many new colors.
 	Yet it still could not make more of that strange white light.
 `, `
 	However, the Being could feel that it was coming soon.
@@ -641,7 +641,7 @@ const story = [
 	Before the Resonance vanishes, I must Attune to it.
 	...
 	Delving into my mind... searching for the right Thread.
-	The etheral Threads of all colors surround me, connect to me.
+	The ethereal Threads of all colors surround me, connect to me.
 	Searching, slowly drifting...
 	Ah. There it is.
 	...
@@ -783,7 +783,7 @@ const story = [
 	Through some kind of mental connection, someone was signaling to the Being to not give up.
 	The Being was skeptical, but the connection felt very real.
 	Calming down, the Being pondered how to make the lights in the void fully real.
-	The Being thought and thought, and after what seemed like an enternity, it finally got an idea.
+	The Being thought and thought, and after what seemed like an eternity, it finally got an idea.
 	If the Being itself was fully real, that meant every part of it was also real.
 	Thus, if it could make the concepts a part of itself, wouldn't they become real as well?
 	The Being wasn't sure it would work, but it had nothing to loose by trying.
@@ -803,7 +803,7 @@ const story = [
 	Exited, the Being decided to name this process.
 	"I shall call this... Assimilation."
 `, `
-	As the Being gradually Assimilated more concepts, the colors of light in the void dissapeared one by one.
+	As the Being gradually Assimilated more concepts, the colors of light in the void disappeared one by one.
 	The Being's form expanded as it progressed, getting ever closer to becoming a real world.
 	The spark of hope within the Being burned ever brighter.
 	Assimilating the concepts got harder every time, but the Being could still manage it after cycling some more.
@@ -828,7 +828,7 @@ const story = [
 	The Being resisted, but it was unable to stop the transfer.
 	The vortex collapsed in on itself, becoming a single blue point of light.
 	The Being felt somewhat annoyed, but it was glad that it had at least kept its memories this time.
-	As the Being inspected the oddly familar blue light, a word came to mind: Planet.
+	As the Being inspected the oddly familiar blue light, a word came to mind: Planet.
 	Somehow, the Chaos had warped the white and green into blue, creating the concept of a Planet.
 	As the Being set about restoring its power, it continued its previous cycles much faster than before.
 	The Planet seemed to connect itself to all of the other concepts, creating great synergy between them.
@@ -845,7 +845,7 @@ const story = [
 	It could feel, but not think; it was sentient, but not sapient.
 	It wanted the loneliness to go away, yet it could not connect that fact to the act of changing its direction of drifting.
 	Luckily, it accidentally drifted into a world after not too long.
-	The entity smoothly drifted into the world, the defence system not recognizing it as the foreign thing that it was.
+	The entity smoothly drifted into the world, the defense system not recognizing it as the foreign thing that it was.
 	As the entity drifted, it passed by many beings, completely invisible to them.
 	Eventually, it collided with a certain being.
 	Just like all the previous times, the entity overlapped with the being, the two partially becoming one.
@@ -950,7 +950,7 @@ const STORY_KEYWORDS = [
 	["anger", "hatred", "curses", "hate"],
 	["warm", "fuzzy", "feeling", "happiness"],
 	["human", "home", "lead", "chief"],
-	["structure", "warmpth"],
+	["structure", "warmth"],
 	["combination", "construct", "force"],
 	["wanderer", "sun", "soul", "planet"],
 	["despair", "balance", "equilibrium"],
